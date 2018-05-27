@@ -49,3 +49,28 @@ MacOSX
 	 - ./configure --prefix==~/athena_utils/libxml2/libxml2-2.9.8-Mac32
 	 - make
 	 - make install
+
+------------
+MonkeyAudio
+Webpage : http://www.monkeysaudio.com/developers.html
+
+The latest version of the Monkey Audio SDK uses VS2017 project. This makes it very
+problematic across multiple platforms. There is an associated codec 'monkeyomega' 
+that can be used which has disabled by default.
+
+------------
+Musepack
+Webpage : https://www.musepack.net/index.php?pg=src
+
+MacOSX
+	- Use CMake with Unix Makefiles to build libcuefile.
+	- Copy dylib and include from libcuefile into ~/athena_utils/musepack/musepack-r475-Mac32
+	- Use CMake with Unix Makefiles to build libreplaygain.
+	- Copy dylib and include from libreplaygain into ~/athena_utils/musepack/musepack-r475-Mac32
+	- Use CMake to build musepack_src
+	- Set CUEFILE_INCLUDE_DIR to ~/athena_utils/musepack/musepack-r475-Mac32/include 
+	- Set REPLAY_GAIN_INCLUDE_DIR to ~/athena_utils/musepack/musepack-r475-Mac32/include 
+	- Set CUEFILE_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac32/lib/libcuefile.dylib
+	- Set REPLAY_GAIN_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac32/lib/libreplaygain.dylib
+	- Use Unix Makefiles to build and copy includes and built libraries into place.
+

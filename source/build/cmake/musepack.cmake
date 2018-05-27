@@ -1,7 +1,13 @@
 # Musepack configuration
 
 set(MUSEPACK_VERSION "r475")
-set(MUSEPACK_HOME "${TIGER_UTILS}/musepack/musepack-${MUSEPACK_VERSION}-${BUILD_SUFFIX}")
+set(MUSEPACK_HOME "${ATHENA_UTILS}/musepack/musepack-${MUSEPACK_VERSION}-${BUILD_SUFFIX}")
+
+if (OMEGA_WIN32)
+	set(MUSEPACK_HOME "${ATHENA_UTILS}/musepack/musepack-${MUSEPACK_VERSION}-${BUILD_SUFFIX}")
+else (OMEGA_WIN32)
+	set(MUSEPACK_HOME "${ATHENA_UTILS}/musepack/musepack-${MUSEPACK_VERSION}-${TIGER_PLATFORM}")
+endif (OMEGA_WIN32)
 
 include_directories(AFTER "${MUSEPACK_HOME}/include" )
 
