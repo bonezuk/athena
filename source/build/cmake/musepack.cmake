@@ -1,8 +1,6 @@
 # Musepack configuration
 
 set(MUSEPACK_VERSION "r475")
-set(MUSEPACK_HOME "${ATHENA_UTILS}/musepack/musepack-${MUSEPACK_VERSION}-${BUILD_SUFFIX}")
-
 if (OMEGA_WIN32)
 	set(MUSEPACK_HOME "${ATHENA_UTILS}/musepack/musepack-${MUSEPACK_VERSION}-${BUILD_SUFFIX}")
 else (OMEGA_WIN32)

@@ -1,7 +1,11 @@
 # WavPack configuration
 
-set(WAVPACK_VERSION "4.70.0")
-set(WAVPACK_HOME "${TIGER_UTILS}/wavpack/wavpack-${WAVPACK_VERSION}-${BUILD_SUFFIX}")
+set(WAVPACK_VERSION "5.1.0")
+if (OMEGA_WIN32)
+	set(WAVPACK_HOME "${ATHENA_UTILS}/wavpack/wavpack-${WAVPACK_VERSION}-${BUILD_SUFFIX}")
+else (OMEGA_WIN32)
+	set(WAVPACK_HOME "${ATHENA_UTILS}/wavpack/wavpack-${WAVPACK_VERSION}-${TIGER_PLATFORM}")
+endif (OMEGA_WIN32)
 
 include_directories(AFTER "${WAVPACK_HOME}/include" )
 

@@ -74,3 +74,14 @@ MacOSX
 	- Set REPLAY_GAIN_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac32/lib/libreplaygain.dylib
 	- Use Unix Makefiles to build and copy includes and built libraries into place.
 
+------------
+Wavpack
+Webpage : http://www.wavpack.com
+
+MacOSX
+	- In Terminal cd to unpacked source directory
+	- ./autogen.sh
+	- ./configure --prefix=~/athena_utils/wavpack/wavpack-5.1.0-Mac64
+	- make
+	- make install
+	
