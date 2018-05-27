@@ -1,18 +1,12 @@
 # LibUPNP configuration
 
-if (OMEGA_WIN32)
-	if (OMEGA_MSVC12)
-		set(LIBUPNP_VERSION "1.6.19")
-	else (OMEGA_MSVC12)
-		set(LIBUPNP_VERSION "1.6.18")
-	endif (OMEGA_MSVC12)
-else (OMEGA_WIN32)
-	set(LIBUPNP_VERSION "1.6.19")
-endif (OMEGA_WIN32)
-
+set(LIBUPNP_VERSION "1.6.25")
 set(LIBUPNP_LIBNAME "libupnp")
-
-set(LIBUPNP_HOME "${TIGER_UTILS}/libupnp/install/libupnp-${LIBUPNP_VERSION}-${BUILD_SUFFIX}")
+if (OMEGA_WIN32)
+	set(LIBUPNP_HOME "${ATHENA_UTILS}/libupnp/libupnp-${LIBUPNP_VERSION}-${BUILD_SUFFIX}")
+else (OMEGA_WIN32)
+	set(LIBUPNP_HOME "${ATHENA_UTILS}/libupnp/libupnp-${LIBUPNP_VERSION}-${TIGER_PLATFORM}")
+endif (OMEGA_WIN32)
 
 if (OMEGA_WIN32)
 	add_definitions(-DUPNP_USE_MSVCPP)

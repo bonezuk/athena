@@ -1,15 +1,13 @@
 # Libxml2 configuration
-if (OMEGA_MSVC12)
-	set(LIBXML_VERSION "2.9.2")
-elseif(OMEGA_LINUX)
-	set(LIBXML_VERSION "2.9.2")
-else (OMEGA_MSVC12)
-	set(LIBXML_VERSION "2.7.8")
-endif (OMEGA_MSVC12)
 
+set(LIBXML_VERSION "2.9.8")
 set(LIBXML_LIBNAME "libxml2")
 
-set(LIBXML_HOME "${TIGER_UTILS}/libxml2/libxml2-${LIBXML_VERSION}-${BUILD_SUFFIX}")
+if (OMEGA_WIN32)
+	set(LIBXML_HOME "${ATHENA_UTILS}/libxml2/libxml2-${LIBXML_VERSION}-${BUILD_SUFFIX}")
+else (OMEGA_WIN32)
+	set(LIBXML_HOME "${ATHENA_UTILS}/libxml2/libxml2-${LIBXML_VERSION}-${TIGER_PLATFORM}")
+endif (OMEGA_WIN32)
 
 if (OMEGA_WIN32)
 	include_directories(AFTER "${LIBXML_HOME}/include" )

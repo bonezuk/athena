@@ -30,3 +30,22 @@ MacOSX
 	- Copy Google Mock dylib library from cmake_build to athena_utils/gmock/gmock-1.7.0-Mac32/lib directory.
 
 -----------
+libupnp v1.6.22
+Webpage : http://pupnp.sourceforge.net
+
+MacOSX
+	 - In Terminal cd to unpacked source directory
+	 - ./configure --prefix==~/athena_utils/libupnp/libupnp-1.6.25-Mac32
+	 - make
+	 - make install
+
+-----------
+libxml2 
+Webpage : http://www.xmlsoft.org/index.html
+Source code : ftp://xmlsoft.org/libxml2/libxml2-2.9.8.tar.gz	 
+
+MacOSX
+	 - In Terminal cd to unpacked source directory
+	 - ./configure --prefix==~/athena_utils/libxml2/libxml2-2.9.8-Mac32
+	 - make
+	 - make install
