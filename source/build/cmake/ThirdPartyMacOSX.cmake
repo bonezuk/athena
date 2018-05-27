@@ -1,5 +1,5 @@
 set(TIGER_INSTALL "${EXECUTABLE_OUTPUT_PATH}")
-set(TIGER_BIN_INSTALL "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}")
+set(TIGER_BIN_INSTALL "${EXECUTABLE_OUTPUT_PATH}")
 
 set(EXECUTABLE_OUTPUT_PATH "${TIGER_BIN_INSTALL}")
 set(LIBRARY_OUTPUT_PATH "${EXECUTABLE_OUTPUT_PATH}")
@@ -12,7 +12,6 @@ file(MAKE_DIRECTORY "${TIGER_BIN_INSTALL}")
 file(MAKE_DIRECTORY "${TIGER_BIN_INSTALL}/imageformats")
 file(MAKE_DIRECTORY "${TIGER_BIN_INSTALL}/platforms")
 file(MAKE_DIRECTORY "${TIGER_BIN_INSTALL}/printsupport")
-file(MAKE_DIRECTORY "${TIGER_INSTALL}/Frameworks")
 
 message("Copy Qt image formats")
 
@@ -28,21 +27,28 @@ function (copy_rename_plugin_files FILENAME PLUGIN_DIR)
 	endif (TIGER_DEBUG_BUILD)
 endfunction (copy_rename_plugin_files)
 
+message("Copy QtCore")
+file(GLOB QTCORE_LIBRARY_FILES "${QT_HOME}/lib/${QT_CORE_LIBNAME}.*")
+file(COPY ${QTCORE_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy QtGui")
+file(GLOB QTGUI_LIBRARY_FILES "${QT_HOME}/lib/${QT_GUI_LIBNAME}.*")
+file(COPY ${QTGUI_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy QtXml")
+file(GLOB QTXML_LIBRARY_FILES "${QT_HOME}/lib/${QT_XML_LIBNAME}.*")
+file(COPY ${QTXML_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy QtWidgets")
+file(GLOB QTWIDGETS_LIBRARY_FILES "${QT_HOME}/lib/${QT_WIDGETS_LIBNAME}.*")
+file(COPY ${QTWIDGETS_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy QtTest")
+file(GLOB QTTEST_LIBRARY_FILES "${QT_HOME}/lib/${QT_TEST_LIBNAME}.*")
+file(COPY ${QTTEST_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
 copy_rename_plugin_files("libqcocoa" "platforms")
 copy_rename_plugin_files("libqjpeg" "imageformats")
 copy_rename_plugin_files("libqgif" "imageformats")
 copy_rename_plugin_files("libcocoaprintersupport" "printsupport")
 
-message("Copy Monkey Audio")
-file(COPY "${MONKEYAUDIO_HOME}/lib/${MONKEYAUDIO_LIBNAME}.1.0.0.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
-file(COPY "${MONKEYAUDIO_HOME}/lib/${MONKEYAUDIO_LIBNAME}.1.0.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
-file(COPY "${MONKEYAUDIO_HOME}/lib/${MONKEYAUDIO_LIBNAME}.1.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
-file(COPY "${MONKEYAUDIO_HOME}/lib/${MONKEYAUDIO_LIBNAME}.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
-
-message("Copy Sparkle Framework")
-#file(COPY "${SPARKLE_HOME}/${SPARKLE_LIBNAME}.framework/Resources" DESTINATION "${TIGER_INSTALL}/Frameworks/${SPARKLE_LIBNAME}.framework/Resources")
-#file(COPY "${SPARKLE_HOME}/${SPARKLE_LIBNAME}.framework/Versions" DESTINATION "${TIGER_INSTALL}/Frameworks/${SPARKLE_LIBNAME}.framework/Versions")
-
-message("Copy license resource")
-file(GLOB LICENSE_SOUND_FILES "${CMAKE_SOURCE_DIR}/source/build/Resources/*.ogg")
-file(COPY ${LICENSE_SOUND_FILES} DESTINATION "${TIGER_INSTALL}")
