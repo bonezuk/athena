@@ -24,10 +24,10 @@ MacOSX
 	- Use CMake with source directory gmock-1.7.0 and Unix Makefiles.
 	- Tick BUILD_SHARED_LIBS
 	- In Terminal ls to build directory and run make.
-	- Copy Google Test includes from gmock-1.7.0/gtest/include to athena_utils/gmock/gmock-1.7.0-Mac32/include directory.
-	- Copy Google Mock includes from gmock-1.7.0/include to athena_utils/gmock/gmock-1.7.0-Mac32/include directory.
-	- Copy Google Test dylib library from cmake_build/gtest to athena_utils/gmock/gmock-1.7.0-Mac32/lib directory.
-	- Copy Google Mock dylib library from cmake_build to athena_utils/gmock/gmock-1.7.0-Mac32/lib directory.
+	- Copy Google Test includes from gmock-1.7.0/gtest/include to athena_utils/gmock/gmock-1.7.0-Mac64/include directory.
+	- Copy Google Mock includes from gmock-1.7.0/include to athena_utils/gmock/gmock-1.7.0-Mac64/include directory.
+	- Copy Google Test dylib library from cmake_build/gtest to athena_utils/gmock/gmock-1.7.0-Mac64/lib directory.
+	- Copy Google Mock dylib library from cmake_build to athena_utils/gmock/gmock-1.7.0-Mac64/lib directory.
 
 -----------
 libupnp v1.6.22
@@ -35,7 +35,7 @@ Webpage : http://pupnp.sourceforge.net
 
 MacOSX
 	 - In Terminal cd to unpacked source directory
-	 - ./configure --prefix==~/athena_utils/libupnp/libupnp-1.6.25-Mac32
+	 - ./configure --prefix==~/athena_utils/libupnp/libupnp-1.6.25-Mac64
 	 - make
 	 - make install
 
@@ -46,7 +46,7 @@ Source code : ftp://xmlsoft.org/libxml2/libxml2-2.9.8.tar.gz
 
 MacOSX
 	 - In Terminal cd to unpacked source directory
-	 - ./configure --prefix==~/athena_utils/libxml2/libxml2-2.9.8-Mac32
+	 - ./configure --prefix==~/athena_utils/libxml2/libxml2-2.9.8-Mac64
 	 - make
 	 - make install
 
@@ -66,14 +66,14 @@ The mpcdec.h header file is modified such that the internal structure of type mp
 
 MacOSX
 	- Use CMake with Unix Makefiles to build libcuefile.
-	- Copy dylib and include from libcuefile into ~/athena_utils/musepack/musepack-r475-Mac32
+	- Copy dylib and include from libcuefile into ~/athena_utils/musepack/musepack-r475-Mac64
 	- Use CMake with Unix Makefiles to build libreplaygain.
-	- Copy dylib and include from libreplaygain into ~/athena_utils/musepack/musepack-r475-Mac32
+	- Copy dylib and include from libreplaygain into ~/athena_utils/musepack/musepack-r475-Mac64
 	- Use CMake to build musepack_src
-	- Set CUEFILE_INCLUDE_DIR to ~/athena_utils/musepack/musepack-r475-Mac32/include 
-	- Set REPLAY_GAIN_INCLUDE_DIR to ~/athena_utils/musepack/musepack-r475-Mac32/include 
-	- Set CUEFILE_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac32/lib/libcuefile.dylib
-	- Set REPLAY_GAIN_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac32/lib/libreplaygain.dylib
+	- Set CUEFILE_INCLUDE_DIR to ~/athena_utils/musepack/musepack-r475-Mac64/include 
+	- Set REPLAY_GAIN_INCLUDE_DIR to ~/athena_utils/musepack/musepack-r475-Mac64/include 
+	- Set CUEFILE_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac64/lib/libcuefile.dylib
+	- Set REPLAY_GAIN_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac64/lib/libreplaygain.dylib
 	- Use Unix Makefiles to build and copy includes and built libraries into place.
 
 
