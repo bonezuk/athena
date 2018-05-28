@@ -52,3 +52,26 @@ copy_rename_plugin_files("libqjpeg" "imageformats")
 copy_rename_plugin_files("libqgif" "imageformats")
 copy_rename_plugin_files("libcocoaprintersupport" "printsupport")
 
+message("Copy libxml2")
+file(GLOB LIBXML_LIBRARY_FILES "${LIBXML_HOME}/lib/${LIBXML_LIBNAME}.${LIBEXT}*")
+file(COPY ${LIBXML_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy UPnP")
+file(GLOB LIBUPNP_LIBRARY_FILES "${LIBUPNP_HOME}/lib/*.${LIBEXT}*")
+file(COPY ${LIBUPNP_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy Musepack Decoder")
+file(GLOB MUSEPACK_LIBRARY_FILES "${MUSEPACK_HOME}/lib/*.${LIBEXT}*")
+file(COPY ${MUSEPACK_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy WavPack")
+file(GLOB WAVPACK_LIBRARY_FILES "${WAVPACK_HOME}/lib/${WAVPACK_LIBNAME}.${LIBEXT}*")
+file(COPY ${WAVPACK_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy GTest")
+file(GLOB GTEST_LIBRARY_FILES "${GTEST_HOME}/lib/*.${LIBEXT}*")
+file(COPY ${GTEST_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
+message("Copy GMock")
+file(GLOB GMOCK_LIBRARY_FILES "${GMOCK_HOME}/lib/*.${LIBEXT}*")
+file(COPY ${GMOCK_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})

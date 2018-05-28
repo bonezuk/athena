@@ -31,7 +31,6 @@ include(libxml2)
 include(libupnp)
 include(musepack)
 include(wavpack)
-include(gtest)
 include(gmock)
 
 if (OMEGA_WIN32)

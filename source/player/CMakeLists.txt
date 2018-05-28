@@ -111,12 +111,6 @@ elseif (OMEGA_LINUX)
 	target_link_libraries(Omega audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets wavpack libupnp mpcdec)
 endif (OMEGA_WIN32)
 
-if (OMEGA_MACOSX)
-	if (${TIGER_DEBUG_BUILD})
-    	set_target_properties(Omega PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
-	endif (${TIGER_DEBUG_BUILD})
-endif (OMEGA_MACOSX)
-
 if (OMEGA_WIN32)
 	set_target_properties(Omega PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS")
 	set_target_properties(Omega PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")

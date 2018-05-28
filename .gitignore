@@ -1,2 +1,4 @@
 Build/*
 cmake_makefile_build/*
+source/
+CMakeLists.txt.user
