@@ -36,9 +36,7 @@ class PlayerController : public QObject
 		QTimer *cliTimer();
 		
 		ITunesConfig *iTunesConfig();
-
-		AutoUpdater *updater();
-		
+				
 		void setPlayText(const QString& text);
 		void createContextMenu(QMenu& m,bool pasteFlag);
 		void onCanPlay(bool f);
@@ -73,7 +71,6 @@ class PlayerController : public QObject
 		QAction *m_nextTrackAction;
 		QAction *m_aboutAction;
 		QAction *m_helpAction;
-		QAction *m_updateCheckAction;
 		QAction *m_cutAction;
 		QAction *m_copyAction;
 		QAction *m_pasteAction;
@@ -92,7 +89,6 @@ class PlayerController : public QObject
 		QAction *m_nextTrackActionMacMenu;
 		QAction *m_aboutActionMacMenu;
 		QAction *m_helpActionMacMenu;
-		QAction *m_updateCheckActionMacMenu;
 		QAction *m_cutActionMacMenu;
 		QAction *m_copyActionMacMenu;
 		QAction *m_pasteActionMacMenu;
@@ -108,8 +104,6 @@ class PlayerController : public QObject
 		
 		QMenu *m_iTunesCollectionMenu;
 		ITunesConfig *m_iTunesConfig;
-		
-		AutoUpdater *m_updater;
 		
 		QTimer *m_cliTimer;
 		
@@ -184,13 +178,6 @@ inline ITunesConfig *PlayerController::iTunesConfig()
 inline QTimer *PlayerController::cliTimer()
 {
 	return m_cliTimer;
-}
-
-//-------------------------------------------------------------------------------------------
-
-inline AutoUpdater *PlayerController::updater()
-{
-	return m_updater;
 }
 
 //-------------------------------------------------------------------------------------------

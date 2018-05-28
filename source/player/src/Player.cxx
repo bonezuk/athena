@@ -1433,12 +1433,7 @@ void Player::onCanPlayNext(bool flag)
 //-------------------------------------------------------------------------------------------
 
 void Player::onUpdateSoftware()
-{
-	if(PlayerController::instance()->updater()!=0)
-	{
-		PlayerController::instance()->updater()->checkForUpdates();
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 

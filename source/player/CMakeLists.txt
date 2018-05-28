@@ -10,8 +10,6 @@ set( PLAYER_UI
 )
 
 set( PLAYER_HEADER
-	inc/AutoUpdater.h
-	inc/AutoUpdaterWin.h
 	inc/CLIPipe.h
 	inc/ITunesConfig.h
 	inc/NoASIODriverDialog.h
@@ -43,8 +41,6 @@ set( PLAYER_HEADER
 )
 
 set( PLAYER_SOURCE
-	src/AutoUpdater.cxx
-	src/AutoUpdaterWin.cxx
 	src/CLIPipe.cxx
 	src/ITunesConfig.cxx
 	src/Main.cxx
@@ -78,13 +74,11 @@ set( PLAYER_SOURCE
 
 if (OMEGA_MACOSX)
 	set( PLAYER_MAC_HEADER
-		inc/AutoUpdaterMac.h
 		inc/CocoaInitializer.h
 		inc/SettingsITunesMac.h
 	)
 
 	set( PLAYER_MAC_SOURCE
-		src/AutoUpdaterMac.mm
 		src/ITunesConfigLocationMac.mm
 		src/CocoaInitializer.mm
 		src/SettingsITunesMac.mm
@@ -110,9 +104,9 @@ elseif (OMEGA_MACOSX)
 endif (OMEGA_WIN32 OR OMEGA_LINUX)
 
 if (OMEGA_WIN32)
-	target_link_libraries(Omega audioio blackomega blueomega common cyanomega dlna engine greenomega http mime monkeyomega toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets winmm ws2_32 winsparkle wavpack)
+	target_link_libraries(Omega audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets winmm ws2_32 winsparkle wavpack)
 elseif (OMEGA_MACOSX)
-	target_link_libraries(Omega audioio blackomega blueomega common cyanomega dlna engine greenomega http mime monkeyomega toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets wavpack ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${SPARKLE_FRAMEWORK})
+	target_link_libraries(Omega audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets wavpack ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${SPARKLE_FRAMEWORK})
 elseif (OMEGA_LINUX)
 	target_link_libraries(Omega audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets wavpack libupnp mpcdec)
 endif (OMEGA_WIN32)

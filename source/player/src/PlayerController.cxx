@@ -21,7 +21,6 @@ PlayerController *PlayerController::m_instance = 0;
 
 PlayerController::PlayerController() : QObject(),
 	m_playerDialog(0),
-	
 	m_addFilesAction(0),
 	m_addFolderAction(0),
 	m_savePlaylistAction(0),
@@ -31,7 +30,6 @@ PlayerController::PlayerController() : QObject(),
 	m_nextTrackAction(0),
 	m_aboutAction(0),
 	m_helpAction(0),
-	m_updateCheckAction(0),
 	m_cutAction(0),
 	m_copyAction(0),
 	m_pasteAction(0),
@@ -47,7 +45,6 @@ PlayerController::PlayerController() : QObject(),
 	m_nextTrackActionMacMenu(0),
 	m_aboutActionMacMenu(0),
 	m_helpActionMacMenu(0),
-	m_updateCheckActionMacMenu(0),
 	m_cutActionMacMenu(0),
 	m_copyActionMacMenu(0),
 	m_pasteActionMacMenu(0),
@@ -58,7 +55,6 @@ PlayerController::PlayerController() : QObject(),
 #endif
 	m_iTunesCollectionMenu(0),
 	m_iTunesConfig(0),
-	m_updater(0),
 	m_cliTimer(0),
 	m_startFlag(false),
 	m_freePlayerDialogs(),
@@ -118,12 +114,6 @@ void PlayerController::onStart()
 	d.cdUp();
 	d.cd("PlugIns");
 	QApplication::setLibraryPaths(QStringList(d.absolutePath()));
-#endif
-
-#if defined(OMEGA_WIN32)
-	m_updater = AutoUpdaterFactory::createUnmanaged("win");
-#elif defined(OMEGA_MACOSX)
-	m_updater = AutoUpdaterFactory::createUnmanaged("mac");
 #endif
 
 	network::Resource::instance();
@@ -221,12 +211,6 @@ void PlayerController::onStop()
 		m_playerDialog->setVisible(false);
 		delete m_playerDialog;
 		m_playerDialog = 0;
-	}
-
-	if(m_updater!=0)
-	{
-		delete m_updater;
-		m_updater = 0;
 	}
 
 #if defined(ORCUS_WIN32)
@@ -526,9 +510,6 @@ void PlayerController::createActions()
 	m_aboutActionMacMenu = new QAction(tr("About Black Omega"),this);
 	connect(m_aboutActionMacMenu,SIGNAL(triggered()),this,SLOT(onShowLicense()));
 
-	m_updateCheckAction = new QAction(tr("Check for updates..."),this);
-	connect(m_updateCheckAction,SIGNAL(triggered()),this,SLOT(onUpdateSoftware()));
-	
 	QMenuBar *mainMenuBar = new QMenuBar(0);
 	
 	QMenu *fileMenu = mainMenuBar->addMenu(tr("&File"));
@@ -563,9 +544,6 @@ void PlayerController::createActions()
 	//QMenu *hMenu = mainMenuBar->addMenu(tr("Help"));
 	helpMenu->addAction(m_helpActionMacMenu);
 	helpMenu->addSeparator();
-#if !defined(OMEGA_MAC_STORE)
-	helpMenu->addAction(m_updateCheckAction);
-#endif
 
 	registerHelpBook();
 #endif

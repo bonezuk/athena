@@ -17,7 +17,6 @@
 #include "player/inc/Settings.h"
 #include "player/inc/CLIPipe.h"
 #include "player/inc/ITunesConfig.h"
-#include "player/inc/AutoUpdater.h"
 #include "remote/inc/RemoteIF.h"
 #include "common/inc/SBService.h"
 #include "remote/inc/KeyControlService.h"
