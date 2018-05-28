@@ -1,0 +1,53 @@
+# xmcd
+#
+# Track frame offsets:
+# 150
+# 17310
+# 30592
+# 48535
+# 66972
+# 83597
+# 97532
+# 117280
+# 131447
+# 146147
+# 164592
+# 182052
+#
+# Disc length: 2729 seconds
+#
+#
+# Revision: 21
+# Processed by: cddbd v1.5.2PL0 Copyright (c) Steve Scherf et al.
+# Submitted via: FreeRIP 2.96 
+#
+DISCID=940aa70c
+DTITLE=Travis / The Invisible Band
+DYEAR=2001
+DGENRE=Alternative
+TTITLE0=Sing
+TTITLE1=Dear Diary
+TTITLE2=Side
+TTITLE3=Pipe Dreams
+TTITLE4=Flowers in the Window
+TTITLE5=The Cage
+TTITLE6=Safe
+TTITLE7=Follow the Light
+TTITLE8=Last Train
+TTITLE9=Afterglow
+TTITLE10=Indefinitely
+TTITLE11=The Humpty Dumpty Love Song
+EXTD=
+EXTT0=
+EXTT1=
+EXTT2=
+EXTT3=
+EXTT4=
+EXTT5=
+EXTT6=
+EXTT7=
+EXTT8=
+EXTT9=
+EXTT10=
+EXTT11=
+PLAYORDER=

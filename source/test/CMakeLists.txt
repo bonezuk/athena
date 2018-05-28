@@ -1,0 +1,209 @@
+set ( TEST_HEADERS
+	../audioio/test/AOChannelMapMock.h
+	../audioio/test/AudioHardwareBufferTester.h
+	../audioio/test/AudioItemMock.h
+	../audioio/test/AOBaseTest.h
+	../audioio/test/AOQueryDeviceMock.h
+	../common/test/AsynchronousFileReaderMock.h
+	../common/test/AsynchronousFileReaderTest.h
+	../common/test/BIOStreamMock.h
+	../common/test/BIOTimeCachedStreamTest.h
+	../common/test/CachedFileStreamTest.h
+	../common/test/CachedFileStreamMock.h
+	../common/test/ServiceEventTest.h
+	../dlna/test/DiskMockIF.h
+	../dlna/test/UPnPMockIF.h
+	../dlna/test/UPnPProviderTestEnviroment.h
+	../dlna/test/XMLLibMockIF.h
+	../engine/test/ADataMock.h
+	../engine/test/CodecMock.h
+	../engine/test/CodecTest.h
+	../engine/test/RDataMock.h
+	../remote/test/KeyAssignmentMock.h
+	../remote/test/RemoteIFMock.h
+	../remote/test/WinLIRCSettingsMock.h
+	../track/db/test/SQLiteMock.h
+	../track/info/test/AIFFInfoTest.h
+	../track/info/test/WavInfoTest.h
+	../track/model/test/AbstractTrackModelTest.h
+	../track/model/test/ImageRepositaryMock.h
+	../track/model/test/TrackDBTestEnviroment.h
+	QUnitTestTimer.h
+)
+
+set ( TEST_SOURCE
+	../audioio/test/AOBaseTest.cxx
+	../audioio/test/AOChannelMapMock.cxx
+	../audioio/test/AudioHardwareBufferTester.cxx
+	../audioio/test/AudioItemMock.cxx
+	../audioio/test/FormatDescriptionTest.cxx
+	../audioio/test/FormatDescriptionUtilsTest.cxx
+	../audioio/test/FormatsSupportedTest.cxx
+	../audioio/test/IOTimeStampTest.cxx
+	../audioio/test/SampleConverterTest.cxx
+
+	../common/test/AsynchronousFileReaderMock.cxx
+	../common/test/AsynchronousFileReaderTest.cxx
+	../common/test/BIOStreamTest.cxx
+	../common/test/BIOStreamFunctionalTest.cxx
+	../common/test/BIOBufferedStreamTest.cxx
+	../common/test/BIOMemoryTest.cxx
+	../common/test/BIOMemoryStreamTest.cxx
+	../common/test/BIOStreamMock.cxx
+	../common/test/BIOTimeCachedStreamTest.cxx
+	../common/test/CachedFileStreamTest.cxx
+	../common/test/CachedFileStreamMock.cxx
+	../common/test/CommonTypesTest.cxx
+	../common/test/LargeNumberTest.cxx
+	../common/test/CommonDirectoriesForFilesTest.cxx
+	../common/test/CryptoRSAEncryptTest.cxx
+	../common/test/DictionaryXMLMapTest.cxx
+	../common/test/ProductVersionInfoTest.cxx
+	../common/test/JaroWinklerDistanceTest.cxx
+	../common/test/RandomTest.cxx
+	../common/test/ServiceEventTest.cxx
+
+	../dlna/test/DiskLayerTestIF.cxx
+	../dlna/test/DiskMockIF.cxx
+	../dlna/test/UPnPDeviceDescriptionTest.cxx
+	../dlna/test/UPnPMockIF.cxx
+	../dlna/test/UPnPProviderTest.cxx
+	../dlna/test/UPnPProviderTestEnviroment.cxx
+	../dlna/test/UPnPServiceDescriptionTest.cxx
+	../dlna/test/UPnPSpecVersionTest.cxx
+	../dlna/test/XMLLibMockIF.cxx
+	../dlna/test/XMLNodeParserTest.cxx
+	../dlna/test/XMLReadOpsTest.cxx
+
+	../engine/test/ADataMock.cxx
+	../engine/test/CodecMock.cxx
+	../engine/test/CodecTest.cxx
+	../engine/test/FormatTypeTest.cxx
+	../engine/test/FormatType8BitTest.cxx
+	../engine/test/FormatTypeFromFloatTest.cxx
+	../engine/test/InterleavedCodecTest.cxx
+	../engine/test/OrcusDCT64Test.cxx
+	../engine/test/RDataMock.cxx
+	../engine/test/RDataTest.cxx
+
+	../engine/violetomega/test/IFFChunkTest.cxx
+	../engine/violetomega/test/IFFCommonChunkTest.cxx
+	../engine/violetomega/test/IFFFileTest.cxx
+	../engine/violetomega/test/IFFFormChunkTest.cxx
+	../engine/violetomega/test/IFFSoundChunkTest.cxx
+	../engine/violetomega/test/IFFTextChunkTest.cxx
+	
+	../engine/wavpackomega/test/WavPackCodecTest.cxx
+	../engine/wavpackomega/test/WavPackBIOReaderTest.cxx
+
+	../remote/test/KeyAssignmentMock.cxx
+	../remote/test/KeyAssignmentTest.cxx
+	../remote/test/KeyCodeExclusionTest.cxx
+	../remote/test/KeyCodesContainerTest.cxx
+	../remote/test/KeyCodeStateEngineTest.cxx
+	../remote/test/KeyControlServiceTest.cxx
+	../remote/test/KeyStateParserTest.cxx
+	../remote/test/WinLIRCClientTest.cxx
+	../remote/test/WinLIRCRemoteTest.cxx
+	../remote/test/WinLIRCSettingsMock.cxx
+
+	../network/test/ResourceTest.cxx
+
+	../track/db/test/ITunesLocationTest.cxx
+	../track/db/test/SQLiteMock.cxx
+	../track/db/test/TrackFileDependenciesTest.cxx
+	
+	../track/info/test/AIFFInfoTest.cxx
+	../track/info/test/APEInfoTest.cxx
+	../track/info/test/APETagTest.cxx
+	../track/info/test/MPCChapterTagTest.cxx
+	../track/info/test/CueInfoTest.cxx
+	../track/info/test/InfoTest.cxx
+	../track/info/test/WavInfoTest.cxx
+	../track/info/test/XMCDInfoTest.cxx
+	
+	../track/model/test/AbstractTrackItemTest.cxx
+	../track/model/test/AbstractTrackModelTest.cxx
+	../track/model/test/AlbumModelTest.cxx
+	../track/model/test/AlbumModelKeyTest.cxx
+	../track/model/test/AlbumModelUtilitiesTest.cxx
+	../track/model/test/AlbumTrackModelTest.cxx
+	../track/model/test/ImageRepositaryMock.cxx
+	../track/model/test/ImageRepositaryTest.cxx
+	../track/model/test/TrackDBTestEnviroment.cxx
+	../track/model/test/TrackModelKeyTest.cxx
+
+	QUnitTestTimer.cxx
+	TestMain.cxx
+)
+
+if (OMEGA_WIN32)
+	set ( TEST_WIN_HEADERS
+		../audioio/test/ASIODataMock.h
+		../audioio/test/ASIODriverMock.h
+		../audioio/test/WasAPICOMInterfacesMock.h
+		../audioio/test/WasAPIIFMock.h
+	)
+
+	set ( TEST_WIN_SOURCE
+		../audioio/test/ASIODataMock.cxx
+		../audioio/test/AOWin32Test.cxx
+		../audioio/test/ASIODriverMock.cxx
+		../audioio/test/ASIODataTest.cxx
+		../audioio/test/AOQueryASIOTest.cxx
+		../audioio/test/AOQueryWasAPITest.cxx
+		../audioio/test/AudioHardwareBufferWasAPITest.cxx
+		../audioio/test/WasAPICOMInterfacesMock.cxx		
+		../audioio/test/WasAPIIFMock.cxx
+		../audioio/test/WasAPILayerIFTest.cxx
+	)
+endif (OMEGA_WIN32)
+
+if (OMEGA_MACOSX)
+	set ( TEST_MAC_HEADERS
+		../audioio/test/CoreAudioMockIF.h
+	)
+	set ( TEST_OBJECTIVE_SOURCE
+		../audioio/test/AOCoreAudioTest.cxx
+		../audioio/test/AOQueryCoreAudioTest.cxx
+		../audioio/test/CoreAudioMockIF.cxx
+		../track/db/test/SandboxBookmarkServiceTest.mm
+	)
+endif (OMEGA_MACOSX)
+
+if (OMEGA_LINUX)
+	set ( TEST_LINUX_HEADERS
+		../audioio/test/AOQueryALSAMock.h
+		../audioio/test/LinuxALSAMockIF.h
+	)
+	set ( TEST_LINUX_SOURCE
+		../audioio/test/AOLinuxALSATest.cxx
+		../audioio/test/AOQueryALSATest.cxx
+		../audioio/test/AudioHardwareBufferALSATest.cxx
+		../audioio/test/LinuxALSAMockIF.cxx
+	)
+endif (OMEGA_LINUX)
+
+qt5_add_resources(TEST_UI_RESOURCES test.qrc)
+
+if (OMEGA_WIN32)
+	add_executable(Test ${TEST_HEADERS} ${TEST_SOURCE} ${TEST_UI_RESOURCES} ${TEST_WIN_HEADERS} ${TEST_WIN_SOURCE})
+elseif (OMEGA_MACOSX)
+	add_executable(Test ${TEST_HEADERS} ${TEST_SOURCE} ${TEST_MAC_HEADERS} ${TEST_OBJECTIVE_SOURCE} ${TEST_UI_RESOURCES})
+elseif(OMEGA_LINUX)
+	add_executable(Test ${TEST_HEADERS} ${TEST_SOURCE} ${TEST_UI_RESOURCES} ${TEST_LINUX_HEADERS} ${TEST_LINUX_SOURCE})
+endif (OMEGA_WIN32)
+
+if (OMEGA_WIN32)
+	target_link_libraries(Test audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega monkeyomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets qt5test winmm ws2_32 wavpack gtest gtest_main gmock gmock_main)
+elseif (OMEGA_MACOSX)
+	target_link_libraries(Test audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega monkeyomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets qt5test wavpack gtest gtest_main gmock gmock_main ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${CORESERVICES_FRAMEWORK_UNIT} ${COREAUDIO_FRAMEWORK_UNIT} ${AUDIOUNIT_FRAMEWORK_UNIT} ${AUDIOTOOLBOX_FRAMEWORK_UNIT})
+elseif (OMEGA_LINUX)
+	target_link_libraries(Test audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 qt5core qt5gui qt5xml qt5widgets qt5test wavpack libupnp mpcdec gtest gtest_main gmock gmock_main)
+endif (OMEGA_WIN32)
+
+if (OMEGA_MACOSX)
+	if (${TIGER_DEBUG_BUILD})
+    	set_target_properties(Test PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}" LIBRARY_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}" RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
+	endif (${TIGER_DEBUG_BUILD})
+endif (OMEGA_MACOSX)

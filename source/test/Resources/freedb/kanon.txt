@@ -1,0 +1,25 @@
+# xmcd
+#
+# Track frame offsets: 
+#        150
+#        1775
+#        28475
+#
+# Disc length: 483 seconds
+#
+# Revision: 0
+# Processed by: cddbd v1.5.2PL0 Copyright (c) Steve Scherf et al.
+# Submitted via: ExactAudioCopy v0.95b4
+#
+DISCID=1a01e103
+DTITLE=Johann Pachelbel / Kanon und Gigue (Begleitung zur Solostimme)
+DYEAR=
+DGENRE=Classical
+TTITLE0=Artist A / Kammerton a
+TTITLE1=Artist B / Kanon
+TTITLE2=Gigue
+EXTD=
+EXTT0=
+EXTT1=
+EXTT2=
+PLAYORDER=
