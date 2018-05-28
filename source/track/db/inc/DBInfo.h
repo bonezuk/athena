@@ -1,0 +1,81 @@
+//-------------------------------------------------------------------------------------------
+#ifndef __ORCUS_TRACK_DB_DBINFO_H
+#define __ORCUS_TRACK_DB_DBINFO_H
+//-------------------------------------------------------------------------------------------
+
+#include "track/info/inc/Info.h"
+#include "track/db/inc/TrackDB.h"
+
+//-------------------------------------------------------------------------------------------
+namespace orcus
+{
+namespace track
+{
+namespace db
+{
+//-------------------------------------------------------------------------------------------
+
+class TRACK_DB_EXPORT DBInfo : public info::Info
+{
+	public:
+		DBInfo(const QString& fileName);
+		virtual ~DBInfo();
+		
+        static QSharedPointer<info::Info> readInfo(int albumID,int trackID);
+        static QSharedPointer<info::Info> readInfo(const QString& fileName);
+		
+		tint albumID() const;
+		tint trackID() const;
+		
+		virtual bool isValid() const;
+		virtual bool isUpdateRequired() const;
+
+		virtual bool isChildren() const;
+		virtual tint noChildren() const;
+		virtual const ChildInfo& child(tint idx) const;
+		
+		virtual bool isImage() const;
+		virtual info::ImageInfoArray *getImageData(ImageFormat& format) const;
+		virtual info::ImageInfoArray *getImageData(info::IDTagImageType type,info::Info::ImageFormat& format) const;
+		
+		virtual QString directoryGroup() const;
+		
+	protected:
+		
+		tint m_albumID;
+		tint m_trackID;
+		bool m_updateFlag;
+		QString m_directoryGroup;
+		
+		QList<ChildInfo> m_chapters;
+		
+		mutable bool m_imageFlag;
+		mutable QMap<info::IDTagImageType,QPair<ImageFormat,info::ImageInfoArray *> > m_imageMap;
+		
+		virtual void printError(const tchar *strR,const tchar *strE) const;
+		
+		virtual bool loadRecord();
+		virtual bool loadImages() const;
+};
+
+//-------------------------------------------------------------------------------------------
+
+inline tint DBInfo::albumID() const
+{
+	return m_albumID;
+}
+
+//-------------------------------------------------------------------------------------------
+
+inline tint DBInfo::trackID() const
+{
+	return m_trackID;
+}
+
+//-------------------------------------------------------------------------------------------
+} // namespace db
+} // namespace track
+} // namespace orcus
+//-------------------------------------------------------------------------------------------
+#endif
+//-------------------------------------------------------------------------------------------

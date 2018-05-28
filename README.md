@@ -62,6 +62,8 @@ that can be used which has disabled by default.
 Musepack
 Webpage : https://www.musepack.net/index.php?pg=src
 
+The mpcdec.h header file is modified such that the internal structure of type mpc_dec_t is defined.
+
 MacOSX
 	- Use CMake with Unix Makefiles to build libcuefile.
 	- Copy dylib and include from libcuefile into ~/athena_utils/musepack/musepack-r475-Mac32
@@ -73,6 +75,8 @@ MacOSX
 	- Set CUEFILE_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac32/lib/libcuefile.dylib
 	- Set REPLAY_GAIN_LIBRARY to ~/athena_utils/musepack/musepack-r475-Mac32/lib/libreplaygain.dylib
 	- Use Unix Makefiles to build and copy includes and built libraries into place.
+
+
 
 ------------
 Wavpack

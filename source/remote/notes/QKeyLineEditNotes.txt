@@ -1,0 +1,218 @@
+See if a custom widget can be used to view data in a QTableView???
+ - Show keyboard icon + keyboard command.
+ - Show remote icon + remote command.
+The list of assigned commands can be drawn such that they appear as 
+distinct commands.
+
+Purpose: Widget provided via delegate to enable one or more input events to be mapped
+to a given player command from within a QTableView. An input event is defined as a 
+keyboard press or as a WinLIRC remote signal.
+
+Usage: The widget is shown when the cell in the QTableView is edited. In view mode the
+given cell shows a concatanated list of the given input event(s) that are mapped to the
+associated command. When the cell is editted then it is at this point this given widget
+is employed and shown to the user. The widget is composed of three components:
+
+1. Input edit field: This part looks like a normal line edit with a blinking cursor. If
+no key is mapped to the given assignment then it appears as blank. Otherwise, the given
+input event is shown. Depending on the input source an icon is used to represent a given
+type: Keyboard press (keyboard icon), Remote press (remote icon).
+
+2. A push button tool button is shown on the right hand of the widget. When pressed a popup
+menu is shown at the location of the tool button giving access to various actions in regards
+to the current command shown. Commands include
+	- Assign
+	- Add
+	- Clear
+
+3. When more than one input event is assigned to the given command then left and right
+navigation tool buttons are given to allow navigation between the different mapped input
+commands.
+
+Consider the sequence of events (i.e. mouse button clicks and keyboard presses in carrying
+out the following actions).
+	- Given no key assignment, how a key is assigned.
+	- Given no key assignment the actions that are allowed or shown in the popup menu
+	- Given one key assignment how another key is assigned.
+	- Given one key assignment how is it unassigned.
+	- Given one key assignment how is the one shown assignment modified.
+	- Given more than one key is assigned how is a new key assigned.
+	- Given more than one key is assigned how is the shown assignment modified.
+	- Given more than one key is assigned how is the one shown.
+	
+Also consider that key codes can also represent WinLIRC commands and that these mapping need to be shown.
+When the key edit box expects input give directional indication to press remote or keyboard button.
+
+// ----- No key assigned and cell displayed and selected for edit ------
+
+GIVEN: No key assignment for a command
+WHEN: Command assignment is shown
+THEN: A blank cell is shown
+
+GIVEN: No key assignment for a command
+WHEN: Cell is selected for editing
+THEN: Only key edit is shown with focus, nothing pressed and blinking cursor.
+
+// ------ No key assigned for selected cell and key or remote assignment made ------
+
+GIVEN: No key assignment for command, cell selected and edit has focus
+WHEN: Key release event is recieved and no mapping exists for key.
+THEN: - Key is assigned to command.
+      - Key press is shown in edit box, with keyboard icon.
+      - Edit box still has focus with blinking cursor.
+      - Popup menu button is now shown.
+
+GIVEN: No key assignment for command, cell selected and edit has focus
+WHEN: Key release event is recieved but mapping exists for key another command.
+THEN: Question dialog box shown asking if reassignment is requested with Yes/No response.
+
+GIVEN: Key reassignment question dialog is shown.
+WHEN: Yes is selected.
+THEN: - Key is assigned to given command, with keyboard icon.
+      - Key assigment is removed from conflicting command.
+      - Key press is shown in edit box.
+      - Edit box still has focus with blinking cursor.
+      - Popup menu button is now shown.
+      - Question dialog is closed
+
+GIVEN: Key reassignment question dialog is shown.
+WHEN: No is selected.
+THEN: - Question dialog is closed. 
+      - No key reassignment is made.
+      - Key edit is shown with focus, nothing pressed and blinking cursor.
+
+GIVEN: No key assignment for command, cell selected and edit has focus
+WHEN: Remote event is recieved and no mapping exists for remote string.
+THEN: - Remote string is assigned to command.
+      - Remote string is shown in edit box, with remote icon.
+      - Edit box still has focus with blinking cursor.
+      - Popup menu button is now shown.
+
+GIVEN: No key assignment for command, cell selected and edit has focus
+WHEN: Remote event is recieved but mapping exists for remote string for another command.
+THEN: Question dialog box shown asking if reassignment is requested with Yes/No response.
+
+GIVEN: Remote string reassignment question dialog is shown.
+WHEN: Yes is selected.
+THEN: - Remote string is assigned to given command.
+      - Remote string assigment is removed from conflicting command.
+      - Remote string is shown in edit box, with remote icon.
+      - Edit box still has focus with blinking cursor.
+      - Popup menu button is now shown.
+      - Question dialog is closed
+
+GIVEN: Remote string reassignment question dialog is shown.
+WHEN: No is selected.
+THEN: - Question dialog is closed. 
+      - No remote string reassignment is made.
+      - Key edit is shown with focus, nothing pressed and blinking cursor.
+
+// ----- Single key assigned and cell displayed and selected for edit ------
+
+GIVEN: Only a key is assigned for a command
+WHEN: Command assignment is shown
+THEN: Cell shows the keyboard assignment.
+      - The keyboard assignment is the key or set of keys to be pressed.
+      - The given assignment is placed against a keyboard icon with icon on left.
+      - Icon and text are contained on a slightly darker background, or lighter
+        background (depending on colour), than the background colour of the edit
+        box.
+      - The keyboard assignment is left aligned in the text box.
+        
+GIVEN: Only a key is assigned for a command
+WHEN: Cell is selected for editing
+THEN: - Edit box and popup menu button to the right are shown.
+      - Keyboard assignment and keyboard icon are shown left aligned.
+      - The edit box has focus with blinking cursor.
+
+// ----- Single remote string assigned and cell displayed and selected for edit ------
+
+GIVEN: Only a remote press is assigned for a command
+WHEN: Command assignment is shown
+THEN: Cell shows the remote press assignment.
+      - The remote press assignment is the string identified by WinLIRC when remote is pressed.
+      - The given assignment is placed against a remote icon with icon on left.
+      - Icon and text are contained on a slightly darker background, or lighter
+        background (depending on colour), than the background colour of the edit
+        box.
+      - The assignment is left aligned in the text box.
+        
+GIVEN: Only a remote press is assigned for a command
+WHEN: Cell is selected for editing
+THEN: - Edit box and popup menu button to the right are shown.
+      - Remote press assignment and remote icon are shown left aligned.
+      - The edit box has focus with blinking cursor.
+
+// ------ Single key/remote assigned for selected cell and key or remote assignment made ------
+
+GIVEN: An edit box is selected for one command with single key assignment.
+WHEN: A key press event is given for key assigment not mapped to any command.
+THEN: - Given key assignment is mapped to the given command.
+      - As multiple key assignments have been made the left and right navigation
+        buttons are shown.
+      - The new key assignment is shown in edit box.
+      - As key assignment is added to end of list, in terms of navigation of assignments,
+        then left nav button is enabled and right is disabled to indicate this.
+
+GIVEN: An edit box is selected for one command with single key assignment.
+WHEN: A key press event is given for key assigment mapped to a different command.
+THEN: Question dialog is shown stating the reassignment of from old command to edit command with Yes/No response.
+
+GIVEN: Edit box with single key assigned has other mapped key being assigned and question dialog.
+WHEN: The Yes button is pressed.
+THEN: - Given key assignment is mapped to the given command.
+      - Given key assignment is removed from the previous command.
+      - As multiple key assignments have been made the left and right navigation
+        buttons are shown.
+      - The new key assignment is shown in edit box.
+      - As key assignment is added to end of list, in terms of navigation of assignments,
+        then left nav button is enabled and right is disabled to indicate this.
+
+GIVEN: Edit box with single key assigned has other mapped key being assigned and question dialog.
+WHEN: The No button is pressed.
+THEN: No key reassignment is done with edit box in same state as before key press event.
+
+GIVEN: An edit box is selected for one command with single key assignment.
+WHEN: A key press event is given for key assigment mapped to command being editted.
+THEN: No key reassignment is done as none is required.
+
+GIVEN: An edit box is selected for one command with single key assignment.
+WHEN: A remote press event is given for key assigment not mapped to any command.
+THEN: - Given remote press assignment is mapped to the given command.
+      - As multiple key assignments have been made the left and right navigation
+        buttons are shown.
+      - The new remote press assignment is shown in edit box.
+      - As remote press assignment is added to end of list, in terms of navigation of assignments,
+        then left nav button is enabled and right is disabled to indicate this.
+
+GIVEN: An edit box is selected for one command with single key assignment.
+WHEN: A remote press event is given for key assigment mapped to a different command.
+THEN: Question dialog is shown stating the reassignment of from old command to edit command with Yes/No response.
+
+GIVEN: Edit box with single key assigned has other mapped remote press being assigned and question dialog.
+WHEN: The Yes button is pressed.
+THEN: - Given remote press assignment is mapped to the given command.
+      - Given remote press assignment is removed from the previous command.
+      - As multiple key assignments have been made the left and right navigation
+        buttons are shown.
+      - The new key assignment is shown in edit box.
+      - As remote press assignment is added to end of list, in terms of navigation of assignments,
+        then left nav button is enabled and right is disabled to indicate this.
+
+GIVEN: Edit box with single key assigned has other mapped remote press being assigned and question dialog.
+WHEN: The No button is pressed.
+THEN: No remote press reassignment is done with edit box in same state as before remote press event.
+
+GIVEN: An edit box is selected for one command with single key assignment.
+WHEN: A remote press event is given for key assigment mapped to command being edited.
+THEN: No remote press reassignment is done as none is required.
+
+// ----- Selection of the Left Navigation button ------
+
+// ----- Selection of the Right Navigation button ------
+
+// ----- Action taken on selecting Remove Assignment ------
+
+// ----- Action taken on selecting Clear -----
+
+// ----- Multiple assignments are made to a given command -----
