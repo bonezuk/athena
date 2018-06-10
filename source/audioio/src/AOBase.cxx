@@ -1,5 +1,3 @@
-#include "network/mime/inc/LicenseClient.h"
-
 #include "audioio/inc/AOBase.h"
 #if defined(OMEGA_WIN32)
 #include "audioio/inc/AOWin32.h"
@@ -678,8 +676,6 @@ AOBase::AOBase(QObject *parent) : QObject(parent),
 	m_mergeCodeTime(),
 	m_mergeCurrentPlayTime(),
 	m_mergeNextPlayTime(10.0),
-	m_licenseFlag(true),
-	m_licenseCheckFlag(true),
 	m_eventQueueTimer(0),
 	m_eventQueueMutex(),
 	m_eventQueue(),
@@ -846,33 +842,6 @@ void AOBase::stopAudioService()
 
 //-------------------------------------------------------------------------------------------
 
-void AOBase::onLicense()
-{
-	m_licenseFlag = true;
-}
-
-//-------------------------------------------------------------------------------------------
-
-void AOBase::onNoLicense()
-{
-#if !defined(OMEGA_MAC_STORE) && !defined(OMEGA_NO_LICENSE)
-	if(m_licenseCheckFlag)
-	{
-		m_licenseFlag = false;
-	}
-#endif
-}
-
-//-------------------------------------------------------------------------------------------
-
-void AOBase::disableLicenseCheck()
-{
-	m_licenseFlag = true;
-	m_licenseCheckFlag = false;
-}
-
-//-------------------------------------------------------------------------------------------
-
 bool AOBase::isLive() const
 {
 	return true;
@@ -885,17 +854,7 @@ bool AOBase::init()
 	QSettings settings;
 	
 	m_threadId = QThread::currentThreadId();
-
-    if(network::LicenseClient::instance().data()!=0)
-	{
-        QObject::connect(network::LicenseClient::instance().data(),SIGNAL(licensed()),this,SLOT(onLicense()));
-        QObject::connect(network::LicenseClient::instance().data(),SIGNAL(notLicensed()),this,SLOT(onNoLicense()));
-	}
-	else
-	{
-		QCoreApplication::quit();
-	}
-	
+		
 	settings.beginGroup("audio");
 	if(settings.contains(QString::fromLatin1("crossfade")))
 	{
@@ -4943,42 +4902,6 @@ bool AOBase::decodeAndResample(engine::Codec *c,AudioItem *outputItem,bool& init
 				initF = false;
 			}
 		}
-		
-#if !defined(OMEGA_MAC_STORE) && !defined(OMEGA_NO_LICENSE)
-		if(!m_licenseFlag)
-		{
-			if(m_mergeCurrentPlayTime > m_mergeNextPlayTime)
-			{
-				if(m_mergeCodec==0)
-				{
-					if(!openMergeCodec(getUnlicensedFilename()))
-					{
-						closeMergeCodec();
-					}
-				}
-				if(m_mergeCodec!=0)
-				{
-					if(!mergeAudioWithCodec(m_mergeCodec,outputItem))
-					{
-						m_mergeNextPlayTime = m_mergeCurrentPlayTime + 10.0;
-						closeMergeCodec();
-					}
-				}
-				else
-				{
-					QCoreApplication::quit();
-				}
-			}
-
-			{
-				engine::RData *oData = dynamic_cast<engine::RData *>(&dData);
-				for(i=0;i<oData->noParts();i++)
-				{
-					m_mergeCurrentPlayTime += static_cast<tfloat64>(oData->part(i).length()) / static_cast<tfloat64>(m_frequency);
-				}
-			}
-		}
-#endif		
 	}
 	dData.mixChannels();
 	return res;
@@ -5274,73 +5197,6 @@ void AOBase::setDeviceChannelMap(int devIdx,const AOChannelMap& chMap)
 		e->channelMap() = chMap;
 		postAudioEvent(e);
 	}
-}
-
-//-------------------------------------------------------------------------------------------
-
-QString AOBase::getUnlicensedFilename()
-{
-	QString fName;
-	QDir dDir(QCoreApplication::applicationDirPath());
-	dDir.cdUp();
-	dDir.cd("data");
-	dDir.cd("license");
-	
-	switch(m_frequency)
-	{
-		case 8000:
-			fName = "license8.ogg";
-			break;
-
-		case 11025:
-			fName = "license11.ogg";
-			break;
-
-		case 12000:
-			fName = "license12.ogg";
-			break;
-
-		case 16000:
-			fName = "license16.ogg";
-			break;
-
-		case 22050:
-			fName = "license22.ogg";
-			break;
-
-		case 24000:
-			fName = "license24.ogg";
-			break;
-
-		case 32000:
-			fName = "license32.ogg";
-			break;
-
-		case 44100:
-			fName = "license44.ogg";
-			break;
-
-		case 48000:
-			fName = "license48.ogg";
-			break;
-
-		case 64000:
-			fName = "license64.ogg";
-			break;
-
-		case 96000:
-			fName = "license96.ogg";
-			break;
-
-		default:
-			break;
-	}
-	if(!fName.isEmpty())
-	{
-		fName = dDir.absolutePath() + "/" + fName;
-		fName = QDir::toNativeSeparators(fName);
-	}
-	return fName;
 }
 
 //-------------------------------------------------------------------------------------------

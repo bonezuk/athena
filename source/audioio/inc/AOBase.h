@@ -213,8 +213,6 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		
 		virtual Qt::HANDLE threadId();
 
-		virtual void disableLicenseCheck();
-		
 		virtual bool isExclusive();
 		virtual bool isExclusive(int devIdx);
 		virtual void setExclusiveMode(bool flag);
@@ -467,7 +465,8 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		// Output channel map from AData::outData to m_bufferInfos output
 		int m_outputChannelArray[c_kMaxOutputChannels];
 		
-		// Codec stream used to merge into output stream to playback unlicensed message
+		// Codec stream used to merge into output stream to playback
+		// Original functionality was to play unlicensed message, deprecated
 		engine::Codec *m_mergeCodec;
 		// Audio item used for merging to output stream.
 		AudioItem *m_mergeAudioItem;
@@ -475,11 +474,8 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		common::TimeStamp m_mergeCodeTime;
 		// Running time of playback for merge.
 		common::TimeStamp m_mergeCurrentPlayTime;
-		// The next time that the license message is to dubbed in.
+		// The next time that the merge codec is to dubbed in.
 		common::TimeStamp m_mergeNextPlayTime;
-		// Flag for specifiying if the product is licensed.
-		bool m_licenseFlag;
-		bool m_licenseCheckFlag;
 		
 		QTimer *m_eventQueueTimer;
 		QMutex m_eventQueueMutex;
@@ -658,7 +654,6 @@ class AUDIOIO_EXPORT AOBase : public QObject
 
 		virtual void buildChannelMapArray();
 		
-		virtual QString getUnlicensedFilename();
 		virtual bool openMergeCodec(const QString& fileName);
 		virtual void closeMergeCodec();
 		virtual bool mergeAudioWithCodec(engine::Codec *mCodec,AudioItem *oItem);
@@ -871,9 +866,6 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		// Possible refactor to reduce this duplication of logic. The onCodecInit is used for remote based codec streams
 		// and startNextCodec is for local codec streams.
 		void onCodecInit(void *cPtr);
-		
-		void onLicense();
-		void onNoLicense();
 		
 		void onEventTimer();
 

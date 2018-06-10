@@ -58,7 +58,8 @@ PlayerController::PlayerController() : QObject(),
 	m_cliTimer(0),
 	m_startFlag(false),
 	m_freePlayerDialogs(),
-	m_splashScreen(0)
+	m_splashScreen(0),
+	m_processThread(0)
 {
 	QEvent *eStartup = new QEvent(static_cast<QEvent::Type>(e_StartupEvent));
 	QCoreApplication::postEvent(this,eStartup);
@@ -118,19 +119,12 @@ void PlayerController::onStart()
 
 	network::Resource::instance();
 	network::Controller::ControllerSPtr ctrl(network::Controller::instance());
-    QSharedPointer<network::LicenseClient> lClient = network::LicenseClient::instance();
-    if(lClient.data()!=0)
-	{
-        QObject::connect(lClient.data(),SIGNAL(licensed()),this,SLOT(onLicensed()));
-        QObject::connect(lClient.data(),SIGNAL(notLicensed()),this,SLOT(onNotLicensed()));
-	}
-
-	m_iTunesConfig = new ITunesConfig;
-	lClient->addService(dynamic_cast<network::LCTService *>(m_iTunesConfig));
-#if defined(OMEGA_MACOSX)
-	m_iTunesConfigMac = new ITunesConfig;
-	lClient->addService(dynamic_cast<network::LCTService *>(m_iTunesConfigMac));
-#endif
+	
+	QSharedPointer<ITunesConfig> pITunesConfig(new ITunesConfig);
+	m_iTunesConfig = pITunesConfig;
+	QSharedPointer<common::ProcessService> pService = qSharedPointerCast<common::ProcessService>(pITunesConfig);
+	m_processThread = new common::ProcessThread(pService, 5000);
+	m_processThread->start();
 	
     if(m_audio.data()==0)
 	{
@@ -220,18 +214,14 @@ void PlayerController::onStop()
 		delete m_cliTimer;
 	}
 #endif
-
-    QSharedPointer<network::LicenseClient> lClient = network::LicenseClient::instance();
-    if(lClient.data()!=0)
-	{
-		lClient->delService(dynamic_cast<network::LCTService *>(m_iTunesConfig));
-		delete m_iTunesConfig;
-#if defined(OMEGA_MACOSX)
-		lClient->delService(dynamic_cast<network::LCTService *>(m_iTunesConfigMac));
-		delete m_iTunesConfigMac;
-#endif
-	}
 	
+	m_processThread->quit();
+	m_processThread->wait();
+	delete m_processThread;
+	m_processThread = 0;
+	
+	m_iTunesConfig.clear();
+		
     if(m_audio.data()!=0)
 	{
 		settings.beginGroup("audio");
@@ -252,7 +242,6 @@ void PlayerController::onStop()
 		m_audio = eAudio;
 	}
 
-	orcus::network::LicenseClient::end();
 	network::Controller::end();
 
 #if defined(ORCUS_WIN32)
@@ -296,9 +285,6 @@ void PlayerController::newPlayer()
 #endif
     
 	m_iTunesConfig->setPlaylistWidget(playerDlg->m_playList,m_iTunesCollectionMenu);
-#if defined(OMEGA_MACOSX)
-	m_iTunesConfigMac->setPlaylistWidget(playerDlg->m_playList,m_iTunesCollectionMenuMac);
-#endif
 
     if(m_splashScreen!=0)
 	{
@@ -724,9 +710,7 @@ void PlayerController::onHelp()
 void PlayerController::onShowLicense()
 {
 	if(m_playerDialog!=0)
-	{
-		m_playerDialog->onShowLicense();
-	}
+	{}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -794,9 +778,7 @@ void PlayerController::onSelectAll()
 void PlayerController::onLicensed()
 {
 	if(m_playerDialog!=0)
-	{
-		m_playerDialog->onLicensed();
-	}
+	{}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -804,9 +786,7 @@ void PlayerController::onLicensed()
 void PlayerController::onNotLicensed()
 {
 	if(m_playerDialog!=0)
-	{
-		m_playerDialog->onNotLicensed();
-	}
+	{}
 }
 
 //-------------------------------------------------------------------------------------------

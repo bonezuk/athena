@@ -3,11 +3,10 @@
 #define __ORCUS_PLAYER_ITUNESCONFIG_H
 //-------------------------------------------------------------------------------------------
 
-#include "network/mime/inc/LicenseClient.h"
-
 #include <QDesktopServices>
 #include <QMenu>
 
+#include "common/inc/ProcessThread.h"
 #include "common/inc/DiskOps.h"
 #include "track/info/inc/PListXMLParser.h"
 #include "player/inc/QPlaylistWidget.h"
@@ -25,7 +24,7 @@ namespace player
 {
 //-------------------------------------------------------------------------------------------
 
-class ITunesConfig : public network::LCTService
+class ITunesConfig : public common::ProcessService
 {
 	public:
 		Q_OBJECT

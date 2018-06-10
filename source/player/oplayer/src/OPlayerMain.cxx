@@ -131,7 +131,6 @@ void OPlayer::onInit()
 		{
 			m_audio->forceBitsPerSample(m_forceDacBits);
 		}
-		m_audio->disableLicenseCheck();
 		m_audio->setCrossfade(0.0);
 		
 		if(!m_printDeviceInfo)

@@ -59,7 +59,6 @@ void VioletPlayback::onInit()
 	connect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
 	connect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
 
-	m_audio->disableLicenseCheck();
 	m_audio->setCrossfade(0.0);
 	m_audio->open(fileName);
 }

@@ -3,8 +3,6 @@
 #define __ORCUS_PLAYER_PLAYER_H
 //-------------------------------------------------------------------------------------------
 
-#include "network/mime/inc/LicenseClient.h"
-#include "widget/inc/LicenseRegisterDialog.h"
 #include "audioio/inc/AOBase.h"
 #include "engine/inc/Codec.h"
 #include "player/inc/QPlaylistWidget.h"
@@ -172,10 +170,6 @@ class Player : public QDialog
 		void onListPlay();
 		
 		void onSettings();
-		void onShowLicense();
-
-		void onLicensed();
-		void onNotLicensed();
 
 		void onCLITimer();
 

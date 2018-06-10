@@ -17,7 +17,7 @@ namespace player
 {
 //-------------------------------------------------------------------------------------------
 
-ITunesConfig::ITunesConfig(QObject *parent) : network::LCTService(parent),
+ITunesConfig::ITunesConfig(QObject *parent) : common::ProcessService(parent),
 	m_mutex(QMutex::Recursive),
 	m_musicFolder(),
 	m_fileMaps(),

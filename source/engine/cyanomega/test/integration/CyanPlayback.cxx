@@ -45,7 +45,6 @@ void CyanPlayback::onInit()
 	fileName = "/Users/bonez/VMWare/Musepack/encode/quest.mpc";
 #endif
 
-	m_audio->disableLicenseCheck();
 	m_audio->setCrossfade(0.0);
     m_audio->open(fileName);
 

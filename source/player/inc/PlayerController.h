@@ -103,7 +103,7 @@ class PlayerController : public QObject
 
 		
 		QMenu *m_iTunesCollectionMenu;
-		ITunesConfig *m_iTunesConfig;
+		QSharedPointer<ITunesConfig> m_iTunesConfig;
 		
 		QTimer *m_cliTimer;
 		
@@ -112,6 +112,8 @@ class PlayerController : public QObject
 		QList<Player *> m_freePlayerDialogs;
 		
 		QSplashScreen *m_splashScreen;
+		
+		common::ProcessThread *m_processThread;
 		
 		PlayerController();
 		
@@ -170,7 +172,7 @@ class PlayerController : public QObject
 
 inline ITunesConfig *PlayerController::iTunesConfig()
 {
-	return m_iTunesConfig;
+	return m_iTunesConfig.data();
 }
 
 //-------------------------------------------------------------------------------------------
