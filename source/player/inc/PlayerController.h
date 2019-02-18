@@ -147,7 +147,6 @@ class PlayerController : public QObject
 		void onPrevious();
 		void onNext();
 		void onHelp();
-		void onShowLicense();
 		void onUpdateSoftware();
 		void onCut();
 		void onCopy();
@@ -155,10 +154,7 @@ class PlayerController : public QObject
 		void onDelete();
 		void onSelectAll();
 		void onSettings();
-		
-		void onLicensed();
-		void onNotLicensed();
-		
+				
 		void onCLITimer();
 		
 		void onPlayerDone(int result);

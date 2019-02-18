@@ -176,8 +176,7 @@ bool AOQueryCoreAudio::queryNames()
 						err = AudioComponentInstanceNew(comp,&outputUnit);
 						if(err==noErr)
 						{
-							//err = AudioUnitSetProperty(outputUnit,kAudioOutputUnitProperty_CurrentDevice,kAudioUnitScope_Global,0,&devID,sizeof(devID));
-							err = noErr;
+							err = AudioUnitSetProperty(outputUnit,kAudioOutputUnitProperty_CurrentDevice,kAudioUnitScope_Global,0,&devID,sizeof(devID));
 							if(err==noErr)
 							{					
 								propAddr.mSelector = kAudioObjectPropertyName;

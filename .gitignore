@@ -2,5 +2,4 @@ Build/*
 cmake_makefile_build/*
 cmake_makefile_build2/*
 cmake_makefile_build3/*
-source/
 CMakeLists.txt.user

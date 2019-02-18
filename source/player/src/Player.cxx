@@ -70,7 +70,6 @@ Player::Player(QWidget *parent,Qt::WindowFlags f) : QDialog(parent,f),
 	QObject::connect(ui.m_addFileButton,SIGNAL(clicked()),this,SLOT(onAddFiles()));
 	QObject::connect(ui.m_addDirButton,SIGNAL(clicked()),this,SLOT(onAddDirectory()));
 	QObject::connect(ui.m_settingsButton,SIGNAL(clicked()),this,SLOT(onSettings()));
-	QObject::connect(ui.m_licenseButton,SIGNAL(clicked()),this,SLOT(onShowLicense()));
 	QObject::connect(ui.m_helpButton,SIGNAL(clicked()),this,SLOT(onHelp()));
 
 	m_playControls->setPlaylistWidget(m_playList);
@@ -285,7 +284,6 @@ void Player::onStop()
 	QObject::disconnect(ui.m_addFileButton,SIGNAL(clicked()),this,SLOT(onAddFiles()));
 	QObject::disconnect(ui.m_addDirButton,SIGNAL(clicked()),this,SLOT(onAddDirectory()));
 	QObject::disconnect(ui.m_settingsButton,SIGNAL(clicked()),this,SLOT(onSettings()));
-	QObject::disconnect(ui.m_licenseButton,SIGNAL(clicked()),this,SLOT(onShowLicense()));
 	QObject::disconnect(ui.m_helpButton,SIGNAL(clicked()),this,SLOT(onHelp()));
 			
 	QObject::disconnect(m_playControls,SIGNAL(onPlay()),this,SLOT(onPlay()));
