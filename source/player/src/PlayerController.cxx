@@ -1,3 +1,4 @@
+#include "network/inc/Resource.h"
 #include "player/inc/PlayerController.h"
 
 #if defined(OMEGA_WIN32)
@@ -707,14 +708,6 @@ void PlayerController::onHelp()
 
 //-------------------------------------------------------------------------------------------
 
-void PlayerController::onShowLicense()
-{
-	if(m_playerDialog!=0)
-	{}
-}
-
-//-------------------------------------------------------------------------------------------
-
 void PlayerController::onUpdateSoftware()
 {
 	if(m_playerDialog!=0)
@@ -771,22 +764,6 @@ void PlayerController::onSelectAll()
 	{
 		m_playerDialog->m_playList->onSelectAll();
 	}
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerController::onLicensed()
-{
-	if(m_playerDialog!=0)
-	{}
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerController::onNotLicensed()
-{
-	if(m_playerDialog!=0)
-	{}
 }
 
 //-------------------------------------------------------------------------------------------

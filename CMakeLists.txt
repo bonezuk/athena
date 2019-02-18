@@ -1,5 +1,9 @@
 cmake_minimum_required (VERSION 2.8)
 
+if (POLICY CMP0020)
+	cmake_policy(SET CMP0020 NEW)
+endif (POLICY CMP0020)
+
 project(BlackOmega)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/source/build/cmake")

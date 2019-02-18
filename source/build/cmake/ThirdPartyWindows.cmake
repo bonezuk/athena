@@ -24,13 +24,17 @@ file(MAKE_DIRECTORY "${TIGER_INSTALL}/data/license")
 file(MAKE_DIRECTORY "${TIGER_INSTALL}/help")
 
 if (OMEGA_MSVC12)
-
+	message("Copy Visual C++ 2013 CRT libraries")
+	if (OMEGA_IS64BIT)
+		set(REDIST_DIR "win64")
+	else (OMEGS_IS64BIT)
+		set(REDIST_DIR "win32")
+	endif (OMEGA_IS64BIT)
+	set(REDIST_LIB_DIR "${ATHENA_UTILS}/redist/${REDIST_DIR}/${CMAKE_BUILD_TYPE}/*")
+	message("${REDIST_LIB_DIR}")
+	file(GLOB MSVC_LIBRARY_FILES "${REDIST_LIB_DIR}/*")
+	file(COPY ${MSVC_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
 endif (OMEGA_MSVC12)
-
-message("Copy Visual C++ 2013 CRT libraries")
-message("${QT_HOME}/redist/${CMAKE_BUILD_TYPE}/*")
-file(GLOB MSVC_LIBRARY_FILES "${QT_HOME}/redist/${CMAKE_BUILD_TYPE}/*")
-file(COPY ${MSVC_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
 
 message("Copy QtCore")
 file(GLOB QTCORE_LIBRARY_FILES "${QT_HOME}/bin/${QT_CORE_LIBNAME}.*")
@@ -53,7 +57,6 @@ file(GLOB QTTEST_LIBRARY_FILES "${QT_HOME}/bin/${QT_TEST_LIBNAME}.*")
 file(COPY ${QTTEST_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
 
 message("Copy Assistant")
-file(COPY "${QT_HOME}/bin/Qt5CLucene.dll" DESTINATION ${TIGER_BIN_INSTALL})
 file(COPY "${QT_HOME}/bin/Qt5PrintSupport.dll" DESTINATION ${TIGER_BIN_INSTALL})
 file(COPY "${QT_HOME}/bin/Qt5Help.dll" DESTINATION ${TIGER_BIN_INSTALL})
 file(COPY "${QT_HOME}/bin/Qt5Core.dll" DESTINATION ${TIGER_BIN_INSTALL})
@@ -65,11 +68,11 @@ file(COPY "${QT_HOME}/bin/assistant.exe" DESTINATION ${TIGER_BIN_INSTALL})
 
 message("Copy Qt image formats")
 if (TIGER_DEBUG_BUILD)
-	set(QTPLUGIN_PLATFORM_FILES "qwindowsd.dll" "qwindowsd.pdb")
-	set(QTPLUGIN_IMAGE_FILES "qjpegd.dll" "qgifd.dll" "qmngd.dll" "qjpegd.pdb" "qgifd.pdb" "qmngd.pdb")
+	set(QTPLUGIN_PLATFORM_FILES "qwindowsd.dll" "qwindows.dll")
+	set(QTPLUGIN_IMAGE_FILES "qjpegd.dll" "qgifd.dll" )
 else (TIGER_DEBUG_BUILD)
 	set(QTPLUGIN_PLATFORM_FILES "qwindows.dll")
-	set(QTPLUGIN_IMAGE_FILES "qjpeg.dll" "qgif.dll" "qmng.dll")
+	set(QTPLUGIN_IMAGE_FILES "qjpeg.dll" "qgif.dll" )
 endif (TIGER_DEBUG_BUILD)
 
 foreach (QTPLUGIN_PLATFORM_FILE ${QTPLUGIN_PLATFORM_FILES})
@@ -84,12 +87,6 @@ file(COPY "${QT_HOME}/plugins/sqldrivers/qsqlite.dll" DESTINATION "${TIGER_INSTA
 
 message("Copy libxml2")
 file(COPY "${LIBXML_HOME}/lib/${LIBXML_LIBNAME}.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
-if (OMEGA_MSVC12)
-	file(COPY "${LIBXML_HOME}/lib/libiconv.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
-endif (OMEGA_MSVC12)
-
-message("Copy WinSparkle")
-file(COPY "${WINSPARKLE_HOME}/lib/${WINSPARKLE_LIBNAME}.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
 
 message("Copy UPnP")
 file(COPY "${LIBUPNP_HOME}/bin/${LIBUPNP_LIBNAME}.dll" DESTINATION ${TIGER_BIN_INSTALL})
@@ -97,9 +94,6 @@ file(COPY "${LIBUPNP_HOME}/bin/${PTHREAD_LIBNAME}.dll" DESTINATION ${TIGER_BIN_I
 
 message("Copy Musepack Decoder")
 file(COPY "${MUSEPACK_HOME}/lib/${MUSEPACK_LIBNAME}.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
-
-message("Copy Monkey Audio")
-file(COPY "${MONKEYAUDIO_HOME}/lib/${MONKEYAUDIO_LIBNAME}.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
 
 message("Copy WinPack")
 file(COPY "${WAVPACK_HOME}/lib/${WAVPACK_LIBNAME}.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
@@ -111,10 +105,6 @@ file(COPY "${GTEST_HOME}/lib/${GTEST_MAIN_LIBNAME}.${LIBEXT}" DESTINATION ${TIGE
 message("Copy GMock")
 file(COPY "${GMOCK_HOME}/lib/${GMOCK_LIBNAME}.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
 file(COPY "${GMOCK_HOME}/lib/${GMOCK_MAIN_LIBNAME}.${LIBEXT}" DESTINATION ${TIGER_BIN_INSTALL})
-
-message("Copy license resources")
-file(GLOB LICENSE_SOUND_FILES "${CMAKE_SOURCE_DIR}/source/build/Resources/*.ogg")
-file(COPY ${LICENSE_SOUND_FILES} DESTINATION "${TIGER_INSTALL}/data/license")
 
 message("Copy Icon Resource")
 file(COPY "${CMAKE_SOURCE_DIR}/source/player/omega.ico" DESTINATION "${TIGER_BIN_INSTALL}")

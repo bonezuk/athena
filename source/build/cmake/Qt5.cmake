@@ -1,16 +1,16 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
+set(QT_HOME "" CACHE PATH "Qt install")
+message("${QT_HOME}")
+set(CMAKE_PREFIX_PATH "${QT_HOME}")
+message("${CMAKE_PREFIX_PATH}")
+
 find_package(Qt5Core)
 find_package(Qt5Gui)
 find_package(Qt5Xml)
 find_package(Qt5Widgets)
 find_package(Qt5Test)
-
-string(LENGTH "${QT_QMAKE_EXECUTABLE}" QT_QMAKE_EXECUTABLE_LEN)
-math(EXPR QT_QMAKE_EXECUTABLE_LEN2 "${QT_QMAKE_EXECUTABLE_LEN} - 10")
-string(SUBSTRING ${QT_QMAKE_EXECUTABLE} 0 ${QT_QMAKE_EXECUTABLE_LEN2} QT_HOME2)
-message("${QT_HOME2}")
 
 if (OMEGA_WIN32)
 

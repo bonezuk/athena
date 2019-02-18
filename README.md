@@ -5,11 +5,19 @@ third party libraries. With the exception of Qt5, the various third party librar
 are collective stored in the one directory.
 
 For convience I have provided an additional git reposiatory with the libraries pre-built
-for both the Windows, MacOSX and Linux enviroments.
+for both Windows, MacOSX and Linux enviroments.
 
 https://github.com/bonezuk/athena_utils.git
 
-For Windows the pre-compiled library files are for Windows 64-bit Visual Studio 2013.
+For Windows the pre-compiled library files are for Windows 32-bit and 64-bit Visual Studio 2013.
+	- Debug and release versions of both the win32 and x64 libraries are in their own directory
+	- e.g. for gmock these are
+		gmock-1.7.0-WIN32.DEBUG.VC12
+		gmock-1.7.0-WIN32.OPT.VC12
+		gmock-1.7.0-WIN64.DEBUG.VC12
+		gmock-1.7.0-WIN64.OPT.VC12
+	- In this document these directories are referenced as : gmock-1.7.0-BUILD_TYPE
+		
 For MacOSX they're built using XCode 7 on macOS Sierra.
 
 Unit-Test Frameworks
@@ -20,8 +28,19 @@ Source code : athena_utils/gmock/source/gmock-1.7.0.tar.gz
 Cloned from https://github.com/paulsapps/gmock-1.7.0.git
 
 Both Google Mock and Test are built together
+
+Windows
+	- Use CMake with source directory gmock-1.7.0 and Visual Studio generator.
+	- Tick BUILD_SHARED_LIBS
+	- Compile libraries with MSVC.
+	- Copy Google Test includes from gmock-1.7.0/gtest/include to athena_utils/gmock/gmock-1.7.0-BUILD_TYPE/include directory.
+	- Copy Google Mock includes from gmock-1.7.0/include to athena_utils/gmock/gmock-1.7.0-BUILD_TYPE/include directory.
+	- Copy Google Test dll library from cmake_build/gtest to athena_utils/gmock/gmock-1.7.0-BUILD_TYPE/lib directory.
+	- Copy Google Mock dll library from cmake_build to athena_utils/gmock/gmock-1.7.0-BUILD_TYPE/lib directory.
+
+
 MacOSX
-	- Use CMake with source directory gmock-1.7.0 and Unix Makefiles.
+	- Use CMake with source directory gmock-1.7.0 and Unix Makefiles generator.
 	- Tick BUILD_SHARED_LIBS
 	- In Terminal ls to build directory and run make.
 	- Copy Google Test includes from gmock-1.7.0/gtest/include to athena_utils/gmock/gmock-1.7.0-Mac64/include directory.
@@ -33,6 +52,14 @@ MacOSX
 libupnp v1.6.22
 Webpage : http://pupnp.sourceforge.net
 
+Windows
+	- Requires POSIX Threads for Windows https://sourceforge.net/projects/pthreads4w/
+		- Use MSVC command prompt to build posix e.g. "namke clean VC-debug"
+		- Copy pthread and libraries into libupnp-1.6.25-BUILD_TYPE
+	- Open and upgrade libupnp-1.6.25\build\vc9\libupnp.sln in Visual Studio
+	- Adjust to point at new POSIX thread library
+	- Build and copy to athena_utils\libupnp\libupnp-1.6.19-BUILD_TYPE
+	
 MacOSX
 	 - In Terminal cd to unpacked source directory
 	 - ./configure --prefix==~/athena_utils/libupnp/libupnp-1.6.25-Mac64
@@ -44,19 +71,14 @@ libxml2
 Webpage : http://www.xmlsoft.org/index.html
 Source code : ftp://xmlsoft.org/libxml2/libxml2-2.9.8.tar.gz	 
 
+Windows : Use alternative build for WIN32 https://github.com/kiyolee/libxml2-win-build.git
+	- Set Runtime Library to Multi-threaded DLL
+
 MacOSX
 	 - In Terminal cd to unpacked source directory
 	 - ./configure --prefix==~/athena_utils/libxml2/libxml2-2.9.8-Mac64
 	 - make
 	 - make install
-
-------------
-MonkeyAudio
-Webpage : http://www.monkeysaudio.com/developers.html
-
-The latest version of the Monkey Audio SDK uses VS2017 project. This makes it very
-problematic across multiple platforms. There is an associated codec 'monkeyomega' 
-that can be used which has disabled by default.
 
 ------------
 Musepack

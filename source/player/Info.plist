@@ -11,7 +11,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.1.1</string>
+	<string>2.3.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleExecutable</key>
@@ -25,18 +25,14 @@
 	<key>NSHighResolutionCapable</key>
 	<string>True</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014 Stuart MacLean. All rights reserved.</string>
+	<string>Copyright © 2019 Stuart MacLean. All rights reserved.</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Copyright © 2014 Stuart MacLean. All rights reserved.</string>
+	<string>Copyright © 2019 Stuart MacLean. All rights reserved.</string>
 	<key>CFBundleIdentifier</key>
 	<string>uk.co.blackomega.blackomega</string>
 	<key>CFBundleHelpBookFolder</key>
 	<string>Black Omega.help</string>
 	<key>CFBundleHelpBookName</key>
 	<string>uk.co.blackomega.blackomega.help</string>
-	<key>SUPublicDSAKeyFile</key>
-	<string>dsa_pub.pem</string>
-	<key>SUFeedURL</key>
-	<string>https://secure101.prositehosting.co.uk/blackomega/sparkle/appcast_mac.xml</string>
 </dict>
 </plist>

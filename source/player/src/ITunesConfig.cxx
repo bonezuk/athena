@@ -1,3 +1,4 @@
+#include "network/inc/Resource.h"
 #include "player/inc/ITunesConfig.h"
 #include "player/inc/PlaylistAbstractIO.h"
 #include "dlna/inc/DiskIF.h"

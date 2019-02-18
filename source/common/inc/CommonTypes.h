@@ -14,8 +14,6 @@
 #define OMEGA_LITTLE_ENDIAN
 #define OMEGA_WINDOWS
 #define OMEGA_MSVC
-#define OMEGA_INTEL
-#define OMEGA_3DNOW
 #define OMEGA_DEFINE_TEMPLATE_HEADER
 #define ORCUS_WIN32
 #endif

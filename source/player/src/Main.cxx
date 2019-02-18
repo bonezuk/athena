@@ -1,3 +1,4 @@
+#include "network/inc/Resource.h"
 #include "player/inc/Player.h"
 #include "engine/inc/Codec.h"
 #include "engine/blackomega/inc/MPCodec.h"
@@ -116,6 +117,10 @@ int main(int argc,char **argv)
 	QCoreApplication::setApplicationName("BlackOmega2");
 #endif
 
+#if defined(ORCUS_WIN32)
+	LoadLibraryA("widget.dll");
+#endif
+
 #if defined(OMEGA_DEBUG)
 	QString logFilename = userApplicationDataDirectory() + "log_debug.txt";
 #else
@@ -132,7 +137,6 @@ int main(int argc,char **argv)
 		orcus::common::HardwareIdentification::instance();
 
 #if defined(ORCUS_WIN32)
-		LoadLibraryA("widget.dll");
 		LoadLibraryA("blueomega.dll");
 		LoadLibraryA("silveromega.dll");
 		LoadLibraryA("blackomega.dll");

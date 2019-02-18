@@ -2,4 +2,6 @@ Build/*
 cmake_makefile_build/*
 cmake_makefile_build2/*
 cmake_makefile_build3/*
+build_cmake_win32/*
+build_cmake_win64/*
 CMakeLists.txt.user

@@ -1,3 +1,4 @@
+#include "network/inc/Resource.h"
 #include "player/inc/Player.h"
 #include "player/inc/Settings.h"
 #include "player/inc/PlayerController.h"

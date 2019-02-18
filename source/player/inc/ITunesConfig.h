@@ -3,6 +3,8 @@
 #define __ORCUS_PLAYER_ITUNESCONFIG_H
 //-------------------------------------------------------------------------------------------
 
+#include "network/inc/Resource.h"
+
 #include <QDesktopServices>
 #include <QMenu>
 

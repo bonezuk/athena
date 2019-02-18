@@ -18,7 +18,7 @@ namespace common
 //-------------------------------------------------------------------------------------------
 
 
-class ProcessService : public QObject
+class COMMON_EXPORT ProcessService : public QObject
 {
 	public:
 		Q_OBJECT
@@ -32,7 +32,7 @@ class ProcessService : public QObject
 
 //-------------------------------------------------------------------------------------------
 
-class ProcessThread : public QThread
+class COMMON_EXPORT ProcessThread : public QThread
 {
 	Q_OBJECT
 	
