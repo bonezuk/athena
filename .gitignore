@@ -1,7 +1,6 @@
 Build/*
-cmake_makefile_build/*
-cmake_makefile_build2/*
-cmake_makefile_build3/*
+build-athena*/*
 build_cmake_win32/*
 build_cmake_win64/*
+cmake_build_unixmake/*
 CMakeLists.txt.user

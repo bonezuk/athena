@@ -1,10 +1,17 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-set(QT_HOME "" CACHE PATH "Qt install")
+message ("Qt path")
+
+if (CMAKE_PREFIX_PATH STREQUAL "")
+	set(QT_HOME "" CACHE PATH "Qt install directory")
+	set(CMAKE_PREFIX_PATH "${QT_HOME}")
+else (CMAKE_PREFIX_PATH STREQUAL "")
+	set(QT_HOME "${CMAKE_PREFIX_PATH}")
+endif (CMAKE_PREFIX_PATH STREQUAL "")
 message("${QT_HOME}")
-set(CMAKE_PREFIX_PATH "${QT_HOME}")
 message("${CMAKE_PREFIX_PATH}")
+set(QT_HOME2 "${QT_HOME}")
 
 find_package(Qt5Core)
 find_package(Qt5Gui)
@@ -49,6 +56,7 @@ elseif (OMEGA_MACOSX)
 		set(QT_XML_LIBNAME "libQt5Xml_debug")
 		set(QT_WIDGETS_LIBNAME "libQt5Widgets_debug")
 		set(QT_TEST_LIBNAME "libQt5Test_debug")
+		set(QT_PRINTSUPPORT_LIBNAME "libQt5PrintSupport_debug")
 		
 	else (${TIGER_DEBUG_BUILD})
 		set(QT_CORE_LIBNAME "libQt5Core")
@@ -56,6 +64,7 @@ elseif (OMEGA_MACOSX)
 		set(QT_XML_LIBNAME "libQt5Xml")
 		set(QT_WIDGETS_LIBNAME "libQt5Widgets")
 		set(QT_TEST_LIBNAME "libQt5Test")
+		set(QT_PRINTSUPPORT_LIBNAME "libQt5PrintSupport")
 		
 	endif (${TIGER_DEBUG_BUILD})
 

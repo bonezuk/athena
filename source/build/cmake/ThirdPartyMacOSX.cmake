@@ -47,6 +47,10 @@ message("Copy QtTest")
 file(GLOB QTTEST_LIBRARY_FILES "${QT_HOME2}/lib/${QT_TEST_LIBNAME}.*")
 file(COPY ${QTTEST_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
 
+message("Copy QtPrintSupport")
+file(GLOB QTPRINTSUPPORT_LIBRARY_FILES "${QT_HOME2}/lib/${QT_PRINTSUPPORT_LIBNAME}.*")
+file(COPY ${QTPRINTSUPPORT_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+
 copy_rename_plugin_files("libqcocoa" "platforms")
 copy_rename_plugin_files("libqjpeg" "imageformats")
 copy_rename_plugin_files("libqgif" "imageformats")
