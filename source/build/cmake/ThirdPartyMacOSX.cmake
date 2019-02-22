@@ -59,6 +59,8 @@ copy_rename_plugin_files("libcocoaprintersupport" "printsupport")
 message("Copy libxml2")
 file(GLOB LIBXML_LIBRARY_FILES "${LIBXML_HOME}/lib/${LIBXML_LIBNAME}.${LIBEXT}*")
 file(COPY ${LIBXML_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
+file(GLOB LIBXML_LIBRARY_FILES "${LIBXML_HOME}/lib/${LIBXML_LIBNAME}.*.${LIBEXT}*")
+file(COPY ${LIBXML_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
 
 message("Copy UPnP")
 file(GLOB LIBUPNP_LIBRARY_FILES "${LIBUPNP_HOME}/lib/*.${LIBEXT}*")

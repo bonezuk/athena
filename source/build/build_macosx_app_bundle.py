@@ -2,9 +2,11 @@ import os
 import shutil
 import sys
 import stat
+import subprocess
 
 isDebug = True
 isUnitTest = True
+isAppStore = False
 
 qt5VersionMajor = 5
 qt5VersionMinor = 10
@@ -13,7 +15,13 @@ qt5VersionRevision = 1
 def get_root_project_directory():
     return os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
+def get_source_directory():
+    return os.path.realpath(os.path.join(get_root_project_directory(), "source"))
+
 def get_app_bundle_directory():
+    return os.path.realpath(os.path.join(get_root_project_directory(), "Build", "Omega.app"))
+
+def get_app_final_bundle_directory():
     return os.path.realpath(os.path.join(get_root_project_directory(), "Build", "Black Omega.app"))
 
 def get_frameworks_directory():
@@ -91,8 +99,7 @@ def copy_and_link_qt5_library(libName):
         print(libName + " library not found '" + get_source_qt5_library(libName) + "'")
         sys.exit(-1)
     shutil.copyfile(get_source_qt5_library(libName), get_dest_qt5_library(libName))
-    os.chmod(get_dest_qt5_library(libName),
-             stat.S_IXUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH | stat.S_IROTH)
+    os.chmod(get_dest_qt5_library(libName), 0o755)
     os.symlink(get_qt5_libname(libName), get_dest_qt5_major_minor_library(libName))
     os.symlink(get_qt5_libname(libName), get_dest_qt5_major_library(libName))
     os.symlink(get_qt5_libname(libName), get_dest_qt5_plain_library(libName))
@@ -106,8 +113,7 @@ def copy_qt5_plugin(pluginDir, pluginName):
         sys.exit(-1)
     destPlugin = os.path.realpath(os.path.join(get_plugins_directory(), pluginDir, libName))
     shutil.copyfile(srcPlugin, destPlugin)
-    os.chmod(destPlugin,
-             stat.S_IXUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH | stat.S_IROTH)
+    os.chmod(destPlugin, 0o755)
 
 def copy_and_link_library(libName, major):
     print("copy " + libName + ".dylib")
@@ -118,12 +124,11 @@ def copy_and_link_library(libName, major):
         print(libName + " library not found '" + srcLib + "'")
         sys.exit(-1)
     shutil.copyfile(srcLib, destLib)
-    os.chmod(destLib,
-             stat.S_IXUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH | stat.S_IROTH)
+    os.chmod(destLib, 0o755)
     lnLib = get_plugins_directory() + "/" + libName + ".dylib"
     os.symlink(lName, lnLib)
 
-def copy_and_link_plain_library(libName):
+def copy_plain_library(libName):
     print("copy " + libName + ".dylib")
     srcLib = get_build_lib_path() + "/" + libName + ".dylib"
     destLib = get_plugins_directory() + "/" + libName + ".dylib"
@@ -134,11 +139,42 @@ def copy_and_link_plain_library(libName):
     os.chmod(destLib,
              stat.S_IXUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH | stat.S_IROTH)
 
+def copy_executable(execName):
+    print("copy " + execName)
+    srcExec = get_build_lib_path() + "/" + execName
+    destExec = get_frameworks_directory() + execName
+    if os.path.exists(srcExec) is not True:
+        print(execName + " library not found '" + srcExec + "'")
+        sys.exit(-1)
+    shutil.copyfile(srcExec, destExec)
+
+
+def copy_and_help():
+    print("Copy Black Omega.help")
+    if isAppStore:
+        srcHelpDir = get_source_directory() + "/help/appleStore/Black Omega.help"
+    else:
+        srcHelpDir = get_source_directory() + "/help/apple/Black Omega.help"
+    destHelpDir = get_plugins_resources_directory() + "/Black Omega.help"
+    shutil.copytree(srcHelpDir, destHelpDir)
+
+def relink_id_for_libary_major(libName, major):
+    print("relink " + libName)
+    lName = libName + "." + str(major) + ".dylib"
+    idPath = "@executable_path/../PlugIns/" + lName
+    libPath = get_plugins_directory() + "/" + lName
+    print(idPath)
+    print(libPath)
+    subprocess.check_call(["install_name_tool", "-id", idPath, libPath])
+
 # Beginning of main build script
 print("Build Black Omega application bundle for MacOSX")
 if os.path.exists(get_app_bundle_directory()):
     print("Removing existing app bundle '" + get_app_bundle_directory() + "'")
     shutil.rmtree(get_app_bundle_directory())
+if os.path.exists(get_app_final_bundle_directory()):
+    print("Removing existing app bundle '" + get_app_final_bundle_directory() + "'")
+    shutil.rmtree(get_app_final_bundle_directory())
 print("Creating application bundle directory '" + get_app_bundle_directory() + "'")
 os.mkdir(get_app_bundle_directory())
 os.makedirs(get_frameworks_directory())
@@ -169,11 +205,45 @@ copy_and_link_library("libixml", 2)
 copy_and_link_library("libthreadutil", 6)
 copy_and_link_library("libupnp", 6)
 
-copy_and_link_plain_library("libmpcdec")
+copy_plain_library("libmpcdec")
 copy_and_link_library("libwavpack", 1)
 
 if isUnitTest:
-    copy_and_link_plain_library("libgtest")
-    copy_and_link_plain_library("libgtest_main")
-    copy_and_link_plain_library("libgmock")
-    copy_and_link_plain_library("libgmock_main")
+    copy_plain_library("libgtest")
+    copy_plain_library("libgtest_main")
+    copy_plain_library("libgmock")
+    copy_plain_library("libgmock_main")
+
+copy_and_help()
+
+copy_plain_library("libcommon")
+copy_plain_library("libengine")
+copy_plain_library("libblueomega")
+copy_plain_library("libsilveromega")
+copy_plain_library("libblackomega")
+copy_plain_library("libredomega")
+copy_plain_library("libwhiteomega")
+copy_plain_library("libgreenomega")
+copy_plain_library("libvioletomega")
+copy_plain_library("libcyanomega")
+copy_plain_library("libtoneomega")
+copy_plain_library("libwavpackomega")
+copy_plain_library("libnetwork_omega")
+copy_plain_library("librtp")
+copy_plain_library("librtp_silveromega")
+copy_plain_library("libhttp")
+copy_plain_library("libmime")
+copy_plain_library("libaudioio")
+copy_plain_library("libtrackinfo")
+copy_plain_library("libtrackdb")
+copy_plain_library("libtrackmodel")
+copy_plain_library("libdlna")
+copy_plain_library("libremote")
+copy_plain_library("libwidget")
+
+if isUnitTest:
+    copy_executable("Test")
+
+copy_and_link_library("libxml2", 2)
+
+relink_id_for_libary_major("libixml",2)
