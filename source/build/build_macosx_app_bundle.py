@@ -148,7 +148,6 @@ def copy_executable(execName):
         sys.exit(-1)
     shutil.copyfile(srcExec, destExec)
 
-
 def copy_and_help():
     print("Copy Black Omega.help")
     if isAppStore:
@@ -158,14 +157,30 @@ def copy_and_help():
     destHelpDir = get_plugins_resources_directory() + "/Black Omega.help"
     shutil.copytree(srcHelpDir, destHelpDir)
 
-def relink_id_for_libary_major(libName, major):
+def relink_id_for_library_major(libName, major):
     print("relink " + libName)
     lName = libName + "." + str(major) + ".dylib"
     idPath = "@executable_path/../PlugIns/" + lName
     libPath = get_plugins_directory() + "/" + lName
-    print(idPath)
-    print(libPath)
     subprocess.check_call(["install_name_tool", "-id", idPath, libPath])
+
+def relink_change_library(imprint, libName, targetLib):
+    oldPath = imprint + "/" + libName + ".dylib"
+    execLibName = "@executable_path/../PlugIns/" + libName + ".dylib"
+    targetLibName = get_plugins_directory() + "/" + targetLib + ".dylib"
+    subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetLibName])
+
+def relink_id_for_qt5_library(libName):
+    print("relink " + libName)
+    idPath = "@executable_path/../PlugIns/" + get_qt5_libname(libName)
+    libPath = get_plugins_directory() + "/" + get_qt5_libname(libName)
+    subprocess.check_call(["install_name_tool", "-id", idPath, libPath])
+
+def relink_change_for_qt5_library(imprint, libName, targetLib):
+    oldPath = imprint + "/" + get_qt5_lib_major_name(libName)
+    execLibName = "@executable_path/../PlugIns/" + get_qt5_lib_major_name(libName)
+    targetLibName = get_plugins_directory() + "/" + get_qt5_libname(targetLib)
+    subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetLibName])
 
 # Beginning of main build script
 print("Build Black Omega application bundle for MacOSX")
@@ -246,4 +261,42 @@ if isUnitTest:
 
 copy_and_link_library("libxml2", 2)
 
-relink_id_for_libary_major("libixml",2)
+#echo "relink libixml"
+#install_name_tool -id @executable_path/../PlugIns/libixml.2.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libixml.2.dylib"
+relink_id_for_library_major("libixml",2)
+
+#echo "relink libthreadutil"
+#install_name_tool -id @executable_path/../PlugIns/libthreadutil.6.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libthreadutil.6.dylib"
+relink_id_for_library_major("libthreadutil",6)
+
+#echo "relink libupnp"
+#install_name_tool -id @executable_path/../PlugIns/libupnp.6.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libupnp.6.dylib"
+#install_name_tool -change $UPNP_IMPRINT/lib/libixml.2.dylib @executable_path/../PlugIns/libixml.2.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libupnp.6.dylib"
+#install_name_tool -change $UPNP_IMPRINT/lib/libthreadutil.6.dylib @executable_path/../PlugIns/libthreadutil.6.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libupnp.6.dylib"
+relink_id_for_library_major("libupnp",6)
+relink_change_library("@rpath", "libixml.2", "libupnp.6")
+relink_change_library("@rpath", "libthreadutil.6", "libupnp.6")
+
+#echo "relink Qt5Core"
+#install_name_tool -id @executable_path/../PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
+relink_id_for_qt5_library("Qt5Core")
+
+#echo "relink Qt5Gui"
+#install_name_tool -id @executable_path/../PlugIns/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
+#install_name_tool -change @rpath/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib @executable_path/../PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
+relink_id_for_qt5_library("Qt5Gui")
+relink_change_for_qt5_library("@rpath", "Qt5Core", "Qt5Gui")
+
+#echo "relink Qt5Xml"
+#install_name_tool -id @executable_path/../PlugIns/libQt5Xml$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Xml$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
+#install_name_tool -change @rpath/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib @executable_path/../PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Xml$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
+relink_id_for_qt5_library("Qt5Xml")
+relink_change_for_qt5_library("@rpath", "Qt5Core", "Qt5Xml")
+
+#echo "relink Qt5Widgets"
+#install_name_tool -id @executable_path/../PlugIns/libQt5Widgets$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Widgets$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
+#install_name_tool -change @rpath/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib @executable_path/../PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Widgets$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
+#install_name_tool -change @rpath/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib @executable_path/../PlugIns/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Widgets$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
+relink_id_for_qt5_library("Qt5Widgets")
+relink_change_for_qt5_library("@rpath", "Qt5Core", "Qt5Widgets")
+relink_change_for_qt5_library("@rpath", "Qt5Gui", "Qt5Widgets")
