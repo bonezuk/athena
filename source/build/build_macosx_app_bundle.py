@@ -4,6 +4,7 @@ import sys
 import stat
 
 isDebug = True
+isUnitTest = True
 
 qt5VersionMajor = 5
 qt5VersionMinor = 10
@@ -96,6 +97,42 @@ def copy_and_link_qt5_library(libName):
     os.symlink(get_qt5_libname(libName), get_dest_qt5_major_library(libName))
     os.symlink(get_qt5_libname(libName), get_dest_qt5_plain_library(libName))
 
+def copy_qt5_plugin(pluginDir, pluginName):
+    libName = "lib" + pluginName + ".dylib"
+    srcPlugin = os.path.realpath(os.path.join(get_build_lib_path(), pluginDir, libName))
+    print("copy plugin " + libName)
+    if os.path.exists(srcPlugin) is not True:
+        print(libName + " library not found '" + srcPlugin + "'")
+        sys.exit(-1)
+    destPlugin = os.path.realpath(os.path.join(get_plugins_directory(), pluginDir, libName))
+    shutil.copyfile(srcPlugin, destPlugin)
+    os.chmod(destPlugin,
+             stat.S_IXUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH | stat.S_IROTH)
+
+def copy_and_link_library(libName, major):
+    print("copy " + libName + ".dylib")
+    lName = libName + "." + str(major) + ".dylib"
+    srcLib = get_build_lib_path() + "/" + lName
+    destLib = get_plugins_directory() + "/" + lName
+    if os.path.exists(srcLib) is not True:
+        print(libName + " library not found '" + srcLib + "'")
+        sys.exit(-1)
+    shutil.copyfile(srcLib, destLib)
+    os.chmod(destLib,
+             stat.S_IXUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH | stat.S_IROTH)
+    lnLib = get_plugins_directory() + "/" + libName + ".dylib"
+    os.symlink(lName, lnLib)
+
+def copy_and_link_plain_library(libName):
+    print("copy " + libName + ".dylib")
+    srcLib = get_build_lib_path() + "/" + libName + ".dylib"
+    destLib = get_plugins_directory() + "/" + libName + ".dylib"
+    if os.path.exists(srcLib) is not True:
+        print(libName + " library not found '" + srcLib + "'")
+        sys.exit(-1)
+    shutil.copyfile(srcLib, destLib)
+    os.chmod(destLib,
+             stat.S_IXUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH | stat.S_IROTH)
 
 # Beginning of main build script
 print("Build Black Omega application bundle for MacOSX")
@@ -122,3 +159,21 @@ qt5TestLibName = "Qt5Test"
 copy_and_link_qt5_library(qt5TestLibName)
 qt5PrintSupportLibName = "Qt5PrintSupport"
 copy_and_link_qt5_library(qt5PrintSupportLibName)
+
+copy_qt5_plugin("platforms", "qcocoa")
+copy_qt5_plugin("printsupport", "cocoaprintersupport")
+copy_qt5_plugin("imageformats", "qgif")
+copy_qt5_plugin("imageformats", "qjpeg")
+
+copy_and_link_library("libixml", 2)
+copy_and_link_library("libthreadutil", 6)
+copy_and_link_library("libupnp", 6)
+
+copy_and_link_plain_library("libmpcdec")
+copy_and_link_library("libwavpack", 1)
+
+if isUnitTest:
+    copy_and_link_plain_library("libgtest")
+    copy_and_link_plain_library("libgtest_main")
+    copy_and_link_plain_library("libgmock")
+    copy_and_link_plain_library("libgmock_main")
