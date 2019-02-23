@@ -1,7 +1,6 @@
 import os
 import shutil
 import sys
-import stat
 import subprocess
 
 isDebug = True
@@ -136,8 +135,7 @@ def copy_plain_library(libName):
         print(libName + " library not found '" + srcLib + "'")
         sys.exit(-1)
     shutil.copyfile(srcLib, destLib)
-    os.chmod(destLib,
-             stat.S_IXUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH | stat.S_IROTH)
+    os.chmod(destLib, 0o755)
 
 def copy_executable(execName):
     print("copy " + execName)
@@ -181,6 +179,48 @@ def relink_change_for_qt5_library(imprint, libName, targetLib):
     execLibName = "@executable_path/../PlugIns/" + get_qt5_lib_major_name(libName)
     targetLibName = get_plugins_directory() + "/" + get_qt5_libname(targetLib)
     subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetLibName])
+
+def relink_change_qt5_path(imprint, libName, targetLib):
+    oldPath = imprint + "/" + get_qt5_lib_major_name(libName)
+    execLibName = "@executable_path/../PlugIns/" + get_qt5_lib_major_name(libName)
+    targetLibName = get_plugins_directory() + "/" + targetLib + ".dylib"
+    subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetLibName])
+
+def relink_id_for_qt5_plugin_library(pluginDir, libName):
+    lName = "lib" + libName + ".dylib"
+    print("relink plugin " + pluginDir + "/" + lName)
+    idPath = "@executable_path/../PlugIns/" + pluginDir + "/" + lName
+    libPath = get_plugins_directory() + "/" + pluginDir + "/" + lName
+    subprocess.check_call(["install_name_tool", "-id", idPath, libPath])
+
+def relink_change_for_qt5_platform_library(pluginDir, pluginName, libName):
+    lName = "lib" + pluginName + ".dylib"
+    oldPath = "@rpath/" + get_qt5_lib_major_name(libName)
+    execLibName = "@executable_path/../PlugIns/" + get_qt5_lib_major_name(libName)
+    targetLibName = get_plugins_directory() + "/" + pluginDir + "/" + lName
+    subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetLibName])
+
+def relink_id_for_library(libName):
+    print("relink " + libName)
+    lName = libName + ".dylib"
+    idPath = "@executable_path/../PlugIns/" + lName
+    libPath = get_plugins_directory() + "/" + lName
+    subprocess.check_call(["install_name_tool", "-id", idPath, libPath])
+
+def relink_change_omega_library(libName, targetLib):
+    oldPath = get_build_lib_path() + "/" + libName + ".dylib"
+    execLibName = "@executable_path/../PlugIns/" + libName + ".dylib"
+    targetLibName = get_plugins_directory() + "/" + targetLib + ".dylib"
+    subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetLibName])
+
+def relink_omega_library(libName, qtModules, libsArray, omegaArray):
+    relink_id_for_library(libName)
+    for mod in qtModules:
+        relink_change_qt5_path("@rpath", mod, libName)
+    for lib in libsArray:
+        relink_change_library("@rpath", lib, libName)
+    for lib in omegaArray:
+        relink_change_omega_library(lib, libName)
 
 # Beginning of main build script
 print("Build Black Omega application bundle for MacOSX")
@@ -261,42 +301,103 @@ if isUnitTest:
 
 copy_and_link_library("libxml2", 2)
 
-#echo "relink libixml"
-#install_name_tool -id @executable_path/../PlugIns/libixml.2.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libixml.2.dylib"
 relink_id_for_library_major("libixml",2)
-
-#echo "relink libthreadutil"
-#install_name_tool -id @executable_path/../PlugIns/libthreadutil.6.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libthreadutil.6.dylib"
 relink_id_for_library_major("libthreadutil",6)
 
-#echo "relink libupnp"
-#install_name_tool -id @executable_path/../PlugIns/libupnp.6.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libupnp.6.dylib"
-#install_name_tool -change $UPNP_IMPRINT/lib/libixml.2.dylib @executable_path/../PlugIns/libixml.2.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libupnp.6.dylib"
-#install_name_tool -change $UPNP_IMPRINT/lib/libthreadutil.6.dylib @executable_path/../PlugIns/libthreadutil.6.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libupnp.6.dylib"
 relink_id_for_library_major("libupnp",6)
 relink_change_library("@rpath", "libixml.2", "libupnp.6")
 relink_change_library("@rpath", "libthreadutil.6", "libupnp.6")
 
-#echo "relink Qt5Core"
-#install_name_tool -id @executable_path/../PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
 relink_id_for_qt5_library("Qt5Core")
 
-#echo "relink Qt5Gui"
-#install_name_tool -id @executable_path/../PlugIns/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
-#install_name_tool -change @rpath/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib @executable_path/../PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
 relink_id_for_qt5_library("Qt5Gui")
 relink_change_for_qt5_library("@rpath", "Qt5Core", "Qt5Gui")
 
-#echo "relink Qt5Xml"
-#install_name_tool -id @executable_path/../PlugIns/libQt5Xml$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Xml$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
-#install_name_tool -change @rpath/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib @executable_path/../PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Xml$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
 relink_id_for_qt5_library("Qt5Xml")
 relink_change_for_qt5_library("@rpath", "Qt5Core", "Qt5Xml")
 
-#echo "relink Qt5Widgets"
-#install_name_tool -id @executable_path/../PlugIns/libQt5Widgets$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Widgets$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
-#install_name_tool -change @rpath/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib @executable_path/../PlugIns/libQt5Core$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Widgets$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
-#install_name_tool -change @rpath/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib @executable_path/../PlugIns/libQt5Gui$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib "$TIGER_INSTALL_DIR/$OMEGA_APP_NAME.app/Contents/PlugIns/libQt5Widgets$QTLIB_DEBUG_SUFFIX.$QT_VERSION_MAJOR.dylib"
 relink_id_for_qt5_library("Qt5Widgets")
 relink_change_for_qt5_library("@rpath", "Qt5Core", "Qt5Widgets")
 relink_change_for_qt5_library("@rpath", "Qt5Gui", "Qt5Widgets")
+
+if isUnitTest:
+    relink_id_for_qt5_library("Qt5Test")
+    relink_change_for_qt5_library("@rpath", "Qt5Core", "Qt5Test")
+
+relink_id_for_qt5_library("Qt5PrintSupport")
+relink_change_for_qt5_library("@rpath", "Qt5Core", "Qt5PrintSupport")
+relink_change_for_qt5_library("@rpath", "Qt5Gui", "Qt5PrintSupport")
+relink_change_for_qt5_library("@rpath", "Qt5Widgets", "Qt5PrintSupport")
+
+relink_id_for_qt5_plugin_library("platforms", "qcocoa")
+relink_change_for_qt5_platform_library("platforms", "qcocoa", "Qt5Core")
+relink_change_for_qt5_platform_library("platforms", "qcocoa", "Qt5Gui")
+relink_change_for_qt5_platform_library("platforms", "qcocoa", "Qt5PrintSupport")
+relink_change_for_qt5_platform_library("platforms", "qcocoa", "Qt5Widgets")
+
+relink_id_for_qt5_plugin_library("printsupport", "cocoaprintersupport")
+relink_change_for_qt5_platform_library("printsupport", "cocoaprintersupport", "Qt5Core")
+relink_change_for_qt5_platform_library("printsupport", "cocoaprintersupport", "Qt5Gui")
+relink_change_for_qt5_platform_library("printsupport", "cocoaprintersupport", "Qt5PrintSupprt")
+relink_change_for_qt5_platform_library("printsupport", "cocoaprintersupport", "Qt5Widgets")
+
+relink_id_for_qt5_plugin_library("imageformats", "qgif")
+relink_change_for_qt5_platform_library("imageformats", "qgif", "Qt5Core")
+relink_change_for_qt5_platform_library("imageformats", "qgif", "Qt5Gui")
+
+relink_id_for_qt5_plugin_library("imageformats", "qjpeg")
+relink_change_for_qt5_platform_library("imageformats", "qjpeg", "Qt5Core")
+relink_change_for_qt5_platform_library("imageformats", "qjpeg", "Qt5Gui")
+
+relink_id_for_library_major("libxml2", 2)
+
+relink_id_for_library("libmpcdec")
+
+relink_id_for_library_major("libwavpack", 1)
+
+if isUnitTest:
+    relink_id_for_library("libgtest")
+    relink_id_for_library("libgtest_main")
+    relink_change_library("@rpath", "libgtest", "libgtest_main")
+    relink_id_for_library("libgmock")
+    relink_id_for_library("libgmock_main")
+    relink_change_library("@rpath", "libgmock", "libgmock_main")
+
+relink_omega_library("libcommon", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], [])
+relink_omega_library("libengine", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon"])
+relink_omega_library("libblueomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine"])
+relink_omega_library("libsilveromega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine"])
+relink_omega_library("libblackomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine"])
+relink_omega_library("libredomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine"])
+relink_omega_library("libwhiteomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine", "libredomega"])
+relink_omega_library("libgreenomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine"])
+relink_omega_library("libtoneomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine"])
+relink_omega_library("libvioletomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine"])
+relink_omega_library("libcyanomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2", "libmpcdec"], ["libcommon", "libengine"])
+relink_omega_library("libwavpackomega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2", "libwavpack.1"], ["libcommon", "libengine"])
+relink_omega_library("libnetwork_omega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine"])
+relink_omega_library("librtp", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine", "libnetwork_omega"])
+relink_omega_library("librtp_silveromega", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine", "libnetwork_omega", "librtp", "libsilveromega"])
+relink_omega_library("libhttp", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine", "libnetwork_omega"])
+relink_omega_library("libmime", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine", "libnetwork_omega", "libhttp"])
+relink_omega_library("libaudioio", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2"], ["libcommon", "libengine", "libnetwork_omega", "libhttp", "libmime"])
+relink_omega_library("libdlna", ["Qt5Core", "Qt5Gui", "Qt5Xml"], ["libxml2.2", "libupnp.6", "libixml.2", "libthreadutil.6"], ["libcommon"])
+relink_omega_library("libtrackinfo", ["Qt5Core", "Qt5Gui", "Qt5Xml"],
+                     ["libxml2.2", "libupnp.6", "libmpcdec"],
+                     ["libcommon", "libengine", "libsilveromega", "libredomega", "libwhiteomega", "libgreenomega", "libvioletomega", "libcyanomega", "libdlna"])
+relink_omega_library("libtrackdb", ["Qt5Core", "Qt5Gui", "Qt5Xml"],
+                     ["libxml2.2", "libupnp.6", "libixml.2", "libthreadutil.6", "libmpcdec"],
+                     ["libcommon", "libengine", "libsilveromega", "libredomega", "libwhiteomega", "libgreenomega", "libvioletomega", "libcyanomega", "libtrackinfo", "libnetwork_omega", "libdlna"])
+relink_omega_library("libremote", ["Qt5Core", "Qt5Gui", "Qt5Xml", "Qt5Widgets"],
+                     ["libxml2.2", "libupnp.6", "libixml.2", "libthreadutil.6"],
+                     ["libcommon", "libengine", "libnetwork_omega", "libdlna"])
+relink_omega_library("libtrackmodel", ["Qt5Core", "Qt5Gui", "Qt5Xml"],
+                     ["libxml2.2", "libupnp.6", "libixml.2", "libthreadutil.6", "libmpcdec"],
+                     ["libcommon", "libengine", "libsilveromega", "libredomega", "libwhiteomega", "libgreenomega", "libvioletomega", "libcyanomega",
+                      "libtrackinfo", "libnetwork_omega", "libaudioio", "libblackomega", "libblueomega", "librtp", "librtp_silveromega",\
+                      "libhttp", "libmime", "libtrackdb", "libdlna"])
+relink_omega_library("libwidget", ["Qt5Core", "Qt5Gui", "Qt5Xml", "Qt5Widgets"],
+                     ["libxml2.2", "libupnp.6", "libixml.2", "libthreadutil.6", "libmpcdec"],
+                     ["libcommon", "libengine", "libnetwork_omega", "libhttp", "libmime", "libtrackdb", "libdlna",
+                      "libtrackinfo", "libgreenomega", "libsilveromega", "libvioletomega", "libwhiteomega",
+                      "libredomega", "libcyanomega"])
