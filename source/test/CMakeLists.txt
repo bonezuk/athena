@@ -56,7 +56,6 @@ set ( TEST_SOURCE
 	../common/test/CommonTypesTest.cxx
 	../common/test/LargeNumberTest.cxx
 	../common/test/CommonDirectoriesForFilesTest.cxx
-	../common/test/CryptoRSAEncryptTest.cxx
 	../common/test/DictionaryXMLMapTest.cxx
 	../common/test/ProductVersionInfoTest.cxx
 	../common/test/JaroWinklerDistanceTest.cxx

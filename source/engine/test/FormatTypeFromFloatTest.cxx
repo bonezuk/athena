@@ -1725,7 +1725,7 @@ TEST(FormatTypeFromFloat,sampleFrom32BitSigned)
 		       -500, // 7
 		   -5000000, // 8
 		-1000000000, // 9
-		 -1  // 10
+		-2147483648  // 10
 	};
 
 	const tfloat64 c_expectOutput[11] = {
@@ -1765,7 +1765,7 @@ TEST(FormatTypeFromFloat,sampleFrom32BitUnsigned)
 		       -500, // 7
 		   -5000000, // 8
 		-1000000000, // 9	
-		 -1  // 10
+		-2147483648  // 10
 	};
 
 	const tfloat64 c_expectOutput[11] = {
@@ -1968,7 +1968,7 @@ TEST(FormatTypeFromFloat,sampleFromIntegerUsing32Bits)
 		       -500, // 7
 		   -5000000, // 8
 		-1000000000, // 9	
-		 -1  // 10
+		-2147483648  // 10
 	};
 
 	const tfloat64 c_expectOutput[11] = {

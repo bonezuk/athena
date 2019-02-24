@@ -85,7 +85,12 @@ void QPlayControls::loadResources()
 #if QT_VERSION >= 0x050000
 	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
 	{
+		fprintf(stdout,"Use Retina\n");
 		retinaFlag = true;
+	}
+	else
+	{
+		fprintf(stdout,"No Retina\n");
 	}
 #endif
 

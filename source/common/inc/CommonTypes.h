@@ -60,6 +60,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_WIN32)
@@ -80,10 +81,10 @@ typedef unsigned short tushort;
 typedef unsigned short tuint16;
 
 typedef int tint;
-typedef int tint32;
+typedef int32_t tint32;
 
 typedef unsigned int tuint;
-typedef unsigned int tuint32;
+typedef uint32_t tuint32;
 
 typedef float tfloat32;
 typedef double tfloat64;
@@ -119,10 +120,10 @@ typedef unsigned short tushort;
 typedef unsigned short tuint16;
 
 typedef int tint;
-typedef int tint32;
+typedef int32_t tint32;
 
 typedef unsigned int tuint;
-typedef unsigned int tuint32;
+typedef uint32_t tuint32;
 
 typedef float tfloat32;
 typedef double tfloat64;
@@ -158,10 +159,10 @@ typedef unsigned short tushort;
 typedef unsigned short tuint16;
 
 typedef int tint;
-typedef int tint32;
+typedef int32_t tint32;
 
 typedef unsigned int tuint;
-typedef unsigned int tuint32;
+typedef uint32_t tuint32;
 
 typedef float tfloat32;
 typedef double tfloat64;

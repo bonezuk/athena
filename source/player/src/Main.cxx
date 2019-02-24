@@ -75,6 +75,29 @@ bool processCLI(int argc,char **argv)
 #endif
 //-------------------------------------------------------------------------------------------
 
+bool isAppBundle(const char *appPath, QString& bundleDir)
+{
+	QString appS = QString::fromLatin1(appPath);
+	
+	bool isBundle = false;
+	QFileInfo appFile(appPath);
+	QDir d = appFile.absolutePath();
+	if(d.exists())
+	{
+		if(d.cdUp() && d.cdUp())
+		{
+			bundleDir = d.absolutePath();
+			if(bundleDir.trimmed().right(4).toLower() == ".app")
+			{
+				isBundle = true;
+			}
+		}
+	}
+	return isBundle;
+}
+
+//-------------------------------------------------------------------------------------------
+
 #if defined(ORCUS_WIN32)
 int CALLBACK WinMain(HINSTANCE ,HINSTANCE ,LPSTR ,int)
 {
@@ -173,20 +196,24 @@ int main(int argc,char **argv)
 #endif
 
 #if defined(Q_OS_MAC)
-        QString pluginDir;
-#if defined(OMEGA_MAC_STORE)
-		pluginDir = orcus::common::Bundle::pluginDirectory();
+		bool isPluginFound = false;
+		QString pluginDir;
+		if(isAppBundle(argv[0],pluginDir))
+		{
+			QDir d = pluginDir;
+			if(d.cd("Contents") && d.cd("Plugins"))
+			{
+				pluginDir = d.absolutePath();
+				isPluginFound = true;
+			}
+		}
+		if(!isPluginFound)
+		{
+			QFileInfo appFile(argv[0]);
+			QDir d = appFile.absolutePath();
+			pluginDir = d.absolutePath();
+		}
 		orcus::common::Log::g_Log.print("%s\n",pluginDir.toUtf8().constData());
-#else
-        QFileInfo appFile(argv[0]);
-        QDir d = appFile.absolutePath();
-#if defined(BUNDLE_PLUGINS)
-        d.cdUp();
-#endif
-        d.cd("Plugins");
-        pluginDir = d.absolutePath();
-		orcus::common::Log::g_Log.print("%s\n",pluginDir.toUtf8().constData());
-#endif
         QApplication::setLibraryPaths(QStringList(pluginDir));
 #else
         QFileInfo appFile(argv[0]);

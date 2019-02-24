@@ -246,9 +246,6 @@ bool TrackDBTestEnviroment::load()
 		fileList.append(QPair<QString,QString>(":/depend/Resources/depend/wavpack/track2.wvc","wavpack/track2.wvc"));
 
 		fileList.append(QPair<QString,QString>(":/bps/Resources/bps/aiff/bps_16bit_2ch.aiff","aiff/bps_16bit_2ch.aiff"));
-		fileList.append(QPair<QString,QString>(":/bps/Resources/bps/ape/bps_16bit_2ch_fast.ape","ape/bps_16bit_2ch_fast.ape"));
-		fileList.append(QPair<QString,QString>(":/bps/Resources/bps/ape/bps_16bit_2ch_high.ape","ape/bps_16bit_2ch_high.ape"));
-		fileList.append(QPair<QString,QString>(":/bps/Resources/bps/ape/bps_16bit_2ch_insane.ape","ape/bps_16bit_2ch_insane.ape"));
 		fileList.append(QPair<QString,QString>(":/bps/Resources/bps/caf/bps_16bit_2ch.caf","caf/bps_16bit_2ch.caf"));
 		fileList.append(QPair<QString,QString>(":/bps/Resources/bps/flac/bps_16bit_2ch_comp0.flac","flac/bps_16bit_2ch_comp0.flac"));
 		fileList.append(QPair<QString,QString>(":/bps/Resources/bps/flac/bps_16bit_2ch_comp5.flac","flac/bps_16bit_2ch_comp5.flac"));

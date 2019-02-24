@@ -23,11 +23,17 @@ def get_app_bundle_directory():
 def get_app_final_bundle_directory():
     return os.path.realpath(os.path.join(get_root_project_directory(), "Build", "Black Omega.app"))
 
+def get_contents_directory():
+    return os.path.realpath(os.path.join(get_app_bundle_directory(), "Contents"))
+
 def get_frameworks_directory():
     return os.path.realpath(os.path.join(get_app_bundle_directory(), "Contents", "Frameworks"))
 
 def get_plugins_directory():
     return os.path.realpath(os.path.join(get_app_bundle_directory(), "Contents", "Plugins"))
+
+def get_exec_directory():
+    return os.path.realpath(os.path.join(get_app_bundle_directory(), "Contents", "MacOS"))
 
 def get_plugins_imageformats_directory():
     return os.path.realpath(os.path.join(get_plugins_directory(), "imageformats"))
@@ -137,14 +143,36 @@ def copy_plain_library(libName):
     shutil.copyfile(srcLib, destLib)
     os.chmod(destLib, 0o755)
 
-def copy_executable(execName):
-    print("copy " + execName)
-    srcExec = get_build_lib_path() + "/" + execName
-    destExec = get_frameworks_directory() + execName
+def copy_executable(exeName):
+    print("copy " + exeName)
+    srcExec = get_build_lib_path() + "/" + exeName
+    destExec = get_exec_directory() + "/" + exeName
     if os.path.exists(srcExec) is not True:
-        print(execName + " library not found '" + srcExec + "'")
+        print(exeName + " executble not found '" + srcExec + "'")
         sys.exit(-1)
     shutil.copyfile(srcExec, destExec)
+    os.chmod(destExec, 0o755)
+
+def copy_resource(resourceName, srcDir, destDir):
+    print("copy resource " + resourceName)
+    srcFile = srcDir + "/" + resourceName
+    destFile = destDir + "/" + resourceName
+    if os.path.exists(srcFile) is not True:
+        print("resource not found '" + srcFile + "'")
+        sys.exit(-1)
+    shutil.copyfile(srcFile, destFile)
+    os.chmod(destFile, 0o644)
+
+def copy_plist():
+    if isAppStore:
+        srcDir = get_source_directory() + "/player/appstore"
+    else:
+        srcDir = get_source_directory() + "/player"
+    copy_resource("Info.plist", srcDir, get_contents_directory())
+
+def copy_icon():
+    srcDir = get_source_directory() + "/player"
+    copy_resource("omega.icns", srcDir, get_plugins_resources_directory())
 
 def copy_and_help():
     print("Copy Black Omega.help")
@@ -222,6 +250,34 @@ def relink_omega_library(libName, qtModules, libsArray, omegaArray):
     for lib in omegaArray:
         relink_change_omega_library(lib, libName)
 
+def relink_change_qt5_path_exec(imprint, libName, targetExec):
+    oldPath = imprint + "/" + get_qt5_lib_major_name(libName)
+    execLibName = "@executable_path/../PlugIns/" + get_qt5_lib_major_name(libName)
+    targetExecName = get_exec_directory() + "/" + targetExec
+    subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetExecName])
+
+def relink_change_library_exec(imprint, libName, targetExec):
+    oldPath = imprint + "/" + libName + ".dylib"
+    execLibName = "@executable_path/../PlugIns/" + libName + ".dylib"
+    targetExecName = get_exec_directory() + "/" + targetExec
+    subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetExecName])
+
+def relink_change_omega_library_exec(libName, targetExec):
+    oldPath = get_build_lib_path() + "/" + libName + ".dylib"
+    execLibName = "@executable_path/../PlugIns/" + libName + ".dylib"
+    targetExecName = get_exec_directory() + "/" + targetExec
+    subprocess.check_call(["install_name_tool", "-change", oldPath, execLibName, targetExecName])
+
+def relink_omega_executable(execName, qtModules, libsArray, omegaArray):
+    print("relink " + execName)
+    for mod in qtModules:
+        relink_change_qt5_path_exec("@rpath", mod, execName)
+    for lib in libsArray:
+        relink_change_library_exec("@rpath", lib, execName)
+    for lib in omegaArray:
+        relink_change_omega_library_exec(lib, execName)
+
+
 # Beginning of main build script
 print("Build Black Omega application bundle for MacOSX")
 if os.path.exists(get_app_bundle_directory()):
@@ -233,6 +289,7 @@ if os.path.exists(get_app_final_bundle_directory()):
 print("Creating application bundle directory '" + get_app_bundle_directory() + "'")
 os.mkdir(get_app_bundle_directory())
 os.makedirs(get_frameworks_directory())
+os.makedirs(get_exec_directory())
 os.makedirs(get_plugins_imageformats_directory())
 os.makedirs(get_plugins_platforms_directory())
 os.makedirs(get_plugins_printsupport_directory())
@@ -262,6 +319,7 @@ copy_and_link_library("libupnp", 6)
 
 copy_plain_library("libmpcdec")
 copy_and_link_library("libwavpack", 1)
+copy_and_link_library("libxml2", 2)
 
 if isUnitTest:
     copy_plain_library("libgtest")
@@ -270,6 +328,8 @@ if isUnitTest:
     copy_plain_library("libgmock_main")
 
 copy_and_help()
+copy_plist()
+copy_icon()
 
 copy_plain_library("libcommon")
 copy_plain_library("libengine")
@@ -296,10 +356,9 @@ copy_plain_library("libdlna")
 copy_plain_library("libremote")
 copy_plain_library("libwidget")
 
+copy_executable("Omega")
 if isUnitTest:
     copy_executable("Test")
-
-copy_and_link_library("libxml2", 2)
 
 relink_id_for_library_major("libixml",2)
 relink_id_for_library_major("libthreadutil",6)
@@ -401,3 +460,18 @@ relink_omega_library("libwidget", ["Qt5Core", "Qt5Gui", "Qt5Xml", "Qt5Widgets"],
                      ["libcommon", "libengine", "libnetwork_omega", "libhttp", "libmime", "libtrackdb", "libdlna",
                       "libtrackinfo", "libgreenomega", "libsilveromega", "libvioletomega", "libwhiteomega",
                       "libredomega", "libcyanomega"])
+
+relink_omega_executable("Omega", ["Qt5Core", "Qt5Gui", "Qt5Xml", "Qt5Widgets"],
+                        ["libxml2.2", "libupnp.6", "libwavpack.1", "libmpcdec", "libixml.2", "libthreadutil.6"],
+                        ["libcommon", "libengine", "libsilveromega", "libredomega", "libwhiteomega", "libgreenomega",
+                         "libvioletomega", "libcyanomega", "libtoneomega", "libwavpackomega", "libtrackinfo", "libnetwork_omega",
+                         "libaudioio", "libblackomega", "libblueomega", "librtp", "librtp_silveromega", "libhttp", "libmime",
+                         "libtrackdb", "libdlna", "libremote", "libwidget"])
+
+relink_omega_executable("Test", ["Qt5Core", "Qt5Gui", "Qt5Xml", "Qt5Widgets", "Qt5Test"],
+                        ["libxml2.2", "libupnp.6", "libwavpack.1", "libmpcdec", "libixml.2", "libthreadutil.6",
+                         "libgtest", "libgtest_main", "libgmock", "libgmock_main"],
+                        ["libcommon", "libengine", "libsilveromega", "libredomega", "libwhiteomega", "libgreenomega",
+                         "libvioletomega", "libcyanomega", "libtoneomega", "libwavpackomega", "libtrackinfo", "libnetwork_omega",
+                         "libaudioio", "libblackomega", "libblueomega", "librtp", "librtp_silveromega", "libhttp", "libmime",
+                         "libtrackdb", "libdlna", "libremote", "libwidget", "libtrackmodel"])

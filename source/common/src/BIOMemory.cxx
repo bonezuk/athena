@@ -83,7 +83,7 @@ tint BIOMemory::read(tbyte *mem,tint len)
 			amount = (remain < len) ? remain : len;
 			if(amount > 0)
 			{
-				const tbyte *source = m_array.constData();
+				const tbyte *source = reinterpret_cast<const tbyte *>(m_array.constData());
 				::memcpy(mem,&source[m_Position],amount * sizeof(tbyte));
 			}
 			m_Position += amount;

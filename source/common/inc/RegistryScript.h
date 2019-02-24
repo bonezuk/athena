@@ -3,7 +3,15 @@
 #define __ORCUS_COMMON_REGISTRYSCRIPT_H
 //-------------------------------------------------------------------------------------------
 
-#include "common/inc/CryptoRSAEncrypt.h"
+#include <QString>
+
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+#include <libxml/tree.h>
+
+#include "common/inc/CommonTypes.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

@@ -13,7 +13,12 @@
 #include <QSet>
 #include <QSharedPointer>
 
-#include "common/inc/CryptoRSAEncrypt.h"
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+#include <libxml/tree.h>
+
 #include "track/info/inc/InfoDLL.h"
 
 //-------------------------------------------------------------------------------------------

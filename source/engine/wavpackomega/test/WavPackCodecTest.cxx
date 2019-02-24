@@ -462,15 +462,15 @@ TEST(WavPackCodec,readDecodedDataWithInteger24Bits)
 TEST(WavPackCodec,readDecodedDataWithInteger25Bits)
 {
 	sample_t output[2] = { 0.0, 0.0 };
-	tint32 decodeBuffer[2] = { 0x7fffff80, -1 };
+	tuint32 decodeBuffer[2] = { 0x7fffff80, 0x80000000 };
 	
 	WavPackCodecTest codec;
 	codec.setupReadDecodeData(25,reinterpret_cast<char *>(decodeBuffer));
 	codec.testReadDecodedData(output,0,1);
     codec.freeReadDecodeData();
 	
-	ASSERT_NEAR( 1.0,output[0],0.000001);
-	ASSERT_NEAR(-1.0,output[1],0.000001);
+	ASSERT_NEAR( 1.0,output[0],0.0001);
+	ASSERT_NEAR(-1.0,output[1],0.0001);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -478,15 +478,15 @@ TEST(WavPackCodec,readDecodedDataWithInteger25Bits)
 TEST(WavPackCodec,readDecodedDataWithInteger26Bits)
 {
 	sample_t output[2] = { 0.0, 0.0 };
-	tint32 decodeBuffer[2] = { 0x7fffffc0, -1 };
+	tuint32 decodeBuffer[2] = { 0x7fffffc0, 0x80000000 };
 	
 	WavPackCodecTest codec;
 	codec.setupReadDecodeData(26,reinterpret_cast<char *>(decodeBuffer));
 	codec.testReadDecodedData(output,0,1);
 	codec.freeReadDecodeData();
 	
-	ASSERT_NEAR( 1.0,output[0],0.000001);
-	ASSERT_NEAR(-1.0,output[1],0.000001);
+	ASSERT_NEAR( 1.0,output[0],0.0001);
+	ASSERT_NEAR(-1.0,output[1],0.0001);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -494,15 +494,15 @@ TEST(WavPackCodec,readDecodedDataWithInteger26Bits)
 TEST(WavPackCodec,readDecodedDataWithInteger27Bits)
 {
 	sample_t output[2] = { 0.0, 0.0 };
-	tint32 decodeBuffer[2] = { 0x7fffffe0, -1 };
+	tuint32 decodeBuffer[2] = { 0x7fffffe0, 0x80000000 };
 	
 	WavPackCodecTest codec;
 	codec.setupReadDecodeData(27,reinterpret_cast<char *>(decodeBuffer));
 	codec.testReadDecodedData(output,0,1);
 	codec.freeReadDecodeData();
 	
-	ASSERT_NEAR( 1.0,output[0],0.000001);
-	ASSERT_NEAR(-1.0,output[1],0.000001);
+	ASSERT_NEAR( 1.0,output[0],0.0001);
+	ASSERT_NEAR(-1.0,output[1],0.0001);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -510,15 +510,15 @@ TEST(WavPackCodec,readDecodedDataWithInteger27Bits)
 TEST(WavPackCodec,readDecodedDataWithInteger28Bits)
 {
 	sample_t output[2] = { 0.0, 0.0 };
-	tint32 decodeBuffer[2] = { 0x7ffffff0, -1 };
+	tuint32 decodeBuffer[2] = { 0x7ffffff0, 0x80000000 };
 	
 	WavPackCodecTest codec;
 	codec.setupReadDecodeData(28,reinterpret_cast<char *>(decodeBuffer));
 	codec.testReadDecodedData(output,0,1);
 	codec.freeReadDecodeData();
 	
-	ASSERT_NEAR( 1.0,output[0],0.000001);
-	ASSERT_NEAR(-1.0,output[1],0.000001);
+	ASSERT_NEAR( 1.0,output[0],0.0001);
+	ASSERT_NEAR(-1.0,output[1],0.0001);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -526,15 +526,15 @@ TEST(WavPackCodec,readDecodedDataWithInteger28Bits)
 TEST(WavPackCodec,readDecodedDataWithInteger29Bits)
 {
 	sample_t output[2] = { 0.0, 0.0 };
-	tint32 decodeBuffer[2] = { 0x7ffffff8, -1 };
+	tuint32 decodeBuffer[2] = { 0x7ffffff8, 0x80000000 };
 	
 	WavPackCodecTest codec;
 	codec.setupReadDecodeData(29,reinterpret_cast<char *>(decodeBuffer));
 	codec.testReadDecodedData(output,0,1);
 	codec.freeReadDecodeData();
 	
-	ASSERT_NEAR( 1.0,output[0],0.000001);
-	ASSERT_NEAR(-1.0,output[1],0.000001);
+	ASSERT_NEAR( 1.0,output[0],0.0001);
+	ASSERT_NEAR(-1.0,output[1],0.0001);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -542,15 +542,15 @@ TEST(WavPackCodec,readDecodedDataWithInteger29Bits)
 TEST(WavPackCodec,readDecodedDataWithInteger30Bits)
 {
 	sample_t output[2] = { 0.0, 0.0 };
-	tint32 decodeBuffer[2] = { 0x7ffffffc, -1 };
+	tuint32 decodeBuffer[2] = { 0x7ffffffc, 0x80000000 };
 	
 	WavPackCodecTest codec;
 	codec.setupReadDecodeData(30,reinterpret_cast<char *>(decodeBuffer));
 	codec.testReadDecodedData(output,0,1);
 	codec.freeReadDecodeData();
 	
-	ASSERT_NEAR( 1.0,output[0],0.000001);
-	ASSERT_NEAR(-1.0,output[1],0.000001);
+	ASSERT_NEAR( 1.0,output[0],0.0001);
+	ASSERT_NEAR(-1.0,output[1],0.0001);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -558,15 +558,15 @@ TEST(WavPackCodec,readDecodedDataWithInteger30Bits)
 TEST(WavPackCodec,readDecodedDataWithInteger31Bits)
 {
 	sample_t output[2] = { 0.0, 0.0 };
-	tint32 decodeBuffer[2] = { 0x7ffffffe, -1 };
+	tuint32 decodeBuffer[2] = { 0x7ffffffe, 0x80000000 };
 	
 	WavPackCodecTest codec;
 	codec.setupReadDecodeData(31,reinterpret_cast<char *>(decodeBuffer));
 	codec.testReadDecodedData(output,0,1);
 	codec.freeReadDecodeData();
 	
-	ASSERT_NEAR( 1.0,output[0],0.000001);
-	ASSERT_NEAR(-1.0,output[1],0.000001);
+	ASSERT_NEAR( 1.0,output[0],0.0001);
+	ASSERT_NEAR(-1.0,output[1],0.0001);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -574,15 +574,15 @@ TEST(WavPackCodec,readDecodedDataWithInteger31Bits)
 TEST(WavPackCodec,readDecodedDataWithInteger32Bits)
 {
 	sample_t output[2] = { 0.0, 0.0 };
-	tint32 decodeBuffer[2] = { 0x7fffffff, -1 };
+	tuint32 decodeBuffer[2] = { 0x7fffffff, 0x80000000 };
 	
 	WavPackCodecTest codec;
 	codec.setupReadDecodeData(32,reinterpret_cast<char *>(decodeBuffer));
 	codec.testReadDecodedData(output,0,1);
 	codec.freeReadDecodeData();
 	
-	ASSERT_NEAR( 1.0,output[0],0.000001);
-	ASSERT_NEAR(-1.0,output[1],0.000001);
+	ASSERT_NEAR( 1.0,output[0],0.0001);
+	ASSERT_NEAR(-1.0,output[1],0.0001);
 }
 
 //-------------------------------------------------------------------------------------------

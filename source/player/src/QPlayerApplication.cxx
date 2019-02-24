@@ -16,7 +16,7 @@ QPlayerApplication::QPlayerApplication(int& argc,char **argv) : QApplication(arg
 	installEventFilter(this);
 	m_instance = this;
 #if QT_VERSION >= 0x050000
-    setAttribute(Qt::AA_UseHighDpiPixmaps);
+//    setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
 }
 

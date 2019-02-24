@@ -27,11 +27,6 @@ class CodecQtUnitTest : public QObject
 		Q_OBJECT
 	private slots:
 		void bitsPerSecondAIFF();
-#if !defined(OMEGA_LINUX)
-		void bitsPerSecondAPEFast();
-		void bitsPerSecondAPEHigh();
-		void bitsPerSecondAPEInsane();
-#endif
 		void bitsPerSecondFlacCompression0();
 		void bitsPerSecondFlacCompression5();
 		void bitsPerSecondFlacCompression8();

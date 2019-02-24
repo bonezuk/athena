@@ -93,9 +93,6 @@
 	</qresource>
 	<qresource prefix="/bps">
 		<file>Resources/bps/aiff/bps_16bit_2ch.aiff</file>
-		<file>Resources/bps/ape/bps_16bit_2ch_fast.ape</file>
-		<file>Resources/bps/ape/bps_16bit_2ch_high.ape</file>
-		<file>Resources/bps/ape/bps_16bit_2ch_insane.ape</file>
 		<file>Resources/bps/caf/bps_16bit_2ch.caf</file>
 		<file>Resources/bps/flac/bps_16bit_2ch_comp0.flac</file>
 		<file>Resources/bps/flac/bps_16bit_2ch_comp5.flac</file>

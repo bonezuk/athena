@@ -22,64 +22,6 @@ void CodecQtUnitTest::bitsPerSecondAIFF()
 }
 
 //-------------------------------------------------------------------------------------------
-#if !defined(OMEGA_LINUX)
-//-------------------------------------------------------------------------------------------
-
-void CodecQtUnitTest::bitsPerSecondAPEFast()
-{
-	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "ape/bps_16bit_2ch_fast.ape");
-	
-	engine::Codec *codec = engine::Codec::get(fileName);
-	QVERIFY(codec!=0);
-	QVERIFY(codec->init());
-	
-	QCOMPARE(650000,codec->bitrate());
-	QCOMPARE(2,codec->noChannels());
-	QCOMPARE(44100,codec->frequency());
-	
-	delete codec;
-}
-
-//-------------------------------------------------------------------------------------------
-
-void CodecQtUnitTest::bitsPerSecondAPEHigh()
-{
-	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "ape/bps_16bit_2ch_high.ape");
-	
-	engine::Codec *codec = engine::Codec::get(fileName);
-	QVERIFY(codec!=0);
-	QVERIFY(codec->init());
-	
-	QCOMPARE(632000,codec->bitrate());
-	QCOMPARE(2,codec->noChannels());
-	QCOMPARE(44100,codec->frequency());
-	
-	delete codec;
-}
-
-//-------------------------------------------------------------------------------------------
-
-void CodecQtUnitTest::bitsPerSecondAPEInsane()
-{
-	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "ape/bps_16bit_2ch_insane.ape");
-	
-	engine::Codec *codec = engine::Codec::get(fileName);
-	QVERIFY(codec!=0);
-	QVERIFY(codec->init());
-	
-	QCOMPARE(591000,codec->bitrate());
-	QCOMPARE(2,codec->noChannels());
-	QCOMPARE(44100,codec->frequency());
-	
-	delete codec;
-}
-
-//-------------------------------------------------------------------------------------------
-#endif
-//-------------------------------------------------------------------------------------------
 
 void CodecQtUnitTest::bitsPerSecondFlacCompression0()
 {
