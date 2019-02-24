@@ -3,8 +3,8 @@ import shutil
 import sys
 import subprocess
 
-isDebug = True
-isUnitTest = True
+isDebug = False
+isUnitTest = False
 isAppStore = False
 
 qt5VersionMajor = 5
@@ -467,8 +467,8 @@ relink_omega_executable("Omega", ["Qt5Core", "Qt5Gui", "Qt5Xml", "Qt5Widgets"],
                          "libvioletomega", "libcyanomega", "libtoneomega", "libwavpackomega", "libtrackinfo", "libnetwork_omega",
                          "libaudioio", "libblackomega", "libblueomega", "librtp", "librtp_silveromega", "libhttp", "libmime",
                          "libtrackdb", "libdlna", "libremote", "libwidget"])
-
-relink_omega_executable("Test", ["Qt5Core", "Qt5Gui", "Qt5Xml", "Qt5Widgets", "Qt5Test"],
+if isUnitTest:
+    relink_omega_executable("Test", ["Qt5Core", "Qt5Gui", "Qt5Xml", "Qt5Widgets", "Qt5Test"],
                         ["libxml2.2", "libupnp.6", "libwavpack.1", "libmpcdec", "libixml.2", "libthreadutil.6",
                          "libgtest", "libgtest_main", "libgmock", "libgmock_main"],
                         ["libcommon", "libengine", "libsilveromega", "libredomega", "libwhiteomega", "libgreenomega",

@@ -54,7 +54,6 @@ set ( TEST_SOURCE
 	../common/test/CachedFileStreamTest.cxx
 	../common/test/CachedFileStreamMock.cxx
 	../common/test/CommonTypesTest.cxx
-	../common/test/LargeNumberTest.cxx
 	../common/test/CommonDirectoriesForFilesTest.cxx
 	../common/test/DictionaryXMLMapTest.cxx
 	../common/test/ProductVersionInfoTest.cxx
