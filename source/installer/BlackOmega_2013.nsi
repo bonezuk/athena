@@ -1,6 +1,7 @@
 # Script for Black Omega installer
 
 !include "MUI2.nsh"
+!include "x64.nsh"
 
 !define APPNAME "Black Omega"
 !define COMPANYNAME "Stuart A. MacLean"
@@ -15,7 +16,7 @@
 
 !define ORCUSPATH "..\..\Build\Omega"
 
-InstallDir "$PROGRAMFILES\${APPNAME}"
+InstallDir "$PROGRAMFILES64\${APPNAME}"
 InstallDirRegKey HKCU "Software\Black Omega 2\InstallDir" ""
 
 LicenseData "license.rtf"
