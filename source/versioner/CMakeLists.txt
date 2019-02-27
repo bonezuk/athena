@@ -1,0 +1,31 @@
+cmake_minimum_required (VERSION 2.8)
+
+project(Versioner)
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/source/build/cmake")
+
+include(OmegaEnviroment)
+
+if (${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
+	set(BINARY_OUTPUT_DIRECTORY "bin")
+else (${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
+	set(BINARY_OUTPUT_DIRECTORY "${CMAKE_BUILD_TYPE}")
+endif (${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
+
+set(TIGER_ROOT_DIRECTORY "${PROJECT_SOURCE_DIR}/Build/Omega")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${TIGER_ROOT_DIRECTORY}/${BINARY_OUTPUT_DIRECTORY}")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+set(LIBRARY_OUTPUT_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
+message(${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+message(${EXECUTABLE_OUTPUT_PATH})
+message(${LIBRARY_OUTPUT_PATH})
+
+include(Qt5)
+
+if (OMEGA_WIN32)
+	include(ThirdPartyWindows)
+elseif (OMEGA_MACOSX)
+endif (OMEGA_WIN32)
+
+add_subdirectory(source)
