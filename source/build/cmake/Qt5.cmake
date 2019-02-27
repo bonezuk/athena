@@ -3,6 +3,10 @@ set(CMAKE_AUTOMOC ON)
 
 message ("Qt path")
 
+if (OMEGA_WIN32)
+set(QT_HOME "" CACHE PATH "Qt install directory")
+set(CMAKE_PREFIX_PATH "${QT_HOME}")
+else (OMEGA_WIN32)
 if (CMAKE_PREFIX_PATH STREQUAL "")
 	set(QT_HOME "" CACHE PATH "Qt install directory")
 	set(CMAKE_PREFIX_PATH "${QT_HOME}")
@@ -11,6 +15,8 @@ else (CMAKE_PREFIX_PATH STREQUAL "")
 endif (CMAKE_PREFIX_PATH STREQUAL "")
 message("${QT_HOME}")
 message("${CMAKE_PREFIX_PATH}")
+endif (OMEGA_WIN32)
+
 set(QT_HOME2 "${QT_HOME}")
 
 find_package(Qt5Core)
