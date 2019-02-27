@@ -7,11 +7,11 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleVersion</key>
-	<string>742</string>
+	<string>1408</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.3.0</string>
+	<string>2.4.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleExecutable</key>
@@ -27,7 +27,7 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2019 Stuart MacLean. All rights reserved.</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Copyright © 2019 Stuart MacLean. All rights reserved.</string>
+	<string>Copyright 1999 - 2019 ©  Stuart A. MacLean. All rights reserved.</string>
 	<key>CFBundleIdentifier</key>
 	<string>uk.co.blackomega.blackomega</string>
 	<key>CFBundleHelpBookFolder</key>

@@ -1,36 +1,39 @@
-IDI_ICON1               ICON    DISCARDABLE     "omega.ico"
-appicon ICON "omega.ico"
-
-#include <winver.h>
-
-// Version information; this, too, is used by WinSparkle
-1 VERSIONINFO
- FILEVERSION     2,3,0,0
- PRODUCTVERSION  2,3,0,0
- FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
- FILEFLAGS       0
- FILEOS          VOS_NT_WINDOWS32
- FILETYPE        VFT_APP
- FILESUBTYPE     VFT2_UNKNOWN
-BEGIN
-    BLOCK "StringFileInfo"
-    BEGIN
-        BLOCK "040904B0" // US English, Unicode
-        BEGIN
-            VALUE "Comments", "Black Omega"
-            VALUE "CompanyName", "www.blackomega.co.uk\0"
-            VALUE "FileDescription", "Black Omega audiophile music player\0"
-            VALUE "FileVersion", "2.3.0\0"
-            VALUE "InternalName", "Black Omega\0"
-            VALUE "OriginalFilename", "Black Omega.exe\0"
-            VALUE "LegalCopyright", "Open-source BSD\0"
-            VALUE "ProductName", "Black Omega\0"
-            VALUE "ProductVersion", "2.3.0\0"
-        END
-    END
-
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x0409, 0x04B0
-    END
-END
+IDI_ICON1               ICON    DISCARDABLE     "omega.ico"
+appicon ICON "omega.ico"
+
+#include <winver.h>
+
+// Get updates from this appcast feed:
+FeedURL     APPCAST     {"http://www.blackomega.co.uk/sparkle/appcast_win.xml"}
+
+// Version information; this, too, is used by WinSparkle
+1 VERSIONINFO
+ FILEVERSION     2,4,0,666
+ PRODUCTVERSION  2,4,0,666
+ FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+ FILEFLAGS       0
+ FILEOS          VOS_NT_WINDOWS32
+ FILETYPE        VFT_APP
+ FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0" // US English, Unicode
+        BEGIN
+            VALUE "Comments", "Black Omega"
+            VALUE "CompanyName", "www.blackomega.co.uk\0"
+            VALUE "FileDescription", "Black Omega audiophile music player\0"
+            VALUE "FileVersion", "2.4.0.666\0"
+            VALUE "InternalName", "Black Omega\0"
+            VALUE "OriginalFilename", "Black Omega.exe\0"
+            VALUE "LegalCopyright", "Copyright 1999 - 2019 ©  Stuart A. MacLean. All rights reserved.\0"
+            VALUE "ProductName", "Black Omega\0"
+            VALUE "ProductVersion", "2.4.0.666\0"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 0x04B0
+    END
+END
