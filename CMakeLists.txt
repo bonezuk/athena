@@ -6,7 +6,8 @@ endif (POLICY CMP0020)
 
 project(BlackOmega)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/source/build/cmake")
+set(ROOT_PROJECT_PATH "${CMAKE_SOURCE_DIR}")
+set(CMAKE_MODULE_PATH "${ROOT_PROJECT_PATH}/source/build/cmake")
 
 include(OmegaEnviroment)
 

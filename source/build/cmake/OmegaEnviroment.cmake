@@ -75,7 +75,7 @@ endif (${CMAKE_BUILD_TYPE} MATCHES "Debug")
 set(BUILD_SUFFIX ${TIGER_PLATFORM}.${TIGER_BUILD_TYPE}.${TIGER_COMPILER})
 
 if ("$ENV{ATHENA_UTILS}" STREQUAL "")
-	set(ATHENA_UTILS "${CMAKE_SOURCE_DIR}/../athena_utils" CACHE PATH "Perforce Library Path")
+	set(ATHENA_UTILS "${ROOT_PROJECT_PATH}/../athena_utils" CACHE PATH "Third Party Utilities Library Path")
 else ("$ENV{ATHENA_UTILS}" STREQUAL "")
 	set(ATHENA_UTILS "$ENV{ATHENA_UTILS}" CACHE PATH "Perforce Library Path")
 endif ("$ENV{ATHENA_UTILS}" STREQUAL "")
@@ -97,7 +97,7 @@ elseif (OMEGA_LINUX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif (OMEGA_WIN32)
 
-include_directories(AFTER "${CMAKE_SOURCE_DIR}/source" )
+include_directories(AFTER "${ROOT_PROJECT_PATH}/source" )
 include_directories(AFTER "${CMAKE_BINARY_DIR}/source" )
 
 if (OMEGA_WIN32)

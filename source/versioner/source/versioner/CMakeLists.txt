@@ -1,4 +1,3 @@
-
 set ( VERSIONER_HEADERS
 	./inc/DictionaryXMLMap.h
 	./inc/ProductVersionInfo.h
@@ -11,4 +10,4 @@ set ( VERSIONER_SOURCES
 )
 
 add_executable(versioner ${VERSIONER_HEADERS} ${VERSIONER_SOURCES} )
-target_link_libraries(versioner qt5core qt5gui qt5xml)
+target_link_libraries(versioner Qt5::Core Qt5::Gui Qt5::Xml)
