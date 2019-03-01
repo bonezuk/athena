@@ -1,5 +1,6 @@
 #include "network/inc/Resource.h"
 #include "player/inc/PlayerController.h"
+#include "widget/inc/AboutDialog.h"
 
 #if defined(OMEGA_WIN32)
 #include "audioio/inc/WasAPIIF.h"
@@ -421,7 +422,7 @@ void PlayerController::createActions()
 #if defined(OMEGA_WIN32)
 	m_aboutAction->setIcon(QIcon(":/player/Resources/key-icon.png"));
 #endif
-	connect(m_aboutAction,SIGNAL(triggered()),this,SLOT(onShowLicense()));
+	connect(m_aboutAction,SIGNAL(triggered()),this,SLOT(onAbout()));
 
 
 #if defined(OMEGA_MACOSX)
@@ -495,7 +496,7 @@ void PlayerController::createActions()
 	connect(m_helpActionMacMenu,SIGNAL(triggered()),this,SLOT(onHelp()));
 
 	m_aboutActionMacMenu = new QAction(tr("About Black Omega"),this);
-	connect(m_aboutActionMacMenu,SIGNAL(triggered()),this,SLOT(onShowLicense()));
+	connect(m_aboutActionMacMenu,SIGNAL(triggered()),this,SLOT(onAbout()));
 
 	QMenuBar *mainMenuBar = new QMenuBar(0);
 	
@@ -524,6 +525,7 @@ void PlayerController::createActions()
 	ctrlMenu->addAction(m_shuffleActionMacMenu);
 	ctrlMenu->addAction(m_repeatActionMacMenu);
 	
+	/*
 	QMenu *helpMenu = mainMenuBar->addMenu(tr("&Help"));
 	helpMenu->addAction(m_aboutActionMacMenu);
 	helpMenu->addAction(m_preferenceActionMacMenu);
@@ -531,7 +533,8 @@ void PlayerController::createActions()
 	//QMenu *hMenu = mainMenuBar->addMenu(tr("Help"));
 	helpMenu->addAction(m_helpActionMacMenu);
 	helpMenu->addSeparator();
-
+	*/
+	
 	registerHelpBook();
 #endif
 
@@ -554,6 +557,14 @@ void PlayerController::defineKeyExclusions()
 	pKeyExclusion->add(remote::KeyCode(static_cast<tuint32>(Qt::Key_Delete)),"Remove Tracks");
 	pKeyExclusion->add(remote::KeyCode(static_cast<tuint32>(Qt::ControlModifier) | static_cast<tuint32>(Qt::Key_A)),"Select All");
 	pKeyExclusion->add(remote::KeyCode(static_cast<tuint32>(Qt::Key_F1)),"Show Help");
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerController::onAbout()
+{
+	widget::AboutDialog aboutDlg(m_playerDialog);
+	aboutDlg.exec();
 }
 
 //-------------------------------------------------------------------------------------------

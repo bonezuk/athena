@@ -9,7 +9,7 @@ elseif (OMEGA_MACOSX)
 	file(GLOB WIDGET_SOURCE src/*.cxx src/*.mm)
 	list(REMOVE_ITEM WIDGET_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/inc/SandBoxWindows.h")
 	list(REMOVE_ITEM WIDGET_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/SandBoxWindows.cxx")
-	qt5_wrap_ui(WIDGET_UI_HEADERS inc/ImportPlaylistDialog.ui)
+	qt5_wrap_ui(WIDGET_UI_HEADERS inc/AboutDialog.ui inc/ImportPlaylistDialog.ui)
 endif (OMEGA_WIN32 OR OMEGA_LINUX)
 
 qt5_add_resources(WIDGET_UI_RESOURCES widget.qrc)

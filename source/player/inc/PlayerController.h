@@ -154,6 +154,7 @@ class PlayerController : public QObject
 		void onDelete();
 		void onSelectAll();
 		void onSettings();
+		void onAbout();
 				
 		void onCLITimer();
 		

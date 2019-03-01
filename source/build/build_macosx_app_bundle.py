@@ -3,7 +3,7 @@ import shutil
 import sys
 import subprocess
 
-isDebug = False
+isDebug = True
 isUnitTest = False
 isAppStore = False
 isCodeSign = True
