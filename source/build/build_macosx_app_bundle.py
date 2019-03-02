@@ -5,13 +5,13 @@ import subprocess
 
 isDebug = True
 isUnitTest = False
-isAppStore = False
+isAppStore = True
 isCodeSign = True
 
 certNameWebApplication = "Developer ID Application: Stuart MacLean (NR9FA7GR93)"
 certNameWebPackage = ""
-certNameStoreApplication = ""
-certNameStorePackage = ""
+certNameStoreApplication = "3rd Party Mac Developer Application: Stuart MacLean (NR9FA7GR93)"
+certNameStorePackage = "3rd Party Mac Developer Installer: Stuart MacLean (NR9FA7GR93)"
 
 certNameApplication = ""
 certNamePackage = ""
@@ -28,6 +28,9 @@ def get_source_directory():
 
 def get_app_bundle_directory():
     return os.path.realpath(os.path.join(get_root_project_directory(), "Build", "Black Omega.app"))
+
+def get_app_package():
+    return os.path.realpath(os.path.join(get_root_project_directory(), "Build", "Black Omega.pkg"))
 
 def get_app_final_bundle_directory():
     return os.path.realpath(os.path.join(get_root_project_directory(), "Build", "Black Omega.app"))
@@ -591,3 +594,10 @@ codesign_library_plain("libwidget")
 
 codesign_help()
 codesign_app_bundle()
+
+def package_and_sign():
+    print("Build and sign package")
+    subprocess.check_call(["productbuild", "--component", get_app_bundle_directory(), "/Applications", "--sign", certNamePackage, get_app_package()])
+
+if isAppStore:
+    package_and_sign()

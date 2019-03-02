@@ -373,19 +373,9 @@ void setupPlatform()
 
 void setupSettingsPath()
 {
-#if defined(OMEGA_MAC_STORE)
-	QString settingPath = userApplicationDataDirectory();
-	QSettings::setPath(QSettings::IniFormat,QSettings::UserScope,settingPath);
-	QSettings::setPath(QSettings::NativeFormat,QSettings::UserScope,settingPath);
-		
-	QCoreApplication::setOrganizationName("Stuart MacLean");
-	QCoreApplication::setOrganizationDomain("www.blackomega.co.uk");
-	QCoreApplication::setApplicationName("Black Omega");
-#else
 	QCoreApplication::setOrganizationName("Tiger-Eye");
 	QCoreApplication::setOrganizationDomain("www.blackomega.co.uk");
 	QCoreApplication::setApplicationName("BlackOmega2");
-#endif
 }
 
 //-------------------------------------------------------------------------------------------

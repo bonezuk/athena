@@ -505,8 +505,8 @@ void PlayerController::createActions()
 	fileMenu->addAction(m_addFolderActionMacMenu);
 	fileMenu->addSeparator();
 	fileMenu->addAction(m_savePlaylistActionMacMenu);
-	fileMenu->addSeparator();
-	fileMenu->addMenu(m_iTunesCollectionMenuMac);
+	//fileMenu->addSeparator();
+	//fileMenu->addMenu(m_iTunesCollectionMenuMac);
 
 	QMenu *editMenu = mainMenuBar->addMenu(tr("&Edit"));
 	editMenu->addAction(m_cutActionMacMenu);
