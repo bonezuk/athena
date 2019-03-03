@@ -3,9 +3,9 @@ import shutil
 import sys
 import subprocess
 
-isDebug = True
+isDebug = False
 isUnitTest = False
-isAppStore = True
+isAppStore = False
 isCodeSign = True
 
 certNameWebApplication = "Developer ID Application: Stuart MacLean (NR9FA7GR93)"
