@@ -7,7 +7,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleVersion</key>
-	<string>4072</string>
+	<string>4074</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleShortVersionString</key>
@@ -36,6 +36,8 @@
 	<string>uk.co.blackomega.omega.help</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.11.0</string>
 	<key>ForAppStore</key>
 	<string>yes</string>
 </dict>
