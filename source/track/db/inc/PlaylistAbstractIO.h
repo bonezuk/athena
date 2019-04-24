@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_PLAYLISTABSTRACTIO_H
-#define __ORCUS_PLAYER_PLAYLISTABSTRACTIO_H
+#ifndef __ORCUS_TRACK_DB_PLAYLISTABSTRACTIO_H
+#define __ORCUS_TRACK_DB_PLAYLISTABSTRACTIO_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -29,26 +29,18 @@
 #include "track/info/inc/Info.h"
 #include "track/db/inc/DBInfo.h"
 #include "track/db/inc/TrackDB.h"
-#include "player/inc/QPLItemBase.h"
-#include "player/inc/QPLProgress.h"
-
-#if defined(OMEGA_MAC_STORE)
-#include "widget/inc/SandBoxMac.h"
-#include "track/db/inc/SBBookmarkTrackDB.h"
-#endif
+#include "track/db/inc/PLProgress.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
-#define PLAYLIST_EXPORT
-
-//-------------------------------------------------------------------------------------------
-
-class PlaylistAbstractIO
+class TRACK_DB_EXPORT PlaylistAbstractIO
 {
 	public:
 		PlaylistAbstractIO();
@@ -57,36 +49,35 @@ class PlaylistAbstractIO
 		static bool isSupported(const QString& name);
 		static QString factoryName(const QString& name);
 		
-		virtual bool load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
-		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
-		
-		void setParentWidget(QWidget *w);
+		virtual bool load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,PLProgress *progress);
+		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,PLProgress *progress);
 		
 	protected:
 
-		QWidget *m_parent;
-		common::BOParse *m_pathParser;
-		tint m_pathParserState[9];
-	
+		static common::BOParse *m_pathParser;
+		static tint m_pathParserState[9];
+				
+		virtual track::info::InfoSPtr getTrack(const QString& fileName);
+		
+		void appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,PLProgress *progress);
+
+		QString getURLFilename(const QString& uPath);
+		
 		virtual QByteArray readLine(common::BIOStream& pFile);
 		virtual bool writeLine(common::BIOStream& pFile,const QString& line);
 		
-		virtual track::info::InfoSPtr getTrack(const QString& fileName);
-		
-		QString getFilePath(const QString& inName,const QDir& homeDir,bool commentFlag);
-		
-		void appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
-
-		QString getURLFilename(const QString& uPath);
+		virtual QString getFilePath(const QString& inName,const QDir& homeDir,bool commentFlag);
 };
 
 //-------------------------------------------------------------------------------------------
 
-ABSTRACT_FACTORY_CLASS(PLAYLIST_EXPORT,PlaylistIOFactory,PlaylistAbstractIO)
+ABSTRACT_FACTORY_CLASS(TRACK_DB_EXPORT,PlaylistIOFactory,PlaylistAbstractIO)
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
+

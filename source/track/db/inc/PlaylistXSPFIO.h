@@ -1,16 +1,18 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_PLAYLISTXSPFIO_H
-#define __ORCUS_PLAYER_PLAYLISTXSPFIO_H
+#ifndef __ORCUS_TRACK_DB_PLAYLISTXSPFIO_H
+#define __ORCUS_TRACK_DB_PLAYLISTXSPFIO_H
 //-------------------------------------------------------------------------------------------
 
-#include "player/inc/PlaylistAbstractIO.h"
+#include "track/db/inc/PlaylistAbstractIO.h"
 
 #include <QStack>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -20,8 +22,8 @@ class PlaylistXSPFIO : public PlaylistAbstractIO
 		PlaylistXSPFIO();
 		virtual ~PlaylistXSPFIO();
 
-		virtual bool load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
-		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
+		virtual bool load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,PLProgress *progress);
+		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,PLProgress *progress);
 	
 	protected:
 		
@@ -32,11 +34,12 @@ class PlaylistXSPFIO : public PlaylistAbstractIO
 		bool loadXMLBookmarkExtension(xmlDocPtr doc,xmlNodePtr eNode,QByteArray& bkArray);
 		void loadXMLFilename(xmlDocPtr doc,xmlNodePtr fNode,QString& fileName);
 
-		bool saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr& pInfo);
+		bool saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr& pInfo,PLProgress *progress);
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 #endif

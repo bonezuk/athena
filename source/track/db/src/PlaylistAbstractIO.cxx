@@ -1,10 +1,12 @@
-#include "player/inc/PlaylistAbstractIO.h"
+#include "track/db/inc/PlaylistAbstractIO.h"
 #include "engine/inc/Codec.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -12,27 +14,33 @@ ABSTRACT_FACTORY_CLASS_IMPL(PlaylistIOFactory,PlaylistAbstractIO)
 
 //-------------------------------------------------------------------------------------------
 
-PlaylistAbstractIO::PlaylistAbstractIO() : m_parent(0)
+common::BOParse *PlaylistAbstractIO::m_pathParser = 0;
+tint PlaylistAbstractIO::m_pathParserState[9];
+
+//-------------------------------------------------------------------------------------------
+
+PlaylistAbstractIO::PlaylistAbstractIO()
 {
-	m_pathParser = new common::BOParse;
-	
-	m_pathParserState[0] = m_pathParser->String("/");     /* /usr */
-	m_pathParserState[1] = m_pathParser->String("\\");    /* usr\local */
-	m_pathParserState[2] = m_pathParser->String(":\\");   /* c:\ */
-	m_pathParserState[3] = m_pathParser->String("\\\\");  /* \\machine\drive */
-	m_pathParserState[4] = m_pathParser->String("://");   /* file:// or http:// */
-	m_pathParserState[5] = m_pathParser->String("file");  /* file:// */
-	m_pathParserState[6] = m_pathParser->String("#");     /* #comment */
-	m_pathParserState[7] = m_pathParser->String(":/");    /* c:/ */
-	m_pathParserState[8] = m_pathParser->String("//");    /* //machine/drive */
+	if(m_pathParser == 0)
+	{
+		m_pathParser = new common::BOParse;
+		
+		m_pathParserState[0] = m_pathParser->String("/");     /* /usr */
+		m_pathParserState[1] = m_pathParser->String("\\");    /* usr\local */
+		m_pathParserState[2] = m_pathParser->String(":\\");   /* c:\ */
+		m_pathParserState[3] = m_pathParser->String("\\\\");  /* \\machine\drive */
+		m_pathParserState[4] = m_pathParser->String("://");   /* file:// or http:// */
+		m_pathParserState[5] = m_pathParser->String("file");  /* file:// */
+		m_pathParserState[6] = m_pathParser->String("#");     /* #comment */
+		m_pathParserState[7] = m_pathParser->String(":/");    /* c:/ */
+		m_pathParserState[8] = m_pathParser->String("//");    /* //machine/drive */
+	}
 }
 
 //-------------------------------------------------------------------------------------------
 
 PlaylistAbstractIO::~PlaylistAbstractIO()
-{
-	delete m_pathParser;
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
@@ -343,7 +351,7 @@ QString PlaylistAbstractIO::getFilePath(const QString& inName,const QDir& homeDi
 
 //-------------------------------------------------------------------------------------------
 
-void PlaylistAbstractIO::appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+void PlaylistAbstractIO::appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	track::info::InfoSPtr info = getTrack(lPath);
 	
@@ -374,13 +382,7 @@ void PlaylistAbstractIO::appendToList(const QString& lPath,QVector<track::info::
 }
 
 //-------------------------------------------------------------------------------------------
-
-void PlaylistAbstractIO::setParentWidget(QWidget *w)
-{
-	m_parent = w;
-}
-
-//-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

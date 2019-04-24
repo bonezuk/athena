@@ -15,10 +15,6 @@ set( PLAYER_HEADER
 	inc/NoASIODriverDialog.h
 	inc/Player.h
 	inc/PlayerController.h
-	inc/PlaylistAbstractIO.h
-	inc/PlaylistM3UIO.h
-	inc/PlaylistPLSIO.h
-	inc/PlaylistXSPFIO.h
 	inc/ProgressMessageDialog.h
 	inc/QPlayControls.h
 	inc/QPlayerApplication.h
@@ -47,10 +43,6 @@ set( PLAYER_SOURCE
 	src/NoASIODriverDialog.cxx
 	src/Player.cxx
 	src/PlayerController.cxx
-	src/PlaylistAbstractIO.cxx
-	src/PlaylistM3UIO.cxx
-	src/PlaylistPLSIO.cxx
-	src/PlaylistXSPFIO.cxx
 	src/ProgressMessageDialog.cxx
 	src/QPlayControls.cxx
 	src/QPlayerApplication.cxx

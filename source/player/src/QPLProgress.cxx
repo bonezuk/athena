@@ -2,6 +2,15 @@
 #include "player/inc/QPlaylistWidget.h"
 #include "player/inc/QPlayerApplication.h"
 
+#if defined(OMEGA_MAC_STORE)
+#include "common/inc/CommonDirectoriesForFiles.h"
+#include "track/db/inc/TrackFileDependencies.h"
+#include "widget/inc/ImportPlaylistDialog.h"
+#endif
+
+#include <QApplication>
+#include <QMessageBox>
+
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
@@ -9,7 +18,7 @@ namespace player
 {
 //-------------------------------------------------------------------------------------------
 
-QPLProgress::QPLProgress(QPlaylistWidget *parent) : QObject(parent),
+QPLProgress::QPLProgress(QPlaylistWidget *parent) : track::db::PLProgress(parent),
 	m_parentWidget(parent),
 	m_leftImage(0),
 	m_rightImage(0),
@@ -490,6 +499,102 @@ void QPLProgress::paintRetinaImage(QPainter *painter,QPointF pos,QImage *pImage)
 	painter->drawPixmap(pos,pixMap);
 }
 
+//-------------------------------------------------------------------------------------------
+#if defined(OMEGA_MAC_STORE)
+//-------------------------------------------------------------------------------------------
+
+bool QPLProgress::getPermissions(QList<QPair<QString,QByteArray> >& fileList)
+{
+	QStringList accessFileList;
+	track::db::TrackFileDependencies dependency;
+	tint fCount = 0;
+
+	for(ppI=fileList.begin();ppI!=fileList.end();ppI++)
+	{
+		const QString& fName = (*ppI).first;
+		const QByteArray& bkArray = (*ppI).second;
+		if(bkArray.size()>0)
+		{
+			if(track::db::SBBookmarkService::instance()->add(fileName,fName,true,bkArray))
+			{
+				fCount++;
+			}
+			else
+			{
+				if(sbBookmark->has(fName,true))
+				{
+					fCount++;
+				}
+				else
+				{
+					accessFileList << fName;
+				}
+			}
+		}
+		else
+		{
+			if(sbBookmark->has(fName,true))
+			{
+				fCount++;
+			}
+			else
+			{
+				accessFileList << fName;
+				dependency.add(fName);
+			}
+		}
+	}
+	
+	QSet<QString> allDependencies = dependency.allDependencies();
+	for(QSet<QString>::iterator ppI=allDependencies.begin();ppI!=allDependencies.end();++ppI)
+	{
+        const QString& lPath = *ppI;
+		if(!sbBookmark->has(lPath,true))
+		{
+			accessFileList << *ppI;
+		}
+	}
+	
+	if(accessFileList.size() > 0)
+	{
+		QFileInfo fInfo(fileName);
+		QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
+		QStringList pathList = pathSet.toList();
+				
+		widget::ImportPlaylistDialog importDialog(m_parentWidget);
+		importDialog.setPlaylistFileName(fInfo.fileName());
+		importDialog.setDirectories(pathList);
+        importDialog.setModal(true);
+		importDialog.exec();
+				
+		if(importDialog.result()==QDialog::Accepted)
+		{
+			for(QStringList::iterator ppI=pathList.begin();ppI!=pathList.end();ppI++)
+			{
+				if(sbBookmark->has(*ppI,true))
+				{
+					fCount++;
+				}
+			}
+		}
+	}
+	
+	if(fCount==0)
+	{
+		return false;
+	}
+	return true;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QByteArray QPLProgress::getSandboxBookmark(const QString& outFilename,const QString& trackFilename)
+{
+	track::db::SBBookmarkService::instance()->getBookmarkArray(outFilename,trackFilename);
+}
+
+//-------------------------------------------------------------------------------------------
+#endif
 //-------------------------------------------------------------------------------------------
 } // namespace player
 } // namespace orcus

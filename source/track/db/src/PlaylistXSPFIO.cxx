@@ -1,18 +1,11 @@
-#include "player/inc/PlaylistXSPFIO.h"
-
-#if defined(OMEGA_MAC_STORE)
-#include "common/inc/CommonDirectoriesForFiles.h"
-#include "track/db/inc/TrackFileDependencies.h"
-#include "widget/inc/ImportPlaylistDialog.h"
-#endif
-
-#include <QApplication>
-#include <QMessageBox>
+#include "track/db/inc/PlaylistXSPFIO.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -200,7 +193,7 @@ void PlaylistXSPFIO::loadXMLFilename(xmlDocPtr doc,xmlNodePtr fNode,QString& fil
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	int i;
 	xmlDocPtr doc;
@@ -238,81 +231,7 @@ bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>
 	}
 
 #if defined(OMEGA_MAC_STORE)
-	QStringList accessFileList;
-	track::db::TrackFileDependencies dependency;
-	tint fCount = 0;
-
-	for(ppI=fileList.begin();ppI!=fileList.end();ppI++)
-	{
-		const QString& fName = (*ppI).first;
-		const QByteArray& bkArray = (*ppI).second;
-		if(bkArray.size()>0)
-		{
-			if(track::db::SBBookmarkService::instance()->add(fileName,fName,true,bkArray))
-			{
-				fCount++;
-			}
-			else
-			{
-				if(sbBookmark->has(fName,true))
-				{
-					fCount++;
-				}
-				else
-				{
-					accessFileList << fName;
-				}
-			}
-		}
-		else
-		{
-			if(sbBookmark->has(fName,true))
-			{
-				fCount++;
-			}
-			else
-			{
-				accessFileList << fName;
-				dependency.add(fName);
-			}
-		}
-	}
-	
-	QSet<QString> allDependencies = dependency.allDependencies();
-	for(QSet<QString>::iterator ppI=allDependencies.begin();ppI!=allDependencies.end();++ppI)
-	{
-        const QString& lPath = *ppI;
-		if(!sbBookmark->has(lPath,true))
-		{
-			accessFileList << *ppI;
-		}
-	}
-	
-	if(accessFileList.size() > 0)
-	{
-		QFileInfo fInfo(fileName);
-		QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-		QStringList pathList = pathSet.toList();
-				
-		widget::ImportPlaylistDialog importDialog(m_parent);
-		importDialog.setPlaylistFileName(fInfo.fileName());
-		importDialog.setDirectories(pathList);
-        importDialog.setModal(true);
-		importDialog.exec();
-				
-		if(importDialog.result()==QDialog::Accepted)
-		{
-			for(QStringList::iterator ppI=pathList.begin();ppI!=pathList.end();ppI++)
-			{
-				if(sbBookmark->has(*ppI,true))
-				{
-					fCount++;
-				}
-			}
-		}
-	}
-	
-	if(fCount==0)
+	if(!progress->getPermissions(fileList))
 	{
 		return false;
 	}
@@ -343,7 +262,7 @@ bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistXSPFIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistXSPFIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	tint i;
 	xmlDocPtr doc;
@@ -448,7 +367,7 @@ bool PlaylistXSPFIO::save(const QString& fileName,const QVector<track::info::Inf
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistXSPFIO::saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr& pInfo)
+bool PlaylistXSPFIO::saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr& pInfo,PLProgress *progress)
 {
 	bool res = false;
 
@@ -479,7 +398,7 @@ bool PlaylistXSPFIO::saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr&
 						{
 #if defined(OMEGA_MAC_STORE)
 							{
-								QByteArray bkArray = track::db::SBBookmarkService::instance()->getBookmarkArray(m_outFilename,pInfo->getFilename());
+								QByteArray bkArray = progress->getSandboxBookmark(m_outFilename,pInfo->getFilename());
 								if(bkArray.size()>0)
 								{
 									if(xmlTextWriterStartElement(writer,reinterpret_cast<const xmlChar *>("extension"))>=0)
@@ -511,6 +430,7 @@ bool PlaylistXSPFIO::saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr&
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

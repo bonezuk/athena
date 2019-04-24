@@ -1,18 +1,11 @@
-#include "player/inc/PlaylistPLSIO.h"
-
-#if defined(OMEGA_MAC_STORE)
-#include "common/inc/CommonDirectoriesForFiles.h"
-#include "track/db/inc/TrackFileDependencies.h"
-#include "widget/inc/ImportPlaylistDialog.h"
-#endif
-
-#include <QApplication>
-#include <QMessageBox>
+#include "track/db/inc/PlaylistPLSIO.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -123,7 +116,7 @@ PlaylistPLSIO::LineType PlaylistPLSIO::parseLineInfo(const QString& line,QString
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	common::BIOBufferedStream pFile(common::e_BIOStream_FileRead);
 	bool res = true;
@@ -131,6 +124,7 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 	pList.clear();
 
 #if defined(OMEGA_MAC_STORE)
+	QList<QPair<QString,QByteArray> > fileList
 	common::SBBookmarkPtr sbBookmark = common::SBBookmark::get();
 	bool canRead = false;
 
@@ -140,7 +134,6 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 	}
 
 	{
-		QStringList accessFileList;
 		common::BIOBufferedStream tFile(common::e_BIOStream_FileRead);
 		if(tFile.open(fileName))
 		{
@@ -149,7 +142,6 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 			LineType type;
 			bool playlistFlag = false;
 			QDir homeDir = QFileInfo(fileName).dir();
-			track::db::TrackFileDependencies dependency;
 			tint fCount = 0;
 			
 			while(!tFile.eof() && !progress->isCancelled())
@@ -171,15 +163,7 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 							lPath = getFilePath(lPath,homeDir,true);
 							if(!lPath.isEmpty())
 							{
-								if(sbBookmark->has(lPath,true))
-								{
-									fCount++;
-								}
-								else
-								{
-									accessFileList << lPath;
-									dependency.add(lPath);
-								}
+								fileList << QPair<QString,QByteArray>(lPath, QByteArray());
 							}
 						}
 					}
@@ -187,47 +171,9 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 			}
 			tFile.close();
 
-			QSet<QString> allDependencies = dependency.allDependencies();
-			for(QSet<QString>::iterator ppI=allDependencies.begin();ppI!=allDependencies.end();++ppI)
-			{
-                const QString& lPath = *ppI;
-				if(!sbBookmark->has(lPath,true))
-				{
-					accessFileList << *ppI;
-				}
-			}
-
-			if(accessFileList.size() > 0)
-			{
-				QFileInfo fInfo(fileName);
-				QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-				QStringList pathList = pathSet.toList();
-				
-				widget::ImportPlaylistDialog importDialog(m_parent);
-				importDialog.setPlaylistFileName(fInfo.fileName());
-				importDialog.setDirectories(pathList);
-                importDialog.setModal(true);
-                importDialog.exec();
-				
-				if(importDialog.result()==QDialog::Accepted)
-				{
-					for(QStringList::iterator ppI=pathList.begin();ppI!=pathList.end();ppI++)
-					{
-						if(sbBookmark->has(*ppI,true))
-						{
-							fCount++;
-						}
-					}
-				}
-			}
-			
-			if(fCount>0)
-			{
-				canRead = true;
-			}
 		}
 	}
-	if(!canRead)
+	if(!progress->getPermissions(fileList))
 	{
 		return false;
 	}
@@ -292,7 +238,7 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistPLSIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistPLSIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	common::BIOBufferedStream pFile(common::e_BIOStream_FileCreate | common::e_BIOStream_FileWrite);
 	bool res = true;
@@ -368,6 +314,7 @@ bool PlaylistPLSIO::save(const QString& fileName,const QVector<track::info::Info
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

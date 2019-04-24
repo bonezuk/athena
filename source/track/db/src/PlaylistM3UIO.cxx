@@ -1,18 +1,11 @@
-#include "player/inc/PlaylistM3UIO.h"
-
-#if defined(OMEGA_MAC_STORE)
-#include "common/inc/CommonDirectoriesForFiles.h"
-#include "track/db/inc/TrackFileDependencies.h"
-#include "widget/inc/ImportPlaylistDialog.h"
-#endif
-
-#include <QApplication>
-#include <QMessageBox>
+#include "track/db/inc/PlaylistM3UIO.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -31,8 +24,49 @@ PlaylistM3UIO::~PlaylistM3UIO()
 {}
 
 //-------------------------------------------------------------------------------------------
+#if defined(OMEGA_MAC_STORE)
+//-------------------------------------------------------------------------------------------
 
-bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+void PlaylistM3UIO::getPermissionsM3U(PLProgress *progress,const QString& fileName)
+{
+	QList<QPair<QString,QByteArray> > fileList;
+	common::SBBookmarkPtr sbBookmark = common::SBBookmark::get();
+
+    if(!sbBookmark->has(fileName,true))
+	{
+        sbBookmark->add(fileName,true);
+	}
+
+	common::BIOBufferedStream tFile(common::e_BIOStream_FileRead);
+	if(tFile.open(fileName))
+	{
+		QDir homeDir = QFileInfo(fileName).dir();
+		tint fCount = 0;
+		
+		while(!tFile.eof())
+		{
+			QString lPath;
+			QByteArray lArray = readLine(tFile);
+			
+			lPath = QString::fromLatin1(lArray.data(),lArray.length());
+			lPath = getFilePath(lPath,homeDir,true);
+			
+			if(!lPath.isEmpty())
+			{
+				fileList << QPair<QString,QByteArray>(lPath,QByteArray());
+			}
+		}
+		tFile.close();
+	}
+	
+	return progress->getPermissions(fileList);
+}
+
+//-------------------------------------------------------------------------------------------
+#endif
+//-------------------------------------------------------------------------------------------
+
+bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	common::BIOBufferedStream pFile(common::e_BIOStream_FileRead);
 	bool res = true;
@@ -40,92 +74,7 @@ bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 	pList.clear();
 
 #if defined(OMEGA_MAC_STORE)
-	common::SBBookmarkPtr sbBookmark = common::SBBookmark::get();
-	bool canRead = false;
-
-    if(!sbBookmark->has(fileName,true))
-	{
-        sbBookmark->add(fileName,true);
-	}
-
-	{
-		track::db::TrackFileDependencies dependency;
-		QStringList accessFileList;
-		common::BIOBufferedStream tFile(common::e_BIOStream_FileRead);
-		if(tFile.open(fileName))
-		{
-			QDir homeDir = QFileInfo(fileName).dir();
-			tint fCount = 0;
-			
-			while(!tFile.eof())
-			{
-				QString lPath;
-				QByteArray lArray = readLine(tFile);
-				
-				lPath = QString::fromLatin1(lArray.data(),lArray.length());
-				lPath = getFilePath(lPath,homeDir,true);
-				if(lPath.isEmpty())
-				{
-					lPath = QString::fromUtf8(lArray.data(),lArray.length());
-					lPath = getFilePath(lPath,homeDir,true);
-				}
-			
-				if(!lPath.isEmpty())
-				{
-					if(sbBookmark->has(lPath,true))
-					{
-						fCount++;
-					}
-					else
-					{
-						accessFileList << lPath;
-						dependency.add(lPath);
-					}
-				}
-			}
-			tFile.close();
-
-			QSet<QString> allDependencies = dependency.allDependencies();
-			for(QSet<QString>::iterator ppI=allDependencies.begin();ppI!=allDependencies.end();++ppI)
-			{
-                const QString& lPath = *ppI;
-				if(!sbBookmark->has(lPath,true))
-				{
-					accessFileList << *ppI;
-				}
-			}
-			
-			if(accessFileList.size() > 0)
-			{
-				QFileInfo fInfo(fileName);
-				QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-				QStringList pathList = pathSet.toList();
-				
-				widget::ImportPlaylistDialog importDialog(m_parent);
-				importDialog.setPlaylistFileName(fInfo.fileName());
-				importDialog.setDirectories(pathList);
-                importDialog.setModal(true);
-                importDialog.exec();
-				
-				if(importDialog.result()==QDialog::Accepted)
-				{
-					for(QStringList::iterator ppI=pathList.begin();ppI!=pathList.end();ppI++)
-					{
-						if(sbBookmark->has(*ppI,true))
-						{
-							fCount++;
-						}
-					}
-				}
-			}
-			
-			if(fCount>0)
-			{
-				canRead = true;
-			}
-		}
-	}
-	if(!canRead)
+	if(!getPermissionsM3U(progress, fileName))
 	{
 		return false;
 	}
@@ -155,6 +104,8 @@ bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 			if(!lPath.isEmpty())
 			{
 #if defined(OMEGA_MAC_STORE)
+				common::SBBookmarkPtr sbBookmark = common::SBBookmark::get();
+				
 				if(sbBookmark->has(lPath,true))
 				{
 					appendToList(lPath,pList,progress);
@@ -180,7 +131,7 @@ bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistM3UIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistM3UIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	common::BIOBufferedStream pFile(common::e_BIOStream_FileCreate | common::e_BIOStream_FileWrite);
 	bool res;
@@ -243,6 +194,7 @@ bool PlaylistM3UIO::save(const QString& fileName,const QVector<track::info::Info
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

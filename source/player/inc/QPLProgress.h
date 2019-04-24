@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/QPLItemBase.h"
+#include "track/db/inc/PLProgress.h"
 
 #include <QTimer>
 
@@ -14,7 +15,7 @@ namespace player
 {
 //-------------------------------------------------------------------------------------------
 
-class QPLProgress : public QObject
+class QPLProgress : public track::db::PLProgress
 {
 	public:
 		Q_OBJECT
@@ -23,19 +24,24 @@ class QPLProgress : public QObject
 		QPLProgress(QPlaylistWidget *parent);
 		virtual ~QPLProgress();
 		
-		bool isActive();
-		void activate(bool useReference = false);
-		void deactivate(bool useReference = false);
+		virtual bool isActive();
+		virtual void activate(bool useReference = false);
+		virtual void deactivate(bool useReference = false);
 				
-		void paint(QPainter *painter);
+		virtual void paint(QPainter *painter);
 
-		void mouseMoveEvent(QMouseEvent *e);
-		void mousePressEvent(QMouseEvent *e);
-		void mouseReleaseEvent(QMouseEvent *e);
+		virtual void mouseMoveEvent(QMouseEvent *e);
+		virtual void mousePressEvent(QMouseEvent *e);
+		virtual void mouseReleaseEvent(QMouseEvent *e);
 		
-		void setProgress(tfloat32 v);
-		tfloat32 getProgress();
-		bool isCancelled();
+		virtual void setProgress(tfloat32 v);
+		virtual tfloat32 getProgress();
+		virtual bool isCancelled();
+
+#if defined(OMEGA_MAC_STORE)
+		virtual bool getPermissions(QList<QPair<QString,QByteArray> >& fileList);
+		virtual QByteArray getSandboxBookmark(const QString& outFilename,const QString& trackFilename);
+#endif
 
 	protected:
 	
