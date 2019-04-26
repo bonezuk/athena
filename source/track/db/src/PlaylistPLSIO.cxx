@@ -124,7 +124,7 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 	pList.clear();
 
 #if defined(OMEGA_MAC_STORE)
-	QList<QPair<QString,QByteArray> > fileList
+	QList<QPair<QString,QByteArray> > fileList;
 	common::SBBookmarkPtr sbBookmark = common::SBBookmark::get();
 	bool canRead = false;
 
@@ -173,7 +173,7 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 
 		}
 	}
-	if(!progress->getPermissions(fileList))
+	if(!progress->getPermissions(fileName, fileList))
 	{
 		return false;
 	}

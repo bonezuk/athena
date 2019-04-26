@@ -32,7 +32,7 @@ class TRACK_DB_EXPORT PLProgress : public QObject
 		virtual void deactivate(bool useReference = false) = 0;
 		
 #if defined(OMEGA_MAC_STORE)
-		virtual bool getPermissions(QList<QPair<QString,QByteArray> >& fileList) = 0;
+		virtual bool getPermissions(const QString& fileName, QList<QPair<QString,QByteArray> >& fileList) = 0;
 		virtual QByteArray getSandboxBookmark(const QString& outFilename,const QString& trackFilename) = 0;
 #endif
 };

@@ -25,7 +25,7 @@ class TRACK_DB_EXPORT PlaylistM3UIO : public PlaylistAbstractIO
 	
 	protected:
 #if defined(OMEGA_MAC_STORE)
-		virtual void getPermissionsM3U(PLProgress *progress,const QString& fileName)
+		virtual bool getPermissionsM3U(PLProgress *progress,const QString& fileName);
 #endif
 };
 

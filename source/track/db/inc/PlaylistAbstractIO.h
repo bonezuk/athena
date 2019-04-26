@@ -26,6 +26,7 @@
 #include "common/inc/BOParse.h"
 #include "common/inc/DiskOps.h"
 #include "common/inc/BIOBufferedStream.h"
+#include "common/inc/SBService.h"
 #include "track/info/inc/Info.h"
 #include "track/db/inc/DBInfo.h"
 #include "track/db/inc/TrackDB.h"

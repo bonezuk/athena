@@ -27,7 +27,7 @@ PlaylistM3UIO::~PlaylistM3UIO()
 #if defined(OMEGA_MAC_STORE)
 //-------------------------------------------------------------------------------------------
 
-void PlaylistM3UIO::getPermissionsM3U(PLProgress *progress,const QString& fileName)
+bool PlaylistM3UIO::getPermissionsM3U(PLProgress *progress,const QString& fileName)
 {
 	QList<QPair<QString,QByteArray> > fileList;
 	common::SBBookmarkPtr sbBookmark = common::SBBookmark::get();
@@ -59,7 +59,7 @@ void PlaylistM3UIO::getPermissionsM3U(PLProgress *progress,const QString& fileNa
 		tFile.close();
 	}
 	
-	return progress->getPermissions(fileList);
+	return progress->getPermissions(fileName, fileList);
 }
 
 //-------------------------------------------------------------------------------------------

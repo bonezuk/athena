@@ -231,7 +231,7 @@ bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>
 	}
 
 #if defined(OMEGA_MAC_STORE)
-	if(!progress->getPermissions(fileList))
+	if(!progress->getPermissions(fileName, fileList))
 	{
 		return false;
 	}
@@ -331,7 +331,7 @@ bool PlaylistXSPFIO::save(const QString& fileName,const QVector<track::info::Inf
                         sbBookmark->add(fileName,fList,true);
 					}
 #endif
-					res = saveXMLTrack(writer,pInfo);
+					res = saveXMLTrack(writer,pInfo,progress);
 				}
 				
 				if(res)

@@ -39,7 +39,7 @@ class QPLProgress : public track::db::PLProgress
 		virtual bool isCancelled();
 
 #if defined(OMEGA_MAC_STORE)
-		virtual bool getPermissions(QList<QPair<QString,QByteArray> >& fileList);
+		virtual bool getPermissions(const QString& fileName, QList<QPair<QString,QByteArray> >& fileList);
 		virtual QByteArray getSandboxBookmark(const QString& outFilename,const QString& trackFilename);
 #endif
 

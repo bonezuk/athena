@@ -44,14 +44,14 @@ PlaylistAbstractIO::~PlaylistAbstractIO()
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistAbstractIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistAbstractIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	return false;
 }
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistAbstractIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistAbstractIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,PLProgress *progress)
 {
 	return false;
 }

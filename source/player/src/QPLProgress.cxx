@@ -6,6 +6,7 @@
 #include "common/inc/CommonDirectoriesForFiles.h"
 #include "track/db/inc/TrackFileDependencies.h"
 #include "widget/inc/ImportPlaylistDialog.h"
+#include "track/db/inc/SBBookmarkTrackDB.h"
 #endif
 
 #include <QApplication>
@@ -503,10 +504,12 @@ void QPLProgress::paintRetinaImage(QPainter *painter,QPointF pos,QImage *pImage)
 #if defined(OMEGA_MAC_STORE)
 //-------------------------------------------------------------------------------------------
 
-bool QPLProgress::getPermissions(QList<QPair<QString,QByteArray> >& fileList)
+bool QPLProgress::getPermissions(const QString& fileName, QList<QPair<QString,QByteArray> >& fileList)
 {
 	QStringList accessFileList;
+	QList<QPair<QString,QByteArray> >::iterator ppI;
 	track::db::TrackFileDependencies dependency;
+	common::SBBookmarkPtr sbBookmark = common::SBBookmark::get();
 	tint fCount = 0;
 
 	for(ppI=fileList.begin();ppI!=fileList.end();ppI++)
@@ -590,7 +593,7 @@ bool QPLProgress::getPermissions(QList<QPair<QString,QByteArray> >& fileList)
 
 QByteArray QPLProgress::getSandboxBookmark(const QString& outFilename,const QString& trackFilename)
 {
-	track::db::SBBookmarkService::instance()->getBookmarkArray(outFilename,trackFilename);
+	return track::db::SBBookmarkService::instance()->getBookmarkArray(outFilename,trackFilename);
 }
 
 //-------------------------------------------------------------------------------------------
