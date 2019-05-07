@@ -53,9 +53,9 @@ void HTTPClientService::printError(const tchar *strR,const tchar *strE) const
 
 //-------------------------------------------------------------------------------------------
 
-HTTPClient *HTTPClientService::getClient()
+QSharedPointer<HTTPClient> HTTPClientService::getClient()
 {
-	HTTPClient *client;
+	QSharedPointer<HTTPClient> client;
 	
 	if(m_serviceThreadId!=QThread::currentThreadId())
 	{
@@ -63,7 +63,7 @@ HTTPClient *HTTPClientService::getClient()
 		ServiceWaitCondition *c = getCondition();
 		QCoreApplication::postEvent(this,e);
 		c->wait();
-		client = reinterpret_cast<HTTPClient *>(c->result());
+		client = c->sharedPtr().dynamicCast<HTTPClient>();
 	}
 	else
 	{
@@ -84,8 +84,9 @@ bool HTTPClientService::event(QEvent *e)
 		{
 			case HTTPClientServiceEvent::e_newHTTPClientEvent:
 				{
-					HTTPClient *client = onGetClient();
-					processCustomEvent(reinterpret_cast<HTTPClientServiceEvent *>(e),reinterpret_cast<void *>(client));
+					QSharedPointer<HTTPClient> client = onGetClient();
+					QSharedPointer<QObject> cObject = client.dynamicCast<QObject>();
+					processCustomEvent(reinterpret_cast<HTTPClientServiceEvent *>(e),cObject);
 				}
 				break;
 				
@@ -102,21 +103,21 @@ bool HTTPClientService::event(QEvent *e)
 
 //-------------------------------------------------------------------------------------------
 
-void HTTPClientService::processCustomEvent(HTTPClientServiceEvent *e,void *result)
+void HTTPClientService::processCustomEvent(HTTPClientServiceEvent *e,QSharedPointer<QObject>& result)
 {
 	ServiceWaitCondition *c;
 	
 	c = getCondition(e->threadId());
-	c->setResult(result);
+	c->setSharedPointer(result);
 	c->wake();
 	e->accept();
 }
 
 //-------------------------------------------------------------------------------------------
 
-HTTPClient *HTTPClientService::onGetClient()
+QSharedPointer<HTTPClient> HTTPClientService::onGetClient()
 {
-	HTTPClient *c = new HTTPClient(this,this);
+	QSharedPointer<HTTPClient> c(new HTTPClient(this,this));
 	return c;
 }
 

@@ -25,14 +25,14 @@ class NETWORK_EXPORT TCPClientService : public Service
 		virtual bool start();
 		virtual void stop();
 
-		virtual void addConnection(TCPConnectionSocket *s);
-		virtual void delConnection(TCPConnectionSocket *s);
+		virtual void addConnection(QSharedPointer<TCPConnectionSocket>& s);
+		virtual void delConnection(QSharedPointer<TCPConnectionSocket>& s);
 
 		virtual bool process();
 		
 	protected:
 		
-		QSet<TCPConnectionSocket *> m_clientSet;
+		QSet<QSharedPointer<TCPConnectionSocket> > m_clientSet;
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 };

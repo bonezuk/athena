@@ -23,17 +23,17 @@ class TRACK_DB_EXPORT PLProgress : public QObject
 		PLProgress(QObject *parent = 0);
 		virtual ~PLProgress();
 
-		virtual void setProgress(tfloat32 v) = 0;
-		virtual tfloat32 getProgress() = 0;
-		virtual bool isCancelled() = 0;
+		virtual void setProgress(tfloat32 v);
+		virtual tfloat32 getProgress();
+		virtual bool isCancelled();
 
-		virtual bool isActive() = 0;
-		virtual void activate(bool useReference = false) = 0;
-		virtual void deactivate(bool useReference = false) = 0;
+		virtual bool isActive();
+		virtual void activate(bool useReference = false);
+		virtual void deactivate(bool useReference = false);
 		
 #if defined(OMEGA_MAC_STORE)
-		virtual bool getPermissions(const QString& fileName, QList<QPair<QString,QByteArray> >& fileList) = 0;
-		virtual QByteArray getSandboxBookmark(const QString& outFilename,const QString& trackFilename) = 0;
+		virtual bool getPermissions(const QString& fileName, QList<QPair<QString,QByteArray> >& fileList);
+		virtual QByteArray getSandboxBookmark(const QString& outFilename,const QString& trackFilename);
 #endif
 };
 

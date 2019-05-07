@@ -31,16 +31,16 @@ void TCPClientService::printError(const tchar *strR,const tchar *strE) const
 
 //-------------------------------------------------------------------------------------------
 
-void TCPClientService::addConnection(TCPConnectionSocket *s)
+void TCPClientService::addConnection(QSharedPointer<TCPConnectionSocket>& s)
 {
 	m_clientSet.insert(s);
 }
 
 //-------------------------------------------------------------------------------------------
 
-void TCPClientService::delConnection(TCPConnectionSocket *s)
+void TCPClientService::delConnection(QSharedPointer<TCPConnectionSocket>& s)
 {
-	QSet<TCPConnectionSocket *>::iterator ppI;
+	QSet<QSharedPointer<TCPConnectionSocket> >::iterator ppI;
 	
 	ppI = m_clientSet.find(s);
 	if(ppI!=m_clientSet.end())
@@ -60,14 +60,13 @@ bool TCPClientService::start()
 
 void TCPClientService::stop()
 {
-	QSet<TCPConnectionSocket *>::iterator ppI;
+	QSet<QSharedPointer<TCPConnectionSocket> >::iterator ppI;
 	
 	while(ppI=m_clientSet.begin(),ppI!=m_clientSet.end())
 	{
-		TCPConnectionSocket *s = *ppI;
+		QSharedPointer<TCPConnectionSocket> s = *ppI;
 		m_clientSet.erase(ppI);
 		s->close();
-		delete s;
 	}
 }
 
@@ -75,12 +74,12 @@ void TCPClientService::stop()
 
 bool TCPClientService::process()
 {
-	QSet<TCPConnectionSocket *>::iterator ppI;
+	QSet<QSharedPointer<TCPConnectionSocket> >::iterator ppI;
 	bool res = true;
 	
 	for(ppI=m_clientSet.begin();ppI!=m_clientSet.end();)
 	{
-		TCPConnectionSocket *s = *ppI;
+		QSharedPointer<TCPConnectionSocket> s = *ppI;
 		
 		if(!s->process())
 		{
@@ -88,7 +87,6 @@ bool TCPClientService::process()
 			{
 				ppI = m_clientSet.erase(ppI);
 				s->close();
-				delete s;
 				res = false;
 			}
 			else

@@ -10,6 +10,9 @@
 #include "network/http/inc/HTTPConnection.h"
 #include "daemon/inc/DaemonDLL.h"
 #include "dlna/inc/DiskIF.h"
+#include "track/info/inc/Info.h"
+#include "track/db/inc/TrackDB.h"
+#include "track/db/inc/PlaylistAbstractIO.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -30,13 +33,27 @@ class DAEMON_EXPORT MusicDaemon : public QCoreApplication
 		MusicDaemon(int argc,char **argv);
 		virtual ~MusicDaemon();
 		
-	private:	
+	private:
+		QStringList m_cmdArgs;
+	
 		network::http::HTTPService *m_webService;
 		network::http::HTTPServer *m_webServer;
 		
+		QVector<track::info::InfoSPtr> m_playlist;
+		
 		void printLog(const QString& msg) const;
 		
+		void printCommandLineUsage() const;
+		void collectCommandLine(int argc, char **argv);
+		bool processCommandLine();
+		bool loadPlaylist(const QString& fileName);
+		bool loadTrackDatabase();
+		
 		QString appHomeDirectory() const;
+		
+		void setupLog();
+		bool startWebServer();
+		void stopWebServer();
 		
 	private slots:
 	
@@ -44,6 +61,15 @@ class DAEMON_EXPORT MusicDaemon : public QCoreApplication
 		void onStopService();
 		
 		void onWebRoot(network::http::HTTPReceive *recieve);
+		
+		void onAudioStart(const QString& name);
+		void onAudioPlay();
+		void onAudioPause();
+		void onAudioTime(quint64 t);
+		void onAudioBuffer(tfloat32 percent);
+		void onAudioReadyForNext();
+		void onAudioNoNext();
+		void onAudioCrossfade();
 };
 
 //-------------------------------------------------------------------------------------------

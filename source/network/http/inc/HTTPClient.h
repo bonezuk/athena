@@ -24,19 +24,25 @@ class HTTP_EXPORT HTTPCTransaction
 				
 		const HTTPCTransaction& operator = (const HTTPCTransaction& rhs);
 		
-		HTTPClient *client();
-		tint id() const;
+		virtual HTTPClient *client();
+		virtual tint id() const;
 				
-		Unit& request();
-		const Unit& request() const;
-		NetArray& requestData();
-		const NetArray& requestData() const;
+		virtual Unit& request();
+		virtual const Unit& request() const;
+		virtual NetArray& requestData();
+		virtual const NetArray& requestData() const;
 				
-		Unit& response();
-		const Unit& response() const;
-		NetArray& responseData();
-		const NetArray& responseData() const;
-				
+		virtual Unit& response();
+		virtual const Unit& response() const;
+		virtual NetArray& responseData();
+		virtual const NetArray& responseData() const;
+
+		virtual bool isStreaming() const;
+		virtual void setStreaming(bool isOn);
+
+		virtual bool isComplete() const;
+		virtual void setComplete(bool isComplete);
+
 	protected:
 		
 		HTTPClient *m_client;
@@ -46,7 +52,7 @@ class HTTP_EXPORT HTTPCTransaction
 		Unit m_response;
 		NetArray m_responseData;
 				
-		void copy(const HTTPCTransaction& rhs);
+		virtual void copy(const HTTPCTransaction& rhs);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -73,7 +79,7 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		
 		virtual tint newTransaction();
 		virtual HTTPCTransaction& transaction(tint id);
-		
+				
 		virtual void run();
 		
 		// internal interface as called in by network service thread
@@ -124,6 +130,7 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		void onTransaction(network::http::HTTPCTransaction*);
 		void onTransactionChunk(network::http::HTTPCTransaction*,const QString&,network::NetArrayPtr);
 		void onTransactionError(network::http::HTTPCTransaction*,const QString&);
+		void onStream(network::http::HTTPCTransaction, int, const QString&, const QString&);
 		void onError(network::http::HTTPClient*,const QString&);
 		void onComplete(network::http::HTTPClient*);
 };

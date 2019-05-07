@@ -48,7 +48,7 @@ class HTTP_EXPORT HTTPClientService : public TCPClientService
 		HTTPClientService(QObject *parent = 0);
 		virtual ~HTTPClientService();
 		
-		virtual HTTPClient *getClient();
+		virtual QSharedPointer<HTTPClient> getClient();
 				
 	protected:
 	
@@ -57,9 +57,9 @@ class HTTP_EXPORT HTTPClientService : public TCPClientService
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		
 		virtual bool event(QEvent *e);
-		virtual HTTPClient *onGetClient();
+		virtual QSharedPointer<HTTPClient> onGetClient();
 		
-		virtual void processCustomEvent(HTTPClientServiceEvent *e,void *result);
+		virtual void processCustomEvent(HTTPClientServiceEvent *e,QSharedPointer<QObject>& result);
 };
 
 //-------------------------------------------------------------------------------------------

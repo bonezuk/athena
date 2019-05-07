@@ -14,6 +14,7 @@
 #include <QTimer>
 #include <QWaitCondition>
 #include <QCoreApplication>
+#include <QSharedPointer>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -39,11 +40,15 @@ class NETWORK_EXPORT ServiceWaitCondition
 		void *result();
 		void setResult(void *p);
 		
+		QSharedPointer<QObject> sharedPtr();
+		void setSharedPtr(QSharedPointer<QObject>& ptr);
+		
 	protected:
 	
 		QMutex m_mutex;
 		QWaitCondition m_condition;
 		void *m_result;
+		QSharedPointer<QObject> m_sharedPtr;
 };
 
 //-------------------------------------------------------------------------------------------
