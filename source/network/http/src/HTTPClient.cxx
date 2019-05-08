@@ -16,7 +16,9 @@ HTTPCTransaction::HTTPCTransaction(HTTPClient *client,tint id) : m_client(client
 	m_request(),
 	m_requestData(),
 	m_response(),
-	m_responseData()
+	m_responseData(),
+	m_isStreaming(false),
+	m_isComplete(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -26,7 +28,9 @@ HTTPCTransaction::HTTPCTransaction(const HTTPCTransaction& rhs) : m_client(0),
 	m_request(),
 	m_requestData(),
 	m_response(),
-	m_responseData()
+	m_responseData(),
+	m_isStreaming(false),
+	m_isComplete(false)
 {
 	copy(rhs);
 }
@@ -57,6 +61,15 @@ void HTTPCTransaction::copy(const HTTPCTransaction& rhs)
 	m_response = rhs.m_response;
 	m_requestData.Copy(rhs.m_requestData);
 	m_responseData.Copy(rhs.m_responseData);
+	m_isStreaming = rhs.m_isStreaming;
+	m_isComplete = rhs.m_isComplete;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HTTPClient *HTTPCTransaction::client()
+{
+	return m_client;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -123,6 +136,34 @@ const NetArray& HTTPCTransaction::responseData() const
 }
 
 //-------------------------------------------------------------------------------------------
+
+bool HTTPCTransaction::isStreaming() const
+{
+	return m_isStreaming;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void HTTPCTransaction::setStreaming(bool isOn)
+{
+	m_isStreaming = isOn;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool HTTPCTransaction::isComplete() const
+{
+	return m_isComplete;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void HTTPCTransaction::setComplete(bool isComplete)
+{
+	m_isComplete = isComplete;
+}
+
+//-------------------------------------------------------------------------------------------
 // HTTPClient
 //-------------------------------------------------------------------------------------------
 
@@ -139,7 +180,8 @@ HTTPClient::HTTPClient(Service *svr,QObject *parent) : TCPConnClientSocket(svr,p
 	m_bodyLength(0),
 	m_chunkState(0),
 	m_chunkLine(),
-	m_chunkArray()
+	m_chunkArray(),
+	m_lock()
 {
 	m_threadId = QThread::currentThreadId();
 }
@@ -363,13 +405,17 @@ bool HTTPClient::doConnect()
 		
 		trans->request().setVersion(1,1);
 		trans->request().add("Host",cHost);
-		if(trans==m_transactions.last())
+		if(trans==m_transactions.last() && !trans->isStreaming())
 		{
 			trans->request().add("Connection","close");
 		}
 		else
 		{
 			trans->request().add("Connection","keep-alive");
+			if(trans->isStreaming())
+			{
+				trans->request().add("Accept","text/event-stream");
+			}
 		}
 		if(!m_proxyName.isEmpty())
 		{
@@ -412,11 +458,7 @@ void HTTPClient::doRequest()
 	{
 		req.add("Content-Length",QString::number(reqData.GetSize()));
 	}
-	else
-	{
-		req.add("Content-Length","0");
-	}
-	
+		
 	QString reqString;
 	req.print(reqString);
 	QByteArray reqArr(reqString.toUtf8());
@@ -502,6 +544,11 @@ void HTTPClient::doResponse(bool& loop)
 	{
 		if(response.type()==Unit::e_Response)
 		{
+			if(isChunked(response) || trans->isStreaming())
+			{
+				m_bodyOffset = 0;
+				m_state = 4;
+			}		
 			if(isBody(response))
 			{
 				m_bodyOffset = 0;
@@ -509,18 +556,10 @@ void HTTPClient::doResponse(bool& loop)
 				trans->responseData().SetSize(m_bodyLength);
 				m_state = 3;
 			}
-			else if(isChunked(response))
-			{
-				m_bodyOffset = 0;
-				m_state = 4;
-			}
 			else
 			{
 				emit onTransaction(trans);
-				if(response.data("Connection").toLower().trimmed()=="close")
-				{
-					m_currentID++;
-				}
+				m_currentID++;
 				m_state = 1;
 			}
 		}
@@ -559,12 +598,29 @@ bool HTTPClient::isBody(const Unit& item) const
 			return true;
 		}
 		
-		if(item.data("Content-Length").toInt() > 0)
+		if(item.exist("Content-Length") && item.data("Content-Length").toInt() > 0)
 		{
 			return true;
 		}
 	}
 	return false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool HTTPClient::isStreaming(const Unit& item) const
+{
+	tint code = item.response();
+	bool res = false;
+	
+	if(code>=200 && code!=204 && code!=304)
+	{
+		if(item.exist("Content-Type") && item.data("Content-Type").toLower() == "text/event-stream")
+		{
+			res = true;
+		}
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -830,6 +886,17 @@ bool HTTPClient::parseChunkHeader(const QString& str,tint& size,QString& field)
 	}
 	return res;
 }
+
+//-------------------------------------------------------------------------------------------
+
+/*
+int m_streamState = 0;
+
+void HTTPClient::doResStreamed(bool& loop)
+{
+	
+}
+*/
 
 //-------------------------------------------------------------------------------------------
 } // namespace http

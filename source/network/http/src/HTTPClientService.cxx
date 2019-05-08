@@ -108,7 +108,7 @@ void HTTPClientService::processCustomEvent(HTTPClientServiceEvent *e,QSharedPoin
 	ServiceWaitCondition *c;
 	
 	c = getCondition(e->threadId());
-	c->setSharedPointer(result);
+	c->setSharedPtr(result);
 	c->wake();
 	e->accept();
 }

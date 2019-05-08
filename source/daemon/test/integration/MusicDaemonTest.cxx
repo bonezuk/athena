@@ -16,8 +16,9 @@ class MusicDaemonTest : public QCoreApplication
 		virtual ~MusicDaemonTest();
 
 	private:
+		int m_count;
 		network::http::HTTPService *m_webClientService;
-	
+		
 	private slots:
 		void onStartTest();
 		void onStopTest();
@@ -27,6 +28,7 @@ class MusicDaemonTest : public QCoreApplication
 		void onHTTPClientTransactionError(network::http::HTTPCTransaction*,const QString&);
 		void onHTTPClientError(network::http::HTTPClient*,const QString&);
 		void onHTTPClientComplete(network::http::HTTPClient*);
+		void onStream(network::http::HTTPCTransaction *tran, int id, const QString& evt, const QString& data);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -38,6 +40,7 @@ class MusicDaemonTest : public QCoreApplication
 //-------------------------------------------------------------------------------------------
 
 MusicDaemonTest::MusicDaemonTest(int argc,char **argv) : QCoreApplication(argc,argv),
+	m_count(0),
 	m_webClientService(0)
 {
 	QObject::connect(this,SIGNAL(aboutToQuit()),this,SLOT(onStopTest()));
@@ -105,17 +108,17 @@ void MusicDaemonTest::startTimeListenTest()
 		this, SLOT(onHTTPClientError(network::http::HTTPClient*,const QString&)));
 	QObject::connect(client.get(), SIGNAL(onComplete(network::http::HTTPClient*)), 
 		this, SLOT(onHTTPClientComplete(network::http::HTTPClient*)));
-	QObject::connect(client.get(), SIGNAL(onStream(int,const QString&,const QString&)),
-		this, SLOT(onStream(int,const QString&,const QString&)));
-	
-	QVERIFY(!client->isSteaming());
-	client->setStreaming(true);
-	QVERIFY(client->isStreaming());
-	
+	QObject::connect(client.get(), SIGNAL(onStream(network::http::HTTPCTransaction*,int,const QString&,const QString&)),
+		this, SLOT(onStream(network::http::HTTPCTransaction*,int,const QString&,const QString&)));
+		
 	client->setHost("127.0.0.1", MUSIC_DAEMON_PORT);
 	
 	int id = client->newTransaction();
 	network::http::HTTPCTransaction& tran = client->transaction();
+
+	QVERIFY(!tran.isSteaming());
+	tran->setStreaming(true);
+	QVERIFY(tran->isStreaming());
 	
 	network::http::Unit req;
 	req.request(network::http::e_Get, "/event/stream/test");
@@ -125,7 +128,7 @@ void MusicDaemonTest::startTimeListenTest()
 
 //-------------------------------------------------------------------------------------------
 
-void MusicDaemonTest::onStream(int id, const QString& evt, const QString& data)
+void MusicDaemonTest::onStream(network::http::HTTPCTransaction *tran, int id, const QString& evt, const QString& data)
 {
 	QString n;
 	
@@ -139,6 +142,26 @@ void MusicDaemonTest::onStream(int id, const QString& evt, const QString& data)
 	}
 	n += "data='" + data + "'";
 	common::Log::g_Log << n.toUtf8().constData() << common::c_endl;
+	m_count++;
+	if(m_count > 20)
+	{
+		tran->setComplete(true);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicDaemonTest::onHTTPClientComplete(network::http::HTTPClient*)
+{
+	if(m_count > 20)
+	{
+		common::Log::g_Log << "HTTP Streaming server test complete" << common::c_endl;
+	}
+	else
+	{
+		common::Log::g_Log << "Unexpected onComplete from HTTPClient" << common::c_endl;
+	}
+	quit();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -172,14 +195,6 @@ void MusicDaemonTest::onHTTPClientError(network::http::HTTPClient*,const QString
 {
 	common::Log::g_Log << "Unexpected onError from HTTPClient - '"
 	common::Log::g_Log << err << "'" << common::c_endl;
-	quit();
-}
-
-//-------------------------------------------------------------------------------------------
-
-void MusicDaemonTest::onHTTPClientComplete(network::http::HTTPClient*)
-{
-	common::Log::g_Log << "Unexpected onComplete from HTTPClient" << common::c_endl;
 	quit();
 }
 

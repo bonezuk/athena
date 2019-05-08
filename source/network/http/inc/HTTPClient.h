@@ -6,6 +6,8 @@
 #include "network/inc/TCPConnClientSocket.h"
 #include "network/http/inc/HTTPClientService.h"
 
+#include <QMutex>
+
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
@@ -47,10 +49,14 @@ class HTTP_EXPORT HTTPCTransaction
 		
 		HTTPClient *m_client;
 		tint m_id;
+		
 		Unit m_request;
 		NetArray m_requestData;
 		Unit m_response;
 		NetArray m_responseData;
+		
+		bool m_isStreaming;
+		bool m_isComplete;
 				
 		virtual void copy(const HTTPCTransaction& rhs);
 };
@@ -77,9 +83,10 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		virtual void setProxy(const tchar *host,tint port);
 		virtual void setProxy(const QString& host,tint port);
 		
+		// Create a series of HTTP transactions that are executed on calling run
 		virtual tint newTransaction();
 		virtual HTTPCTransaction& transaction(tint id);
-				
+		
 		virtual void run();
 		
 		// internal interface as called in by network service thread
@@ -107,6 +114,8 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		QString m_chunkLine;
 		NetArray m_chunkArray;
 		
+		QMutex m_lock;
+		
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;
 		
@@ -122,6 +131,7 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		
 		virtual bool isBody(const Unit& item) const;
 		virtual bool isChunked(const Unit& item) const;
+		virtual bool isStreaming(const Unit& item) const;
 		
 		virtual bool parseChunkHeader(const QString& str,tint& size,QString& field);
 		

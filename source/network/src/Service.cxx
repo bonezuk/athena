@@ -60,14 +60,14 @@ void ServiceWaitCondition::setResult(void *p)
 
 //-------------------------------------------------------------------------------------------
 
-QSharedPointer<QObject> sharedPtr()
+QSharedPointer<QObject> ServiceWaitCondition::sharedPtr()
 {
 	return m_sharedPtr;
 }
 
 //-------------------------------------------------------------------------------------------
 
-void setSharedPtr(QSharedPointer<QObject>& ptr)
+void ServiceWaitCondition::setSharedPtr(QSharedPointer<QObject>& ptr)
 {
 	m_sharedPtr = ptr;
 }
