@@ -53,6 +53,7 @@ class HTTP_EXPORT EventStreamItem
 		QString m_data;
 		
 		virtual void copy(const EventStreamItem& rhs);
+		virtual void concatDataString(const QString& data, QStringList& lines) const;
 };
 
 //-------------------------------------------------------------------------------------------

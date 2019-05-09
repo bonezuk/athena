@@ -36,7 +36,8 @@ TEST(EventStreamItem, parseEventsAndTransmit)
 	EXPECT_EQ(a.data(), "This is a piece of data");
 	
 	QString aExpectStr = "id: 42\r\nevent: foo\r\ndata: This is a piece of data\r\n\r\n";
-	EXPECT_EQ(a.toString(), aExpectStr);
+	QString aStr = a.toString();
+	EXPECT_EQ(aStr, aExpectStr);
 	
 	EventStreamItem b;
 	
@@ -59,7 +60,8 @@ TEST(EventStreamItem, parseEventsAndTransmit)
 	EXPECT_EQ(b.data(), "This is a piece of the test\r\n with multiple lines.");
 	
 	QString bExpectStr = "id: 43\r\nevent: bar\r\ndata: This is a piece of the test\r\ndata:  with multiple lines.\r\n\r\n";
-	EXPECT_EQ(b.toString(), bExpectStr);
+	QString bStr = b.toString();
+	EXPECT_EQ(bStr, bExpectStr);
 }
 
 //-------------------------------------------------------------------------------------------

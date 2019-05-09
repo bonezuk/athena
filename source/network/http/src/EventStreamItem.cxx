@@ -56,7 +56,7 @@ void EventStreamItem::copy(const EventStreamItem& rhs)
 
 bool EventStreamItem::isEmpty() const
 {
-	return (isId() || isEvent() || isData());
+	return (!isId() && !isEvent() && !isData());
 }
 
 //-------------------------------------------------------------------------------------------
@@ -124,9 +124,55 @@ QString& EventStreamItem::data()
 
 //-------------------------------------------------------------------------------------------
 
+void EventStreamItem::concatDataString(const QString& data, QStringList& lines) const
+{
+	int start = 0, pos = 0, end;
+	QString line;
+	
+	while(pos = data.indexOf(QChar('\n'), pos), pos > 0)
+	{
+		end = pos + 1;
+		if(pos > 0 && data.at(pos - 1) == QChar('\r'))
+		{
+			pos--;
+		}
+		if(pos > start)
+		{
+			line = "data: " + data.mid(start, pos - start);
+		}
+		else
+		{
+			line = "data: ";
+		}
+		lines << line;
+		start = pos = end;
+	}
+	if(start < data.length())
+	{
+		line = "data: " + data.mid(start);
+		lines << line;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 QString EventStreamItem::toString() const
 {
-	return QString(); // TODO
+	QStringList lines;
+
+	if(isId())
+	{
+		lines << "id: " + QString::number(m_id);
+	}
+	if(isEvent())
+	{
+		lines << "event: " + m_event;
+	}
+	if(isData())
+	{
+		concatDataString(m_data, lines);
+	}
+	return lines.join("\r\n") + "\r\n" + "\r\n";
 }
 
 //-------------------------------------------------------------------------------------------
