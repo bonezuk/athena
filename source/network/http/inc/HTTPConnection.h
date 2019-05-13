@@ -29,6 +29,7 @@ class HTTP_EXPORT HTTPConnection : public TCPConnServerSocket
 			e_ProcessRequest,
 			e_PostResponse,
 			e_PostData,
+			e_PostStream,
 			e_CompleteOnSend
 		} State;
 		
@@ -65,6 +66,7 @@ class HTTP_EXPORT HTTPConnection : public TCPConnServerSocket
 		State m_state;
 		bool m_persistent;
 		bool m_chunked;
+		bool m_streaming;
 		
 		Unit m_request;
 		NetArray m_requestBody;
@@ -86,6 +88,9 @@ class HTTP_EXPORT HTTPConnection : public TCPConnServerSocket
 		virtual bool doRequest(bool& loop);
 		virtual bool doPostRequest(bool& loop);
 		virtual bool doPostData(bool& loop);
+		virtual bool doPostStream(bool& loop);
+		
+		virtual bool postDataToClient(bool& loop, Message *msg);
 		
 		virtual bool sendErrorResponse(tint code);
 		

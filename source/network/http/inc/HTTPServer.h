@@ -53,7 +53,7 @@ class HTTP_EXPORT HTTPReceive : public QObject
 		void endProcess();
 
 		void process();
-
+		void connectionComplete();
 		
 	protected:
 		
@@ -70,6 +70,7 @@ class HTTP_EXPORT HTTPReceive : public QObject
 	signals:
 	
 		void onReceive(network::http::HTTPReceive *);
+		void onComplete(network::http::HTTPReceive *);
 };
 
 //-------------------------------------------------------------------------------------------

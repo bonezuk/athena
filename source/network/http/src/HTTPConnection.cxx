@@ -81,6 +81,7 @@ HTTPConnection::HTTPConnection(HTTPServer *server,Service *svr,QObject *parent) 
 	m_state(e_StartSession),
 	m_persistent(true),
 	m_chunked(false),
+	m_streaming(false),
 	m_request(),
 	m_requestBody(),
 	m_requestBodyLength(0),
@@ -290,6 +291,13 @@ bool HTTPConnection::processMain()
 				}
 				break;
 				
+			case e_PostStream:
+				if(!doPostStream(loop))
+				{
+					return false;
+				}
+				break;
+				
 			case e_CompleteOnSend:
 				break;
 				
@@ -362,7 +370,12 @@ bool HTTPConnection::getRequest(bool& loop)
 			}
 			m_response.setVersion(major,minor);
 			
-			if(m_request.exist("Content-Length"))
+			if(m_request.exist("Accept") && m_request.data("Accept").trimmed().toLower()=="text/event-stream")
+			{
+				m_streaming = true;
+				m_state = e_ProcessRequest;
+			}
+			else if(m_request.exist("Content-Length"))
 			{
 				length = m_request.data("Content-Length").toInt();
 				if(length>0)
@@ -513,14 +526,22 @@ bool HTTPConnection::doPostRequest(bool& loop)
 			m_response.add("Connection","close");
 			m_persistent = false;
 		}
-		
+				
 		m_response.print(str);
 		arr = str.toUtf8();
 		if(write(arr.constData(),arr.length()))
 		{
 			if(m_response.response()!=100)
 			{
-				m_state = e_PostData;
+				if(m_response.exist("Content-Type") && m_response.data("Content-Type").trimmed().toLower()=="text/event-stream")
+				{
+					m_streaming = true;
+					m_state = e_PostStream;
+				}
+				else
+				{
+					m_state = e_PostData;
+				}
 			}
 			loop = true;
 			res = true;
@@ -537,6 +558,25 @@ bool HTTPConnection::doPostRequest(bool& loop)
 		sendErrorResponse(500);
 	}
 	delete msg;
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool HTTPConnection::postDataToClient(bool& loop, Message *msg)
+{
+	bool res = true;
+	NetArraySPtr mem(msg->body());
+	
+	if(mem->GetData()!=0 && mem->GetSize()>0)
+	{
+		if(!write(mem->GetData(),mem->GetSize()))
+		{
+			printError("doPostData","Error in sending data to client");
+			res = false;
+		}
+	}
+	loop = true;
 	return res;
 }
 
@@ -568,19 +608,7 @@ bool HTTPConnection::doPostData(bool& loop)
 			break;
 			
 		case e_PostBody:
-			{
-				NetArraySPtr mem(msg->body());
-				
-				if(mem->GetData()!=0 && mem->GetSize()>0)
-				{
-					if(!write(mem->GetData(),mem->GetSize()))
-					{
-						printError("doPostData","Error in sending data to client");
-						res = false;
-					}
-				}
-				loop = true;
-			}
+			res = postDataToClient(loop, msg);
 			break;
 			
 		case e_PostChunk:
@@ -635,6 +663,30 @@ bool HTTPConnection::doPostData(bool& loop)
 
 //-------------------------------------------------------------------------------------------
 
+bool HTTPConnection::doPostStream(bool& loop)
+{
+	bool res = true;
+	Message *msg;
+	
+	msg = getMessage();
+	if(msg == 0)
+	{
+		return true;
+	}
+	if(msg->type() == e_PostBody)
+	{
+		res = postDataToClient(loop, msg);
+	}
+	else if(msg->type() == e_Complete)
+	{
+		m_state = e_CompleteOnSend;
+		loop = true;	
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void HTTPConnection::resetState()
 {
 	Message *msg;
@@ -655,6 +707,7 @@ void HTTPConnection::resetState()
 	m_state = e_StartSession;
 	m_persistent = true;
 	m_chunked = false;
+	m_streaming = false;
 	m_request = blank;
 	m_response = blank;
 	m_requestBody.SetSize(0);

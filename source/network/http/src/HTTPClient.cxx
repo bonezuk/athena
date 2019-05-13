@@ -366,6 +366,10 @@ bool HTTPClient::process()
 				case 4:
 					doResChunked(loop);
 					break;
+					
+				case 5:
+					doResStreamed(loop);
+					break;
 			}
 		}
 		else
@@ -544,12 +548,16 @@ void HTTPClient::doResponse(bool& loop)
 	{
 		if(response.type()==Unit::e_Response)
 		{
-			if(isChunked(response) || trans->isStreaming())
+			if(isStreaming(response))
+			{
+				m_state = 5;
+			}
+			if(isChunked(response))
 			{
 				m_bodyOffset = 0;
 				m_state = 4;
 			}		
-			if(isBody(response))
+			else if(isBody(response))
 			{
 				m_bodyOffset = 0;
 				m_bodyLength = response.data("Content-Length").toInt();
@@ -889,14 +897,30 @@ bool HTTPClient::parseChunkHeader(const QString& str,tint& size,QString& field)
 
 //-------------------------------------------------------------------------------------------
 
-/*
-int m_streamState = 0;
-
 void HTTPClient::doResStreamed(bool& loop)
 {
+	QString line;
 	
+	if(!m_transactions.at(m_currentID)->isComplete())
+	{
+		while(canGetNextLine() && getNextLine(line))
+		{
+			EventStreamItem item;
+			
+			EventStreamItem::parseLine(line, item);
+			if(!item.isEmpty())
+			{
+				emit onStream(m_transactions.at(m_currentID), item);
+			}
+		}
+		loop = false;
+	}
+	else
+	{
+		m_currentID++;
+		m_state = 1;
+	}
 }
-*/
 
 //-------------------------------------------------------------------------------------------
 } // namespace http

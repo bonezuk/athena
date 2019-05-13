@@ -37,6 +37,13 @@ void HTTPReceive::process()
 
 //-------------------------------------------------------------------------------------------
 
+void HTTPReceive::connectionComplete()
+{
+	emit onComplete(this);
+}
+
+//-------------------------------------------------------------------------------------------
+
 const QString& HTTPReceive::host() const
 {
 	return m_host;
@@ -179,6 +186,8 @@ void HTTPServer::freeReceive(HTTPReceive *rec)
 	{
 		QString tail;
 		ResourceSlot *rSlot = m_resource.get(rec->url(),tail);
+		
+		rec->connectionComplete();
 		
 		if(rSlot!=0)
 		{

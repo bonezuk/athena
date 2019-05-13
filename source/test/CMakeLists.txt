@@ -137,10 +137,12 @@ set ( TEST_SOURCE
 
 set ( TEST2_HEADERS
 	Test2Enviroment.h
+	../network/http/test/TestHTTPConnectionTest.h
 )
 
 set ( TEST2_SOURCE
 	../network/http/test/EventStreamTest.cxx
+	../network/http/test/TestHTTPConnectionTest.cxx
 	Test2Enviroment.cxx
 	Test2Main.cxx
 )

@@ -5,6 +5,7 @@
 
 #include "network/inc/TCPConnClientSocket.h"
 #include "network/http/inc/HTTPClientService.h"
+#include "network/http/inc/EventStreamItem.h"
 
 #include <QMutex>
 
@@ -128,6 +129,7 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		virtual void doResponse(bool& loop);
 		virtual void doResData(bool& loop);
 		virtual void doResChunked(bool& loop);
+		virtual void doResStreamed(bool& loop);
 		
 		virtual bool isBody(const Unit& item) const;
 		virtual bool isChunked(const Unit& item) const;
@@ -140,7 +142,7 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		void onTransaction(network::http::HTTPCTransaction*);
 		void onTransactionChunk(network::http::HTTPCTransaction*,const QString&,network::NetArrayPtr);
 		void onTransactionError(network::http::HTTPCTransaction*,const QString&);
-		void onStream(network::http::HTTPCTransaction, int, const QString&, const QString&);
+		void onStream(network::http::HTTPCTransaction*,const network::http::EventStreamItem&);
 		void onError(network::http::HTTPClient*,const QString&);
 		void onComplete(network::http::HTTPClient*);
 };
