@@ -1,4 +1,5 @@
 #include "network/http/inc/HTTPService.h"
+#include "network/http/inc/EventStreamItem.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -64,7 +65,9 @@ void HTTPServiceEvent::setServer(HTTPServer *x)
 //-------------------------------------------------------------------------------------------
 
 HTTPService::HTTPService(QObject *parent) : TCPService(parent)
-{}
+{
+	qRegisterMetaType<network::http::EventStreamItem>("network::http::EventStreamItem");
+}
 
 //-------------------------------------------------------------------------------------------
 

@@ -552,7 +552,7 @@ void HTTPClient::doResponse(bool& loop)
 			{
 				m_state = 5;
 			}
-			if(isChunked(response))
+			else if(isChunked(response))
 			{
 				m_bodyOffset = 0;
 				m_state = 4;

@@ -85,7 +85,9 @@ bool HTTPClientService::event(QEvent *e)
 			case HTTPClientServiceEvent::e_newHTTPClientEvent:
 				{
 					QSharedPointer<HTTPClient> client = onGetClient();
+					QSharedPointer<TCPConnectionSocket> tcpClient = client.dynamicCast<TCPConnectionSocket>();
 					QSharedPointer<QObject> cObject = client.dynamicCast<QObject>();
+					addConnection(tcpClient);
 					processCustomEvent(reinterpret_cast<HTTPClientServiceEvent *>(e),cObject);
 				}
 				break;

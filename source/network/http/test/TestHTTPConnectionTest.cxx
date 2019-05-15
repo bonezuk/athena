@@ -71,13 +71,13 @@ void TestHTTPClientThread::startEventStream()
 	QSharedPointer<network::http::HTTPClient> client = m_webClientService->getClient();
 
 	QObject::connect(client.data(), SIGNAL(onTransactionError(network::http::HTTPCTransaction*,const QString&)),
-		this, SLOT(onHTTPClientTransactionError(network::http::HTTPCTransaction*,const QString&)));
+		this, SLOT(onTransactionError(network::http::HTTPCTransaction*,const QString&)));
 	QObject::connect(client.data(), SIGNAL(onError(network::http::HTTPClient*,const QString&)),
-		this, SLOT(onHTTPClientError(network::http::HTTPClient*,const QString&)));
+		this, SLOT(onError(network::http::HTTPClient*,const QString&)));
 	QObject::connect(client.data(), SIGNAL(onComplete(network::http::HTTPClient*)),
-		this, SLOT(onHTTPClientComplete(network::http::HTTPClient*)));
-	QObject::connect(client.data(), SIGNAL(onStream(const network::http::EventStreamItem&)),
-		this, SLOT(onStream(const network::http::EventStreamItem&)));
+		this, SLOT(onComplete(network::http::HTTPClient*)));
+	QObject::connect(client.data(), SIGNAL(onStream(network::http::HTTPCTransaction*,const network::http::EventStreamItem&)),
+		this, SLOT(onStream(network::http::HTTPCTransaction*,const network::http::EventStreamItem&)));
 		
 	client->setHost("127.0.0.1", TEST_DAEMON_PORT);
 	
@@ -90,6 +90,7 @@ void TestHTTPClientThread::startEventStream()
 	
 	network::http::Unit req;
 	req.request(network::http::Unit::e_Get, "/test/event-stream");
+	tran.request() = req;
 	
 	client->run();
 }
@@ -108,10 +109,13 @@ void TestHTTPClientThread::onStream(network::http::HTTPCTransaction *trans,const
 {
 	if(m_streamCounter < 30 && !trans->isComplete())
 	{
+		fprintf(stdout, "client - onStream\n");
+		QString n = item.toString().replace("\r\n", "\n");
 		fprintf(stdout, "%s", item.toString().toUtf8().constData());
 	}
 	else
 	{
+		fprintf(stdout, "client - onStream, complete\n");
 		trans->setComplete(true);
 	}
 }
@@ -160,6 +164,7 @@ TestHTTPConnection::TestHTTPConnection(int argc, char **argv) : QCoreApplication
 	m_eventStreamTimer = new QTimer(this);
 	m_eventStreamTimer->setInterval(100);
 	m_eventStreamTimer->setSingleShot(false);
+	m_eventStreamTimer->start();
 	QObject::connect(m_eventStreamTimer, SIGNAL(timeout()), this, SLOT(onEventTimer()));
 	QTimer::singleShot(10, this, SLOT(onStartup()));
 	QObject::connect(this, SIGNAL(aboutToQuit()), this, SLOT(onShutdown()));
@@ -205,6 +210,7 @@ bool TestHTTPConnection::startWebServer()
 				if(m_webServer!=0)
 				{
 					m_webServer->connect("/test/event-stream",this,SLOT(onEventStreamTest(network::http::HTTPReceive *)));
+					fprintf(stdout, "Test web server started\n");
 					res = true;
 				}
 			}
@@ -274,6 +280,7 @@ void TestHTTPConnection::onShutdown()
 void TestHTTPConnection::onEventStreamTest(network::http::HTTPReceive *receive)
 {
 	m_eventStreamHandler->addReceiverWithResponse(receive);
+	fprintf(stdout, "Server recieved event connection from client\n");
 }
 
 //-------------------------------------------------------------------------------------------
@@ -283,6 +290,8 @@ void TestHTTPConnection::onEventTimer()
 	network::http::EventStreamItem item;
 	item.id() = m_eventStreamCounter;
 	item.data() = QString("Event with count='%1'").arg(m_eventStreamCounter);
+	QString n = item.data();
+	fprintf(stdout, "onEventTimer - post\n%s\n", n.toUtf8().constData());
 	m_eventStreamCounter++;
 	m_eventStreamHandler->post(item);
 }
