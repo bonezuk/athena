@@ -87,7 +87,8 @@ HTTPConnection::HTTPConnection(HTTPServer *server,Service *svr,QObject *parent) 
 	m_requestBodyLength(0),
 	m_response(),
 	m_receiver(0),
-	m_process(true)
+	m_process(true),
+	m_isCompleteSignalled(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -96,7 +97,14 @@ HTTPConnection::~HTTPConnection()
 {
 	try
 	{
-		resetState();
+		Message *msg;
+
+		while(m_processList.size() > 0)
+		{
+			msg = m_processList.takeFirst();
+			delete msg;
+		}
+
 	}
 	catch(...) {}
 }
@@ -189,6 +197,11 @@ bool HTTPConnection::process()
 {
 	if(!TCPConnectionSocket::process())
 	{
+		if(!m_isCompleteSignalled)
+		{
+			m_receiver->connectionComplete();
+			m_isCompleteSignalled = true;
+		}
 		return false;
 	}
 

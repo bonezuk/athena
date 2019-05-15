@@ -35,6 +35,7 @@ void EventStreamHandler::addReceiverWithResponse(HTTPReceive *pReceiver)
 		streamResponse.response(200);
 		streamResponse.add("Content-Type", "text/event-stream");
 		pReceiver->connection()->postResponse(streamResponse);
+		QObject::connect(pReceiver, SIGNAL(onComplete(network::http::HTTPReceive *)), this, SLOT(onComplete(network::http::HTTPReceive *)));
 	}
 }
 
@@ -57,13 +58,15 @@ void EventStreamHandler::post(const EventStreamItem& item)
 
 //-------------------------------------------------------------------------------------------
 
-void EventStreamHandler::onComplete(HTTPReceive *pReceiver)
+void EventStreamHandler::onComplete(network::http::HTTPReceive *pReceiver)
 {
 	m_lock.lock();
 	{
 		QSet<HTTPReceive *>::iterator ppI = m_receivers.find(pReceiver);
 		if(ppI != m_receivers.end())
 		{
+			HTTPReceive *rec = *ppI;
+			rec->connection()->unlock();
 			m_receivers.erase(ppI);
 		}
 	}

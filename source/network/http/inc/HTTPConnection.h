@@ -77,6 +77,7 @@ class HTTP_EXPORT HTTPConnection : public TCPConnServerSocket
 		HTTPReceive *m_receiver;
 		
 		bool m_process;
+		bool m_isCompleteSignalled;
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;

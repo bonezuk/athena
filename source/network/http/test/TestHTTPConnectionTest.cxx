@@ -112,6 +112,7 @@ void TestHTTPClientThread::onStream(network::http::HTTPCTransaction *trans,const
 		fprintf(stdout, "client - onStream\n");
 		QString n = item.toString().replace("\r\n", "\n");
 		fprintf(stdout, "%s", item.toString().toUtf8().constData());
+		m_streamCounter++;
 	}
 	else
 	{
@@ -133,6 +134,7 @@ void TestHTTPClientThread::onError(network::http::HTTPClient *client,const QStri
 void TestHTTPClientThread::onComplete(network::http::HTTPClient *client)
 {
 	fprintf(stdout,"HTTPClient instance done\n");
+	exit();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -158,7 +160,9 @@ TestHTTPConnection::TestHTTPConnection(int argc, char **argv) : QCoreApplication
 	m_webServer(0),
 	m_eventStreamHandler(0),
 	m_eventStreamCounter(0),
-	m_client(0)
+	m_client(0),
+	m_isClientComplete(false),
+	m_isServerComplete(false)
 {
 	m_eventStreamHandler = new network::http::EventStreamHandler(this);
 	m_eventStreamTimer = new QTimer(this);
@@ -279,6 +283,7 @@ void TestHTTPConnection::onShutdown()
 
 void TestHTTPConnection::onEventStreamTest(network::http::HTTPReceive *receive)
 {
+	QObject::connect(receive, SIGNAL(onComplete(network::http::HTTPReceive *)), this, SLOT(onStreamServerComplete()));
 	m_eventStreamHandler->addReceiverWithResponse(receive);
 	fprintf(stdout, "Server recieved event connection from client\n");
 }
@@ -300,7 +305,24 @@ void TestHTTPConnection::onEventTimer()
 
 void TestHTTPConnection::onStreamClientComplete()
 {
-	quit();
+	fprintf(stdout, "Client HTTP thread complete\n");
+	m_isClientComplete = true;
+	if(m_isServerComplete && m_isClientComplete)
+	{
+		quit();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TestHTTPConnection::onStreamServerComplete()
+{
+	fprintf(stdout, "Server HTTP event connection complete\n");
+	m_isServerComplete = true;
+	if(m_isServerComplete && m_isClientComplete)
+	{
+		quit();
+	}
 }
 
 //-------------------------------------------------------------------------------------------

@@ -187,8 +187,6 @@ void HTTPServer::freeReceive(HTTPReceive *rec)
 		QString tail;
 		ResourceSlot *rSlot = m_resource.get(rec->url(),tail);
 		
-		rec->connectionComplete();
-		
 		if(rSlot!=0)
 		{
 			rSlot = m_default;

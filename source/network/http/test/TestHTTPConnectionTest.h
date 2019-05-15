@@ -65,6 +65,9 @@ class TestHTTPConnection : public QCoreApplication
 		int m_eventStreamCounter;
 		TestHTTPClientThread *m_client;
 		
+		bool m_isClientComplete;
+		bool m_isServerComplete;
+		
 		virtual void printError(const char *strR, const char *strE);
 		virtual bool startWebServer();
 		
@@ -73,7 +76,9 @@ class TestHTTPConnection : public QCoreApplication
 		virtual void onShutdown();
 		virtual void onEventStreamTest(network::http::HTTPReceive *);
 		virtual void onEventTimer();
+		
 		virtual void onStreamClientComplete();
+		virtual void onStreamServerComplete();
 };
 
 //-------------------------------------------------------------------------------------------

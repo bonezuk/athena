@@ -31,7 +31,7 @@ class HTTP_EXPORT EventStreamHandler : public QObject
 		QMutex m_lock;
 		QSet<HTTPReceive *> m_receivers;
 	private slots:
-		virtual void onComplete(HTTPReceive *pReceiver);
+		virtual void onComplete(network::http::HTTPReceive *pReceiver);
 };
 
 //-------------------------------------------------------------------------------------------

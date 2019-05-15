@@ -175,7 +175,7 @@ HTTPClient::HTTPClient(Service *svr,QObject *parent) : TCPConnClientSocket(svr,p
 	m_proxyName(),
 	m_proxyPort(80),
 	m_currentID(0),
-	m_state(5),
+	m_state(6),
 	m_bodyOffset(0),
 	m_bodyLength(0),
 	m_chunkState(0),
@@ -329,7 +329,7 @@ bool HTTPClient::process()
 {
 	bool loop = true,res = true;
 	
-	if(m_state >= 5)
+	if(m_state >= 6)
 	{
 		return true;
 	}
