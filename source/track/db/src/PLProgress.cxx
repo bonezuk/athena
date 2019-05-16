@@ -9,7 +9,8 @@ namespace db
 {
 //-------------------------------------------------------------------------------------------
 
-PLProgress::PLProgress(QObject *parent) : QObject(parent)
+PLProgress::PLProgress(QObject *parent) : QObject(parent),
+	m_percentProgress(0.0f)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -20,13 +21,23 @@ PLProgress::~PLProgress()
 //-------------------------------------------------------------------------------------------
 
 void PLProgress::setProgress(tfloat32 v)
-{}
+{
+	if(v < 0.0f)
+	{
+		v = 0.0f;
+	}
+	else if (v > 100.0f)
+	{
+		v = 100.0f;
+	}
+	m_percentProgress = v;
+}
 
 //-------------------------------------------------------------------------------------------
 
 tfloat32 PLProgress::getProgress()
 {
-	return 100.0f;
+	return m_percentProgress;
 }
 
 //-------------------------------------------------------------------------------------------

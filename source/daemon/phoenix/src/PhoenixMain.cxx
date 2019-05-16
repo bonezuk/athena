@@ -65,7 +65,7 @@ void setupSettingsPath()
 {
 	QCoreApplication::setOrganizationName("Tiger-Eye");
 	QCoreApplication::setOrganizationDomain("www.blackomega.co.uk");
-	QCoreApplication::setApplicationName("PhoenixMusicDaemon");
+	QCoreApplication::setApplicationName("BlackOmega2");
 }
 
 //-------------------------------------------------------------------------------------------

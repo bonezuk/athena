@@ -1,49 +1,34 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_PLPROGRESS_H
-#define __ORCUS_TRACK_DB_PLPROGRESS_H
+#ifndef __ORCUS_DAEMON_CONSOLEPLPROGRESS_H
+#define __ORCUS_DAEMON_CONSOLEPLPROGRESS_H
 //-------------------------------------------------------------------------------------------
 
-#include "track/db/inc/TrackDB.h"
+#include "track/db/inc/PlaylistAbstractIO.h"
+#include "daemon/inc/DaemonDLL.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace track
-{
-namespace db
+namespace daemon
 {
 //-------------------------------------------------------------------------------------------
 
-class TRACK_DB_EXPORT PLProgress : public QObject
+class DAEMON_EXPORT ConsolePLProgress : public track::db::PLProgress
 {
 	public:
-		Q_OBJECT
+		ConsolePLProgress(const QString& plFileName, QObject *parent = 0);
+		virtual ~ConsolePLProgress();
 		
-	public:
-		PLProgress(QObject *parent = 0);
-		virtual ~PLProgress();
-
 		virtual void setProgress(tfloat32 v);
-		virtual tfloat32 getProgress();
-		virtual bool isCancelled();
-
-		virtual bool isActive();
-		virtual void activate(bool useReference = false);
-		virtual void deactivate(bool useReference = false);
+		virtual void done();
 		
-#if defined(OMEGA_MAC_STORE)
-		virtual bool getPermissions(const QString& fileName, QList<QPair<QString,QByteArray> >& fileList);
-		virtual QByteArray getSandboxBookmark(const QString& outFilename,const QString& trackFilename);
-#endif
 	private:
-		tfloat32 m_percentProgress;
+		QString m_plFileName;
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace db
-} // namespace track
+} // namespace daemon
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
-
