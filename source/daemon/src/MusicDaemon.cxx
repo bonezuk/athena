@@ -11,7 +11,12 @@ MusicDaemon::MusicDaemon(int argc,char **argv) : QCoreApplication(argc, argv),
 	m_cmdArgs(),
 	m_webService(0),
 	m_webServer(0),
-	m_playlist()
+	m_pEventStream(),
+	m_nextEventId(1),
+	m_playlist(),
+	m_audio(),
+	m_currentPlayIndex(0),
+	m_nextCount(0)
 {
 	QObject::connect(this,SIGNAL(aboutToQuit()),this,SLOT(onStopService()));
 	collectCommandLine(argc, argv);
@@ -173,7 +178,9 @@ bool MusicDaemon::startWebServer()
 				m_webServer = m_webService->getServer(MUSIC_DAEMON_PORT);
 				if(m_webServer!=0)
 				{
+					m_pEventStream = QSharedPointer<network::http::EventStreamHandler>(new network::http::EventStreamHandler(this));
 					m_webServer->connect("/",this,SLOT(onWebRoot(network::http::HTTPReceive *)));
+					m_webServer->connect("/event",this,SLOT(onConnectToEventStream(network::http::HTTPReceive *)));
 					printLog("Daemon HTTP server started successfully");
 					res = true;
 				}
@@ -200,7 +207,10 @@ void MusicDaemon::onStartService()
 		{
 			if(startWebServer())
 			{
-				res = true;
+				if(startAudioEngine())
+				{
+					res = true;
+				}
 			}
 			else
 			{
@@ -232,6 +242,7 @@ void MusicDaemon::stopWebServer()
 	{
 		if(m_webServer!=0)
 		{
+			m_pEventStream.clear();
 			m_webService->deleteServer(m_webServer);
 			m_webServer = 0;
 		}
@@ -245,6 +256,7 @@ void MusicDaemon::stopWebServer()
 
 void MusicDaemon::onStopService()
 {
+	stopAudioEngine();
 	stopWebServer();
 	if(track::db::TrackDB::instance() != 0)
 	{
@@ -277,26 +289,205 @@ void MusicDaemon::onWebRoot(network::http::HTTPReceive *recieve)
 }
 
 //-------------------------------------------------------------------------------------------
+
+void MusicDaemon::onConnectToEventStream(network::http::HTTPReceive *recieve)
+{
+	m_pEventStream->addReceiverWithResponse(recieve);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicDaemon::startPlaybackOfList()
+{
+	m_currentPlayIndex = 0;
+	if(!m_audio.isNull() && m_currentPlayIndex < m_playlist.size())
+	{
+		m_audio->open(m_playlist.at(m_currentPlayIndex)->getFilename());
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 // Audio interface
 //-------------------------------------------------------------------------------------------
 
+bool MusicDaemon::startAudioEngine()
+{
+#if defined(ORCUS_WIN32)
+	m_audio = audioio::AOBase::get("win32");
+#elif defined(OMEGA_MACOSX)
+	m_audio = audioio::AOBase::get("coreaudio");
+#elif defined(OMEGA_LINUX)
+	m_audio = audioio::AOBase::get("alsa");
+#endif
+	connect(m_audio.data(),SIGNAL(onStart(const QString&)),this,SLOT(onAudioStart(const QString&)));
+	connect(m_audio.data(),SIGNAL(onStop()),this,SLOT(onAudioStop()));
+	connect(m_audio.data(),SIGNAL(onPlay()),this,SLOT(onAudioPlay()));
+	connect(m_audio.data(),SIGNAL(onPause()),this,SLOT(onAudioPause()));
+	connect(m_audio.data(),SIGNAL(onTime(quint64)),this,SLOT(onAudioTime(quint64)));
+	connect(m_audio.data(),SIGNAL(onBuffer(tfloat32)),this,SLOT(onAudioBuffer(tfloat32)));
+	connect(m_audio.data(),SIGNAL(onReadyForNext()),this,SLOT(onAudioReadyForNext()));
+	connect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
+	connect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
+	return true;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicDaemon::stopAudioEngine()
+{
+	if(!m_audio.isNull())
+	{
+		disconnect(m_audio.data(),SIGNAL(onStart(const QString&)),this,SLOT(onAudioStart(const QString&)));
+		disconnect(m_audio.data(),SIGNAL(onStop()),this,SLOT(onAudioStop()));
+		disconnect(m_audio.data(),SIGNAL(onPlay()),this,SLOT(onAudioPlay()));
+		disconnect(m_audio.data(),SIGNAL(onPause()),this,SLOT(onAudioPause()));
+		disconnect(m_audio.data(),SIGNAL(onTime(quint64)),this,SLOT(onAudioTime(quint64)));
+		disconnect(m_audio.data(),SIGNAL(onBuffer(tfloat32)),this,SLOT(onAudioBuffer(tfloat32)));
+		disconnect(m_audio.data(),SIGNAL(onReadyForNext()),this,SLOT(onAudioReadyForNext()));
+		disconnect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
+		disconnect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
+		m_audio.clear();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+int MusicDaemon::indexOfPlayItem(const QString& name) const
+{
+	int id, lowId, highId;
+	
+	id = m_currentPlayIndex;
+	if(id >= 0 && id < m_playlist.size())
+	{
+		if(m_playlist.at(id)->getFilename() != name)
+		{
+			bool loop = true;
+		
+			lowId  = highId = m_currentPlayIndex;
+			while(loop)
+			{
+				highId++;
+				lowId--;
+				if(highId < m_playlist.size() && m_playlist.at(highId)->getFilename() == name)
+				{
+					id = highId;
+					loop = false;
+				}
+				else if(lowId >= 0 && m_playlist.at(lowId)->getFilename() == name)
+				{
+					id = lowId;
+					loop = false;
+				}
+			}
+		} 
+	}
+	else
+	{
+		id = 0;
+	}
+	return id;
+}
+
+//-------------------------------------------------------------------------------------------
+// id : 1
+// event: onAudioStart
+// data: { "trackId": 3 }
+//-------------------------------------------------------------------------------------------
+
+void MusicDaemon::postAudioEvent(const QString& eventName)
+{
+	if(m_currentPlayIndex >= 0 && m_currentPlayIndex < m_playlist.size())
+	{
+		QString dataStr;
+		QJsonDocument doc;
+		QJsonObject jData;
+		network::http::EventStreamItem item;
+	
+		item.id() = m_nextEventId++;
+		item.event() = eventName;
+	
+		jData["trackId"] = m_currentPlayIndex;
+		doc.setObject(jData);
+		item.data() = QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
+	
+		m_pEventStream->post(item);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void MusicDaemon::onAudioStart(const QString& name)
-{}
+{
+	if(m_nextCount > 0)
+	{
+		m_currentPlayIndex++;
+		if(m_currentPlayIndex >= m_playlist.size())
+		{
+			m_currentPlayIndex = 0;
+		}
+	}
+	m_nextCount = 0;
+
+	m_currentPlayIndex = indexOfPlayItem(name);
+	postAudioEvent("onAudioStart");
+}
 
 //-------------------------------------------------------------------------------------------
 
 void MusicDaemon::onAudioPlay()
-{}
+{
+	postAudioEvent("onAudioPlay");
+}
 
 //-------------------------------------------------------------------------------------------
 
 void MusicDaemon::onAudioPause()
-{}
+{
+	postAudioEvent("onAudioPause");
+}
 
 //-------------------------------------------------------------------------------------------
 
+void MusicDaemon::onAudioStop()
+{
+	m_nextCount = 0;
+	postAudioEvent("onAudioStop");
+}
+
+//-------------------------------------------------------------------------------------------
+// id : 1
+// event: onAudioTime
+// data: { "trackId": 3, "playTime": 12345 }
+//-------------------------------------------------------------------------------------------
+
 void MusicDaemon::onAudioTime(quint64 t)
-{}
+{
+	common::TimeStamp pT(t);
+
+	if(m_currentPlayIndex >= 0 && m_currentPlayIndex < m_playlist.size())
+	{
+		QString dataStr;
+		QJsonDocument doc;
+		QJsonObject jData;
+		network::http::EventStreamItem item;
+		track::info::InfoSPtr pTrack = m_playlist.at(m_currentPlayIndex);
+		
+		if(pT > pTrack->length())
+		{
+			pT = pTrack->length();
+		}
+		
+		item.id() = m_nextEventId++;
+		item.event() = "onAudioTime";
+	
+		jData["trackId"] = m_currentPlayIndex;
+		jData["playTime"] = static_cast<tint64>(pT);
+		doc.setObject(jData);
+		item.data() = QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
+	
+		m_pEventStream->post(item);
+	}	
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -306,12 +497,27 @@ void MusicDaemon::onAudioBuffer(tfloat32 percent)
 //-------------------------------------------------------------------------------------------
 
 void MusicDaemon::onAudioReadyForNext()
-{}
+{
+	m_nextCount++;
+	if(m_nextCount <= 1)
+	{
+		int nextId = m_currentPlayIndex + 1;
+		if(nextId >= m_playlist.size())
+		{
+			nextId = 0;
+		}
+		
+		track::info::InfoSPtr pTrack = m_playlist.at(nextId);
+		m_audio->next(pTrack->getFilename());
+	}
+}
 
 //-------------------------------------------------------------------------------------------
 
 void MusicDaemon::onAudioNoNext()
-{}
+{
+	onAudioReadyForNext();
+}
 
 //-------------------------------------------------------------------------------------------
 
