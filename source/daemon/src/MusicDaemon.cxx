@@ -181,6 +181,7 @@ bool MusicDaemon::startWebServer()
 					m_pEventStream = QSharedPointer<network::http::EventStreamHandler>(new network::http::EventStreamHandler(this));
 					m_webServer->connect("/",this,SLOT(onWebRoot(network::http::HTTPReceive *)));
 					m_webServer->connect("/event",this,SLOT(onConnectToEventStream(network::http::HTTPReceive *)));
+					m_webServer->connect("/track",this,SLOT(onWebTrack(network::http::HTTPReceive *)));
 					printLog("Daemon HTTP server started successfully");
 					res = true;
 				}
@@ -286,6 +287,226 @@ void MusicDaemon::onWebRoot(network::http::HTTPReceive *recieve)
 	recieve->connection()->postBody(body);
 	recieve->connection()->complete();
 	recieve->endProcess();
+}
+
+//-------------------------------------------------------------------------------------------
+// GET /track?id=3					// Get single track id=3
+// GET /track?lowId=3&highId=10		// Get tracks from id=3 to id=10 (3, 4, 5, 6, 7, 8, 9, 10)
+// GET /track						// Get all tracks
+//
+//		{
+//			"low" : 3
+//			"high" : 10
+//			"tracks" : [
+//				{
+//					"id": 3
+//					"filename": "/Users/bonez/Music/13-Imagine The Fire.flac",
+//					"length": 1234567890,
+//					"bitrate": 160000,
+//					"channels": 2,
+//					"frequency": 44100,
+//					"artist": "Hans Zimmer",
+//					"title": "Imagine The Fire",
+//					"album": "The Dark Knight Rises: Original Motion Picture Soundtrack (Deluxe Edition)",
+//					"year": "2008",
+//					"comment": "Sample Track",
+//					"genre": "Soundtrack",
+//					"track": "12",
+//					"disc": "1",
+//					"composer": "Hans Zimmer",
+//					"original_artist": "Hans Zimmer",
+//					"copyright": "(c) Hans Zimmer",
+//					"encoder": "Flac encoder",
+//					"image": "http://127.0.0.1:13766/image?id=3"
+//				},
+//				{
+//					"id": 4
+//					"filename": "/Users/bonez/Music/14-Track.flac",
+//					...		
+//				},
+//				...
+//				{
+//					"id": 10
+//					"filename": "/Users/bonez/Music/15-Track.flac",
+//					...
+//				}
+//			]
+//		}
+//
+//-------------------------------------------------------------------------------------------
+
+QJsonObject MusicDaemon::getTrackJSON(int id)
+{
+	QJsonObject obj;
+	
+	if(id >= 0 && id < m_playlist.size())
+	{
+		track::info::InfoSPtr pInfo = m_playlist.at(id);
+		
+		obj["id"] = id;
+		obj["filename"] = pInfo->getFilename();
+		obj["length"] = static_cast<tint64>(pInfo->length());
+		obj["bitrate"] = pInfo->bitrate();
+		obj["channels"] = pInfo->noChannels();
+		obj["frequency"] = pInfo->frequency();
+		obj["artist"] = pInfo->artist();
+		obj["title"] = pInfo->title();
+		obj["album"] = pInfo->album();
+		obj["year"] = pInfo->year();
+		obj["comment"] = pInfo->comment();
+		obj["genre"] = pInfo->genre();
+		obj["track"] = pInfo->track();
+		obj["disc"] = pInfo->disc();
+		obj["composer"] = pInfo->composer();
+		obj["original_artist"] = pInfo->originalArtist();
+		obj["copyright"] = pInfo->copyright();
+		obj["encoder"] = pInfo->encoder();
+		obj["image"] = "http://" + network::Resource::instance().localIPName() + "/image?id=" + QString::number(id);
+	}
+	return obj;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool MusicDaemon::isQueryIdSingle(const network::http::Query& q, int& id)
+{
+	bool res = false;
+	
+	if(!q.data("id").isEmpty())
+	{
+		bool idOk = false;
+		
+		id = q.data("id").toInt(&idOk);
+		if(idOk)
+		{
+			if(id>=0 && id<m_playlist.size())
+			{
+				res = true;
+			}
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool MusicDaemon::isQueryIdRange(const network::http::Query& q, int& lowId, int& highId)
+{
+	bool res = false;
+	
+	if(!q.data("lowId").isEmpty() && !q.data("highId").isEmpty())
+	{
+		bool lowOk = false, highOk = false;
+		
+		lowId = q.data("lowId").toInt(&lowOk);
+		highId = q.data("highId").toInt(&highOk);
+		if(lowOk && highOk)
+		{
+			if(highId < lowId)
+			{
+				int t = lowId;
+				lowId = highId;
+				highId = t;
+			}
+			if(lowId>=0 && lowId<m_playlist.size() && highId>=0 && highId<m_playlist.size())
+			{
+				res = true;
+			}
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool MusicDaemon::tracksListJSON(int lowId, int highId, QJsonDocument& doc)
+{
+	bool res = false;
+	
+	if(lowId>=0 && lowId<m_playlist.size() && highId>=0 && highId<m_playlist.size())
+	{
+		QJsonObject root;
+		QJsonArray tracks;
+		
+		root["low"] = lowId;
+		root["high"] = highId;
+		
+		for(int id = lowId; id <= highId; id++)
+		{
+			QJsonObject obj = getTrackJSON(id);
+			tracks.append(obj);
+		}
+		root["tracks"] = tracks;
+		
+		doc.setObject(root);
+		res = true;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicDaemon::onWebTrack(network::http::HTTPReceive *recieve)
+{
+	int resCode;
+	int lowId, highId;
+	
+	if(recieve != 0)
+	{
+		const network::http::Query& q = recieve->header().query();
+		
+		if(q.value().isEmpty())
+		{
+			lowId = 0;
+			highId = m_playlist.size() - 1;
+			resCode = 200;
+		}
+		else if(isQueryIdRange(q, lowId, highId))
+		{
+			resCode = 200;
+		}
+		else if(isQueryIdSingle(q, lowId))
+		{
+			highId = lowId;
+			resCode = 200;
+		}
+		else
+		{
+			resCode = 400;
+		}
+		
+		if(resCode == 200)
+		{
+			QJsonDocument doc;
+			
+			if(tracksListJSON(lowId, highId, doc))
+			{
+				network::http::Unit hdr;
+				QByteArray data = doc.toJson(QJsonDocument::Compact);
+				network::NetArraySPtr body(new network::NetArray);
+				
+				hdr.response(200);
+				hdr.add("Content-Type", "application/json");
+				hdr.add("Content-Length", QString::number(data.length()));
+				body->AppendRaw(data.constData(), data.length());
+				recieve->connection()->postResponse(hdr);
+				recieve->connection()->postBody(body);
+			}
+			else
+			{
+				resCode = 500;
+			}
+		}
+		
+		if(resCode != 200)
+		{
+			network::http::Unit hdr;
+			hdr.response(resCode);
+			recieve->connection()->postResponse(hdr);
+		}
+		recieve->connection()->complete();
+		recieve->endProcess();
+	}
 }
 
 //-------------------------------------------------------------------------------------------

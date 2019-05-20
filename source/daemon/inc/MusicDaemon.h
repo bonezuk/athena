@@ -18,6 +18,7 @@
 
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -75,6 +76,11 @@ class DAEMON_EXPORT MusicDaemon : public QCoreApplication
 		virtual void postAudioEvent(const QString& eventName);
 		virtual void startPlaybackOfList();
 
+		virtual QJsonObject getTrackJSON(int id);
+		virtual bool isQueryIdSingle(const network::http::Query& q, int& id);
+		virtual bool isQueryIdRange(const network::http::Query& q, int& lowId, int& highId);
+		virtual bool tracksListJSON(int lowId, int highId, QJsonDocument& doc);
+
 	private slots:
 	
 		virtual void onStartService();
@@ -82,7 +88,8 @@ class DAEMON_EXPORT MusicDaemon : public QCoreApplication
 		
 		virtual void onWebRoot(network::http::HTTPReceive *recieve);
 		virtual void onConnectToEventStream(network::http::HTTPReceive *recieve);
-		
+		virtual void onWebTrack(network::http::HTTPReceive *recieve);
+
 		virtual void onAudioStart(const QString& name);
 		virtual void onAudioPlay();
 		virtual void onAudioPause();
