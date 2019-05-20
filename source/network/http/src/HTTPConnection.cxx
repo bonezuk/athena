@@ -78,7 +78,7 @@ HTTPConnection::HTTPConnection(HTTPServer *server,Service *svr,QObject *parent) 
 	m_server(server),
 	m_mutex(),
 	m_processList(),
-	m_state(e_StartSession),
+	m_stateHttp(e_StartSession),
 	m_persistent(true),
 	m_chunked(false),
 	m_streaming(false),
@@ -104,7 +104,6 @@ HTTPConnection::~HTTPConnection()
 			msg = m_processList.takeFirst();
 			delete msg;
 		}
-
 	}
 	catch(...) {}
 }
@@ -199,17 +198,20 @@ bool HTTPConnection::process()
 	{
 		if(!m_isCompleteSignalled)
 		{
-			m_receiver->connectionComplete();
+			if(m_receiver != 0)
+			{
+				m_receiver->connectionComplete();
+			}
 			m_isCompleteSignalled = true;
 		}
 		return false;
 	}
 
-	if(m_state==e_CompleteOnSend && m_sQueue.size()==0)
+	if(m_stateHttp==e_CompleteOnSend && m_sQueue.size()==0)
 	{
 		if(m_persistent)
 		{
-			m_state = e_StartSession;
+			m_stateHttp = e_StartSession;
 		}
 		else
 		{
@@ -249,7 +251,7 @@ bool HTTPConnection::processMain()
 {
 	bool loop = true;
 
-	if(m_state==e_RecieveRequest || m_state==e_RecieveRequestData)
+	if(m_stateHttp==e_RecieveRequest || m_stateHttp==e_RecieveRequestData)
 	{
 		if(timeout())
 		{
@@ -261,11 +263,11 @@ bool HTTPConnection::processMain()
 	{
 		loop = false;
 
-		switch(m_state)
+		switch(m_stateHttp)
 		{
 			case e_StartSession:
 				resetState();
-				m_state = e_RecieveRequest;
+				m_stateHttp = e_RecieveRequest;
 				loop = true;
 				break;
 				
@@ -386,7 +388,7 @@ bool HTTPConnection::getRequest(bool& loop)
 			if(m_request.exist("Accept") && m_request.data("Accept").trimmed().toLower()=="text/event-stream")
 			{
 				m_streaming = true;
-				m_state = e_ProcessRequest;
+				m_stateHttp = e_ProcessRequest;
 			}
 			else if(m_request.exist("Content-Length"))
 			{
@@ -396,7 +398,7 @@ bool HTTPConnection::getRequest(bool& loop)
 					if(length <= c_HTTPConnection_MaxPostSize)
 					{
 						m_requestBodyLength = length;
-						m_state = e_RecieveRequestData;
+						m_stateHttp = e_RecieveRequestData;
 					}
 					else
 					{
@@ -408,12 +410,12 @@ bool HTTPConnection::getRequest(bool& loop)
 				{
 					m_requestBody.SetSize(0);
 					m_requestBodyLength = 0;
-					m_state = e_ProcessRequest;
+					m_stateHttp = e_ProcessRequest;
 				}
 			}
 			else
 			{
-				m_state = e_ProcessRequest;
+				m_stateHttp = e_ProcessRequest;
 			}
 			loop = true;
 		}
@@ -430,7 +432,7 @@ bool HTTPConnection::getRequest(bool& loop)
 
 bool HTTPConnection::getRequestData(bool& loop)
 {
-	if(m_state!=e_RecieveRequestData)
+	if(m_stateHttp!=e_RecieveRequestData)
 	{
 		printError("getRequestData","Can only receive data while in request data mode");
 		return false;
@@ -446,7 +448,7 @@ bool HTTPConnection::getRequestData(bool& loop)
 		m_requestBody.SetSize(m_requestBodyLength);
 		if(read(m_requestBody.GetData(),m_requestBodyLength))
 		{
-			m_state = e_ProcessRequest;
+			m_stateHttp = e_ProcessRequest;
 			loop = true;
 		}
 		else
@@ -466,7 +468,7 @@ bool HTTPConnection::getRequestData(bool& loop)
 
 bool HTTPConnection::doRequest(bool& loop)
 {
-	if(m_state!=e_ProcessRequest)
+	if(m_stateHttp!=e_ProcessRequest)
 	{
 		printError("doRequest","Connection not in process request state");
 		return false;
@@ -487,7 +489,7 @@ bool HTTPConnection::doRequest(bool& loop)
 			m_receiver->setBody(rBody);
 			m_receiver->process();
 			
-			m_state = e_PostResponse;
+			m_stateHttp = e_PostResponse;
 		}
 		else
 		{
@@ -508,7 +510,7 @@ bool HTTPConnection::doPostRequest(bool& loop)
 	Message *msg;
 	bool res = false;
 	
-	if(m_state!=e_PostResponse)
+	if(m_stateHttp!=e_PostResponse)
 	{
 		printError("doPostRequest","Cannot post response in given state");
 		return false;
@@ -549,11 +551,11 @@ bool HTTPConnection::doPostRequest(bool& loop)
 				if(m_response.exist("Content-Type") && m_response.data("Content-Type").trimmed().toLower()=="text/event-stream")
 				{
 					m_streaming = true;
-					m_state = e_PostStream;
+					m_stateHttp = e_PostStream;
 				}
 				else
 				{
-					m_state = e_PostData;
+					m_stateHttp = e_PostData;
 				}
 			}
 			loop = true;
@@ -600,7 +602,7 @@ bool HTTPConnection::doPostData(bool& loop)
 	Message *msg;
 	bool res = true;
 	
-	if(m_state!=e_PostData)
+	if(m_stateHttp!=e_PostData)
 	{
 		printError("doPostData","Cannot post data in given state");
 		return false;
@@ -616,7 +618,7 @@ bool HTTPConnection::doPostData(bool& loop)
 	switch(msg->type())
 	{
 		case e_PostHeader:
-			m_state = e_PostResponse;
+			m_stateHttp = e_PostResponse;
 			loop = true;
 			break;
 			
@@ -666,7 +668,7 @@ bool HTTPConnection::doPostData(bool& loop)
 					res = false;
 				}
 			}
-			m_state = e_CompleteOnSend;
+			m_stateHttp = e_CompleteOnSend;
 			loop = true;
 			break;
 	}
@@ -692,7 +694,7 @@ bool HTTPConnection::doPostStream(bool& loop)
 	}
 	else if(msg->type() == e_Complete)
 	{
-		m_state = e_CompleteOnSend;
+		m_stateHttp = e_CompleteOnSend;
 		loop = true;	
 	}
 	return res;
@@ -717,7 +719,7 @@ void HTTPConnection::resetState()
 		delete msg;	
 	}
 	
-	m_state = e_StartSession;
+	m_stateHttp = e_StartSession;
 	m_persistent = true;
 	m_chunked = false;
 	m_streaming = false;
@@ -743,7 +745,7 @@ bool HTTPConnection::sendErrorResponse(tint code)
 		printError("sendErrorResponse","Failed to send response to client");
 		return false;
 	}
-	m_state = e_CompleteOnSend;
+	m_stateHttp = e_CompleteOnSend;
 	return true;
 }
 

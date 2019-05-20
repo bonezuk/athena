@@ -1,4 +1,5 @@
 #include "daemon/inc/MusicDaemon.h"
+#include "daemon/inc/ConsolePLProgress.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -19,7 +20,7 @@ MusicDaemon::MusicDaemon(int argc,char **argv) : QCoreApplication(argc, argv),
 	m_nextCount(0)
 {
 	QObject::connect(this,SIGNAL(aboutToQuit()),this,SLOT(onStopService()));
-	collectCommandLine(argc, argv);
+	MusicDaemon::collectCommandLine(argc, argv);
 	QTimer::singleShot(100,this,SLOT(onStartService()));
 }
 
@@ -94,7 +95,7 @@ bool MusicDaemon::processCommandLine()
 		}
 	}
 	
-	if(processCmdLine)
+	if(!processCmdLine)
 	{
 		printCommandLineUsage();
 	}
@@ -114,11 +115,12 @@ bool MusicDaemon::loadPlaylist(const QString& fileName)
 			QSharedPointer<track::db::PlaylistAbstractIO> pLoader = track::db::PlaylistIOFactory::createShared(track::db::PlaylistAbstractIO::factoryName(fileName));
             if(pLoader.data()!=0)
             {
-				track::db::PLProgress progress;
+				ConsolePLProgress progress(fileName);
 	            QVector<track::info::InfoSPtr> pList;
 	            
             	if(pLoader->load(fileName, pList, &progress))
             	{
+					progress.done();
             		m_playlist.append(pList);
             		res = true;
             	}
@@ -210,6 +212,7 @@ void MusicDaemon::onStartService()
 			{
 				if(startAudioEngine())
 				{
+					startPlaybackOfList();
 					res = true;
 				}
 			}
@@ -533,6 +536,9 @@ void MusicDaemon::startPlaybackOfList()
 
 bool MusicDaemon::startAudioEngine()
 {
+	bool res = false;
+
+	printf("Starting audio engine\r");
 #if defined(ORCUS_WIN32)
 	m_audio = audioio::AOBase::get("win32");
 #elif defined(OMEGA_MACOSX)
@@ -540,16 +546,25 @@ bool MusicDaemon::startAudioEngine()
 #elif defined(OMEGA_LINUX)
 	m_audio = audioio::AOBase::get("alsa");
 #endif
-	connect(m_audio.data(),SIGNAL(onStart(const QString&)),this,SLOT(onAudioStart(const QString&)));
-	connect(m_audio.data(),SIGNAL(onStop()),this,SLOT(onAudioStop()));
-	connect(m_audio.data(),SIGNAL(onPlay()),this,SLOT(onAudioPlay()));
-	connect(m_audio.data(),SIGNAL(onPause()),this,SLOT(onAudioPause()));
-	connect(m_audio.data(),SIGNAL(onTime(quint64)),this,SLOT(onAudioTime(quint64)));
-	connect(m_audio.data(),SIGNAL(onBuffer(tfloat32)),this,SLOT(onAudioBuffer(tfloat32)));
-	connect(m_audio.data(),SIGNAL(onReadyForNext()),this,SLOT(onAudioReadyForNext()));
-	connect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
-	connect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
-	return true;
+	if(!m_audio.isNull())
+	{
+		connect(m_audio.data(), SIGNAL(onStart(const QString&)), this, SLOT(onAudioStart(const QString&)));
+		connect(m_audio.data(), SIGNAL(onStop()), this, SLOT(onAudioStop()));
+		connect(m_audio.data(), SIGNAL(onPlay()), this, SLOT(onAudioPlay()));
+		connect(m_audio.data(), SIGNAL(onPause()), this, SLOT(onAudioPause()));
+		connect(m_audio.data(), SIGNAL(onTime(quint64)), this, SLOT(onAudioTime(quint64)));
+		connect(m_audio.data(), SIGNAL(onBuffer(tfloat32)), this, SLOT(onAudioBuffer(tfloat32)));
+		connect(m_audio.data(), SIGNAL(onReadyForNext()), this, SLOT(onAudioReadyForNext()));
+		connect(m_audio.data(), SIGNAL(onNoNext()), this, SLOT(onAudioNoNext()));
+		connect(m_audio.data(), SIGNAL(onCrossfade()), this, SLOT(onAudioCrossfade()));
+		printLog("Audio engine started successfully");
+		res = true;
+	}
+	else
+	{
+		printLog("Audio engine failed to start");
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -568,6 +583,7 @@ void MusicDaemon::stopAudioEngine()
 		disconnect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
 		disconnect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
 		m_audio.clear();
+		printLog("Audio engine has shutdown");
 	}
 }
 

@@ -63,7 +63,7 @@ class HTTP_EXPORT HTTPConnection : public TCPConnServerSocket
 		QMutex m_mutex;
 		QList<Message *> m_processList;
 		
-		State m_state;
+		State m_stateHttp;
 		bool m_persistent;
 		bool m_chunked;
 		bool m_streaming;
