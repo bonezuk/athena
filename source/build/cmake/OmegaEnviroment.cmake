@@ -19,6 +19,7 @@ endif (CMAKE_SIZEOF_VOID_P EQUAL 8)
 set(TIGER_DEBUG_BUILD TRUE CACHE BOOL "Create Debug Build")
 set(TIGER_DEBUG_PLAYBACK_LOG TRUE CACHE BOOL "Log Playback Debug Messages")
 set(TIGER_MAC_STORE TRUE CACHE BOOL "Apple Mac Store Build")
+set(TIGER_RASPBIAN_BUILD FALSE CACHE BOOL "Cross-compile build for Raspbian")
 
 if (${TIGER_DEBUG_BUILD})
 	set(CMAKE_BUILD_TYPE "Debug")
@@ -48,6 +49,18 @@ elseif (OMEGA_MACOSX)
 elseif (OMEGA_LINUX)
 	set(LIBEXT "so")
 endif (OMEGA_WIN32)
+
+if (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
+	INCLUDE(CMakeForceCompiler)
+
+	# Set OS and processor architecture
+	set(CMAKE_SYSTEM_NAME Linux)
+	set(CMAKE_SYSTEM_PROCESSOR arm)
+	set(CMAKE_SYSTEM_VERSION 1)
+
+	# Specify the compilers
+	set(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
+endif (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
 
 if (OMEGA_WIN32)
 	if (OMEGA_IS64BIT)
@@ -83,7 +96,7 @@ set(BUILD_SUFFIX ${TIGER_PLATFORM}.${TIGER_BUILD_TYPE}.${TIGER_COMPILER})
 if ("$ENV{ATHENA_UTILS}" STREQUAL "")
 	set(ATHENA_UTILS "${ROOT_PROJECT_PATH}/../athena_utils" CACHE PATH "Third Party Utilities Library Path")
 else ("$ENV{ATHENA_UTILS}" STREQUAL "")
-	set(ATHENA_UTILS "$ENV{ATHENA_UTILS}" CACHE PATH "Perforce Library Path")
+	set(ATHENA_UTILS "$ENV{ATHENA_UTILS}" CACHE PATH "Third Party Utilities Library Path")
 endif ("$ENV{ATHENA_UTILS}" STREQUAL "")
 
 if (OMEGA_WIN32)
