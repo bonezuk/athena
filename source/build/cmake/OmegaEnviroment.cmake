@@ -50,6 +50,8 @@ elseif (OMEGA_LINUX)
 	set(LIBEXT "so")
 endif (OMEGA_WIN32)
 
+set( OMEGA_LIBRARIES audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 )
+
 if (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
 	INCLUDE(CMakeForceCompiler)
 
@@ -77,9 +79,8 @@ if (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 	
-	set(CODEC_LIBRARIES 
 else (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
-
+	list( APPEND OMEGA_LIBRARIES wavpackomega wavpack )
 endif (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
 
 if (OMEGA_WIN32)

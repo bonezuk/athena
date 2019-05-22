@@ -91,9 +91,6 @@ set ( TEST_SOURCE
 	../engine/violetomega/test/IFFSoundChunkTest.cxx
 	../engine/violetomega/test/IFFTextChunkTest.cxx
 	
-	../engine/wavpackomega/test/WavPackCodecTest.cxx
-	../engine/wavpackomega/test/WavPackBIOReaderTest.cxx
-
 	../remote/test/KeyAssignmentMock.cxx
 	../remote/test/KeyAssignmentTest.cxx
 	../remote/test/KeyCodeExclusionTest.cxx
@@ -134,6 +131,11 @@ set ( TEST_SOURCE
 	QUnitTestTimer.cxx
 	TestMain.cxx
 )
+
+if (NOT ${TIGER_RASPBIAN_BUILD})
+	list(APPEND TEST_SOURCE ../engine/wavpackomega/test/WavPackCodecTest.cxx
+		../engine/wavpackomega/test/WavPackBIOReaderTest.cxx)
+endif (NOT ${TIGER_RASPBIAN_BUILD})
 
 set ( TEST2_HEADERS
 	Test2Enviroment.h
@@ -207,12 +209,12 @@ endif (OMEGA_WIN32)
 add_executable(Test2 ${TEST2_HEADERS} ${TEST2_SOURCE})
 
 if (OMEGA_WIN32)
-	target_link_libraries(Test audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test winmm ws2_32 wavpack gtest gtest_main gmock gmock_main)
-	target_link_libraries(Test2 audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test winmm ws2_32 wavpack gtest gtest_main gmock gmock_main)
+	target_link_libraries(Test  ${OMEGA_LIBRARIES} trackmodel Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test winmm ws2_32 gtest gtest_main gmock gmock_main)
+	target_link_libraries(Test2 ${OMEGA_LIBRARIES} Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test winmm ws2_32 gtest gtest_main gmock gmock_main)
 elseif (OMEGA_MACOSX)
-	target_link_libraries(Test audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test wavpack gtest gtest_main gmock gmock_main ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${CORESERVICES_FRAMEWORK_UNIT} ${COREAUDIO_FRAMEWORK_UNIT} ${AUDIOUNIT_FRAMEWORK_UNIT} ${AUDIOTOOLBOX_FRAMEWORK_UNIT})
-	target_link_libraries(Test2 audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test wavpack gtest gtest_main gmock gmock_main ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${CORESERVICES_FRAMEWORK_UNIT} ${COREAUDIO_FRAMEWORK_UNIT} ${AUDIOUNIT_FRAMEWORK_UNIT} ${AUDIOTOOLBOX_FRAMEWORK_UNIT})
+	target_link_libraries(Test  ${OMEGA_LIBRARIES} trackmodel Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test gtest gtest_main gmock gmock_main ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${CORESERVICES_FRAMEWORK_UNIT} ${COREAUDIO_FRAMEWORK_UNIT} ${AUDIOUNIT_FRAMEWORK_UNIT} ${AUDIOTOOLBOX_FRAMEWORK_UNIT})
+	target_link_libraries(Test2 ${OMEGA_LIBRARIES} Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test gtest gtest_main gmock gmock_main ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${CORESERVICES_FRAMEWORK_UNIT} ${COREAUDIO_FRAMEWORK_UNIT} ${AUDIOUNIT_FRAMEWORK_UNIT} ${AUDIOTOOLBOX_FRAMEWORK_UNIT})
 elseif (OMEGA_LINUX)
-	target_link_libraries(Test audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test wavpack libupnp mpcdec gtest gtest_main gmock gmock_main)
-	target_link_libraries(Test2 audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test wavpack libupnp mpcdec gtest gtest_main gmock gmock_main)
+	target_link_libraries(Test  ${OMEGA_LIBRARIES} trackmodel Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test libupnp mpcdec gtest gtest_main gmock gmock_main)
+	target_link_libraries(Test2 ${OMEGA_LIBRARIES} Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets Qt5::Test libupnp mpcdec gtest gtest_main gmock gmock_main)
 endif (OMEGA_WIN32)
