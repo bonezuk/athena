@@ -66,12 +66,14 @@ message("Copy Qt5Network")
 file(GLOB QTNETWORK_LIBRARY_FILES "${QT_HOME}/lib/libQt5Network.${LIBEXT}*")
 file(COPY ${QTNETWORK_LIBRARY_FILES} DESTINATION ${TIGER_BIN_INSTALL})
 
-message("Copy Assistant")
-file(COPY "${QT_HOME}/bin/assistant" DESTINATION ${TIGER_BIN_INSTALL})
+if (NOT ${TIGER_RASPBIAN_BUILD})
+	message("Copy Assistant")
+	file(COPY "${QT_HOME}/bin/assistant" DESTINATION ${TIGER_BIN_INSTALL})
+endif (NOT ${TIGER_RASPBIAN_BUILD})
 
 message("Copy Qt image formats")
 set(QTPLUGIN_PLATFORM_FILES "libqlinuxfb.so" "libqminimal.so" "libqoffscreen.so" "libqxcb.so")
-set(QTPLUGIN_IMAGE_FILES "libqjpeg.so" "libqgif.so" "libqmng.so")
+set(QTPLUGIN_IMAGE_FILES "libqjpeg.so" "libqgif.so" )
 
 foreach (QTPLUGIN_PLATFORM_FILE ${QTPLUGIN_PLATFORM_FILES})
 	file(COPY "${QT_HOME}/plugins/platforms/${QTPLUGIN_PLATFORM_FILE}" DESTINATION "${TIGER_INSTALL}/plugins/platforms")

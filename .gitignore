@@ -4,5 +4,6 @@ build_cmake_win64/*
 build_ver_win64/*
 cmake_build_unixmake/*
 cmake_build_version/*
+cmake_rpi_debug/*
 CMakeLists.txt.user
 source/versioner/Build/*

@@ -58,8 +58,28 @@ if (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
 	set(CMAKE_SYSTEM_PROCESSOR arm)
 	set(CMAKE_SYSTEM_VERSION 1)
 
+	set(TIGER_RASPBIAN_TOOLCHAIN "~/Disk/RPi/rsapi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64" CACHE PATH "Sysroot Path")
+
 	# Specify the compilers
-	set(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
+	set(CMAKE_C_COMPILER "${TIGER_RASPBIAN_TOOLCHAIN}/bin/arm-linux-gnueabihf-gcc")
+	set(CMAKE_CXX_COMPILER "${TIGER_RASPBIAN_TOOLCHAIN}/bin/arm-linux-gnueabihf-g++")
+	
+	set(TIGER_RASPBIAN_SYSROOT "~/Disk/RPi/rsapi/sysroot" CACHE PATH "Sysroot Path")
+	set(CMAKE_SYSROOT ${TIGER_RASPBIAN_SYSROOT})
+		
+	# where is the target environment
+	set(CMAKE_FIND_ROOT_PATH ${TIGER_RASPBIAN_TOOLCHAIN})
+
+	# search for programs in the build host directories
+	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+
+	# for libraries and headers in the target directories
+	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+	
+	set(CODEC_LIBRARIES 
+else (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
+
 endif (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
 
 if (OMEGA_WIN32)
@@ -78,7 +98,11 @@ elseif (OMEGA_MACOSX)
 	set(TIGER_PLATFORM "Mac64")
 	set(TIGER_COMPILER "GCC4.0")
 elseif (OMEGA_LINUX)
-	set(TIGER_PLATFORM "Linux")
+	if (${TIGER_RASPBIAN_BUILD})
+		set(TIGER_PLATFORM "RPi2")
+	else (${TIGER_RASPBIAN_BUILD})
+		set(TIGER_PLATFORM "Linux")
+	endif (${TIGER_RASPBIAN_BUILD})
 	set(TIGER_COMPILER "GCC4.0")
 endif (OMEGA_WIN32)
 
@@ -113,7 +137,8 @@ elseif (OMEGA_MACOSX)
 	set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 elseif (OMEGA_LINUX)
 	add_definitions(-DOMEGA_LINUX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -std=c++11")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpermissive")
 endif (OMEGA_WIN32)
 
 include_directories(AFTER "${ROOT_PROJECT_PATH}/source" )
