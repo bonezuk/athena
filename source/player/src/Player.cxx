@@ -47,6 +47,8 @@ Player::Player(QWidget *parent,Qt::WindowFlags f) : QDialog(parent,f),
 	cLayout->setContentsMargins(0,0,0,0);
 	ui.m_controlFrame->setLayout(cLayout);
 
+	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+
 	m_playListScrollArea = new QFixedHorizontalScrollArea(this);
 	m_playListScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	m_playListScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
