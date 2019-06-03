@@ -281,7 +281,7 @@ void PlayerController::newPlayer()
 	QSettings wSettings;
 
 #if defined(OMEGA_MACOSX)
-	playerDlg = new Player(0,Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+	playerDlg = new Player(0,Qt::Window);
 #else
 	playerDlg = new Player(0,Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 #endif
