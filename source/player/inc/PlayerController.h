@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/Player.h"
+#include "daemon/inc/MusicClient.h"
 
 #include <QSplashScreen>
 
@@ -32,6 +33,8 @@ class PlayerController : public QObject
 		static PlayerController *instance();
 		
         QSharedPointer<audioio::AOBase> audio();
+        
+        QSharedPointer<daemon::MusicClient> client();
 
 		QTimer *cliTimer();
 		
@@ -59,6 +62,7 @@ class PlayerController : public QObject
 		static PlayerController *m_instance;
 		
         QSharedPointer<audioio::AOBase> m_audio;
+        QSharedPointer<daemon::MusicClient> m_client;
 	
 		Player *m_playerDialog;
 
@@ -78,6 +82,7 @@ class PlayerController : public QObject
 		QAction *m_selectAllAction;
 		QAction *m_shuffleAction;
 		QAction *m_repeatAction;
+		QAction *m_connectAction;
 
 #if defined (OMEGA_MACOSX)
 		QAction *m_addFilesActionMacMenu;
@@ -114,6 +119,8 @@ class PlayerController : public QObject
 		QSplashScreen *m_splashScreen;
 		
 		common::ProcessThread *m_processThread;
+		
+		network::http::HTTPClientService *m_webClientService;
 		
 		PlayerController();
 		
@@ -155,7 +162,7 @@ class PlayerController : public QObject
 		void onSelectAll();
 		void onSettings();
 		void onAbout();
-				
+		
 		void onCLITimer();
 		
 		void onPlayerDone(int result);
@@ -163,6 +170,8 @@ class PlayerController : public QObject
 		
 		void onShuffle(bool flag);
 		void onRepeat(bool flag);
+		
+		void onConnect();
 };
 
 //-------------------------------------------------------------------------------------------
@@ -184,6 +193,13 @@ inline QTimer *PlayerController::cliTimer()
 inline QSharedPointer<audioio::AOBase> PlayerController::audio()
 {
 	return m_audio;
+}
+
+//-------------------------------------------------------------------------------------------
+
+inline QSharedPointer<daemon::MusicClient> PlayerController::client()
+{
+	return m_client;
 }
 
 //-------------------------------------------------------------------------------------------

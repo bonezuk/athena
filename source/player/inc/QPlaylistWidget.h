@@ -99,6 +99,8 @@ class QPlaylistWidget : public QWidget
 		virtual void addDirectory(const QString& name,bool recursive,QPLItemBase *prevItem=0);
 		virtual void savePlaylist(const QString& fileName,bool selectFlag);
 		
+		void addTracks(QVector<track::info::InfoSPtr>& trackItems,QPLItemBase *prevItem = 0,bool sortFlag = true);
+		
 		void setFont(const QFont& f,int size);
 		
 		virtual QPLItemBase *currentPlayItem();
@@ -264,7 +266,6 @@ class QPlaylistWidget : public QWidget
 		void buildTrackList(QVector<QPair<track::info::InfoSPtr,int> >& items,QList<QPLItemBase *>& list);
 		void buildInfoList(QVector<QPLItemBase *>& list,QVector<QPair<track::info::InfoSPtr,int> >& infoList);
 		
-		void addTracks(QVector<track::info::InfoSPtr>& trackItems,QPLItemBase *prevItem = 0,bool sortFlag = true);
 		void addTracks(QVector<QPair<track::info::InfoSPtr,int> >& trackItems,QPLItemBase *prevItem);
 
 		void removeTracks(QVector<QPLItemBase *>& trackItems);

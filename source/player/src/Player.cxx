@@ -2,12 +2,14 @@
 #include "player/inc/Player.h"
 #include "player/inc/Settings.h"
 #include "player/inc/PlayerController.h"
+#include "player/inc/ConnectToDaemonDialog.h"
 
 #if defined(OMEGA_MACOSX)
 #include "audioio/inc/AOQueryCoreAudio.h"
 #endif
 
 #include <QBitmap>
+#include <QMessageBox>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -36,7 +38,8 @@ Player::Player(QWidget *parent,Qt::WindowFlags f) : QDialog(parent,f),
 	m_loadFileList(),
 	m_loadDirectoryList(),
 	m_savePlaylistName(),
-	m_savePlaylistFilter()
+	m_savePlaylistFilter(),
+	m_isConnected(false)
 {
 	ui.setupUi(this);
 	
@@ -1916,6 +1919,83 @@ void Player::onShuffle(bool on)
 void Player::onRepeat(bool on)
 {
 	PlayerController::instance()->updateRepeat(on);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::clearPlaylistAndPreserve()
+{
+	m_playList->saveCurrentPlaylist();
+	m_playList->doSelectAll();
+	m_playList->doDelete();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::restorePreservedPlaylist()
+{
+	m_playList->doSelectAll();
+	m_playList->doDelete();
+	m_playList->loadCurrentPlaylist();
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool Player::isConnected() const
+{
+	return m_isConnected;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onConnect()
+{
+	ConnectToDaemonDialog dlg(this);
+	
+	if(dlg.exec())
+	{
+		QString hostName = dlg.hostName();
+		if(!hostName.isEmpty())
+		{
+			clearPlaylistAndPreserve();
+			
+			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onLoadTracks(QVector<QSharedPointer<track::info::Info> >&)),
+				this, SLOT(onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >&)));
+			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onError(const QString&)),
+				this, SLOT(onConnectionError(const QString&)));
+				
+			PlayerController::instance()->client()->connect(hostName);
+			
+			m_isConnected = true;
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onDisconnect()
+{
+	QObject::disconnect(PlayerController::instance()->client().data(), SIGNAL(onLoadTracks(QVector<QSharedPointer<track::info::Info> >&)),
+		this, SLOT(onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >&)));
+				
+	m_isConnected = false;
+	restorePreservedPlaylist();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onConnectionError(const QString& err)
+{
+	QString msgStr = QString("Error in connection to Omega Music Daemon.\nDetails : %1").arg(err);
+	QMessageBox::critical(this, "Connection Error", msgStr);
+	onDisconnect();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >& tracks)
+{
+	m_playList->addTracks(tracks);
 }
 
 //-------------------------------------------------------------------------------------------

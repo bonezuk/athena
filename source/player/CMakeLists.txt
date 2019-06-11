@@ -1,4 +1,5 @@
 set( PLAYER_UI
+	inc/ConnectToDaemonDialog.ui
 	inc/NoASIODriverWidget.ui
 	inc/Player.ui
 	inc/ProgressMessageDialog.ui
@@ -11,6 +12,7 @@ set( PLAYER_UI
 
 set( PLAYER_HEADER
 	inc/CLIPipe.h
+	inc/ConnectToDaemonDialog.h
 	inc/ITunesConfig.h
 	inc/NoASIODriverDialog.h
 	inc/Player.h
@@ -38,6 +40,7 @@ set( PLAYER_HEADER
 
 set( PLAYER_SOURCE
 	src/CLIPipe.cxx
+	src/ConnectToDaemonDialog.cxx
 	src/ITunesConfig.cxx
 	src/Main.cxx
 	src/NoASIODriverDialog.cxx

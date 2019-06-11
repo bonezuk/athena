@@ -50,7 +50,7 @@ elseif (OMEGA_LINUX)
 	set(LIBEXT "so")
 endif (OMEGA_WIN32)
 
-set( OMEGA_LIBRARIES audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 )
+set( OMEGA_LIBRARIES audioio daemon blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo violetomega whiteomega widget xml2 )
 
 if (OMEGA_LINUX AND ${TIGER_RASPBIAN_BUILD})
 	INCLUDE(CMakeForceCompiler)

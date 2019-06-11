@@ -37,6 +37,7 @@ PlayerController::PlayerController() : QObject(),
 	m_pasteAction(0),
 	m_deleteAction(0),
 	m_selectAllAction(0),
+	m_connectAction(0),
 #if defined (OMEGA_MACOSX)
 	m_addFilesActionMacMenu(0),
 	m_addFolderActionMacMenu(0),
@@ -121,6 +122,10 @@ void PlayerController::onStart()
 
 	network::Resource::instance();
 	network::Controller::ControllerSPtr ctrl(network::Controller::instance());
+	m_webClientService = dynamic_cast<network::http::HTTPClientService *>(ctrl->newService("http_client"));
+	
+	QSharedPointer<daemon::MusicClient> nClient(new daemon::MusicClient(this));
+	m_client = nClient;
 	
 	QSharedPointer<ITunesConfig> pITunesConfig(new ITunesConfig);
 	m_iTunesConfig = pITunesConfig;
@@ -242,6 +247,12 @@ void PlayerController::onStop()
         QSharedPointer<audioio::AOBase> eAudio;
 		audioio::AOBase::end(m_audio);
 		m_audio = eAudio;
+	}
+
+	if(m_webClientService != 0)
+	{
+		network::Controller::ControllerSPtr ctrl(network::Controller::instance());
+		ctrl->deleteService(m_webClientService);
 	}
 
 	network::Controller::end();
@@ -424,6 +435,8 @@ void PlayerController::createActions()
 #endif
 	connect(m_aboutAction,SIGNAL(triggered()),this,SLOT(onAbout()));
 
+	m_connectAction = new QAction(tr("Connect to Daemon"), this);
+	connect(m_connectAction, SIGNAL(triggered()), this, SLOT(onConnect()));
 
 #if defined(OMEGA_MACOSX)
 
@@ -799,6 +812,32 @@ void PlayerController::onSettings()
 
 //-------------------------------------------------------------------------------------------
 
+void PlayerController::onConnect()
+{
+	if(m_playerDialog != 0)
+	{
+		if(!m_playerDialog->isConnected())
+		{
+			m_playerDialog->onConnect();
+		}
+		else
+		{
+			m_playerDialog->onDisconnect();
+		}
+		
+		if(!m_playerDialog->isConnected())
+		{
+			m_connectAction->setText(tr("Connect to Daemon"));
+		}
+		else
+		{
+			m_connectAction->setText(tr("Disconnect from Daemon"));
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void PlayerController::setPlayText(const QString& text)
 {
 	m_playAction->setText(text);
@@ -836,7 +875,10 @@ void PlayerController::createContextMenu(QMenu& m,bool pasteFlag)
 	m.addAction(m_selectAllAction);
 	m.addSeparator();
 	m.addAction(m_deleteAction);
-
+	
+	m.addSeparator();
+	m.addAction(m_connectAction);
+	
 	m.addSeparator();
 	m.addAction(m_preferenceAction);
 	m.addAction(m_aboutAction);

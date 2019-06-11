@@ -101,7 +101,8 @@ class TRACK_INFO_EXPORT Info : public QObject
 			e_InfoXKCD,
 			e_InfoAPE,
 			e_InfoAIFF,
-			e_InfoWAV
+			e_InfoWAV,
+			e_InfoDaemon
 		} Type;
 		
 		typedef enum

@@ -99,7 +99,9 @@ class Player : public QDialog
 		QString m_loadDirectoryList;
 		QString m_savePlaylistName;
 		QString m_savePlaylistFilter;
-
+		
+		bool m_isConnected;
+		
 		QString getCurrentDirectory() const;
 		void setCurrentDirectory(const QString& name,bool dirFlag) const;
 		
@@ -150,6 +152,10 @@ class Player : public QDialog
 		
 		void doPaintUpdate();
 
+		bool isConnected() const;		
+		void clearPlaylistAndPreserve();
+		void restorePreservedPlaylist();
+		
 	protected slots:
 	
 		void onAddFiles();
@@ -200,6 +206,11 @@ class Player : public QDialog
 
 		void onShuffle(bool on);
 		void onRepeat(bool on);
+		
+		void onConnect();
+		void onDisconnect();
+		void onConnectionError(const QString& err);
+		void onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >& tracks);
 };
 
 //-------------------------------------------------------------------------------------------
