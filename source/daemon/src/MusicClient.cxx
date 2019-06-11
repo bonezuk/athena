@@ -21,7 +21,7 @@ MusicClient::~MusicClient()
 
 //-------------------------------------------------------------------------------------------
 
-void MusicClient::connect(const QString& hostName)
+void MusicClient::runTrackRequest(const QString& hostName)
 {
 	QSharedPointer<network::http::HTTPClient> client = m_webClientService->getClient();
 	client->setHost(hostName, MUSIC_DAEMON_PORT);
@@ -40,6 +40,41 @@ void MusicClient::connect(const QString& hostName)
 	tran.request() = req;
 	
 	client->run();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicClient::runEventRequest(const QString& hostName)
+{
+	QSharedPointer<network::http::HTTPClient> client = m_webClientService->getClient();
+	client->setHost(hostName, MUSIC_DAEMON_PORT);
+	int id = client->newTransaction();
+	network::http::HTTPCTransaction& tran = client->transaction(id);
+	
+	QObject::connect(client.data(), SIGNAL(onTransactionError(network::http::HTTPCTransaction*,const QString&)),
+		this, SLOT(onTransactionError(network::http::HTTPCTransaction*,const QString&)));
+	QObject::connect(client.data(), SIGNAL(onError(network::http::HTTPClient*,const QString&)),
+		this, SLOT(onError(network::http::HTTPClient*,const QString&)));
+	QObject::connect(client.data(), SIGNAL(onComplete(network::http::HTTPClient*)),
+		this, SLOT(onEventComplete(network::http::HTTPClient*)));
+	QObject::connect(client.data(), SIGNAL(onStream(network::http::HTTPCTransaction*,const network::http::EventStreamItem&)),
+		this, SLOT(onEventStream(network::http::HTTPCTransaction*,const network::http::EventStreamItem&)));
+		
+	network::http::Unit req;
+	req.request(network::http::Unit::e_Get, "/event");
+	tran.request() = req;
+	tran.setStreaming(true);
+	
+	client->run();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicClient::connect(const QString& hostName)
+{
+	m_hostName = hostName;
+	runTrackRequest(hostName);
+	runEventRequest(hostName);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -82,10 +117,6 @@ void MusicClient::processTrackList(network::http::HTTPCTransaction *trans)
 
 		QJsonDocument doc = QJsonDocument::fromJson(jsonArr);
 		
-		bool isDoc = doc.isObject();
-		bool isArray = doc.isArray();
-		bool isNull = doc.isNull();
-
 		if(doc.isObject())
 		{
 			QJsonObject root = doc.object();
@@ -127,6 +158,34 @@ void MusicClient::processTrackList(network::http::HTTPCTransaction *trans)
 	}
 	
 	emit onLoadTracks(trackList);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicClient::onEventComplete(network::http::HTTPCTransaction *trans)
+{
+	QString errMsg = "Connection to daemon " + m_hostName + " has been disconnected";
+	emit onError(errMsg);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicClient::onEventStream(network::http::HTTPCTransaction *trans,const network::http::EventStreamItem& item)
+{
+	QJsonDocument doc;
+	
+	doc = QJsonDocument::fromJson(item.data().toUtf8());
+	if(doc.isObject())
+	{
+		QJsonObject eventData(doc.object());
+	
+		if(item.event() == "onAudioTime")
+		{
+			int trackId = eventData["trackId"].toInt();
+			tuint64 tLen = static_cast<tuint64>(eventData["playTime"].toVariant().toULongLong());
+			emit onAudioTime(trackId, tLen);
+		}
+	}
 }
 
 //-------------------------------------------------------------------------------------------

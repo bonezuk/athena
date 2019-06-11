@@ -211,6 +211,7 @@ class Player : public QDialog
 		void onDisconnect();
 		void onConnectionError(const QString& err);
 		void onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >& tracks);
+		void onDaemonAudioTime(int id, tuint64 t);
 };
 
 //-------------------------------------------------------------------------------------------

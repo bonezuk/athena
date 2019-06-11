@@ -1961,6 +1961,8 @@ void Player::onConnect()
 			
 			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onLoadTracks(QVector<QSharedPointer<track::info::Info> >&)),
 				this, SLOT(onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >&)));
+			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onAudioTime(int, tuint64)),
+				this, SLOT(onDaemonAudioTime(int, tuint64)));
 			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onError(const QString&)),
 				this, SLOT(onConnectionError(const QString&)));
 				
@@ -1977,6 +1979,10 @@ void Player::onDisconnect()
 {
 	QObject::disconnect(PlayerController::instance()->client().data(), SIGNAL(onLoadTracks(QVector<QSharedPointer<track::info::Info> >&)),
 		this, SLOT(onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >&)));
+	QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onAudioTime(int, tuint64)),
+		this, SLOT(onDaemonAudioTime(int, tuint64)));
+	QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onError(const QString&)),
+		this, SLOT(onConnectionError(const QString&)));
 				
 	m_isConnected = false;
 	restorePreservedPlaylist();
@@ -1996,6 +2002,24 @@ void Player::onConnectionError(const QString& err)
 void Player::onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >& tracks)
 {
 	m_playList->addTracks(tracks, 0, false);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onDaemonAudioTime(int id, tuint64 t)
+{
+	bool paintF = false;
+	
+	if(m_state == e_Stop)
+	{
+		m_playControls->setPlaying(true);
+		m_state = e_Play;
+		doPaintUpdate();
+		PlayerController::instance()->setPlayText("Pause");
+		paintF = true;
+	}
+	m_playList->updateCurrentDaemonTrack(id);
+	onAudioTime(t);
 }
 
 //-------------------------------------------------------------------------------------------

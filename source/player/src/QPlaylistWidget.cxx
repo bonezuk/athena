@@ -4551,6 +4551,66 @@ void QPlaylistWidget::removeTracksShuffleList(QPLItemBase *item)
 }
 
 //-------------------------------------------------------------------------------------------
+
+QPLItemBase *QPlaylistWidget::findDaemonTrack(QPLItemBase *item, int id)
+{
+	bool loop = true;
+	
+	while(item != 0 && loop)
+	{
+		if(item->isChildren())
+		{
+			QPLItemBase *cItem = findDaemonTrack(item->child(0), id);
+			if(cItem != 0)
+			{
+				item = cItem;
+				loop = false;
+			}
+		}
+		else if(item->type() == QPLItemBase::e_AlbumTrack || item->type() == QPLItemBase::e_Single)
+		{
+			if(item->info()->type() == track::info::Info::e_InfoDaemon)
+			{
+				QSharedPointer<track::info::DaemonInfo> pInfo = item->info().dynamicCast<track::info::DaemonInfo>();
+				if(pInfo->id() == id)
+				{
+					loop = false;
+				}
+			}
+		}
+		if(loop)
+		{
+			item = item->nextSibling();
+		}
+	}
+	return item;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void QPlaylistWidget::updateCurrentDaemonTrack(int id)
+{
+	bool found = false;
+	
+	if(m_currentPlayItem != 0)
+	{
+		if(m_currentPlayItem->info()->type() == track::info::Info::e_InfoDaemon)
+		{
+			QSharedPointer<track::info::DaemonInfo> pInfo = m_currentPlayItem->info().dynamicCast<track::info::DaemonInfo>();
+			found = (pInfo->id() == id);
+		}
+	}
+	if(!found && !m_playRootList.isEmpty())
+	{
+		QPLItemBase *playItem = findDaemonTrack(m_playRootList.at(0), id);
+		if(playItem != 0)
+		{
+			setCurrentPlayItem(playItem);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 // QFixedHorizontalScrollArea
 //-------------------------------------------------------------------------------------------
 

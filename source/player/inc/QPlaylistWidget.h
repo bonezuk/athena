@@ -99,7 +99,9 @@ class QPlaylistWidget : public QWidget
 		virtual void addDirectory(const QString& name,bool recursive,QPLItemBase *prevItem=0);
 		virtual void savePlaylist(const QString& fileName,bool selectFlag);
 		
+		// daemon interface
 		void addTracks(QVector<track::info::InfoSPtr>& trackItems,QPLItemBase *prevItem = 0,bool sortFlag = true);
+		void updateCurrentDaemonTrack(int id);
 		
 		void setFont(const QFont& f,int size);
 		
@@ -324,7 +326,10 @@ class QPlaylistWidget : public QWidget
 #if defined(OMEGA_MAC_STORE)		
 		virtual void dropEventProcessBookmarks(const QList<QUrl>& urlList);
 #endif
-
+		
+		// daemon specific methods
+		QPLItemBase *findDaemonTrack(QPLItemBase *item, int id);
+		
 	signals:
 
 		void onUpdate();
