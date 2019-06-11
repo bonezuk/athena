@@ -76,8 +76,16 @@ void MusicClient::processTrackList(network::http::HTTPCTransaction *trans)
 	
 	if(trans->response().response() == 200)
 	{
-		QJsonDocument doc = QJsonDocument::fromRawData(reinterpret_cast<const char *>(trans->responseData().GetData()), trans->responseData().GetSize());
+		const char *jsonTxt = reinterpret_cast<const char *>(trans->responseData().GetData());
+		int jsonLen = trans->responseData().GetSize();
+		QByteArray jsonArr(jsonTxt, jsonLen);
+
+		QJsonDocument doc = QJsonDocument::fromJson(jsonArr);
 		
+		bool isDoc = doc.isObject();
+		bool isArray = doc.isArray();
+		bool isNull = doc.isNull();
+
 		if(doc.isObject())
 		{
 			QJsonObject root = doc.object();
@@ -92,8 +100,8 @@ void MusicClient::processTrackList(network::http::HTTPCTransaction *trans)
 					QSharedPointer<track::info::DaemonInfo> item(new track::info::DaemonInfo(id, this));
 					
 					item->setFilename(track["filename"].toString());
-					common::TimeStamp tlen = static_cast<tuint64>(track["length"].toString().toULongLong());
-					item->length() = tlen;
+					tuint64 tLen = static_cast<tuint64>(track["length"].toVariant().toULongLong());
+					item->length() = tLen;
 					item->setBitrate(track["bitrate"].toInt());
 					item->setNoChannels(track["channels"].toInt());
 					item->setFrequency(track["frequency"].toInt());

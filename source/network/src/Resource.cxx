@@ -299,7 +299,7 @@ bool Resource::isLocal(const struct sockaddr_in *addr)
 
 tuint32 Resource::localIP()
 {
-	tuint32 lIP = static_cast<tuint32>(::inet_addr("127.0.0.1"));
+	tuint32 lIP = static_cast<tuint32>(ntohl(::inet_addr("127.0.0.1")));
 	QSet<tuint32>::const_iterator ppI;
 
 	buildLocalIP();
@@ -322,10 +322,10 @@ QString Resource::localIPName()
 	QString name;
 	tuint32 lIP = localIP();
 
-	name  = QString::number(lIP & 0x000000ff) + ".";
-	name += QString::number((lIP >>  8) & 0x000000ff) + ".";
+	name  = QString::number((lIP >> 24) & 0x000000ff) + ".";
 	name += QString::number((lIP >> 16) & 0x000000ff) + ".";
-	name += QString::number((lIP >> 24) & 0x000000ff);
+	name += QString::number((lIP >>  8) & 0x000000ff) + ".";
+	name += QString::number(lIP & 0x000000ff);
 	return name;
 }
 

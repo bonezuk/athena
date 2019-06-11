@@ -99,10 +99,6 @@ int main(int argc,char **argv)
 {
 	int res = 0;
 
-#if defined(OMEGA_WIN32)
-	::SetConsoleCtrlHandler(ctrlHandler,TRUE);
-#endif
-	
 	setupEnviroment(argv[0]);
 
 #if defined(OMEGA_WIN32)

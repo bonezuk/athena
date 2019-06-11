@@ -1995,7 +1995,7 @@ void Player::onConnectionError(const QString& err)
 
 void Player::onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >& tracks)
 {
-	m_playList->addTracks(tracks);
+	m_playList->addTracks(tracks, 0, false);
 }
 
 //-------------------------------------------------------------------------------------------

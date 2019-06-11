@@ -485,9 +485,9 @@ void MusicDaemon::onWebTrack(network::http::HTTPReceive *recieve)
 			if(tracksListJSON(lowId, highId, doc))
 			{
 				network::http::Unit hdr;
-				QByteArray data = doc.toJson(QJsonDocument::Compact);
+				QByteArray data = doc.toJson(); // (QJsonDocument::Compact);
 				network::NetArraySPtr body(new network::NetArray);
-				
+
 				hdr.response(200);
 				hdr.add("Content-Type", "application/json");
 				hdr.add("Content-Length", QString::number(data.length()));
