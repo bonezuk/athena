@@ -4588,7 +4588,7 @@ QPLItemBase *QPlaylistWidget::findDaemonTrack(QPLItemBase *item, int id)
 
 //-------------------------------------------------------------------------------------------
 
-void QPlaylistWidget::updateCurrentDaemonTrack(int id)
+bool QPlaylistWidget::updateCurrentDaemonTrack(int id)
 {
 	bool found = false;
 	
@@ -4606,8 +4606,10 @@ void QPlaylistWidget::updateCurrentDaemonTrack(int id)
 		if(playItem != 0)
 		{
 			setCurrentPlayItem(playItem);
+			found = true;
 		}
 	}
+	return found;
 }
 
 //-------------------------------------------------------------------------------------------

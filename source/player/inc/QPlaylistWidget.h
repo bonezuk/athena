@@ -101,7 +101,7 @@ class QPlaylistWidget : public QWidget
 		
 		// daemon interface
 		void addTracks(QVector<track::info::InfoSPtr>& trackItems,QPLItemBase *prevItem = 0,bool sortFlag = true);
-		void updateCurrentDaemonTrack(int id);
+		bool updateCurrentDaemonTrack(int id);
 		
 		void setFont(const QFont& f,int size);
 		

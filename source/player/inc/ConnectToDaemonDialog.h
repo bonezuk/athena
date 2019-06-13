@@ -18,7 +18,7 @@ class ConnectToDaemonDialog : public QDialog
 	Q_OBJECT
 	
 	public:
-		ConnectToDaemonDialog(QWidget *parent=0, Qt::WindowFlags f=0);
+		ConnectToDaemonDialog(const QString& name,QWidget *parent=0, Qt::WindowFlags f=0);
 		virtual ~ConnectToDaemonDialog();
 		
 		virtual const QString& hostName() const;

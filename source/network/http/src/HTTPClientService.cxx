@@ -36,6 +36,7 @@ Qt::HANDLE HTTPClientServiceEvent::threadId()
 
 HTTPClientService::HTTPClientService(QObject *parent) : TCPClientService(parent)
 {
+	qRegisterMetaType<network::http::EventStreamItem>("network::http::EventStreamItem");
 	m_serviceThreadId = QThread::currentThreadId();
 }
 

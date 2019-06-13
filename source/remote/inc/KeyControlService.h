@@ -39,6 +39,8 @@ class REMOTE_EXPORT KeyControlService : public KeyCodeStateEngine
 		virtual void startAssignment();
 		virtual void endAssignment();
 		
+		virtual void setExclusion(bool flag);
+
 	protected:
 	
         static QSharedPointer<KeyControlService> m_instance;
@@ -49,6 +51,7 @@ class REMOTE_EXPORT KeyControlService : public KeyCodeStateEngine
 		WinLIRCClient *m_lircClient;
 
 		int m_assignmentState;
+		bool m_isExclude;
 		
 		virtual void printError(const tchar *strE,const tchar *strR) const;
 	

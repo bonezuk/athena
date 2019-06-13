@@ -24,6 +24,8 @@ class DAEMON_EXPORT MusicClient : public QObject
 		virtual ~MusicClient();
 		
 		virtual void connect(const QString& hostName);
+		
+		virtual QString lastConnectedHost();
 	
 	private:
 		QString m_hostName;
@@ -32,6 +34,8 @@ class DAEMON_EXPORT MusicClient : public QObject
 		virtual void processTrackList(network::http::HTTPCTransaction *trans);
 		virtual void runTrackRequest(const QString& hostName);
 		virtual void runEventRequest(const QString& hostName);
+
+		virtual void setLastConnectedHost(const QString& hostName);
 
 	private slots:
 		void onTransactionError(network::http::HTTPCTransaction *trans,const QString& err);

@@ -7,14 +7,15 @@ namespace player
 {
 //-------------------------------------------------------------------------------------------
 
-ConnectToDaemonDialog::ConnectToDaemonDialog(QWidget *parent, Qt::WindowFlags f) : QDialog(parent, f),
+ConnectToDaemonDialog::ConnectToDaemonDialog(const QString& name, QWidget *parent, Qt::WindowFlags f) : QDialog(parent, f),
 	m_hostName()
 {
 	ui.setupUi(this);
+	ui.m_hostNameEdit->setText(name);
 	connect(ui.m_hostNameEdit, SIGNAL(textChanged(const QString&)), this, SLOT(onHostEdit(const QString&)));
 	connect(ui.m_connectButton, SIGNAL(clicked()), this, SLOT(onConnect()));
 	connect(ui.m_cancelButton, SIGNAL(clicked()), this, SLOT(onCancel()));
-	ui.m_connectButton->setEnabled(false);
+	ui.m_connectButton->setEnabled(!name.isEmpty());
 }
 
 //-------------------------------------------------------------------------------------------

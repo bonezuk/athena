@@ -28,6 +28,8 @@ class HTTP_EXPORT Query
 		Query(const QString& s);
 		Query(const Query& rhs);
 		
+		bool isEmpty() const;
+
 		void string(QString& str) const;
 		
 		QString value() const;

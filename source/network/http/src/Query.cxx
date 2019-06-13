@@ -54,6 +54,13 @@ void Query::printError(const tchar *strR,const tchar *strE) const
 
 //-------------------------------------------------------------------------------------------
 
+bool Query::isEmpty() const
+{
+	return m_order.isEmpty();
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Query::clear()
 {
 	m_order.clear();

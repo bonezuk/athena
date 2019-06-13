@@ -21,6 +21,40 @@ MusicClient::~MusicClient()
 
 //-------------------------------------------------------------------------------------------
 
+QString MusicClient::lastConnectedHost()
+{
+	QString lastHost;
+	QSettings settings;
+
+	settings.beginGroup("daemon");
+	if(settings.contains("last_host"))
+	{
+		lastHost = settings.value("last_host").toString();
+	}
+	else
+	{
+		lastHost = "localhost";
+	}
+	settings.endGroup();
+	return lastHost;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void MusicClient::setLastConnectedHost(const QString& hostName)
+{
+	if(!hostName.isEmpty())
+	{
+		QSettings settings;
+
+		settings.beginGroup("daemon");
+		settings.setValue("last_host", QVariant(hostName));
+		settings.endGroup();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void MusicClient::runTrackRequest(const QString& hostName)
 {
 	QSharedPointer<network::http::HTTPClient> client = m_webClientService->getClient();
@@ -99,6 +133,10 @@ void MusicClient::onTransaction(network::http::HTTPCTransaction *trans)
 {
 	if(trans->request().resource() == "/track")
 	{
+		if(trans->request().query().isEmpty())
+		{
+			setLastConnectedHost(m_hostName);
+		}
 		processTrackList(trans);
 	}
 }

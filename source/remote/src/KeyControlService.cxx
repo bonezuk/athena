@@ -288,7 +288,7 @@ bool KeyControlService::onKeyPress(QKeyEvent *evt)
 {
 	bool res = false;
 
-	if(evt!=0 && m_assignmentState==0)
+	if(evt != 0 && m_assignmentState == 0 && !m_isExclude)
 	{
 		KeyCode keyCode = getKeyCodeForEvent(evt);
 		
@@ -326,7 +326,7 @@ bool KeyControlService::onKeyRelease(QKeyEvent *evt)
 {
 	bool res = false;
 
-	if(evt!=0 && m_assignmentState==0)
+	if(evt != 0 && m_assignmentState == 0 && !m_isExclude)
 	{
 		KeyCode keyCode = getKeyCodeForEvent(evt);
 		
@@ -419,6 +419,13 @@ void KeyControlService::startAssignment()
 void KeyControlService::endAssignment()
 {
 	m_assignmentState = 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void KeyControlService::setExclusion(bool flag)
+{
+	m_isExclude = flag;
 }
 
 //-------------------------------------------------------------------------------------------

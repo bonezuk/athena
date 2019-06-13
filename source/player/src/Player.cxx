@@ -1950,8 +1950,9 @@ bool Player::isConnected() const
 
 void Player::onConnect()
 {
-	ConnectToDaemonDialog dlg(this);
+	ConnectToDaemonDialog dlg(PlayerController::instance()->client()->lastConnectedHost(), this);
 	
+	remote::KeyControlService::instance()->setExclusion(true);
 	if(dlg.exec())
 	{
 		QString hostName = dlg.hostName();
@@ -1971,6 +1972,7 @@ void Player::onConnect()
 			m_isConnected = true;
 		}
 	}
+	remote::KeyControlService::instance()->setExclusion(false);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -2010,16 +2012,19 @@ void Player::onDaemonAudioTime(int id, tuint64 t)
 {
 	bool paintF = false;
 	
-	if(m_state == e_Stop)
+	if(m_playList->updateCurrentDaemonTrack(id))
 	{
-		m_playControls->setPlaying(true);
-		m_state = e_Play;
-		doPaintUpdate();
-		PlayerController::instance()->setPlayText("Pause");
-		paintF = true;
+		if(m_state == e_Stop)
+		{
+			m_playControls->setPlaying(true);
+			m_playControls->setPlayback(m_playList->currentPlayItem());
+			m_state = e_Play;
+			doPaintUpdate();
+			PlayerController::instance()->setPlayText("Pause");
+			paintF = true;
+		}
+		onAudioTime(t);
 	}
-	m_playList->updateCurrentDaemonTrack(id);
-	onAudioTime(t);
 }
 
 //-------------------------------------------------------------------------------------------
