@@ -155,6 +155,7 @@ class Player : public QDialog
 		bool isConnected() const;		
 		void clearPlaylistAndPreserve();
 		void restorePreservedPlaylist();
+		bool daemonSetPlayback(int id);
 		
 	protected slots:
 	
@@ -212,6 +213,11 @@ class Player : public QDialog
 		void onConnectionError(const QString& err);
 		void onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >& tracks);
 		void onDaemonAudioTime(int id, tuint64 t);
+
+		void onDaemonAudioPlay(int id);
+		void onDaemonAudioPause(int id);
+		void onDaemonAudioStop();
+
 };
 
 //-------------------------------------------------------------------------------------------

@@ -164,24 +164,35 @@ void HTTPCTransaction::setComplete(bool isComplete)
 }
 
 //-------------------------------------------------------------------------------------------
+
+bool HTTPCTransaction::isLast() const
+{
+	return (request().data("Connection") == "close") ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
 // HTTPClient
 //-------------------------------------------------------------------------------------------
 
 HTTPClient::HTTPClient(Service *svr,QObject *parent) : TCPConnClientSocket(svr,parent),
 	m_httpCService(0),
+	m_nextTransactionId(1),
+	m_newTransactions(),
 	m_transactions(),
+	m_currentTransaction(0),
+	m_doneTransactions(),
 	m_hostName(),
 	m_hostPort(80),
 	m_proxyName(),
 	m_proxyPort(80),
-	m_currentID(0),
 	m_state(6),
 	m_bodyOffset(0),
 	m_bodyLength(0),
 	m_chunkState(0),
 	m_chunkLine(),
 	m_chunkArray(),
-	m_lock()
+	m_lock(),
+	m_isShutdown(false)
 {
 	m_threadId = QThread::currentThreadId();
 }
@@ -192,12 +203,30 @@ HTTPClient::~HTTPClient()
 {
 	try
 	{
+		QMap<int, HTTPCTransaction *>::iterator ppJ;
 		QList<HTTPCTransaction *>::iterator ppI;
 		
+		while(ppJ = m_newTransactions.begin(), ppJ != m_newTransactions.end())
+		{
+			HTTPCTransaction *trans = ppJ.value();
+			m_newTransactions.erase(ppJ);
+			delete trans;
+		}
 		while(ppI=m_transactions.begin(),ppI!=m_transactions.end())
 		{
 			HTTPCTransaction *trans = *ppI;
 			m_transactions.erase(ppI);
+			delete trans;
+		}
+		if(m_currentTransaction != 0)
+		{
+			delete m_currentTransaction;
+			m_currentTransaction = 0;
+		}
+		while(ppI=m_doneTransactions.begin(),ppI!=m_doneTransactions.end())
+		{
+			HTTPCTransaction *trans = *ppI;
+			m_doneTransactions.erase(ppI);
 			delete trans;
 		}
 	}
@@ -255,25 +284,37 @@ void HTTPClient::setProxy(const QString& host,tint port)
 
 //-------------------------------------------------------------------------------------------
 
-tint HTTPClient::newTransaction()
+HTTPCTransaction& HTTPClient::newTransaction(bool isLast)
 {
-	tint id;
-	HTTPCTransaction *trans;
-	
-	id = m_transactions.size();
-	trans = new HTTPCTransaction(this,id);
-	m_transactions.append(trans);
-	return id;
+	m_lock.lock();
+	HTTPCTransaction *trans = new HTTPCTransaction(this, m_nextTransactionId);
+	m_newTransactions.insert(trans->id(), trans);
+	m_nextTransactionId++;
+	m_lock.unlock();
+	if(isLast)
+	{
+		trans->request().add("Connection","close");
+	}
+	else
+	{
+		trans->request().add("Connection","keep-alive");
+	}
+	return *trans;
 }
 
 //-------------------------------------------------------------------------------------------
 
-HTTPCTransaction& HTTPClient::transaction(tint id)
+void HTTPClient::enqueueTransaction(tint id)
 {
-	HTTPCTransaction *trans;
-	
-	trans = m_transactions.at(id);
-	return *trans;
+	m_lock.lock();
+	QMap<int, HTTPCTransaction *>::iterator ppI = m_newTransactions.find(id);
+	if(ppI != m_newTransactions.end())
+	{
+		HTTPCTransaction *trans = ppI.value();
+		m_newTransactions.erase(ppI);
+		m_transactions.append(trans);
+	}
+	m_lock.unlock();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -289,6 +330,13 @@ void HTTPClient::run()
 	{
 		doRun();
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void HTTPClient::shutdown()
+{
+	m_isShutdown = true;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -343,33 +391,50 @@ bool HTTPClient::process()
 
 	while(loop && res)
 	{
-		if(m_currentID < m_transactions.size())
+		if(!m_isShutdown)
 		{
-			switch(m_state)
+			m_lock.lock();
+			if(m_currentTransaction == 0)
 			{
-				case 0:
-					res = doConnect();
-					break;
+				if(!m_transactions.isEmpty())
+				{
+					m_currentTransaction = m_transactions.takeFirst();
+				}
+			}
+			m_lock.unlock();
+			
+			if(m_currentTransaction != 0)
+			{
+				switch(m_state)
+				{
+					case 0:
+						res = doConnect();
+						break;
 					
-				case 1:
-					doRequest();
-					break;
+					case 1:
+						doRequest();
+						break;
 					
-				case 2:
-					doResponse(loop);
-					break;
+					case 2:
+						doResponse(loop);
+						break;
 					
-				case 3:
-					doResData(loop);
-					break;
+					case 3:
+						doResData(loop);
+						break;
 					
-				case 4:
-					doResChunked(loop);
-					break;
+					case 4:
+						doResChunked(loop);
+						break;
 					
-				case 5:
-					doResStreamed(loop);
-					break;
+					case 5:
+						doResStreamed(loop);
+						break;
+				}
+			}
+			else
+			{
+				loop = false;
 			}
 		}
 		else
@@ -388,9 +453,26 @@ bool HTTPClient::process()
 
 //-------------------------------------------------------------------------------------------
 
+void HTTPClient::currentTransactionDone()
+{
+	if(m_currentTransaction != 0)
+	{
+		// Remove done after sufficient time so they don't stack
+		// - i.e. enough time for called slots to finish processing
+		while(m_doneTransactions.size() > 2)
+		{
+			delete m_doneTransactions.takeFirst();
+		}
+		m_doneTransactions.append(m_currentTransaction);
+		m_currentTransaction = 0;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool HTTPClient::doConnect()
 {
-	QList<HTTPCTransaction *>::iterator ppI;
+	HTTPCTransaction *trans = m_currentTransaction;
 	QString cHost,err;
 	bool res = true;
 	
@@ -403,37 +485,27 @@ bool HTTPClient::doConnect()
 		cHost = m_hostName + ":" + QString::number(m_hostPort);
 	}
 	
-	for(ppI=m_transactions.begin();ppI!=m_transactions.end();++ppI)
+	trans->request().setVersion(1,1);
+	trans->request().add("Host",cHost);
+	if(trans->isStreaming())
 	{
-		HTTPCTransaction *trans = *ppI;
-		
-		trans->request().setVersion(1,1);
-		trans->request().add("Host",cHost);
-		if(trans==m_transactions.last() && !trans->isStreaming())
+		trans->request().add("Accept","text/event-stream");
+	}
+	if(!m_proxyName.isEmpty())
+	{
+		trans->request().setProxyConnection(m_hostName,m_hostPort);
+	}
+	
+	if(!isConnected())
+	{
+		if(!m_proxyName.isEmpty())
 		{
-			trans->request().add("Connection","close");
+			res = open(m_proxyName,m_proxyPort);
 		}
 		else
 		{
-			trans->request().add("Connection","keep-alive");
-			if(trans->isStreaming())
-			{
-				trans->request().add("Accept","text/event-stream");
-			}
+			res = open(m_hostName,m_hostPort);
 		}
-		if(!m_proxyName.isEmpty())
-		{
-			trans->request().setProxyConnection(m_hostName,m_hostPort);
-		}
-	}
-	
-	if(!m_proxyName.isEmpty())
-	{
-		res = open(m_proxyName,m_proxyPort);
-	}
-	else
-	{
-		res = open(m_hostName,m_hostPort);
 	}
 	
 	if(res)
@@ -452,7 +524,7 @@ bool HTTPClient::doConnect()
 
 void HTTPClient::doRequest()
 {
-	HTTPCTransaction *trans = m_transactions.at(m_currentID);
+	HTTPCTransaction *trans = m_currentTransaction;
 	Unit& req = trans->request();
 	NetArray& reqData = trans->requestData();
 	QString err;
@@ -494,7 +566,7 @@ void HTTPClient::doRequest()
 	if(!res)
 	{
 		emit onTransactionError(trans,err);
-		m_currentID++;
+		currentTransactionDone();
 		m_state = 1;
 	}
 }
@@ -503,7 +575,7 @@ void HTTPClient::doRequest()
 
 void HTTPClient::doResponse(bool& loop)
 {
-	HTTPCTransaction *trans = m_transactions.at(m_currentID);
+	HTTPCTransaction *trans = m_currentTransaction;
 	Unit& response = trans->response();
 	QString line,err;
 	bool loopF,end = false,res = true;
@@ -567,7 +639,7 @@ void HTTPClient::doResponse(bool& loop)
 			else
 			{
 				emit onTransaction(trans);
-				m_currentID++;
+				currentTransactionDone();
 				m_state = 1;
 			}
 		}
@@ -585,7 +657,7 @@ void HTTPClient::doResponse(bool& loop)
 	if(!res)
 	{
 		emit onTransactionError(trans,err);
-		m_currentID++;
+		currentTransactionDone();
 		m_state = 1;
 	}	
 }
@@ -650,7 +722,7 @@ bool HTTPClient::isChunked(const Unit& item) const
 void HTTPClient::doResData(bool& loop)
 {
 	tint len,amount = m_bodyLength - m_bodyOffset;
-	HTTPCTransaction *trans = m_transactions.at(m_currentID);
+	HTTPCTransaction *trans = m_currentTransaction;
 	NetArray& data = trans->responseData();
 	tchar *x = reinterpret_cast<tchar *>(data.GetData());
 	QString err;
@@ -681,14 +753,14 @@ void HTTPClient::doResData(bool& loop)
 	else
 	{
 		emit onTransaction(trans);
-		m_currentID++;
+		currentTransactionDone();
 		m_state = 1;
 	}
 	
 	if(!res)
 	{
 		emit onTransactionError(trans,err);
-		m_currentID++;
+		currentTransactionDone();
 		m_state = 1;
 	}
 }
@@ -697,7 +769,7 @@ void HTTPClient::doResData(bool& loop)
 
 void HTTPClient::doResChunked(bool& loop)
 {
-	HTTPCTransaction *trans = m_transactions.at(m_currentID);
+	HTTPCTransaction *trans = m_currentTransaction;
 	QString err;
 	bool res = true;
 	
@@ -783,7 +855,7 @@ void HTTPClient::doResChunked(bool& loop)
 				
 				if(getNextLine(line))
 				{
-					m_currentID++;
+					currentTransactionDone();
 					m_state = 1;
 				}
 				else
@@ -801,7 +873,7 @@ void HTTPClient::doResChunked(bool& loop)
 	if(!res)
 	{
 		emit onTransactionError(trans,err);
-		m_currentID++;
+		currentTransactionDone();
 		m_state = 1;
 	}
 }
@@ -899,9 +971,10 @@ bool HTTPClient::parseChunkHeader(const QString& str,tint& size,QString& field)
 
 void HTTPClient::doResStreamed(bool& loop)
 {
+	HTTPCTransaction *trans = m_currentTransaction;
 	QString line;
 	
-	if(!m_transactions.at(m_currentID)->isComplete())
+	if(trans->isComplete())
 	{
 		while(canGetNextLine() && getNextLine(line))
 		{
@@ -910,14 +983,14 @@ void HTTPClient::doResStreamed(bool& loop)
 			EventStreamItem::parseLine(line, item);
 			if(!item.isEmpty())
 			{
-				emit onStream(m_transactions.at(m_currentID), item);
+				emit onStream(trans, item);
 			}
 		}
 		loop = false;
 	}
 	else
 	{
-		m_currentID++;
+		currentTransactionDone();
 		m_state = 1;
 	}
 }

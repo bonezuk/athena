@@ -4,10 +4,15 @@
 
 //-------------------------------------------------------------------------------------------
 
-TestHTTPClientThread::TestHTTPClientThread(QObject *parent) : QThread(parent),
+TestHTTPClientThread::TestHTTPClientThread(int unitTestCase, QObject *parent) : QThread(parent),
+	m_unitTestCase(unitTestCase),
 	m_isError(false),
 	m_streamCounter(0),
-	m_webClientService(0)
+	m_webClientService(0),
+	m_pClient(),
+	m_idList(),
+	m_idTransSet(),
+	m_idReplySet()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -81,8 +86,7 @@ void TestHTTPClientThread::startEventStream()
 		
 	client->setHost("127.0.0.1", TEST_DAEMON_PORT);
 	
-	int id = client->newTransaction();
-	network::http::HTTPCTransaction& tran = client->transaction(id);
+	network::http::HTTPCTransaction& tran = client->newTransaction();
 
 	Q_ASSERT(!tran.isStreaming());
 	tran.setStreaming(true);
@@ -91,6 +95,8 @@ void TestHTTPClientThread::startEventStream()
 	network::http::Unit req;
 	req.request(network::http::Unit::e_Get, "/test/event-stream");
 	tran.request() = req;
+	
+	client->enqueueTransaction(tran.id());
 	
 	client->run();
 }
@@ -139,11 +145,185 @@ void TestHTTPClientThread::onComplete(network::http::HTTPClient *client)
 
 //-------------------------------------------------------------------------------------------
 
+void TestHTTPClientThread::populateIdList()
+{
+	m_idList.clear();
+	m_idTransSet.clear();
+	m_idReplySet.clear();
+	
+	for(int id = 0; id < c_numberOfPersistentIds; id++)
+	{
+		m_idList.append(id);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool TestHTTPClientThread::checkReplyIdSet()
+{
+	int id;
+	QSet<int> missing;
+	QSet<int>::iterator ppI;
+
+	for(id = 0; id < c_numberOfPersistentIds; id++)
+	{
+		ppI = m_idReplySet.find(id);
+		if(ppI == m_idReplySet.end())
+		{
+			missing.insert(id);
+		}
+	}
+	if(!missing.isEmpty())
+	{
+		fprintf(stdout, "Missing transaction ids : ");
+		for(ppI = missing.begin(); ppI != missing.end(); ppI++)
+		{
+			fprintf(stdout, "%d, ", *ppI);
+		}
+		fprintf(stdout,"\n");
+	}
+	return missing.isEmpty();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TestHTTPClientThread::queueNextQuery()
+{
+	if(!m_idList.isEmpty())
+	{
+		network::http::HTTPCTransaction& tran = m_pClient->newTransaction();
+	
+		int id = m_idList.takeFirst();
+		network::http::Unit req;
+		req.request(network::http::Unit::e_Get, "/test/persistent");
+		req.query().add("id", QString::number(id));
+		tran.request() = req;
+		
+		m_idTransSet.insert(id);
+		m_pClient->enqueueTransaction(tran.id());
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TestHTTPClientThread::startPersistentTest()
+{
+	m_pClient = m_webClientService->getClient();
+	
+	m_pClient->setHost("127.0.0.1", TEST_DAEMON_PORT);
+
+	QObject::connect(m_pClient.data(), SIGNAL(onTransactionError(network::http::HTTPCTransaction*,const QString&)),
+		this, SLOT(onTransactionError(network::http::HTTPCTransaction*,const QString&)));
+	QObject::connect(m_pClient.data(), SIGNAL(onError(network::http::HTTPClient*,const QString&)),
+		this, SLOT(onError(network::http::HTTPClient*,const QString&)));
+	QObject::connect(m_pClient.data(), SIGNAL(onComplete(network::http::HTTPClient*)),
+		this, SLOT(onPersistentComplete(network::http::HTTPClient*)));
+	QObject::connect(m_pClient.data(), SIGNAL(onTransaction(network::http::HTTPCTransaction*)),
+		this, SLOT(onPersistentTransaction(network::http::HTTPCTransaction*)));
+
+	populateIdList();
+	queueNextQuery();
+	queueNextQuery();
+	queueNextQuery();
+	
+	m_pClient->run();
+	
+	m_timer = new QTimer(this);
+	m_timer->setInterval(100);
+	m_timer->setSingleShot(false);
+	m_timer->start();
+	QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(onPersistentTimer()));
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TestHTTPClientThread::onPersistentTimer()
+{
+	if(!m_idList.isEmpty())
+	{
+		queueNextQuery();
+	}
+	else if(m_idTransSet.isEmpty())
+	{
+		m_isError = checkReplyIdSet();
+		m_pClient->shutdown();
+		exit();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TestHTTPClientThread::onPersistentTransaction(network::http::HTTPCTransaction *pTrans)
+{
+	if(pTrans->response().response() == 200)
+	{
+		if(pTrans->responseData().GetSize() > 0)
+		{
+			int id;
+			QString idStr = QString::fromUtf8(reinterpret_cast<const char *>(pTrans->responseData().GetData()), pTrans->responseData().GetSize());
+			bool res = false;
+			
+			id = idStr.toInt(&res);
+			if(res)
+			{
+				QSet<int>::iterator ppI;
+				
+				ppI = m_idTransSet.find(id);
+				if(ppI != m_idTransSet.end())
+				{
+					fprintf(stdout, "Client reply id = %d\n", id);
+					m_idTransSet.erase(ppI);
+					m_idReplySet.insert(id);
+				}
+				else
+				{
+					QString err = "Id " + QString::number(id) + " not in expected transaction list";
+					printError("onPersistentTransaction", err.toUtf8().constData());
+					exit();
+				}
+			}
+			else
+			{
+				QString err = "Failed to get id number from body: '" + idStr + "'";
+				printError("onPersistentTransaction", err.toUtf8().constData());
+				exit();
+			}
+		}
+		else
+		{
+			printError("onPersistentTransaction", "Error no body in response");
+			exit();
+		}
+	}
+	else
+	{
+		printError("onPersistentTransaction", "Error in transaction response");
+		exit();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TestHTTPClientThread::onPersistentComplete(network::http::HTTPClient *client)
+{
+	printError("onPersistentComplete", "Unexpected complete of client");
+	exit();
+}
+
+//-------------------------------------------------------------------------------------------
+
 void TestHTTPClientThread::run()
 {
 	if(startHTTPClient())
 	{
-		startEventStream();
+		if(m_unitTestCase == 0)
+		{
+			startEventStream();
+		}
+		else
+		{
+			startPersistentTest();
+		}
 		exec();
 	}
 	else
@@ -154,7 +334,8 @@ void TestHTTPClientThread::run()
 
 //-------------------------------------------------------------------------------------------
 
-TestHTTPConnection::TestHTTPConnection(int argc, char **argv) : QCoreApplication(argc, argv),
+TestHTTPConnection::TestHTTPConnection(int unitTestCase, int argc, char **argv) : QCoreApplication(argc, argv),
+	m_unitTestCase(unitTestCase),
 	m_isError(false),
 	m_webService(0),
 	m_webServer(0),
@@ -164,12 +345,15 @@ TestHTTPConnection::TestHTTPConnection(int argc, char **argv) : QCoreApplication
 	m_isClientComplete(false),
 	m_isServerComplete(false)
 {
-	m_eventStreamHandler = new network::http::EventStreamHandler(this);
-	m_eventStreamTimer = new QTimer(this);
-	m_eventStreamTimer->setInterval(100);
-	m_eventStreamTimer->setSingleShot(false);
-	m_eventStreamTimer->start();
-	QObject::connect(m_eventStreamTimer, SIGNAL(timeout()), this, SLOT(onEventTimer()));
+	if(m_unitTestCase == 0)
+	{
+		m_eventStreamHandler = new network::http::EventStreamHandler(this);
+		m_eventStreamTimer = new QTimer(this);
+		m_eventStreamTimer->setInterval(100);
+		m_eventStreamTimer->setSingleShot(false);
+		m_eventStreamTimer->start();
+		QObject::connect(m_eventStreamTimer, SIGNAL(timeout()), this, SLOT(onEventTimer()));
+	}
 	QTimer::singleShot(10, this, SLOT(onStartup()));
 	QObject::connect(this, SIGNAL(aboutToQuit()), this, SLOT(onShutdown()));
 }
@@ -191,7 +375,7 @@ void TestHTTPConnection::printError(const char *strR, const char *strE)
 
 bool TestHTTPConnection::isError() const
 {
-	return (m_isError && (m_client==0 || m_client->isError()));
+	return (m_isError || m_client==0 || m_client->isError());
 }
 
 //-------------------------------------------------------------------------------------------
@@ -214,6 +398,7 @@ bool TestHTTPConnection::startWebServer()
 				if(m_webServer!=0)
 				{
 					m_webServer->connect("/test/event-stream",this,SLOT(onEventStreamTest(network::http::HTTPReceive *)));
+					m_webServer->connect("/test/persistent",this,SLOT(onPersistentConnectionTest(network::http::HTTPReceive *)));
 					fprintf(stdout, "Test web server started\n");
 					res = true;
 				}
@@ -235,7 +420,7 @@ void TestHTTPConnection::onStartup()
 	
 	if(startWebServer())
 	{
-		m_client = new TestHTTPClientThread();
+		m_client = new TestHTTPClientThread(m_unitTestCase);
 		QObject::connect(m_client, SIGNAL(finished()), this, SLOT(onStreamClientComplete()));
 		m_client->start();
 		res = true;
@@ -277,6 +462,39 @@ void TestHTTPConnection::onShutdown()
 		m_webService = 0;
 	}
 	network::Controller::end();
+}
+
+//-------------------------------------------------------------------------------------------
+// /test/persistent?id=3
+//-------------------------------------------------------------------------------------------
+
+void TestHTTPConnection::onPersistentConnectionTest(network::http::HTTPReceive *receive)
+{
+	QString idStr;
+	network::http::Unit hdr;
+	
+	idStr = receive->header().query().data("id");
+	if(!idStr.isEmpty())
+	{
+		QByteArray arr(idStr.toUtf8());
+		network::NetArraySPtr body(new network::NetArray);
+		body->AppendRaw(arr.constData(), arr.length());
+		
+		hdr.response(200);
+		hdr.add("Content-Type", "text/plain");
+		hdr.add("Content-Length", QString::number(arr.length()));
+		
+		receive->connection()->postResponse(hdr);
+		receive->connection()->postBody(body);
+		
+		fprintf(stdout, "Server recieve persistent id=%s\n", arr.constData());
+	}
+	else
+	{
+		hdr.response(400);
+		receive->connection()->postResponse(hdr);
+	}
+	receive->connection()->complete();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -330,7 +548,17 @@ void TestHTTPConnection::onStreamServerComplete()
 TEST(TestHTTPConnection,testEventStream)
 {
 	int argc = 0;
-	TestHTTPConnection connectionApp(argc,0);
+	TestHTTPConnection connectionApp(0,argc,0);
+	connectionApp.exec();
+	EXPECT_FALSE(connectionApp.isError());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(TestHTTPConnection,testPersistentConnection)
+{
+	int argc = 0;
+	TestHTTPConnection connectionApp(1,argc,0);
 	connectionApp.exec();
 	EXPECT_FALSE(connectionApp.isError());
 }

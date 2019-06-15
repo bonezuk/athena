@@ -45,6 +45,8 @@ class HTTP_EXPORT HTTPCTransaction
 
 		virtual bool isComplete() const;
 		virtual void setComplete(bool isComplete);
+		
+		virtual bool isLast() const;
 
 	protected:
 		
@@ -85,10 +87,11 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		virtual void setProxy(const QString& host,tint port);
 		
 		// Create a series of HTTP transactions that are executed on calling run
-		virtual tint newTransaction();
-		virtual HTTPCTransaction& transaction(tint id);
+		virtual HTTPCTransaction& newTransaction(bool isLast = false);
+		virtual void enqueueTransaction(tint id);
 		
 		virtual void run();
+		virtual void shutdown();
 		
 		// internal interface as called in by network service thread
 		virtual bool process();
@@ -98,14 +101,17 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		HTTPClientService *m_httpCService;
 		Qt::HANDLE m_threadId;
 		
+		int m_nextTransactionId;
+		QMap<int, HTTPCTransaction *> m_newTransactions;
 		QList<HTTPCTransaction *> m_transactions;
+		HTTPCTransaction *m_currentTransaction;
+		QList<HTTPCTransaction *> m_doneTransactions;
 		
 		QString m_hostName;
 		tint m_hostPort;
 		QString m_proxyName;
 		tint m_proxyPort;
 		
-		tint m_currentID;
 		tint m_state;
 		
 		tint m_bodyOffset;
@@ -116,6 +122,7 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		NetArray m_chunkArray;
 		
 		QMutex m_lock;
+		bool m_isShutdown;
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;
@@ -136,6 +143,7 @@ class HTTP_EXPORT HTTPClient : public TCPConnClientSocket
 		virtual bool isStreaming(const Unit& item) const;
 		
 		virtual bool parseChunkHeader(const QString& str,tint& size,QString& field);
+		virtual void currentTransactionDone();
 		
 	signals:
 	

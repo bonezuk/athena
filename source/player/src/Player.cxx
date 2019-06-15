@@ -1966,7 +1966,13 @@ void Player::onConnect()
 				this, SLOT(onDaemonAudioTime(int, tuint64)));
 			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onError(const QString&)),
 				this, SLOT(onConnectionError(const QString&)));
-				
+			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onAudioPlay(int)),
+				this, SLOT(onDaemonAudioPlay(int)));
+			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onAudioPause(int)),
+				this, SLOT(onDaemonAudioPause(int)));
+			QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onAudioStop()),
+				this, SLOT(onDaemonAudioStop()));
+
 			PlayerController::instance()->client()->connect(hostName);
 			
 			m_isConnected = true;
@@ -1985,7 +1991,13 @@ void Player::onDisconnect()
 		this, SLOT(onDaemonAudioTime(int, tuint64)));
 	QObject::connect(PlayerController::instance()->client().data(), SIGNAL(onError(const QString&)),
 		this, SLOT(onConnectionError(const QString&)));
-				
+	QObject::disconnect(PlayerController::instance()->client().data(), SIGNAL(onAudioPlay(int)),
+		this, SLOT(onDaemonAudioPlay(int)));
+	QObject::disconnect(PlayerController::instance()->client().data(), SIGNAL(onAudioPause(int)),
+		this, SLOT(onDaemonAudioPause(int)));
+	QObject::disconnect(PlayerController::instance()->client().data(), SIGNAL(onAudioStop()),
+			this, SLOT(onDaemonAudioStop()));
+			
 	m_isConnected = false;
 	restorePreservedPlaylist();
 }
@@ -2008,23 +2020,57 @@ void Player::onClientLoadTracks(QVector<QSharedPointer<track::info::Info> >& tra
 
 //-------------------------------------------------------------------------------------------
 
-void Player::onDaemonAudioTime(int id, tuint64 t)
+bool Player::daemonSetPlayback(int id)
 {
-	bool paintF = false;
+	bool res = false;
 	
 	if(m_playList->updateCurrentDaemonTrack(id))
 	{
-		if(m_state == e_Stop)
-		{
-			m_playControls->setPlaying(true);
-			m_playControls->setPlayback(m_playList->currentPlayItem());
-			m_state = e_Play;
-			doPaintUpdate();
-			PlayerController::instance()->setPlayText("Pause");
-			paintF = true;
-		}
+		m_playControls->setPlaying(true);
+		m_playControls->setPlayback(m_playList->currentPlayItem());
+		m_state = e_Play;
+		doPaintUpdate();
+		PlayerController::instance()->setPlayText("Pause");	
+		res = true;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onDaemonAudioTime(int id, tuint64 t)
+{
+	if(daemonSetPlayback(id))
+	{
 		onAudioTime(t);
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onDaemonAudioPlay(int id)
+{
+	daemonSetPlayback(id);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onDaemonAudioPause(int id)
+{
+	m_playControls->setPlaying(false);
+	m_state = e_Pause;
+	doPaintUpdate();
+	setWindowTitle("Black Omega");
+	PlayerController::instance()->setPlayText("Play");
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Player::onDaemonAudioStop()
+{
+	m_playList->setPlayItemToStart();
+	m_playControls->setPlayback(QString());
+	m_state = e_Stop;
 }
 
 //-------------------------------------------------------------------------------------------

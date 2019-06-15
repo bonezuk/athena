@@ -24,30 +24,41 @@ class DAEMON_EXPORT MusicClient : public QObject
 		virtual ~MusicClient();
 		
 		virtual void connect(const QString& hostName);
+		virtual void disconnect();
 		
 		virtual QString lastConnectedHost();
 	
 	private:
 		QString m_hostName;
 		network::http::HTTPClientService *m_webClientService;
+		QVector<QSharedPointer<network::http::HTTPClient> > m_clients;
 		
 		virtual void processTrackList(network::http::HTTPCTransaction *trans);
-		virtual void runTrackRequest(const QString& hostName);
-		virtual void runEventRequest(const QString& hostName);
-
 		virtual void setLastConnectedHost(const QString& hostName);
+		
+		virtual void runTrackRequest();
+		virtual void runEventRequest();
+
+		virtual void addClient(QSharedPointer<network::http::HTTPClient>& pClient);
+		virtual void removeClient(network::http::HTTPClient *client);
 
 	private slots:
+		
+		void onTrackTransaction(network::http::HTTPCTransaction *trans);
+		void onEventStream(network::http::HTTPCTransaction *trans,const network::http::EventStreamItem& item);
+		
+		void onClientComplete(network::http::HTTPClient *client);
+
 		void onTransactionError(network::http::HTTPCTransaction *trans,const QString& err);
 		void onError(network::http::HTTPClient *client,const QString& err);
-		void onTransaction(network::http::HTTPCTransaction *trans);
-		void onEventStream(network::http::HTTPCTransaction *trans,const network::http::EventStreamItem& item);
-		void onEventComplete(network::http::HTTPCTransaction *trans);
 	
 	signals:
 		void onError(const QString&);
 		void onLoadTracks(QVector<QSharedPointer<track::info::Info> >&);
 		void onAudioTime(int id, tuint64 t);
+		void onAudioPlay(int id);
+		void onAudioPause(int id);
+		void onAudioStop();
 };
 
 //-------------------------------------------------------------------------------------------

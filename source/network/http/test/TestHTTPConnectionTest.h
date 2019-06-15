@@ -23,27 +23,46 @@ using namespace orcus;
 
 class TestHTTPClientThread : public QThread
 {
+	public:
+		const int c_numberOfPersistentIds = 30;
+
 	Q_OBJECT
 	public:
-		TestHTTPClientThread(QObject *parent = 0);
+		TestHTTPClientThread(int unitTestCase, QObject *parent = 0);
 		virtual ~TestHTTPClientThread();
 		bool isError() const;
 		
 	private:
+		int m_unitTestCase;
 		bool m_isError;
 		int m_streamCounter;
 		network::http::HTTPClientService *m_webClientService;
+		
+		QSharedPointer<network::http::HTTPClient> m_pClient;
+		QVector<int> m_idList;
+		QSet<int> m_idTransSet;
+		QSet<int> m_idReplySet;
+		QTimer *m_timer;
 		
 		virtual void printError(const char *strR, const char *strE);
 		virtual bool startHTTPClient();
 		virtual void startEventStream();
 		virtual void run();
+
+		virtual void populateIdList();
+		virtual bool checkReplyIdSet();
+		virtual void queueNextQuery();
+		virtual void startPersistentTest();
 		
 	private slots:
 		void onTransactionError(network::http::HTTPCTransaction *trans,const QString& err);
 		void onStream(network::http::HTTPCTransaction *trans,const network::http::EventStreamItem& item);
 		void onError(network::http::HTTPClient *client,const QString& err);
 		void onComplete(network::http::HTTPClient *client);
+
+		void onPersistentTimer();
+		void onPersistentTransaction(network::http::HTTPCTransaction *pTrans);
+		void onPersistentComplete(network::http::HTTPClient *client);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -52,11 +71,12 @@ class TestHTTPConnection : public QCoreApplication
 {
 	Q_OBJECT
 	public:
-		TestHTTPConnection(int argc, char **argv);
+		TestHTTPConnection(int unitTestCase, int argc, char **argv);
 		virtual ~TestHTTPConnection();
 		bool isError() const;
 		
 	private:
+		int m_unitTestCase;
 		bool m_isError;
 		network::http::HTTPService *m_webService;
 		network::http::HTTPServer *m_webServer;
@@ -79,6 +99,8 @@ class TestHTTPConnection : public QCoreApplication
 		
 		virtual void onStreamClientComplete();
 		virtual void onStreamServerComplete();
+
+		virtual void onPersistentConnectionTest(network::http::HTTPReceive *receive);
 };
 
 //-------------------------------------------------------------------------------------------

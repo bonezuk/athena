@@ -44,6 +44,8 @@ class NETWORK_EXPORT Socket : public QObject
 		virtual void setForRead();
 		virtual void setForWrite();
 		
+		virtual bool isConnected() const;
+		
 	protected:
 		
 		Service *m_service;

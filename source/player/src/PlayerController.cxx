@@ -248,6 +248,9 @@ void PlayerController::onStop()
 		audioio::AOBase::end(m_audio);
 		m_audio = eAudio;
 	}
+	
+	m_client->disconnect();
+	m_client.clear();
 
 	if(m_webClientService != 0)
 	{
