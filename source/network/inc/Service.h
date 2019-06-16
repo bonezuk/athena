@@ -84,6 +84,8 @@ class NETWORK_EXPORT Service : public QObject
 
 		virtual bool process() = 0;
 		
+		virtual void processComplete();
+		
 	protected:
 	
 		static tint m_newID;

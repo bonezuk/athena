@@ -13,6 +13,7 @@ namespace network
 //-------------------------------------------------------------------------------------------
 
 class ControllerThread;
+class TCPConnectionSocket;
 
 //-------------------------------------------------------------------------------------------
 
@@ -77,6 +78,7 @@ class NETWORK_EXPORT Controller : public QObject
 		friend class ControllerThread;
 		friend class Socket;
 		friend class Service;
+		friend class TCPConnectionSocket;
 		
 		typedef Controller* ControllerPtr;
 		typedef QSharedPointer<Controller> ControllerSPtr;

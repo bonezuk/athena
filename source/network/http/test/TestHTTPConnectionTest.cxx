@@ -18,14 +18,7 @@ TestHTTPClientThread::TestHTTPClientThread(int unitTestCase, QObject *parent) : 
 //-------------------------------------------------------------------------------------------
 
 TestHTTPClientThread::~TestHTTPClientThread()
-{
-	if(m_webClientService != 0)
-	{
-		network::Controller::ControllerSPtr ctrl(network::Controller::instance());
-		ctrl->deleteService(m_webClientService);
-		m_webClientService = 0;
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
@@ -228,7 +221,7 @@ void TestHTTPClientThread::startPersistentTest()
 	
 	m_pClient->run();
 	
-	m_timer = new QTimer(this);
+	m_timer = new QTimer();
 	m_timer->setInterval(100);
 	m_timer->setSingleShot(false);
 	m_timer->start();
@@ -245,9 +238,25 @@ void TestHTTPClientThread::onPersistentTimer()
 	}
 	else if(m_idTransSet.isEmpty())
 	{
-		m_isError = checkReplyIdSet();
-		m_pClient->shutdown();
-		exit();
+		if(isRunning())
+		{
+			m_isError = checkReplyIdSet();
+			m_pClient->shutdown();
+			QThread::msleep(1000);
+			quit();
+			wait();
+
+			if(m_webClientService != 0)
+			{
+				network::Controller::ControllerSPtr ctrl(network::Controller::instance());
+				ctrl->deleteService(m_webClientService);
+				m_webClientService = 0;
+			}
+
+			m_timer->stop();
+			delete m_timer;
+			m_timer = 0;
+		}
 	}
 }
 
@@ -306,8 +315,7 @@ void TestHTTPClientThread::onPersistentTransaction(network::http::HTTPCTransacti
 
 void TestHTTPClientThread::onPersistentComplete(network::http::HTTPClient *client)
 {
-	printError("onPersistentComplete", "Unexpected complete of client");
-	exit();
+	fprintf(stdout, "HTTP Client complete");
 }
 
 //-------------------------------------------------------------------------------------------
@@ -524,11 +532,7 @@ void TestHTTPConnection::onEventTimer()
 void TestHTTPConnection::onStreamClientComplete()
 {
 	fprintf(stdout, "Client HTTP thread complete\n");
-	m_isClientComplete = true;
-	if(m_isServerComplete && m_isClientComplete)
-	{
-		quit();
-	}
+	quit();
 }
 
 //-------------------------------------------------------------------------------------------

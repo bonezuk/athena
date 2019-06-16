@@ -11,7 +11,8 @@ namespace network
 Socket::Socket(Service *svr,QObject *parent) : QObject(parent),
 	m_service(svr),
 	m_socket(c_invalidSocket),
-	m_state(0)
+	m_state(0),
+	m_isComplete(false)
 {
 	if(m_service!=0)
 	{
@@ -66,6 +67,20 @@ void Socket::setForWrite()
 bool Socket::isConnected() const
 {
 	return (m_socket != c_invalidSocket);
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool Socket::isComplete() const
+{
+	return m_isComplete;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Socket::markAsComplete()
+{
+	m_isComplete = true;
 }
 
 //-------------------------------------------------------------------------------------------

@@ -60,6 +60,8 @@ class NETWORK_EXPORT TCPConnectionSocket : public Socket
 		virtual void lock();
 		virtual void unlock();
 		virtual bool isLocked();
+		
+		virtual void disassociateService();
 
 	protected:
 	

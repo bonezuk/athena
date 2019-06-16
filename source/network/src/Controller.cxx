@@ -421,6 +421,11 @@ void Controller::onProcess()
 			}
 		}
 	}
+
+	for(ppK=m_serviceMap.begin();ppK!=m_serviceMap.end();++ppK)
+	{
+		ppK.value()->processComplete();
+	}
 }
 
 //-------------------------------------------------------------------------------------------

@@ -290,7 +290,6 @@ HTTPCTransaction& HTTPClient::newTransaction(bool isLast)
 	HTTPCTransaction *trans = new HTTPCTransaction(this, m_nextTransactionId);
 	m_newTransactions.insert(trans->id(), trans);
 	m_nextTransactionId++;
-	m_lock.unlock();
 	if(isLast)
 	{
 		trans->request().add("Connection","close");
@@ -299,6 +298,7 @@ HTTPCTransaction& HTTPClient::newTransaction(bool isLast)
 	{
 		trans->request().add("Connection","keep-alive");
 	}
+	m_lock.unlock();
 	return *trans;
 }
 

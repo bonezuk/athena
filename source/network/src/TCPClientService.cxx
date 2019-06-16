@@ -31,6 +31,26 @@ void TCPClientService::printError(const tchar *strR,const tchar *strE) const
 
 //-------------------------------------------------------------------------------------------
 
+void TCPClientService::delConnection(TCPConnectionSocket *s)
+{
+	QSet<QSharedPointer<TCPConnectionSocket> >::iterator ppI;
+
+	for(ppI = m_clientSet.begin(); ppI != m_clientSet.end();)
+	{
+		QSharedPointer<TCPConnectionSocket> pSocket = *ppI;
+		if(pSocket.data() == s)
+		{
+			ppI = m_clientSet.erase(ppI);
+		}
+		else
+		{
+			++ppI;
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void TCPClientService::addConnection(QSharedPointer<TCPConnectionSocket>& s)
 {
 	m_clientSet.insert(s);
@@ -67,6 +87,7 @@ void TCPClientService::stop()
 		QSharedPointer<TCPConnectionSocket> s = *ppI;
 		m_clientSet.erase(ppI);
 		s->close();
+		s->disassociateService();
 	}
 }
 
@@ -77,7 +98,7 @@ bool TCPClientService::process()
 	QSet<QSharedPointer<TCPConnectionSocket> >::iterator ppI;
 	bool res = true;
 	
-	for(ppI=m_clientSet.begin();ppI!=m_clientSet.end();)
+	for(ppI=m_clientSet.begin();ppI!=m_clientSet.end(); ++ppI)
 	{
 		QSharedPointer<TCPConnectionSocket> s = *ppI;
 		
@@ -85,21 +106,35 @@ bool TCPClientService::process()
 		{
 			if(!s->isLocked())
 			{
-				ppI = m_clientSet.erase(ppI);
-				s->close();
+				s->markAsComplete();
 				res = false;
 			}
-			else
-			{
-				++ppI;
-			}
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TCPClientService::processComplete()
+{
+	QSet<QSharedPointer<TCPConnectionSocket> >::iterator ppI;
+	
+	for(ppI = m_clientSet.begin(); ppI != m_clientSet.end();)
+	{
+		QSharedPointer<TCPConnectionSocket> s = *ppI;
+		
+		if(s->isComplete() && !s->isLocked())
+		{
+			s->close();
+			s->disassociateService();
+			ppI = m_clientSet.erase(ppI);
 		}
 		else
 		{
 			++ppI;
 		}
 	}
-	return res;
 }
 
 //-------------------------------------------------------------------------------------------

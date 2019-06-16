@@ -24,7 +24,7 @@ using namespace orcus;
 class TestHTTPClientThread : public QThread
 {
 	public:
-		const int c_numberOfPersistentIds = 30;
+		const int c_numberOfPersistentIds = 10;
 
 	Q_OBJECT
 	public:

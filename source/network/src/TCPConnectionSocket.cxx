@@ -146,6 +146,14 @@ void TCPConnectionSocket::close()
 
 //-------------------------------------------------------------------------------------------
 
+void TCPConnectionSocket::disassociateService()
+{
+	m_service->controller()->delSocket(m_service, this);
+	m_service = 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
 MemoryPacket *TCPConnectionSocket::newIOPacket()
 {
 	MemoryPacket *item;

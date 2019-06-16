@@ -45,12 +45,15 @@ class NETWORK_EXPORT Socket : public QObject
 		virtual void setForWrite();
 		
 		virtual bool isConnected() const;
+		virtual bool isComplete() const;
+		virtual void markAsComplete();
 		
 	protected:
 		
 		Service *m_service;
 		socket_type m_socket;
 		tuint32 m_state;
+		bool m_isComplete;
 	
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;
