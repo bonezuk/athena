@@ -20,7 +20,7 @@ namespace network
 ControllerEvent::ControllerEvent(ControllerEventType t) : QEvent(static_cast<QEvent::Type>(t)),
 	m_threadId(QThread::currentThreadId()),
 	m_name(),
-	m_service(0)
+	m_service()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -46,14 +46,15 @@ void ControllerEvent::name(const QString& n)
 
 //-------------------------------------------------------------------------------------------
 
-Service::ServicePtr ControllerEvent::service() const
+QSharedPointer<Service> ControllerEvent::service() const
 {
-	return m_service;
+	QSharedPointer<Service> pService(m_service);
+	return pService;
 }
 
 //-------------------------------------------------------------------------------------------
 
-void ControllerEvent::service(Service::ServicePtr s)
+void ControllerEvent::service(QSharedPointer<Service>& s)
 {
 	m_service = s;
 }
@@ -93,14 +94,15 @@ void ControllerWaitCondition::wake()
 
 //-------------------------------------------------------------------------------------------
 
-Service::ServicePtr ControllerWaitCondition::service() const
+QSharedPointer<Service> ControllerWaitCondition::service() const
 {
-	return m_service;
+	QSharedPointer<Service> pService(m_service);
+	return pService;
 }
 
 //-------------------------------------------------------------------------------------------
 
-void ControllerWaitCondition::service(Service::ServicePtr s)
+void ControllerWaitCondition::service(QSharedPointer<Service>& s)
 {
 	m_service = s;
 }
@@ -171,7 +173,7 @@ void ControllerThread::run()
 //-------------------------------------------------------------------------------------------
 
 QMutex Controller::m_mutex;
-QMap<tint,Controller::ControllerSPtr> Controller::m_controlMap;
+QMap<tint,QSharedPointer<Controller> > Controller::m_controlMap;
 
 //-------------------------------------------------------------------------------------------
 
@@ -199,8 +201,8 @@ void Controller::printError(const tchar *strR,const tchar *strE) const
 
 Controller::ControllerSPtr Controller::instance(tint id)
 {
-	QMap<tint,ControllerSPtr>::iterator ppI;
-	ControllerSPtr ctrl;
+	QMap<tint,QSharedPointer<Controller> >::iterator ppI;
+	QSharedPointer<Controller> ctrl;
 	
 	m_mutex.lock();
 	ppI = m_controlMap.find(id);
@@ -230,7 +232,7 @@ Controller::ControllerSPtr Controller::instance(tint id)
 
 void Controller::end(tint id)
 {
-	QMap<tint,ControllerSPtr>::iterator ppI;
+	QMap<tint,QSharedPointer<Controller> >::iterator ppI;
 	
 	m_mutex.lock();
 	ppI = m_controlMap.find(id);
@@ -272,22 +274,20 @@ bool Controller::start()
 
 void Controller::stop()
 {
-	QMap<tint,Service::ServicePtr>::iterator ppI;
-	QSet<Socket::SocketPtr>::iterator ppJ;
+	QMap<tint,QSharedPointer<Service> >::iterator ppI;
+	QSet<QSharedPointer<Service> >::iterator ppJ;
 	
 	while(ppI=m_serviceMap.begin(), ppI!=m_serviceMap.end())
 	{
-		Service::ServicePtr s = ppI.value();
+		QSharedPointer<Service> s = ppI.value();
 		m_serviceMap.erase(ppI);
 		s->stop();
-		delete s;
 	}
 	
 	while(ppJ=m_socketSet.begin(), ppJ!=m_socketSet.end())
 	{
-		Socket::SocketPtr sk = *ppJ;
+		QSharedPointer<Socket> sk = *ppJ;
 		m_socketSet.erase(ppJ);
-		delete sk;
 	}
 	
 	m_processTimer->stop();
@@ -304,11 +304,11 @@ void Controller::onProcess()
 {
 	tint nfds = -1;
 	fd_set readS,writeS;
-	QSet<Socket::SocketPtr> readSet,writeSet;
-	QVector<Socket::SocketPtr> rSelect,wSelect;
-	QSet<Socket::SocketPtr>::iterator ppI;
-	QVector<Socket::SocketPtr>::iterator ppJ;
-	QMap<tint,Service::ServicePtr>::iterator ppK;
+	QSet<QSharedPointer<Socket> > readSet,writeSet;
+	QVector<QSharedPointer<Socket> > rSelect,wSelect;
+	QSet<QSharedPointer<Socket> >::iterator ppI;
+	QVector<QSharedPointer<Socket> >::iterator ppJ;
+	QMap<tint,QSharedPointer<Service> >::iterator ppK;
 	bool writeFlag = true;
 	
 	FD_ZERO(&readS);
@@ -316,7 +316,7 @@ void Controller::onProcess()
 	
 	for(ppI=m_socketSet.begin();ppI!=m_socketSet.end();++ppI)
 	{
-		Socket::SocketPtr s = *ppI;
+		QSharedPointer<Socket> s = *ppI;
 		const tuint32& state = s->state();
 		
 		if(s->socket()!=c_invalidSocket)
@@ -367,7 +367,7 @@ void Controller::onProcess()
 		{
 			for(ppJ=rSelect.begin();ppJ!=rSelect.end();++ppJ)
 			{
-				Socket::SocketPtr s = *ppJ;
+				QSharedPointer<Socket> s = *ppJ;
 				
 				if(FD_ISSET(s->socket(),&readS))
 				{
@@ -378,7 +378,7 @@ void Controller::onProcess()
 			
 			for(ppJ=wSelect.begin();ppJ!=wSelect.end();++ppJ)
 			{
-				Socket::SocketPtr s = *ppJ;
+				QSharedPointer<Socket> s = *ppJ;
 				
 				if(FD_ISSET(s->socket(),&writeS))
 				{
@@ -391,7 +391,7 @@ void Controller::onProcess()
 	
 	for(ppI=readSet.begin();ppI!=readSet.end();++ppI)
 	{
-		Socket::SocketPtr s = *ppI;
+		QSharedPointer<Socket> s = *ppI;
 		if(!s->doRead())
 		{
 			emit socketError(s);
@@ -410,7 +410,7 @@ void Controller::onProcess()
 	{
 		for(ppI=writeSet.begin();ppI!=writeSet.end();++ppI)
 		{
-			Socket::SocketPtr s = *ppI;
+			QSharedPointer<Socket> s = *ppI;
 			
 			if(m_socketSet.find(s)!=m_socketSet.end())
 			{
@@ -430,21 +430,21 @@ void Controller::onProcess()
 
 //-------------------------------------------------------------------------------------------
 
-void Controller::doRead(Service::ServicePtr s)
+void Controller::doRead(QSharedPointer<Service>& s)
 {
 	tint nfds = -1;
 	fd_set readS;
-	QSet<Socket::SocketPtr> readSet;
-	QVector<Socket::SocketPtr> rSelect;
-	QSet<Socket::SocketPtr>::iterator ppI;
-	QVector<Socket::SocketPtr>::iterator ppJ;
-	QMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppK;
+	QSet<QSharedPointer<Socket> > readSet;
+	QVector<QSharedPointer<Socket> > rSelect;
+	QSet<QSharedPointer<Socket> >::iterator ppI;
+	QVector<QSharedPointer<Socket> >::iterator ppJ;
+	QMap<QSharedPointer<Service>, QSharedPointer<Socket> >::iterator ppK;
 
 	FD_ZERO(&readS);
 	
 	for(ppK=m_socketServiceMap.find(s);ppK!=m_socketServiceMap.end() && ppK.key()==s;++ppK)
 	{
-		Socket::SocketPtr s = ppK.value();
+		QSharedPointer<Socket> s = ppK.value();
 		const tuint32& state = s->state();
 		
 		if(s->socket()!=c_invalidSocket && s->canRead())
@@ -478,7 +478,7 @@ void Controller::doRead(Service::ServicePtr s)
 		{
 			for(ppJ=rSelect.begin();ppJ!=rSelect.end();++ppJ)
 			{
-				Socket::SocketPtr s = *ppJ;
+				QSharedPointer<Socket> s = *ppJ;
 				
 				if(FD_ISSET(s->socket(),&readS))
 				{
@@ -491,7 +491,7 @@ void Controller::doRead(Service::ServicePtr s)
 	
 	for(ppI=readSet.begin();ppI!=readSet.end();++ppI)
 	{
-		Socket::SocketPtr s = *ppI;
+		QSharedPointer<Socket> s = *ppI;
 		if(!s->doRead())
 		{
 			emit socketError(s);
@@ -501,21 +501,21 @@ void Controller::doRead(Service::ServicePtr s)
 
 //-------------------------------------------------------------------------------------------
 
-void Controller::doWrite(Service::ServicePtr s)
+void Controller::doWrite(QSharedPointer<Service>& s)
 {
 	tint nfds = -1;
 	fd_set writeS;
-	QSet<Socket::SocketPtr> writeSet;
-	QVector<Socket::SocketPtr> wSelect;
-	QSet<Socket::SocketPtr>::iterator ppI;
-	QVector<Socket::SocketPtr>::iterator ppJ;
-	QMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppK;
+	QSet<QSharedPointer<Socket> > writeSet;
+	QVector<QSharedPointer<Socket> > wSelect;
+	QSet<QSharedPointer<Socket> >::iterator ppI;
+	QVector<QSharedPointer<Socket> >::iterator ppJ;
+	QMap<QSharedPointer<Service>,QSharedPointer<Socket> >::iterator ppK;
 	
 	FD_ZERO(&writeS);
 	
 	for(ppK=m_socketServiceMap.find(s);ppK!=m_socketServiceMap.end() && ppK.key()==s;++ppK)
 	{
-		Socket::SocketPtr s = ppK.value();
+		QSharedPointer<Socket> s = ppK.value();
 		const tuint32& state = s->state();
 		
 		if(s->socket()!=c_invalidSocket && s->canWrite())
@@ -549,7 +549,7 @@ void Controller::doWrite(Service::ServicePtr s)
 		{
 			for(ppJ=wSelect.begin();ppJ!=wSelect.end();++ppJ)
 			{
-				Socket::SocketPtr s = *ppJ;
+				QSharedPointer<Socket> s = *ppJ;
 				
 				if(FD_ISSET(s->socket(),&writeS))
 				{
@@ -562,7 +562,7 @@ void Controller::doWrite(Service::ServicePtr s)
 	
 	for(ppI=writeSet.begin();ppI!=writeSet.end();++ppI)
 	{
-		Socket::SocketPtr s = *ppI;
+		QSharedPointer<Socket> s = *ppI;
 		if(!s->doWrite())
 		{
 			emit socketError(s);
@@ -619,18 +619,18 @@ void Controller::freeConditions()
 
 //-------------------------------------------------------------------------------------------
 
-Service::ServicePtr Controller::newService(const tchar *name)
+QSharedPointer<Service> Controller::newService(const tchar *name)
 {
 	return newService(QString::fromLatin1(name));
 }
 
 //-------------------------------------------------------------------------------------------
 
-Service::ServicePtr Controller::newService(const QString& name)
+QSharedPointer<Service> Controller::newService(const QString& name)
 {
 	ControllerEvent *e = new ControllerEvent(ControllerEvent::e_newService);
 	ControllerWaitCondition *c = getCondition();
-	Service::ServicePtr svr;
+	QSharedPointer<Service> svr;
 	
 	e->name(name);
 	QCoreApplication::postEvent(this,e);
@@ -641,18 +641,18 @@ Service::ServicePtr Controller::newService(const QString& name)
 
 //-------------------------------------------------------------------------------------------
 
-Service::ServicePtr Controller::getService(const tchar *name)
+QSharedPointer<Service> Controller::getService(const tchar *name)
 {
 	return getService(QString::fromLatin1(name));
 }
 
 //-------------------------------------------------------------------------------------------
 
-Service::ServicePtr Controller::getService(const QString& name)
+QSharedPointer<Service> Controller::getService(const QString& name)
 {
 	ControllerEvent *e = new ControllerEvent(ControllerEvent::e_getService);
 	ControllerWaitCondition *c = getCondition();
-	Service::ServicePtr svr;
+	QSharedPointer<Service> svr;
 	
 	e->name(name);
 	QCoreApplication::postEvent(this,e);
@@ -663,7 +663,7 @@ Service::ServicePtr Controller::getService(const QString& name)
 
 //-------------------------------------------------------------------------------------------
 
-void Controller::deleteService(Service::ServicePtr s)
+void Controller::deleteService(QSharedPointer<Service> s)
 {
 	ControllerEvent *e = new ControllerEvent(ControllerEvent::e_deleteService);
 	ControllerWaitCondition *c = getCondition();
@@ -687,7 +687,7 @@ bool Controller::event(QEvent *e)
 			case ControllerEvent::e_newService:
 				{
 					ControllerEvent *cEvent = reinterpret_cast<ControllerEvent *>(e);
-					Service::ServicePtr s;
+					QSharedPointer<Service> s;
 					s = onNewService(cEvent->name());
 					c = getCondition(cEvent->threadId());
 					c->service(s);
@@ -699,7 +699,7 @@ bool Controller::event(QEvent *e)
 			case ControllerEvent::e_getService:
 				{
 					ControllerEvent *cEvent = reinterpret_cast<ControllerEvent *>(e);
-					Service::ServicePtr s;
+					QSharedPointer<Service> s;
 					s = onGetService(cEvent->name());
 					c = getCondition(cEvent->threadId());
 					c->service(s);
@@ -732,10 +732,10 @@ bool Controller::event(QEvent *e)
 
 //-------------------------------------------------------------------------------------------
 
-Service::ServicePtr Controller::onNewService(const QString& name)
+QSharedPointer<Service> Controller::onNewService(const QString& name)
 {
-	Service::ServicePtr svr = ServiceFactory::createUnmanaged(name,this);
-	QMap<tint,Service::ServicePtr>::iterator ppI;
+	QSharedPointer<Service> svr = ServiceFactory::createUnmanaged(name,this);
+	QMap<tint,QSharedPointer<Service> >::iterator ppI;
 	QString err;
 	
 	if(svr!=0)
@@ -763,10 +763,10 @@ Service::ServicePtr Controller::onNewService(const QString& name)
 
 //-------------------------------------------------------------------------------------------
 
-Service::ServicePtr Controller::onGetService(const QString& name)
+QSharedPointer<Service> Controller::onGetService(const QString& name)
 {
-	Service::ServicePtr svr = 0;
-	QMap<tint,Service::ServicePtr>::iterator ppI;
+	QSharedPointer<Service> svr = 0;
+	QMap<tint,QSharedPointer<Service> >::iterator ppI;
 	
 	for(ppI=m_serviceMap.begin();svr==0 && ppI!=m_serviceMap.end();++ppI)
 	{
@@ -784,11 +784,11 @@ Service::ServicePtr Controller::onGetService(const QString& name)
 
 //-------------------------------------------------------------------------------------------
 
-void Controller::onDeleteService(Service::ServicePtr s)
+void Controller::onDeleteService(QSharedPointer<Service>& s)
 {
 	if(s!=0)
 	{
-		QMap<tint,Service::ServicePtr>::iterator ppI = m_serviceMap.find(s->id());
+		QMap<tint,QSharedPointer<Service> >::iterator ppI = m_serviceMap.find(s->id());
 		
 		s->stop();
 		
@@ -796,13 +796,12 @@ void Controller::onDeleteService(Service::ServicePtr s)
 		{
 			m_serviceMap.erase(ppI);
 		}
-		delete s;
 	}
 }
 
 //-------------------------------------------------------------------------------------------
 
-void Controller::addSocket(Service::ServicePtr svr,Socket::SocketPtr s)
+void Controller::addSocket(QSharedPointer<Service>& svr, QSharedPointer<Socket>& s)
 {
 	if(s!=0)
 	{
@@ -813,27 +812,59 @@ void Controller::addSocket(Service::ServicePtr svr,Socket::SocketPtr s)
 
 //-------------------------------------------------------------------------------------------
 
-void Controller::delSocket(Service::ServicePtr svr,Socket::SocketPtr s)
+void Controller::delSocketService(QSharedPointer<Service>& svr, QSharedPointer<Socket>& s)
 {
-	if(s!=0)
+	QMap<QSharedPointer<Service>, QSharedPointer<Socket> >::iterator ppJ = m_socketServiceMap.find(svr);
+	
+	while(ppJ!=m_socketServiceMap.end() && ppJ.key()==svr)
 	{
-		QSet<Socket::SocketPtr>::iterator ppI = m_socketSet.find(s);
+		if(ppJ.value()==s)
+		{
+			ppJ = m_socketServiceMap.erase(ppJ);
+			break;
+		}
+		else
+		{
+			++ppJ;
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Controller::delSocket(QSharedPointer<Service>& svr, QSharedPointer<Socket>& s)
+{
+	if(!s.isNull())
+	{
+		QSet<QSharedPointer<Socket> >::iterator ppI;
 		
+		delSocketService(svr, s);
+		
+		ppI = m_socketSet.find(s);
 		if(ppI!=m_socketSet.end())
 		{
 			m_socketSet.erase(ppI);
-		}
+		}		
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Controller::delSocket(QSharedPointer<Service>& svr,Socket *s)
+{
+	if(s != 0)
+	{
+		QSet<QSharedPointer<Socket> >::iterator ppI;
 		
-		QMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppJ = m_socketServiceMap.find(svr);
-		
-		while(ppJ!=m_socketServiceMap.end() && ppJ.key()==svr)
+		for(ppI = m_socketSet.begin(); ppI != m_socketSet.end(); ++ppI)
 		{
-			if(ppJ.value()==s)
+			QSharedPointer<Socket>& pSocket = *ppI;
+			if(pSocket.data() == s)
 			{
-				m_socketServiceMap.erase(ppJ);
+				delSocketService(svr, pSocket);
+				pSocket.erase(ppI);
 				break;
 			}
-			++ppJ;
 		}
 	}
 }

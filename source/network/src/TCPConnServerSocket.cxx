@@ -8,7 +8,7 @@ namespace network
 {
 //-------------------------------------------------------------------------------------------
 
-TCPConnServerSocket::TCPConnServerSocket(Service *svr,QObject *parent) : TCPConnectionSocket(svr,parent)
+TCPConnServerSocket::TCPConnServerSocket(QSharedPointer<Service>& svr,QObject *parent) : TCPConnectionSocket(svr,parent)
 {
 	::memset(&m_address,0,sizeof(struct sockaddr_in));
 }

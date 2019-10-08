@@ -87,13 +87,6 @@ namespace network
 {
 //-------------------------------------------------------------------------------------------
 
-
-typedef common::Array<tubyte,tubyte> NetArray;
-typedef NetArray* NetArrayPtr;
-typedef QSharedPointer<NetArray> NetArraySPtr;
-
-//-------------------------------------------------------------------------------------------
-
 class NETWORK_EXPORT Resource
 {
 	public:

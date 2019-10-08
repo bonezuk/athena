@@ -18,7 +18,7 @@ class NETWORK_EXPORT TCPConnClientSocket : public TCPConnectionSocket
 		Q_OBJECT
 	
 	public:
-		TCPConnClientSocket(Service *svr,QObject *parent = 0);
+		TCPConnClientSocket(QSharedPointer<Service>& svr,QObject *parent = 0);
 		virtual ~TCPConnClientSocket();
 		
 		virtual bool open(const tchar *name,tint port);

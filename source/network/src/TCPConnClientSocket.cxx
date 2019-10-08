@@ -8,7 +8,7 @@ namespace network
 {
 //-------------------------------------------------------------------------------------------
 
-TCPConnClientSocket::TCPConnClientSocket(Service *svr,QObject *parent) : TCPConnectionSocket(svr,parent)
+TCPConnClientSocket::TCPConnClientSocket(QSharedPointer<Service>& svr,QObject *parent) : TCPConnectionSocket(svr,parent)
 {}
 
 //-------------------------------------------------------------------------------------------

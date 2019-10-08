@@ -20,7 +20,7 @@ QList<MemoryPacket *> TCPConnectionSocket::m_freePackets;
 
 //-------------------------------------------------------------------------------------------
 
-TCPConnectionSocket::TCPConnectionSocket(Service *svr,QObject *parent) : Socket(svr,parent),
+TCPConnectionSocket::TCPConnectionSocket(QSharedPointer<Service>& svr,QObject *parent) : Socket(svr,parent),
 	m_host(),
 	m_port(0),
 	m_sQueue(),
@@ -29,38 +29,16 @@ TCPConnectionSocket::TCPConnectionSocket(Service *svr,QObject *parent) : Socket(
 	m_time(0),
 	m_errorFlag(false),
 	m_lock(false)
-{
-	if(m_service!=0)
-	{
-		m_service->addConnection(this);
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
 TCPConnectionSocket::~TCPConnectionSocket()
 {
-	try
-	{
-		if(m_service!=0)
-		{
-			m_service->delConnection(this);
-		}
-		TCPConnectionSocket::close();
-		while(m_sQueue.size() > 0)
-		{
-			TCPConnectionSocket::freeIOPacket(m_sQueue,0);
-		}
-		while(m_rQueue.size() > 0)
-		{
-			TCPConnectionSocket::freeIOPacket(m_rQueue,0);
-		}
-	}
-	catch(...) {}
+	TCPConnectionSocket::close();
 }
 
 //-------------------------------------------------------------------------------------------
-
 
 void TCPConnectionSocket::printError(const tchar *strR,const tchar *strE) const
 {
@@ -148,8 +126,11 @@ void TCPConnectionSocket::close()
 
 void TCPConnectionSocket::disassociateService()
 {
-	m_service->controller()->delSocket(m_service, this);
-	m_service = 0;
+	if(!m_service.isNull())
+	{
+		m_service->controller()->delSocket(m_service, this);
+		m_service.clear();
+	}
 }
 
 //-------------------------------------------------------------------------------------------

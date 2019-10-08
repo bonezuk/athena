@@ -62,14 +62,13 @@ class NETWORK_EXPORT Service : public QObject
 		friend class Controller;
 		
 	public:
-		typedef Service* ServicePtr;
-        typedef QSharedPointer<ServicePtr> ServiceSPtr;
+        typedef QSharedPointer<Service> ServiceSPtr;
 	
 	public:
-		Service(QObject *parent = 0);
+		Service(QSharedPointer<Controller>& ctrl, QObject *parent = 0);
 		virtual ~Service();
 		
-		Controller *controller() const;
+		QSharedPointer<Controller> controller() const;
 		tint id() const;
 		const QString& name() const;
 		
@@ -79,8 +78,8 @@ class NETWORK_EXPORT Service : public QObject
 		virtual void doWrite();
 		virtual void doRead();
 		
-		virtual void addConnection(TCPConnectionSocket *s);
-		virtual void delConnection(TCPConnectionSocket *s);
+		virtual void addConnection(QSharedPointer<TCPConnectionSocket> &s);
+		virtual void delConnection(QSharedPointer<TCPConnectionSocket> &s);
 
 		virtual bool process() = 0;
 		
@@ -90,7 +89,7 @@ class NETWORK_EXPORT Service : public QObject
 	
 		static tint m_newID;
 	
-		Controller *m_controller;
+		QSharedPointer<Controller> m_controller;
 		tint m_id;
 		QString m_name;
 		

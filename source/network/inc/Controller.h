@@ -36,14 +36,14 @@ class ControllerEvent : public QEvent
 		const QString& name() const;
 		void name(const QString& n);
 		
-		Service::ServicePtr service() const;
-		void service(Service::ServicePtr s);
+		QSharedPointer<Service> service() const;
+		void service(QSharedPointer<Service>& s);
 		
 	protected:
 		
 		Qt::HANDLE m_threadId;
 		QString m_name;
-		Service::ServicePtr m_service;
+		QSharedPointer<Service> m_service;
 };
 
 //-------------------------------------------------------------------------------------------
@@ -57,14 +57,14 @@ class ControllerWaitCondition
 		void wait();
 		void wake();
 		
-		Service::ServicePtr service() const;
-		void service(Service::ServicePtr s);		
+		QSharedPointer<Service> service() const;
+		void service(QSharedPointer<Service>& s);		
 		
 	protected:
 	
 		QMutex m_mutex;
 		QWaitCondition m_condition;
-		Service::ServicePtr m_service;
+		QSharedPointer<Service> m_service;
 };
 
 //-------------------------------------------------------------------------------------------
@@ -80,37 +80,36 @@ class NETWORK_EXPORT Controller : public QObject
 		friend class Service;
 		friend class TCPConnectionSocket;
 		
-		typedef Controller* ControllerPtr;
 		typedef QSharedPointer<Controller> ControllerSPtr;
 		
 	public:
 		Controller(tint id,QObject *parent = 0);
 		virtual ~Controller();
 		
-		static ControllerSPtr instance(tint id = 1);
+		static QSharedPointer<Controller> instance(tint id = 1);
 		static void end(tint id = 1);
 		
 		tint id() const;
 		
-		Service::ServicePtr newService(const tchar *name);
-		Service::ServicePtr newService(const QString& name);
+		QSharedPointer<Service> newService(const tchar *name);
+		QSharedPointer<Service> newService(const QString& name);
 		
-		Service::ServicePtr getService(const tchar *name);
-		Service::ServicePtr getService(const QString& name);
+		QSharedPointer<Service> getService(const tchar *name);
+		QSharedPointer<Service> getService(const QString& name);
 		
-		void deleteService(Service::ServicePtr s);
+		void deleteService(QSharedPointer<Service>& s);
 		
 	protected:
 		
 		static QMutex m_mutex;
-		static QMap<tint,ControllerSPtr> m_controlMap;
+		static QMap<tint,QSharedPointer<Controller> > m_controlMap;
 		
 		tint m_id;
 		ControllerThread *m_thread;
 		QTimer *m_processTimer;
-		QMap<tint,Service::ServicePtr> m_serviceMap;
-		QSet<Socket::SocketPtr> m_socketSet;
-		QMap<Service::ServicePtr,Socket::SocketPtr> m_socketServiceMap;
+		QMap<tint,QSharedPointer<Service> > m_serviceMap;
+		QSet<QSharedPointer<Socket> > m_socketSet;
+		QMap<QSharedPointer<Service>, QSharedPointer<Socket> > m_socketServiceMap;
 		QMap<Qt::HANDLE,ControllerWaitCondition *> m_waitConditionMap;
 		
 		void printError(const tchar *strR,const tchar *strE) const;
@@ -124,15 +123,17 @@ class NETWORK_EXPORT Controller : public QObject
 		ControllerWaitCondition *getCondition(Qt::HANDLE id);
 		void freeConditions();
 		
-		Service::ServicePtr onNewService(const QString& name);
-		Service::ServicePtr onGetService(const QString& name);
-		void onDeleteService(Service::ServicePtr s);
+		QSharedPointer<Service> onNewService(const QString& name);
+		QSharedPointer<Service> onGetService(const QString& name);
+		void onDeleteService(QSharedPointer<Service>& s);
 		
-		void addSocket(Service::ServicePtr svr,Socket::SocketPtr s);
-		void delSocket(Service::ServicePtr svr,Socket::SocketPtr s);
+		void addSocket(QSharedPointer<Service>& svr,QSharedPointer<Socket>& s);
+		void delSocket(QSharedPointer<Service>& svr,QSharedPointer<Socket>& s);
+		void delSocket(QSharedPointer<Service>& svr,Socket *s);
+		void delSocketService(QSharedPointer<Service>& svr, QSharedPointer<Socket>& s);
 		
-		void doRead(Service::ServicePtr s);
-		void doWrite(Service::ServicePtr s);
+		void doRead(QSharedPointer<Service>& s);
+		void doWrite(QSharedPointer<Service>& s);
 		
 	protected slots:
 	
@@ -140,7 +141,7 @@ class NETWORK_EXPORT Controller : public QObject
 
 	signals:
 
-		void socketError(network::Socket::SocketPtr s);
+		void socketError(QSharedPointer<Service>& s);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -158,7 +159,7 @@ class ControllerThread : public QThread
 		
 		virtual bool ignite(tint id);
 		
-		Controller::ControllerSPtr controller();
+		QSharedPointer<Controller> controller();
 		
 	protected:
 	
@@ -166,7 +167,7 @@ class ControllerThread : public QThread
 		QMutex m_mutex;
 		QWaitCondition m_condition;
 		
-		Controller::ControllerSPtr m_controller;
+		QSharedPointer<Controller> m_controller;
 		
 		virtual void run();
 };

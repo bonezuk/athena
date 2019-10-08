@@ -14,39 +14,13 @@ TCPClientService::TCPClientService(QObject *parent) : Service(parent),
 //-------------------------------------------------------------------------------------------
 
 TCPClientService::~TCPClientService()
-{
-	try
-	{
-		TCPClientService::stop();
-	}
-	catch(...) {}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
 void TCPClientService::printError(const tchar *strR,const tchar *strE) const
 {
 	common::Log::g_Log << "TCPClientService::" << strR << " - " << strE << "." << common::c_endl;
-}
-
-//-------------------------------------------------------------------------------------------
-
-void TCPClientService::delConnection(TCPConnectionSocket *s)
-{
-	QSet<QSharedPointer<TCPConnectionSocket> >::iterator ppI;
-
-	for(ppI = m_clientSet.begin(); ppI != m_clientSet.end();)
-	{
-		QSharedPointer<TCPConnectionSocket> pSocket = *ppI;
-		if(pSocket.data() == s)
-		{
-			ppI = m_clientSet.erase(ppI);
-		}
-		else
-		{
-			++ppI;
-		}
-	}
 }
 
 //-------------------------------------------------------------------------------------------

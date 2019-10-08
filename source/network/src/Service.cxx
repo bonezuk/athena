@@ -80,15 +80,14 @@ tint Service::m_newID = 0;
 
 //-------------------------------------------------------------------------------------------
 
-Service::Service(QObject *parent) : QObject(parent),
-	m_controller(0),
+Service::Service(QSharedPointer<Controller>& ctrl, QObject *parent) : QObject(parent),
+	m_controller(ctrl),
 	m_id(0),
 	m_name(),
 	m_mutex(),
 	m_waitConditionMap()
 {
 	m_newID++;
-	m_controller = reinterpret_cast<Controller *>(parent);
 	m_id = m_newID;
 }
 
@@ -96,11 +95,7 @@ Service::Service(QObject *parent) : QObject(parent),
 
 Service::~Service()
 {
-	try
-	{
-		Service::freeConditions();
-	}
-	catch(...) {}
+	Service::freeConditions();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -159,9 +154,10 @@ void Service::freeConditions()
 
 //-------------------------------------------------------------------------------------------
 
-Controller *Service::controller() const
+QSharedPointer<Controller> Service::controller() const
 {
-	return m_controller;
+	QSharedPointer<Controller> pCtrl(m_controller);
+	return pCtrl;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -206,12 +202,12 @@ void Service::doRead()
 
 //-------------------------------------------------------------------------------------------
 
-void Service::addConnection(TCPConnectionSocket *s)
+void Service::addConnection(QSharedPointer<TCPConnectionSocket> &s)
 {}
 
 //-------------------------------------------------------------------------------------------
 
-void Service::delConnection(TCPConnectionSocket *s)
+void Service::delConnection(QSharedPointer<TCPConnectionSocket> &s)
 {}
 
 //-------------------------------------------------------------------------------------------

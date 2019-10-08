@@ -8,7 +8,7 @@ namespace network
 {
 //-------------------------------------------------------------------------------------------
 
-TCPServerSocket::TCPServerSocket(Service *svr,QObject *parent) : Socket(svr,parent),
+TCPServerSocket::TCPServerSocket(QSharedPointer<Service>& svr,QObject *parent) : Socket(svr,parent),
 	m_port(0)
 {}
 
@@ -16,11 +16,7 @@ TCPServerSocket::TCPServerSocket(Service *svr,QObject *parent) : Socket(svr,pare
 
 TCPServerSocket::~TCPServerSocket()
 {
-	try
-	{
-		TCPServerSocket::close();
-	}
-	catch(...) {}
+	TCPServerSocket::close();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -153,12 +149,11 @@ bool TCPServerSocket::canWrite() const
 
 bool TCPServerSocket::doRead()
 {
-	TCPConnServerSocket *io = newIO();
+	QSharedPointer<TCPConnServerSocket> io = newIO();
 	
 	if(!io->open(m_socket))
 	{
 		printError("doRead","Error getting new connection");
-		delete io;
 	}
 	m_state = 0;
 	return true;
@@ -173,9 +168,10 @@ bool TCPServerSocket::doWrite()
 
 //-------------------------------------------------------------------------------------------
 
-TCPConnServerSocket *TCPServerSocket::newIO()
+QSharedPointer<TCPConnServerSocket> TCPServerSocket::newIO()
 {
-	TCPConnServerSocket *io = new TCPConnServerSocket(m_service,this);
+	QSharedPointer<TCPConnServerSocket> io(new TCPConnServerSocket(m_service, this));
+	io->addConnection(io.dynamicCast<TCPConnectionSocket>());
 	return io;
 }
 

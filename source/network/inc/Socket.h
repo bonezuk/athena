@@ -18,7 +18,6 @@ class NETWORK_EXPORT Socket : public QObject
 		Q_OBJECT
 	
 	public:
-		typedef Socket* SocketPtr;
         typedef QSharedPointer<SocketPtr> SocketSPtr;
 
 		static const tuint32 c_socketStateRead  = 0x00000001;
@@ -26,10 +25,10 @@ class NETWORK_EXPORT Socket : public QObject
 		static const tuint32 c_socketStateClose = 0x00000004;
 	
 	public:
-		Socket(Service *svr,QObject *parent = 0);
+		Socket(QSharedPointer<Service>& svr,QObject *parent = 0);
 		virtual ~Socket();
 		
-		Service *service() const;
+		QSharedPointer<Service> service() const;
 		socket_type socket();
 		
 		tuint32& state();
@@ -48,22 +47,26 @@ class NETWORK_EXPORT Socket : public QObject
 		virtual bool isComplete() const;
 		virtual void markAsComplete();
 		
-	protected:
+		virtual void deleteServiceConnection();
 		
-		Service *m_service;
+	protected:
+		QSharedPointer<Service> m_service;
 		socket_type m_socket;
 		tuint32 m_state;
 		bool m_isComplete;
 	
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;
+		
+		virtual void addServiceConnection();
 };
 
 //-------------------------------------------------------------------------------------------
 
-inline Service *Socket::service() const
+inline QSharedPointer<Service> Socket::service() const
 {
-	return m_service;
+	QSharedPointer<Service> pService(m_service);
+	return pService;
 }
 
 //-------------------------------------------------------------------------------------------

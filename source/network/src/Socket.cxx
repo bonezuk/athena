@@ -8,31 +8,17 @@ namespace network
 {
 //-------------------------------------------------------------------------------------------
 
-Socket::Socket(Service *svr,QObject *parent) : QObject(parent),
+Socket::Socket(QSharedPointer<Service>& svr,QObject *parent) : QObject(parent),
 	m_service(svr),
 	m_socket(c_invalidSocket),
 	m_state(0),
 	m_isComplete(false)
-{
-	if(m_service!=0)
-	{
-		m_service->controller()->addSocket(m_service,this);
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
 Socket::~Socket()
-{
-	try
-	{
-		if(m_service!=0)
-		{
-			m_service->controller()->delSocket(m_service,this);
-		}
-	}
-	catch(...) {}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
@@ -46,6 +32,27 @@ void Socket::printError(const tchar *strR,const tchar *strE) const
 void Socket::printError(const tchar *strR,const tchar *strE,tint eNo) const
 {
 	Resource::instance().error("Socket",strR,strE,eNo);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Socket::addServiceConnection()
+{
+	if(!m_service.isNull() && !m_service->controller().isNull() && !m_self.isNull())
+	{
+		m_service->controller()->addSocket(m_service, m_self);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Socket::deleteServiceConnection()
+{
+	if(!m_service.isNull() && !m_service->controller().isNull() && !m_self.isNull())
+	{
+		m_service->controller()->delSocket(m_service, m_self);
+	}
+	m_service.clear();
 }
 
 //-------------------------------------------------------------------------------------------

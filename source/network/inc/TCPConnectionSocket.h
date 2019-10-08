@@ -19,7 +19,7 @@ class NETWORK_EXPORT TCPConnectionSocket : public Socket
 		Q_OBJECT
 	
 	public:
-		TCPConnectionSocket(Service *svr,QObject *parent = 0);
+		TCPConnectionSocket(QSharedPointer<Service>& svr,QObject *parent = 0);
 		virtual ~TCPConnectionSocket();
 		
 		virtual void close();

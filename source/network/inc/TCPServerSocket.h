@@ -24,7 +24,7 @@ class NETWORK_EXPORT TCPServerSocket : public Socket
 		Q_OBJECT
 		
 	public:
-		TCPServerSocket(Service *svr,QObject *parent = 0);
+		TCPServerSocket(QSharedPointer<Service>& svr,QObject *parent = 0);
 		virtual ~TCPServerSocket();
 		
 		tint port() const;
@@ -45,7 +45,7 @@ class NETWORK_EXPORT TCPServerSocket : public Socket
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;
 		
-		virtual TCPConnServerSocket *newIO();
+		virtual QSharedPointer<TCPConnServerSocket> newIO();
 };
 
 //-------------------------------------------------------------------------------------------
