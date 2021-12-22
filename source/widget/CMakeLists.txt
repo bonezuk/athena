@@ -21,3 +21,7 @@ if (OMEGA_WIN32)
 elseif (OMEGA_MACOSX OR OMEGA_LINUX)
 	target_link_libraries(widget common http mime network_omega trackdb xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets)
 endif (OMEGA_WIN32)
+
+if (${TIGER_LINUX_DISTRO})
+	install(TARGETS widget DESTINATION lib)
+endif (${TIGER_LINUX_DISTRO})

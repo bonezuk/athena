@@ -10,3 +10,7 @@ if (OMEGA_WIN32)
 elseif (OMEGA_MACOSX)
 	target_link_libraries(cyanomega engine common xml2 mpcdec Qt5::Core Qt5::Gui Qt5::Xml)
 endif (OMEGA_WIN32)
+
+if (${TIGER_LINUX_DISTRO})
+	install(TARGETS cyanomega DESTINATION lib)
+endif (${TIGER_LINUX_DISTRO})

@@ -14,3 +14,7 @@ if (OMEGA_WIN32)
 elseif (OMEGA_MACOSX)
 	target_link_libraries(network_omega engine common xml2 Qt5::Core Qt5::Gui Qt5::Xml)
 endif (OMEGA_WIN32)
+
+if (${TIGER_LINUX_DISTRO})
+	install(TARGETS network_omega DESTINATION lib)
+endif (${TIGER_LINUX_DISTRO})
