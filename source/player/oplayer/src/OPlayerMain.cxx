@@ -118,35 +118,43 @@ void OPlayer::onInit()
 		m_audio = audioio::AOBase::get("alsa");
 #endif
 
-		connect(m_audio.data(),SIGNAL(onStart(const QString&)),this,SLOT(onAudioStart(const QString&)));
-		connect(m_audio.data(),SIGNAL(onStop()),this,SLOT(onStop()));
-		connect(m_audio.data(),SIGNAL(onPlay()),this,SLOT(onAudioPlay()));
-		connect(m_audio.data(),SIGNAL(onPause()),this,SLOT(onAudioPause()));
-		connect(m_audio.data(),SIGNAL(onTime(quint64)),this,SLOT(onAudioTime(quint64)));
-		connect(m_audio.data(),SIGNAL(onBuffer(tfloat32)),this,SLOT(onAudioBuffer(tfloat32)));
-		connect(m_audio.data(),SIGNAL(onReadyForNext()),this,SLOT(onAudioReadyForNext()));
-		connect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
-		connect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
+		if(!m_audio.isNull())
+		{
+			connect(m_audio.data(),SIGNAL(onStart(const QString&)),this,SLOT(onAudioStart(const QString&)));
+			connect(m_audio.data(),SIGNAL(onStop()),this,SLOT(onStop()));
+			connect(m_audio.data(),SIGNAL(onPlay()),this,SLOT(onAudioPlay()));
+			connect(m_audio.data(),SIGNAL(onPause()),this,SLOT(onAudioPause()));
+			connect(m_audio.data(),SIGNAL(onTime(quint64)),this,SLOT(onAudioTime(quint64)));
+			connect(m_audio.data(),SIGNAL(onBuffer(tfloat32)),this,SLOT(onAudioBuffer(tfloat32)));
+			connect(m_audio.data(),SIGNAL(onReadyForNext()),this,SLOT(onAudioReadyForNext()));
+			connect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
+			connect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
 
-		if(m_forceDacBits==16 || m_forceDacBits==24 || m_forceDacBits==32)
-		{
-			m_audio->forceBitsPerSample(m_forceDacBits);
-		}
-		m_audio->setCrossfade(0.0);
+			if(m_forceDacBits==16 || m_forceDacBits==24 || m_forceDacBits==32)
+			{
+				m_audio->forceBitsPerSample(m_forceDacBits);
+			}
+			m_audio->setCrossfade(0.0);
 		
-		if(!m_printDeviceInfo)
-		{
-			QString fileName = m_fileNameList.at(0);
-			m_audio->open(fileName);
+			if(!m_printDeviceInfo)
+			{
+				QString fileName = m_fileNameList.at(0);
+				m_audio->open(fileName);
+			}
+			else
+			{
+				common::Log::g_Log.print("Number of Audio Devices %d\n",m_audio->noDevices());
+				for(int deviceIdx=0;deviceIdx<m_audio->noDevices();deviceIdx++)
+				{
+					m_audio->device(deviceIdx)->print();
+					common::Log::g_Log.print("\n");
+				}
+				onStop();
+			}
 		}
 		else
 		{
-			common::Log::g_Log.print("Number of Audio Devices %d\n",m_audio->noDevices());
-			for(int deviceIdx=0;deviceIdx<m_audio->noDevices();deviceIdx++)
-			{
-				m_audio->device(deviceIdx)->print();
-				common::Log::g_Log.print("\n");
-			}
+			common::Log::g_Log.print("Failed to initialise audio engine\n");
 			onStop();
 		}
 	}
@@ -160,10 +168,10 @@ void OPlayer::onInit()
 
 void OPlayer::onStop()
 {
-	if(m_audio.data()!=0)
+	if(!m_audio.isNull())
 	{
 		m_audio.clear();
-		fprintf(stdout,"\n");
+		common::Log::g_Log.print("\n");
 	}
 	quit();	
 }
@@ -172,7 +180,7 @@ void OPlayer::onStop()
 
 void OPlayer::processArguements(int argc,char **argv)
 {
-	printf("Black Omega CLI Player v2.3.0 (c) 2015 Stuart A. MacLean\n");
+	printf("Black Omega CLI Player v2.3.0 (c) 2021 Stuart A. MacLean\n");
 
 	for(int idx=1;idx<argc;idx++)
 	{
@@ -338,7 +346,7 @@ void setPluginLocation(const char *appPath)
 	d.cd("Plugins");
 	pluginDir = d.absolutePath();
 	QCoreApplication::setLibraryPaths(QStringList(pluginDir));
-#else
+#elif defined(Q_OS_WIN)
 	QFileInfo appFile(appPath);
 	QDir d = appFile.absolutePath();
 	QString pluginDir;

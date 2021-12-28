@@ -37,26 +37,33 @@ bool AOQueryALSA::queryNames()
 	QVector<tint> cards;
 	
 	cards = listOfCards();
-	for(idx=0;idx<cards.size();idx++)
+	if(!cards.isEmpty())
 	{
-		int status;
-		char *name = 0;
-		int card = cards.at(idx);	
-		
-		status = LinuxALSAIF::instance()->snd_card_get_longname(card,&name);
-		if(!status && name!=0)
+		for(idx=0;idx<cards.size();idx++)
 		{
-            QString n = QString::fromUtf8(name);
-			DeviceALSA *pDevice = new DeviceALSA();
-            pDevice->id() = QString::number(card);
-			pDevice->name() = n;
-			m_devices.append(pDevice);
-			res = true;
+			int status;
+			char *name = 0;
+			int card = cards.at(idx);
+
+			status = LinuxALSAIF::instance()->snd_card_get_longname(card,&name);
+			if(!status && name!=0)
+			{
+				QString n = QString::fromUtf8(name);
+				DeviceALSA *pDevice = new DeviceALSA();
+	            pDevice->id() = QString::number(card);
+				pDevice->name() = n;
+				m_devices.append(pDevice);
+				res = true;
+			}
+			else
+			{
+				printError("queryNames","Failed to long name of sound card",status);
+			}
 		}
-		else
-		{
-			printError("queryNames","Failed to long name of sound card",status);
-		}
+	}
+	else
+	{
+		common::Log::g_Log << "No sound hardware found. Cannot initialise audio." << common::c_endl;
 	}
 	return res;
 }
@@ -505,8 +512,8 @@ bool AOQueryALSA::DeviceALSA::queryDevice(int cardNo)
 
 	m_card = cardNo;
 	hwName = pcmDeviceName().toLatin1();
-	
-    status = LinuxALSAIF::instance()->snd_pcm_open(&handle,hwName.toLatin1().data(),SND_PCM_STREAM_PLAYBACK,0);
+
+	status = LinuxALSAIF::instance()->snd_pcm_open(&handle,hwName.toLatin1().data(),SND_PCM_STREAM_PLAYBACK,0);
 	if(!status)
 	{
 		querySupportedFormats(handle);
