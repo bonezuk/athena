@@ -4,8 +4,8 @@ set(CMAKE_AUTOMOC ON)
 message ("Qt path")
 
 if (OMEGA_WIN32)
-set(QT_HOME "" CACHE PATH "Qt install directory")
-set(CMAKE_PREFIX_PATH "${QT_HOME}")
+	set(QT_HOME "" CACHE PATH "Qt install directory")
+	set(CMAKE_PREFIX_PATH "${QT_HOME}")
 else (OMEGA_WIN32)
 	string(STRIP "${CMAKE_PREFIX_PATH}" CMAKE_PREFIX_PATH)
 	if (CMAKE_PREFIX_PATH STREQUAL "")
@@ -28,12 +28,17 @@ find_package(Qt5Xml)
 find_package(Qt5Widgets)
 find_package(Qt5Test)
 
+if (${TIGER_LINUX_DISTRO})
+	set(QT_HOME "${ATHENA_UTILS}/usr")
+endif (${TIGER_LINUX_DISTRO})
+
 include_directories(AFTER "${QT_HOME}/include" )
 include_directories(AFTER "${QT_HOME}/include/QtCore" )
 include_directories(AFTER "${QT_HOME}/include/QtGui" )
 include_directories(AFTER "${QT_HOME}/include/QtXml" )
 include_directories(AFTER "${QT_HOME}/include/QtWidgets" )
 include_directories(AFTER "${QT_HOME}/include/QtTest" )
+
 
 if (OMEGA_WIN32)
 

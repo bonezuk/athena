@@ -75,7 +75,7 @@ TEST(FormatType8Bit,sampleFrom8BitSigned)
 {
 	const tfloat64 c_Tolerance = 0.00000001;
 	
-	const tbyte c_input[11] = {
+	const signed char c_input[11] = {
 		-128, -90, -60, -30, -1, 0,
 		1, 30, 60, 90, 127
 	};
@@ -122,7 +122,7 @@ TEST(FormatType8Bit,sampleFrom8BitUnsigned)
 {
 	const tfloat64 c_Tolerance = 0.00000001;
 	
-	const tbyte c_input[11] = {
+	const signed char c_input[11] = {
 		-128, -90, -60, -30, -1, 0,
 		1, 30, 60, 90, 127
 	};

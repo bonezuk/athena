@@ -25,3 +25,7 @@ elseif (OMEGA_MACOSX)
 elseif (OMEGA_LINUX)
 	target_link_libraries(remote common dlna network_omega xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets)
 endif (OMEGA_WIN32)
+
+if (${TIGER_LINUX_DISTRO})
+	install(TARGETS remote DESTINATION lib)
+endif (${TIGER_LINUX_DISTRO})

@@ -18,6 +18,10 @@ add_library(widget SHARED ${WIDGET_HEADER} ${WIDGET_SOURCE} ${WIDGET_UI_HEADERS}
 
 if (OMEGA_WIN32)
 	target_link_libraries(widget common http mime network_omega xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets winmm ws2_32)
-elseif (OMEGA_MACOSX OR OMEGA_LINUX)
+else (OMEGA_WIN32)
 	target_link_libraries(widget common http mime network_omega trackdb xml2 Qt5::Core Qt5::Gui Qt5::Xml Qt5::Widgets)
 endif (OMEGA_WIN32)
+
+if (${TIGER_LINUX_DISTRO})
+	install(TARGETS widget DESTINATION lib)
+endif (${TIGER_LINUX_DISTRO})

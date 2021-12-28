@@ -7,6 +7,10 @@ add_library(cyanomega SHARED ${CYANOMEGA_ENGINE_HEADER} ${CYANOMEGA_ENGINE_SOURC
 
 if (OMEGA_WIN32)
 	target_link_libraries(cyanomega engine common xml2 mpcdec Qt5::Core Qt5::Gui Qt5::Xml winmm)
-elseif (OMEGA_MACOSX)
+else (OMEGA_WIN32)
 	target_link_libraries(cyanomega engine common xml2 mpcdec Qt5::Core Qt5::Gui Qt5::Xml)
 endif (OMEGA_WIN32)
+
+if (${TIGER_LINUX_DISTRO})
+	install(TARGETS cyanomega DESTINATION lib)
+endif (${TIGER_LINUX_DISTRO})

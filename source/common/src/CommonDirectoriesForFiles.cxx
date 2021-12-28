@@ -50,7 +50,7 @@ bool CommonDirectoriesForFiles::Node::isEqual(const QString& n) const
 {
 #if defined(OMEGA_WIN32)
 	return (m_name.compare(n,Qt::CaseInsensitive)==0);
-#elif defined(OMEGA_MACOSX)
+#else
 	return (m_name.compare(n,Qt::CaseSensitive)==0);
 #endif
 }
