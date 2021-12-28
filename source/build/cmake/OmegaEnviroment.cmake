@@ -34,6 +34,7 @@ endif (${TIGER_MAC_STORE})
 
 if (MSVC12)
 	set(OMEGA_MSVC12 TRUE)
+	add_definitions(/bigobj)
 elseif (${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
 	message("Set MSVC12")
 	set(OMEGA_MSVC12 TRUE)
