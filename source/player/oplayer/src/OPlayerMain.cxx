@@ -7,6 +7,7 @@
 #if defined(ORCUS_WIN32)
 #include "audioio/inc/WasAPIIF.h"
 #endif
+#include "common/inc/CommonFunctions.h"
 
 #if !defined(ORCUS_WIN32)
 #include <termios.h>
@@ -352,20 +353,19 @@ void setPluginLocation(const char *appPath)
 
 void setupPlatform()
 {
+	::orcus::common::loadSharedLibrary("blackomega");
+	::orcus::common::loadSharedLibrary("blueomega");
+	::orcus::common::loadSharedLibrary("cyanomega");
+	::orcus::common::loadSharedLibrary("greenomega");
+	::orcus::common::loadSharedLibrary("redomega");
+	::orcus::common::loadSharedLibrary("silveromega");
+	::orcus::common::loadSharedLibrary("toneomega");
+	::orcus::common::loadSharedLibrary("violetomega");
+	::orcus::common::loadSharedLibrary("wavpackomega");
+	::orcus::common::loadSharedLibrary("whiteomega");
+	::orcus::common::loadSharedLibrary("widget");
 #if defined(ORCUS_WIN32)
-	LoadLibraryA("blackomega.dll");
-	LoadLibraryA("blueomega.dll");
-	LoadLibraryA("cyanomega.dll");
-	LoadLibraryA("greenomega.dll");
-	LoadLibraryA("monkeyomega.dll");
-	LoadLibraryA("redomega.dll");
-	LoadLibraryA("toneomega.dll");
-	LoadLibraryA("silveromega.dll");
-	LoadLibraryA("violetomega.dll");
-	LoadLibraryA("wavpackomega.dll");
-	LoadLibraryA("whiteomega.dll");
-	LoadLibraryA("widget.dll");
-    CoInitialize(NULL);
+	CoInitialize(NULL);
 #endif
 }
 

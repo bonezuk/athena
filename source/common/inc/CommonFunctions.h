@@ -20,6 +20,8 @@ COMMON_EXPORT QString getOSErrorString(tint errCode);
 COMMON_EXPORT void msleepThread(tint msecs);
 COMMON_EXPORT void usleepThread(tint usecs);
 
+COMMON_EXPORT void loadSharedLibrary(const char *libName);
+
 //-------------------------------------------------------------------------------------------
 } // namespace common
 } // namespace orcus

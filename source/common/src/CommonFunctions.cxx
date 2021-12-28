@@ -2,6 +2,10 @@
 #include <QtGlobal>
 #include <QThread>
 
+#if defined(OMEGA_LINUX)
+#include <dlfcn.h>
+#endif
+
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
@@ -69,6 +73,21 @@ void usleepThread(tint usecs)
 #elif defined(OMEGA_POSIX)
 	::usleep(usecs);
 #endif
+#endif
+}
+
+//-------------------------------------------------------------------------------------------
+
+void loadSharedLibrary(const char *libName)
+{
+#if defined(ORCUS_WIN32)
+	QString name = QString::fromUtf8(libName) + ".dll";
+	Q_ASSERT(LoadLibraryA(name.toUtf8().constData()) != NULL);
+#elif defined(OMEGA_LINUX)
+	void *handle;
+	QString name = "lib" + QString::fromUtf8(libName) + ".so";
+	handle = dlopen(name.toUtf8().constData(), RTLD_NOW);
+	Q_ASSERT(handle != NULL);
 #endif
 }
 
