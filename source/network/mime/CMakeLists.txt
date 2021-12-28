@@ -7,7 +7,7 @@ add_library(mime SHARED ${NETWORK_MIME_HEADER} ${NETWORK_MIME_SOURCE})
 
 if (OMEGA_WIN32)
 	target_link_libraries(mime network_omega http engine common xml2 Qt5::Core Qt5::Gui Qt5::Xml winmm ws2_32)
-elseif (OMEGA_MACOSX)
+else (OMEGA_WIN32)
 	target_link_libraries(mime network_omega http engine common xml2 Qt5::Core Qt5::Gui Qt5::Xml)
 endif (OMEGA_WIN32)
 
