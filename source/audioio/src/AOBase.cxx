@@ -726,7 +726,11 @@ bool AOBase::startAudioService()
 {
 	int i;
 	bool res = true;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::startAudioService\n");
+#endif
+
 	if(!m_audioStartCount)
 	{
 #if defined(OMEGA_WIN32)
@@ -824,6 +828,10 @@ bool AOBase::startAudioService()
 
 void AOBase::stopAudioService()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::stopAudioService\n");
+#endif
+
 	m_audioStartCount--;
 	if(!m_audioStartCount)
 	{
@@ -852,7 +860,11 @@ bool AOBase::isLive() const
 bool AOBase::init()
 {
 	QSettings settings;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::init\n");
+#endif
+
 	m_threadId = QThread::currentThreadId();
 		
 	settings.beginGroup("audio");
@@ -886,7 +898,11 @@ bool AOBase::init()
 void AOBase::reset()
 {
 	QSettings settings;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::reset\n");
+#endif
+
 	settings.beginGroup("audio");
 	settings.setValue("crossfade",QVariant(static_cast<tfloat64>(m_crossFadeTimeLen)));
 	settings.endGroup();
@@ -905,6 +921,10 @@ void AOBase::reset()
 
 QSharedPointer<AOBase> AOBase::get(const QString& type)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::get - %s\n", type.toUtf8().constData());
+#endif
+
 	AudioThread *aThread = new AudioThread(type);
 	if(aThread->ignite())
 	{
@@ -923,7 +943,11 @@ QSharedPointer<AOBase> AOBase::get(const QString& type)
 void AOBase::end(QSharedPointer<AOBase> audioOutput)
 {
 	AudioThread *aThread = audioOutput->m_thread;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::end\n");
+#endif
+
 	if(aThread!=0)
 	{
 		aThread->quit();
@@ -948,6 +972,10 @@ void AOBase::initCyclicBuffer()
 		noItems = 3;
 	}
 	m_noOfCyclicBufferItems = noItems;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::initCyclicBuffer - %d, %d, %.8f,\n", noItems, m_frequency, static_cast<tfloat64>(bufferT));
+#endif
 
 	for(i=0;i<noItems;++i)
 	{
@@ -984,7 +1012,11 @@ void AOBase::initCyclicBuffer()
 void AOBase::freeCyclicBuffer()
 {
 	AudioItem *nItem,*item = m_callbackAudioItem;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::freeCyclicBuffer\n");
+#endif
+
 	if(item!=0)
 	{
 		do
@@ -1040,6 +1072,11 @@ QString AOBase::getDeviceName(tint devIdx)
 		devName = m_deviceInfo->device(devIdx).name();
 	}
 	m_deviceInfoMutex.unlock();
+	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::getDeviceName - %d, %s\n", devIdx, devName.toUtf8().constData());
+#endif
+	
 	return devName;
 }
 
@@ -1048,6 +1085,10 @@ QString AOBase::getDeviceName(tint devIdx)
 void AOBase::flushCyclicBuffer()
 {
 	AudioItem *item = m_callbackAudioItem;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::flushCyclicBuffer\n");
+#endif
 	
 	do
 	{
@@ -1071,6 +1112,10 @@ void AOBase::flushCyclicBuffer()
 
 engine::Codec *AOBase::createNewCodecFromUrl(const QString& url) const
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::createNewCodecFromUrl - %s\n", url.toUtf8().constData());
+#endif
+
 	return engine::Codec::get(url);
 }
 
@@ -1082,6 +1127,11 @@ void AOBase::connectPreBufferedRemoteCodec()
 	
 	QObject::connect(getCodec(),SIGNAL(onInit(void*)),this,SLOT(onCodecInit(void*)));
 	bT = getRemoteTimeSync();
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::connectPreBufferedRemoteCodec - %.8f\n", static_cast<tfloat64>(bT));
+#endif
+
 	getCodec()->buffer(bT);
 	setState(e_statePreBuffer);
 	startInternalTimer(100);
@@ -1091,6 +1141,9 @@ void AOBase::connectPreBufferedRemoteCodec()
 
 void AOBase::startInternalTimer(int period)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::startInternalTimer - %d\n", period);
+#endif
 	m_timer->start(period);
 }
 
@@ -1098,6 +1151,9 @@ void AOBase::startInternalTimer(int period)
 
 void AOBase::emitOnStart(const QString& url)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::emitOnStart - %s\n", url.toUtf8().constData());
+#endif
 	emit onStart(url);
 }
 
@@ -1105,6 +1161,9 @@ void AOBase::emitOnStart(const QString& url)
 
 void AOBase::emitOnPause()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::emitOnPause\n");
+#endif
 	emit onPause();
 }
 
@@ -1112,6 +1171,9 @@ void AOBase::emitOnPause()
 
 void AOBase::emitOnPlay()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::emitOnPlay\n");
+#endif
 	emit onPlay();
 }
 
@@ -1119,6 +1181,9 @@ void AOBase::emitOnPlay()
 
 void AOBase::startPlayTimeWithSingleCodec()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::startPlayTimeWithSingleCodec\n");
+#endif
 	m_codecState = e_codecSingle;
 	m_currentPlayTime.set(0);
 }
@@ -1128,7 +1193,11 @@ void AOBase::startPlayTimeWithSingleCodec()
 void AOBase::connectPreBufferedNextRemoteCodec(const QString& url,bool fade)
 {
 	common::TimeStamp bT;
-				
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::connectPreBufferedNextRemoteCodec\n");
+#endif
+
 	QObject::connect(getNextCodec(),SIGNAL(onInit(void*)),this,SLOT(onCodecInit(void*)));
 	bT = getRemoteTimeSync();
 	getNextCodec()->buffer(bT);
@@ -1142,7 +1211,11 @@ void AOBase::connectPreBufferedNextRemoteCodec(const QString& url,bool fade)
 void AOBase::calculateNextCodecCrossFadeTime()
 {
 	common::TimeStamp eC;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::connectPreBufferedNextRemoteCodec\n");
+#endif
+
 	setCrossFadeTime(getCodecCurrentTime() + 0.01);
 	eC = getCrossFadeTime() + getProgFadeTime();
 	if(eC < getCodecTimeLength() || (getCodecTimePositionComplete()>0 && eC<getCodecTimePositionComplete()))
@@ -1157,6 +1230,9 @@ void AOBase::calculateNextCodecCrossFadeTime()
 
 void AOBase::emitOnNoNext()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::emitOnNoNext\n");
+#endif
 	emit onNoNext();
 }
 
@@ -1535,6 +1611,10 @@ void AOBase::setCodecCompletePositionFromNext()
 {
 	common::TimeStamp zeroPos;
 
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::setCodecCompletePositionFromNext\n");
+#endif
+
 	if(getNextCodec()!=0 && getNextCodecTimeLengthComplete()>0)
 	{
 		common::TimeStamp endPos = getNextCodecSeekTime() + getNextCodecTimeLengthComplete();
@@ -1700,6 +1780,11 @@ common::TimeStamp AOBase::currentPlayTime()
 	{
 		t = 0;
 	}
+	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::currentPlayTime - %.8f\n", static_cast<tfloat64>(t));
+#endif
+	
 	return t;
 }
 
@@ -1720,6 +1805,9 @@ common::TimeStamp AOBase::currentCallbackTime()
 			loop = false;
 		}
 	};
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::currentCallbackTime - %.8f\n", static_cast<tfloat64>(t));
+#endif
 	return t;
 }
 
@@ -1727,6 +1815,10 @@ common::TimeStamp AOBase::currentCallbackTime()
 
 void AOBase::processCodec(bool initF)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodec - %d\n", (int)initF);
+#endif
+
 	if(getCodec()!=0)
 	{
 		AudioItem *item = getCodecAudioItem();
@@ -1750,7 +1842,11 @@ AudioItem *AOBase::processCodecLoop(AudioItem *item,bool& initF,bool& loop)
 	common::TimeStamp currentT;
 	
 	currentT = currentCallbackTime();
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecLoop - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
+
 	if(getAudioProcessType()==0)
 	{
 		item->setState(AudioItem::e_stateCodec);
@@ -1774,6 +1870,10 @@ bool AOBase::processCodecState(AudioItem **pItem,const common::TimeStamp& curren
 {
 	AudioItem *item = *pItem;
 	bool loop;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecState - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
 
 	switch(getState())
 	{
@@ -1806,7 +1906,11 @@ bool AOBase::processCodecPlay(AudioItem **pItem,const common::TimeStamp& current
 	AudioItem *item = *pItem;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
 	tint iFrom = (getAudioProcessType()==2) ? data->noParts() : 0;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlay - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
+
 	bool flag = processCodecPlayDecode(item,currentT,initF);
 	processCodecReadyForNext(item,flag,iFrom);
 	return processCodecPlayPostProcess(pItem,currentT,flag);
@@ -1818,6 +1922,10 @@ bool AOBase::processCodecPlayDecode(AudioItem* item,const common::TimeStamp& cur
 {
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
 	bool flag;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayDecode - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
 
 	if(getAudioProcessType()!=1)
 	{
@@ -1848,6 +1956,10 @@ bool AOBase::processCodecPlayDecodeInTime(AudioItem *item,const common::TimeStam
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
 	bool flag;
 	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayDecodeInTime - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
+	
 	while(flag = decodeAndResample(getCodec(),item,initF),flag)
 	{
 		if(data->noParts()==0)
@@ -1869,7 +1981,11 @@ bool AOBase::processCodecEndForTimePositionComplete(AudioItem *item,bool decodeF
 {
 	bool runningFlag;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecEndForTimePositionComplete\n");
+#endif
+
 	if(getCodecTimePositionComplete()>0 && data->end()>=getCodecTimePositionComplete())
 	{
 		data->clipToTime(getCodecTimePositionComplete());
@@ -1886,6 +2002,10 @@ bool AOBase::processCodecEndForTimePositionComplete(AudioItem *item,bool decodeF
 
 void AOBase::processCodecPlayTagPartAsRequired(engine::RData *data)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayTagPartAsRequired\n");
+#endif
+
 	if(getAudioProcessType()==2)
 	{
 		data->part(data->noParts() - 1).setNext(true);
@@ -1903,6 +2023,10 @@ void AOBase::processCodecPlayTagPartAsRequired(engine::RData *data)
 void AOBase::processCodecReadyForNext(AudioItem *item,bool completeFlag,tint iFrom)
 {
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecReadyForNext\n");
+#endif
 
 	if(data->noParts()>0)
 	{
@@ -1923,6 +2047,10 @@ void AOBase::processCodecReadyForNext(AudioItem *item,bool completeFlag,tint iFr
 
 void AOBase::processCodecPlayNextEndInParts(engine::RData *data,bool completeFlag,tint iFrom)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayNextEndInParts\n");
+#endif
+
 	if(getAudioProcessType()!=2)
 	{
 		for(tint i=iFrom;i<data->noParts();++i)
@@ -1955,6 +2083,10 @@ void AOBase::processCodecPlayNextEndInParts(engine::RData *data,bool completeFla
 
 void AOBase::processCodecPlayNextOutStateZero(engine::RData::Part& part)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayNextOutStateZero\n");
+#endif
+
 	if(part.start() > getNextCodecTime())
 	{
 		setNextOutState(1);
@@ -1972,6 +2104,10 @@ void AOBase::processCodecPlayNextOutStateZero(engine::RData::Part& part)
 
 void AOBase::processCodecPlayNextOutStateOne(engine::RData::Part& part,engine::RData *data)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayNextOutStateOne\n");
+#endif
+
 	if(getCrossFadeFlag() && getNextCodec()!=0 && part.end()>=getCrossFadeTime())
 	{
 		setState(e_stateCrossFade);
@@ -1987,6 +2123,10 @@ void AOBase::processCodecPlayNextOutStateOne(engine::RData::Part& part,engine::R
 bool AOBase::processCodecPlayPostProcess(AudioItem **pItem,const common::TimeStamp& currentT,bool completeFlag)
 {
 	bool loop = true;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayPostProcess - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
 
 	if(getAudioProcessType()!=1)
 	{
@@ -2009,7 +2149,11 @@ bool AOBase::processCodecPlayPostProcessComplete(AudioItem **pItem,const common:
 	bool loop;
 	AudioItem *item = *pItem;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayPostProcessComplete - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
+
 	if(data->noParts() > 0)
 	{
 		if(getCodec()->isRemote())
@@ -2036,7 +2180,11 @@ bool AOBase::processCodecPlayPostProcessCompleteRemote(AudioItem **pItem,const c
 	AudioItem *item = *pItem;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
 	common::TimeStamp endT = data->part(data->noParts() - 1).end();
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayPostProcessComplete - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
+
 	if(getAudioStartFlag() && currentT>=endT)
 	{
 		*pItem = item->prev();
@@ -2055,6 +2203,11 @@ bool AOBase::processCodecPlayPostProcessCompleteLocal(AudioItem **pItem)
 {
 	AudioItem *item = *pItem;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayPostProcessCompleteLocal\n");
+#endif	
+
 	postProcess(data);
 	item->setState(AudioItem::e_stateFull);
 	return true;
@@ -2065,6 +2218,10 @@ bool AOBase::processCodecPlayPostProcessCompleteLocal(AudioItem **pItem)
 bool AOBase::processCodecPlayPostProcessRunning(AudioItem **pItem)
 {
 	bool res = true;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayPostProcessRunning\n");
+#endif
 
 	if(getCodec()->isRemote() && !getCodec()->isComplete())
 	{
@@ -2095,6 +2252,10 @@ bool AOBase::processCodecPlayPostProcessCheckBufferedState(AudioItem **pItem)
 	
 	currentT = timeFromEndOfItemBeingPlayed(item);
 	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayPostProcessCheckBufferedState - %.8f\n", static_cast<tfloat64>(currentT));
+#endif
+	
 	limit = (static_cast<tfloat64>(getRemoteTimeSync()) * 3.0 ) / 10.0;
 	limitT = limit;
 	if(currentT < limitT)
@@ -2115,7 +2276,11 @@ void AOBase::processCodecPlayPostProcessRunningWithNext(AudioItem **pItem)
 {
 	AudioItem *item = *pItem;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayPostProcessRunningWithNext\n");
+#endif
+
 	setAudioProcessType(2);
 	setTrackTimeState(0);
 	if(!data->rLength())
@@ -2131,6 +2296,10 @@ void AOBase::processCodecPlayPostProcessRunningWithNoNext(AudioItem **pItem)
 {
 	AudioItem *item = *pItem;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
+	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPlayPostProcessRunningWithNoNext\n");
+#endif
 	postProcess(data);
 	item->setState(AudioItem::e_stateFullEnd);
 }
@@ -2143,6 +2312,10 @@ bool AOBase::processCodecCrossFade(AudioItem* item,const common::TimeStamp&,bool
 	bool flag = true,loop = true;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
 	engine::RData *nextData;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecCrossFade\n");
+#endif
 
 	nextData = dynamic_cast<engine::RData *>(m_crossFadeItem->data());
 
@@ -2334,6 +2507,10 @@ bool AOBase::processCodecPreBuffer()
 	bool loop = true;
 	tfloat32 percent = 0.0f;
 
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processCodecPreBuffer\n");
+#endif
+
 	if(m_codec->isBuffered(percent) || m_codec->isComplete())
 	{
 		if(m_codec->isComplete())
@@ -2362,6 +2539,10 @@ common::TimeStamp AOBase::timeFromEndOfItemBeingPlayed(AudioItem *item)
 	common::TimeStamp totalT;
 	common::TimeStamp playT = currentPlayTime();
 	AudioItem *cItem = getCallbackAudioItem();
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::timeFromEndOfItemBeingPlayed\n");
+#endif
 
 	if(cItem!=0)
 	{
@@ -2421,6 +2602,10 @@ common::TimeStamp AOBase::timeFromEndOfItemBeingPlayedCallbackEndPart(AudioItem 
 	common::TimeStamp t,endT;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
 	engine::RData::Part& p = data->part(data->noParts() - 1);
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::timeFromEndOfItemBeingPlayedCallbackEndPart\n");
+#endif
 
 	if(endFlag)
 	{
@@ -2498,6 +2683,10 @@ common::TimeStamp AOBase::timeFromEndOfItemBeingPlayedCallbackPart(AudioItem *it
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
 	engine::RData::Part& p = data->part(index);
 
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::timeFromEndOfItemBeingPlayedCallbackPart\n");
+#endif
+
 	if(p.start() <= playT)
 	{
         t = timeFromEndOfItemBeingPlayedDiff(markT,playT);
@@ -2547,6 +2736,11 @@ common::TimeStamp AOBase::timeFromEndOfItemBeingPlayedCallbackPart(AudioItem *it
 common::TimeStamp AOBase::timeFromEndOfItemBeingPlayedDiff(const common::TimeStamp& a,const common::TimeStamp& b)
 {
     common::TimeStamp t;
+    
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::timeFromEndOfItemBeingPlayedDiff\n");
+#endif
+
     if(a > b)
     {
         t = a;
@@ -2562,7 +2756,11 @@ common::TimeStamp AOBase::timeFromEndOfItemBeingPlayedItemTime(AudioItem *item,A
 	tint i;
 	common::TimeStamp t;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::timeFromEndOfItemBeingPlayedItemTime\n");
+#endif
+
 	for(i=data->noParts()-1;i>=0;i--)
 	{
 		common::TimeStamp gapTime,partTime;
@@ -2606,6 +2804,10 @@ bool AOBase::timeFromEndOfItemBeingPlayedHasData(AudioItem *item,AudioItem *targ
 {
 	bool res = false;
 
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::timeFromEndOfItemBeingPlayedHasData\n");
+#endif
+
 	if(item!=getCallbackAudioItem() && item!=targetItem->next())
 	{
 		if(item->state()==AudioItem::e_stateFull || item->state()==AudioItem::e_stateFullEnd || item->state()==AudioItem::e_stateCodec ||
@@ -2624,6 +2826,10 @@ void AOBase::processComplete()
 	int i;
 	AudioItem *item = m_callbackAudioItem->prev();
 	common::TimeStamp current(currentPlayTime());
+	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processComplete - %.8f\n", static_cast<tfloat64>(current));
+#endif
 	
 	if(m_startNextTrackFlag)
 	{
@@ -2681,12 +2887,20 @@ void AOBase::processComplete()
 //-------------------------------------------------------------------------------------------
 
 void AOBase::postProcess(engine::RData *)
-{}
+{
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::postProcess\n");
+#endif
+}
 
 //-------------------------------------------------------------------------------------------
 
 void AOBase::onTimer()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::onTimer\n");
+#endif
+
 	if(canCallSlot(e_onTimer))
 	{
 		doTimer();
@@ -2698,6 +2912,10 @@ void AOBase::onTimer()
 
 void AOBase::doTimer()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::doTimer - %d\n", (int)m_state);
+#endif
+
 	processMessages();
 	
 	switch(m_state)
@@ -2733,6 +2951,10 @@ void AOBase::doTimer()
 
 void AOBase::onCodecInit(void *cPtr)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::onCodecInit\n");
+#endif
+
 	if(canCallSlot(e_onCodecInit,cPtr))
 	{
         doCodecInit(cPtr);
@@ -2864,6 +3086,10 @@ void AOBase::doCodecInit(void *cPtr)
 
 bool AOBase::pausePlayback(bool shutdown,bool signalFlag)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::pausePlayback\n");
+#endif
+
 	if(getState()!=e_statePause && getState()!=e_stateStop)
 	{
 		setPauseTime(currentPlayTime());
@@ -2888,6 +3114,10 @@ bool AOBase::pausePlayback(bool shutdown,bool signalFlag)
 bool AOBase::unpausePlayback(bool signalFlag)
 {
 	bool res = false;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlayback\n");
+#endif
 
 	if(getState()==e_statePause)
 	{
@@ -2929,6 +3159,9 @@ bool AOBase::unpausePlayback(bool signalFlag)
 
 bool AOBase::unpausePlaybackCodecStateNoPlay()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateNoPlay\n");
+#endif
 	m_state = e_stateStop;
 	return false;
 }
@@ -2938,6 +3171,9 @@ bool AOBase::unpausePlaybackCodecStateNoPlay()
 bool AOBase::unpausePlaybackCodecStateSingle()
 {
 	bool process = unpausePlaybackCodecStateSingleTiming();
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateSingle\n");
+#endif
 	unpausePlaybackCodecStateSinglePlayState(process);
 	return process;
 }
@@ -2947,6 +3183,9 @@ bool AOBase::unpausePlaybackCodecStateSingle()
 bool AOBase::unpausePlaybackCodecStateSingleTiming()
 {
 	bool process = unpausePlaybackCodecStateSingleSeekToPauseTime();
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateSingleTiming\n");
+#endif
 	return unpausePlaybackCodecStateSingleBufferOnRemote(process);
 }
 
@@ -2955,7 +3194,11 @@ bool AOBase::unpausePlaybackCodecStateSingleTiming()
 bool AOBase::unpausePlaybackCodecStateSingleSeekToPauseTime()
 {
 	bool process = true;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateSingleSeekToPauseTime\n");
+#endif
+
 	if(getCodec()->isSeek())
 	{
 		if(!getCodec()->seek(getPauseTime()))
@@ -2971,6 +3214,10 @@ bool AOBase::unpausePlaybackCodecStateSingleSeekToPauseTime()
 
 bool AOBase::unpausePlaybackCodecStateSingleBufferOnRemote(bool process)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateSingleBufferOnRemote\n");
+#endif
+
 	if(process && getCodec()->isRemote())
 	{
 		common::TimeStamp bT = getRemoteTimeSync();
@@ -2985,6 +3232,10 @@ bool AOBase::unpausePlaybackCodecStateSingleBufferOnRemote(bool process)
 
 void AOBase::unpausePlaybackCodecStateSinglePlayState(bool process)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateSinglePlayState\n");
+#endif
+
 	if(process && getNextCodec()!=0 && getCrossFadeFlag() && getPauseTime()>=getCrossFadeTime())
 	{
 		unpausePlaybackCodecStateSinglePlayToCrossfadeState();
@@ -3000,6 +3251,10 @@ void AOBase::unpausePlaybackCodecStateSinglePlayState(bool process)
 void AOBase::unpausePlaybackCodecStateSinglePlayToCrossfadeState()
 {
 	common::TimeStamp bT;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateSinglePlayToCrossfadeState\n");
+#endif
 
 	if(getNextCodec()->isSeek())
 	{
@@ -3029,6 +3284,10 @@ void AOBase::unpausePlaybackCodecStateSinglePlayToCrossfadeState()
 
 void AOBase::unpausePlaybackCodecStateSingleSetPlayState(bool process)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateSingleSetPlayState\n");
+#endif
+
 	setNextOutState(0);
 	if(process)
 	{
@@ -3041,7 +3300,11 @@ void AOBase::unpausePlaybackCodecStateSingleSetPlayState(bool process)
 bool AOBase::unpausePlaybackCodecStateFinish()
 {
 	bool res;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackCodecStateFinish\n");
+#endif
+
 	if(getCompleteCodec()->isSeek())
 	{
 		setNextCodec(getCodec());
@@ -3075,6 +3338,9 @@ bool AOBase::unpausePlaybackCodecStateFinish()
 
 bool AOBase::unpausePlaybackProcess(bool signalFlag)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackProcess\n");
+#endif
 	unpausePlaybackProcessSetTimeAndState();
 	unpausePlaybackProcessOpenAudio();
 	return unpausePlaybackProcessRestartPlayback(signalFlag);
@@ -3085,6 +3351,9 @@ bool AOBase::unpausePlaybackProcess(bool signalFlag)
 void AOBase::unpausePlaybackProcessSetTimeAndState()
 {
 	common::TimeStamp pTime = getPauseTime();
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackProcessSetTimeAndState\n");
+#endif
 	setCurrentOutTime(pTime);
 	setCurrentPlayTime(pTime);
 	setCurrentCallbackTime(pTime);
@@ -3096,6 +3365,9 @@ void AOBase::unpausePlaybackProcessSetTimeAndState()
 
 void AOBase::unpausePlaybackProcessOpenAudio()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackProcessOpenAudio\n");
+#endif
 	resetResampler();
 	if(!isAudio())
 	{
@@ -3112,6 +3384,10 @@ void AOBase::unpausePlaybackProcessOpenAudio()
 bool AOBase::unpausePlaybackProcessRestartPlayback(bool signalFlag)
 {
 	bool res = false;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::unpausePlaybackProcessRestartPlayback\n");
+#endif
 
 	if(isAudio())
 	{
@@ -3311,6 +3587,10 @@ bool AOBase::seekPlayback(const common::TimeStamp& t)
 {
 	bool res = false;
 
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::seekPlayback - %.8f\n", static_cast<tfloat64>(t));
+#endif
+
 	if(m_state!=e_statePause)
 	{
 		if(pausePlayback(false,false))
@@ -3349,6 +3629,10 @@ common::TimeStamp AOBase::getRemoteTimeSync()
 
 void AOBase::setDeviceID(tint idIndex)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::setDeviceID - %d\n", idIndex);
+#endif
+
 	if(idIndex>=0 && idIndex<m_deviceInfo->noDevices())
 	{
 		QSettings settings;
@@ -3364,6 +3648,10 @@ void AOBase::setDeviceID(tint idIndex)
 
 void AOBase::setChannelMap(tint devId,const AOChannelMap& chMap)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::setChannelMap\n");
+#endif
+
 	if(m_deviceIdx==devId)
 	{
 		m_audioChannelMap = chMap;
@@ -3375,6 +3663,10 @@ void AOBase::setChannelMap(tint devId,const AOChannelMap& chMap)
 
 void AOBase::doSetVolume(sample_t vol)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::doSetVolume\n");
+#endif
+
 	if(vol<c_zeroSample)
 	{
 		m_volume = c_zeroSample;
@@ -3393,6 +3685,10 @@ void AOBase::doSetVolume(sample_t vol)
 
 void AOBase::doSetCrossFade(const common::TimeStamp& t)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::doSetCrossFade\n");
+#endif
+
 	m_progFadeState = 1;
 	m_progFadeTime = t;
 }
@@ -3423,12 +3719,18 @@ void AOBase::calcNextCodecTime()
 	{
 		m_nextCodecTime = 0.0;
 	}
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::calcNextCodecTime - %.8f\n", static_cast<tfloat64>(m_nextCodecTime));
+#endif
 }
 
 //-------------------------------------------------------------------------------------------
 
 void AOBase::calcCrossFadeTime()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::calcCrossFadeTime\n");
+#endif
 	calcCrossFadeTimeSetLength();
 	calcCrossFadeTimeAdjustToCodecLength();
 }
@@ -3437,6 +3739,10 @@ void AOBase::calcCrossFadeTime()
 
 void AOBase::calcCrossFadeTimeSetLength()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::calcCrossFadeTimeSetLength\n");
+#endif
+
 	if(getProgFadeState())
 	{
 		setCrossFadeTimeLen(getProgFadeTime());
@@ -3453,6 +3759,9 @@ void AOBase::calcCrossFadeTimeAdjustToCodecLength()
 {
 	common::TimeStamp t;
 
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::calcCrossFadeTimeAdjustToCodecLength\n");
+#endif
 	if(getCrossFadeFlag() && getCrossFadeTime() < getCodecTimeLengthAdjustedForEndPosition())
 	{
 		t = getCodecTimeLengthAdjustedForEndPosition() - getCrossFadeTime();
@@ -3477,7 +3786,11 @@ void AOBase::initCrossFadeWindow()
 {
 	tint i;
 	tfloat64 fac = c_PI_D / 4096.0;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::initCrossFadeWindow\n");
+#endif
+
 	m_crossFadeAWin = new sample_t [2048 + 10];
 	m_crossFadeBWin = new sample_t [2048 + 10];
 	
@@ -3502,7 +3815,11 @@ void AOBase::crossFade(engine::RData *dataA,engine::RData *dataB,common::TimeSta
 	common::TimeStamp tCurrent,tSample,tEnd,tNext;
 	sample_t *inA,*inB,*out;
 	tfloat64 fLen,freq = static_cast<sample_t>(m_frequency);
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::crossFade\n");
+#endif
+
 	total = dataA->length();
 	fLen = static_cast<tfloat64>(m_codecTimeLength - m_crossFadeTime);
 	
@@ -3718,7 +4035,11 @@ void AOBase::resetNextCrossData(engine::RData *fromD,const common::TimeStamp& tE
 	QVector<engine::RData::Part> parts;
 	QVector<engine::RData::Part>::iterator ppI;
 	sample_t *inD,*outD;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::resetNextCrossData\n");
+#endif
+
 	tE = tEnd - m_crossFadeTime;
 	
 	for(i=0;i<fromD->noParts();++i)
@@ -3816,6 +4137,10 @@ void AOBase::resetNextCrossData(engine::RData *fromD,const common::TimeStamp& tE
 
 void AOBase::postAudioEvent(QEvent *e)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::postAudioEvent\n");
+#endif
+
 	if(e!=0 && e->type()>=static_cast<QEvent::Type>(AudioEvent::e_startPlaybackEvent))
 	{
 		m_eventQueueMutex.lock();
@@ -3828,6 +4153,10 @@ void AOBase::postAudioEvent(QEvent *e)
 
 void AOBase::onEventTimer()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::onEventTimer\n");
+#endif
+
 	if(canCallSlot(e_onEventTimer))
 	{
 		doEventTimer();
@@ -3880,7 +4209,11 @@ void AOBase::doEventTimer()
 {
 	QEvent *e;
 	bool loop = true;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::doEventTimer\n");
+#endif
+
 	while(loop)
 	{
 		AudioEvent *audioE = 0;
@@ -4515,6 +4848,11 @@ void AOBase::open(const QString& url,const common::TimeStamp& t)
 void AOBase::open(const QString& url,const common::TimeStamp& t,const common::TimeStamp& len)
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_startPlaybackEvent);
+	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::open - %s, %.8f, %.8f\n", url.toUtf8().constData(), static_cast<tfloat64>(t), static_cast<tfloat64>(len));
+#endif
+
 	e->uri() = url;
 	e->time() = t;
 	e->timeLength() = len;
@@ -4542,6 +4880,11 @@ void AOBase::next(const QString& url,const common::TimeStamp& t)
 void AOBase::next(const QString& url,const common::TimeStamp& t,const common::TimeStamp& len)
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_nextPlaybackEvent);
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::next - %s, %.8f, %.8f\n", url.toUtf8().constData(), static_cast<tfloat64>(t), static_cast<tfloat64>(len));
+#endif
+
 	e->uri() = url;
 	e->time() = t;
 	e->timeLength() = len;
@@ -4569,6 +4912,11 @@ void AOBase::nextCrossfade(const QString& url,const common::TimeStamp& t)
 void AOBase::nextCrossfade(const QString& url,const common::TimeStamp& t,const common::TimeStamp& len)
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_nextCrossPlaybackEvent);
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::nextCrossfade - %s, %.8f, %.8f\n", url.toUtf8().constData(), static_cast<tfloat64>(t), static_cast<tfloat64>(len));
+#endif
+
 	e->uri() = url;
 	e->time() = t;
 	e->timeLength() = len;
@@ -4580,6 +4928,9 @@ void AOBase::nextCrossfade(const QString& url,const common::TimeStamp& t,const c
 void AOBase::play()
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_playPlaybackEvent);
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::play\n");
+#endif
 	postAudioEvent(e);
 }
 
@@ -4588,6 +4939,9 @@ void AOBase::play()
 void AOBase::pause()
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_pausePlaybackEvent);
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::pause\n");
+#endif
 	postAudioEvent(e);
 }
 
@@ -4596,6 +4950,9 @@ void AOBase::pause()
 void AOBase::stop()
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_stopPlaybackEvent);
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::stop\n");
+#endif
 	postAudioEvent(e);
 }
 
@@ -4605,6 +4962,9 @@ void AOBase::seek(const common::TimeStamp& t)
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_seekPlaybackEvent);
 	e->time() = t;
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::seek\n");
+#endif
 	postAudioEvent(e);
 }
 
@@ -4614,6 +4974,9 @@ void AOBase::setVolume(sample_t vol)
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_setVolumeEvent);
 	e->volume() = vol;
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::setVolume\n");
+#endif
 	QCoreApplication::postEvent(this,e);
 }
 
@@ -4651,6 +5014,10 @@ void AOBase::setCrossfade(const common::TimeStamp& t)
 
 bool AOBase::initResampler(int iFreq,int oFreq)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::initResampler - %d, %d\n", iFreq, oFreq);
+#endif
+
 	closeResampler();
 	
 	if(iFreq!=oFreq)
@@ -4685,7 +5052,11 @@ bool AOBase::initResampler(int iFreq,int oFreq)
 void AOBase::closeResampler()
 {
 	int i;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::closeResampler\n");
+#endif
+
 	if(m_resampleItem!=0)
 	{
 		delete m_resampleItem;
@@ -4717,6 +5088,9 @@ void AOBase::closeResampler()
 
 void AOBase::resetResampler()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::resetResampler\n");
+#endif
 	if(m_resampleFlag)
 	{
 		initResampler(m_rInFrequency,m_frequency);
@@ -4727,6 +5101,9 @@ void AOBase::resetResampler()
 
 void AOBase::resetResampler(int iFreq,int oFreq)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::resetResampler - %d, %d\n", iFreq, oFreq);
+#endif
 	if(m_resampleFlag)
 	{
 		initResampler(iFreq,oFreq);
@@ -4740,7 +5117,11 @@ bool AOBase::decodeAndResample(engine::Codec *c,AudioItem *outputItem,bool& init
 	tint i,j,k,idx;
 	engine::AData& dData = *(outputItem->data());
 	bool res = true;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::decodeAndResample\n");
+#endif
+
 	if(m_resampleFlag)
 	{
 		engine::RData *iData = dynamic_cast<engine::RData *>(m_resampleItem->data());
@@ -4912,7 +5293,11 @@ bool AOBase::decodeAndResample(engine::Codec *c,AudioItem *outputItem,bool& init
 tint AOBase::decodeAndResampleInterleaveOutputChannels(sample_t *out,tint dLen,tint rLen)
 {
 	sample_t *in[8];
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::decodeAndResampleInterleaveOutputChannels\n");
+#endif
+
 	for(tint i=0;i<getNoInChannels();i++)
 	{
 		in[i] = getROut(i);
@@ -4930,7 +5315,11 @@ tint AOBase::decodeAndResampleInterleaveOutputChannels(sample_t *out,sample_t **
 	tint len = (dLen < rLen) ? dLen : rLen;
 	tint bLen = getROutNo();
 	tint noChs = getNoInChannels();
-	
+
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::decodeAndResampleInterleaveOutputChannels\n");
+#endif
 	while(i<len && j<bLen)
 	{
 		for(tint k=0;k<noChs;k++,idx++)
@@ -4950,7 +5339,11 @@ bool AOBase::decodeAndResampleSetCompletePartTiming(engine::AData& dData,engine:
 {
 	bool res = true;
 	AOResampleInfo& dInfo = resampleList().first();
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::decodeAndResampleSetCompletePartTiming\n");
+#endif
+
 	p.length() = idx;
 	p.done() = true;
 	p.start() = dInfo.start();
@@ -4989,6 +5382,10 @@ tint AOBase::decodeAndResampleCalculateOutputLength()
 	tfloat64 dLenActual,diff,rDrift;
 	AOResampleInfo& dInfo = resampleList().first();
 
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::decodeAndResampleCalculateOutputLength\n");
+#endif
+
 	dLenActual = static_cast<tfloat64>(dInfo.end() - dInfo.start()) * static_cast<tfloat64>(getFrequency());
 	dLen = static_cast<int>(dLenActual);
 	diff = dLenActual - static_cast<tfloat64>(dLen);
@@ -5021,6 +5418,10 @@ tint AOBase::decodeAndResampleCalculateOutputLength()
 
 void AOBase::buildChannelMapArray()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::buildChannelMapArray\n");
+#endif
+
 	if(m_codec!=0)
 	{
 		int i,j;
@@ -5106,6 +5507,10 @@ void AOBase::buildChannelMapArray()
 int AOBase::noDevices()
 {
 	int nDev;
+	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::noDevices\n");
+#endif
 	m_deviceInfoMutex.lock();
 	nDev = m_deviceInfo->noDevices();
 	m_deviceInfoMutex.unlock();
@@ -5117,6 +5522,11 @@ int AOBase::noDevices()
 QString AOBase::deviceName(int devIdx)
 {
 	QString dName;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::deviceName\n");
+#endif
+
 	m_deviceInfoMutex.lock();
 	if(devIdx>=0 && devIdx<m_deviceInfo->noDevices())
 	{
@@ -5131,6 +5541,10 @@ QString AOBase::deviceName(int devIdx)
 QSharedPointer<AOQueryDevice::Device> AOBase::device(int devIdx)
 {
 	QSharedPointer<AOQueryDevice::Device> pDevice;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::device\n");
+#endif
 
 	m_deviceInfoMutex.lock();
 	if(devIdx>=0 && devIdx<m_deviceInfo->noDevices())
@@ -5163,6 +5577,9 @@ int AOBase::currentOutputDeviceIndex()
 void AOBase::setOutputDevice(int devIdx)
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_setDeviceID);
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::setOutputDevice\n");
+#endif
 	e->device() = devIdx;
 	postAudioEvent(e);
 }
@@ -5204,7 +5621,11 @@ void AOBase::setDeviceChannelMap(int devIdx,const AOChannelMap& chMap)
 bool AOBase::openMergeCodec(const QString& fileName)
 {
 	bool res = false;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::openMergeCodec\n");
+#endif
+
 	closeMergeCodec();
 	
 	if(!fileName.isEmpty())
@@ -5227,6 +5648,10 @@ bool AOBase::openMergeCodec(const QString& fileName)
 
 void AOBase::closeMergeCodec()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::closeMergeCodec\n");
+#endif
+
 	if(m_mergeCodec!=0)
 	{
 		m_mergeCodec->close();
@@ -5242,7 +5667,11 @@ bool AOBase::mergeAudioWithCodec(engine::Codec *mCodec,AudioItem *oItem)
 	engine::RData *oData = dynamic_cast<engine::RData *>(oItem->data());
 	engine::RData *mData = dynamic_cast<engine::RData *>(m_mergeAudioItem->data());
 	bool res = true;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::mergeAudioWithCodec\n");
+#endif
+
 	if(m_codec!=0)
 	{
 		if(m_mergeCodec->noChannels()!=m_codec->noChannels() || m_mergeCodec->frequency()!=m_codec->frequency())
@@ -5297,6 +5726,10 @@ void AOBase::mergeAudioStreams(AudioItem *oItem,AudioItem *mItem)
 {
 	common::TimeStamp mergeFadeTimeLength(1.5);
 	engine::RData *oData,*mData;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::mergeAudioStreams\n");
+#endif
 
 	mData = dynamic_cast<engine::RData *>(mItem->data());
 	oData = dynamic_cast<engine::RData *>(oItem->data());
@@ -5498,6 +5931,10 @@ void AOBase::updateCurrentPlayTimeFromStreamTime(const IOTimeStamp& systemTime)
 		}
 		playTime = systemTime.time() - getAudioStartClock();
 		setCurrentPlayTime(playTime);
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::updateCurrentPlayTimeFromStreamTime - %.8f, %.8f\n", static_cast<tfloat64>(systemTime.time()), static_cast<tfloat64>(playTime));
+#endif
 	}
 }
 
@@ -5505,6 +5942,10 @@ void AOBase::updateCurrentPlayTimeFromStreamTime(const IOTimeStamp& systemTime)
 
 void AOBase::setItemStateToCallbackAsApplicable(AudioItem *item)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::setItemStateToCallbackAsApplicable\n");
+#endif
+
 	if(item->state()==AudioItem::e_stateFull || item->state()==AudioItem::e_stateFullEnd)
 	{
 		if(item->state()==AudioItem::e_stateFull)
@@ -5551,6 +5992,10 @@ tint AOBase::partBufferIndexForChannel(tint channelIndex) const
 
 void AOBase::playbackOfNextTrackIsStarting(const engine::RData::Part& part,const IOTimeStamp& systemTime,tint sIndex)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::playbackOfNextTrackIsStarting\n");
+#endif
+
 	if(part.isNext())
 	{
 		common::TimeStamp aSClock;
@@ -5576,6 +6021,9 @@ tint AOBase::numberOfSamplesInTime(common::TimeStamp& t) const
 	tfloat64 actualNoSamples = static_cast<tfloat64>(t) * freq;
 	tint noWholeSamples = static_cast<tint>(actualNoSamples);
 	t = static_cast<tfloat64>(noWholeSamples) / freq;
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::numberOfSamplesInTime - %.8f, %d\n", static_cast<tfloat64>(t), noWholeSamples);
+#endif
 	return noWholeSamples;
 }
 
@@ -5591,6 +6039,9 @@ tint AOBase::numberOfSamplesInFixedTime(const common::TimeStamp& t) const
 	{
 		noWholeSamples++;
 	}
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::numberOfSamplesInFixedTime - %.8f, %d\n", static_cast<tfloat64>(t), noWholeSamples);
+#endif
 	return noWholeSamples;
 }
 
@@ -5607,6 +6058,11 @@ common::TimeStamp AOBase::timeForNumberOfSamples(tint numberOfSamples) const
 void AOBase::syncAudioTimeToPartReferenceLatencyDelay(engine::RData::Part& part,const IOTimeStamp& systemTime,const common::TimeStamp& referenceTime)
 {
 	common::TimeStamp dT,currentOutT,audioStartT;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::syncAudioTimeToPartReferenceLatencyDelay\n");
+#endif
+
 	dT = referenceTime - part.refStartTime();
 	currentOutT = dT + part.start();
 	setCurrentOutTime(currentOutT);
@@ -5625,7 +6081,11 @@ void AOBase::writeSilenceForSynchronizedLatencyDelay(AbstractAudioHardwareBuffer
 {
 	tint amount;
 	common::TimeStamp dT,currentOutT;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeSilenceForSynchronizedLatencyDelay\n");
+#endif
+
 	dT = part.refStartTime() - referenceTime;
 	amount = numberOfSamplesInTime(dT);
 	if(amount > (pBuffer->bufferLength() - outputSampleIndex))
@@ -5646,7 +6106,11 @@ void AOBase::writeSilenceForSynchronizedLatencyDelay(AbstractAudioHardwareBuffer
 void AOBase::syncAudioToPartReferenceLatencyDelay(AbstractAudioHardwareBuffer *pBuffer,engine::RData::Part& part,const IOTimeStamp& systemTime,tint& outputSampleIndex)
 {
 	common::TimeStamp referenceTime = getReferenceClockTime();
-			
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::syncAudioToPartReferenceLatencyDelay\n");
+#endif
+
 	if(referenceTime >= part.refStartTime())
 	{
 		syncAudioTimeToPartReferenceLatencyDelay(part,systemTime,referenceTime);
@@ -5664,6 +6128,10 @@ void AOBase::writeToAudioSilenceForGivenRange(AbstractAudioHardwareBuffer *pBuff
 	if(numberOfSamples > 0)
 	{
 		tint j,k;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioSilenceForGivenRange - %d, %d\n", fromIndex, numberOfSamples);
+#endif
 	
 		j = 0;
 		k = 0;
@@ -5683,6 +6151,9 @@ void AOBase::writeToAudioSilenceForGivenRange(AbstractAudioHardwareBuffer *pBuff
 
 void AOBase::writeToAudioSilenceToEndOfBuffer(AbstractAudioHardwareBuffer *pBuffer,tint fromIndex)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioSilenceToEndOfBuffer - %d\n", fromIndex);
+#endif
 	writeToAudioSilenceForGivenRange(pBuffer,fromIndex,remainingSamplesInBuffer(pBuffer,fromIndex));
 }
 
@@ -5691,7 +6162,10 @@ void AOBase::writeToAudioSilenceToEndOfBuffer(AbstractAudioHardwareBuffer *pBuff
 void AOBase::writeToAudioSilenceForRemainder(AbstractAudioHardwareBuffer *pBuffer,tint fromIndex)
 {
 	common::TimeStamp dT,newOutTime;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioSilenceForRemainder - %d\n", fromIndex);
+#endif
 	writeToAudioSilenceToEndOfBuffer(pBuffer,fromIndex);
 	dT = static_cast<tfloat64>(remainingSamplesInBuffer(pBuffer,fromIndex)) / static_cast<tfloat64>(getFrequency());
 	newOutTime = getCurrentOutTime() + dT;
@@ -5708,7 +6182,11 @@ void AOBase::writeToAudioOutputBufferSilence(AbstractAudioHardwareBuffer *pBuffe
 	tint sampleSize = pBuffer->sampleSize(bufferIndex);
 	tint inc = pBuffer->numberOfChannelsInBuffer(bufferIndex) * sampleSize;
 	tint tAmount = oIdx + (amount * inc);
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioOutputBufferSilence\n");
+#endif
+
 	while(oIdx < tAmount)
 	{
 		for(tint i=0;i<sampleSize;i++)
@@ -5732,7 +6210,11 @@ void AOBase::writeToAudioOutputBuffer(AbstractAudioHardwareBuffer *pBuffer,
 
 	channelIdx = 0;
 	bufferIdx = 0;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioOutputBuffer\n");
+#endif
+
 	while(bufferIdx<pBuffer->numberOfBuffers())
 	{
 		for(tint packetInFrame=0;packetInFrame<pBuffer->numberOfChannelsInBuffer(bufferIdx);packetInFrame++)
@@ -5806,7 +6288,11 @@ tint AOBase::writeToAudioProcessPart(AbstractAudioHardwareBuffer *pBuffer,AudioI
 	tint offset;
 	tint partNumber = partNumberFromAudioItem(item);
 	engine::RData::Part& part = partFromAudioItem(item);
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioProcessPart\n");
+#endif
+
 	if(getCurrentOutTime() < part.end())
 	{
 		offset = offsetFromAudioItem(item);
@@ -5872,6 +6358,10 @@ tint AOBase::writeToAudioProcessPart(AbstractAudioHardwareBuffer *pBuffer,AudioI
 
 AudioItem *AOBase::audioItemCallbackIsDone(AudioItem *item,tint outputSampleIndex,bool& loop,bool& loopFlag)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::audioItemCallbackIsDone\n");
+#endif
+
 	if(item->state()==AudioItem::e_stateCallbackEnd)
 	{
 		common::TimeStamp sT;
@@ -5893,7 +6383,11 @@ tint AOBase::writeToAudioSilenceUntilStartOfNextPart(AbstractAudioHardwareBuffer
 {
 	tint amount;
     common::TimeStamp dT;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioSilenceUntilStartOfNextPart\n");
+#endif
+
 	dT = part.startConst() - getCurrentOutTime();
 	amount = numberOfSamplesInFixedTime(dT);
 	if(amount > (pBuffer->bufferLength() - outputSampleIndex))
@@ -5914,7 +6408,11 @@ tint AOBase::writeToAudioSilenceUntilStartOfNextPart(AbstractAudioHardwareBuffer
 //-------------------------------------------------------------------------------------------
 
 void AOBase::processDataForOutput(engine::RData *)
-{}
+{
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::processDataForOutput\n");
+#endif
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -5922,7 +6420,11 @@ AudioItem *AOBase::writeToAudioFromItem(AbstractAudioHardwareBuffer *pBuffer,Aud
 {
 	tint pNo;
 	engine::RData *data = dynamic_cast<engine::RData *>(item->data());
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioFromItem\n");
+#endif	
+
 	processDataForOutput(data);
 	
 	pNo = partNumberFromAudioItem(item);
@@ -5959,7 +6461,11 @@ void AOBase::writeToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp
 	tint outputSampleIndex;
 	AudioItem *item = getCallbackAudioItem(), *oItem = getCallbackAudioItem();
 	bool loop = true,loopFlag = false;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudio\n");
+#endif
+
 	outputSampleIndex = 0;
 	
 	while(outputSampleIndex<pBuffer->bufferLength() && loop && !(loopFlag && item==oItem))
@@ -5992,7 +6498,11 @@ void AOBase::writeToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp
 void AOBase::writeToAudioIOCallback(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp& systemTime)
 {
 	States state = getState();
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::writeToAudioIOCallback\n");
+#endif
+
 	incrementMutexCount();
 	updateCurrentPlayTimeFromStreamTime(systemTime);
 	
@@ -6999,6 +7509,11 @@ bool AOBase::canCallSlot(SlotType type,void *cData)
 {
 	bool res = m_recursiveSlotList.isEmpty();
 	m_recursiveSlotList.append(QPair<SlotType,void *>(type,cData));
+	
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::canCallSlot - %d, %d\n", (int)type, (int)res);
+#endif
+	
 	return res;
 }
 
@@ -7012,6 +7527,10 @@ void AOBase::slotComplete()
 		while(!m_recursiveSlotList.isEmpty())
 		{
 			QPair<SlotType,void *> p = m_recursiveSlotList.takeFirst();
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::slotComplete - %d\n", (int)type);
+#endif
 			switch(p.first)
 			{
 				case e_onTimer:

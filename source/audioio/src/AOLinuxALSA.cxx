@@ -56,6 +56,9 @@ void AOLinuxALSA::printErrorOS(const tchar *strR,const tchar *strE,tint errCode)
 engine::AData *AOLinuxALSA::allocateData(tint len,tint inChannel,tint outChannel)
 {
     engine::RData *d = new engine::RData(len,inChannel,outChannel);
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::allocateData\n");
+#endif
 	return reinterpret_cast<engine::AData *>(d);
 }
 
@@ -64,6 +67,9 @@ engine::AData *AOLinuxALSA::allocateData(tint len,tint inChannel,tint outChannel
 bool AOLinuxALSA::init()
 {
 	LinuxALSAIF::instance("alsa");
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::init\n");
+#endif
 	return AOBase::init();
 }
 
@@ -76,7 +82,11 @@ bool AOLinuxALSA::openAudio()
 	
 	closeAudio();
 	m_frequency = m_codec->frequency();
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::openAudio\n");
+#endif
+
 	QSharedPointer<AOQueryALSA::DeviceALSA> pDeviceALSA = getCurrentALSAAudioDevice();
 	if(pDeviceALSA.isNull())
 	{
@@ -156,6 +166,10 @@ bool AOLinuxALSA::openAudio()
 
 void AOLinuxALSA::closeAudio()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::closeAudio\n");
+#endif
+
 	stopAudioDevice();
 	closeResampler();
 	
@@ -192,6 +206,10 @@ bool AOLinuxALSA::startAudioDevice()
 {
 	bool res = false;
 
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::startAudioDevice\n");
+#endif
+
 	if(m_flagInit)
 	{
 		int status;
@@ -227,6 +245,10 @@ bool AOLinuxALSA::startAudioDevice()
 
 void AOLinuxALSA::stopAudioDevice()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::stopAudioDevice\n");
+#endif
+
 	if(m_flagInit)
 	{
 		if(m_flagStart)
@@ -255,7 +277,11 @@ int AOLinuxALSA::formatFromDescription(snd_pcm_t *handle,QSharedPointer<AOQueryA
 {
 	int format = SND_PCM_FORMAT_UNKNOWN;
 	QVector<int> formats = pDeviceALSA->formatsFromDescription(desc);
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::formatFromDescription\n");
+#endif
+
 	if(!formats.isEmpty())
 	{
 		if(formats.size() > 1)
@@ -295,7 +321,11 @@ bool AOLinuxALSA::setupHardwareParameters(int fType,const FormatDescription& des
 {
 	int status;
 	bool res = false;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::setupHardwareParameters\n");
+#endif
+
 	status = LinuxALSAIF::instance()->snd_pcm_hw_params_malloc(&m_hwParamsALSA);
     if(!status && m_hwParamsALSA!=0)
 	{
@@ -390,6 +420,10 @@ bool AOLinuxALSA::setBufferLength()
 	{
 		tuint bufferTime = (maxBufferTime < 500000) ? maxBufferTime : 500000;
 		tuint periodTime = bufferTime / 4;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::setBufferLength - %d, %d\n", bufferTime, periodTime);
+#endif
 		
 		status = LinuxALSAIF::instance()->snd_pcm_hw_params_set_period_time_near(m_handleALSA,m_hwParamsALSA,&periodTime,0);
 		if(!status)
@@ -430,6 +464,9 @@ bool AOLinuxALSA::queryBufferSize()
         status = LinuxALSAIF::instance()->snd_pcm_hw_params_get_buffer_size(m_hwParamsALSA,&bufferSize);
 		if(!status)
 		{
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::queryBufferSize - %d, %d\n", periodSize, bufferSize);
+#endif
             m_noSamplesInPeriodALSA = periodSize;
             m_noSamplesInBufferALSA = bufferSize;
 			res = true;
@@ -452,6 +489,10 @@ bool AOLinuxALSA::setupSoftwareParameters()
 {
 	int status;
 	bool res = false;
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::setupSoftwareParameters\n");
+#endif
 
     status = LinuxALSAIF::instance()->snd_pcm_sw_params_malloc(&m_swParamsALSA);
 	if(!status)
@@ -517,7 +558,11 @@ bool AOLinuxALSA::setupSoftwareParameters()
 SampleConverter *AOLinuxALSA::createSampleConverter(tint formatType)
 {
 	SampleConverter *sampleConverter;
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::createSampleConverter - %d\n", formatType);
+#endif
+
 	switch(formatType)
 	{
         case SND_PCM_FORMAT_S8:
@@ -582,6 +627,10 @@ SampleConverter *AOLinuxALSA::createSampleConverter(tint formatType)
 
 void AOLinuxALSA::setResamplerAsRequired(tint codecFrequency,tint deviceFrequency)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::setResamplerAsRequired - %d\n", deviceFrequency);
+#endif
+
 	if(codecFrequency!=deviceFrequency)
 	{
 		initResampler(codecFrequency,deviceFrequency);
@@ -610,7 +659,11 @@ void AOLinuxALSA::writeAudioALSAImpl(snd_async_handler_t *pCallback)
 {
 	bool loop = true;
 	snd_pcm_t *handle = LinuxALSAIF::instance()->snd_async_handler_get_pcm(pCallback);
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::writeAudioALSAImpl\n");
+#endif
+
 	while(loop)
 	{
 		tint avail = LinuxALSAIF::instance()->snd_pcm_avail_update(handle);
@@ -629,6 +682,10 @@ void AOLinuxALSA::writeAudioALSAImpl(snd_async_handler_t *pCallback)
 
 void AOLinuxALSA::writeAudioToALSA(snd_pcm_t *handle,tint noFrames)
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::writeAudioToALSA\n");
+#endif
+
 	AudioHardwareBufferALSA buffer(m_formatTypeALSA,noFrames,m_noChannels);
 	IOTimeStamp systemTime = createIOTimeStamp(handle);
 	writeToAudioIOCallback(&buffer,systemTime);
@@ -651,6 +708,9 @@ IOTimeStamp AOLinuxALSA::createIOTimeStamp(snd_pcm_t *handle) const
 		tS.set(&tTimeStamp);
 		valid = true;
 	}
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::createIOTimeStamp - %.8f, %d\n", static_cast<tfloat64>(tS), valid);
+#endif
 	return IOTimeStamp(valid,tS);
 }
 
@@ -677,7 +737,11 @@ void AOLinuxALSA::writeToAudioOutputBufferFromPartData(AbstractAudioHardwareBuff
 	
 	tbyte *out = reinterpret_cast<tbyte *>(pBuffer->buffer(bufferIndex));
 	out += oIdx * getSampleConverter()->bytesPerSample();
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::writeToAudioOutputBufferFromPartData\n");
+#endif
+
 	getSampleConverter()->setNumberOfInputChannels(noInputChannels);
 	getSampleConverter()->setNumberOfOutputChannels(noOutputChannels);
 	getSampleConverter()->setVolume(m_volume);
@@ -704,6 +768,10 @@ void AOLinuxALSA::processMessages()
 
 void AOLinuxALSA::processMessagesForStop()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::processMessagesForStop\n");
+#endif
+
 	if(getStopTimeFlag())
 	{
 		if(getFlagStart())
@@ -747,6 +815,9 @@ void AOLinuxALSA::processMessagesForStopSetTimer(tint delay)
 
 void AOLinuxALSA::onStopProcess()
 {
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOLinuxALSA::onStopProcess\n");
+#endif
 	stopCodec();
 }
 
