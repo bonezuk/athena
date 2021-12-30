@@ -95,7 +95,7 @@ int main(int argc,char **argv)
     pluginDir = d.absolutePath();
 #endif
 	QApplication::setLibraryPaths(QStringList(pluginDir));
-#else
+#elseif defined(Q_OS_WIN)
 	QFileInfo appFile(argv[0]);
 	QDir d = appFile.absolutePath();
 	QString pluginDir;
@@ -105,19 +105,18 @@ int main(int argc,char **argv)
 	QApplication::setLibraryPaths(QStringList(pluginDir));
 #endif
 
-#if defined(ORCUS_WIN32)
-	LoadLibraryA("blueomega.dll");
-	LoadLibraryA("silveromega.dll");
-	LoadLibraryA("blackomega.dll");
-	LoadLibraryA("whiteomega.dll");
-	LoadLibraryA("redomega.dll");
-	LoadLibraryA("greenomega.dll");
-	LoadLibraryA("rtp_silveromega.dll");
-	LoadLibraryA("widget.dll");
-	LoadLibraryA("violetomega.dll");
-	LoadLibraryA("wavpackomega.dll");
-	LoadLibraryA("monkeyomega.dll");
-	LoadLibraryA("toneomega.dll");
+#if !defined(Q_OS_MAC)
+	::orcus::common::loadSharedLibrary("blueomega");
+	::orcus::common::loadSharedLibrary("silveromega");
+	::orcus::common::loadSharedLibrary("blackomega");
+	::orcus::common::loadSharedLibrary("whiteomega");
+	::orcus::common::loadSharedLibrary("redomega");
+	::orcus::common::loadSharedLibrary("greenomega");
+	::orcus::common::loadSharedLibrary("rtp_silveromega");
+	::orcus::common::loadSharedLibrary("widget");
+	::orcus::common::loadSharedLibrary("violetomega");
+	::orcus::common::loadSharedLibrary("wavpackomega");
+	::orcus::common::loadSharedLibrary("toneomega");
 #endif
 
 #if defined(OMEGA_MAC_STORE)
