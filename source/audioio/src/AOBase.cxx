@@ -656,6 +656,8 @@ AOBase::AOBase(QObject *parent) : QObject(parent),
 	m_crossFadeItem(0),
 	m_crossFadeFlag(false),
 	m_startNextTrackFlag(false),
+	m_syncAudioToTimestamp(false),
+	m_silenceIsWritten(false),
 	m_resampleFlag(false),
 	m_resampleRatio(1.0),
 	m_resampleItem(0),
@@ -1723,6 +1725,7 @@ bool AOBase::startAudio(const QString& url)
 			if(openAudio())
 			{
 				m_audioStartFlag = false;
+				m_silenceIsWritten = false;
 				m_mutexCount = 0;
 
 				emit onStart(url);
@@ -6476,13 +6479,23 @@ AudioItem *AOBase::writeToAudioFromItem(AbstractAudioHardwareBuffer *pBuffer,Aud
 
 //-------------------------------------------------------------------------------------------
 
+void AOBase::resyncAudioOutputTimeToItem(AudioItem *item)
+{
+	tint pNo = partNumberFromAudioItem(item);
+	engine::RData *partData = dynamic_cast<engine::RData *>(item->data());
+	const engine::RData::Part& part = partData->part(pNo);
+	setCurrentOutTime(part.startConst());
+	m_silenceIsWritten = false;	
+}
+
+//-------------------------------------------------------------------------------------------
+
 void AOBase::writeToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp& systemTime)
 {
 	tint outputSampleIndex;
 	AudioItem *item = getCallbackAudioItem(), *oItem = getCallbackAudioItem();
 	bool loop = true,loopFlag = false;
-	static bool silenceIsWritten = false;
-
+	
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
 	common::Log::g_Log.print("AOBase::writeToAudio\n");
 #endif
@@ -6495,13 +6508,9 @@ void AOBase::writeToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp
 		
 		if(item->state()==AudioItem::e_stateCallback || item->state()==AudioItem::e_stateCallbackEnd)
 		{
-            if(silenceIsWritten)
+            if(!m_syncAudioToTimestamp && m_silenceIsWritten)
             {
-                tint pNo = partNumberFromAudioItem(item);
-                engine::RData *partData = dynamic_cast<engine::RData *>(item->data());
-                const engine::RData::Part& part = partData->part(pNo);
-                setCurrentOutTime(part.startConst());
-                silenceIsWritten = false;
+            	resyncAudioOutputTimeToItem(item);
             }
 			item = writeToAudioFromItem(pBuffer,item,systemTime,outputSampleIndex,loop,loopFlag);
 		}
@@ -6519,9 +6528,9 @@ void AOBase::writeToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp
 	if(outputSampleIndex < pBuffer->bufferLength())
 	{
 		writeToAudioSilenceForRemainder(pBuffer,outputSampleIndex);
-        if(!silenceIsWritten)
+        if(!m_syncAudioToTimestamp && !m_silenceIsWritten)
         {
-            silenceIsWritten = true;
+            m_silenceIsWritten = true;
         }
 	}
 }

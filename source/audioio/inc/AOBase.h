@@ -438,6 +438,17 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		// relay fade flag for remote codec from startNextCodec to onCodecInit
 		bool m_nrCrossfadeFlag;
 
+		// When the audio loop prematurely reads ahead of the decoded codec how and where to resume
+		// the audio signal after writing silence is controlled by this flag. If true the audio written 
+		// to the sound card is synchronised to the timestamp on the codec. This is required when the
+		// codec is in sync with other playback streams. If false then the audio resumes at the next
+		// sample and the output time is adjusted accordingly.
+		bool m_syncAudioToTimestamp;
+
+		// Used in writeToAudio when tracking that silence has been written and to resume on the next
+		// valid audio data item.
+		bool m_silenceIsWritten;
+
 		// Resampling variables
 		bool m_resampleFlag;
 		tfloat64 m_resampleRatio;
@@ -661,6 +672,8 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual bool mergeAudioWithCodec(engine::Codec *mCodec,AudioItem *oItem);
 		virtual void mergeAudioStreams(AudioItem *oItem,AudioItem *mItem);
 		
+		virtual void resyncAudioOutputTimeToItem(AudioItem *item);
+
 #if defined(DEBUG_LOG_AUDIOOUTPUT)
 		volatile AODebugItem *m_debugList;
 		
