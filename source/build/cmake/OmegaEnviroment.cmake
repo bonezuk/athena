@@ -87,7 +87,7 @@ set(BUILD_SUFFIX ${TIGER_PLATFORM}.${TIGER_BUILD_TYPE}.${TIGER_COMPILER})
 
 if (${TIGER_LINUX_DISTRO})
 	set(ATHENA_UTILS "${CMAKE_SYSROOT}" CACHE PATH "System root for Third Party Utilities Library Path")
-elseif (${TIGER_LINUX_DISTRO})
+else (${TIGER_LINUX_DISTRO})
 	if ("$ENV{ATHENA_UTILS}" STREQUAL "")
 		set(ATHENA_UTILS "${ROOT_PROJECT_PATH}/../athena_utils" CACHE PATH "Third Party Utilities Library Path")
 	else ("$ENV{ATHENA_UTILS}" STREQUAL "")

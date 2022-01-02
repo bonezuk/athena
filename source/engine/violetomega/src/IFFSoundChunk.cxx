@@ -23,13 +23,20 @@ IFFSoundChunk::IFFSoundChunk() : IFFChunk(),
 	m_noSampleFrames(0),
 	m_sampleSize(0),
 	m_sampleRate(1.0),
-	m_currentIndexPosition(0)
+	m_currentIndexPosition(0),
+	m_readBlockMem(0),
+	m_readBlockSize(0)
 {}
 
 //-------------------------------------------------------------------------------------------
 
 IFFSoundChunk::~IFFSoundChunk()
-{}
+{
+	if(m_readBlockMem != 0)
+	{
+		delete [] m_readBlockMem;
+	}
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -134,60 +141,34 @@ void IFFSoundChunk::sortOutputChannels(const sample_t *in,sample_t *out)
 
 //-------------------------------------------------------------------------------------------
 
-int IFFSoundChunk::read(sample_t *sampleMem,int noSamples)
+int IFFSoundChunk::readAsBlocks(sample_t *sampleMem,int noSamples)
 {
 	int amount = 0;
+	tbyte mem[24];
+	sample_t out[6];
+	int cIndex,bPerFrame,bPerSample;
+	bool res = true;
 	
-    if(m_file!=0 && filePositionToStart() && sampleMem!=0 && noSamples>0)
+	bPerFrame = bytesPerFrame();
+	bPerSample = bytesPerSample();
+
+	cIndex = currentIndexPosition();
+	if(m_file->seek(cIndex + 8,common::e_Seek_Current))
 	{
-		tbyte mem[24];
-		sample_t out[6];
-		int cIndex,bPerFrame,bPerSample;
-		bool res = true;
-	
-		bPerFrame = bytesPerFrame();
-		bPerSample = bytesPerSample();
-	
-		cIndex = currentIndexPosition();
-		if(m_file->seek(cIndex + 8,common::e_Seek_Current))
+		while(res && amount<noSamples)
 		{
-			while(res && amount<noSamples)
+			int nIndex,diff;
+			sample_t *pSample = &sampleMem[amount * noOutChannels()];
+			
+			nIndex = nextIndexPosition();
+			if(nIndex>=0)
 			{
-				int nIndex,diff;
-                sample_t *pSample = &sampleMem[amount * noOutChannels()];
-				
-				nIndex = nextIndexPosition();
-				if(nIndex>=0)
+				diff = nIndex - cIndex;
+				if(diff)
 				{
-					diff = nIndex - cIndex;
-                    if(diff)
+					if(m_file->seek(diff,common::e_Seek_Current))
 					{
-						if(m_file->seek(diff,common::e_Seek_Current))
-						{
-							cIndex += diff;
-						}
-						else
-						{
-							res = false;
-						}
-					}
-				}
-				else
-				{
-					res = false;
-				}
-				
-				if(res)
-				{
-					if(m_file->read(mem,bPerFrame)==bPerFrame)
-					{
-						for(int i=0;i<m_noChannels;i++)
-						{
-							out[i] = readSample(&mem[i * bPerSample],m_sampleSize);
-						}
-						sortOutputChannels(out,pSample);
-                        cIndex += bPerFrame;
-						amount++;
+						cIndex += diff;
 					}
 					else
 					{
@@ -195,6 +176,93 @@ int IFFSoundChunk::read(sample_t *sampleMem,int noSamples)
 					}
 				}
 			}
+			else
+			{
+				res = false;
+			}
+
+			if(res)
+			{
+				if(m_file->read(mem,bPerFrame)==bPerFrame)
+				{
+					for(int i=0;i<m_noChannels;i++)
+					{
+						out[i] = readSample(&mem[i * bPerSample],m_sampleSize);
+					}
+					sortOutputChannels(out,pSample);
+					cIndex += bPerFrame;
+					amount++;
+				}
+				else
+				{
+					res = false;
+				}
+			}
+		}
+	}
+	return amount;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int IFFSoundChunk::readAsWhole(sample_t *sampleMem,int noSamples)
+{
+	int amount = 0;
+	sample_t out[6];
+	int cIndex,bPerFrame,bPerSample,totalSize;
+	
+	bPerFrame = bytesPerFrame();
+	bPerSample = bytesPerSample();
+	
+	totalSize = noSamples * bPerFrame;
+	if(totalSize > m_readBlockSize || m_readBlockMem == 0)
+	{
+		if(m_readBlockMem != 0)
+		{
+			delete [] m_readBlockMem;
+		}
+		m_readBlockMem = new tbyte [totalSize];
+		m_readBlockSize = totalSize;
+	}
+
+	cIndex = currentIndexPosition();
+	if(m_file->seek(cIndex + 8,common::e_Seek_Current))
+	{
+		totalSize = m_file->read(m_readBlockMem, totalSize);
+		noSamples = totalSize / bPerFrame;
+
+		while(amount<noSamples)
+		{
+			sample_t *pSample = &sampleMem[amount * noOutChannels()];
+			tbyte *mem = &m_readBlockMem[amount * bPerFrame];
+			
+			for(int i=0;i<m_noChannels;i++)
+			{
+				out[i] = readSample(&mem[i * bPerSample],m_sampleSize);
+			}
+			sortOutputChannels(out,pSample);
+			amount++;
+		}
+		m_currentIndexPosition += amount;
+	}
+	return amount;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int IFFSoundChunk::read(sample_t *sampleMem,int noSamples)
+{
+	int amount = 0;
+	
+    if(m_file!=0 && filePositionToStart() && sampleMem!=0 && noSamples>0)
+	{
+		if(m_blockSize > 0)
+		{
+			amount = readAsBlocks(sampleMem, noSamples);
+		}
+		else
+		{
+			amount = readAsWhole(sampleMem, noSamples);
 		}
 	}
 	return amount;

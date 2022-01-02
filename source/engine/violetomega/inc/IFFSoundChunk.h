@@ -57,6 +57,9 @@ class VIOLETOMEGA_EXPORT IFFSoundChunk : public IFFChunk
 		
 		int m_currentIndexPosition;
 		
+		tbyte *m_readBlockMem;
+		tint m_readBlockSize;
+		
 		virtual sample_t readSample(const tbyte *mem,int noBits);
 		
 		virtual int indexPosition(int idx) const;
@@ -72,6 +75,9 @@ class VIOLETOMEGA_EXPORT IFFSoundChunk : public IFFChunk
 		virtual int nextIndexPosition();
 		
 		virtual void sortOutputChannels(const sample_t *in,sample_t *out);
+		
+		virtual int readAsWhole(sample_t *sampleMem, int noSamples);
+		virtual int readAsBlocks(sample_t *sampleMem,int noSamples);
 };
 
 typedef QSharedPointer<IFFSoundChunk> IFFSoundChunkSPtr;
