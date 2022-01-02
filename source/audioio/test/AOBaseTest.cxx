@@ -10184,7 +10184,11 @@ class AOBaseWriteToAudioTest : public AOBaseTest
 		AudioItem *writeToAudioFromItemInvoke(AbstractAudioHardwareBuffer *pBuffer,AudioItem *item,const IOTimeStamp& systemTime,tint& outputSampleIndex,bool& loop,bool& loopFlag);
 		
 		void testWriteToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp& systemTime);
+		void setSyncAudioToTimestamp(bool syncFlag);
 		
+		const common::TimeStamp& getCurrentOutTimeTest() const;
+		void setCurrentOutTimeTest(const common::TimeStamp& v);
+
 	private:
 		QVector<AudioItem *> m_cyclicBufferItems;
 		
@@ -10205,6 +10209,27 @@ AudioItem *AOBaseWriteToAudioTest::writeToAudioFromItemInvoke(AbstractAudioHardw
 {
 	item = audioItemCallbackIsDone(item,outputSampleIndex,loop,loopFlag);
 	return item;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBaseWriteToAudioTest::setSyncAudioToTimestamp(bool syncFlag)
+{
+	m_syncAudioToTimestamp = syncFlag;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const common::TimeStamp& AOBaseWriteToAudioTest::getCurrentOutTimeTest() const
+{
+	return getCurrentOutTime();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBaseWriteToAudioTest::setCurrentOutTimeTest(const common::TimeStamp& v)
+{
+	setCurrentOutTime(v);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -10262,6 +10287,84 @@ void AOBaseWriteToAudioTest::freeCyclicTestBuffer()
 void AOBaseWriteToAudioTest::testWriteToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp& systemTime)
 {
 	writeToAudio(pBuffer,systemTime);
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase,writeToAudioWithSilenceNoSync)
+{
+	common::TimeStamp audioTimeStamp(30.0);
+	common::TimeStamp partStartTime(40.0);
+	common::TimeStamp outTime(20.0);
+	IOTimeStamp systemTime(true,audioTimeStamp);
+
+	AudioHardwareBufferMock buffer;
+	EXPECT_CALL(buffer,bufferLength()).WillRepeatedly(Return(30));
+
+	AOBaseWriteToAudioTest audio;
+	QVector<AudioItem *> items = audio.createCyclic3ItemTestBuffer(AudioItem::e_stateEmpty,AudioItem::e_stateEmpty,AudioItem::e_stateEmpty);
+	AudioItem *itemA = items[0];
+	AudioItem *itemB = items[1];
+	AudioItem *itemC = items[2];
+
+	audio.setSyncAudioToTimestamp(false);
+	audio.setCurrentOutTimeTest(outTime);
+
+	EXPECT_CALL(audio,getCallbackAudioItem()).WillRepeatedly(Return(items[0]));
+	EXPECT_CALL(audio,writeToAudioSilenceForRemainder(&buffer,0)).Times(1);
+	EXPECT_CALL(audio, writeToAudioFromItem(&buffer, itemA, systemTime, A<int&>(), A<bool&>(), A<bool&>())).Times(1)
+		.WillOnce(DoAll(SetArgReferee<3>(30), Return(itemB)));
+
+	audio.testWriteToAudio(&buffer,systemTime);
+	
+	engine::RData *data = new engine::RData();
+	engine::RData::Part& part = data->nextPart();
+	part.start() = partStartTime;
+	itemA->setData(data);
+	itemA->setState(AudioItem::e_stateFull);
+
+	audio.testWriteToAudio(&buffer, systemTime);
+
+	EXPECT_EQ(audio.getCurrentOutTimeTest(), partStartTime);
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, writeToAudioWithSilenceWithSync)
+{
+	common::TimeStamp audioTimeStamp(30.0);
+	common::TimeStamp partStartTime(40.0);
+	common::TimeStamp outTime(20.0);
+	IOTimeStamp systemTime(true, audioTimeStamp);
+
+	AudioHardwareBufferMock buffer;
+	EXPECT_CALL(buffer, bufferLength()).WillRepeatedly(Return(30));
+
+	AOBaseWriteToAudioTest audio;
+	QVector<AudioItem *> items = audio.createCyclic3ItemTestBuffer(AudioItem::e_stateEmpty, AudioItem::e_stateEmpty, AudioItem::e_stateEmpty);
+	AudioItem *itemA = items[0];
+	AudioItem *itemB = items[1];
+	AudioItem *itemC = items[2];
+
+	audio.setSyncAudioToTimestamp(true);
+	audio.setCurrentOutTimeTest(outTime);
+
+	EXPECT_CALL(audio, getCallbackAudioItem()).WillRepeatedly(Return(items[0]));
+	EXPECT_CALL(audio, writeToAudioSilenceForRemainder(&buffer, 0)).Times(1);
+	EXPECT_CALL(audio, writeToAudioFromItem(&buffer, itemA, systemTime, A<int&>(), A<bool&>(), A<bool&>())).Times(1)
+		.WillOnce(DoAll(SetArgReferee<3>(30), Return(itemB)));
+
+	audio.testWriteToAudio(&buffer, systemTime);
+
+	engine::RData *data = new engine::RData();
+	engine::RData::Part& part = data->nextPart();
+	part.start() = partStartTime;
+	itemA->setData(data);
+	itemA->setState(AudioItem::e_stateFull);
+
+	audio.testWriteToAudio(&buffer, systemTime);
+
+	EXPECT_EQ(audio.getCurrentOutTimeTest(), outTime);
 }
 
 //-------------------------------------------------------------------------------------------
