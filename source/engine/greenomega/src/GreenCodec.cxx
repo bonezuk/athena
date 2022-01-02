@@ -92,7 +92,7 @@ bool GreenCodec::open(const QString& name)
 	close();
 	if(getFileExtension(name).toLower()=="flac")
 	{
-		m_cachedFile = new common::BIOTimeCachedStream;
+		m_cachedFile = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 		m_file = new engine::IOFile(m_cachedFile);
 
 		m_framework = new FLACFramework;
@@ -159,7 +159,6 @@ bool GreenCodec::init()
 	m_frame = new FLACFrame(m_framework->streamInfo());
 	m_state = 0;
 	m_initFlag = true;
-	m_cachedFile->setBitrate(bitrate());
 	return true;
 }
 
@@ -207,7 +206,6 @@ bool GreenCodec::next(AData& data)
 							m_state = -1;
 							res = false;							
 						}
-						m_cachedFile->springCleanTheCache();
 					}
 					break;
 					

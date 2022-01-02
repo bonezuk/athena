@@ -44,7 +44,7 @@ bool VioletCodec::open(const QString& name)
 	
 	close();
 	
-	m_file = new common::BIOTimeCachedStream;
+	m_file = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 
 	if(m_file->open(name))
 	{
@@ -164,7 +164,7 @@ bool VioletCodec::init()
 	{
 		if(m_file!=0)
 		{
-			m_file->setBitrate(bitrate());
+//			m_file->setBitrate(bitrate());
 		}
 		res = true;
 	}
@@ -184,7 +184,7 @@ bool VioletCodec::decodeNextPacket(int& outLen)
 	}
 	else
 	{
-		m_file->springCleanTheCache();
+//		m_file->springCleanTheCache();
 		res = true;
 	}
 	return res;

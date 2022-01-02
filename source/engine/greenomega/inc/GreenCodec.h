@@ -71,7 +71,7 @@ class GREENOMEGA_EXPORT GreenCodec : public engine::Codec
 		tint m_outOffset;
 		tint m_outLen;
 
-		common::BIOTimeCachedStream *m_cachedFile;
+		common::BIOBufferedStream *m_cachedFile;
 		engine::File *m_file;
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;

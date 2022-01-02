@@ -6462,7 +6462,6 @@ void AOBase::writeToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp
 	AudioItem *item = getCallbackAudioItem(), *oItem = getCallbackAudioItem();
 	bool loop = true,loopFlag = false;
 
-	static bool silenceIsWritten = false;
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
 	common::Log::g_Log.print("AOBase::writeToAudio\n");
 #endif
@@ -6475,17 +6474,6 @@ void AOBase::writeToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp
 		
 		if(item->state()==AudioItem::e_stateCallback || item->state()==AudioItem::e_stateCallbackEnd)
 		{
-			if(silenceIsWritten)
-			{
-#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
-				common::Log::g_Log.print("AOBase::writeToAudio - processAfterSilence\n");
-#endif
-				tint pNo = partNumberFromAudioItem(item);
-				engine::RData *partData = dynamic_cast<engine::RData *>(item->data());
-				const engine::RData::Part& part = partData->part(pNo);
-				setCurrentOutTime(part.startConst());
-				silenceIsWritten = false;
-			}
 			item = writeToAudioFromItem(pBuffer,item,systemTime,outputSampleIndex,loop,loopFlag);
 		}
 		else if(item->state()==AudioItem::e_stateDone)
@@ -6502,13 +6490,6 @@ void AOBase::writeToAudio(AbstractAudioHardwareBuffer *pBuffer,const IOTimeStamp
 	if(outputSampleIndex < pBuffer->bufferLength())
 	{
 		writeToAudioSilenceForRemainder(pBuffer,outputSampleIndex);
-		if(!silenceIsWritten)
-		{
-#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
-			common::Log::g_Log.print("AOBase::writeToAudio - silenceFirst\n");
-#endif
-			silenceIsWritten = true;
-		}
 	}
 }
 

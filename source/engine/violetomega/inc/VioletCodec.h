@@ -49,7 +49,7 @@ class VIOLETOMEGA_EXPORT VioletCodec : public InterleavedCodec
 
 	protected:
 	
-		common::BIOTimeCachedStream *m_file;
+		common::BIOBufferedStream *m_file;
 		IFFFileSPtr m_iffFile;
 		IFFCommonChunkSPtr m_pCommon;
 		IFFSoundChunkSPtr m_pSound;
