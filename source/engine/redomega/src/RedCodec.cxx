@@ -80,7 +80,7 @@ bool RedCodec::open(const QString& name)
 	
 	close();
 	
-	m_fileStream = new common::BIOTimeCachedStream;
+	m_fileStream = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 	
 	if(m_fileStream->open(name))
 	{
@@ -161,10 +161,6 @@ void RedCodec::close()
 
 bool RedCodec::init()
 {
-	if(m_fileStream!=0)
-	{
-		m_fileStream->setBitrate(bitrate());
-	}
 	return true;
 }
 
@@ -245,7 +241,6 @@ bool RedCodec::next(AData& data)
 							m_state = -1;
 							res = false;
 						}
-						m_fileStream->springCleanTheCache();
 					}
 					break;
 					

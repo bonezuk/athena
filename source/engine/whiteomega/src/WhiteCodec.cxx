@@ -110,7 +110,7 @@ bool WhiteCodec::open(const QString& name)
 	
 	close();
 	
-	m_fileStream = new common::BIOTimeCachedStream;
+	m_fileStream = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 
 	if(m_fileStream->open(name))
 	{
@@ -269,10 +269,6 @@ bool WhiteCodec::init()
 	if(m_decoder!=0 || m_alacDecoder!=0)
 	{
 		m_initFlag = true;
-		if(m_fileStream!=0)
-		{
-			m_fileStream->setBitrate(bitrate());
-		}
 		return true;
 	}
 	else
@@ -358,7 +354,6 @@ bool WhiteCodec::next(AData& data)
 							m_state = -1;
 							res = false;
 						}
-						m_fileStream->springCleanTheCache();
 					}
 					break;
 					

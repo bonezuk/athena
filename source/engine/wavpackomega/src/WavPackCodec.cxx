@@ -100,10 +100,10 @@ bool WavPackCodec::open(const QString& name)
 	
 	correctionName = correctionFileName(name);
 
-	m_file = new common::BIOTimeCachedStream;
+	m_file = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 	if(!correctionName.isEmpty())
 	{
-		m_fileCorrection = new common::BIOTimeCachedStream;
+		m_fileCorrection = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 	}
 	else
 	{
@@ -205,15 +205,6 @@ bool WavPackCodec::init()
 		m_channelMap.setup(m_noOutputChannels,m_channelMask);
 		setupReadSample();
 		res = InterleavedCodec::init();
-
-		if(m_file!=0)
-		{
-			m_file->setBitrate(WavpackGetAverageBitrate(m_context,0));
-		}
-		if(m_fileCorrection!=0)
-		{
-			m_fileCorrection->setBitrate(WavpackGetAverageBitrate(m_context,1));
-		}
 	}
 	return res;
 }
@@ -253,16 +244,7 @@ void WavPackCodec::readDecodedData(sample_t *output,tint sampleOffset,tint amoun
 //-------------------------------------------------------------------------------------------
 
 void WavPackCodec::springClean()
-{
-	if(m_file!=0)
-	{
-		m_file->springCleanTheCache();
-	}
-	if(m_fileCorrection!=0)
-	{
-		m_fileCorrection->springCleanTheCache();
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 

@@ -958,6 +958,26 @@ void AOBase::end(QSharedPointer<AOBase> audioOutput)
 
 //-------------------------------------------------------------------------------------------
 
+common::TimeStamp AOBase::getCacheTimeLength() const
+{
+	common::TimeStamp len;
+	QSettings settings;
+
+	settings.beginGroup("buffer");
+	if(settings.contains("lengthCache"))
+	{
+		len = settings.value("lengthCache", QVariant(0.5)).toDouble();
+	}
+	else
+	{
+		len = 0.5;
+	}
+	settings.endGroup();
+	return len;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void AOBase::initCyclicBuffer()
 {
 	tint i,noItems;
@@ -965,7 +985,7 @@ void AOBase::initCyclicBuffer()
 	
 	freeCyclicBuffer();
 	
-	tfloat64 bufferT = static_cast<tfloat64>(common::BIOTimeCachedStreamSettings::instance()->getBufferTimeLength());
+	tfloat64 bufferT = static_cast<tfloat64>(getCacheTimeLength());
 	noItems = static_cast<tint>(ceil((static_cast<tfloat64>(m_frequency)* bufferT) / static_cast<tfloat64>(c_noSamplesPerAudioItem)));
 	if(noItems < 3)
 	{

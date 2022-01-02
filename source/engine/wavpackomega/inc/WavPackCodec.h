@@ -65,8 +65,8 @@ class WAVPACKOMEGA_EXPORT WavPackCodec : public InterleavedCodec
 		
         ReadSampleFunc m_readSample;
 
-		common::BIOTimeCachedStream *m_file;
-		common::BIOTimeCachedStream *m_fileCorrection;
+		common::BIOBufferedStream *m_file;
+		common::BIOBufferedStream *m_fileCorrection;
 		WavpackStreamReader *m_reader;
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;

@@ -73,7 +73,7 @@ class BLACKOMEGA_EXPORT MPCodec : public engine::Codec
 		
 		common::Allocation m_alloc;
 		
-		common::BIOTimeCachedStream *m_cachedFile;
+		common::BIOBufferedStream *m_cachedFile;
 		engine::File *m_file;
 		
 		BBitstream *m_bs;

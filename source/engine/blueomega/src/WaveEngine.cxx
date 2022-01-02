@@ -90,7 +90,7 @@ bool WaveEngine::open(const QString& name)
 	}
 	else
 	{
-		m_file = new common::BIOTimeCachedStream;
+		m_file = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 	}
 
 	if(m_file->open(name))
@@ -167,13 +167,6 @@ bool WaveEngine::init()
 	{
 		m_info.setupChannelMap(m_noOutputChannels);
 		m_initFlag = true;
-		
-		common::BIOTimeCachedStream *cachedFile = dynamic_cast<common::BIOTimeCachedStream *>(m_file);
-		if(cachedFile!=0)
-		{
-			cachedFile->setBitrate(bitrate());
-		}
-		
 		res = true;
 	}
 	else
@@ -312,12 +305,6 @@ bool WaveEngine::next(AData& data)
 		part.length() = noSamples;
 		part.end() = m_currentTime;
 		part.done() = true;
-		
-		common::BIOTimeCachedStream *cachedFile = dynamic_cast<common::BIOTimeCachedStream *>(m_file);
-		if(cachedFile!=0)
-		{
-			cachedFile->springCleanTheCache();
-		}
 		
 		m_dataPosition += amount;
 		if(amount<len || m_dataPosition>=m_dataSize)

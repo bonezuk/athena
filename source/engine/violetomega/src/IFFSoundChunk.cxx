@@ -153,7 +153,7 @@ int IFFSoundChunk::readAsBlocks(sample_t *sampleMem,int noSamples)
 	bPerSample = bytesPerSample();
 
 	cIndex = currentIndexPosition();
-	if(m_file->seek(cIndex + 8,common::e_Seek_Current))
+	if(m_file->seek(cIndex + 8,common::e_Seek_Current) && cIndex >= 0)
 	{
 		while(res && amount<noSamples)
 		{
@@ -226,7 +226,7 @@ int IFFSoundChunk::readAsWhole(sample_t *sampleMem,int noSamples)
 	}
 
 	cIndex = currentIndexPosition();
-	if(m_file->seek(cIndex + 8,common::e_Seek_Current))
+	if(m_file->seek(cIndex + 8,common::e_Seek_Current) && cIndex >= 0)
 	{
 		totalSize = m_file->read(m_readBlockMem, totalSize);
 		noSamples = totalSize / bPerFrame;

@@ -64,7 +64,7 @@ class REDOMEGA_EXPORT RedCodec : public engine::Codec
 		
 	protected:
 	
-		common::BIOTimeCachedStream *m_fileStream;
+		common::BIOBufferedStream *m_fileStream;
 		IOFile *m_file;
 		
 		ALACContainer *m_container;

@@ -70,7 +70,7 @@ class WHITEOMEGA_EXPORT WhiteCodec : public engine::Codec
 		
 		GAConfig m_gaConfig;
 		
-		common::BIOTimeCachedStream *m_fileStream;
+		common::BIOBufferedStream *m_fileStream;
 		IOFile *m_file;
 		Atom *m_atom;
 		AACRoot *m_decoder;

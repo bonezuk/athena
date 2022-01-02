@@ -110,7 +110,7 @@ bool SilverCodec::open(const QString& name)
 	{
 		m_name = name;
 
-		m_cachedFile = new common::BIOTimeCachedStream;
+		m_cachedFile = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 		m_file = new engine::IOFile(m_cachedFile);
 
 		if(m_file->open(name))
@@ -227,10 +227,6 @@ bool SilverCodec::init()
 	if(m_container!=0)
 	{
 		m_initFlag = true;
-		if(m_cachedFile!=0)
-		{
-			m_cachedFile->setBitrate(bitrate());
-		}
 		return true;
 	}
 	else
@@ -287,7 +283,6 @@ bool SilverCodec::next(AData& data)
 							m_state = -1;
 							res = false;
 						}
-						m_cachedFile->springCleanTheCache();
 					}
 					break;
 				

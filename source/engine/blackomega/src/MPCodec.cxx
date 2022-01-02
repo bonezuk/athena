@@ -475,7 +475,7 @@ bool MPCodec::open(const QString& name)
 	
 	close();
 	
-	m_cachedFile = new common::BIOTimeCachedStream;
+	m_cachedFile = new common::BIOBufferedStream(common::e_BIOStream_FileRead);
 	m_file = new engine::IOFile(m_cachedFile);
 	
 	if(m_file->open(name))
@@ -547,10 +547,6 @@ bool MPCodec::init()
 {
 	initStructure();
 	m_initFlag = true;
-	if(m_cachedFile!=0)
-	{
-		m_cachedFile->setBitrate(bitrate());
-	}
 	return true;
 }
 
@@ -596,7 +592,6 @@ bool MPCodec::next(AData& data)
 							m_state = -1;
 							res = false;
 						}
-						m_cachedFile->springCleanTheCache();
 					}
 					break;
 				

@@ -4,6 +4,7 @@
 #include "dlna/test/UPnPProviderTestEnviroment.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 
+#include "common/inc/CommonFunctions.h"
 #include "engine/inc/Codec.h"
 #include "engine/blackomega/inc/MPCodec.h"
 #include "engine/silveromega/inc/SilverCodec.h"
@@ -106,17 +107,17 @@ int main(int argc,char **argv)
 #endif
 
 #if !defined(Q_OS_MAC)
-	::orcus::common::loadSharedLibrary("blueomega");
-	::orcus::common::loadSharedLibrary("silveromega");
-	::orcus::common::loadSharedLibrary("blackomega");
-	::orcus::common::loadSharedLibrary("whiteomega");
-	::orcus::common::loadSharedLibrary("redomega");
-	::orcus::common::loadSharedLibrary("greenomega");
-	::orcus::common::loadSharedLibrary("rtp_silveromega");
-	::orcus::common::loadSharedLibrary("widget");
-	::orcus::common::loadSharedLibrary("violetomega");
-	::orcus::common::loadSharedLibrary("wavpackomega");
-	::orcus::common::loadSharedLibrary("toneomega");
+	orcus::common::loadSharedLibrary("blueomega");
+	orcus::common::loadSharedLibrary("silveromega");
+	orcus::common::loadSharedLibrary("blackomega");
+	orcus::common::loadSharedLibrary("whiteomega");
+	orcus::common::loadSharedLibrary("redomega");
+	orcus::common::loadSharedLibrary("greenomega");
+	orcus::common::loadSharedLibrary("rtp_silveromega");
+	orcus::common::loadSharedLibrary("widget");
+	orcus::common::loadSharedLibrary("violetomega");
+	orcus::common::loadSharedLibrary("wavpackomega");
+	orcus::common::loadSharedLibrary("toneomega");
 #endif
 
 #if defined(OMEGA_MAC_STORE)

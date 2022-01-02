@@ -10,7 +10,7 @@
 #include "engine/inc/RData.h"
 #include "common/inc/BIOMemoryStream.h"
 #include "engine/inc/IOFile.h"
-#include "common/inc/BIOTimeCachedStream.h"
+#include "common/inc/BIOBufferedStream.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

@@ -77,7 +77,7 @@ class SILVEROMEGA_EXPORT SilverCodec : public engine::Codec
 		bool m_seekService;
 		bool m_remoteService;
 		
-		common::BIOTimeCachedStream *m_cachedFile;
+		common::BIOBufferedStream *m_cachedFile;
 		engine::File *m_file;
 		engine::Bitstream *m_stream;
 		VSilverOgg *m_oggStream;

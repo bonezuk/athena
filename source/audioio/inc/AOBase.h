@@ -497,6 +497,8 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual void initCyclicBuffer();
 		virtual void freeCyclicBuffer();
 		virtual void flushCyclicBuffer();
+
+		virtual common::TimeStamp getCacheTimeLength() const;
 		
 		virtual QString getActiveDeviceName();
 		virtual QString getDeviceName(tint devIdx);
