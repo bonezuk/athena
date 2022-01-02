@@ -966,11 +966,11 @@ common::TimeStamp AOBase::getCacheTimeLength() const
 	settings.beginGroup("buffer");
 	if(settings.contains("lengthCache"))
 	{
-		len = settings.value("lengthCache", QVariant(0.5)).toDouble();
+		len = settings.value("lengthCache", QVariant(2.0)).toDouble();
 	}
 	else
 	{
-		len = 0.5;
+		len = 2.0;
 	}
 	settings.endGroup();
 	return len;
