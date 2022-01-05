@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_PLAYLISTABSTRACTIO_H
-#define __ORCUS_PLAYER_PLAYLISTABSTRACTIO_H
+#ifndef __ORCUS_TRACK_DB_PLAYLISTABSTRACTIO_H
+#define __ORCUS_TRACK_DB_PLAYLISTABSTRACTIO_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -29,8 +29,7 @@
 #include "track/info/inc/Info.h"
 #include "track/db/inc/DBInfo.h"
 #include "track/db/inc/TrackDB.h"
-#include "player/inc/QPLItemBase.h"
-#include "player/inc/QPLProgress.h"
+#include "common/inc/AbstractProgressInterface.h"
 
 #if defined(OMEGA_MAC_STORE)
 #include "widget/inc/SandBoxMac.h"
@@ -40,7 +39,9 @@
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -48,7 +49,7 @@ namespace player
 
 //-------------------------------------------------------------------------------------------
 
-class PlaylistAbstractIO
+class TRACK_DB_EXPORT PlaylistAbstractIO
 {
 	public:
 		PlaylistAbstractIO();
@@ -57,14 +58,14 @@ class PlaylistAbstractIO
 		static bool isSupported(const QString& name);
 		static QString factoryName(const QString& name);
 		
-		virtual bool load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
-		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
+		virtual bool load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress);
+		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress);
 		
-		void setParentWidget(QWidget *w);
+		void setParent(QObject *w);
 		
 	protected:
 
-		QWidget *m_parent;
+		QObject *m_parent;
 		common::BOParse *m_pathParser;
 		tint m_pathParserState[9];
 	
@@ -75,7 +76,7 @@ class PlaylistAbstractIO
 		
 		QString getFilePath(const QString& inName,const QDir& homeDir,bool commentFlag);
 		
-		void appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
+		void appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress);
 
 		QString getURLFilename(const QString& uPath);
 };
@@ -85,7 +86,8 @@ class PlaylistAbstractIO
 ABSTRACT_FACTORY_CLASS(PLAYLIST_EXPORT,PlaylistIOFactory,PlaylistAbstractIO)
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 #endif

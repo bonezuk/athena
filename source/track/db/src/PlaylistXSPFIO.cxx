@@ -1,4 +1,4 @@
-#include "player/inc/PlaylistXSPFIO.h"
+#include "track/db/inc/PlaylistXSPFIO.h"
 
 #if defined(OMEGA_MAC_STORE)
 #include "common/inc/CommonDirectoriesForFiles.h"
@@ -6,13 +6,14 @@
 #include "widget/inc/ImportPlaylistDialog.h"
 #endif
 
-#include <QApplication>
-#include <QMessageBox>
+#include <QCoreApplication>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -200,7 +201,7 @@ void PlaylistXSPFIO::loadXMLFilename(xmlDocPtr doc,xmlNodePtr fNode,QString& fil
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	int i;
 	xmlDocPtr doc;
@@ -343,7 +344,7 @@ bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistXSPFIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistXSPFIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	tint i;
 	xmlDocPtr doc;
@@ -511,6 +512,7 @@ bool PlaylistXSPFIO::saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr&
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

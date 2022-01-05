@@ -96,7 +96,7 @@ int main(int argc,char **argv)
     pluginDir = d.absolutePath();
 #endif
 	QApplication::setLibraryPaths(QStringList(pluginDir));
-#elseif defined(Q_OS_WIN)
+#elif defined(Q_OS_WIN)
 	QFileInfo appFile(argv[0]);
 	QDir d = appFile.absolutePath();
 	QString pluginDir;

@@ -1,4 +1,4 @@
-#include "player/inc/PlaylistPLSIO.h"
+#include "track/db/inc/PlaylistPLSIO.h"
 
 #if defined(OMEGA_MAC_STORE)
 #include "common/inc/CommonDirectoriesForFiles.h"
@@ -6,13 +6,14 @@
 #include "widget/inc/ImportPlaylistDialog.h"
 #endif
 
-#include <QApplication>
-#include <QMessageBox>
+#include <QCoreApplication>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -123,7 +124,7 @@ PlaylistPLSIO::LineType PlaylistPLSIO::parseLineInfo(const QString& line,QString
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	common::BIOBufferedStream pFile(common::e_BIOStream_FileRead);
 	bool res = true;
@@ -292,7 +293,7 @@ bool PlaylistPLSIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistPLSIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistPLSIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	common::BIOBufferedStream pFile(common::e_BIOStream_FileCreate | common::e_BIOStream_FileWrite);
 	bool res = true;
@@ -368,6 +369,7 @@ bool PlaylistPLSIO::save(const QString& fileName,const QVector<track::info::Info
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

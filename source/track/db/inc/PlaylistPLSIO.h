@@ -1,18 +1,20 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_PLAYLISTPLSIO_H
-#define __ORCUS_PLAYER_PLAYLISTPLSIO_H
+#ifndef __ORCUS_TRACK_DB_PLAYLISTPLSIO_H
+#define __ORCUS_TRACK_DB_PLAYLISTPLSIO_H
 //-------------------------------------------------------------------------------------------
 
-#include "player/inc/PlaylistAbstractIO.h"
+#include "track/db/inc/PlaylistAbstractIO.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
-class PlaylistPLSIO : public PlaylistAbstractIO
+class TRACK_DB_EXPORT PlaylistPLSIO : public PlaylistAbstractIO
 {
 	public:
 	
@@ -31,8 +33,8 @@ class PlaylistPLSIO : public PlaylistAbstractIO
 		PlaylistPLSIO();
 		virtual ~PlaylistPLSIO();
 		
-		virtual bool load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
-		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress);
+		virtual bool load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress);
+		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress);
 
 	protected:
 	
@@ -43,7 +45,8 @@ class PlaylistPLSIO : public PlaylistAbstractIO
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 #endif

@@ -15,8 +15,13 @@ namespace db
 {
 //-------------------------------------------------------------------------------------------
 
+CONCRETE_FACTORY_CLASS_IMPL(track::info::SBBookmarkServiceFactory, track::info::SBBookmarkService, \
+                            SandboxBookmarkServiceFactory, SandboxBookmarkService, \
+                            "trackdb",false)
 
-SandboxBookmarkService::SandboxBookmarkService() : SBBookmarkService(),
+//-------------------------------------------------------------------------------------------
+
+SandboxBookmarkService::SandboxBookmarkService() : track::info::SBBookmarkService(),
 	m_mutex(QMutex::Recursive),
     m_referenceCountMap()
 {}
@@ -1120,7 +1125,7 @@ QByteArray SandboxBookmarkService::getBookmarkArray(const QString& docFileName,c
 
 //-------------------------------------------------------------------------------------------
 
-QString SandboxBookmarkService::userErrorMessage(UserSandboxErrorMessage err)
+QString SandboxBookmarkService::userErrorMessage(track::info::UserSandboxErrorMessage err)
 {
 	QString errMsg;
 	

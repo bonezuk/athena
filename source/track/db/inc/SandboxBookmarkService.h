@@ -6,6 +6,7 @@
 #include "common/inc/SBService.h"
 #include "track/db/inc/TrackDB.h"
 #include "track/db/inc/SBBookmarkTrackDB.h"
+#include "track/info/inc/SBBookmarkService.h"
 
 #include <QMutex>
 #include <QSet>
@@ -22,7 +23,7 @@ namespace db
 {
 //-------------------------------------------------------------------------------------------
 
-class TRACK_DB_EXPORT SandboxBookmarkService : public SBBookmarkService
+class TRACK_DB_EXPORT SandboxBookmarkService : public track::info::SBBookmarkService
 {
 	public:
 		SandboxBookmarkService();
@@ -47,7 +48,7 @@ class TRACK_DB_EXPORT SandboxBookmarkService : public SBBookmarkService
 		
 		virtual QByteArray getBookmarkArray(const QString& docFileName,const QString& refFileName);
 		
-        virtual QString userErrorMessage(UserSandboxErrorMessage err);
+        virtual QString userErrorMessage(track::info::UserSandboxErrorMessage err);
 		
 	protected:
 	

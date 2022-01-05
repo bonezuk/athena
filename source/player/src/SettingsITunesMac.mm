@@ -1,5 +1,6 @@
 #include "player/inc/SettingsITunesMac.h"
 #include "track/db/inc/SBBookmarkTrackDB.h"
+#include "track/info/inc/SBBookmarkService.h"
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
@@ -143,7 +144,7 @@ void *SettingsITunesMac::toUrl(const QString& fileName)
 
 void SettingsITunesMac::onFolderOpen(const QStringList& files)
 {
-	QSharedPointer<track::db::SBBookmarkService> pSBService = track::db::SBBookmarkService::instance();
+	QSharedPointer<track::info::SBBookmarkService> pSBService = track::info::SBBookmarkService::instance();
 	
 	for(QStringList::const_iterator ppI=files.begin();ppI!=files.end();ppI++)
 	{

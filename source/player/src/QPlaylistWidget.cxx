@@ -5,7 +5,7 @@
 #include "track/db/inc/DBInfo.h"
 #include "common/inc/DiskOps.h"
 #include "player/inc/Player.h"
-#include "player/inc/PlaylistAbstractIO.h"
+#include "track/db/inc/PlaylistAbstractIO.h"
 #include "player/inc/PlayerController.h"
 #include "player/inc/QPlayerApplication.h"
 #include "common/inc/Random.h"
@@ -902,12 +902,12 @@ void QPlaylistWidget::addFile(const QString& name,QPLItemBase *prevItem)
 			addTracks(tList,prevItem,true);
 		}
 	}
-	else if(PlaylistAbstractIO::isSupported(name))
+	else if(track::db::PlaylistAbstractIO::isSupported(name))
 	{
-        QSharedPointer<PlaylistAbstractIO> pLoader = PlaylistIOFactory::createShared(PlaylistAbstractIO::factoryName(name));
+        QSharedPointer<track::db::PlaylistAbstractIO> pLoader = track::db::PlaylistIOFactory::createShared(track::db::PlaylistAbstractIO::factoryName(name));
         if(pLoader.data()!=0)
 		{
-			pLoader->setParentWidget(parentWidget());
+			pLoader->setParent(parentWidget());
 			if(pLoader->load(name,tList,m_progressControl))
 			{
 				addTracks(tList,prevItem,false);
@@ -975,9 +975,9 @@ void QPlaylistWidget::addFiles(const QStringList& name,QPLItemBase *prevItem,boo
 			m_progressControl->setProgress(cP);
 			QCoreApplication::processEvents(QEventLoop::AllEvents);
 		}
-		else if(PlaylistAbstractIO::isSupported(name.at(i)))
+		else if(track::db::PlaylistAbstractIO::isSupported(name.at(i)))
 		{
-            QSharedPointer<PlaylistAbstractIO> pLoader = PlaylistIOFactory::createShared(PlaylistAbstractIO::factoryName(name.at(i)));
+            QSharedPointer<track::db::PlaylistAbstractIO> pLoader = track::db::PlaylistIOFactory::createShared(track::db::PlaylistAbstractIO::factoryName(name.at(i)));
             if(pLoader.data()!=0)
 			{
 				QVector<track::info::InfoSPtr> pList;
@@ -1365,11 +1365,11 @@ void QPlaylistWidget::countDirectoryR(const QString& name,bool recursive,int& co
 
 void QPlaylistWidget::savePlaylist(const QString& fileName,bool selectFlag)
 {
-	if(PlaylistAbstractIO::isSupported(fileName))
+	if(track::db::PlaylistAbstractIO::isSupported(fileName))
 	{
 		try
 		{
-            QSharedPointer<PlaylistAbstractIO> pSaver = PlaylistIOFactory::createShared(PlaylistAbstractIO::factoryName(fileName));
+            QSharedPointer<track::db::PlaylistAbstractIO> pSaver = track::db::PlaylistIOFactory::createShared(track::db::PlaylistAbstractIO::factoryName(fileName));
             if(pSaver.data()!=0)
 			{
 				QVector<track::info::InfoSPtr> pList;
@@ -2494,7 +2494,7 @@ void QPlaylistWidget::dropEvent(QDropEvent *e)
 				switch(common::DiskOps::fileType(fName))
 				{
 					case 1:
-						if(track::info::Info::isSupported(fName) || PlaylistAbstractIO::isSupported(fName))
+						if(track::info::Info::isSupported(fName) || track::db::PlaylistAbstractIO::isSupported(fName))
 						{
 							m_dirFileTotal++;
 						}
@@ -2538,9 +2538,9 @@ void QPlaylistWidget::dropEvent(QDropEvent *e)
 									infoList.append(fInfo);
 								}
 							}
-							else if(PlaylistAbstractIO::isSupported(fName))
+							else if(track::db::PlaylistAbstractIO::isSupported(fName))
 							{
-                                QSharedPointer<PlaylistAbstractIO> pLoader = PlaylistIOFactory::createShared(PlaylistAbstractIO::factoryName(fName));
+								QSharedPointer<track::db::PlaylistAbstractIO> pLoader = track::db::PlaylistIOFactory::createShared(track::db::PlaylistAbstractIO::factoryName(fName));
                                 if(pLoader.data()!=0)
 								{
 									QVector<track::info::InfoSPtr> pList;
@@ -3680,7 +3680,7 @@ void QPlaylistWidget::doPaste()
 					switch(common::DiskOps::fileType(fName))
 					{
 						case 1:
-							if(track::info::Info::isSupported(fName) || PlaylistAbstractIO::isSupported(fName))
+							if(track::info::Info::isSupported(fName) || track::db::PlaylistAbstractIO::isSupported(fName))
 							{
 								m_dirFileTotal++;
 							}
@@ -3724,9 +3724,9 @@ void QPlaylistWidget::doPaste()
 										infoList.append(fInfo);
 									}
 								}
-								else if(PlaylistAbstractIO::isSupported(fName))
+								else if(track::db::PlaylistAbstractIO::isSupported(fName))
 								{
-                                    QSharedPointer<PlaylistAbstractIO> pLoader = PlaylistIOFactory::createShared(PlaylistAbstractIO::factoryName(fName));
+                                    QSharedPointer<track::db::PlaylistAbstractIO> pLoader = track::db::PlaylistIOFactory::createShared(track::db::PlaylistAbstractIO::factoryName(fName));
                                     if(pLoader.data()!=0)
 									{
 										QVector<track::info::InfoSPtr> pList;

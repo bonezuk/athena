@@ -1,10 +1,12 @@
-#include "player/inc/PlaylistAbstractIO.h"
+#include "track/db/inc/PlaylistAbstractIO.h"
 #include "engine/inc/Codec.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -36,14 +38,14 @@ PlaylistAbstractIO::~PlaylistAbstractIO()
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistAbstractIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistAbstractIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	return false;
 }
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistAbstractIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistAbstractIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	return false;
 }
@@ -343,7 +345,7 @@ QString PlaylistAbstractIO::getFilePath(const QString& inName,const QDir& homeDi
 
 //-------------------------------------------------------------------------------------------
 
-void PlaylistAbstractIO::appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+void PlaylistAbstractIO::appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	track::info::InfoSPtr info = getTrack(lPath);
 	
@@ -375,12 +377,13 @@ void PlaylistAbstractIO::appendToList(const QString& lPath,QVector<track::info::
 
 //-------------------------------------------------------------------------------------------
 
-void PlaylistAbstractIO::setParentWidget(QWidget *w)
+void PlaylistAbstractIO::setParent(QObject *w)
 {
 	m_parent = w;
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

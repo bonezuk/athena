@@ -9,7 +9,7 @@ namespace player
 {
 //-------------------------------------------------------------------------------------------
 
-QPLProgress::QPLProgress(QPlaylistWidget *parent) : QObject(parent),
+QPLProgress::QPLProgress(QPlaylistWidget *parent) : common::AbstractProgressInterface(parent),
 	m_parentWidget(parent),
 	m_leftImage(0),
 	m_rightImage(0),

@@ -1,5 +1,5 @@
 #include "widget/inc/ImportPlaylistDialog.h"
-#include "track/db/inc/SandboxBookmarkService.h"
+#include "track/info/inc/SBBookmarkService.h"
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
@@ -343,7 +343,7 @@ void ImportPlaylistDialog::processFolder(int index)
 	}
 	else
 	{
-		QSharedPointer<track::db::SBBookmarkService> pSBService = track::db::SBBookmarkService::instance();
+		QSharedPointer<track::info::SBBookmarkService> pSBService = track::info::SBBookmarkService::instance();
 		bool res = false;
 		
 		for(QStringList::const_iterator ppI=m_directoryList.begin();ppI!=m_directoryList.end();ppI++)
@@ -362,7 +362,7 @@ void ImportPlaylistDialog::processFolder(int index)
 
 void ImportPlaylistDialog::onFolderOpen(const QStringList& files)
 {
-	QSharedPointer<track::db::SBBookmarkService> pSBService = track::db::SBBookmarkService::instance();
+	QSharedPointer<track::info::SBBookmarkService> pSBService = track::info::SBBookmarkService::instance();
 	
 	for(QStringList::const_iterator ppI=files.begin();ppI!=files.end();ppI++)
 	{

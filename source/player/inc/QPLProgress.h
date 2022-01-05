@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/QPLItemBase.h"
+#include "common/inc/AbstractProgressInterface.h"
 
 #include <QTimer>
 
@@ -14,7 +15,7 @@ namespace player
 {
 //-------------------------------------------------------------------------------------------
 
-class QPLProgress : public QObject
+class QPLProgress : public common::AbstractProgressInterface
 {
 	public:
 		Q_OBJECT
@@ -23,19 +24,19 @@ class QPLProgress : public QObject
 		QPLProgress(QPlaylistWidget *parent);
 		virtual ~QPLProgress();
 		
-		bool isActive();
-		void activate(bool useReference = false);
-		void deactivate(bool useReference = false);
+		virtual bool isActive();
+		virtual void activate(bool useReference = false);
+		virtual void deactivate(bool useReference = false);
 				
-		void paint(QPainter *painter);
+		virtual void paint(QPainter *painter);
 
-		void mouseMoveEvent(QMouseEvent *e);
-		void mousePressEvent(QMouseEvent *e);
-		void mouseReleaseEvent(QMouseEvent *e);
+		virtual void mouseMoveEvent(QMouseEvent *e);
+		virtual void mousePressEvent(QMouseEvent *e);
+		virtual void mouseReleaseEvent(QMouseEvent *e);
 		
-		void setProgress(tfloat32 v);
-		tfloat32 getProgress();
-		bool isCancelled();
+		virtual void setProgress(tfloat32 v);
+		virtual tfloat32 getProgress();
+		virtual bool isCancelled();
 
 	protected:
 	
@@ -55,11 +56,11 @@ class QPLProgress : public QObject
 		int m_progressReferenceCount;
 		bool m_cancelFlag;
 		
-		bool isOnCancelButton(QMouseEvent *e);
+		virtual bool isOnCancelButton(QMouseEvent *e);
 		
-		bool isRetina() const;
-		void paintRetinaImage(QPainter *painter,QPoint pos,QImage *pImage) const;
-		void paintRetinaImage(QPainter *painter,QPointF pos,QImage *pImage) const;
+		virtual bool isRetina() const;
+		virtual void paintRetinaImage(QPainter *painter,QPoint pos,QImage *pImage) const;
+		virtual void paintRetinaImage(QPainter *painter,QPointF pos,QImage *pImage) const;
 		
 	protected slots:
 	

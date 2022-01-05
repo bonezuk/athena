@@ -1,4 +1,4 @@
-#include "player/inc/PlaylistM3UIO.h"
+#include "track/db/inc/PlaylistM3UIO.h"
 
 #if defined(OMEGA_MAC_STORE)
 #include "common/inc/CommonDirectoriesForFiles.h"
@@ -6,13 +6,14 @@
 #include "widget/inc/ImportPlaylistDialog.h"
 #endif
 
-#include <QApplication>
-#include <QMessageBox>
+#include <QCoreApplication>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace player
+namespace track
+{
+namespace db
 {
 //-------------------------------------------------------------------------------------------
 
@@ -32,7 +33,7 @@ PlaylistM3UIO::~PlaylistM3UIO()
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	common::BIOBufferedStream pFile(common::e_BIOStream_FileRead);
 	bool res = true;
@@ -180,7 +181,7 @@ bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 
 //-------------------------------------------------------------------------------------------
 
-bool PlaylistM3UIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,QPLProgress *progress)
+bool PlaylistM3UIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	common::BIOBufferedStream pFile(common::e_BIOStream_FileCreate | common::e_BIOStream_FileWrite);
 	bool res;
@@ -243,6 +244,7 @@ bool PlaylistM3UIO::save(const QString& fileName,const QVector<track::info::Info
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace player
+} // namespace db
+} // namespace track
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
