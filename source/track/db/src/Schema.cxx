@@ -31,14 +31,21 @@ void Schema::printError(const tchar *strR,const tchar *strE) const
 
 //-------------------------------------------------------------------------------------------
 
-bool Schema::isTableDefined(const QString& tableName)
+bool Schema::isTableDefinedOps(SQLiteDatabase *db, const QString& tableName)
 {
 	QString cmd;
-	SQLiteQuery qTable(m_db);
+	SQLiteQuery qTable(db);
 	
 	cmd = "SELECT name FROM sqlite_master WHERE type=\"table\" AND name=\"" + tableName + "\"";
 	qTable.prepare(cmd);
 	return (qTable.next()) ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool Schema::isTableDefined(const QString& tableName)
+{
+	return isTableDefinedOps(m_db, tableName);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -53,7 +60,7 @@ bool Schema::createDB(SQLiteDatabase *db)
 		{
 			m_db = db;
 			createDatabaseInfo();
-			if(writeDatabaseVersion(5))
+			if(writeDatabaseVersion(TRACKDB_VERSION))
 			{
 				createAlbum();
 				createTrack();
@@ -67,6 +74,7 @@ bool Schema::createDB(SQLiteDatabase *db)
 				createPlayList();
 				createPlayListInfo();
 				createSandBoxURL();
+				createMountPoints();
 			}
 		}
 		catch(const SQLiteException& e)
@@ -81,6 +89,29 @@ bool Schema::createDB(SQLiteDatabase *db)
 		res = false;
 	}
 	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::createMountPointsOps(SQLiteDatabase *db)
+{
+	if(!isTableDefinedOps(db, "mountpoints"))
+	{
+		QString cmd;
+
+		cmd  = "CREATE TABLE mountpoints (";
+		cmd += "  mountID INTEGER PRIMARY KEY AUTOINCREMENT,";
+		cmd += "  mountName TEXT NOT NULL";
+		cmd += ");";
+		db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::createMountPoints()
+{
+	createMountPointsOps(m_db);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -585,6 +616,71 @@ bool Schema::upgradeVersion4To5CopySandbox(SQLiteDatabase *orgDB,SQLiteDatabase 
 //-------------------------------------------------------------------------------------------
 
 bool Schema::upgradeVersion4To5(const QString& orgTrackDBFileName)
+{
+	bool res = false;
+
+	QString newTrackDBFileName = tempUpgradeDBFileName(orgTrackDBFileName);
+	if(!newTrackDBFileName.isEmpty())
+	{
+		SQLiteDatabase orgTrackDB;
+		
+		if(orgTrackDB.open(orgTrackDBFileName))
+		{
+			SQLiteDatabase newTrackDB;
+		
+			if(newTrackDB.open(newTrackDBFileName))
+			{
+				Schema dbSchema;
+				
+				if(dbSchema.createDB(&newTrackDB))
+				{
+					res = upgradeVersion4To5CopySandbox(&orgTrackDB,&newTrackDB);
+				}
+				newTrackDB.close();
+			}
+			orgTrackDB.close();
+		}
+		
+		if(res)
+		{
+			common::DiskOps::remove(orgTrackDBFileName);
+			QFile nDBFile(newTrackDBFileName);
+			if(!nDBFile.rename(orgTrackDBFileName))
+			{
+				res = false;
+			}
+		}
+		else
+		{
+			common::DiskOps::remove(newTrackDBFileName);
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool Schema::upgradeVerion5To6Operation(SQLiteDatabase *orgDB,SQLiteDatabase *newDB)
+{
+	bool res = true;
+
+	try
+	{
+		newDB->exec("SAVEPOINT upgradeVersion5To6");
+		createMountPointsOps(newDB);
+		newDB->exec("RELEASE upgradeVersion5To6");
+	}
+	catch(const SQLiteException&)
+	{
+		newDB->exec("ROLLBACK TO SAVEPOINT upgradeVersion5To6");
+		res = false;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool Schema::upgradeVersion5To6(const QString& orgTrackDBFileName)
 {
 	bool res = false;
 

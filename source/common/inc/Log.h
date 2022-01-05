@@ -5,6 +5,7 @@
 
 #include "common/inc/BString.h"
 #include "common/inc/UString.h"
+#include <QString>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -26,9 +27,11 @@ class COMMON_EXPORT Log
 		
 		virtual void set(const tchar *str);
 		virtual void set(const BString& str);
+		virtual void set(const QString& str);
 		
 		virtual void write(const tchar *str);
 		virtual void write(const BString& str);
+		virtual void write(const QString& str);
 		
 		virtual void on();
 		virtual void off();
@@ -55,6 +58,7 @@ COMMON_EXPORT Log& operator << (Log& in,tint i);
 COMMON_EXPORT Log& operator << (Log& in,tchar s);
 COMMON_EXPORT Log& operator << (Log& in,const tushort *str);
 COMMON_EXPORT Log& operator << (Log& in,const UString& str);
+COMMON_EXPORT Log& operator << (Log& in,const QString& str);
 
 const tchar c_endl[] = "\r\n";
 

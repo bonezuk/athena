@@ -30,7 +30,8 @@ TrackDB *TrackDB::m_instance = 0;
 
 //-------------------------------------------------------------------------------------------
 
-TrackDB::TrackDB() : m_db(0)
+TrackDB::TrackDB() : m_db(0),
+	m_mountPoints()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -101,6 +102,8 @@ bool TrackDB::open(const QString& dbName)
 		
 		if(dbSchema.createDB(m_db))
 		{
+			QSharedPointer<TrackDBMountPoints> pMounts(new TrackDBMountPoints(m_db));
+			m_mountPoints = pMounts;
 			res = true;
 		}
 		else
@@ -121,10 +124,21 @@ void TrackDB::close()
 {
 	if(m_db!=0)
 	{
+		if(!m_mountPoints.isNull())
+		{
+			m_mountPoints.clear();
+		}
 		m_db->close();
 		delete m_db;
 		m_db = 0;
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+QSharedPointer<TrackDBMountPoints>& TrackDB::mountPoints()
+{
+	return m_mountPoints;
 }
 
 //-------------------------------------------------------------------------------------------

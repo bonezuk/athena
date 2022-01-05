@@ -140,6 +140,13 @@ void Log::print(const char *fmt,...)
 
 //-------------------------------------------------------------------------------------------
 
+void Log::write(const QString& str)
+{
+	write(str.toUtf8().constData());
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Log::write(const tchar *str)
 {
 	BString s(str);
@@ -255,6 +262,13 @@ void Log::copy(const Log& log)
 
 //-------------------------------------------------------------------------------------------
 
+void Log::set(const QString& str)
+{
+	set(str.toUtf8().constData());
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Log::set(const tchar *str)
 {
 	m_logName = str;
@@ -350,6 +364,14 @@ Log& operator << (Log& in,const UString& str)
 	
 	a = str.AStr();
 	in.write(a);
+	return in;
+}
+
+//-------------------------------------------------------------------------------------------
+
+Log& operator << (Log& in,const QString& str)
+{
+	in.write(str);
 	return in;
 }
 

@@ -16,6 +16,10 @@ namespace db
 {
 //-------------------------------------------------------------------------------------------
 
+#define TRACKDB_VERSION 6
+
+//-------------------------------------------------------------------------------------------
+
 class TRACK_DB_EXPORT Schema
 {
 	public:
@@ -25,6 +29,7 @@ class TRACK_DB_EXPORT Schema
 		virtual bool createDB(SQLiteDatabase *db);
 		
 		static bool upgradeVersion4To5(const QString& orgTrackDBFileName);
+		static bool upgradeVersion5To6(const QString& orgTrackDBFileName);
 		
 	protected:
 	
@@ -32,6 +37,7 @@ class TRACK_DB_EXPORT Schema
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		
+		static bool isTableDefinedOps(SQLiteDatabase *db, const QString& tableName);
 		virtual bool isTableDefined(const QString& tableName);
 		
 		virtual void createAlbum();
@@ -47,12 +53,18 @@ class TRACK_DB_EXPORT Schema
 		virtual void createPlayListInfo();
 		virtual void createDatabaseInfo();
 		virtual void createSandBoxURL();
+		
+		virtual void createMountPoints();
+		static void createMountPointsOps(SQLiteDatabase *db);
+		
 		virtual bool writeDatabaseVersion(int versionNo);
 		
 		virtual bool upgradeVersion1To2();
 		
 		static QString tempUpgradeDBFileName(const QString& orgTrackDBFileName);
 		static bool upgradeVersion4To5CopySandbox(SQLiteDatabase *orgDB,SQLiteDatabase *newDB);
+		
+		static bool upgradeVerion5To6Operation(SQLiteDatabase *orgDB,SQLiteDatabase *newDB);
 };
 
 //-------------------------------------------------------------------------------------------

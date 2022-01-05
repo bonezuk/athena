@@ -6,6 +6,9 @@
 #include "track/info/inc/Info.h"
 #include "track/db/inc/Schema.h"
 #include "track/db/inc/SQLiteInsert.h"
+#include "track/db/inc/TrackDBMountPoints.h"
+
+#include <QSharedPointer>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -56,11 +59,14 @@ class TRACK_DB_EXPORT TrackDB
 		
 		int dbVersion();
 		
+		QSharedPointer<TrackDBMountPoints>& mountPoints();
+		
 	protected:
 		
 		static TrackDB *m_instance;
 		
 		SQLiteDatabase *m_db;
+		QSharedPointer<TrackDBMountPoints> m_mountPoints;
 		
 		TrackDB();
 		
