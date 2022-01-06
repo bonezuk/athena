@@ -3808,46 +3808,17 @@ void QPlaylistWidget::contextMenuEvent(QContextMenuEvent *e)
 
 bool QPlaylistWidget::loadPlaylistFromDB(int playlistID,bool appendFlag,QString& name)
 {
-	track::db::SQLiteDatabase *db = track::db::TrackDB::instance()->db();
+	QPLItemBase *pItem = 0;
+	track::db::TrackDB *db = track::db::TrackDB::instance();
 	bool res = false;
 	
 	if(db!=0)
 	{
-		int position,albumID,trackID,subtrackID;
-		QVector<PlaylistTriple> trackDBList;
-		QVector<PlaylistTriple>::iterator ppI;
 		QVector<QPair<track::info::InfoSPtr,int> > trackList;
-		QPLItemBase *pItem;
-			
-		try
+		
+		name = db->playlist(playlistID);
+		if(db->loadPlaylist(playlistID, trackList))
 		{
-			QString cmdQ;
-			track::db::SQLiteQuery playQ(db);
-			track::db::SQLiteQuery infoQ(db);
-
-			cmdQ = "SELECT name FROM playlistInfo WHERE playlistID=" + QString::number(playlistID);
-			infoQ.prepare(cmdQ);
-			infoQ.bind(name);
-			if(!infoQ.next())
-			{
-				name = "";
-			}
-
-			cmdQ = "SELECT position,albumID,trackID,subtrackID FROM playlist WHERE playlistID=" + QString::number(playlistID) + " ORDER BY position";
-			playQ.prepare(cmdQ);
-			playQ.bind(position);
-			playQ.bind(albumID);
-			playQ.bind(trackID);
-			playQ.bind(subtrackID);
-			while(playQ.next())
-			{
-				PlaylistTriple t;
-				t.albumID = albumID;
-				t.trackID = trackID;
-				t.subtrackID = subtrackID;
-				trackDBList.append(t);
-			}
-			
 			if(!appendFlag)
 			{
 				QList<QPLItemBase *>::iterator ppJ;
@@ -3876,20 +3847,11 @@ bool QPlaylistWidget::loadPlaylistFromDB(int playlistID,bool appendFlag,QString&
 				}
 			}
 			
-			for(ppI=trackDBList.begin();ppI!=trackDBList.end();ppI++)
-			{
-				PlaylistTriple& t = *ppI;
-				track::info::InfoSPtr info = track::db::DBInfo::readInfo(t.albumID,t.trackID);
-				trackList.append(QPair<track::info::InfoSPtr,int>(info,t.subtrackID));
-			}
-			
 			addTracks(trackList,pItem);
 			initCurrentPlay();
 			applyAndEmitUpdate();
-		}
-		catch(const track::db::SQLiteException&)
-		{
-			res = false;
+			
+			res = true;
 		}
 	}
 	return res;
@@ -3899,152 +3861,61 @@ bool QPlaylistWidget::loadPlaylistFromDB(int playlistID,bool appendFlag,QString&
 
 int QPlaylistWidget::savePlaylistToDB(int playlistID,const QString& name,bool selectFlag)
 {
+	track::db::TrackDB *db = track::db::TrackDB::instance();
+	QVector<QPair<track::info::InfoSPtr,int> > trackList;
+	QPLItemBase *cItem;
 	int resID = -1;
-	track::db::SQLiteDatabase *db = track::db::TrackDB::instance()->db();
 	
-	if(db!=0)
+	if(m_playRootList.size()>0)
 	{
-		try
+		cItem = m_playRootList[0];
+	}
+	else
+	{
+		cItem = 0;
+	}
+			
+	while(cItem!=0)
+	{
+		if(!(selectFlag && !cItem->isSelected()))
 		{
-			int i;
-			QString cmdQ,cmdD,cmdI,pName(name);
-			QPLItemBase *cItem;
-			QVector<PlaylistTriple> trackDBList;
-			QVector<PlaylistTriple>::iterator ppI;
-			track::db::SQLiteDatabase *db = track::db::TrackDB::instance()->db();
-			track::db::SQLiteInsert playI(db),infoI(db);
-			bool res = true;
-
-			db->exec("SAVEPOINT savePlaylistToDB");
-			
-			if(m_playRootList.size()>0)
+			if(cItem->type()!=QPLItemBase::e_Album)
 			{
-				cItem = m_playRootList[0];
+				trackList.append(QPair<track::info::InfoSPtr,int>(cItem->info(), cItem->subTrackIndex()));
 			}
-			else
-			{
-				cItem = 0;
-			}
+		}
+		if(cItem->isChildren())
+		{
+			cItem = cItem->child(0);
+		}
+		else
+		{
+			bool loop = true;
 			
-			while(cItem!=0)
+			while(loop && cItem!=0)
 			{
-				if(!(selectFlag && !cItem->isSelected()))
+				QPLItemBase *sItem = cItem->nextSibling();
+				
+				if(sItem!=0)
 				{
-					if(cItem->type()!=QPLItemBase::e_Album)
-					{
-						PlaylistTriple t;
-                        QSharedPointer<track::db::DBInfo> dbInfo = cItem->info().dynamicCast<track::db::DBInfo>();
-                        if(dbInfo==0 && cItem->info().data()!=0)
-						{
-                            dbInfo = track::db::DBInfo::readInfo(cItem->info()->getFilename()).dynamicCast<track::db::DBInfo>();
-						}
-						
-						if(dbInfo!=0)
-						{
-							t.albumID = dbInfo->albumID();
-							t.trackID = dbInfo->trackID();
-							t.subtrackID = cItem->subTrackIndex();
-							trackDBList.append(t);
-						}
-					}
-				}
-				if(cItem->isChildren())
-				{
-					cItem = cItem->child(0);
+					cItem = sItem;
+					loop = false;
 				}
 				else
 				{
-					bool loop = true;
-					
-					while(loop && cItem!=0)
+					if(cItem->parent()!=0)
 					{
-						QPLItemBase *sItem = cItem->nextSibling();
-						
-						if(sItem!=0)
-						{
-							cItem = sItem;
-							loop = false;
-						}
-						else
-						{
-							if(cItem->parent()!=0)
-							{
-								cItem = cItem->parent();
-							}
-							else
-							{
-								cItem = 0;
-							}
-						}
+						cItem = cItem->parent();
+					}
+					else
+					{
+						cItem = 0;
 					}
 				}
 			}
-			
-			if(playlistID<0)
-			{
-				track::db::SQLiteQuery plIDQ(db);
-				cmdQ = "SELECT playlistID FROM playlistInfo ORDER BY playlistID DESC LIMIT 1";
-				plIDQ.prepare(cmdQ);
-				plIDQ.bind(playlistID);
-				if(!plIDQ.next())
-				{
-					playlistID = 1;
-				}
-			}
-
-			cmdD = "DELETE FROM playlistInfo WHERE playlistID=" + QString::number(playlistID);
-			db->exec(cmdD);
-			cmdD = "DELETE FROM playlist WHERE playlistID=" + QString::number(playlistID);
-			db->exec(cmdD);
-			
-			cmdI = "INSERT INTO playlistInfo VALUES (?,?)";
-			infoI.prepare(cmdI);
-			infoI.bind(playlistID);
-			infoI.bind(pName);
-			if(infoI.next())
-			{
-				cmdI = "INSERT INTO playlist VALUES (?,?,?,?,?)";
-				playI.prepare(cmdI);
-				for(i=0,ppI=trackDBList.begin();ppI!=trackDBList.end() && res;ppI++,i++)
-				{
-					PlaylistTriple& t = *ppI;
-					playI.bind(playlistID);
-					playI.bind(i);
-					playI.bind(t.albumID);
-					playI.bind(t.trackID);
-					playI.bind(t.subtrackID);
-					if(!playI.next())
-					{
-						res = false;
-					}
-				}
-			}
-			else
-			{
-				res = false;
-			}
-
-			if(res)
-			{
-				resID = playlistID;
-			}
-			
-			if(resID>=0)
-			{
-				db->exec("RELEASE savePlaylistToDB");
-			}
-			else
-			{
-				db->exec("ROLLBACK TO SAVEPOINT savePlaylistToDB");
-			}
-		}
-		catch(track::db::SQLiteException&)
-		{
-			db->exec("ROLLBACK TO SAVEPOINT savePlaylistToDB");
-			resID = -1;
 		}
 	}
-	return resID;
+	return db->replacePlaylist(playlistID, name, trackList);
 }
 
 //-------------------------------------------------------------------------------------------

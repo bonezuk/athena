@@ -110,6 +110,51 @@ QString mountPointFromArguments()
 
 //-------------------------------------------------------------------------------------------
 
+QString playlistFromArguments()
+{
+	int idx, state;
+	QString name;
+	QStringList args = QCoreApplication::arguments();
+	
+	for(idx = 0, state = 0; idx < args.size() && name.isEmpty(); idx++)
+	{
+		if(args.at(idx) == "-p")
+		{
+			state = 1;
+		}
+		else if(state == 1)
+		{
+			name = args.at(idx);
+			if(!QFileInfo(name).exists())
+			{
+				name = QString();
+			}
+		}
+	}
+	return name;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool loadPlaylistFromDBOrArguments(QVector<orcus::track::info::InfoSPtr>& pList)
+{
+	QString plFilename;
+	bool res = false;
+	
+	plFilename = playlistFromArguments();
+	if(!plFilename.isEmpty())
+	{
+	
+	}
+	else
+	{
+	
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
 int main(int argc, char *argv[])
 {
 	int res = -1;

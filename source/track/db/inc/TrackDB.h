@@ -21,6 +21,17 @@ namespace db
 
 class DBInfo;
 
+typedef QSharedPointer<DBInfo> DBInfoSPtr;
+
+//-------------------------------------------------------------------------------------------
+
+typedef struct s_PlaylistTriple
+{
+	tint albumID;
+	tint trackID;
+	tint subtrackID;
+} PlaylistTriple;
+
 //-------------------------------------------------------------------------------------------
 
 class TRACK_DB_EXPORT TrackDB
@@ -61,6 +72,13 @@ class TRACK_DB_EXPORT TrackDB
 		
 		QSharedPointer<TrackDBMountPoints>& mountPoints();
 		
+		QMap<tint, QString> playlists();
+		QString playlist(int playlistID);
+		bool loadPlaylist(int playlistID, QVector<QPair<info::InfoSPtr, tint> >& pList);
+		int savePlaylist(const QString& name, QVector<QPair<info::InfoSPtr, tint> >& pList);
+		int replacePlaylist(int playlistID, const QString& name, QVector<QPair<info::InfoSPtr, tint> >& pList);
+		void clearPlaylist(int playlistID);
+		
 	protected:
 		
 		static TrackDB *m_instance;
@@ -94,6 +112,10 @@ class TRACK_DB_EXPORT TrackDB
 		bool updateAlbumImage(int albumID);
 		tint levenshteinDistance(const QString& a,const QString& b) const;
 		QString loadDirectoryImage(const QString& dirName,const QString& albumName) const;
+		
+		int savePlaylistOp(int playlistID, const QString& name, const QVector<QPair<DBInfoSPtr, tint> >& pList);
+		void getDBInfoListFromPlaylist(QVector<QPair<info::InfoSPtr, tint> >& pList, QVector<QPair<DBInfoSPtr, tint> >& pDBList);
+		void clearPlaylistOp(int playlistID);
 };
 
 //-------------------------------------------------------------------------------------------
