@@ -2,6 +2,7 @@
 #include <QtGui/qsurfaceformat.h>
 #include <QtGui/qguiapplication.h>
 #include <QtQml/qqml.h>
+#include <QtQml/qqmlcontext.h>
 #include <QFileInfo>
 #include <QDir>
 
@@ -16,8 +17,8 @@
 #include "engine/silveromega/inc/SilverCodec.h"
 #include "engine/whiteomega/inc/WhiteCodec.h"
 
-#include "embedded/playlistmanager/inc/SortFilterProxyModel.h"
 #include "embedded/playlistmanager/inc/CLIProgress.h"
+#include "embedded/playlistmanager/inc/PlayListModel.h"
 
 //-------------------------------------------------------------------------------------------
 
@@ -272,6 +273,37 @@ bool loadPlaylistFromDBOrArguments(QVector<QPair<track::db::DBInfoSPtr,tint> >& 
 
 //-------------------------------------------------------------------------------------------
 
+void printPlaylistAsQMLModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
+{
+	QString artistData, titleData, albumData;
+
+	fprintf(stdout, "\t\tListModel {\n");
+	for(QVector<QPair<track::db::DBInfoSPtr,tint> >::iterator ppI = playListDB.begin(); ppI != playListDB.end(); ppI++)
+	{
+		track::db::DBInfoSPtr item = (*ppI).first;
+		tint subtrackID = (*ppI).second;
+		
+		fprintf(stdout, "\t\t\tListElement {\n");
+		artistData = QString("\t\t\t\tartist: \"%1\"").arg(item->artist());
+		if(subtrackID >= 0 && subtrackID < item->noChildren())
+		{
+			titleData = QString("\t\t\t\ttitle: \"%1\"").arg(item->child(subtrackID).name());
+		}
+		else
+		{
+			titleData = QString("\t\t\t\ttitle: \"%1\"").arg(item->title());
+		}
+		albumData = QString("\t\t\t\talbum: \"%1\"").arg(item->album());
+		fprintf(stdout, "%s\n", artistData.toUtf8().constData());
+		fprintf(stdout, "%s\n", titleData.toUtf8().constData());
+		fprintf(stdout, "%s\n", albumData.toUtf8().constData());
+		fprintf(stdout, "\t\t\t}\n");
+	}
+	fprintf(stdout, "\t\t}\n");
+}
+
+//-------------------------------------------------------------------------------------------
+
 int main(int argc, char *argv[])
 {
 	int res = -1;
@@ -305,16 +337,11 @@ int main(int argc, char *argv[])
 		}
 		else if(loadPlaylistFromDBOrArguments(playListDB))
 		{
-	    	if (QCoreApplication::arguments().contains(QLatin1String("--coreprofile"))) 
-    		{
-        		QSurfaceFormat fmt;
-	        	fmt.setVersion(4, 4);
-	    	    fmt.setProfile(QSurfaceFormat::CoreProfile);
-    	    	QSurfaceFormat::setDefaultFormat(fmt);
-	    	}
-	    	qmlRegisterType<SortFilterProxyModel>("org.qtproject.example", 1, 0, "SortFilterProxyModel");
-		    QQmlApplicationEngine engine(QUrl("qrc:/Resources/main.qml"));
-    		res = app.exec();
+			PlayListModel playListModel(playListDB);
+			QQmlApplicationEngine engine;
+			engine.rootContext()->setContextProperty("playListModel", &playListModel);
+			engine.load(QUrl("qrc:/Resources/playlist.qml"));
+			res = app.exec();
     	}
     	delete trackDB;
     }

@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource prefix="/">
   <file>Resources/main.qml</file>
+  <file>Resources/playlist.qml</file>
 </qresource>
 </RCC>

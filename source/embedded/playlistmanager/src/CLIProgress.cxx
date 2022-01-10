@@ -66,7 +66,7 @@ void CLIProgress::printProgressToConsole()
 #if defined(ORCUS_WIN32)
 	printf("%s\r",line.toLatin1().constData());
 #else
-	printf("\33[2K%s\r",line.toLatin1().constData());
+//	printf("\33[2K%s\r",line.toLatin1().constData());
 #endif
 	fflush(stdout);
 }
