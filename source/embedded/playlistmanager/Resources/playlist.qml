@@ -1,11 +1,16 @@
 import QtQuick 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
+import uk.co.blackomega 1.0
 
 ApplicationWindow {
     id: window
     visible: true
     title: "Black Omega Playlist Manager"
+	
+	PlayListModel {
+		id: playListModel
+	}
 	
 	ListView {
 		id: playListView
@@ -19,9 +24,23 @@ ApplicationWindow {
         
         model: playListModel
         
-        delegate: Text {
-        	text: title + " (" + artist + ") [" + album + "]"
-        }
-
+        delegate: Rectangle {
+        	width: parent.width; height: 100
+        	Text {
+   				id: itexItem
+				anchors.left: imageItem.right
+				anchors.leftMargin: 20
+				anchors.verticalCenter: parent.verticalCenter
+				font.pixelSize: 40
+				text: title + " (" + artist + ") [" + album + "]"
+			}
+			MouseArea {
+				anchors.fill: parent
+				onDoubleClicked: {
+					console.log(index + " " + title);
+					playListModel.playItemAtIndex(index);
+				}
+			}
+		}
 	}
 }

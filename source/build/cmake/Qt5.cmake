@@ -29,6 +29,7 @@ find_package(Qt5Widgets)
 find_package(Qt5Test)
 find_package(Qt5Qml)
 find_package(Qt5Quick)
+find_package(Qt5DBus)
 
 if (${TIGER_LINUX_DISTRO})
 	set(QT_HOME "${ATHENA_UTILS}/usr")
@@ -42,7 +43,7 @@ include_directories(AFTER "${QT_HOME}/include/QtWidgets" )
 include_directories(AFTER "${QT_HOME}/include/QtTest" )
 include_directories(AFTER "${QT_HOME}/include/QtQml" )
 include_directories(AFTER "${QT_HOME}/include/QtQuick" )
-
+include_directories(AFTER "${QT_HOME}/include/QtDBus" )
 
 if (OMEGA_WIN32)
 
@@ -56,6 +57,7 @@ if (OMEGA_WIN32)
 		set(QT_QML_LIBNAME "Qt5Qmld")
 		set(QT_QUICK_LIBNAME "Qt5Quickd")
 		set(QT_NETWORK_LIBNAME "Qt5Networkd")
+		set(QT_DBUS_LIBNAME "Qt5DBusd")
 		
 	else (${TIGER_DEBUG_BUILD})
 		set(QT_CORE_LIBNAME "Qt5Core")
@@ -66,6 +68,7 @@ if (OMEGA_WIN32)
 		set(QT_QML_LIBNAME "Qt5Qml")
 		set(QT_QUICK_LIBNAME "Qt5Quick")
 		set(QT_NETWORK_LIBNAME "Qt5Network")
+		set(QT_DBUS_LIBNAME "Qt5DBus")
 		
 	endif (${TIGER_DEBUG_BUILD})
 
@@ -91,6 +94,7 @@ elseif (OMEGA_MACOSX)
 		set(QT_QML_LIBNAME "libQt5Qml_debug")
 		set(QT_QUICK_LIBNAME "libQt5Quick_debug")
 		set(QT_NETWORK_LIBNAME "libQt5Network_debug")
+		set(QT_DBUS_LIBNAME "libQt5DBus_debug")
 		
 	else (${TIGER_DEBUG_BUILD})
 		set(QT_CORE_LIBNAME "libQt5Core")
@@ -102,6 +106,7 @@ elseif (OMEGA_MACOSX)
 		set(QT_QML_LIBNAME "libQt5Qml")
 		set(QT_QUICK_LIBNAME "libQt5Quick")
 		set(QT_NETWORK_LIBNAME "libQt5Network")
+		set(QT_DBUS_LIBNAME "libQt5DBus")
 		
 	endif (${TIGER_DEBUG_BUILD})
 
@@ -115,5 +120,6 @@ elseif (OMEGA_LINUX)
 	set(QT_QML_LIBNAME "libQt5Qml")
 	set(QT_QUICK_LIBNAME "libQt5Quick")
 	set(QT_NETWORK_LIBNAME "libQt5Network")
+	set(QT_DBUS_LIBNAME "libQt5DBus")
 
 endif (OMEGA_WIN32)

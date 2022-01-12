@@ -19,81 +19,10 @@
 
 #include "embedded/playlistmanager/inc/CLIProgress.h"
 #include "embedded/playlistmanager/inc/PlayListModel.h"
-
-//-------------------------------------------------------------------------------------------
+#include "embedded/omegapicommon/inc/EmbeddedEnv.h"
+#include "embedded/omegapicommon/inc/OmegaPiDBusServiceNames.h"
 
 using namespace orcus;
-
-//-------------------------------------------------------------------------------------------
-
-void setPluginLocation(const char *appPath)
-{
-#if defined(Q_OS_MAC)
-    QFileInfo appFile(appPath);
-    QDir d = appFile.absolutePath();
-	QString pluginDir;
-#if defined(BUNDLE_PLUGINS)
-	d.cdUp();
-#endif
-	d.cd("Plugins");
-	pluginDir = d.absolutePath();
-	QCoreApplication::setLibraryPaths(QStringList(pluginDir));
-#elif defined(Q_OS_WIN)
-	QFileInfo appFile(appPath);
-	QDir d = appFile.absolutePath();
-	QString pluginDir;
-	d.cdUp();
-	d.cd("plugins");
-	pluginDir = d.absolutePath();
-	QCoreApplication::setLibraryPaths(QStringList(pluginDir));
-#endif
-}
-
-//-------------------------------------------------------------------------------------------
-
-void setupPlatform()
-{
-	common::loadSharedLibrary("blackomega");
-	common::loadSharedLibrary("blueomega");
-	common::loadSharedLibrary("cyanomega");
-	common::loadSharedLibrary("greenomega");
-	common::loadSharedLibrary("redomega");
-	common::loadSharedLibrary("silveromega");
-	common::loadSharedLibrary("toneomega");
-	common::loadSharedLibrary("violetomega");
-	common::loadSharedLibrary("wavpackomega");
-	common::loadSharedLibrary("whiteomega");
-	common::loadSharedLibrary("widget");
-#if defined(ORCUS_WIN32)
-	CoInitialize(NULL);
-#endif
-}
-
-//-------------------------------------------------------------------------------------------
-
-void setupSettingsPath()
-{
-	QCoreApplication::setOrganizationName("Tiger-Eye");
-	QCoreApplication::setOrganizationDomain("www.blackomega.co.uk");
-	QCoreApplication::setApplicationName("BlackOmega2");
-}
-
-//-------------------------------------------------------------------------------------------
-
-void setupEnviroment(const char *appPath)
-{
-	network::Resource::instance();
-	setPluginLocation(appPath);
-	setupPlatform();
-	setupSettingsPath();    
-}
-
-//-------------------------------------------------------------------------------------------
-
-QString userApplicationDataDirectory()
-{
-	return common::SBService::applicationDataDirectory();
-}
 
 //-------------------------------------------------------------------------------------------
 
@@ -222,6 +151,8 @@ bool loadPlaylistFromDBOrArguments(QVector<QPair<track::db::DBInfoSPtr,tint> >& 
 	        if(pLoader.data()!=0)
 			{
 				CLIProgress progressBar;
+				
+				pLoader->useMountedDrives();
 				if(pLoader->load(plFilename, playList, &progressBar))
 				{
 					playlistToDBList(playList, playListDB);
@@ -309,11 +240,7 @@ int main(int argc, char *argv[])
 	int res = -1;
 	
 	setupEnviroment(argv[0]);
-	
-	engine::CodecInitialize::start();
-	engine::blackomega::MPCodecInitialize::start();
-	engine::silveromega::SilverCodecInitialize::start();
-	engine::whiteomega::WhiteCodecInitialize::start();
+	initCodecs();
 
 	QString trackDBFilename = userApplicationDataDirectory() + "track_playlist_dev.db";
 	track::db::TrackDB *trackDB = track::db::TrackDB::instance(trackDBFilename);
@@ -337,11 +264,28 @@ int main(int argc, char *argv[])
 		}
 		else if(loadPlaylistFromDBOrArguments(playListDB))
 		{
-			PlayListModel playListModel(playListDB);
-			QQmlApplicationEngine engine;
-			engine.rootContext()->setContextProperty("playListModel", &playListModel);
-			engine.load(QUrl("qrc:/Resources/playlist.qml"));
-			res = app.exec();
+			qmlRegisterType<orcus::PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
+			
+			if(QDBusConnection::sessionBus().isConnected())
+			{
+				QDBusInterface audioDaemonIFace(OMEGAAUDIODAEMON_SERVICE_NAME, "/", OMEGAAUDIODAEMON_DBUS_IFACE_NAME);
+				if(audioDaemonIFace.isValid())
+				{
+					PlayListModel playListModel(playListDB, &audioDaemonIFace);
+					QQmlApplicationEngine engine;
+					engine.rootContext()->setContextProperty("playListModel", &playListModel);
+					engine.load(QUrl("qrc:/Resources/playlist.qml"));
+					res = app.exec();
+				}
+				else
+				{
+					common::Log::g_Log << "Failed to connect to Omega Audio Daemon" << common::c_endl;
+				}
+			}
+			else
+			{
+				common::Log::g_Log << "Failed to connect to session D-Bus" << common::c_endl;
+			}
     	}
     	delete trackDB;
     }
@@ -349,11 +293,8 @@ int main(int argc, char *argv[])
     {
 		common::Log::g_Log << "Failed to create track database file '" << trackDBFilename << "'" << common::c_endl;
     }
-
-	engine::whiteomega::WhiteCodecInitialize::end();
-	engine::silveromega::SilverCodecInitialize::end();
-	engine::blackomega::MPCodecInitialize::end();
-	engine::CodecInitialize::end();
+    
+    releaseCodecs();
 
     return res;
 }

@@ -14,7 +14,8 @@ ABSTRACT_FACTORY_CLASS_IMPL(PlaylistIOFactory,PlaylistAbstractIO)
 
 //-------------------------------------------------------------------------------------------
 
-PlaylistAbstractIO::PlaylistAbstractIO() : m_parent(0)
+PlaylistAbstractIO::PlaylistAbstractIO() : m_parent(0),
+	m_useMountedDrives(false)
 {
 	m_pathParser = new common::BOParse;
 	
@@ -48,6 +49,13 @@ bool PlaylistAbstractIO::load(const QString& fileName,QVector<track::info::InfoS
 bool PlaylistAbstractIO::save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress)
 {
 	return false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaylistAbstractIO::useMountedDrives()
+{
+	m_useMountedDrives = true;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -155,11 +163,81 @@ QByteArray PlaylistAbstractIO::readLine(common::BIOStream& pFile)
 
 //-------------------------------------------------------------------------------------------
 
+QString PlaylistAbstractIO::findFileFromMounts(const QString& fileName)
+{
+	int i, startIndex;
+	QString oName(fileName);
+	QStringList mounts = TrackDB::instance()->mountPoints()->mountPoints();
+	QString actualFileName;
+	
+	oName = oName.replace(QChar('\\'), QChar('/'));
+	if(oName.startsWith(QStringLiteral("//")))
+	{
+		// Windows share //machine/drive/dir1/dir2
+		startIndex = oName.indexOf(QChar('/'), 2);
+		if(startIndex > 2)
+		{
+			startIndex = oName.indexOf(QChar('/'), startIndex);
+		}
+		else
+		{
+			startIndex = -1;
+		}
+	}
+	else if(oName.at(1)==QChar(':') && oName.at(2)==QChar('/'))
+	{
+		// Windows drive letter g:/dir1/dir2
+		startIndex = 3;
+	}
+	else if(oName.at(0)==QChar('/'))
+	{
+		// UNIX absolute /dir1/dir2
+		startIndex = 1;
+	}
+	// Cannot find from relative path but from absolute path
+	
+	if(startIndex > 0 && mounts.size() > 0)
+	{
+		for(QStringList::iterator ppI = mounts.begin(); actualFileName.isEmpty() && ppI != mounts.end(); ppI++)
+		{
+			QString mountName = (*ppI).replace(QChar('\\'), QChar('/'));
+			
+			if(mountName.at(mountName.size() - 1) != QChar('/'))
+			{
+				mountName += QStringLiteral("/");
+			}
+			for(i = startIndex; i > 0 && i < oName.length(); i = oName.indexOf(QChar('/'), i) + 1)
+			{
+				QString fName = mountName + oName.mid(i);
+				QFileInfo fInfo(fName);
+				if(fInfo.exists())
+				{
+					actualFileName = fName;
+				}
+			}
+		}
+	}
+	return actualFileName;
+}
+
+//-------------------------------------------------------------------------------------------
+
 track::info::InfoSPtr PlaylistAbstractIO::getTrack(const QString& fileName)
 {
-	if(track::info::Info::isSupported(fileName))
+	QString actualFileName;
+	
+	if(m_useMountedDrives)
 	{
-		return track::db::DBInfo::readInfo(fileName);
+		actualFileName = findFileFromMounts(fileName);
+	}
+	else
+	{
+		actualFileName = fileName;
+	}
+	
+	if(!actualFileName.isEmpty() && track::info::Info::isSupported(actualFileName))
+	{
+		return track::db::DBInfo::readInfo(actualFileName);
 	}
 	else
 	{

@@ -62,12 +62,16 @@ class TRACK_DB_EXPORT PlaylistAbstractIO
 		virtual bool save(const QString& fileName,const QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress);
 		
 		void setParent(QObject *w);
+		void useMountedDrives();
 		
 	protected:
 
 		QObject *m_parent;
 		common::BOParse *m_pathParser;
 		tint m_pathParserState[9];
+		
+		// A playlist file saved on another OS using the same share that has been mounted.
+		bool m_useMountedDrives;
 	
 		virtual QByteArray readLine(common::BIOStream& pFile);
 		virtual bool writeLine(common::BIOStream& pFile,const QString& line);
@@ -79,6 +83,8 @@ class TRACK_DB_EXPORT PlaylistAbstractIO
 		void appendToList(const QString& lPath,QVector<track::info::InfoSPtr>& pList,common::AbstractProgressInterface *progress);
 
 		QString getURLFilename(const QString& uPath);
+		
+		QString findFileFromMounts(const QString& fileName);
 };
 
 //-------------------------------------------------------------------------------------------

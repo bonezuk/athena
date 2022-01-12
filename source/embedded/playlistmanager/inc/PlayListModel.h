@@ -9,6 +9,8 @@
 #include "track/db/inc/DBInfo.h"
 #include "track/db/inc/TrackDB.h"
 
+#include <QtDBus/QDBusInterface>
+
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
@@ -37,16 +39,20 @@ class PlayListModel : public QAbstractListModel
 		};
 		
 	public:
-		PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QObject *parent = 0);
+		PlayListModel();
+		PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QDBusInterface *pAudioInterface, QObject *parent = 0);
 		virtual ~PlayListModel();
 		
 		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 		virtual QHash<int,QByteArray> roleNames() const;
 		
+		Q_INVOKABLE void playItemAtIndex(int index);
+		
 	private:
 	
 		QVector<QPair<track::db::DBInfoSPtr,tint> > m_playList;
+		QDBusInterface *m_pAudioInterface;
 };
 
 //-------------------------------------------------------------------------------------------

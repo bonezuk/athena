@@ -44,7 +44,7 @@ template <class X> class BOQueueTree {
 		//Root of the queue tree structure.
 		QTItem *m_Root,*m_Current;
 		
-		QTItem *SeekItem(register QTItem *item,register tint pos) const;
+		QTItem *SeekItem(QTItem *item, tint pos) const;
 		
 		QTItem *AllocateItem() const;
 		
@@ -156,7 +156,7 @@ template <class X> BOQueueTree<X>::~BOQueueTree() {
 //		successful, otherwise NULL is returned.
 //-------------------------------------------------------------------------------------
 
-template <class X> QTItem *BOQueueTree<X>::SeekItem(register QTItem *item,register tint pos) const {
+template <class X> QTItem *BOQueueTree<X>::SeekItem(QTItem *item, tint pos) const {
 
 	while(item!=NULL) {	
 		if(pos>=item->index) {

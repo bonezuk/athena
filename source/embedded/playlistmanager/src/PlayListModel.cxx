@@ -5,8 +5,16 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QObject *parent) : QAbstractListModel(parent),
-	m_playList(playList)
+PlayListModel::PlayListModel() : QAbstractListModel(0),
+	m_playList(),
+	m_pAudioInterface()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QDBusInterface *pAudioInterface, QObject *parent) : QAbstractListModel(parent),
+	m_playList(playList),
+	m_pAudioInterface(pAudioInterface)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -108,6 +116,22 @@ QHash<int,QByteArray> PlayListModel::roleNames() const
 	h[CopyrightRole] = "copyright";
 	h[EncoderRole] = "encoder";
 	return h;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::playItemAtIndex(int index)
+{
+	if(index >= 0 && index < m_playList.size())
+	{
+		QString fileName = m_playList.at(index).first->getFilename();
+		common::Log::g_Log.print("PlayListModel::playItemAtIndex - %d '%s'\n", index, fileName.toUtf8().constData());
+		m_pAudioInterface->call("playFile", fileName);
+	}
+	else
+	{
+		common::Log::g_Log.print("PlayListModel::playItemAtIndex - Given index, %d, out of range\n", index);
+	}
 }
 
 //-------------------------------------------------------------------------------------------
