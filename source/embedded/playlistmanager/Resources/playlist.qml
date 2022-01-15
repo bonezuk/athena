@@ -8,10 +8,6 @@ ApplicationWindow {
     visible: true
     title: "Black Omega Playlist Manager"
 	
-	PlayListModel {
-		id: playListModel
-	}
-	
 	ListView {
 		id: playListView
 
@@ -23,17 +19,17 @@ ApplicationWindow {
         Layout.preferredHeight: 400
         
         model: playListModel
-        
+
         delegate: Rectangle {
-        	width: parent.width; height: 100
+            width: parent.width; height: 30
         	Text {
    				id: itexItem
 				anchors.left: imageItem.right
 				anchors.leftMargin: 20
 				anchors.verticalCenter: parent.verticalCenter
-				font.pixelSize: 40
-				text: title + " (" + artist + ") [" + album + "]"
-			}
+                font.pixelSize: 20
+                text: title + " (" + artist + ") [" + album + "]"
+            }
 			MouseArea {
 				anchors.fill: parent
 				onDoubleClicked: {
@@ -42,5 +38,6 @@ ApplicationWindow {
 				}
 			}
 		}
+
 	}
 }

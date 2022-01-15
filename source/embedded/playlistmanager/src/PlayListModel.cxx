@@ -15,7 +15,14 @@ PlayListModel::PlayListModel() : QAbstractListModel(0),
 PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QDBusInterface *pAudioInterface, QObject *parent) : QAbstractListModel(parent),
 	m_playList(playList),
 	m_pAudioInterface(pAudioInterface)
-{}
+{
+	int i = 0;
+	for(QVector<QPair<track::db::DBInfoSPtr,tint> >::iterator ppI = m_playList.begin(); ppI != m_playList.end(); ppI++, i++)
+	{
+		track::db::DBInfoSPtr pInfo = (*ppI).first;
+		fprintf(stderr,"%d - %s\n",i,pInfo->title().toUtf8().constData());
+	}
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -33,6 +40,7 @@ QVariant PlayListModel::data(const QModelIndex& index, int role) const
 		if(role == Qt::DisplayRole)
 		{
 			QString s = pInfo->title() + " (" + pInfo->artist() + ")";
+			fprintf(stdout, "%s\n", s.toUtf8().constData());
 			return QVariant(s);
 		}
 		else if(role == ArtistRole)
@@ -41,7 +49,9 @@ QVariant PlayListModel::data(const QModelIndex& index, int role) const
 		}
 		else if(role == TitleRole)
 		{
-			return QVariant(pInfo->title());
+			QString s = pInfo->title();
+			fprintf(stdout, "title - %s\n", s.toUtf8().constData());
+			return QVariant(s);
 		}
 		else if(role == AlbumRole)
 		{
