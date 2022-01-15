@@ -180,7 +180,7 @@ OmegaAudioDBusAdaptor::~OmegaAudioDBusAdaptor()
 
 void OmegaAudioDBusAdaptor::setAudioDaemon(OmegaAudioDaemon *pDaemon)
 {
-	m_pDaemon = 0;
+	m_pDaemon = pDaemon;
 }
 
 //-------------------------------------------------------------------------------------------

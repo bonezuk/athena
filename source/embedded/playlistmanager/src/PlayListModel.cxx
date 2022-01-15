@@ -136,7 +136,11 @@ void PlayListModel::playItemAtIndex(int index)
 	{
 		QString fileName = m_playList.at(index).first->getFilename();
 		common::Log::g_Log.print("PlayListModel::playItemAtIndex - %d '%s'\n", index, fileName.toUtf8().constData());
-		m_pAudioInterface->call("playFile", fileName);
+
+		QDBusMessage reply;
+		reply = m_pAudioInterface->call(QLatin1String("playFile"), fileName);
+		fprintf(stderr, "reply - %s, %s\n", reply.errorName().toUtf8().constData(), reply.errorMessage().toUtf8().constData());
+		fprintf(stderr, "sysbus - %s\n",QDBusConnection::systemBus().lastError().message().toUtf8().constData());
 	}
 	else
 	{
