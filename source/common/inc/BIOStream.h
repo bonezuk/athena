@@ -137,6 +137,9 @@ class COMMON_EXPORT BIOStream
 #if defined(OMEGA_MAC_STORE)
 		bool m_checkOutFlag;
 #endif
+#if defined(OMEGA_POSIX)
+		bool m_latinNameEncoding;
+#endif
 
 		virtual void PrintError(const tchar *strR,const tchar *strE) const;
 		virtual void PrintError(const tchar *strR,const tchar *strE1,const tchar *strE2) const;

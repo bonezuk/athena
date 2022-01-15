@@ -224,9 +224,15 @@ bool DiskOps::exist(const QString& name)
 
 bool DiskOps::exist(const QString& name)
 {
+	int r;
 	struct stat pathStat;
 	
-	if(::stat(name.toUtf8().constData(),&pathStat)==0)
+	r = ::stat(name.toUtf8().constData(),&pathStat);
+	if(r)
+	{
+		r = ::stat(name.toLatin1().constData(),&pathStat);
+	}
+	if(!r)
 	{
 		if(S_IFREG & pathStat.st_mode)
 		{

@@ -63,7 +63,7 @@ QString playlistFromArguments()
 		else if(state == 1)
 		{
 			name = args.at(idx);
-			if(!QFileInfo(name).exists())
+			if(!QFileInfo::exists(name))
 			{
 				name = QString();
 			}
@@ -76,8 +76,6 @@ QString playlistFromArguments()
 
 void playlistToDBList(QVector<track::info::InfoSPtr>& playList, QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {
-	track::db::TrackDB *db = track::db::TrackDB::instance();
-	
 	for(QVector<track::info::InfoSPtr>::iterator ppI = playList.begin(); ppI != playList.end(); ppI++)
 	{
 		track::info::InfoSPtr pFInfo = *ppI;
@@ -111,8 +109,6 @@ void playlistToDBList(QVector<track::info::InfoSPtr>& playList, QVector<QPair<tr
 
 void playlistSubtrackToDBList(QVector<QPair<track::info::InfoSPtr, tint> >& playList, QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {
-	track::db::TrackDB *db = track::db::TrackDB::instance();
-	
 	for(QVector<QPair<track::info::InfoSPtr, tint> >::iterator ppI = playList.begin(); ppI != playList.end(); ppI++)
 	{
 		int subTrack = (*ppI).second;
@@ -266,9 +262,9 @@ int main(int argc, char *argv[])
 		{
 			qmlRegisterType<orcus::PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
 			
-			if(QDBusConnection::sessionBus().isConnected())
+			if(QDBusConnection::systemBus().isConnected())
 			{
-				QDBusInterface audioDaemonIFace(OMEGAAUDIODAEMON_SERVICE_NAME, "/", OMEGAAUDIODAEMON_DBUS_IFACE_NAME);
+				QDBusInterface audioDaemonIFace(OMEGAAUDIODAEMON_SERVICE_NAME, "/", OMEGAAUDIODAEMON_DBUS_IFACE_NAME, QDBusConnection::systemBus());
 				if(audioDaemonIFace.isValid())
 				{
 					PlayListModel playListModel(playListDB, &audioDaemonIFace);
@@ -279,7 +275,8 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					common::Log::g_Log << "Failed to connect to Omega Audio Daemon" << common::c_endl;
+					common::Log::g_Log << "Failed to connect to Omega Audio Daemon." << common::c_endl;
+					common::Log::g_Log << qPrintable(QDBusConnection::systemBus().lastError().message()) << common::c_endl;
 				}
 			}
 			else

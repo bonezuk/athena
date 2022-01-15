@@ -26,6 +26,9 @@ BIOStream::BIOStream(tint flags) : m_File(c_invalidFile),
 #if defined(OMEGA_MAC_STORE)
 	,m_checkOutFlag(true)
 #endif
+#if defined(OMEGA_POSIX)
+	,m_latinNameEncoding(false)
+#endif
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -194,7 +197,7 @@ bool BIOStream::path(QString& name)
 
 bool BIOStream::path(QString& name)
 {
-	tint i;
+	tint i, r;
 	QString pName;
 	struct stat fileStat;
 	bool res = true;
@@ -225,7 +228,21 @@ bool BIOStream::path(QString& name)
 			if(name.at(i)==QChar('/'))
 			{
 				pName = name.mid(0,i);
-				if(::stat(pName.toUtf8().constData(),&fileStat)==0)
+				
+				r = 1;
+				if(!m_latinNameEncoding)
+				{
+					r = ::stat(pName.toUtf8().constData(),&fileStat);
+				}
+				if(r)
+				{
+					r = ::stat(pName.toLatin1().constData(),&fileStat);
+					if(!r)
+					{
+						m_latinNameEncoding = true;
+					}
+				}
+				if(!r)
 				{
 					if(S_ISREG(fileStat.st_mode))
 					{
@@ -235,7 +252,15 @@ bool BIOStream::path(QString& name)
 				}
 				else if(m_Flags & e_BIOStream_FileCreate)
 				{
-					if(::mkdir(pName.toUtf8().constData(),S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)!=0)
+					if(!m_latinNameEncoding)
+					{
+						r = ::mkdir(pName.toUtf8().constData(),S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+					}
+					else
+					{
+						r = ::mkdir(pName.toLatin1().constData(),S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+					}
+					if(r!=0)
 					{
 						PrintError("path","Could not create directory for path");
 						return false;
@@ -384,20 +409,37 @@ bool BIOStream::open(const QString& name)
 			return false;
 		}
 #endif
-
+		
+		QByteArray nameArr(m_latinNameEncoding ? m_Name.toLatin1() : m_Name.toUtf8());
 		if(m_Flags & e_BIOStream_FileCreate) 
 		{
-			m_File = ::open(m_Name.toUtf8().constData(),flags | O_CREAT | O_TRUNC,mode);
+			m_File = ::open(nameArr.constData(),flags | O_CREAT | O_TRUNC,mode);
 		}
 		else 
 		{
 			if(m_Flags & e_BIOStream_FileWrite)
 			{
-				m_File = ::open(m_Name.toUtf8().constData(),flags | O_CREAT,mode);
+				m_File = ::open(nameArr.constData(),flags | O_CREAT,mode);
+				if(m_File==c_invalidFile && !m_latinNameEncoding)
+				{
+					m_File = ::open(m_Name.toLatin1().constData(),flags | O_CREAT,mode);
+					if(m_File!=c_invalidFile)
+					{
+						m_latinNameEncoding = true;
+					}
+				}
 			}
 			else
 			{
-				m_File = ::open(m_Name.toUtf8().constData(),flags,mode);
+				m_File = ::open(nameArr.constData(),flags,mode);
+				if(m_File==c_invalidFile && !m_latinNameEncoding)
+				{
+					m_File = ::open(m_Name.toLatin1().constData(),flags,mode);
+					if(m_File!=c_invalidFile)
+					{
+						m_latinNameEncoding = true;
+					}
+				}
 			}
 		}
 

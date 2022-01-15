@@ -12,5 +12,5 @@ elseif (OMEGA_LINUX)
 endif (OMEGA_WIN32)
 
 if (${TIGER_LINUX_DISTRO})
-	install(TARGETS OmegaPlaylistManager DESTINATION bin)
+	install(TARGETS OmegaAudioDaemon DESTINATION bin)
 endif (${TIGER_LINUX_DISTRO})

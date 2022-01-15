@@ -50,6 +50,7 @@ class OmegaAudioDaemon : public QCoreApplication
 		void onAudioStart(const QString& name);
 		void onAudioPlay();
 		void onAudioPause();
+		void onAudioStop();
 		void onAudioTime(quint64 t);
 		void onAudioBuffer(tfloat32 percent);
 		void onAudioReadyForNext();

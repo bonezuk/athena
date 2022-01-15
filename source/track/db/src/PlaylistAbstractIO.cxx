@@ -206,13 +206,13 @@ QString PlaylistAbstractIO::findFileFromMounts(const QString& fileName)
 			{
 				mountName += QStringLiteral("/");
 			}
-			for(i = startIndex; i > 0 && i < oName.length(); i = oName.indexOf(QChar('/'), i) + 1)
+			for(i = startIndex; i > 0 && i < oName.length() && actualFileName.isEmpty(); i = oName.indexOf(QChar('/'), i) + 1)
 			{
 				QString fName = mountName + oName.mid(i);
 				QFileInfo fInfo(fName);
 				if(fInfo.exists())
 				{
-					actualFileName = fName;
+					actualFileName = fInfo.absoluteFilePath();
 				}
 			}
 		}
@@ -224,20 +224,9 @@ QString PlaylistAbstractIO::findFileFromMounts(const QString& fileName)
 
 track::info::InfoSPtr PlaylistAbstractIO::getTrack(const QString& fileName)
 {
-	QString actualFileName;
-	
-	if(m_useMountedDrives)
+	if(!fileName.isEmpty() && track::info::Info::isSupported(fileName))
 	{
-		actualFileName = findFileFromMounts(fileName);
-	}
-	else
-	{
-		actualFileName = fileName;
-	}
-	
-	if(!actualFileName.isEmpty() && track::info::Info::isSupported(actualFileName))
-	{
-		return track::db::DBInfo::readInfo(actualFileName);
+		return track::db::DBInfo::readInfo(fileName);
 	}
 	else
 	{
@@ -310,6 +299,7 @@ QString PlaylistAbstractIO::getFilePath(const QString& inName,const QDir& homeDi
 		QDir cDir(homeDir);
 		bool urlFlag = false;
 		bool pNextFlag = false;
+		bool absolutePathFlag = false;
 		
 		if(item->state==m_pathParserState[6] && item->start==0 && commentFlag)
 		{
@@ -320,12 +310,14 @@ QString PlaylistAbstractIO::getFilePath(const QString& inName,const QDir& homeDi
 			QDir hDir(QString::fromUtf8(x,item->start + item->length));
 			cDir = hDir;
 			pNextFlag = true;
+			absolutePathFlag = true;
 		}
 		else if((item->state==m_pathParserState[0] || item->state==m_pathParserState[1]) && item->start==0)
 		{
 			QDir hDir("/");
 			cDir = hDir;
 			pNextFlag = true;
+			absolutePathFlag = true;
 		}
 		else if((item->state==m_pathParserState[3] || item->state==m_pathParserState[8]) && item->start==0)
 		{
@@ -344,6 +336,7 @@ QString PlaylistAbstractIO::getFilePath(const QString& inName,const QDir& homeDi
 			{
 				QDir hDir(QString::fromUtf8(x,item->start));
 				cDir = hDir;
+				absolutePathFlag = true;
 			}
 			else
 			{
@@ -365,45 +358,52 @@ QString PlaylistAbstractIO::getFilePath(const QString& inName,const QDir& homeDi
 		
 		if(!urlFlag)
 		{
-			if(pNextFlag)
+			if(absolutePathFlag && m_useMountedDrives)
 			{
-				cPos = item->start + item->length;
-				item = item->next;
+				oName = findFileFromMounts(inName);
 			}
-
-			while(item!=0)
+			else
 			{
-				if(item->state==m_pathParserState[0] || item->state==m_pathParserState[1])
+				if(pNextFlag)
 				{
-					tint diff = item->start - cPos;
-					if(diff>0)
-					{
-						QString dName = QString::fromUtf8(&x[cPos],diff);
-						if(dName=="..")
-						{
-							if(!cDir.cdUp())
-							{
-								return oName;
-							}
-						}
-						else if(dName!=".")
-						{
-							if(!cDir.cd(dName))
-							{
-								return oName;
-							}
-						}
-					}
 					cPos = item->start + item->length;
+					item = item->next;
 				}
-				item = item->next;
+
+				while(item!=0)
+				{
+					if(item->state==m_pathParserState[0] || item->state==m_pathParserState[1])
+					{
+						tint diff = item->start - cPos;
+						if(diff>0)
+						{
+							QString dName = QString::fromUtf8(&x[cPos],diff);
+							if(dName=="..")
+							{
+								if(!cDir.cdUp())
+								{
+									return oName;
+								}
+							}
+							else if(dName!=".")
+							{
+								if(!cDir.cd(dName))
+								{
+									return oName;
+								}
+							}
+						}
+						cPos = item->start + item->length;
+					}
+					item = item->next;
+				}
+				oName = cDir.absolutePath();
+				if(oName.at(oName.length()-1)!=QChar('/') && oName.at(oName.length()-1)!=QChar('\\'))
+				{
+					oName += "/";
+				}
+				oName += QString::fromUtf8(&x[cPos]);
 			}
-			oName = cDir.absolutePath();
-			if(oName.at(oName.length()-1)!=QChar('/') && oName.at(oName.length()-1)!=QChar('\\'))
-			{
-				oName += "/";
-			}
-			oName += QString::fromUtf8(&x[cPos]);
 		}
 	}
 	else

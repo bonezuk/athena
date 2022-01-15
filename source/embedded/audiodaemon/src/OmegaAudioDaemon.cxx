@@ -43,7 +43,7 @@ void OmegaAudioDaemon::onInit()
 	if(!m_audio.isNull())
 	{
 		connect(m_audio.data(),SIGNAL(onStart(const QString&)),this,SLOT(onAudioStart(const QString&)));
-		connect(m_audio.data(),SIGNAL(onStop()),this,SLOT(onStop()));
+		connect(m_audio.data(),SIGNAL(onStop()),this,SLOT(onAudioStop()));
 		connect(m_audio.data(),SIGNAL(onPlay()),this,SLOT(onAudioPlay()));
 		connect(m_audio.data(),SIGNAL(onPause()),this,SLOT(onAudioPause()));
 		connect(m_audio.data(),SIGNAL(onTime(quint64)),this,SLOT(onAudioTime(quint64)));
@@ -51,6 +51,7 @@ void OmegaAudioDaemon::onInit()
 		connect(m_audio.data(),SIGNAL(onReadyForNext()),this,SLOT(onAudioReadyForNext()));
 		connect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
 		connect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
+		common::Log::g_Log << "Audio Daemon running..."<< common::c_endl;
 	
 	}
 	else
@@ -71,6 +72,7 @@ void OmegaAudioDaemon::shutdownDaemon()
 
 void OmegaAudioDaemon::onQuitDaemon()
 {
+	common::Log::g_Log << "onQuitDaemon"<< common::c_endl;
 	if(m_pInterface != 0)
 	{
 		m_pInterface->setAudioDaemon(0);
@@ -105,6 +107,13 @@ void OmegaAudioDaemon::onAudioStart(const QString& name)
 void OmegaAudioDaemon::onAudioPlay()
 {
 	common::Log::g_Log << "onAudioPlay" << common::c_endl;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaAudioDaemon::onAudioStop()
+{
+	common::Log::g_Log << "onAudioStop" << common::c_endl;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -222,9 +231,9 @@ int main(int argc, char *argv[])
 
 	QObject obj;
 	orcus::OmegaAudioDBusAdaptor *pIface = new orcus::OmegaAudioDBusAdaptor(&obj);
-	QDBusConnection::sessionBus().registerObject("/", &obj);
+	QDBusConnection::systemBus().registerObject("/", &obj);
 	
-	if(QDBusConnection::sessionBus().registerService(OMEGAAUDIODAEMON_SERVICE_NAME))
+	if(QDBusConnection::systemBus().registerService(OMEGAAUDIODAEMON_SERVICE_NAME))
 	{
 		g_audioDaemonApp = new orcus::OmegaAudioDaemon(argc, argv, pIface);
 		res = g_audioDaemonApp->exec();
@@ -233,7 +242,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		fprintf(stdout, "::main - %s\n", qPrintable(QDBusConnection::sessionBus().lastError().message()));
+		fprintf(stdout, "::main - %s\n", qPrintable(QDBusConnection::systemBus().lastError().message()));
 		res = -1;
 	}
 
