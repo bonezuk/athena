@@ -88,6 +88,9 @@ class COMMON_EXPORT DiskOps
 		static bool copyDir(const QString& source,const QString& dest);
 
 		static bool copyFile(const QString& source,const QString& dest);
+#if defined(OMEGA_POSIX)
+		static bool existLatin1(const QString& name, bool& useLatin);
+#endif
 };
 
 //-------------------------------------------------------------------------------------------

@@ -1,9 +1,9 @@
+#import <Foundation/Foundation.h>
+
 #include "common/inc/Bundle.h"
 
 #include <QDir>
 #include <QString>
-
-#import <Foundation/Foundation.h>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

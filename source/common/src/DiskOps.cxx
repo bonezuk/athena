@@ -136,7 +136,8 @@ bool DiskOps::path(const QString& name,bool dirFlag)
 
 bool DiskOps::path(const QString& name,bool dirFlag)
 {
-	tint i;
+	tint i, r;
+	bool useLatin = false;
 	struct stat pathStat;
 	QString fileName,tmp;
 	
@@ -157,7 +158,21 @@ bool DiskOps::path(const QString& name,bool dirFlag)
 		{
 			tmp = fileName.mid(0,i+1);
 			
-			if(::stat(tmp.toUtf8().constData(),&pathStat)==0)
+			r = 1;
+			if(!useLatin)
+			{
+				r = ::stat(tmp.toUtf8().constData(),&pathStat);
+			}
+			if(r)
+			{
+				r = ::stat(tmp.toLatin1().constData(),&pathStat);
+				if(!r)
+				{
+					useLatin = true;
+				}
+			}
+			
+			if(!r)
 			{
 				if(!(S_IFDIR & pathStat.st_mode))
 				{
@@ -166,7 +181,15 @@ bool DiskOps::path(const QString& name,bool dirFlag)
 			}
 			else
 			{
-				if(mkdir(tmp.toUtf8().constData(),S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)!=0)
+				if(!useLatin)
+				{
+					r = mkdir(tmp.toUtf8().constData(),S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+				}
+				else
+				{
+					r = mkdir(tmp.toLatin1().constData(),S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+				}
+				if(r!=0)
 				{
 					return false;
 				}
@@ -224,6 +247,14 @@ bool DiskOps::exist(const QString& name)
 
 bool DiskOps::exist(const QString& name)
 {
+	bool useLatin = false;
+	return existLatin1(name, useLatin);
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool DiskOps::existLatin1(const QString& name, bool& useLatin)
+{
 	int r;
 	struct stat pathStat;
 	
@@ -231,6 +262,14 @@ bool DiskOps::exist(const QString& name)
 	if(r)
 	{
 		r = ::stat(name.toLatin1().constData(),&pathStat);
+		if(!r)
+		{
+			useLatin = true;
+		}
+	}
+	else
+	{
+		useLatin = false;
 	}
 	if(!r)
 	{
@@ -243,12 +282,11 @@ bool DiskOps::exist(const QString& name)
 			return true;
 		}
 	}
-	return false;	
+	return false;
 }
 
 //-------------------------------------------------------------------------------------------
 #endif
-
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_WIN32)
 //-------------------------------------------------------------------------------------------
@@ -279,9 +317,15 @@ int DiskOps::fileType(const QString& name)
 
 int DiskOps::fileType(const QString& name)
 {
+	int r;
 	struct stat pathStat;
 	
-	if(::stat(name.toUtf8().constData(),&pathStat)==0)
+	r = ::stat(name.toUtf8().constData(),&pathStat);
+	if(r)
+	{
+		r = ::stat(name.toLatin1().constData(),&pathStat);
+	} 
+	if(r==0)
 	{
 		if(S_IFREG & pathStat.st_mode)
 		{
@@ -445,15 +489,26 @@ bool DiskOps::deleteDirectory(const QString& dirName)
 
 bool DiskOps::deleteDirectory(const QString& dirName)
 {
+	int r;
 	DIR *h;
 	struct dirent *entry;
 	struct stat fileStat;
 	QString tmp,fullPath(dirName);
 	QStringList pathList,fileList;
 	QStringList::iterator ppI;
+	bool useLatin = false;
 	
 	formatDirectoryPath(fullPath);
-	if(::stat(fullPath.toUtf8().constData(),&fileStat)!=0)
+	r = ::stat(fullPath.toUtf8().constData(),&fileStat);
+	if(r)
+	{
+		r = ::stat(fullPath.toLatin1().constData(),&fileStat);
+		if(!r)
+		{
+			useLatin = true;
+		}
+	}
+	if(r!=0)
 	{
 		return false;
 	}
@@ -462,7 +517,14 @@ bool DiskOps::deleteDirectory(const QString& dirName)
 		return false;
 	}
 	
-	h = ::opendir(fullPath.toUtf8().constData());
+	if(!useLatin)
+	{
+		h = ::opendir(fullPath.toUtf8().constData());
+	}
+	else
+	{
+		h = ::opendir(fullPath.toLatin1().constData());
+	}
 	if(h!=0)
 	{
 		while(entry=::readdir(h),entry!=0)
@@ -470,7 +532,20 @@ bool DiskOps::deleteDirectory(const QString& dirName)
 			if(dotCheck(entry->d_name))
 			{
 				tmp = fullPath + "/" + QString::fromUtf8(entry->d_name);
-				if(::stat(tmp.toUtf8().constData(),&fileStat)==0)
+				if(!useLatin)
+				{
+					r = ::stat(tmp.toUtf8().constData(),&fileStat); 
+				}
+				else
+				{
+					r = ::stat(tmp.toLatin1().constData(),&fileStat);
+				}
+				if(r)
+				{
+					tmp = fullPath + "/" + QString::fromLatin1(entry->d_name);
+					r = ::stat(tmp.toLatin1().constData(),&fileStat);
+				}
+				if(r==0)
 				{
 					if(S_IFDIR & fileStat.st_mode)
 					{
@@ -488,7 +563,19 @@ bool DiskOps::deleteDirectory(const QString& dirName)
 		for(ppI=fileList.begin();ppI!=fileList.end();++ppI)
 		{
 			const QString& name = *ppI;
-			::unlink(name.toUtf8().constData());
+			r = ::stat(name.toUtf8().constData(),&fileStat); 
+			if(!r)
+			{
+				::unlink(name.toUtf8().constData());
+			}
+			else
+			{
+				r = ::stat(name.toLatin1().constData(),&fileStat); 
+				if(!r)
+				{
+					::unlink(name.toLatin1().constData());
+				}
+			}
 		}
 		for(ppI=pathList.begin();ppI!=pathList.end();++ppI)
 		{
@@ -503,7 +590,16 @@ bool DiskOps::deleteDirectory(const QString& dirName)
 	{
 		return false;
 	}
-	if(::rmdir(fullPath.toUtf8().constData())!=0)
+	
+	if(!useLatin)
+	{
+		r = ::rmdir(fullPath.toUtf8().constData());
+	}
+	else
+	{
+		r = ::rmdir(fullPath.toLatin1().constData());
+	}
+	if(r!=0)
 	{
 		return false;
 	}
@@ -587,22 +683,23 @@ tint DiskOps::checkFile(const QString& name)
 {
 	tint fileSize = 0;
 	TTime endTime,currentTime;
-	bool loop = true;
+	bool loop = true, useLatin = false;
 	
 	endTime = TTime::Now();
 	endTime += 2;
 	do
 	{
-		if(exist(name))
+		if(existLatin1(name, useLatin))
 		{
+			QByteArray nameArr = (!useLatin) ? name.toUtf8() : name.toLatin1();
 			int h;
 			
-			h = ::open(name.toUtf8().constData(),O_RDWR);
+			h = ::open(nameArr.constData(),O_RDWR);
 			if(h!=-1)
 			{
 				struct stat fileStat;
 				
-				if(::stat(name.toUtf8(),&fileStat)==0 && (S_IFREG & fileStat.st_mode))
+				if(::stat(nameArr.constData(),&fileStat)==0 && (S_IFREG & fileStat.st_mode))
 				{
 					if(fileStat.st_size>0)
 					{
@@ -1166,6 +1263,10 @@ bool DiskOps::canWriteFile(const QString& name)
 		int file;
 
 		file = ::open(name.toUtf8().constData(),O_WRONLY | O_CREAT,mode);
+		if(file==-1)
+		{
+			file = ::open(name.toLatin1().constData(),O_WRONLY | O_CREAT,mode);
+		}
 		if(file!=-1)
 		{
 			::close(file);
@@ -1305,7 +1406,19 @@ void DiskOps::deleteFile(const QString& name)
 void DiskOps::deleteFile(const QString& name)
 {
 	QString n(QDir::toNativeSeparators(name));
-	::unlink(n.toUtf8().constData());
+	bool useLatin = false;
+	
+	if(existLatin1(n, useLatin))
+	{
+		if(!useLatin)
+		{
+			::unlink(n.toUtf8().constData());
+		}
+		else
+		{
+			::unlink(n.toLatin1().constData());
+		}
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1327,8 +1440,22 @@ tint DiskOps::remove(const QString& path)
 
 tint DiskOps::remove(const QString& path)
 {
+	int r = 0;
 	QString n(QDir::toNativeSeparators(path));
-	return ::remove(n.toUtf8().constData());
+	bool useLatin = false;
+	
+	if(existLatin1(n, useLatin))
+	{
+		if(!useLatin)
+		{
+			r = ::remove(n.toUtf8().constData());
+		}
+		else
+		{
+			r = ::remove(n.toLatin1().constData());
+		}
+	}
+	return r;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1553,6 +1680,7 @@ common::TimeStamp DiskOps::getModifiedTime(const QString& fileName,tint& fileSiz
 
 common::TimeStamp DiskOps::getModifiedTime(const QString& fileName,tint& fileSize)
 {
+	int r;
 	QString fName(fileName);
 	common::TimeStamp t;
 	struct stat mStat;
@@ -1564,8 +1692,13 @@ common::TimeStamp DiskOps::getModifiedTime(const QString& fileName,tint& fileSiz
 			fName = fName.mid(0,fName.length()-1);
 		}
 		fName = QDir::toNativeSeparators(fName);
-
-		if(::stat(fileName.toUtf8().constData(),&mStat)==0)
+		
+		r = ::stat(fileName.toUtf8().constData(),&mStat); 
+		if(r)
+		{
+			r = ::stat(fileName.toLatin1().constData(),&mStat); 
+		}
+		if(r==0)
 		{
 			if(S_IFREG & mStat.st_mode)
 			{
