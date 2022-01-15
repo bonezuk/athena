@@ -1,3 +1,5 @@
+#include "network/inc/Resource.h"
+
 #include <QtQml/qqmlapplicationengine.h>
 #include <QtGui/qsurfaceformat.h>
 #include <QtGui/qguiapplication.h>
@@ -8,7 +10,6 @@
 
 #include "common/inc/SBService.h"
 #include "common/inc/CommonFunctions.h"
-#include "network/inc/Resource.h"
 #include "track/db/inc/TrackDB.h"
 #include "track/db/inc/DBInfo.h"
 #include "track/db/inc/PlaylistAbstractIO.h"

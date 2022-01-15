@@ -89,7 +89,7 @@ class TRACK_DB_EXPORT PlaylistAbstractIO
 
 //-------------------------------------------------------------------------------------------
 
-ABSTRACT_FACTORY_CLASS(PLAYLIST_EXPORT,PlaylistIOFactory,PlaylistAbstractIO)
+ABSTRACT_FACTORY_CLASS(TRACK_DB_EXPORT, PlaylistIOFactory, PlaylistAbstractIO)
 
 //-------------------------------------------------------------------------------------------
 } // namespace db

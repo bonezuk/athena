@@ -358,11 +358,13 @@ QString PlaylistAbstractIO::getFilePath(const QString& inName,const QDir& homeDi
 		
 		if(!urlFlag)
 		{
+#if defined(OMEGA_LINUX)
 			if(absolutePathFlag && m_useMountedDrives)
 			{
 				oName = findFileFromMounts(inName);
 			}
 			else
+#endif
 			{
 				if(pNextFlag)
 				{

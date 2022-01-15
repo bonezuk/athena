@@ -1,4 +1,7 @@
 #include "embedded/audiodaemon/inc/OmegaAudioDaemon.h"
+#if defined(ORCUS_WIN32)
+#include "audioio/inc/WasAPIIF.h"
+#endif
 
 #include <QtDBus/QtDBus>
 

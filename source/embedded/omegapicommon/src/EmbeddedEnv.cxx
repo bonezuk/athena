@@ -1,3 +1,5 @@
+#include "network/inc/Resource.h"
+
 #include <QFileInfo>
 #include <QDir>
 
@@ -7,7 +9,6 @@
 #include "engine/blackomega/inc/MPCodec.h"
 #include "engine/silveromega/inc/SilverCodec.h"
 #include "engine/whiteomega/inc/WhiteCodec.h"
-#include "network/inc/Resource.h"
 #include "embedded/omegapicommon/inc/EmbeddedEnv.h"
 
 #include <QCoreApplication>
