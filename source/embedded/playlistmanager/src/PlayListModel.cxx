@@ -15,14 +15,7 @@ PlayListModel::PlayListModel() : QAbstractListModel(0),
 PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QDBusInterface *pAudioInterface, QObject *parent) : QAbstractListModel(parent),
 	m_playList(playList),
 	m_pAudioInterface(pAudioInterface)
-{
-	int i = 0;
-	for(QVector<QPair<track::db::DBInfoSPtr,tint> >::iterator ppI = m_playList.begin(); ppI != m_playList.end(); ppI++, i++)
-	{
-		track::db::DBInfoSPtr pInfo = (*ppI).first;
-		fprintf(stderr,"%d - %s\n",i,pInfo->title().toUtf8().constData());
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
@@ -140,7 +133,7 @@ void PlayListModel::playItemAtIndex(int index)
 		QDBusMessage reply;
 		reply = m_pAudioInterface->call(QLatin1String("playFile"), fileName);
 		fprintf(stderr, "reply - %s, %s\n", reply.errorName().toUtf8().constData(), reply.errorMessage().toUtf8().constData());
-		fprintf(stderr, "sysbus - %s\n",QDBusConnection::systemBus().lastError().message().toUtf8().constData());
+		fprintf(stderr, "sysbus - %s\n",m_pAudioInterface->connection().lastError().message().toUtf8().constData());
 	}
 	else
 	{

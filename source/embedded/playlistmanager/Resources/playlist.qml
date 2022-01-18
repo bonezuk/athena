@@ -7,7 +7,77 @@ ApplicationWindow {
     id: window
     visible: true
     title: "Black Omega Playlist Manager"
-	
+
+    toolBar: ToolBar {
+        id: toolBarId
+
+        Rectangle {
+            id: playControlContainer
+            color: "transparent"
+            width: playButtonId.width * 2
+            height: playButtonId.height
+            anchors.left: toolBarId.left
+            anchors.leftMargin: 1
+            anchors.verticalCenter: parent.verticalCenter
+
+            Image {
+                id: playButtonId
+                height: 45
+                anchors.verticalCenter: playControlContainer.verticalCenter
+                anchors.horizontalCenter: playControlContainer.horizontalCenter
+                fillMode: Image.PreserveAspectFit
+                source: "images/pc_play_normal.png"
+            }
+            Image {
+                id: backButtonId
+                height: 30
+                anchors.verticalCenter: playButtonId.verticalCenter
+                anchors.right: playButtonId.horizontalCenter
+                anchors.rightMargin: 15
+                fillMode: Image.PreserveAspectFit
+                source: "images/pc_back_normal.png"
+            }
+            Image {
+                id: forwardButtonId
+                height: 30
+                anchors.verticalCenter: playButtonId.verticalCenter
+                anchors.left: playButtonId.horizontalCenter
+                anchors.leftMargin: 15
+                fillMode: Image.PreserveAspectFit
+                source: "images/pc_forward_normal.png"
+            }
+        }
+
+        Rectangle {
+            color: "transparent"
+            width: digitLayoutId.width
+            height: digitLayoutId.height
+            anchors.right: parent.right
+            anchors.rightMargin: 5
+            anchors.verticalCenter: parent.verticalCenter
+
+            Row {
+                id: digitLayoutId
+                spacing: 1
+                Image {
+                    source: "images/no0@2x.png"
+                }
+                Image {
+                    source: "images/no0@2x.png"
+                }
+                Image {
+                    source: "images/colon@2x.png"
+                }
+                Image {
+                    source: "images/no0@2x.png"
+                }
+                Image {
+                    source: "images/no0@2x.png"
+                }
+            }
+        }
+    }
+
 	ListView {
 		id: playListView
 
@@ -40,4 +110,5 @@ ApplicationWindow {
 		}
 
 	}
+
 }

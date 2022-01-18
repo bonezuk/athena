@@ -232,20 +232,34 @@ int main(int argc, char *argv[])
 	signal(SIGTERM, termSignalHandler);
 #endif
 
-	QObject obj;
-	orcus::OmegaAudioDBusAdaptor *pIface = new orcus::OmegaAudioDBusAdaptor(&obj);
-	QDBusConnection::systemBus().registerObject("/", &obj);
-	
-	if(QDBusConnection::systemBus().registerService(OMEGAAUDIODAEMON_SERVICE_NAME))
+#if defined(OMEGA_LINUX)
+	QDBusConnection bus = QDBusConnection::systemBus();
+#else
+	QDBusConnection bus = QDBusConnection::sessionBus();
+#endif
+
+	if(bus.isConnected())
 	{
-		g_audioDaemonApp = new orcus::OmegaAudioDaemon(argc, argv, pIface);
-		res = g_audioDaemonApp->exec();
-		delete g_audioDaemonApp;
-		g_audioDaemonApp = 0;
+		QObject obj;
+		orcus::OmegaAudioDBusAdaptor *pIface = new orcus::OmegaAudioDBusAdaptor(&obj);	
+		bus.registerObject("/", &obj);
+	
+		if(bus.registerService(OMEGAAUDIODAEMON_SERVICE_NAME))
+		{
+			g_audioDaemonApp = new orcus::OmegaAudioDaemon(argc, argv, pIface);
+			res = g_audioDaemonApp->exec();
+			delete g_audioDaemonApp;
+			g_audioDaemonApp = 0;
+		}
+		else
+		{
+			fprintf(stdout, "::main - %s\n", qPrintable(bus.lastError().message()));
+			res = -1;
+		}
 	}
 	else
 	{
-		fprintf(stdout, "::main - %s\n", qPrintable(QDBusConnection::systemBus().lastError().message()));
+		fprintf(stdout, "::main connection - %s\n", qPrintable(bus.lastError().message()));
 		res = -1;
 	}
 

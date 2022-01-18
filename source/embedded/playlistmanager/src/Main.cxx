@@ -262,10 +262,15 @@ int main(int argc, char *argv[])
 		else if(loadPlaylistFromDBOrArguments(playListDB))
 		{
 			qmlRegisterType<orcus::PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
-			
-			if(QDBusConnection::systemBus().isConnected())
+
+#if defined(OMEGA_LINUX)
+			QDBusConnection bus = QDBusConnection::systemBus();
+#else
+			QDBusConnection bus = QDBusConnection::sessionBus();
+#endif
+			if(bus.isConnected())
 			{
-				QDBusInterface audioDaemonIFace(OMEGAAUDIODAEMON_SERVICE_NAME, "/", OMEGAAUDIODAEMON_DBUS_IFACE_NAME, QDBusConnection::systemBus());
+				QDBusInterface audioDaemonIFace(OMEGAAUDIODAEMON_SERVICE_NAME, "/", OMEGAAUDIODAEMON_DBUS_IFACE_NAME, bus);
 				if(audioDaemonIFace.isValid())
 				{
 					PlayListModel playListModel(playListDB, &audioDaemonIFace);

@@ -19,7 +19,7 @@ class WIDGET_EXPORT ImportPlaylistDialog : public QDialog
 		Q_OBJECT
 		
 	public:
-		ImportPlaylistDialog(QWidget *parent = 0,Qt::WindowFlags f = 0);
+		ImportPlaylistDialog(QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~ImportPlaylistDialog();
 		
 		void setPlaylistFileName(const QString& fileName);
