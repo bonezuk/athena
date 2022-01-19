@@ -22,6 +22,7 @@
 #include "embedded/playlistmanager/inc/PlayListModel.h"
 #include "embedded/omegapicommon/inc/EmbeddedEnv.h"
 #include "embedded/omegapicommon/inc/OmegaPiDBusServiceNames.h"
+#include "embedded/playlistmanager/inc/PLAudioDBusAdaptor.h"
 
 using namespace orcus;
 
@@ -273,16 +274,29 @@ int main(int argc, char *argv[])
 				QDBusInterface audioDaemonIFace(OMEGAAUDIODAEMON_SERVICE_NAME, "/", OMEGAAUDIODAEMON_DBUS_IFACE_NAME, bus);
 				if(audioDaemonIFace.isValid())
 				{
-					PlayListModel playListModel(playListDB, &audioDaemonIFace);
 					QQmlApplicationEngine engine;
+					PlayListModel playListModel(playListDB, &audioDaemonIFace, &engine);
+					
 					engine.rootContext()->setContextProperty("playListModel", &playListModel);
 					engine.load(QUrl("qrc:/Resources/playlist.qml"));
-					res = app.exec();
+					
+					QObject plIFaceObj;
+					orcus::PLAudioDBusAdaptor *pIface = new orcus::PLAudioDBusAdaptor(&playListModel, plIFaceObj);
+					bus.registerObject("/", &plIFaceObj);
+					if(bus.registerService(OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME))
+					{
+						res = app.exec();
+					}
+					else
+					{
+						common::Log::g_Log << "Failed to present register dbus service for Playlist Manager." << common::c_endl;
+						common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;					
+					}
 				}
 				else
 				{
 					common::Log::g_Log << "Failed to connect to Omega Audio Daemon." << common::c_endl;
-					common::Log::g_Log << qPrintable(QDBusConnection::systemBus().lastError().message()) << common::c_endl;
+					common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
 				}
 			}
 			else

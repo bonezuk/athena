@@ -7,6 +7,10 @@
 
 #define OMEGAAUDIODAEMON_DBUS_IFACE_NAME "uk.co.blackomega.OmegaAudioDBusAdaptor"
 
+#define OMEGAPLAYLISTMANAGER_SERVICE_NAME    "uk.co.blackomega.OmegaPlaylistManager"
+
+#define OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME "uk.co.blackomega.PLAudioDBusAdaptor"
+
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

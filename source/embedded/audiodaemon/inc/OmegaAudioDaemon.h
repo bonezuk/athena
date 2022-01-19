@@ -12,6 +12,7 @@
 #include <QCoreApplication>
 #include <QtDBus/QDBusAbstractAdaptor>
 #include <QtDBus/QDBusVariant>
+#include <QtDBus/QDBusInterface>
 
 #include "embedded/omegapicommon/inc/EmbeddedEnv.h"
 #include "embedded/omegapicommon/inc/OmegaPiDBusServiceNames.h"
@@ -40,8 +41,11 @@ class OmegaAudioDaemon : public QCoreApplication
 	
 		QSharedPointer<audioio::AOBase> m_audio;
 		OmegaAudioDBusAdaptor *m_pInterface;
+		QSharedPtr<QDBusInterface> m_pPLManagerInterface;
 		
 		virtual void printError(const char *strR, const char *strE) const;
+		
+		virtual QSharedPtr<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface();
 		
 	private slots:
 		void onInit();
@@ -63,7 +67,7 @@ class OmegaAudioDaemon : public QCoreApplication
 class OmegaAudioDBusAdaptor : public QDBusAbstractAdaptor
 {
 	Q_OBJECT
-	Q_CLASSINFO("D-Bus Interface", OMEGAAUDIODAEMON_DBUS_IFACE_NAME)
+	Q_CLASSINFO("Audio Engine interface", OMEGAAUDIODAEMON_DBUS_IFACE_NAME)
 	
 	public:
 		OmegaAudioDBusAdaptor(QObject *obj);

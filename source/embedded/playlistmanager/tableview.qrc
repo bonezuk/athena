@@ -2,6 +2,8 @@
 <qresource prefix="/">
   <file>Resources/main.qml</file>
   <file>Resources/playlist.qml</file>
+  <file>Resources/playlist.js</file>
+  
   <file>Resources/images/colon@2x.png</file>
   <file>Resources/images/no0@2x.png</file>
   <file>Resources/images/no1@2x.png</file>
@@ -30,7 +32,6 @@
   <file>Resources/images/pc_play_hover.png</file>
   <file>Resources/images/pc_play_normal.png</file>
   <file>Resources/images/pc_play_press.png</file>
-
   
 </qresource>
 </RCC>

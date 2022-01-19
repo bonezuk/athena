@@ -3,6 +3,8 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
 import uk.co.blackomega 1.0
 
+import "playlist.js" as Playlist
+
 ApplicationWindow {
     id: window
     visible: true
@@ -13,6 +15,7 @@ ApplicationWindow {
 
         Rectangle {
             id: playControlContainer
+            
             color: "transparent"
             width: playButtonId.width * 2
             height: playButtonId.height
@@ -49,6 +52,9 @@ ApplicationWindow {
         }
 
         Rectangle {
+        	id: playbackTimeContainer
+        	property int playbackTime: 0
+        
             color: "transparent"
             width: digitLayoutId.width
             height: digitLayoutId.height
@@ -60,19 +66,28 @@ ApplicationWindow {
                 id: digitLayoutId
                 spacing: 1
                 Image {
-                    source: "images/no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(PlayTimeHourUpperDigit, parent.playbackTime)
                 }
                 Image {
-                    source: "images/no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(PlayTimeHourLowerDigit, parent.playbackTime)
                 }
                 Image {
                     source: "images/colon@2x.png"
                 }
                 Image {
-                    source: "images/no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(PlayTimeMinuteUpperDigit, parent.playbackTime)
                 }
                 Image {
-                    source: "images/no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(PlayTimeMinuteLowerDigit, parent.playbackTime)
+                }
+                Image {
+                    source: "images/colon@2x.png"
+                }
+                Image {
+                    source: Playlist.getPlayTimeDigitImageName(PlayTimeSecondUpperDigit, parent.playbackTime)
+                }
+                Image {
+                    source: Playlist.getPlayTimeDigitImageName(PlayTimeSecondLowerDigit, parent.playbackTime)
                 }
             }
         }

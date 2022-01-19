@@ -132,6 +132,12 @@ void OmegaAudioDaemon::onAudioTime(quint64 t)
 {
 	common::TimeStamp tS(t);
 	common::Log::g_Log.print("onAudioTime - %.2f\n", static_cast<tfloat64>(tS));
+	
+	QSharedPtr<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull() && pIface->isValid())
+	{
+		pIface->call("playbackTime". t);
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -162,6 +168,27 @@ void OmegaAudioDaemon::onAudioCrossfade()
 	common::Log::g_Log << "onAudioCrossfade" << common::c_endl;
 }
 
+//-------------------------------------------------------------------------------------------
+
+QSharedPtr<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface()
+{
+	if(m_pPLManagerInterface.isNull() || !m_pPLManagerInterface->isValid())
+	{
+#if defined(OMEGA_LINUX)
+		QDBusConnection bus = QDBusConnection::systemBus();
+#else
+		QDBusConnection bus = QDBusConnection::sessionBus();
+#endif
+		if(bus.isConnected())
+		{
+			QSharedPtr<QDBusInterface> pInterface(new QDBusInterface(OMEGAPLAYLISTMANAGER_SERVICE_NAME, "/", OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME, this));
+			if(pInterface->isValid())
+			{
+				m_pPLManagerInterface = pInterface;
+			}
+		}
+	}
+}
 
 //-------------------------------------------------------------------------------------------
 // OmegaAudioDBusAdaptor
@@ -243,7 +270,7 @@ int main(int argc, char *argv[])
 		QObject obj;
 		orcus::OmegaAudioDBusAdaptor *pIface = new orcus::OmegaAudioDBusAdaptor(&obj);	
 		bus.registerObject("/", &obj);
-	
+		
 		if(bus.registerService(OMEGAAUDIODAEMON_SERVICE_NAME))
 		{
 			g_audioDaemonApp = new orcus::OmegaAudioDaemon(argc, argv, pIface);

@@ -7,20 +7,29 @@ namespace orcus
 
 PlayListModel::PlayListModel() : QAbstractListModel(0),
 	m_playList(),
-	m_pAudioInterface()
+	m_pAudioInterface(),
+	m_pQmlEngine()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QDBusInterface *pAudioInterface, QObject *parent) : QAbstractListModel(parent),
+PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QDBusInterface *pAudioInterface, QQmlEngine *pQmlEngine, QObject *parent) : QAbstractListModel(parent),
 	m_playList(playList),
-	m_pAudioInterface(pAudioInterface)
+	m_pAudioInterface(pAudioInterface),
+	m_pQmlEngine(pQmlEngine)
 {}
 
 //-------------------------------------------------------------------------------------------
 
 PlayListModel::~PlayListModel()
 {}
+
+//-------------------------------------------------------------------------------------------
+
+QQmlEngine *PlayListModel::qmlEngine()
+{
+	return m_pQmlEngine;
+}
 
 //-------------------------------------------------------------------------------------------
 
