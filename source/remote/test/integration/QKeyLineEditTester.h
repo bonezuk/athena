@@ -28,7 +28,7 @@ class QKeyLineEditTestDialog : public QDialog, public WinLIRCRemoteProxyIF
 		Q_OBJECT
 		
 	public:
-        QKeyLineEditTestDialog(QWidget *parent = 0,Qt::WindowFlags f = 0);
+        QKeyLineEditTestDialog(QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~QKeyLineEditTestDialog();
 		
 		virtual WinLIRCRemoteSPtr getWinLIRCRemote();

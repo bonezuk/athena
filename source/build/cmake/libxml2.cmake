@@ -10,7 +10,11 @@ else (${TIGER_LINUX_DISTRO})
 
 	set(LIBXML_VERSION "2.9.8")
 	set(LIBXML_LIBNAME "libxml2")
-	
+
+	if (OMEGA_MSVC16)
+		set(LIBICONV_LIBNAME "iconv")
+	endif (OMEGA_MSVC16)
+
 	if (OMEGA_WIN32)
 		set(LIBXML_HOME "${ATHENA_UTILS}/libxml2/libxml2-${LIBXML_VERSION}-${BUILD_SUFFIX}")
 	else (OMEGA_WIN32)

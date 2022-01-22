@@ -12,6 +12,7 @@
 #include <QVariant>
 #include <QSet>
 #include <QSharedPointer>
+#include <QMultiMap>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>

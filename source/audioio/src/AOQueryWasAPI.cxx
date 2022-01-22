@@ -144,7 +144,7 @@ void AOQueryWasAPI::DeviceWasAPI::print() const
 	{
 		sFreq.append(*ppI);
 	}
-	qSort(sFreq.begin(),sFreq.end());
+	std::sort(sFreq.begin(),sFreq.end());
 	
 	common::Log::g_Log.print("Device UUID : %s\n",m_id.toUtf8().constData());
 	common::Log::g_Log.print("Device Name : %s\n",m_name.toUtf8().constData());

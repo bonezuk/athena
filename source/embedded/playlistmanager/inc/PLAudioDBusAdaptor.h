@@ -6,7 +6,7 @@
 #include <QtDBus/QDBusAbstractAdaptor>
 
 #include "embedded/omegapicommon/inc/OmegaPiDBusServiceNames.h"
-#include "embedded/playlistmanager/PlayListModel.h"
+#include "embedded/playlistmanager/inc/PlayListModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

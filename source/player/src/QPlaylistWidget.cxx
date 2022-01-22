@@ -661,7 +661,7 @@ void QPlaylistWidget::addTracks(QVector<track::info::InfoSPtr>& tracks,QPLItemBa
 	tint i,j;
 	QString name;
 	QMap<QString,QMap<QString,tint> > albumMap;
-	QMap<QString,tint> nonAlbumMap;
+	QMultiMap<QString,tint> nonAlbumMap;
 	QMap<QString,QMap<QString,tint> >::iterator ppI;
 	QMap<QString,tint>::iterator ppJ;
 	QVector<QPair<track::info::InfoSPtr,int> > trackItems;
@@ -710,7 +710,7 @@ void QPlaylistWidget::addTracks(QVector<track::info::InfoSPtr>& tracks,QPLItemBa
 							name = track->getName("%O",contentFlag,true);
 							track->title() = name;
 						}
-						nonAlbumMap.insertMulti(name,i);
+						nonAlbumMap.insert(name,i);
 					}
 				}
 			}

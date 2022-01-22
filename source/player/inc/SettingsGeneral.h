@@ -19,7 +19,7 @@ class SettingsGeneral : public SettingsBase
 		Q_OBJECT
 		
 	public:
-		SettingsGeneral(QWidget *parent = 0,Qt::WindowFlags f = 0);
+		SettingsGeneral(QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~SettingsGeneral();
 		
 		virtual void onSelected(int index);

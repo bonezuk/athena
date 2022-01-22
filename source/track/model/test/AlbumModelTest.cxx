@@ -31,13 +31,13 @@ class AlbumModelTest : public AlbumModel
 		QVector<QChar> testGetIndexAlphabet() const;
 		void testBuildIndexMap(const QVector<QChar>& alphabet,QMap<QChar,int>& indexMap) const;
 		QChar testGetFirstCharacter(const QString& name,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet) const;
-        void testMapResultsToAlphabetIndex(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMap<QString,int> >& sectionMap) const;
+        void testMapResultsToAlphabetIndex(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMultiMap<QString,int> >& sectionMap) const;
 		
 		void testEnumerateSections(const QueryResult& results);
         QVector<int>& getPositionIndex();
 		void testInsertIntoAlbum(QVector<QueryRecord>& recordList);
 		void testAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map);
-		void testBuildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMap<QString,int> >& sectionMap);
+		void testBuildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMultiMap<QString,int> >& sectionMap);
 		
 	protected:
 		db::SQLiteQuerySPtr m_pQuery;
@@ -140,7 +140,7 @@ QChar AlbumModelTest::testGetFirstCharacter(const QString& name,const QMap<QChar
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumModelTest::testMapResultsToAlphabetIndex(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMap<QString,int> >& sectionMap) const
+void AlbumModelTest::testMapResultsToAlphabetIndex(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMultiMap<QString,int> >& sectionMap) const
 {
 	mapResultsToAlphabetIndex(results,indexMap,alphabet,sectionMap);
 }
@@ -168,7 +168,7 @@ void AlbumModelTest::testAddToModelForGivenMap(const QueryResult& results,const 
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumModelTest::testBuildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMap<QString,int> >& sectionMap)
+void AlbumModelTest::testBuildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMultiMap<QString,int> >& sectionMap)
 {
 	buildModelFromSortedIndex(results,alphabet,sectionMap);
 }
@@ -1369,8 +1369,8 @@ TEST(AlbumModel,mapResultsToAlphabetIndexNoResultsEmptyMap)
 	QMap<QChar,int> indexMap;
 	QVector<QChar> alphabet;
 
-	QMap<QChar,QMap<QString,int> > sectionMap;
-	sectionMap.insert(QChar('a'),QMap<QString,int>());
+	QMap<QChar,QMultiMap<QString,int> > sectionMap;
+	sectionMap.insert(QChar('a'),QMultiMap<QString,int>());
 	
     model.testMapResultsToAlphabetIndex(mResults,indexMap,alphabet,sectionMap);
 	
@@ -1397,8 +1397,8 @@ TEST(AlbumModel,mapResultsToAlphabetIndexDuplicateAlbumNameButDifferentCaseBothI
 	
 	QMap<QChar,int> indexMap;
 	QVector<QChar> alphabet;
-	QMap<QChar,QMap<QString,int> > sectionMap;
-	QMap<QChar,QMap<QString,int> >::iterator ppI;
+	QMap<QChar,QMultiMap<QString,int> > sectionMap;
+	QMap<QChar, QMultiMap<QString,int> >::iterator ppI;
 	
     model.testMapResultsToAlphabetIndex(mResults,indexMap,alphabet,sectionMap);
 	
@@ -1437,8 +1437,8 @@ TEST(AlbumModel,mapResultsToAlphabetIndexAlbumsWithDifferentFirstLettersInSepera
 		
 	QMap<QChar,int> indexMap;
 	QVector<QChar> alphabet;
-	QMap<QChar,QMap<QString,int> > sectionMap;
-	QMap<QChar,QMap<QString,int> >::iterator ppI;
+	QMap<QChar,QMultiMap<QString,int> > sectionMap;
+	QMap<QChar, QMultiMap<QString,int> >::iterator ppI;
 	
     model.testMapResultsToAlphabetIndex(mResults,indexMap,alphabet,sectionMap);
 	
@@ -1446,19 +1446,19 @@ TEST(AlbumModel,mapResultsToAlphabetIndexAlbumsWithDifferentFirstLettersInSepera
 	
 	ppI = sectionMap.find(QChar('a'));
 	EXPECT_TRUE(ppI!=sectionMap.end());
-	QMap<QString,int>& mapA = ppI.value();
+	QMultiMap<QString,int>& mapA = ppI.value();
 	EXPECT_TRUE(mapA.size()==1);
     EXPECT_TRUE(mapA.find("alpha").value()==0);
 
 	ppI = sectionMap.find(QChar('b'));
 	EXPECT_TRUE(ppI!=sectionMap.end());
-	QMap<QString,int>& mapB = ppI.value();
+	QMultiMap<QString,int>& mapB = ppI.value();
 	EXPECT_TRUE(mapB.size()==1);
     EXPECT_TRUE(mapB.find("bravo").value()==2);
 
 	ppI = sectionMap.find(QChar('c'));
 	EXPECT_TRUE(ppI!=sectionMap.end());
-	QMap<QString,int>& mapC = ppI.value();
+	QMultiMap<QString,int>& mapC = ppI.value();
 	EXPECT_TRUE(mapC.size()==1);
     EXPECT_TRUE(mapC.find("charlie").value()==1);
 }
@@ -1491,8 +1491,8 @@ TEST(AlbumModel,mapResultsToAlphabetIndexAlbumsWithSameFirstLettersAreMappedInTo
 		
 	QMap<QChar,int> indexMap;
 	QVector<QChar> alphabet;
-	QMap<QChar,QMap<QString,int> > sectionMap;
-	QMap<QChar,QMap<QString,int> >::iterator ppI;
+	QMap<QChar,QMultiMap<QString,int> > sectionMap;
+	QMap<QChar, QMultiMap<QString,int> >::iterator ppI;
 	
     model.testMapResultsToAlphabetIndex(mResults,indexMap,alphabet,sectionMap);
 	
@@ -1500,21 +1500,21 @@ TEST(AlbumModel,mapResultsToAlphabetIndexAlbumsWithSameFirstLettersAreMappedInTo
 	
 	ppI = sectionMap.find(QChar('a'));
 	EXPECT_TRUE(ppI!=sectionMap.end());
-	QMap<QString,int>& mapA = ppI.value();
+	QMultiMap<QString,int>& mapA = ppI.value();
 	EXPECT_TRUE(mapA.size()==2);
     EXPECT_TRUE(mapA.find("alpha").value()==0);
     EXPECT_TRUE(mapA.find("amazon").value()==4);
 
 	ppI = sectionMap.find(QChar('b'));
 	EXPECT_TRUE(ppI!=sectionMap.end());
-	QMap<QString,int>& mapB = ppI.value();
+	QMultiMap<QString,int>& mapB = ppI.value();
 	EXPECT_TRUE(mapB.size()==2);
     EXPECT_TRUE(mapB.find("bravo").value()==2);
     EXPECT_TRUE(mapB.find("beta").value()==3);
 
 	ppI = sectionMap.find(QChar('c'));
 	EXPECT_TRUE(ppI!=sectionMap.end());
-	QMap<QString,int>& mapC = ppI.value();
+	QMultiMap<QString,int>& mapC = ppI.value();
 	EXPECT_TRUE(mapC.size()==2);
     EXPECT_TRUE(mapC.find("charlie").value()==1);
     EXPECT_TRUE(mapC.find("copper").value()==5);
@@ -1601,8 +1601,8 @@ TEST(AlbumModel,addToModelForGivenMapGivenSingleName)
 	QueryRecord recordA = model.testCreateRecordAlbum(AlbumModelKey(std::pair<bool,int>(false,1)),"Name");
 	result.push_back(recordA);
 
-	QMap<QString,int> sectionMap;
-	sectionMap.insertMulti("name",0);
+	QMultiMap<QString,int> sectionMap;
+	sectionMap.insert("name",0);
 	
 	model.testAddToModelForGivenMap(result,sectionMap);
 	
@@ -1623,9 +1623,9 @@ TEST(AlbumModel,addToModelForGivenMapGivenDuplicateNameTwice)
 	result.push_back(recordA);
 	result.push_back(recordB);
 
-	QMap<QString,int> sectionMap;
-	sectionMap.insertMulti("name",0);
-	sectionMap.insertMulti("name",1);
+	QMultiMap<QString,int> sectionMap;
+	sectionMap.insert("name",0);
+	sectionMap.insert("name",1);
 	
 	model.testAddToModelForGivenMap(result,sectionMap);
 	
@@ -1652,11 +1652,11 @@ TEST(AlbumModel,addToModelForGivenMapGivenDuplicateNameFourTimes)
 	result.push_back(recordC);
 	result.push_back(recordD);
 
-	QMap<QString,int> sectionMap;
-	sectionMap.insertMulti("name",0);
-	sectionMap.insertMulti("name",1);
-	sectionMap.insertMulti("name",2);
-	sectionMap.insertMulti("name",3);
+	QMultiMap<QString,int> sectionMap;
+	sectionMap.insert("name",0);
+	sectionMap.insert("name",1);
+	sectionMap.insert("name",2);
+	sectionMap.insert("name",3);
 	
 	model.testAddToModelForGivenMap(result,sectionMap);
 	
@@ -1685,10 +1685,10 @@ TEST(AlbumModel,addToModelForGivenMapDuplicateNameAppended)
 	result.push_back(recordB);
 	result.push_back(recordC);
 
-	QMap<QString,int> sectionMap;
-	sectionMap.insertMulti("nameu",0);
-	sectionMap.insertMulti("name",1);
-	sectionMap.insertMulti("name",2);
+	QMultiMap<QString, int> sectionMap;
+	sectionMap.insert("nameu",0);
+	sectionMap.insert("name",1);
+	sectionMap.insert("name",2);
 
 	model.testAddToModelForGivenMap(result,sectionMap);
 
@@ -1715,10 +1715,10 @@ TEST(AlbumModel,addToModelForGivenMapDuplicateNamePrepended)
 	result.push_back(recordB);
 	result.push_back(recordC);
 
-	QMap<QString,int> sectionMap;
-	sectionMap.insertMulti("name",0);
-	sectionMap.insertMulti("name",1);
-	sectionMap.insertMulti("names",2);
+	QMultiMap<QString,int> sectionMap;
+	sectionMap.insert("name",0);
+	sectionMap.insert("name",1);
+	sectionMap.insert("names",2);
 
 	model.testAddToModelForGivenMap(result,sectionMap);
 
@@ -1747,11 +1747,11 @@ TEST(AlbumModel,addToModelForGivenMapDuplicateNameInTheMiddle)
 	result.push_back(recordC);
 	result.push_back(recordD);
 	
-	QMap<QString,int> sectionMap;
-	sectionMap.insertMulti("nameu",0);
-	sectionMap.insertMulti("name",1);
-	sectionMap.insertMulti("name",2);
-	sectionMap.insertMulti("names",3);
+	QMultiMap<QString,int> sectionMap;
+	sectionMap.insert("nameu",0);
+	sectionMap.insert("name",1);
+	sectionMap.insert("name",2);
+	sectionMap.insert("names",3);
 	
 	model.testAddToModelForGivenMap(result,sectionMap);
 	
@@ -1780,10 +1780,10 @@ TEST(AlbumModel,addToModelForGivenMapNoDuplicates)
     result.push_back(recordB);
     result.push_back(recordC);
 
-	QMap<QString,int> sectionMap;
-	sectionMap.insertMulti("nameu",0);
-	sectionMap.insertMulti("name",1);
-	sectionMap.insertMulti("names",2);
+	QMultiMap<QString,int> sectionMap;
+	sectionMap.insert("nameu",0);
+	sectionMap.insert("name",1);
+	sectionMap.insert("names",2);
 
 	model.testAddToModelForGivenMap(result,sectionMap);
 
@@ -1833,7 +1833,7 @@ TEST(AlbumModel,buildModelFromSortedIndexEmptyModelWhenIndexIsEmpty)
 	alphabet.append(QChar('g'));
 
 	QueryResult results;
-	QMap<QChar,QMap<QString,int> > sectionMap;
+	QMap<QChar,QMultiMap<QString,int> > sectionMap;
 	AlbumModelBuildModelSortedIndexTest model;
 	
     model.testBuildModelFromSortedIndex(results,alphabet,sectionMap);
@@ -1864,7 +1864,7 @@ TEST(AlbumModel,buildModelFromSortedIndexIsIndexedAtExpectedPositions)
 	QueryResult results;
 
 	QMap<QString,int> bMap,dMap,fMap;
-	QMap<QChar,QMap<QString,int> > sectionMap;
+	QMultiMap<QChar, QMultiMap<QString,int> > sectionMap;
 	sectionMap.insert(QChar('b'),bMap);
 	sectionMap.insert(QChar('d'),dMap);
 	sectionMap.insert(QChar('f'),fMap);

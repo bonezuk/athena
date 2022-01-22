@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Socket.h"
+#include <QMultiMap>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -108,7 +109,7 @@ class NETWORK_EXPORT Controller : public QObject
 		QTimer *m_processTimer;
 		QMap<tint,Service::ServicePtr> m_serviceMap;
 		QSet<Socket::SocketPtr> m_socketSet;
-		QMap<Service::ServicePtr,Socket::SocketPtr> m_socketServiceMap;
+		QMultiMap<Service::ServicePtr,Socket::SocketPtr> m_socketServiceMap;
 		QMap<Qt::HANDLE,ControllerWaitCondition *> m_waitConditionMap;
 		
 		void printError(const tchar *strR,const tchar *strE) const;

@@ -22,7 +22,7 @@ void PLAudioDBusAdaptor::playbackTime(quint64 tS)
 	QObject *plTime = m_pModel->qmlEngine()->rootContext()->findChild<QObject *>("playbackTimeContainer");
 	if(plTime != 0)
 	{
-		plTime->setProperty("playbackTime", tS.secondsTotal());
+		plTime->setProperty("playbackTime", timeStamp.secondsTotal());
 	}
 }
 

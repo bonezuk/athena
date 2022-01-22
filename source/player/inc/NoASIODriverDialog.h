@@ -18,7 +18,7 @@ class NoASIODriverDialog : public QDialog
 	Q_OBJECT
 	
 	public:
-		NoASIODriverDialog(QWidget *parent=0,Qt::WindowFlags f=0);
+		NoASIODriverDialog(QWidget *parent=0,Qt::WindowFlags f= Qt::WindowFlags());
 		virtual ~NoASIODriverDialog();
 		
 	protected:

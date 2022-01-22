@@ -23,7 +23,7 @@ class ProgressMessageDialog : public QDialog
 		Q_OBJECT
 	
 	public:
-		ProgressMessageDialog(const QString& txt,QWidget *parent = 0,Qt::WindowFlags f = 0);
+		ProgressMessageDialog(const QString& txt,QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~ProgressMessageDialog();
 		
 		void setLabel(const QString& txt);

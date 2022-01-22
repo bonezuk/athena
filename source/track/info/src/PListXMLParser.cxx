@@ -560,7 +560,7 @@ void DictXMLParser::processData(PListBaseXMLParserPtr pChild)
 		if(dictParser.data()!=0 && parent()->parserType()==PListBaseXMLParser::e_parserPList)
 		{
 			QVariant mapV(dictParser->data());
-			m_data.insertMulti("dict",mapV);
+			m_data.insert("dict",mapV);
 		}
 	}
 }

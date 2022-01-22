@@ -3,8 +3,8 @@
 #define __EMBEDDED_AUDIODAEMON_OMEGAAUDIODAEMON_H
 //-------------------------------------------------------------------------------------------
 
-#include "network/inc/Resource.h"
 #include "audioio/inc/AOBase.h"
+
 #include "engine/inc/Codec.h"
 #include "track/info/inc/Info.h"
 #include "common/inc/DiskOps.h"
@@ -41,11 +41,11 @@ class OmegaAudioDaemon : public QCoreApplication
 	
 		QSharedPointer<audioio::AOBase> m_audio;
 		OmegaAudioDBusAdaptor *m_pInterface;
-		QSharedPtr<QDBusInterface> m_pPLManagerInterface;
+		QSharedPointer<QDBusInterface> m_pPLManagerInterface;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		
-		virtual QSharedPtr<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface();
+		virtual QSharedPointer<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface();
 		
 	private slots:
 		void onInit();

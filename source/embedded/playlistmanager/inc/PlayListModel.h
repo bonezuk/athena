@@ -5,6 +5,8 @@
 
 #include <QAbstractListModel>
 #include <QModelIndex>
+#include <QQmlEngine>
+#include <QQmlContext>
 
 #include "track/db/inc/DBInfo.h"
 #include "track/db/inc/TrackDB.h"

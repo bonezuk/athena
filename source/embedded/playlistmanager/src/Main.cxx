@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
 					engine.load(QUrl("qrc:/Resources/playlist.qml"));
 					
 					QObject plIFaceObj;
-					orcus::PLAudioDBusAdaptor *pIface = new orcus::PLAudioDBusAdaptor(&playListModel, plIFaceObj);
+					orcus::PLAudioDBusAdaptor *pIface = new orcus::PLAudioDBusAdaptor(&playListModel, &plIFaceObj);
 					bus.registerObject("/", &plIFaceObj);
 					if(bus.registerService(OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME))
 					{

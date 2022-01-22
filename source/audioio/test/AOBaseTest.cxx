@@ -414,7 +414,7 @@ bool AOBaseStartCodecTest::testStartCodec(const QString& url,const common::TimeS
 
 TEST(AOBase,startCodecWhereAudioFailedToStop)
 {
-	QString nullStr = QString::null;
+	QString nullStr = QString();
 	QString fileName = "/pathto/music/track.flac";
 	common::TimeStamp startTime = 5.0;
 	common::TimeStamp tLen = 0.0;
@@ -434,7 +434,7 @@ TEST(AOBase,startCodecWhereAudioFailedToStop)
 
 TEST(AOBase,startCodecWherePreviousCodecFailedToStop)
 {
-	QString nullStr = QString::null;
+	QString nullStr = QString();
 	QString fileName = "/pathto/music/track.flac";
 	common::TimeStamp startTime = 5.0;
 	common::TimeStamp tLen = 0.0;
@@ -455,7 +455,7 @@ TEST(AOBase,startCodecWherePreviousCodecFailedToStop)
 
 TEST(AOBase,startCodecWhereCodecFailsToBeCreated)
 {
-	QString nullStr = QString::null;
+	QString nullStr = QString();
 	QString fileName = "/pathto/music/track.flac";
 	common::TimeStamp startTime = 5.0;
 	common::TimeStamp tLen = 0.0;
@@ -510,7 +510,7 @@ TEST(AOBase,startCodecWithRemoteThatOpensSuccessfully)
 
 TEST(AOBase,startCodecWithLocalThatOpensButAudioFails)
 {
-	QString nullStr = QString::null;
+	QString nullStr = QString();
 	QString fileName = "/pathto/music/track.flac";
 	common::TimeStamp startTime = 5.0;
 	common::TimeStamp tLen = 0.0;

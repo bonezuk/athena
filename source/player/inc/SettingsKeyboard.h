@@ -21,7 +21,7 @@ class SettingsKeyboard : public SettingsBase, public remote::WinLIRCRemoteProxyI
         Q_OBJECT
 
 	public:
-        SettingsKeyboard(QWidget *parent = 0,Qt::WindowFlags f = 0);
+        SettingsKeyboard(QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~SettingsKeyboard();
 		
 		virtual void onSelected(int index);

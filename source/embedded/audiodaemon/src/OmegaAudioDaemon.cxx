@@ -1,7 +1,8 @@
-#include "embedded/audiodaemon/inc/OmegaAudioDaemon.h"
+#include "network/inc/Resource.h"
 #if defined(ORCUS_WIN32)
 #include "audioio/inc/WasAPIIF.h"
 #endif
+#include "embedded/audiodaemon/inc/OmegaAudioDaemon.h"
 
 #include <QtDBus/QtDBus>
 
@@ -133,10 +134,10 @@ void OmegaAudioDaemon::onAudioTime(quint64 t)
 	common::TimeStamp tS(t);
 	common::Log::g_Log.print("onAudioTime - %.2f\n", static_cast<tfloat64>(tS));
 	
-	QSharedPtr<QDBusInterface> pIface = getPLManagerInterface();
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
 	if(!pIface.isNull() && pIface->isValid())
 	{
-		pIface->call("playbackTime". t);
+		pIface->call("playbackTime", t);
 	}
 }
 
@@ -170,7 +171,7 @@ void OmegaAudioDaemon::onAudioCrossfade()
 
 //-------------------------------------------------------------------------------------------
 
-QSharedPtr<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface()
+QSharedPointer<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface()
 {
 	if(m_pPLManagerInterface.isNull() || !m_pPLManagerInterface->isValid())
 	{
@@ -181,13 +182,14 @@ QSharedPtr<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface()
 #endif
 		if(bus.isConnected())
 		{
-			QSharedPtr<QDBusInterface> pInterface(new QDBusInterface(OMEGAPLAYLISTMANAGER_SERVICE_NAME, "/", OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME, this));
+			QSharedPointer<QDBusInterface> pInterface(new QDBusInterface(OMEGAPLAYLISTMANAGER_SERVICE_NAME, "/", OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME, bus, this));
 			if(pInterface->isValid())
 			{
 				m_pPLManagerInterface = pInterface;
 			}
 		}
 	}
+	return m_pPLManagerInterface;
 }
 
 //-------------------------------------------------------------------------------------------

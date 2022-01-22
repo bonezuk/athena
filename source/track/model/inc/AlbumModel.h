@@ -67,10 +67,10 @@ class TRACK_MODEL_EXPORT AlbumModel : public AbstractTrackModel
 		virtual QVector<QChar> getIndexAlphabet() const;
 		virtual void buildIndexMap(const QVector<QChar>& alphabet,QMap<QChar,int>& indexMap) const;
 		virtual QChar getFirstCharacter(const QString& name,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet) const;
-		virtual void mapResultsToAlphabetIndex(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMap<QString,int> >& sectionMap) const;
+		virtual void mapResultsToAlphabetIndex(const QueryResult& results, const QMap<QChar, int>& indexMap, const QVector<QChar>& alphabet, QMap<QChar, QMultiMap<QString, int> >& sectionMap) const;
         virtual void insertIntoAlbum(QVector<QueryRecord>& recordList);
         virtual void addToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map);
-        virtual void buildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMap<QString,int> >& sectionMap);
+        virtual void buildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMultiMap<QString,int> >& sectionMap);
 
 		static bool compareIdenticalAlbumNameLessThan(const QueryRecord& a,const QueryRecord& b);
 };

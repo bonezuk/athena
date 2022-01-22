@@ -802,7 +802,7 @@ void Controller::addSocket(Service::ServicePtr svr,Socket::SocketPtr s)
 	if(s!=0)
 	{
 		m_socketSet.insert(s);
-		m_socketServiceMap.insertMulti(svr,s);
+		m_socketServiceMap.insert(svr,s);
 	}
 }
 

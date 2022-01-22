@@ -1112,7 +1112,7 @@ void Atom::parseMetaTag(AtomFile *in,Type parentType,tint size)
 							
 							if(parentType==e_atom_tempo)
 							{
-								data.sprintf("%.5u BPM",val);
+								data.asprintf("%.5u BPM",val);
 								m_metadata.insert(QString::fromLatin1("tempo"),data);
 							}
 							else

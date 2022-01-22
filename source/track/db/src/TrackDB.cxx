@@ -2090,7 +2090,7 @@ void TrackDB::clearPlaylist(int playlistID)
 		
 		m_db->exec("RELEASE clearPlaylist");
 	}
-	catch(const SQLiteException& e)
+	catch(const SQLiteException&)
 	{
 		m_db->exec("ROLLBACK TO SAVEPOINT clearPlaylist");
 	}

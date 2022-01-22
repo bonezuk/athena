@@ -61,7 +61,7 @@ void QKeyLineEdit::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
 
-    QStyleOptionFrameV2 panel;
+    QStyleOptionFrame panel;
     panel.initFrom(m_dummyEdit);
     panel.fontMetrics = painter.fontMetrics();
 
@@ -101,7 +101,7 @@ void QKeyLineEdit::paintEvent(QPaintEvent *e)
 	int tIYPos = static_cast<int>(::floor(tYPos));
 	int iIYPos = static_cast<int>(::floor(iYPos));
 
-	int xPos = offset + fontMetrics.width(QChar(' '));
+	int xPos = offset + fontMetrics.horizontalAdvance(QChar(' '));
 
 	QRect rIcon(xPos,iIYPos,(icon!=0) ? icon->width() : 0, (icon!=0) ? icon->height() : 0);
 	QRect rText(rIcon.right()+4,tIYPos,lSize.width() - rIcon.right() + 4,s.height());
@@ -1933,7 +1933,7 @@ void QKeyLineEditDelegate::paint(QPainter *painter,const QStyleOptionViewItem& o
 {
 	KeyCodesContainer keys(index.model()->data(index,Qt::EditRole));
 
-    painter->fillRect(option.rect,option.palette.color(QPalette::Background));
+    painter->fillRect(option.rect,option.palette.color(QPalette::Window));
     if(!keys.isEmpty() && !(index.row()==m_editRow && index.column()==m_editColumn))
 	{
 		QList<KeyCode>::const_iterator ppI;
@@ -1978,7 +1978,7 @@ void QKeyLineEditDelegate::paint(QPainter *painter,const QStyleOptionViewItem& o
 			int iIYPos = static_cast<int>(::floor(iYPos));
 
 			QRect rIcon(tXPos+3,iIYPos,icon->width(),icon->height());
-			QRect rText(rIcon.right()+4,tIYPos,option.fontMetrics.width(kText),option.fontMetrics.height());
+			QRect rText(rIcon.right()+4,tIYPos,option.fontMetrics.horizontalAdvance(kText),option.fontMetrics.height());
 
 			QPoint ptBack(tXPos,((iIYPos < tIYPos) ? iIYPos : tIYPos));
 			QSize sBack((rText.right() + 4) - ptBack.x(),((rIcon.height() > rText.height()) ? rIcon.height() : rText.height()));
@@ -1991,7 +1991,7 @@ void QKeyLineEditDelegate::paint(QPainter *painter,const QStyleOptionViewItem& o
 
 			painter->setRenderHint(QPainter::Antialiasing);
 			painter->setRenderHint(QPainter::TextAntialiasing);
-			painter->setRenderHint(QPainter::HighQualityAntialiasing);
+			painter->setRenderHint(QPainter::Antialiasing);
 
 			painter->setPen(QPen(option.palette.color(QPalette::Base)));
 			painter->setBrush(backBrush);

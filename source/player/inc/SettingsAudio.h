@@ -21,7 +21,7 @@ class SettingsAudio : public SettingsBase
 		Q_OBJECT
 
 	public:
-        SettingsAudio(QSharedPointer<audioio::AOBase> pAudio,QWidget *parent,Qt::WindowFlags f = 0);
+        SettingsAudio(QSharedPointer<audioio::AOBase> pAudio,QWidget *parent,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~SettingsAudio();
 		
 		QString nextSpeakerFile();

@@ -41,7 +41,7 @@ class REMOTE_EXPORT QKeyLineEdit : public QWidget
 		Q_OBJECT
 
 	public:
-		QKeyLineEdit(WinLIRCRemoteProxyIF *remoteProxy,QWidget *parent = 0,Qt::WindowFlags f = 0);
+		QKeyLineEdit(WinLIRCRemoteProxyIF *remoteProxy,QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~QKeyLineEdit();
 		
 		virtual QString text();
@@ -89,7 +89,7 @@ class REMOTE_EXPORT QKeyAssignEdit : public QWidget
 		Q_OBJECT
 	
 	public:
-		QKeyAssignEdit(WinLIRCRemoteProxyIF *remoteProxy,QWidget *parent = 0,Qt::WindowFlags f = 0);
+		QKeyAssignEdit(WinLIRCRemoteProxyIF *remoteProxy,QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~QKeyAssignEdit();
 
 		const KeyCodesContainer& keys() const;

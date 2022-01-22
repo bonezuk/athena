@@ -30,7 +30,7 @@ class SettingsCentralWidget : public QWidget
 		Q_OBJECT
 		
 	public:
-		SettingsCentralWidget(QSharedPointer<audioio::AOBase> pAudio,Player *player,QWidget *parent = 0,Qt::WindowFlags f = 0);
+		SettingsCentralWidget(QSharedPointer<audioio::AOBase> pAudio,Player *player,QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~SettingsCentralWidget();
 	
 		QString nextSpeakerFile();

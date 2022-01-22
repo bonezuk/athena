@@ -149,7 +149,7 @@ bool VSilverFloorData1::read(engine::Sequence *seq)
 
 static tint setupIComp(const void *a,const void *b)
 {
-	return (**(size_t **)a-**(size_t **)b);
+	return static_cast<tint>(**(size_t **)a-**(size_t **)b);
 }
 
 //-------------------------------------------------------------------------------------------

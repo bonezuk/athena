@@ -22,7 +22,7 @@ class WIDGET_EXPORT BuildVersionDialog : public QDialog
 	Q_OBJECT
 	
 	public:
-		BuildVersionDialog(QDialog *dialog = 0,Qt::WindowFlags f = 0);
+		BuildVersionDialog(QDialog *dialog = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~BuildVersionDialog();
 	
 	protected:
@@ -38,7 +38,7 @@ class WIDGET_EXPORT AboutDialog : public BuildVersionDialog
 	Q_OBJECT
 	
 	public:
-		AboutDialog(QDialog *dialog = 0,Qt::WindowFlags f = 0);
+		AboutDialog(QDialog *dialog = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~AboutDialog();
 		
 	protected:

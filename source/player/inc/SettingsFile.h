@@ -19,7 +19,7 @@ class SettingsFile : public SettingsBase
 		Q_OBJECT
 
 	public:
-		SettingsFile(QWidget *parent,Qt::WindowFlags f = 0);
+		SettingsFile(QWidget *parent,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~SettingsFile();
 
 		virtual void onSelected(int index);

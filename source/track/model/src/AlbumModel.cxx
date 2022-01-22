@@ -141,7 +141,7 @@ void AlbumModel::enumerateSections(const QueryResult& results)
 {
 	QVector<QChar> alphabet;
 	QMap<QChar,int> indexMap;
-	QMap<QChar,QMap<QString,int> > sectionMap;
+	QMap<QChar,QMultiMap<QString,int> > sectionMap;
 	
 	alphabet = getIndexAlphabet();
 	buildIndexMap(alphabet,indexMap);
@@ -153,7 +153,7 @@ void AlbumModel::enumerateSections(const QueryResult& results)
 
 void AlbumModel::insertIntoAlbum(QVector<QueryRecord>& recordList)
 {
-	qSort(recordList.begin(),recordList.end(),AlbumModel::compareIdenticalAlbumNameLessThan);
+	std::sort(recordList.begin(),recordList.end(),AlbumModel::compareIdenticalAlbumNameLessThan);
 	
 	for(QVector<QueryRecord>::const_iterator ppI=recordList.begin();ppI!=recordList.end();ppI++)
 	{
@@ -188,14 +188,14 @@ void AlbumModel::addToModelForGivenMap(const QueryResult& results,const QMap<QSt
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumModel::buildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMap<QString,int> >& sectionMap)
+void AlbumModel::buildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar, QMultiMap<QString,int> >& sectionMap)
 {
 	m_albums.clear();
     m_index.clear();
 	
 	for(int i=0;i<alphabet.size();i++)
 	{
-        QMap<QChar,QMap<QString,int> >::const_iterator ppI;
+        QMap<QChar,QMultiMap<QString,int> >::const_iterator ppI;
 		
 		m_index.push_back(m_albums.size());
         ppI = sectionMap.find(alphabet.at(i));
@@ -280,7 +280,7 @@ QChar AlbumModel::getFirstCharacter(const QString& name,const QMap<QChar,int>& i
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumModel::mapResultsToAlphabetIndex(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMap<QString,int> >& sectionMap) const
+void AlbumModel::mapResultsToAlphabetIndex(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar, QMultiMap<QString,int> >& sectionMap) const
 {
 	int i;
 
@@ -290,15 +290,15 @@ void AlbumModel::mapResultsToAlphabetIndex(const QueryResult& results,const QMap
 	{
 		QString name = nameRecordAlbum(results.at(i)).trimmed();
 		QChar firstChar = getFirstCharacter(name,indexMap,alphabet);
-		QMap<QChar,QMap<QString,int> >::iterator ppJ = sectionMap.find(firstChar);
+		QMap<QChar, QMultiMap<QString,int> >::iterator ppJ = sectionMap.find(firstChar);
 		if(ppJ==sectionMap.end())
 		{
-			QMap<QString,int> newMap;
+			QMultiMap<QString,int> newMap;
 			sectionMap.insert(firstChar,newMap);
 			ppJ = sectionMap.find(firstChar);
 		}
-		QMap<QString,int>& rMap = ppJ.value();
-		rMap.insertMulti(name.toLower(),i);
+		QMultiMap<QString,int>& rMap = ppJ.value();
+		rMap.insert(name.toLower(),i);
 	}
 }
 

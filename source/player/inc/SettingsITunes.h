@@ -22,7 +22,7 @@ class SettingsITunes : public SettingsBase
 		Q_OBJECT
 		
 	public:
-		SettingsITunes(QWidget *parent = 0,Qt::WindowFlags f = 0);
+		SettingsITunes(QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~SettingsITunes();
 		
 		virtual void onSelected(int index);
