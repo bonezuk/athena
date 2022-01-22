@@ -9,7 +9,6 @@
 #include <QtCore/QMap>
 #include <QtCore/QHash>
 #include <QtCore/QVector>
-#include <QtCore/QMultiHash>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -32,14 +31,14 @@ class COMMON_EXPORT JaroWinklerDistance
 	
 		QString m_s2;
 		QString m_s2Lower;
-		QMap<int,QVector<QMultiHash<QChar,int> > > m_lookupIndexMap;
-		QMap<int,QVector<QMultiHash<QChar,int> > > m_lookupLowerIndexMap;
+		QMap<int,QVector<QHash<QChar,int> > > m_lookupIndexMap;
+		QMap<int,QVector<QHash<QChar,int> > > m_lookupLowerIndexMap;
 
 		virtual const QString& getComparisonString(bool caseSensitive) const;
-		virtual QMap<int,QVector<QMultiHash<QChar,int> > >& getLookupIndexMap(bool caseSensitive);
+		virtual QMap<int,QVector<QHash<QChar,int> > >& getLookupIndexMap(bool caseSensitive);
 
-		virtual void buildIndexMap(const QString& s2,QVector<QMultiHash<QChar,int> >& iMapList,int noEntries);
-		virtual const QVector<QMultiHash<QChar,int> >& getIndexMap(const QString& s1,bool caseSensitive);
+		virtual void buildIndexMap(const QString& s2,QVector<QHash<QChar,int> >& iMapList,int noEntries);
+		virtual const QVector<QHash<QChar,int> >& getIndexMap(const QString& s1,bool caseSensitive);
 		virtual int findMatches(const QString& s,int *match,bool caseSensitive);
 	
 		static int minLength(int s1Len,int s2Len);

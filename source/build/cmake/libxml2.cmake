@@ -12,7 +12,11 @@ else (${TIGER_LINUX_DISTRO})
 	set(LIBXML_LIBNAME "libxml2")
 
 	if (OMEGA_MSVC16)
-		set(LIBICONV_LIBNAME "iconv")
+		if (TIGER_DEBUG_BUILD)
+			set(LIBICONV_LIBNAME "libiconvD")
+		else (TIGER_DEBUG_BUILD)
+			set(LIBICONV_LIBNAME "libiconv")
+		endif (TIGER_DEBUG_BUILD)
 	endif (OMEGA_MSVC16)
 
 	if (OMEGA_WIN32)

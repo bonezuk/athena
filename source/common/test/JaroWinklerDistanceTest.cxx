@@ -12,8 +12,8 @@ class JaroWinklerDistanceTest : public JaroWinklerDistance
 {
 	public:
 		JaroWinklerDistanceTest(const QString& s2);
-		virtual void testBuildIndexMap(const QString& s2,QVector<QMultiHash<QChar,int> >& iMapList,int noEntries);
-		virtual const QVector<QMultiHash<QChar,int> >& testGetIndexMap(const QString& s1,bool caseSensitive);
+		virtual void testBuildIndexMap(const QString& s2,QVector<QHash<QChar,int> >& iMapList,int noEntries);
+		virtual const QVector<QHash<QChar,int> >& testGetIndexMap(const QString& s1,bool caseSensitive);
 		virtual int testFindMatches(const QString& s,int *match,bool caseSensitive);
 		
 		static int testMinLength(int s1Len,int s2Len);
@@ -36,7 +36,7 @@ JaroWinklerDistanceTest::JaroWinklerDistanceTest(const QString& s2) : JaroWinkle
 
 //-------------------------------------------------------------------------------------------
 
-void JaroWinklerDistanceTest::testBuildIndexMap(const QString& s2,QVector<QMultiHash<QChar,int> >& iMapList,int noEntries)
+void JaroWinklerDistanceTest::testBuildIndexMap(const QString& s2,QVector<QHash<QChar,int> >& iMapList,int noEntries)
 {
 	buildIndexMap(s2,iMapList,noEntries);
 }
@@ -50,7 +50,7 @@ int JaroWinklerDistanceTest::testFindMatches(const QString& s,int *match,bool ca
 
 //-------------------------------------------------------------------------------------------
 
-const QVector<QMultiHash<QChar,int> >& JaroWinklerDistanceTest::testGetIndexMap(const QString& s1,bool caseSensitive)
+const QVector<QHash<QChar,int> >& JaroWinklerDistanceTest::testGetIndexMap(const QString& s1,bool caseSensitive)
 {
 	return getIndexMap(s1,caseSensitive);
 }
@@ -686,7 +686,7 @@ TEST(JaroWinklerDistance,buildIndexMap)
 {
 	QString s2("teststrin");
 
-	QVector<QMultiHash<QChar,int> > mapList;
+	QVector<QHash<QChar,int> > mapList;
     JaroWinklerDistanceTest jaro(s2);
 	jaro.testBuildIndexMap(s2,mapList,7);
 	
@@ -695,11 +695,11 @@ TEST(JaroWinklerDistance,buildIndexMap)
 	QList<int> mPos;
 	
 	// 0 -     t-est (0,1,2,3)
-	const QMultiHash<QChar,int>& mapA = mapList.at(0);
+	const QHash<QChar,int>& mapA = mapList.at(0);
     EXPECT_TRUE(mapA.size()==4);
 	EXPECT_TRUE(mapA.count(QChar('t'))==2);
 	mPos = mapA.values(QChar('t'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==0);
 	EXPECT_TRUE(mPos.at(1)==3);
 	EXPECT_TRUE(mapA.count(QChar('e'))==1);
@@ -708,27 +708,27 @@ TEST(JaroWinklerDistance,buildIndexMap)
 	EXPECT_TRUE(mapA.value(QChar('s'))==2);
 	
 	// 1 -   t-e-sts (0,1,2,3,4)
-	const QMultiHash<QChar,int>& mapB = mapList.at(1);
+	const QHash<QChar,int>& mapB = mapList.at(1);
 	EXPECT_TRUE(mapB.size()==5);
 	EXPECT_TRUE(mapB.count(QChar('t'))==2);
 	mPos = mapB.values(QChar('t'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==0);
 	EXPECT_TRUE(mPos.at(1)==3);
 	EXPECT_TRUE(mapB.count(QChar('e'))==1);
 	EXPECT_TRUE(mapB.value(QChar('e'))==1);
 	EXPECT_TRUE(mapB.count(QChar('s'))==2);
 	mPos = mapB.values(QChar('s'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==2);
 	EXPECT_TRUE(mPos.at(1)==4);
 	
 	// 2 -  te-s-tst (0,1,2,3,4,5)
-	const QMultiHash<QChar,int>& mapC = mapList.at(2);
+	const QHash<QChar,int>& mapC = mapList.at(2);
 	EXPECT_TRUE(mapC.size()==6);
 	EXPECT_TRUE(mapC.count(QChar('t'))==3);
 	mPos = mapC.values(QChar('t'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==0);
 	EXPECT_TRUE(mPos.at(1)==3);
 	EXPECT_TRUE(mPos.at(2)==5);
@@ -736,16 +736,16 @@ TEST(JaroWinklerDistance,buildIndexMap)
 	EXPECT_TRUE(mapC.value(QChar('e'))==1);
 	EXPECT_TRUE(mapC.count(QChar('s'))==2);
 	mPos = mapC.values(QChar('s'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==2);
 	EXPECT_TRUE(mPos.at(1)==4);
 	
 	// 3 - tes-t-str (0,1,2,3,4,5,6)
-	const QMultiHash<QChar,int>& mapD = mapList.at(3);
+	const QHash<QChar,int>& mapD = mapList.at(3);
 	EXPECT_TRUE(mapD.size()==7);
 	EXPECT_TRUE(mapD.count(QChar('t'))==3);
 	mPos = mapD.values(QChar('t'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==0);
 	EXPECT_TRUE(mPos.at(1)==3);
 	EXPECT_TRUE(mPos.at(2)==5);
@@ -753,25 +753,25 @@ TEST(JaroWinklerDistance,buildIndexMap)
 	EXPECT_TRUE(mapD.value(QChar('e'))==1);
 	EXPECT_TRUE(mapD.count(QChar('s'))==2);
 	mPos = mapD.values(QChar('s'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==2);
 	EXPECT_TRUE(mPos.at(1)==4);
 	EXPECT_TRUE(mapD.count(QChar('r'))==1);
 	EXPECT_TRUE(mapD.value(QChar('r'))==6);
 	
 	// 4 - est-s-tri (1,2,3,4,5,6,7)
-	const QMultiHash<QChar,int>& mapE = mapList.at(4);
+	const QHash<QChar,int>& mapE = mapList.at(4);
 	EXPECT_TRUE(mapE.size()==7);
 	EXPECT_TRUE(mapE.count(QChar('t'))==2);
 	mPos = mapE.values(QChar('t'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==3);
 	EXPECT_TRUE(mPos.at(1)==5);
 	EXPECT_TRUE(mapE.count(QChar('e'))==1);
 	EXPECT_TRUE(mapE.value(QChar('e'))==1);
 	EXPECT_TRUE(mapE.count(QChar('s'))==2);
 	mPos = mapE.values(QChar('s'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==2);
 	EXPECT_TRUE(mPos.at(1)==4);
 	EXPECT_TRUE(mapE.count(QChar('r'))==1);
@@ -780,16 +780,16 @@ TEST(JaroWinklerDistance,buildIndexMap)
 	EXPECT_TRUE(mapE.value(QChar('i'))==7);
 	
 	// 5 - sts-t-rin (2,3,4,5,6,7,8)
-	const QMultiHash<QChar,int>& mapF = mapList.at(5);
+	const QHash<QChar,int>& mapF = mapList.at(5);
 	EXPECT_TRUE(mapF.size()==7);
 	EXPECT_TRUE(mapF.count(QChar('t'))==2);
 	mPos = mapF.values(QChar('t'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==3);
 	EXPECT_TRUE(mPos.at(1)==5);
 	EXPECT_TRUE(mapF.count(QChar('s'))==2);
 	mPos = mapF.values(QChar('s'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==2);
 	EXPECT_TRUE(mPos.at(1)==4);
 	EXPECT_TRUE(mapF.count(QChar('r'))==1);
@@ -800,11 +800,11 @@ TEST(JaroWinklerDistance,buildIndexMap)
 	EXPECT_TRUE(mapF.value(QChar('n'))==8);
 	
 	// 6 - tst-r-in (3,4,5,6,7,8,--)
-	const QMultiHash<QChar,int>& mapG = mapList.at(6);
+	const QHash<QChar,int>& mapG = mapList.at(6);
 	EXPECT_TRUE(mapG.size()==6);
 	EXPECT_TRUE(mapG.count(QChar('t'))==2);
 	mPos = mapG.values(QChar('t'));
-	std::sort(mPos.begin(),mPos.end());
+	qSort(mPos.begin(),mPos.end());
 	EXPECT_TRUE(mPos.at(0)==3);
 	EXPECT_TRUE(mPos.at(1)==5);
 	EXPECT_TRUE(mapG.count(QChar('s'))==1);
@@ -824,9 +824,9 @@ class JaroWinklerDistanceGetIndexMapTest : public JaroWinklerDistanceTest
 	public:
         JaroWinklerDistanceGetIndexMapTest(const QString& s2);
 		MOCK_CONST_METHOD1(getComparisonString,const QString& (bool caseSensitive));
-		MOCK_METHOD1(getLookupIndexMap,QMap<int,QVector<QMultiHash<QChar,int> > >& (bool caseSensitive));
+		MOCK_METHOD1(getLookupIndexMap,QMap<int,QVector<QHash<QChar,int> > >& (bool caseSensitive));
 	protected:
-		virtual void buildIndexMap(const QString& s2,QVector<QMultiHash<QChar,int> >& iMapList,int noEntries);
+		virtual void buildIndexMap(const QString& s2,QVector<QHash<QChar,int> >& iMapList,int noEntries);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -836,9 +836,9 @@ JaroWinklerDistanceGetIndexMapTest::JaroWinklerDistanceGetIndexMapTest(const QSt
 
 //-------------------------------------------------------------------------------------------
 
-void JaroWinklerDistanceGetIndexMapTest::buildIndexMap(const QString& s2,QVector<QMultiHash<QChar,int> >& iMapList,int noEntries)
+void JaroWinklerDistanceGetIndexMapTest::buildIndexMap(const QString& s2,QVector<QHash<QChar,int> >& iMapList,int noEntries)
 {
-	QMultiHash<QChar,int> map;
+	QHash<QChar,int> map;
     map.insert(QChar('a'),1);
 	iMapList.append(map);
 }
@@ -849,13 +849,13 @@ TEST(JaroWinklerDistance,getIndexMapGivenIndexOfLengthNotBuiltCaseSensitive)
 {
 	QString s2("String"),s1("abc");
 	
-	QMap<int,QVector<QMultiHash<QChar,int> > > lookupMap;
+	QMap<int,QVector<QHash<QChar,int> > > lookupMap;
 	
     JaroWinklerDistanceGetIndexMapTest jaro(s2);
 	EXPECT_CALL(jaro,getComparisonString(true)).Times(1).WillOnce(ReturnRef(s2));
 	EXPECT_CALL(jaro,getLookupIndexMap(true)).WillRepeatedly(ReturnRef(lookupMap));
 	
-	const QVector<QMultiHash<QChar,int> >& indexMap = jaro.testGetIndexMap(s1,true);
+	const QVector<QHash<QChar,int> >& indexMap = jaro.testGetIndexMap(s1,true);
 	EXPECT_TRUE(indexMap.size()==1);
 	EXPECT_TRUE(indexMap.at(0).size()==1);
 	EXPECT_TRUE(indexMap.at(0).value(QChar('a'))==1);
@@ -872,17 +872,17 @@ TEST(JaroWinklerDistance,getIndexMapGivenIndexOfLengthBuiltCaseSensitive)
 {
 	QString s2("String"),s1("abc");
 	
-	QMultiHash<QChar,int> dict;
+	QHash<QChar,int> dict;
 	dict.insert(QChar('b'),2);
-	QVector<QMultiHash<QChar,int> > dictList;
+	QVector<QHash<QChar,int> > dictList;
 	dictList.append(dict);
-	QMap<int,QVector<QMultiHash<QChar,int> > > lookupMap;
+	QMap<int,QVector<QHash<QChar,int> > > lookupMap;
 	lookupMap.insert(3,dictList);
 	
     JaroWinklerDistanceGetIndexMapTest jaro(s2);
 	EXPECT_CALL(jaro,getLookupIndexMap(true)).WillRepeatedly(ReturnRef(lookupMap));
 	
-	const QVector<QMultiHash<QChar,int> >& indexMap = jaro.testGetIndexMap(s1,true);
+	const QVector<QHash<QChar,int> >& indexMap = jaro.testGetIndexMap(s1,true);
 	EXPECT_TRUE(indexMap.size()==1);
 	EXPECT_TRUE(indexMap.at(0).size()==1);
 	EXPECT_TRUE(indexMap.at(0).value(QChar('b'))==2);
@@ -894,13 +894,13 @@ TEST(JaroWinklerDistance,getIndexMapGivenIndexOfLengthNotBuiltCaseInsensitive)
 {
 	QString s2("string"),s1("abc");
 	
-	QMap<int,QVector<QMultiHash<QChar,int> > > lookupMap;
+	QMap<int,QVector<QHash<QChar,int> > > lookupMap;
 	
     JaroWinklerDistanceGetIndexMapTest jaro(s2);
 	EXPECT_CALL(jaro,getComparisonString(false)).Times(1).WillOnce(ReturnRef(s2));
 	EXPECT_CALL(jaro,getLookupIndexMap(false)).WillRepeatedly(ReturnRef(lookupMap));
 	
-	const QVector<QMultiHash<QChar,int> >& indexMap = jaro.testGetIndexMap(s1,false);
+	const QVector<QHash<QChar,int> >& indexMap = jaro.testGetIndexMap(s1,false);
 	EXPECT_TRUE(indexMap.size()==1);
 	EXPECT_TRUE(indexMap.at(0).size()==1);
 	EXPECT_TRUE(indexMap.at(0).value(QChar('a'))==1);
@@ -917,17 +917,17 @@ TEST(JaroWinklerDistance,getIndexMapGivenIndexOfLengthBuiltCaseInsensitive)
 {
 	QString s2("String"),s1("abc");
 	
-	QMultiHash<QChar,int> dict;
+	QHash<QChar,int> dict;
 	dict.insert(QChar('b'),2);
-	QVector<QMultiHash<QChar,int> > dictList;
+	QVector<QHash<QChar,int> > dictList;
 	dictList.append(dict);
-	QMap<int,QVector<QMultiHash<QChar,int> > > lookupMap;
+	QMap<int,QVector<QHash<QChar,int> > > lookupMap;
 	lookupMap.insert(3,dictList);
 	
     JaroWinklerDistanceGetIndexMapTest jaro(s2);
 	EXPECT_CALL(jaro,getLookupIndexMap(false)).WillRepeatedly(ReturnRef(lookupMap));
 	
-	const QVector<QMultiHash<QChar,int> >& indexMap = jaro.testGetIndexMap(s1,false);
+	const QVector<QHash<QChar,int> >& indexMap = jaro.testGetIndexMap(s1,false);
 	EXPECT_TRUE(indexMap.size()==1);
 	EXPECT_TRUE(indexMap.at(0).size()==1);
 	EXPECT_TRUE(indexMap.at(0).value(QChar('b'))==2);
