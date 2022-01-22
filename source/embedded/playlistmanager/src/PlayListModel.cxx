@@ -1,4 +1,5 @@
 #include "embedded/playlistmanager/inc/PlayListModel.h"
+#include "embedded/omegapicommon/inc/OmegaPiDBusServiceNames.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -138,11 +139,31 @@ void PlayListModel::playItemAtIndex(int index)
 	{
 		QString fileName = m_playList.at(index).first->getFilename();
 		common::Log::g_Log.print("PlayListModel::playItemAtIndex - %d '%s'\n", index, fileName.toUtf8().constData());
-
-		QDBusMessage reply;
-		reply = m_pAudioInterface->call(QLatin1String("playFile"), fileName);
-		fprintf(stderr, "reply - %s, %s\n", reply.errorName().toUtf8().constData(), reply.errorMessage().toUtf8().constData());
-		fprintf(stderr, "sysbus - %s\n",m_pAudioInterface->connection().lastError().message().toUtf8().constData());
+#if defined(OMEGA_LINUX)
+		QDBusConnection bus = QDBusConnection::systemBus();
+#else
+		QDBusConnection bus = QDBusConnection::sessionBus();
+#endif
+		if(bus.isConnected())
+		{
+			QDBusInterface audioDaemonIFace(OMEGAAUDIODAEMON_SERVICE_NAME, "/", OMEGAAUDIODAEMON_DBUS_IFACE_NAME, bus);
+			if(audioDaemonIFace.isValid())
+			{
+				QDBusMessage reply;
+				reply = m_pAudioInterface->call(QLatin1String("playFile"), fileName);
+				fprintf(stderr, "reply - %s, %s\n", reply.errorName().toUtf8().constData(), reply.errorMessage().toUtf8().constData());
+				fprintf(stderr, "sysbus - %s\n",m_pAudioInterface->connection().lastError().message().toUtf8().constData());
+			}
+			else
+			{
+				common::Log::g_Log << "Failed to connect to Omega Audio Daemon." << common::c_endl;
+				common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
+			}
+		}
+		else
+		{
+			common::Log::g_Log << "Failed to connect to session D-Bus" << common::c_endl;
+		}
 	}
 	else
 	{

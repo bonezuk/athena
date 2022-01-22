@@ -19,10 +19,10 @@ PLAudioDBusAdaptor::~PLAudioDBusAdaptor()
 void PLAudioDBusAdaptor::playbackTime(quint64 tS)
 {
 	common::TimeStamp timeStamp(tS);
-	QObject *plTime = m_pModel->qmlEngine()->rootContext()->findChild<QObject *>("playbackTimeContainer");
-	if(plTime != 0)
+	QQmlContext *root = m_pModel->qmlEngine()->rootContext();
+	if(root != 0)
 	{
-		plTime->setProperty("playbackTime", timeStamp.secondsTotal());
+		root->setProperty("playbackTime", timeStamp.secondsTotal());
 	}
 }
 

@@ -45,7 +45,7 @@ class OmegaAudioDaemon : public QCoreApplication
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		
-		virtual QSharedPointer<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface();
+		virtual QSharedPointer<QDBusInterface> getPLManagerInterface();
 		
 	private slots:
 		void onInit();
@@ -67,7 +67,7 @@ class OmegaAudioDaemon : public QCoreApplication
 class OmegaAudioDBusAdaptor : public QDBusAbstractAdaptor
 {
 	Q_OBJECT
-	Q_CLASSINFO("Audio Engine interface", OMEGAAUDIODAEMON_DBUS_IFACE_NAME)
+	Q_CLASSINFO("D-Bus Interface", OMEGAAUDIODAEMON_DBUS_IFACE_NAME)
 	
 	public:
 		OmegaAudioDBusAdaptor(QObject *obj);

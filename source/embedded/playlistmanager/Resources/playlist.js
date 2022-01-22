@@ -16,10 +16,10 @@ function getPlayTimeDigitImageName(digitType, timeInSeconds)
 	let imageName = "";
 	let tS = -1;
 	
-	if(digitType == PlayTimeHourUpperDigit || digitType == PlayTimeHourLowerDigit)
+    if(digitType === PlayTimeHourUpperDigit || digitType === PlayTimeHourLowerDigit)
 	{
 		tS = parseInt(timeInSeconds / (60 * 60));
-		if(digitType == PlayTimeHourLowerDigit)
+        if(digitType === PlayTimeHourLowerDigit)
 		{
 			tS = tS % 10;
 		}
@@ -28,10 +28,10 @@ function getPlayTimeDigitImageName(digitType, timeInSeconds)
 			tS = parseInt(tS / 10) % 100;
 		}
 	}
-	else if(digitType == PlayTimeMinuteUpperDigit || digitType == PlayTimeMinuteLowerDigit)
+    else if(digitType === PlayTimeMinuteUpperDigit || digitType === PlayTimeMinuteLowerDigit)
 	{
 		tS = parseInt(timeInSeconds / 60) % 60;
-		if(digitType == PlayTimeMinuteLowerDigit)
+        if(digitType === PlayTimeMinuteLowerDigit)
 		{
 			tS = tS % 10;
 		}
@@ -40,10 +40,10 @@ function getPlayTimeDigitImageName(digitType, timeInSeconds)
 			tS = parseInt(tS / 10);
 		}	
 	}
-	else if(digitType == PlayTimeSecondUpperDigit || digitType == PlayTimeSecondLowerDigit)
+    else if(digitType === PlayTimeSecondUpperDigit || digitType === PlayTimeSecondLowerDigit)
 	{
 		tS = parseInt(timeInSeconds % 60);
-		if(digitType == PlayTimeSecondLowerDigit)
+        if(digitType === PlayTimeSecondLowerDigit)
 		{
 			tS = tS % 10;
 		}
@@ -57,6 +57,7 @@ function getPlayTimeDigitImageName(digitType, timeInSeconds)
 	{
 		imageName = "images/no" + tS + "@2x.png";
 	}
+    console.log("imageName(", digitType ,") - ", imageName)
 	return imageName;
 }
 

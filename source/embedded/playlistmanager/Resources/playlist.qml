@@ -10,6 +10,8 @@ ApplicationWindow {
     visible: true
     title: "Black Omega Playlist Manager"
 
+    property int playbackTime: 0
+
     toolBar: ToolBar {
         id: toolBarId
 
@@ -53,7 +55,7 @@ ApplicationWindow {
 
         Rectangle {
         	id: playbackTimeContainer
-        	property int playbackTime: 0
+            objectName: "playbackTimeContainer"
         
             color: "transparent"
             width: digitLayoutId.width
@@ -66,28 +68,34 @@ ApplicationWindow {
                 id: digitLayoutId
                 spacing: 1
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName(PlayTimeHourUpperDigit, parent.playbackTime)
+                    source: function()
+                    {
+                        var tS = 1;
+                        var imageName = "images/no" + tS + "@2x.png";
+                        console.log("imageName - ", imageName, " ;", window.playbackTime);
+                        return imageName;
+                    }
                 }
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName(PlayTimeHourLowerDigit, parent.playbackTime)
-                }
-                Image {
-                    source: "images/colon@2x.png"
-                }
-                Image {
-                    source: Playlist.getPlayTimeDigitImageName(PlayTimeMinuteUpperDigit, parent.playbackTime)
-                }
-                Image {
-                    source: Playlist.getPlayTimeDigitImageName(PlayTimeMinuteLowerDigit, parent.playbackTime)
+                    source: Playlist.getPlayTimeDigitImageName("PlayTimeHourLowerDigit", window.playbackTime)
                 }
                 Image {
                     source: "images/colon@2x.png"
                 }
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName(PlayTimeSecondUpperDigit, parent.playbackTime)
+                    source: Playlist.getPlayTimeDigitImageName("PlayTimeMinuteUpperDigit", window.playbackTime)
                 }
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName(PlayTimeSecondLowerDigit, parent.playbackTime)
+                    source: Playlist.getPlayTimeDigitImageName("PlayTimeMinuteLowerDigit", window.playbackTime)
+                }
+                Image {
+                    source: "images/colon@2x.png"
+                }
+                Image {
+                    source: Playlist.getPlayTimeDigitImageName("PlayTimeSecondUpperDigit", window.playbackTime)
+                }
+                Image {
+                    source: Playlist.getPlayTimeDigitImageName("PlayTimeSecondLowerDigit", window.playbackTime)
                 }
             }
         }

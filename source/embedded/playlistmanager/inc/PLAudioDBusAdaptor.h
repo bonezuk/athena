@@ -16,7 +16,7 @@ namespace orcus
 class PLAudioDBusAdaptor : public QDBusAbstractAdaptor
 {
 	Q_OBJECT
-	Q_CLASSINFO("Playlist Audio callback interface", OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME)
+	Q_CLASSINFO("D-Bus Interface", OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME)
 	
 	public:
 		PLAudioDBusAdaptor(PlayListModel *pModel, QObject *parent);

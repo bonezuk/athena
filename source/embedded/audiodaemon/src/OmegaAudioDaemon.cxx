@@ -187,6 +187,16 @@ QSharedPointer<QDBusInterface> OmegaAudioDaemon::getPLManagerInterface()
 			{
 				m_pPLManagerInterface = pInterface;
 			}
+			else
+			{
+				common::Log::g_Log << "Failed to connect to Omega Audio Daemon." << common::c_endl;
+				common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
+			}
+		}
+		else
+		{
+			common::Log::g_Log << "Failed to connect to session D-Bus." << common::c_endl;
+			common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
 		}
 	}
 	return m_pPLManagerInterface;
