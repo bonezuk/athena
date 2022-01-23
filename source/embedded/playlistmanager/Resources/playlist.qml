@@ -12,6 +12,13 @@ ApplicationWindow {
 
     property int playbackTime: 0
 
+    onPlaybackTimeChanged: console.log("playback time = ", playbackTime)
+
+    Timer {
+        interval: 1000; running: true; repeat: true
+        onTriggered: console.log("timer - pt = ", playbackTime)
+    }
+
     toolBar: ToolBar {
         id: toolBarId
 
@@ -58,8 +65,8 @@ ApplicationWindow {
             objectName: "playbackTimeContainer"
         
             color: "transparent"
-            width: digitLayoutId.width
-            height: digitLayoutId.height
+            implicitWidth: digitLayoutId.width
+            implicitHeight: digitLayoutId.height
             anchors.right: parent.right
             anchors.rightMargin: 5
             anchors.verticalCenter: parent.verticalCenter
@@ -68,34 +75,34 @@ ApplicationWindow {
                 id: digitLayoutId
                 spacing: 1
                 Image {
-                    source: function()
-                    {
-                        var tS = 1;
-                        var imageName = "images/no" + tS + "@2x.png";
-                        console.log("imageName - ", imageName, " ;", window.playbackTime);
-                        return imageName;
-                    }
+                    id: digitHourUpper
+                    source: "no0@2x.png"
                 }
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName("PlayTimeHourLowerDigit", window.playbackTime)
+                    id: digitHourLower
+                    source: "no0@2x.png"
                 }
                 Image {
                     source: "images/colon@2x.png"
                 }
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName("PlayTimeMinuteUpperDigit", window.playbackTime)
+                    id: digitMinuteUpper
+                    source: "no0@2x.png"
                 }
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName("PlayTimeMinuteLowerDigit", window.playbackTime)
+                    id: digitMinuteLower
+                    source: "no0@2x.png"
                 }
                 Image {
                     source: "images/colon@2x.png"
                 }
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName("PlayTimeSecondUpperDigit", window.playbackTime)
+                    id: digitSecondUpper
+                    source: "no0@2x.png"
                 }
                 Image {
-                    source: Playlist.getPlayTimeDigitImageName("PlayTimeSecondLowerDigit", window.playbackTime)
+                    id: digitSecondLower
+                    source: "no0@2x.png"
                 }
             }
         }
@@ -116,8 +123,7 @@ ApplicationWindow {
         delegate: Rectangle {
             width: parent.width; height: 30
         	Text {
-   				id: itexItem
-				anchors.left: imageItem.right
+                anchors.left: parent.left
 				anchors.leftMargin: 20
 				anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 20
