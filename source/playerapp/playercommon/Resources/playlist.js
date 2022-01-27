@@ -57,7 +57,6 @@ function getPlayTimeDigitImageName(digitType, timeInSeconds)
 	{
 		imageName = "images/no" + tS + "@2x.png";
 	}
-    console.log("imageName(", digitType ,") - ", imageName)
 	return imageName;
 }
 

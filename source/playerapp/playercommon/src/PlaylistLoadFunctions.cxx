@@ -10,11 +10,10 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-QString mountPointFromArguments()
+QString mountPointFromArguments(const QStringList& args)
 {
 	int idx, state;
 	QString name;
-	QStringList args = QCoreApplication::arguments();
 	
 	for(idx = 0, state = 0; idx < args.size() && name.isEmpty(); idx++)
 	{
@@ -32,11 +31,10 @@ QString mountPointFromArguments()
 
 //-------------------------------------------------------------------------------------------
 
-QString playlistFromArguments()
+QString playlistFromArguments(const QStringList& args)
 {
 	int idx, state;
 	QString name;
-	QStringList args = QCoreApplication::arguments();
 	
 	for(idx = 0, state = 0; idx < args.size() && name.isEmpty(); idx++)
 	{
@@ -116,14 +114,14 @@ void playlistSubtrackToDBList(QVector<QPair<track::info::InfoSPtr, tint> >& play
 
 //-------------------------------------------------------------------------------------------
 
-bool loadPlaylistFromDBOrArguments(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
+bool loadPlaylistFromDBOrArguments(const QStringList& args, QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {
 	QString plFilename;
 	QVector<track::info::InfoSPtr> playList;
 	track::db::TrackDB *db = track::db::TrackDB::instance();
 	bool res = false;
 	
-	plFilename = playlistFromArguments();
+	plFilename = playlistFromArguments(args);
 	if(!plFilename.isEmpty())
 	{
 		if(track::db::PlaylistAbstractIO::isSupported(plFilename))
@@ -132,8 +130,10 @@ bool loadPlaylistFromDBOrArguments(QVector<QPair<track::db::DBInfoSPtr,tint> >& 
 	        if(pLoader.data()!=0)
 			{
 				CLIProgress progressBar;
-				
+
+#if defined(OMEGA_LINUX)
 				pLoader->useMountedDrives();
+#endif
 				if(pLoader->load(plFilename, playList, &progressBar))
 				{
 					playlistToDBList(playList, playListDB);

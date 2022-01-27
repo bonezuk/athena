@@ -19,7 +19,7 @@ ApplicationWindow {
             color: "transparent"
             width: playButtonId.width * 2
             height: playButtonId.height
-            anchors.left: toolBarId.left
+            anchors.left: parent.left
             anchors.leftMargin: 1
             anchors.verticalCenter: parent.verticalCenter
 
@@ -67,33 +67,33 @@ ApplicationWindow {
                 spacing: 1
                 Image {
                     id: digitHourUpper
-                    source: "no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeHourUpperDigit, playbackState.playbackTimeInSeconds)
                 }
                 Image {
                     id: digitHourLower
-                    source: "no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeHourLowerDigit, playbackState.playbackTimeInSeconds)
                 }
                 Image {
                     source: "images/colon@2x.png"
                 }
                 Image {
                     id: digitMinuteUpper
-                    source: "no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeMinuteUpperDigit, playbackState.playbackTimeInSeconds)
                 }
                 Image {
                     id: digitMinuteLower
-                    source: "no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeMinuteLowerDigit, playbackState.playbackTimeInSeconds)
                 }
                 Image {
                     source: "images/colon@2x.png"
                 }
                 Image {
                     id: digitSecondUpper
-                    source: "no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeSecondUpperDigit, playbackState.playbackTimeInSeconds)
                 }
                 Image {
                     id: digitSecondLower
-                    source: "no0@2x.png"
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeSecondLowerDigit, playbackState.playbackTimeInSeconds)
                 }
             }
         }

@@ -64,6 +64,8 @@ int runPlayerQMLApp(PlaylistManagerApp *pApp, QVector<QPair<track::db::DBInfoSPt
 {
 	int res = -1;
 	
+	pApp->initPlaylistManager(playListDB);
+	
 	qmlRegisterType<PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
 	qmlRegisterType<PlaybackState>("uk.co.blackomega", 1, 0, "PlaybackState");
 	
@@ -103,8 +105,22 @@ int runPlayerQMLApp(PlaylistManagerApp *pApp, QVector<QPair<track::db::DBInfoSPt
 
 //-------------------------------------------------------------------------------------------
 
+QStringList listFromArguements(int argc, char **argv)
+{
+	QStringList args;
+	
+	for(int i = 0; i < argc; i++)
+	{
+		args.append(QString::fromUtf8(argv[i]));
+	}
+	return args;
+}
+
+//-------------------------------------------------------------------------------------------
+
 int main(int argc, char **argv)
 {
+	QStringList args = listFromArguements(argc, argv);
 	int res = -1;
 	
 	setupEnviroment(argv[0]);
@@ -118,7 +134,7 @@ int main(int argc, char **argv)
 		QString mountPoint;
 		QVector<QPair<track::db::DBInfoSPtr,tint> > playListDB;
 		
-		mountPoint = mountPointFromArguments();
+		mountPoint = mountPointFromArguments(args);
 		if(!mountPoint.isEmpty())
 		{
 			if(trackDB->mountPoints()->addMountPoint(mountPoint))
@@ -130,7 +146,7 @@ int main(int argc, char **argv)
 				common::Log::g_Log << "Failed to define mount point at '" << mountPoint << "'" << common::c_endl;
 			}
 		}
-		else if(loadPlaylistFromDBOrArguments(playListDB))
+		else if(loadPlaylistFromDBOrArguments(args, playListDB))
 		{
 			res = runPlayerQMLApp(&app, playListDB);
     	}
