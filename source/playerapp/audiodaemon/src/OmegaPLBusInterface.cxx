@@ -34,6 +34,17 @@ void OmegaPLBusInterface::playbackTime(quint64 tS)
 
 //-------------------------------------------------------------------------------------------
 
+void OmegaPLBusInterface::onAudioStart(const QString& name)
+{
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call("onAudioStart", name);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 QSharedPointer<QDBusInterface> OmegaPLBusInterface::getPLManagerInterface()
 {
 	if(m_pPLManagerInterface.isNull() || !m_pPLManagerInterface->isValid())

@@ -8,8 +8,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
-#include "track/db/inc/DBInfo.h"
-#include "track/db/inc/TrackDB.h"
+#include "playerapp/playercommon/inc/PlaybackState.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 
 //-------------------------------------------------------------------------------------------
@@ -20,8 +19,7 @@ namespace orcus
 class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 {
 	Q_OBJECT
-	Q_ENUMS(TrackRoles)
-	
+
 	public:
 		enum TrackRoles
 		{
@@ -38,6 +36,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 			CopyrightRole,
 			EncoderRole
 		};
+		Q_ENUM(TrackRoles)
 		
 	public:
 		PlayListModel();
@@ -49,10 +48,13 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		virtual QHash<int,QByteArray> roleNames() const;
 		
 		Q_INVOKABLE void playItemAtIndex(int index);
-	
+		
+		PlaybackState *playbackState();
+		
 	private:
 		QVector<QPair<track::db::DBInfoSPtr,tint> > m_playList;
 		OmegaAudioInterface *m_pAudioInterface;
+		PlaybackState *m_pPlaybackState;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 };

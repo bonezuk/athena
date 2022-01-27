@@ -19,6 +19,7 @@ class PLAYERCOMMON_EXPORT OmegaPlaylistInterface
 		OmegaPlaylistInterface();
 		
 		virtual void playbackTime(quint64 tS) = 0;
+		virtual void onAudioStart(const QString& name) = 0;
 };
 
 //-------------------------------------------------------------------------------------------

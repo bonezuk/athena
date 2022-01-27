@@ -90,6 +90,7 @@ void OmegaAudioDaemon::playFile(const QString& fileName)
 void OmegaAudioDaemon::onAudioStart(const QString& name)
 {
 	common::Log::g_Log << "onAudioStart - " << name << common::c_endl;
+	m_pPLInterface->onAudioStart(name);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -118,7 +119,6 @@ void OmegaAudioDaemon::onAudioPause()
 void OmegaAudioDaemon::onAudioTime(quint64 t)
 {
 	common::TimeStamp tS(t);
-	common::Log::g_Log.print("onAudioTime - %.2f\n", static_cast<tfloat64>(tS));
 	m_pPLInterface->playbackTime(t);
 }
 

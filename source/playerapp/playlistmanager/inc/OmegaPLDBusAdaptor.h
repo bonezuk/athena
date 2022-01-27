@@ -24,6 +24,7 @@ class OmegaPLDBusAdaptor : public QDBusAbstractAdaptor
 		
 	public slots:
 		Q_NOREPLY void playbackTime(quint64 tS);
+		Q_NOREPLY void onAudioStart(const QString& name);
 		
 	private:
 		OmegaPlaylistInterface *m_pPLInterface;

@@ -20,13 +20,23 @@ PlaylistManagerApp::PlaylistManagerApp(int argc, char **argv) : QGuiApplication(
 //-------------------------------------------------------------------------------------------
 
 PlaylistManagerApp::~PlaylistManagerApp()
-{}
+{
+	if(m_pModel != 0)
+	{
+		delete m_pModel;
+		m_pModel = 0;
+	}
+	if(m_pAudioInterface != 0)
+	{
+		delete m_pAudioInterface;
+		m_pAudioInterface = 0;
+	}
+}
 
 //-------------------------------------------------------------------------------------------
 
 void PlaylistManagerApp::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {	
-	m_pState = new PlaybackState(this);
 	m_pAudioInterface = new OmegaAudioBusInterface(this);
 	m_pModel = new PlayListModel(playListDB, m_pAudioInterface, this);	
 }
@@ -35,14 +45,14 @@ void PlaylistManagerApp::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr
 
 void PlaylistManagerApp::playbackTime(quint64 tS)
 {
-	m_pState->setPlaybackTime(tS);
+	m_pModel->playbackState()->setPlaybackTime(tS);
 }
 
 //-------------------------------------------------------------------------------------------
 
 PlaybackState *PlaylistManagerApp::getPlaybackState()
 {
-	return m_pState;
+	return m_pModel->playbackState();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -50,6 +60,13 @@ PlaybackState *PlaylistManagerApp::getPlaybackState()
 PlayListModel *PlaylistManagerApp::getPlayListModel()
 {
 	return m_pModel;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaylistManagerApp::onAudioStart(const QString& name)
+{
+	m_pModel->playbackState()->onAudioStart(name);
 }
 
 //-------------------------------------------------------------------------------------------

@@ -29,7 +29,7 @@ ApplicationWindow {
                 anchors.verticalCenter: playControlContainer.verticalCenter
                 anchors.horizontalCenter: playControlContainer.horizontalCenter
                 fillMode: Image.PreserveAspectFit
-                source: "images/pc_play_normal.png"
+                source: (playbackState.playbackState === PlaybackState.Play) ? "images/pc_play_normal.png" : "images/pc_pause_normal.png";
             }
             Image {
                 id: backButtonId
@@ -112,6 +112,7 @@ ApplicationWindow {
         model: playListModel
 
         delegate: Rectangle {
+            color: (index === playbackState.playbackIndex) ? "green" : "white"
             width: parent.width; height: 30
         	Text {
                 anchors.left: parent.left

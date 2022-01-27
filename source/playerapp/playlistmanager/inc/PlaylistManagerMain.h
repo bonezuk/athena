@@ -34,6 +34,7 @@ class PlaylistManagerApp : public QGuiApplication, public OmegaPlaylistInterface
 		virtual PlayListModel *getPlayListModel();
 		
 		virtual void playbackTime(quint64 tS);
+		virtual void onAudioStart(const QString& name);
 		
 	private:
 		PlaybackState *m_pState;
