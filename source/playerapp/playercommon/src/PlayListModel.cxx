@@ -5,7 +5,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-PlayListModel::PlayListModel() : QAbstractListModel(0),
+PlayListModel::PlayListModel(QObject *parent) : QAbstractListModel(parent),
 	m_playList(),
 	m_pAudioInterface(),
 	m_pPlaybackState(0)
@@ -18,7 +18,7 @@ PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playLi
 	m_pAudioInterface(pAudioInterface),
 	m_pPlaybackState(0)
 {
-	m_pPlaybackState = new PlaybackState(this);
+	m_pPlaybackState = new PlaybackStateController(pAudioInterface, this);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ void PlayListModel::printError(const char *strR, const char *strE) const
 
 //-------------------------------------------------------------------------------------------
 
-PlaybackState *PlayListModel::playbackState()
+PlaybackStateController *PlayListModel::playbackState()
 {
 	return m_pPlaybackState;
 }
@@ -152,7 +152,7 @@ void PlayListModel::playItemAtIndex(int index)
 		QString fileName = m_playList.at(index).first->getFilename();
 		common::Log::g_Log.print("PlayListModel::playItemAtIndex - %d '%s'\n", index, fileName.toUtf8().constData());
 		m_pAudioInterface->playFile(fileName);
-		m_pPlaybackState->setPlaybackItem(index, m_playList.at(index));
+		m_pPlaybackState->setItem(index, m_playList.at(index));
 	}
 	else
 	{

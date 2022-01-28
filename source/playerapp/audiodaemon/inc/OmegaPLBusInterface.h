@@ -27,7 +27,15 @@ class OmegaPLBusInterface : public QObject, public OmegaPlaylistInterface
 		
 		virtual void playbackTime(quint64 tS);
 		virtual void onAudioStart(const QString& name);
-		
+
+		virtual void onAudioPlay();
+		virtual void onAudioPause();
+		virtual void onAudioStop();
+		virtual void onAudioBuffer(tfloat32 percent);
+		virtual void onAudioReadyForNext();
+		virtual void onAudioNoNext();
+		virtual void onAudioCrossfade();
+
 	private:
 		QSharedPointer<QDBusInterface> m_pPLManagerInterface;
 		

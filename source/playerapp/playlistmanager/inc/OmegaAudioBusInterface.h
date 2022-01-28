@@ -24,6 +24,8 @@ class OmegaAudioBusInterface : public QObject, public OmegaAudioInterface
 		virtual ~OmegaAudioBusInterface();
 		
 		virtual void playFile(const QString& fileName);
+		virtual void play();
+		virtual void pause();
 		
 	private:
 		QSharedPointer<QDBusInterface> m_pAudioInterface;

@@ -8,7 +8,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
-#include "playerapp/playercommon/inc/PlaybackState.h"
+#include "playerapp/playercommon/inc/PlaybackStateController.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 
 //-------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		Q_ENUM(TrackRoles)
 		
 	public:
-		PlayListModel();
+		PlayListModel(QObject *parent = 0);
 		PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, OmegaAudioInterface *pAudioInterface, QObject *parent = 0);
 		virtual ~PlayListModel();
 		
@@ -49,12 +49,12 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		
 		Q_INVOKABLE void playItemAtIndex(int index);
 		
-		PlaybackState *playbackState();
+		PlaybackStateController *playbackState();
 		
 	private:
 		QVector<QPair<track::db::DBInfoSPtr,tint> > m_playList;
 		OmegaAudioInterface *m_pAudioInterface;
-		PlaybackState *m_pPlaybackState;
+		PlaybackStateController *m_pPlaybackState;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 };

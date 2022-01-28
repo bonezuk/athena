@@ -87,6 +87,22 @@ void OmegaAudioDaemon::playFile(const QString& fileName)
 
 //-------------------------------------------------------------------------------------------
 
+void OmegaAudioDaemon::play()
+{
+	common::Log::g_Log << "play" << common::c_endl;
+	m_audio->play();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaAudioDaemon::pause()
+{
+	common::Log::g_Log << "pause" << common::c_endl;
+	m_audio->pause();
+}
+
+//-------------------------------------------------------------------------------------------
+
 void OmegaAudioDaemon::onAudioStart(const QString& name)
 {
 	common::Log::g_Log << "onAudioStart - " << name << common::c_endl;
@@ -98,6 +114,7 @@ void OmegaAudioDaemon::onAudioStart(const QString& name)
 void OmegaAudioDaemon::onAudioPlay()
 {
 	common::Log::g_Log << "onAudioPlay" << common::c_endl;
+	m_pPLInterface->onAudioPlay();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -105,6 +122,7 @@ void OmegaAudioDaemon::onAudioPlay()
 void OmegaAudioDaemon::onAudioStop()
 {
 	common::Log::g_Log << "onAudioStop" << common::c_endl;
+	m_pPLInterface->onAudioStop();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -112,6 +130,7 @@ void OmegaAudioDaemon::onAudioStop()
 void OmegaAudioDaemon::onAudioPause()
 {
 	common::Log::g_Log << "onAudioPause" << common::c_endl;
+	m_pPLInterface->onAudioPause();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -127,6 +146,7 @@ void OmegaAudioDaemon::onAudioTime(quint64 t)
 void OmegaAudioDaemon::onAudioBuffer(tfloat32 percent)
 {
 	common::Log::g_Log << "onAudioBuffer" << common::c_endl;
+	m_pPLInterface->onAudioBuffer(percent);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -134,6 +154,7 @@ void OmegaAudioDaemon::onAudioBuffer(tfloat32 percent)
 void OmegaAudioDaemon::onAudioReadyForNext()
 {
 	common::Log::g_Log << "onAudioReadyForNext" << common::c_endl;
+	m_pPLInterface->onAudioReadyForNext();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -141,6 +162,7 @@ void OmegaAudioDaemon::onAudioReadyForNext()
 void OmegaAudioDaemon::onAudioNoNext()
 {
 	common::Log::g_Log << "onAudioNoNext" << common::c_endl;
+	m_pPLInterface->onAudioNoNext();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -148,6 +170,7 @@ void OmegaAudioDaemon::onAudioNoNext()
 void OmegaAudioDaemon::onAudioCrossfade()
 {
 	common::Log::g_Log << "onAudioCrossfade" << common::c_endl;
+	m_pPLInterface->onAudioCrossfade();
 }
 
 //-------------------------------------------------------------------------------------------

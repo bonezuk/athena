@@ -37,6 +37,28 @@ void OmegaAudioBusInterface::playFile(const QString& fileName)
 
 //-------------------------------------------------------------------------------------------
 
+void OmegaAudioBusInterface::play()
+{
+	QSharedPointer<QDBusInterface> pIface = getAudioInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call(QLatin1String("play"));
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaAudioBusInterface::pause()
+{
+	QSharedPointer<QDBusInterface> pIface = getAudioInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call(QLatin1String("pause"));
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 QSharedPointer<QDBusInterface> OmegaAudioBusInterface::getAudioInterface()
 {
 	if(m_pAudioInterface.isNull() || !m_pAudioInterface->isValid())

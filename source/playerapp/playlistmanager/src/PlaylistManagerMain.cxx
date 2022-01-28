@@ -45,12 +45,12 @@ void PlaylistManagerApp::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr
 
 void PlaylistManagerApp::playbackTime(quint64 tS)
 {
-	m_pModel->playbackState()->setPlaybackTime(tS);
+	m_pModel->playbackState()->setTime(tS);
 }
 
 //-------------------------------------------------------------------------------------------
 
-PlaybackState *PlaylistManagerApp::getPlaybackState()
+PlaybackStateController *PlaylistManagerApp::getPlaybackState()
 {
 	return m_pModel->playbackState();
 }
@@ -70,6 +70,47 @@ void PlaylistManagerApp::onAudioStart(const QString& name)
 }
 
 //-------------------------------------------------------------------------------------------
+
+void PlaylistManagerApp::onAudioPlay()
+{
+	m_pModel->playbackState()->onAudioPlay();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaylistManagerApp::onAudioPause()
+{
+	m_pModel->playbackState()->onAudioPause();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaylistManagerApp::onAudioStop()
+{
+	m_pModel->playbackState()->onAudioPause();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaylistManagerApp::onAudioBuffer(tfloat32 percent)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaylistManagerApp::onAudioReadyForNext()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaylistManagerApp::onAudioNoNext()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaylistManagerApp::onAudioCrossfade()
+{}
+
+//-------------------------------------------------------------------------------------------
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 
@@ -84,7 +125,7 @@ int runPlayerQMLApp(PlaylistManagerApp *pApp, QVector<QPair<track::db::DBInfoSPt
 	pApp->initPlaylistManager(playListDB);
 	
 	qmlRegisterType<PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
-	qmlRegisterType<PlaybackState>("uk.co.blackomega", 1, 0, "PlaybackState");
+	qmlRegisterType<PlaybackStateController>("uk.co.blackomega", 1, 0, "PlaybackStateController");
 	
 #if defined(OMEGA_LINUX)
 	QDBusConnection bus = QDBusConnection::systemBus();
@@ -96,7 +137,7 @@ int runPlayerQMLApp(PlaylistManagerApp *pApp, QVector<QPair<track::db::DBInfoSPt
 		QQmlApplicationEngine engine;
 
 		engine.rootContext()->setContextProperty("playListModel", pApp->getPlayListModel());
-		engine.rootContext()->setContextProperty("playbackState", pApp->getPlaybackState());
+		engine.rootContext()->setContextProperty("playbackStateController", pApp->getPlaybackState());
 		engine.load(QUrl("qrc:/Resources/playlist.qml"));
 
 		QObject plIFaceObj;

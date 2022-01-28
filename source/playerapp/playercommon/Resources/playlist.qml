@@ -29,8 +29,14 @@ ApplicationWindow {
                 anchors.verticalCenter: playControlContainer.verticalCenter
                 anchors.horizontalCenter: playControlContainer.horizontalCenter
                 fillMode: Image.PreserveAspectFit
-                source: (playbackState.playbackState === PlaybackState.Play) ? "images/pc_play_normal.png" : "images/pc_pause_normal.png";
+                source: (playbackStateController.state === playbackStateController.Pause) ? "images/pc_play_normal.png" : "images/pc_pause_normal.png"
+                
+                MouseArea {
+                	anchors.fill: parent
+	                onClicked: playbackStateController.onPlayPausePressed()
+	            }
             }
+            
             Image {
                 id: backButtonId
                 height: 30
@@ -40,6 +46,7 @@ ApplicationWindow {
                 fillMode: Image.PreserveAspectFit
                 source: "images/pc_back_normal.png"
             }
+            
             Image {
                 id: forwardButtonId
                 height: 30
@@ -67,33 +74,33 @@ ApplicationWindow {
                 spacing: 1
                 Image {
                     id: digitHourUpper
-                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeHourUpperDigit, playbackState.playbackTimeInSeconds)
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeHourUpperDigit, playbackStateController.timeInSeconds)
                 }
                 Image {
                     id: digitHourLower
-                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeHourLowerDigit, playbackState.playbackTimeInSeconds)
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeHourLowerDigit, playbackStateController.timeInSeconds)
                 }
                 Image {
                     source: "images/colon@2x.png"
                 }
                 Image {
                     id: digitMinuteUpper
-                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeMinuteUpperDigit, playbackState.playbackTimeInSeconds)
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeMinuteUpperDigit, playbackStateController.timeInSeconds)
                 }
                 Image {
                     id: digitMinuteLower
-                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeMinuteLowerDigit, playbackState.playbackTimeInSeconds)
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeMinuteLowerDigit, playbackStateController.timeInSeconds)
                 }
                 Image {
                     source: "images/colon@2x.png"
                 }
                 Image {
                     id: digitSecondUpper
-                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeSecondUpperDigit, playbackState.playbackTimeInSeconds)
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeSecondUpperDigit, playbackStateController.timeInSeconds)
                 }
                 Image {
                     id: digitSecondLower
-                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeSecondLowerDigit, playbackState.playbackTimeInSeconds)
+                    source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeSecondLowerDigit, playbackStateController.timeInSeconds)
                 }
             }
         }
@@ -112,7 +119,7 @@ ApplicationWindow {
         model: playListModel
 
         delegate: Rectangle {
-            color: (index === playbackState.playbackIndex) ? "green" : "white"
+            color: (index === playbackStateController.index) ? "green" : "white"
             width: parent.width; height: 30
         	Text {
                 anchors.left: parent.left

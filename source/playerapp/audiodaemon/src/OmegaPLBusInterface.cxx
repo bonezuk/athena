@@ -45,6 +45,83 @@ void OmegaPLBusInterface::onAudioStart(const QString& name)
 
 //-------------------------------------------------------------------------------------------
 
+void OmegaPLBusInterface::onAudioPlay()
+{
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call("onAudioPlay");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaPLBusInterface::onAudioPause()
+{
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call("onAudioPause");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaPLBusInterface::onAudioStop()
+{
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call("onAudioStop");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaPLBusInterface::onAudioBuffer(tfloat32 percent)
+{
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call("onAudioBuffer", percent);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaPLBusInterface::onAudioReadyForNext()
+{
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call("onAudioReadyForNext");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaPLBusInterface::onAudioNoNext()
+{
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call("onAudioNoNext");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaPLBusInterface::onAudioCrossfade()
+{
+	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
+	if(!pIface.isNull())
+	{
+		pIface->call("onAudioCrossfade");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 QSharedPointer<QDBusInterface> OmegaPLBusInterface::getPLManagerInterface()
 {
 	if(m_pPLManagerInterface.isNull() || !m_pPLManagerInterface->isValid())

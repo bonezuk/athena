@@ -8,7 +8,7 @@
 #include "track/db/inc/TrackDB.h"
 #include "track/db/inc/DBInfo.h"
 
-#include "playerapp/playercommon/inc/PlaybackState.h"
+#include "playerapp/playercommon/inc/PlaybackStateController.h"
 #include "playerapp/playercommon/inc/PlayListModel.h"
 #include "playerapp/playercommon/inc/PlaylistLoadFunctions.h"
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
@@ -30,14 +30,21 @@ class PlaylistManagerApp : public QGuiApplication, public OmegaPlaylistInterface
 		virtual ~PlaylistManagerApp();
 		
 		virtual void initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB);
-		virtual PlaybackState *getPlaybackState();
+		virtual PlaybackStateController *getPlaybackState();
 		virtual PlayListModel *getPlayListModel();
 		
 		virtual void playbackTime(quint64 tS);
 		virtual void onAudioStart(const QString& name);
-		
+		virtual void onAudioPlay();
+		virtual void onAudioPause();
+		virtual void onAudioStop();
+		virtual void onAudioBuffer(tfloat32 percent);
+		virtual void onAudioReadyForNext();
+		virtual void onAudioNoNext();
+		virtual void onAudioCrossfade();
+
 	private:
-		PlaybackState *m_pState;
+		PlaybackStateController *m_pState;
 		PlayListModel *m_pModel;
 		OmegaAudioBusInterface *m_pAudioInterface;
 };

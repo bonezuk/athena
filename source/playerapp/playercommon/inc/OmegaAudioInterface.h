@@ -19,6 +19,8 @@ class PLAYERCOMMON_EXPORT OmegaAudioInterface
 		OmegaAudioInterface();
 		
 		virtual void playFile(const QString& fileName) = 0;
+		virtual void play() = 0;
+		virtual void pause() = 0;
 };
 
 //-------------------------------------------------------------------------------------------

@@ -11,19 +11,20 @@
 #include "track/db/inc/DBInfo.h"
 #include "track/db/inc/TrackDB.h"
 #include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+#include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class PLAYERCOMMON_EXPORT PlaybackState : public QObject
+class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 {
 	public:
 		Q_OBJECT
-		Q_PROPERTY(quint32 playbackTimeInSeconds READ getPlaybackTimeInSeconds NOTIFY onPlaybackTimeChanged)
-		Q_PROPERTY(qint32 playbackIndex READ getPlaybackIndex NOTIFY onPlaybackIndexChanged)
-		Q_PROPERTY(qint32 playbackState READ getPlaybackState NOTIFY onPlaybackStateChanged)
+		Q_PROPERTY(quint32 timeInSeconds READ getTimeInSeconds NOTIFY onTimeChanged)
+		Q_PROPERTY(qint32 index READ getIndex NOTIFY onIndexChanged)
+		Q_PROPERTY(qint32 state READ getState NOTIFY onStateChanged)
 
 	public:
 		enum PlayState
@@ -34,24 +35,30 @@ class PLAYERCOMMON_EXPORT PlaybackState : public QObject
 		Q_ENUM(PlayState)
 
 	public:
-		PlaybackState(QObject *parent = 0);
-		virtual ~PlaybackState();
+		PlaybackStateController(QObject *parent = 0);
+		PlaybackStateController(OmegaAudioInterface *pAudioInterface, QObject *parent = 0);
+		virtual ~PlaybackStateController();
 		
-		quint32 getPlaybackTimeInSeconds() const;
-		qint32 getPlaybackIndex() const;
-		qint32 getPlaybackState() const;
+		quint32 getTimeInSeconds() const;
+		qint32 getIndex() const;
+		qint32 getState() const;
 		
-		void setPlaybackTime(quint64 tS);
-		void setPlaybackItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem);
+		void setTime(quint64 tS);
+		void setItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem);
+		
+		Q_INVOKABLE void onPlayPausePressed();
 		
 		void onAudioStart(const QString& fileName);
+		void onAudioPlay();
+		void onAudioPause();
 		
 	signals:
-		void onPlaybackTimeChanged();
-		void onPlaybackIndexChanged();
-		void onPlaybackStateChanged();
+		void onTimeChanged();
+		void onIndexChanged();
+		void onStateChanged();
 		
 	private:
+		OmegaAudioInterface *m_pAudioInterface;
 		common::TimeStamp m_playbackTime;
 		qint32 m_pbIndex;
 		QPair<track::db::DBInfoSPtr,tint> m_pbItem;
