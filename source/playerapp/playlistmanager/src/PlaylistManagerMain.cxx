@@ -13,7 +13,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-PlaylistManagerApp::PlaylistManagerApp(int argc, char **argv) : QGuiApplication(argc, argv),
+PlaylistManagerApp::PlaylistManagerApp(int& argc, char **argv) : QGuiApplication(argc, argv),
 	OmegaPlaylistInterface()
 {}
 
@@ -38,7 +38,7 @@ PlaylistManagerApp::~PlaylistManagerApp()
 void PlaylistManagerApp::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {	
 	m_pAudioInterface = new OmegaAudioBusInterface(this);
-	m_pModel = new PlayListModel(playListDB, m_pAudioInterface, this);	
+	m_pModel = new PlayListModel(playListDB, m_pAudioInterface, this);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -118,51 +118,6 @@ using namespace orcus;
 
 //-------------------------------------------------------------------------------------------
 
-int runPlayerQMLApp(PlaylistManagerApp *pApp, QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
-{
-	int res = -1;
-	
-	pApp->initPlaylistManager(playListDB);
-	
-	qmlRegisterType<PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
-	qmlRegisterType<PlaybackStateController>("uk.co.blackomega", 1, 0, "PlaybackStateController");
-	
-#if defined(OMEGA_LINUX)
-	QDBusConnection bus = QDBusConnection::systemBus();
-#else
-	QDBusConnection bus = QDBusConnection::sessionBus();
-#endif
-	if(bus.isConnected())
-	{
-		QQmlApplicationEngine engine;
-
-		engine.rootContext()->setContextProperty("playListModel", pApp->getPlayListModel());
-		engine.rootContext()->setContextProperty("playbackStateController", pApp->getPlaybackState());
-		engine.load(QUrl("qrc:/Resources/playlist.qml"));
-
-		QObject plIFaceObj;
-		OmegaPLDBusAdaptor *pIFace = new OmegaPLDBusAdaptor(pApp, &plIFaceObj);
-		bus.registerObject("/", &plIFaceObj);
-		if(bus.registerService(OMEGAPLAYLISTMANAGER_SERVICE_NAME))
-		{
-			res = pApp->exec();
-		}
-		else
-		{
-			common::Log::g_Log << "Failed to present register dbus service for Playlist Manager." << common::c_endl;
-			common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
-		}
-	}
-	else
-	{
-		common::Log::g_Log << "Failed to connect to session D-Bus" << common::c_endl;
-		common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
-	}
-	return res;
-}
-
-//-------------------------------------------------------------------------------------------
-
 QStringList listFromArguements(int argc, char **argv)
 {
 	QStringList args;
@@ -206,7 +161,43 @@ int main(int argc, char **argv)
 		}
 		else if(loadPlaylistFromDBOrArguments(args, playListDB))
 		{
-			res = runPlayerQMLApp(&app, playListDB);
+			QQmlApplicationEngine engine;
+
+			app.initPlaylistManager(playListDB);
+
+			qmlRegisterType<PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
+			qmlRegisterType<PlaybackStateController>("uk.co.blackomega", 1, 0, "PlaybackStateController");
+
+			engine.rootContext()->setContextProperty("playListModel", app.getPlayListModel());
+			engine.rootContext()->setContextProperty("playbackStateController", app.getPlaybackState());
+
+			engine.load(QUrl("qrc:/Resources/playlist.qml"));
+
+#if defined(OMEGA_LINUX)
+			QDBusConnection bus = QDBusConnection::systemBus();
+#else
+			QDBusConnection bus = QDBusConnection::sessionBus();
+#endif
+			if(bus.isConnected())
+			{
+				QObject plIFaceObj;
+				OmegaPLDBusAdaptor *pIFace = new OmegaPLDBusAdaptor(&app, &plIFaceObj);
+				bus.registerObject("/", &plIFaceObj);
+				if(bus.registerService(OMEGAPLAYLISTMANAGER_SERVICE_NAME))
+				{
+					res = app.exec();
+				}
+				else
+				{
+					common::Log::g_Log << "Failed to present register dbus service for Playlist Manager." << common::c_endl;
+					common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
+				}
+			}
+			else
+			{
+				common::Log::g_Log << "Failed to connect to session D-Bus" << common::c_endl;
+				common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
+			}
     	}
     	delete trackDB;
     }

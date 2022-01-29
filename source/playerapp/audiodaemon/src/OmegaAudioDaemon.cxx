@@ -2,7 +2,7 @@
 #if defined(ORCUS_WIN32)
 #include "audioio/inc/WasAPIIF.h"
 #endif
-#include "playerapp/playercommon/inc/OmegaAudioDaemon.h"
+#include "playerapp/audiodaemon/inc/OmegaAudioDaemon.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

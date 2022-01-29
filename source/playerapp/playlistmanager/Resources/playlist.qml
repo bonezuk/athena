@@ -29,7 +29,7 @@ ApplicationWindow {
                 anchors.verticalCenter: playControlContainer.verticalCenter
                 anchors.horizontalCenter: playControlContainer.horizontalCenter
                 fillMode: Image.PreserveAspectFit
-                source: (playbackStateController.state === playbackStateController.Pause) ? "images/pc_play_normal.png" : "images/pc_pause_normal.png"
+                source: (!playbackStateController.state) ? "images/pc_play_normal.png" : "images/pc_pause_normal.png"
                 
                 MouseArea {
                 	anchors.fill: parent
@@ -136,7 +136,6 @@ ApplicationWindow {
 				}
 			}
 		}
-
 	}
 
 }

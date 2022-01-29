@@ -10,7 +10,7 @@
 
 #include "playerapp/playercommon/inc/EmbeddedEnv.h"
 #include "playerapp/playercommon/inc/OmegaPiDBusServiceNames.h"
-#include "playerapp/playercommon/inc/OmegaAudioDaemon.h"
+#include "playerapp/audiodaemon/inc/OmegaAudioDaemon.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

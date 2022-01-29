@@ -3,7 +3,7 @@
 #define __ORCUS_PLAYERAPP_AUDIODAEMON_AUDIODAEMONMAIN_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/OmegaAudioDaemon.h"
+#include "playerapp/audiodaemon/inc/OmegaAudioDaemon.h"
 #include "playerapp/audiodaemon/inc/OmegaPLBusInterface.h"
 #include "playerapp/audiodaemon/inc/OmegaAudioDBusAdaptor.h"
 

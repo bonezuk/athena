@@ -26,7 +26,7 @@ class PlaylistManagerApp : public QGuiApplication, public OmegaPlaylistInterface
 	Q_OBJECT
 	
 	public:
-		PlaylistManagerApp(int argc, char **argv);
+		PlaylistManagerApp(int& argc, char **argv);
 		virtual ~PlaylistManagerApp();
 		
 		virtual void initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB);
