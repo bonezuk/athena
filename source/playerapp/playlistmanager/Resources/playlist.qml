@@ -33,7 +33,7 @@ ApplicationWindow {
                 
                 MouseArea {
                 	anchors.fill: parent
-	                onClicked: playbackStateController.onPlayPausePressed()
+	                onClicked: playListModel.onPlayPausePressed()
 	            }
             }
             

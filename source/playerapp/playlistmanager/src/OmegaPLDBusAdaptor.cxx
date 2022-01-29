@@ -1,3 +1,4 @@
+#include "network/inc/Resource.h"
 #include "playerapp/playlistmanager/inc/OmegaPLDBusAdaptor.h"
 
 //-------------------------------------------------------------------------------------------

@@ -6,7 +6,7 @@ qt5_add_resources(PLAYLISTMANAGER_RESOURCES playlistmanager.qrc)
 add_executable(OmegaPlaylistManager ${PLAYLISTMANAGER_HEADER} ${PLAYLISTMANAGER_SOURCE} ${PLAYLISTMANAGER_RESOURCES} )
 
 if (OMEGA_WIN32)
-	target_link_libraries(OmegaPlaylistManager engine common blackomega silveromega whiteomega network_omega trackdb trackinfo xml2 Qt5::Core Qt5::Gui Qt5::Quick Qt5::Qml Qt5::DBus winmm ws2_32 wavpack)
+	target_link_libraries(OmegaPlaylistManager engine common blackomega silveromega whiteomega network_omega trackdb trackinfo playercommon xml2 Qt5::Core Qt5::Gui Qt5::Quick Qt5::Qml Qt5::DBus winmm ws2_32 wavpack)
 elseif (OMEGA_MACOSX)
 	target_link_libraries(OmegaPlaylistManager engine common blackomega silveromega whiteomega network_omega trackdb trackinfo playercommon xml2 Qt5::Core Qt5::Gui Qt5::Quick Qt5::Qml Qt5::DBus wavpack ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${SPARKLE_FRAMEWORK})
 elseif (OMEGA_LINUX)

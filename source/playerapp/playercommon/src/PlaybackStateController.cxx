@@ -10,6 +10,8 @@ PlaybackStateController::PlaybackStateController(QObject *parent) : QObject(pare
 	m_playbackTime(),
 	m_pbIndex(-1),
 	m_pbItem(),
+	m_pbNextIndex(-1),
+	m_pbNextItem(),
 	m_pbState(Pause)
 {}
 
@@ -20,6 +22,8 @@ PlaybackStateController::PlaybackStateController(OmegaAudioInterface *pAudioInte
 	m_playbackTime(),
 	m_pbIndex(-1),
 	m_pbItem(),
+	m_pbNextIndex(-1),
+	m_pbNextItem(),
 	m_pbState(Pause)
 {}
 
@@ -51,10 +55,10 @@ void PlaybackStateController::setTime(quint64 tS)
 
 //-------------------------------------------------------------------------------------------
 
-void PlaybackStateController::setItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem)
+void PlaybackStateController::setNextItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem)
 {
-	m_pbIndex = pbIndex;
-	m_pbItem = pbItem;
+	m_pbNextIndex = pbIndex;
+	m_pbNextItem = pbItem;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -75,23 +79,52 @@ qint32 PlaybackStateController::getState() const
 
 void PlaybackStateController::onAudioStart(const QString& fileName)
 {
-	if(m_pbIndex >= 0 && !m_pbItem.first.isNull())
+	if(m_pbNextIndex >= 0 && !m_pbNextItem.first.isNull() && fileName == m_pbNextItem.first->getFilename())
 	{
-		if(fileName == m_pbItem.first->getFilename())
+		m_pbIndex = m_pbNextIndex;
+		m_pbItem = m_pbNextItem;
+		m_pbNextIndex = -1;
+		m_pbNextItem = QPair<track::db::DBInfoSPtr, tint>();
+
+		if(m_pbState == Pause)
 		{
-			if(m_pbState == Pause)
-			{
-				m_pbState = Play;
-				emit onStateChanged();
-			}
-			emit onIndexChanged();
+			m_pbState = Play;
+			emit onStateChanged();
 		}
+		emit onIndexChanged();
+	}
+	else
+	{
+		m_pbIndex = m_pbNextIndex = -1;
+		m_pbItem = m_pbNextItem = QPair<track::db::DBInfoSPtr, tint>();
+
+		if(m_pbState == Play)
+		{
+			m_pbState = Pause;
+			emit onStateChanged();
+		}
+		emit onIndexChanged();
 	}
 }
 
 //-------------------------------------------------------------------------------------------
 
-void PlaybackStateController::onPlayPausePressed()
+void PlaybackStateController::onAudioStop()
+{
+	m_pbIndex = m_pbNextIndex = -1;
+	m_pbItem = m_pbNextItem = QPair<track::db::DBInfoSPtr, tint>();
+
+	if (m_pbState == Play)
+	{
+		m_pbState = Pause;
+		emit onStateChanged();
+	}
+	emit onIndexChanged();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaybackStateController::resumeOrPausePlayback()
 {
 	if(m_pAudioInterface != 0)
 	{

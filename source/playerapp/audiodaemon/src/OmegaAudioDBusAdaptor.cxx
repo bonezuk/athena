@@ -16,9 +16,9 @@ OmegaAudioDBusAdaptor::~OmegaAudioDBusAdaptor()
 
 //-------------------------------------------------------------------------------------------
 
-void OmegaAudioDBusAdaptor::playFile(const QString& fileName)
+void OmegaAudioDBusAdaptor::playFile(const QString& fileName, bool isNext)
 {
-	m_pDaemon->playFile(fileName);
+	m_pDaemon->playFile(fileName, isNext);
 }
 
 //-------------------------------------------------------------------------------------------

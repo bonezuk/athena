@@ -1,3 +1,5 @@
+#include "network/inc/Resource.h"
+
 #include <QCoreApplication>
 #include <QFileInfo>
 #include <QDir>

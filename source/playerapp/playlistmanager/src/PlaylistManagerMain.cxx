@@ -87,7 +87,7 @@ void PlaylistManagerApp::onAudioPause()
 
 void PlaylistManagerApp::onAudioStop()
 {
-	m_pModel->playbackState()->onAudioPause();
+	m_pModel->playNextItem(false);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -98,7 +98,9 @@ void PlaylistManagerApp::onAudioBuffer(tfloat32 percent)
 //-------------------------------------------------------------------------------------------
 
 void PlaylistManagerApp::onAudioReadyForNext()
-{}
+{
+	m_pModel->playNextItem(true);
+}
 
 //-------------------------------------------------------------------------------------------
 

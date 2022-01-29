@@ -77,11 +77,18 @@ void OmegaAudioDaemon::quitDaemon()
 
 //-------------------------------------------------------------------------------------------
 
-void OmegaAudioDaemon::playFile(const QString& fileName)
+void OmegaAudioDaemon::playFile(const QString& fileName, bool isNext)
 {
 	if(common::DiskOps::exist(fileName))
 	{
-		m_audio->open(fileName);
+		if(isNext)
+		{
+			m_audio->next(fileName);
+		}
+		else
+		{
+			m_audio->open(fileName);
+		}
 	}
 }
 

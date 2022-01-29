@@ -47,16 +47,20 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 		virtual QHash<int,QByteArray> roleNames() const;
 		
+		Q_INVOKABLE void onPlayPausePressed();
 		Q_INVOKABLE void playItemAtIndex(int index);
 		
-		PlaybackStateController *playbackState();
-		
+		virtual PlaybackStateController *playbackState();
+		virtual void playNextItem(bool isNext);
+
 	private:
 		QVector<QPair<track::db::DBInfoSPtr,tint> > m_playList;
 		OmegaAudioInterface *m_pAudioInterface;
 		PlaybackStateController *m_pPlaybackState;
 		
 		virtual void printError(const char *strR, const char *strE) const;
+
+		virtual void playItemAtIndexWithNext(int index, bool isNext);
 };
 
 //-------------------------------------------------------------------------------------------

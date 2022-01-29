@@ -145,19 +145,75 @@ QHash<int,QByteArray> PlayListModel::roleNames() const
 
 //-------------------------------------------------------------------------------------------
 
-void PlayListModel::playItemAtIndex(int index)
+void PlayListModel::playItemAtIndexWithNext(int index, bool isNext)
 {
 	if(index >= 0 && index < m_playList.size())
 	{
 		QString fileName = m_playList.at(index).first->getFilename();
 		common::Log::g_Log.print("PlayListModel::playItemAtIndex - %d '%s'\n", index, fileName.toUtf8().constData());
-		m_pAudioInterface->playFile(fileName);
-		m_pPlaybackState->setItem(index, m_playList.at(index));
+		m_pAudioInterface->playFile(fileName, isNext);
+		m_pPlaybackState->setNextItem(index, m_playList.at(index));
 	}
 	else
 	{
 		QString err = QString("Given index, %1, out of range").arg(index);
 		printError("playItemAtIndex", err.toUtf8().constData());
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::playItemAtIndex(int index)
+{
+	playItemAtIndexWithNext(index, false);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::onPlayPausePressed()
+{
+	int playIndex;
+	
+	playIndex = m_pPlaybackState->getIndex();
+	if (playIndex >= 0 && playIndex < m_playList.size())
+	{
+		m_pPlaybackState->resumeOrPausePlayback();
+	}
+	else
+	{
+		playItemAtIndex(0);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::playNextItem(bool isNext)
+{
+	int nextIndex;
+
+	nextIndex = m_pPlaybackState->getIndex();
+	if(nextIndex < 0)
+	{
+		nextIndex = 0;
+	}
+	else
+	{
+		nextIndex++;
+	}
+	if(nextIndex >= 0 && nextIndex < m_playList.size())
+	{
+		playItemAtIndexWithNext(nextIndex, isNext);
+	}
+	else
+	{
+		if(isNext)
+		{
+			m_pPlaybackState->setNextItem(-1, QPair<track::db::DBInfoSPtr, tint>());
+		}
+		else
+		{
+			m_pPlaybackState->onAudioStop();
+		}
 	}
 }
 

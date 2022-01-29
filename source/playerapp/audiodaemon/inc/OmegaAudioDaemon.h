@@ -27,7 +27,7 @@ class OmegaAudioDaemon : public QObject
 		OmegaAudioDaemon(OmegaPlaylistInterface *pPLInterface, QObject *parent = 0);
 		virtual ~OmegaAudioDaemon();
 		
-		virtual void playFile(const QString& fileName);
+		virtual void playFile(const QString& fileName, bool isNext);
 		virtual void play();
 		virtual void pause();
 

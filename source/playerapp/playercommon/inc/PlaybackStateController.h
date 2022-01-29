@@ -44,14 +44,15 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 		qint32 getState() const;
 		
 		void setTime(quint64 tS);
-		void setItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem);
-		
-		Q_INVOKABLE void onPlayPausePressed();
+		void setNextItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem);
 		
 		void onAudioStart(const QString& fileName);
 		void onAudioPlay();
 		void onAudioPause();
-		
+		void onAudioStop();
+
+		void resumeOrPausePlayback();
+
 	signals:
 		void onTimeChanged();
 		void onIndexChanged();
@@ -60,8 +61,13 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 	private:
 		OmegaAudioInterface *m_pAudioInterface;
 		common::TimeStamp m_playbackTime;
+
 		qint32 m_pbIndex;
 		QPair<track::db::DBInfoSPtr,tint> m_pbItem;
+		
+		qint32 m_pbNextIndex;
+		QPair<track::db::DBInfoSPtr, tint> m_pbNextItem;
+		
 		enum PlayState m_pbState;
 };
 

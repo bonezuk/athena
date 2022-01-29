@@ -27,7 +27,7 @@ class OmegaAudioDBusAdaptor : public QDBusAbstractAdaptor
 		virtual ~OmegaAudioDBusAdaptor();
 
 	public slots:
-		Q_NOREPLY void playFile(const QString& fileName);
+		Q_NOREPLY void playFile(const QString& fileName, bool isNext);
 		Q_NOREPLY void play();
 		Q_NOREPLY void pause();
 

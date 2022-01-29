@@ -1,3 +1,4 @@
+#include "network/inc/Resource.h"
 #include "common/inc/Log.h"
 #include "playerapp/playercommon/inc/OmegaPiDBusServiceNames.h"
 #include "playerapp/playlistmanager/inc/OmegaAudioBusInterface.h"
@@ -26,12 +27,12 @@ void OmegaAudioBusInterface::printError(const char *strR, const char *strE) cons
 
 //-------------------------------------------------------------------------------------------
 
-void OmegaAudioBusInterface::playFile(const QString& fileName)
+void OmegaAudioBusInterface::playFile(const QString& fileName, bool isNext)
 {
 	QSharedPointer<QDBusInterface> pIface = getAudioInterface();
 	if(!pIface.isNull())
 	{
-		pIface->call(QLatin1String("playFile"), fileName);
+		pIface->call(QLatin1String("playFile"), fileName, isNext);
 	}
 }
 

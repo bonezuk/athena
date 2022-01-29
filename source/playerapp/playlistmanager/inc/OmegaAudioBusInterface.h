@@ -3,6 +3,8 @@
 #define __PLAYERAPP_PLAYLISTMANAGER_OMEGAAUDIOBUSINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
+#include "network/inc/Resource.h"
+
 #include <QtDBus/QDBusAbstractAdaptor>
 #include <QtDBus/QDBusVariant>
 #include <QtDBus/QDBusInterface>
@@ -23,7 +25,7 @@ class OmegaAudioBusInterface : public QObject, public OmegaAudioInterface
 		OmegaAudioBusInterface(QObject *parent = 0);
 		virtual ~OmegaAudioBusInterface();
 		
-		virtual void playFile(const QString& fileName);
+		virtual void playFile(const QString& fileName, bool isNext);
 		virtual void play();
 		virtual void pause();
 		
