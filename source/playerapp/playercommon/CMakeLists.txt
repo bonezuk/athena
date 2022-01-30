@@ -3,7 +3,9 @@ add_definitions(-DORCUS_PLAYERCOMMON_DLL)
 file(GLOB PLAYERCOMMON_HEADER inc/*.h)
 file(GLOB PLAYERCOMMON_SOURCE src/*.cxx)
 
-add_library(playercommon SHARED ${PLAYERCOMMON_HEADER} ${PLAYERCOMMON_SOURCE} )
+qt5_add_resources(PLAYERCOMMON_RESOURCES playercommon.qrc)
+
+add_library(playercommon SHARED ${PLAYERCOMMON_HEADER} ${PLAYERCOMMON_SOURCE} ${PLAYERCOMMON_RESOURCES})
 
 if (OMEGA_WIN32)
 	target_link_libraries(playercommon engine common blackomega silveromega whiteomega network_omega trackdb trackinfo xml2 Qt5::Core Qt5::Gui Qt5::Quick Qt5::Qml winmm ws2_32 wavpack)

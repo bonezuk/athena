@@ -1,9 +1,7 @@
 file(GLOB PLAYLISTMANAGER_HEADER inc/*.h)
 file(GLOB PLAYLISTMANAGER_SOURCE src/*.cxx)
 
-qt5_add_resources(PLAYLISTMANAGER_RESOURCES playlistmanager.qrc)
-
-add_executable(OmegaPlaylistManager ${PLAYLISTMANAGER_HEADER} ${PLAYLISTMANAGER_SOURCE} ${PLAYLISTMANAGER_RESOURCES} )
+add_executable(OmegaPlaylistManager ${PLAYLISTMANAGER_HEADER} ${PLAYLISTMANAGER_SOURCE} )
 
 if (OMEGA_WIN32)
 	target_link_libraries(OmegaPlaylistManager engine common blackomega silveromega whiteomega network_omega trackdb trackinfo playercommon xml2 Qt5::Core Qt5::Gui Qt5::Quick Qt5::Qml Qt5::DBus winmm ws2_32 wavpack)

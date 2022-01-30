@@ -14,7 +14,23 @@
   <file>Resources/images/no7@2x.png</file>
   <file>Resources/images/no8@2x.png</file>
   <file>Resources/images/no9@2x.png</file>
- 
+  <file>Resources/images/play_controls1.png</file>
+  
+  <file>Resources/images/pc_back_disabled.png</file>
+  <file>Resources/images/pc_back_hover.png</file>
+  <file>Resources/images/pc_back_normal.png</file>
+  <file>Resources/images/pc_back_press.png</file>
+  <file>Resources/images/pc_forward_disabled.png</file>
+  <file>Resources/images/pc_forward_hover.png</file>
+  <file>Resources/images/pc_forward_normal.png</file>
+  <file>Resources/images/pc_forward_press.png</file>
+  <file>Resources/images/pc_pause_hover.png</file>
+  <file>Resources/images/pc_pause_normal.png</file>
+  <file>Resources/images/pc_pause_press.png</file>
+  <file>Resources/images/pc_play_disabled.png</file>
+  <file>Resources/images/pc_play_hover.png</file>
+  <file>Resources/images/pc_play_normal.png</file>
+  <file>Resources/images/pc_play_press.png</file>
   
 </qresource>
 </RCC>
