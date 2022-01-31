@@ -55,7 +55,7 @@ function getPlayTimeDigitImageName(digitType, timeInSeconds)
 	
 	if(tS >= 0.0)
 	{
-		imageName = "images/no" + tS + "@2x.png";
+        imageName = "images/digit_" + tS + ".png";
 	}
 	return imageName;
 }
