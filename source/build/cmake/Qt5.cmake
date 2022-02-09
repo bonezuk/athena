@@ -3,6 +3,8 @@ set(CMAKE_AUTOMOC ON)
 
 message ("Qt path")
 
+set(QTVER "Qt5")
+
 if (OMEGA_WIN32)
 	set(QT_HOME "" CACHE PATH "Qt install directory")
 	set(CMAKE_PREFIX_PATH "${QT_HOME}")

@@ -6,7 +6,7 @@
 // Qt
 #include <QObject>
 #include <QThread>
-#include <QMutex>
+#include <QRecursiveMutex>
 #include <QEvent>
 #include <QWaitCondition>
 #include <QSettings>
@@ -226,7 +226,7 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		static tint m_audioStartCount;
 		static tint m_defaultDeviceIndex;
 		static AOQueryDevice *m_deviceInfo;
-		static QMutex m_deviceInfoMutex;
+        static QRecursiveMutex m_deviceInfoMutex;
 		
 		States m_state;
 		

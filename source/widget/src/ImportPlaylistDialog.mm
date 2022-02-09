@@ -50,7 +50,7 @@
 	[loadPanel setCanCreateDirectories:NO];
 	
 	[loadPanel beginSheetModalForWindow:win completionHandler: ^(NSInteger result) {
-		if(result == NSFileHandlingPanelOKButton) 
+        if(result == NSModalResponseOK)
 		{
 			int i;
 			QStringList aList;

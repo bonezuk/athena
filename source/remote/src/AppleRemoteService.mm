@@ -448,7 +448,7 @@ io_object_t AppleRemoteService::findRemoteAppleIRDevice()
 	CFMutableDictionaryRef hidMatchDictionary;
 	
 	hidMatchDictionary = IOServiceMatching(c_AppleIRDeviceName);
-	ioRes = IOServiceGetMatchingServices(kIOMasterPortDefault,hidMatchDictionary,&hidObjectIterator);
+    ioRes = IOServiceGetMatchingServices(kIOMainPortDefault,hidMatchDictionary,&hidObjectIterator);
 	if(ioRes==kIOReturnSuccess && hidObjectIterator!=0)
 	{
 		io_object_t matchingService = 0,foundService = 0;
@@ -1061,17 +1061,17 @@ void AppleRemoteService::printButton(Button button)
 bool AppleRemoteService::openEventSecureInput()
 {
 	bool res = false;
-	io_registry_entry_t root = IORegistryGetRootEntry(kIOMasterPortDefault);
+    io_registry_entry_t root = IORegistryGetRootEntry(kIOMainPortDefault);
 	if(root!=MACH_PORT_NULL)
 	{
-		m_notifyPort = IONotificationPortCreate(kIOMasterPortDefault);
+        m_notifyPort = IONotificationPortCreate(kIOMainPortDefault);
 		if(m_notifyPort!=0)
 		{
 			io_registry_entry_t entry;
 			CFRunLoopSourceRef runLoopSource = IONotificationPortGetRunLoopSource(m_notifyPort);
             CFRunLoopAddSource(CFRunLoopGetCurrent(),runLoopSource,kCFRunLoopDefaultMode);
 			
-			entry = IORegistryEntryFromPath(kIOMasterPortDefault,kIOServicePlane ":/");
+            entry = IORegistryEntryFromPath(kIOMainPortDefault,kIOServicePlane ":/");
 			if(entry!=MACH_PORT_NULL)
 			{
 				kern_return_t kr;
@@ -1133,7 +1133,7 @@ void AppleRemoteService::closeEventSecureInput()
 bool AppleRemoteService::retrieveSecureEventInputState()
 {
 	bool res = false;
-	io_registry_entry_t root = IORegistryGetRootEntry(kIOMasterPortDefault);
+    io_registry_entry_t root = IORegistryGetRootEntry(kIOMainPortDefault);
 	if(root!=MACH_PORT_NULL)
 	{
         CFArrayRef arrayRef = (CFArrayRef)IORegistryEntrySearchCFProperty(root,kIOServicePlane,CFSTR("IOConsoleUsers"),0,kIORegistryIterateRecursively);

@@ -88,6 +88,7 @@ template <class X> class BOQueueTree {
 		tint Position(QTItem *item);
 };
 
+template <typename T> T BOQueueTree<T>::nullObject;
 
 //-------------------------------------------------------------------------------------
 //	Method:

@@ -76,7 +76,7 @@ void ServiceWaitCondition::wake()
 //-------------------------------------------------------------------------------------------
 
 ServiceEventAndCondition::ServiceEventAndCondition(QObject *parent) : QObject(parent),
-	m_mutex(QMutex::Recursive),
+    m_mutex(),
 	m_waitConditionMap(),
 	m_thread(0)
 {}

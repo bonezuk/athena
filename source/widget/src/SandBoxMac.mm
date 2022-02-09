@@ -67,11 +67,11 @@
 	[loadPanel setCanCreateDirectories:NO];
 	if(filterArray!=nil)
 	{
-		[loadPanel setAllowedFileTypes:filterArray];
-	}
+        [loadPanel setAllowedContentTypes:filterArray];
+    }
 	
 	[loadPanel beginSheetModalForWindow:win completionHandler: ^(NSInteger result) {
-		if(result == NSFileHandlingPanelOKButton) 
+        if(result == NSModalResponseOK)
 		{
 			int i;
 			QStringList aList;
@@ -104,7 +104,7 @@
 	[loadPanel setCanCreateDirectories:NO];
 	
 	[loadPanel beginSheetModalForWindow:win completionHandler: ^(NSInteger result) {
-		if(result == NSFileHandlingPanelOKButton) 
+        if(result == NSModalResponseOK)
 		{
 			int i;
 			QStringList aList;
@@ -140,11 +140,11 @@
 	if(filterArray!=nil)
 	{
 		NSArray *fArray = [NSArray arrayWithObjects:@"xspf",@"m3u",@"m3u8",@"pls",nil];
-		[savePanel setAllowedFileTypes:fArray];
+        [savePanel setAllowedContentTypes:fArray];
 	}
 	
 	[savePanel beginSheetModalForWindow:win completionHandler: ^(NSInteger result) {
-		if(result == NSFileHandlingPanelOKButton) 
+        if(result == NSModalResponseOK)
 		{
 			QStringList aList;
 		

@@ -3,7 +3,7 @@
 
 #include <QPainter>
 #include <QLineEdit>
-#include <QStyleOptionFrameV2>
+#include <QStyleOptionFrame>
 #include <QStyle>
 #include <QSpinBox>
 #include <QApplication>
@@ -75,7 +75,7 @@ void QKeyLineEdit::paintEvent(QPaintEvent *e)
     {
         panel.state |= QStyle::State_HasFocus | QStyle::State_KeyboardFocusChange;
     }
-    panel.features = QStyleOptionFrameV2::None;
+    panel.features = QStyleOptionFrame::None;
 
     style()->drawPrimitive(QStyle::PE_PanelLineEdit, &panel, &painter, this);
 
@@ -1937,7 +1937,7 @@ void QKeyLineEditDelegate::paint(QPainter *painter,const QStyleOptionViewItem& o
     if(!keys.isEmpty() && !(index.row()==m_editRow && index.column()==m_editColumn))
 	{
 		QList<KeyCode>::const_iterator ppI;
-		qreal backCHue,backCSat,backCVal;
+        float backCHue,backCSat,backCVal;
 
 		option.palette.color(QPalette::Base).getHsvF(&backCHue,&backCSat,&backCVal);
 		backCVal += (backCVal < 0.5) ? 0.06 : -0.06;

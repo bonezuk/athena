@@ -6,9 +6,9 @@ file(GLOB WAVPACKOMEGA_ENGINE_SOURCE src/*.cxx)
 add_library(wavpackomega SHARED ${WAVPACKOMEGA_ENGINE_HEADER} ${WAVPACKOMEGA_ENGINE_SOURCE})
 
 if (OMEGA_WIN32)
-	target_link_libraries(wavpackomega engine common xml2 Qt5::Core Qt5::Gui Qt5::Xml winmm wavpack)
+	target_link_libraries(wavpackomega engine common xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml winmm wavpack)
 else (OMEGA_WIN32)
-	target_link_libraries(wavpackomega engine common xml2 Qt5::Core Qt5::Gui Qt5::Xml wavpack)
+	target_link_libraries(wavpackomega engine common xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml wavpack)
 endif (OMEGA_WIN32)
 
 if (${TIGER_LINUX_DISTRO})

@@ -601,7 +601,7 @@ bool& AudioEvent::exclusive()
 tint AOBase::m_audioStartCount = 0;
 tint AOBase::m_defaultDeviceIndex = 0;
 AOQueryDevice *AOBase::m_deviceInfo = 0;
-QMutex AOBase::m_deviceInfoMutex(QMutex::Recursive);
+QRecursiveMutex AOBase::m_deviceInfoMutex;
 
 //-------------------------------------------------------------------------------------------
 

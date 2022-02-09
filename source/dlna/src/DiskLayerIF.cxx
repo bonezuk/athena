@@ -14,7 +14,7 @@ CONCRETE_FACTORY_CLASS_IMPL(DiskIFFactory,DiskIF, \
 //-------------------------------------------------------------------------------------------
 
 DiskLayerIF::DiskLayerIF() : DiskIF(),
-	m_mutex(QMutex::Recursive),
+    m_mutex(),
 	m_dirHandleMap()
 {}
 

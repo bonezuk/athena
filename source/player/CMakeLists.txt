@@ -81,12 +81,12 @@ if (OMEGA_WIN32)
 	set( PLAYER_RESOURCE ./player.rc )
 endif (OMEGA_WIN32)
 
-qt5_wrap_ui(PLAYER_UI_HEADERS ${PLAYER_UI})
+qt_wrap_ui(PLAYER_UI_HEADERS ${PLAYER_UI})
 
 if (OMEGA_WIN32)
-	qt5_add_resources(PLAYER_UI_RESOURCES player.qrc platform/windows/platform.qrc)
+	qt_add_resources(PLAYER_UI_RESOURCES player.qrc platform/windows/platform.qrc)
 elseif (OMEGA_MACOSX OR OMEGA_LINUX)
-	qt5_add_resources(PLAYER_UI_RESOURCES player.qrc)
+	qt_add_resources(PLAYER_UI_RESOURCES player.qrc)
 endif (OMEGA_WIN32)
 
 if (OMEGA_WIN32 OR OMEGA_LINUX)

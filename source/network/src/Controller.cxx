@@ -433,7 +433,7 @@ void Controller::doRead(Service::ServicePtr s)
 	QVector<Socket::SocketPtr> rSelect;
 	QSet<Socket::SocketPtr>::iterator ppI;
 	QVector<Socket::SocketPtr>::iterator ppJ;
-	QMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppK;
+    QMultiMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppK;
 
 	FD_ZERO(&readS);
 	
@@ -504,7 +504,7 @@ void Controller::doWrite(Service::ServicePtr s)
 	QVector<Socket::SocketPtr> wSelect;
 	QSet<Socket::SocketPtr>::iterator ppI;
 	QVector<Socket::SocketPtr>::iterator ppJ;
-	QMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppK;
+    QMultiMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppK;
 	
 	FD_ZERO(&writeS);
 	
@@ -819,7 +819,7 @@ void Controller::delSocket(Service::ServicePtr svr,Socket::SocketPtr s)
 			m_socketSet.erase(ppI);
 		}
 		
-		QMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppJ = m_socketServiceMap.find(svr);
+        QMultiMap<Service::ServicePtr,Socket::SocketPtr>::iterator ppJ = m_socketServiceMap.find(svr);
 		
 		while(ppJ!=m_socketServiceMap.end() && ppJ.key()==svr)
 		{

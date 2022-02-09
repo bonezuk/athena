@@ -119,6 +119,9 @@ template <class T,class S> class BOTree
 		void Set(const T& index,const S& item);
 };
 
+template <typename T, typename S> S BOTree<T,S>::nullObject;
+template <typename T, typename S> T BOTree<T,S>::nullIndex;
+
 //-------------------------------------------------------------------------------------------
 
 template <class T,class S> BOTree<T,S>::BOTree() : amount(0)

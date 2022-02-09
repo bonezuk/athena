@@ -130,16 +130,16 @@ endif (OMEGA_WIN32)
 add_library(audioio SHARED ${AUDIOIO_HEADER} ${AUDIOIO_SOURCE})
 
 if (OMEGA_WIN32)
-	target_link_libraries(audioio engine common network_omega mime xml2 Qt5::Core Qt5::Gui Qt5::Xml winmm avrt)
+	target_link_libraries(audioio engine common network_omega mime xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml winmm avrt)
 elseif (OMEGA_MACOSX)
-	target_link_libraries(audioio engine common network_omega mime xml2 Qt5::Core Qt5::Gui Qt5::Xml 
+	target_link_libraries(audioio engine common network_omega mime xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml 
 		${CORESERVICES_FRAMEWORK_UNIT}
 		${COREAUDIO_FRAMEWORK_UNIT}
 		${AUDIOUNIT_FRAMEWORK_UNIT}
 		${AUDIOTOOLBOX_FRAMEWORK_UNIT}
 	)
 elseif (OMEGA_LINUX)
-	target_link_libraries(audioio engine common network_omega mime xml2 Qt5::Core Qt5::Gui Qt5::Xml asound)
+	target_link_libraries(audioio engine common network_omega mime xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml asound)
 endif (OMEGA_WIN32)
 
 if (${TIGER_LINUX_DISTRO})

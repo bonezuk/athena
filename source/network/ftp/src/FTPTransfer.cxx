@@ -950,7 +950,7 @@ QString FTPTransfer::printFile(const QString& name)
 			}
 			else
 			{
-				fSize = fileStat.st_uid;
+                fSize = QString::number(fileStat.st_uid);
 			}
 			len = 12 - fSize.length();
 			for(i=0;i<len;i++)
