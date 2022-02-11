@@ -1,4 +1,5 @@
 #include "track/db/inc/PlaylistXSPFIO.h"
+#include "track/info/inc/SBBookmarkService.h"
 
 #if defined(OMEGA_MAC_STORE)
 #include "common/inc/CommonDirectoriesForFiles.h"
@@ -249,7 +250,7 @@ bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>
 		const QByteArray& bkArray = (*ppI).second;
 		if(bkArray.size()>0)
 		{
-			if(track::db::SBBookmarkService::instance()->add(fileName,fName,true,bkArray))
+            if(track::info::SBBookmarkService::instance()->add(fileName,fName,true,bkArray))
 			{
 				fCount++;
 			}
@@ -293,9 +294,9 @@ bool PlaylistXSPFIO::load(const QString& fileName,QVector<track::info::InfoSPtr>
 	{
 		QFileInfo fInfo(fileName);
 		QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-		QStringList pathList = pathSet.toList();
+        QStringList pathList(pathSet.begin(), pathSet.end());
 				
-		widget::ImportPlaylistDialog importDialog(m_parent);
+        widget::ImportPlaylistDialog importDialog(dynamic_cast<QWidget *>(m_parent));
 		importDialog.setPlaylistFileName(fInfo.fileName());
 		importDialog.setDirectories(pathList);
         importDialog.setModal(true);
@@ -480,7 +481,7 @@ bool PlaylistXSPFIO::saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr&
 						{
 #if defined(OMEGA_MAC_STORE)
 							{
-								QByteArray bkArray = track::db::SBBookmarkService::instance()->getBookmarkArray(m_outFilename,pInfo->getFilename());
+                                QByteArray bkArray = track::info::SBBookmarkService::instance()->getBookmarkArray(m_outFilename,pInfo->getFilename());
 								if(bkArray.size()>0)
 								{
 									if(xmlTextWriterStartElement(writer,reinterpret_cast<const xmlChar *>("extension"))>=0)

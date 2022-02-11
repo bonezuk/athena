@@ -22,7 +22,7 @@ CONCRETE_FACTORY_CLASS_IMPL(track::info::SBBookmarkServiceFactory, track::info::
 //-------------------------------------------------------------------------------------------
 
 SandboxBookmarkService::SandboxBookmarkService() : track::info::SBBookmarkService(),
-	m_mutex(QMutex::Recursive),
+    m_mutex(),
     m_referenceCountMap()
 {}
 
@@ -1131,7 +1131,7 @@ QString SandboxBookmarkService::userErrorMessage(track::info::UserSandboxErrorMe
 	
 	switch(err)
 	{
-		case e_cannotLoadPlaylist:
+        case track::info::e_cannotLoadPlaylist:
 			errMsg  = "Sorry, M3U and PLS playlists outside of your Music folder cannot be loaded due to Apple's sandbox security restrictions. ";
 			errMsg += "Please save and load your playlists as xspf files.";
 			break;

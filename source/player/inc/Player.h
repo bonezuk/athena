@@ -53,7 +53,7 @@ class Player : public QDialog
 		} PlayState;
 			
 	public:
-		Player(QWidget *parent = 0,Qt::WindowFlags f = 0);
+		Player(QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~Player();
 		
 		PlayState state() const;

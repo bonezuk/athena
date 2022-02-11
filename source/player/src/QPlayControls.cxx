@@ -853,8 +853,8 @@ bool QPlayControls::onMouseControl(QMouseEvent *e,bool releaseFlag)
 	bool pausePressFlag = false;
 	bool res = false;
 	
-	qreal xPos = static_cast<qreal>(e->x());
-	qreal yPos = static_cast<qreal>(e->y());
+	qreal xPos = static_cast<qreal>(e->pos().x());
+	qreal yPos = static_cast<qreal>(e->pos().y());
 	qreal xRatio = static_cast<qreal>(m_maskImageBack->width()) / static_cast<qreal>(95.0);
 	qreal yRatio = static_cast<qreal>(m_maskImageBack->height()) / static_cast<qreal>(52.0);
 	xPos *= xRatio;
@@ -1817,8 +1817,9 @@ bool QPlayControls::onMouseMoveWindowPress(QMouseEvent *e)
 	{
 		if(e->button()==Qt::LeftButton)
 		{
+			QPoint gPos(static_cast<int>(e->globalPosition().x()), static_cast<int>(e->globalPosition().y()));
 			m_moveWindowState = 1;
-			m_moveWindowOffset = e->globalPos() - window()->pos();
+			m_moveWindowOffset = gPos - window()->pos();
 			res = true;
 		}
 	}
@@ -1833,7 +1834,8 @@ bool QPlayControls::onMouseMoveWindowMove(QMouseEvent *e)
 	
 	if(m_moveWindowState==1)
 	{
-		QPoint nP = e->globalPos() - m_moveWindowOffset;
+		QPoint gPos(static_cast<int>(e->globalPosition().x()), static_cast<int>(e->globalPosition().y()));
+		QPoint nP = gPos - m_moveWindowOffset;
 		window()->move(nP);
 		res = true;
 	}

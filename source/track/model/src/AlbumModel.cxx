@@ -165,11 +165,11 @@ void AlbumModel::insertIntoAlbum(QVector<QueryRecord>& recordList)
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumModel::addToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map)
+void AlbumModel::addToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map)
 {
 	QVector<QueryRecord> recordList;
 
-	for(QMap<QString,int>::const_iterator ppI=map.begin();ppI!=map.end();ppI++)
+    for(QMultiMap<QString,int>::const_iterator ppI=map.begin();ppI!=map.end();ppI++)
 	{
 		const QueryRecord& record = results.at(ppI.value());
 		

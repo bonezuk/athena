@@ -20,7 +20,7 @@ namespace info
 
 typedef enum
 {
-	e_cannotLoadPlaylist = 0,
+    e_cannotLoadPlaylist = 0,
 } UserSandboxErrorMessage;
 
 //-------------------------------------------------------------------------------------------

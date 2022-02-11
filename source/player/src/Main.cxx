@@ -27,6 +27,7 @@
 
 #if defined(OMEGA_MAC_STORE)
 #include "track/db/inc/SBBookmarkTrackDB.h"
+#include "track/info/inc/SBBookmarkService.h"
 #include "common/inc/Bundle.h"
 #endif
 
@@ -266,7 +267,7 @@ int main(int argc,char **argv)
 		if(trackDB!=0)
 		{
 #if defined(OMEGA_MAC_STORE)
-			orcus::track::db::SBBookmarkService::instance();
+            orcus::track::info::SBBookmarkService::instance();
 #endif
 
 			{
@@ -306,7 +307,7 @@ int main(int argc,char **argv)
 			}
 
 #if defined(OMEGA_MAC_STORE)
-			orcus::track::db::SBBookmarkService::release();
+            orcus::track::info::SBBookmarkService::release();
 #endif
 		}
 		delete trackDB;

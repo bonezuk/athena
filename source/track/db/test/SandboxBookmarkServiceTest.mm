@@ -4946,7 +4946,7 @@ TEST(SandboxBookmarkService,isInAppContainerGivenEmptyFileName)
 
 TEST(SandboxBookmarkService,isInAppContainerGivenFileInDirectoryUserHome)
 {
-    QString fileName = dlna::DiskIF::mergeName(track::db::SBBookmarkService::getHomeDirectory(),"Music").trimmed();
+	QString fileName = dlna::DiskIF::mergeName(track::info::SBBookmarkService::getHomeDirectory(),"Music").trimmed();
 	SandboxBookmarkService svr;
 	EXPECT_FALSE(svr.isInAppContainer(fileName));
 }

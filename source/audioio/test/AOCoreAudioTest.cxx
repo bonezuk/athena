@@ -1558,7 +1558,7 @@ TEST(AOCoreAudio,setupPropertyRunLoopAndSetSuccessfully)
     memset(&property,0,sizeof(AudioObjectPropertyAddress));
 	property.mSelector = kAudioHardwarePropertyRunLoop;
 	property.mScope = kAudioObjectPropertyScopeGlobal;
-	property.mElement = kAudioObjectPropertyElementMaster;
+	property.mElement = kAudioObjectPropertyElementMain;
 
 	AOCoreAudioSetupPropertyRunLoopTest audio(expectRunLoop,property,noErr);
 
@@ -1583,7 +1583,7 @@ TEST(AOCoreAudio,setupPropertyRunLoopAndFailsToSet)
     memset(&property,0,sizeof(AudioObjectPropertyAddress));
 	property.mSelector = kAudioHardwarePropertyRunLoop;
 	property.mScope = kAudioObjectPropertyScopeGlobal;
-	property.mElement = kAudioObjectPropertyElementMaster;
+	property.mElement = kAudioObjectPropertyElementMain;
 
 	AOCoreAudioSetupPropertyRunLoopTest audio(expectRunLoop,property,err);
 	EXPECT_CALL(audio,printErrorOS(StrEq("setupPropertyRunLoop"),StrEq("Error setting run loop"),err)).Times(1);
@@ -1617,7 +1617,7 @@ bool AOCoreAudioUseExclusiveModeIfAvailableTest::testUseExclusiveModeIfAvailable
 
 //-------------------------------------------------------------------------------------------
 
-MATCHER(PropertyIsHogMode, "") { return (arg->mSelector==kAudioDevicePropertyHogMode && arg->mScope==kAudioDevicePropertyScopeOutput && arg->mElement==kAudioObjectPropertyElementMaster); }
+MATCHER(PropertyIsHogMode, "") { return (arg->mSelector==kAudioDevicePropertyHogMode && arg->mScope==kAudioDevicePropertyScopeOutput && arg->mElement==kAudioObjectPropertyElementMain); }
 MATCHER_P(PropertyHasSize,value,"") { return (*((tuint *)(arg))==value); }
 MATCHER_P(PropertyHasProcessID,value,"") { return (*((pid_t *)(arg)) == value); }
 ACTION_P(SetProcessIDForArguement,value) { *static_cast<pid_t*>(arg5) = value; }
@@ -1831,10 +1831,10 @@ bool AOCoreAudioDisableMixingIfPossible::testDisableMixingIfPossible(AudioDevice
 
 //-------------------------------------------------------------------------------------------
 
-MATCHER(PropertyIsNominalSampleRate, "") { return (arg->mSelector==kAudioDevicePropertyNominalSampleRate && arg->mScope==kAudioDevicePropertyScopeOutput && arg->mElement==kAudioObjectPropertyElementMaster); }
+MATCHER(PropertyIsNominalSampleRate, "") { return (arg->mSelector==kAudioDevicePropertyNominalSampleRate && arg->mScope==kAudioDevicePropertyScopeOutput && arg->mElement==kAudioObjectPropertyElementMain); }
 MATCHER_P(PropertyHasSampleRate,value,"") { return static_cast<int>(*((Float64 *)(arg)) == value); }
 
-MATCHER(PropertyIsMixingSupported, "") { return (arg->mSelector==kAudioDevicePropertySupportsMixing && arg->mScope==kAudioObjectPropertyScopeGlobal && arg->mElement==kAudioObjectPropertyElementMaster); }
+MATCHER(PropertyIsMixingSupported, "") { return (arg->mSelector==kAudioDevicePropertySupportsMixing && arg->mScope==kAudioObjectPropertyScopeGlobal && arg->mElement==kAudioObjectPropertyElementMain); }
 MATCHER_P(PropertyHasMixingEnabled,value,"") { return (*((UInt32 *)(arg)) == value); }
 ACTION_P(SetMixingEnabledForArgument,value) { *static_cast<UInt32 *>(arg5) = value; }
 
@@ -2188,7 +2188,7 @@ QVector<AudioStreamID> AOCoreAudioGetAudioStreamsForDeviceTest::testGetAudioStre
 
 //-------------------------------------------------------------------------------------------
 
-MATCHER(PropertyDeviceAudioStreams, "") { return (arg->mSelector==kAudioDevicePropertyStreams && arg->mScope==kAudioDevicePropertyScopeOutput && arg->mElement==kAudioObjectPropertyElementMaster); }
+MATCHER(PropertyDeviceAudioStreams, "") { return (arg->mSelector==kAudioDevicePropertyStreams && arg->mScope==kAudioDevicePropertyScopeOutput && arg->mElement==kAudioObjectPropertyElementMain); }
 ACTION_P(Set1StreamIDsForArgument,value) { (reinterpret_cast<AudioStreamID *>(arg5))[0] = value; }
 ACTION_P3(Set3StreamIDsForArgument,valueA,valueB,valueC) { 
 	(reinterpret_cast<AudioStreamID *>(arg5))[0] = valueA;
@@ -3815,7 +3815,7 @@ AOCoreAudioSetAudioStreamThread::~AOCoreAudioSetAudioStreamThread()
 
 void AOCoreAudioSetAudioStreamThread::run()
 {
-	AudioObjectPropertyAddress property = { kAudioStreamPropertyPhysicalFormat, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
+	AudioObjectPropertyAddress property = { kAudioStreamPropertyPhysicalFormat, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
 	
 	m_mutex->lock();	
 	for(tint i=0;i<5;i++)
@@ -3828,7 +3828,7 @@ void AOCoreAudioSetAudioStreamThread::run()
 
 //-------------------------------------------------------------------------------------------
 
-MATCHER(PropertySetPhysicalFormats, "") { return (arg->mSelector==kAudioStreamPropertyPhysicalFormat && arg->mScope==kAudioObjectPropertyScopeGlobal && arg->mElement==kAudioObjectPropertyElementMaster); }
+MATCHER(PropertySetPhysicalFormats, "") { return (arg->mSelector==kAudioStreamPropertyPhysicalFormat && arg->mScope==kAudioObjectPropertyScopeGlobal && arg->mElement==kAudioObjectPropertyElementMain); }
 ACTION_P(SetAudioStreamBasicDescriptionForArguement,value) { *static_cast<AudioStreamBasicDescription*>(arg5) = value; }
 
 //-------------------------------------------------------------------------------------------
@@ -4442,7 +4442,7 @@ tint AOCoreAudioSetSampleRateIfPossibleTest::testSetSampleRateIfPossible(AudioDe
 
 //-------------------------------------------------------------------------------------------
 
-MATCHER(PropertySetSampleRate, "") { return (arg->mSelector==kAudioDevicePropertyNominalSampleRate && arg->mScope==kAudioDevicePropertyScopeOutput && arg->mElement==kAudioObjectPropertyElementMaster); }
+MATCHER(PropertySetSampleRate, "") { return (arg->mSelector==kAudioDevicePropertyNominalSampleRate && arg->mScope==kAudioDevicePropertyScopeOutput && arg->mElement==kAudioObjectPropertyElementMain); }
 ACTION_P(SetSampleRateForArguement,value) { *static_cast<Float64*>(arg5) = value; }
 
 //-------------------------------------------------------------------------------------------
@@ -5443,7 +5443,7 @@ bool AOCoreAudioIsDeviceAliveTest::testIsDeviceAlive(QSharedPointer<AOQueryCoreA
 
 //-------------------------------------------------------------------------------------------
 
-MATCHER(PropertyIsDeviceAlive, "") { return (arg->mSelector==kAudioDevicePropertyDeviceIsAlive && arg->mScope==kAudioObjectPropertyScopeGlobal && arg->mElement==kAudioObjectPropertyElementMaster); }
+MATCHER(PropertyIsDeviceAlive, "") { return (arg->mSelector==kAudioDevicePropertyDeviceIsAlive && arg->mScope==kAudioObjectPropertyScopeGlobal && arg->mElement==kAudioObjectPropertyElementMain); }
 ACTION_P(SetIsDeviceAlive,value) { *static_cast<bool*>(arg5) = value; }
 
 //-------------------------------------------------------------------------------------------

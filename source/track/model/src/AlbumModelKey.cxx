@@ -60,7 +60,7 @@ void AlbumModelKey::copy(const QVariant& v)
 	bool res = false;
 
 #if QT_VERSION >= 0x050000
-    if(v.canConvert(QMetaType::QVariantList))
+    if(v.canConvert(QMetaType(QMetaType::QVariantList)))
 #else
     if(v.canConvert(QVariant::List))
 #endif
@@ -69,7 +69,7 @@ void AlbumModelKey::copy(const QVariant& v)
 		if(vList.size()==2)
 		{
 #if QT_VERSION >= 0x050000
-            if(vList.at(0).canConvert(QMetaType::Bool) && vList.at(1).canConvert(QMetaType::Int))
+            if(vList.at(0).canConvert(QMetaType(QMetaType::Bool)) && vList.at(1).canConvert(QMetaType(QMetaType::Int)))
 #else
 			if(vList.at(0).canConvert(QVariant::Bool) && vList.at(1).canConvert(QVariant::Int))
 #endif

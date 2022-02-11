@@ -113,9 +113,9 @@ void QPLItemAlbum::paint(tint yTop,QPainter *painter)
 	painter->drawText(albumTRect,Qt::AlignLeft | Qt::TextSingleLine,albumStr,&albumTRect);
 
 	QString timeStr = getTime();
-	QRectF timeTRect((boundingRect.width() - lFontMetric.width(timeStr)) - 4.0,
+    QRectF timeTRect((boundingRect.width() - lFontMetric.horizontalAdvance(timeStr)) - 4.0,
 	                 (boundingRect.height() / 2.0) + 1.0 + yTop,
-	                 lFontMetric.width(timeStr),
+                     lFontMetric.horizontalAdvance(timeStr),
 	                 lFontMetric.height());
 	
 	painter->setFont(lFont);

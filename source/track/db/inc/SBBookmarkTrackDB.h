@@ -17,13 +17,6 @@ namespace db
 {
 //-------------------------------------------------------------------------------------------
 
-typedef enum
-{
-	e_cannotLoadPlaylist = 0,
-} UserSandboxErrorMessage;
-
-//-------------------------------------------------------------------------------------------
-
 class TRACK_DB_EXPORT SBBookmarkTrackDB : public common::SBBookmark
 {
 	public:

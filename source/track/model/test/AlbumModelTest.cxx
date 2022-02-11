@@ -36,7 +36,7 @@ class AlbumModelTest : public AlbumModel
 		void testEnumerateSections(const QueryResult& results);
         QVector<int>& getPositionIndex();
 		void testInsertIntoAlbum(QVector<QueryRecord>& recordList);
-		void testAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map);
+		void testAddToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map);
 		void testBuildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMultiMap<QString,int> >& sectionMap);
 		
 	protected:
@@ -161,7 +161,7 @@ void AlbumModelTest::testInsertIntoAlbum(QVector<QueryRecord>& recordList)
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumModelTest::testAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map)
+void AlbumModelTest::testAddToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map)
 {
 	addToModelForGivenMap(results,map);
 }
@@ -1406,9 +1406,9 @@ TEST(AlbumModel,mapResultsToAlphabetIndexDuplicateAlbumNameButDifferentCaseBothI
 	
 	ppI = sectionMap.find(QChar('a'));
 	EXPECT_TRUE(ppI!=sectionMap.end());
-	QMap<QString,int>& mapA = ppI.value();
+	QMultiMap<QString,int>& mapA = ppI.value();
 	EXPECT_TRUE(mapA.size()==2);
-	for(QMap<QString,int>::iterator ppI=mapA.begin();ppI!=mapA.end();ppI++)
+	for(QMultiMap<QString,int>::iterator ppI=mapA.begin();ppI!=mapA.end();ppI++)
 	{
 		EXPECT_TRUE(ppI.key()=="alpha");
 		EXPECT_TRUE(ppI.value()==0 || ppI.value()==1);
@@ -1584,7 +1584,7 @@ TEST(AlbumModel,addToModelForGivenMapWhenMapIsEmpty)
 {
 	AlbumModelTest model;
 	QueryResult result;
-	QMap<QString,int> sectionMap;
+	QMultiMap<QString,int> sectionMap;
 	
 	model.testAddToModelForGivenMap(result,sectionMap);
 	
@@ -1863,8 +1863,8 @@ TEST(AlbumModel,buildModelFromSortedIndexIsIndexedAtExpectedPositions)
 
 	QueryResult results;
 
-	QMap<QString,int> bMap,dMap,fMap;
-	QMultiMap<QChar, QMultiMap<QString,int> > sectionMap;
+	QMultiMap<QString,int> bMap,dMap,fMap;
+	QMap<QChar, QMultiMap<QString,int> > sectionMap;
 	sectionMap.insert(QChar('b'),bMap);
 	sectionMap.insert(QChar('d'),dMap);
 	sectionMap.insert(QChar('f'),fMap);
@@ -2427,7 +2427,7 @@ TEST(AlbumModel,modelHandlesUnicode)
 	QueryResult results;
 
 	tuint16 inTxt[] = { 0xBA0, 0x1C00, 0x1C10, 0x06A0, 0x2230, 0x0000 };
-    QString inString = QString::fromUtf16(inTxt);
+	QString inString = QString::fromUtf16(reinterpret_cast<const char16_t *>(inTxt));
     results.push_back(model.testCreateRecordAlbum(AlbumModelKey(std::pair<bool,int>(false,1)),inString));
 	
 	model.testEnumerateSections(results);
