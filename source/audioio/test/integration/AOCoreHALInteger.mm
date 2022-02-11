@@ -273,7 +273,7 @@ bool HALSignalGenerator::useExclusiveModeIfAvailable(AudioDeviceID devId)
 	
 	propAddr.mSelector = kAudioDevicePropertyHogMode;
 	propAddr.mScope = kAudioDevicePropertyScopeOutput;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 	propSize = sizeof(pid_t);
 	
 	cProcessID = ::getpid();
@@ -356,7 +356,7 @@ bool HALSignalGenerator::setAudioStreamFormat(AudioDeviceID devId,int noChannels
 
     propAddr.mSelector = kAudioDevicePropertyStreamFormat;
     propAddr.mScope = kAudioDevicePropertyScopeOutput;
-    propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
     propSize = sizeof(AudioStreamBasicDescription);
 
     ::memset(&deviceFormat,0,sizeof(AudioStreamBasicDescription));
@@ -395,7 +395,7 @@ bool HALSignalGenerator::setSampleRate(AudioDeviceID devId,int sampleRate)
 	
 	propAddr.mSelector = kAudioDevicePropertyNominalSampleRate;
 	propAddr.mScope = kAudioDevicePropertyScopeOutput;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 	propSize = sizeof(Float64);
 	
 	err = AudioObjectIsPropertySettable(devId,&propAddr,&settableFlag);
@@ -478,7 +478,7 @@ bool HALSignalGenerator::isDeviceRunning(AudioDeviceID devId)
 	
 	propAddr.mSelector = kAudioDevicePropertyDeviceIsRunning;
 	propAddr.mScope = kAudioDevicePropertyScopeOutput;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 	propSize = sizeof(UInt32);
 	
 	err = AudioObjectGetPropertyData(devId,&propAddr,0,0,&propSize,&runValue);
@@ -512,7 +512,7 @@ void HALSignalGenerator::exclusiveModeRelease(AudioDeviceID devId)
 	
 	propAddr.mSelector = kAudioDevicePropertyHogMode;
 	propAddr.mScope = kAudioDevicePropertyScopeOutput;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 	propSize = sizeof(pid_t);
 	
 	cProcessID = ::getpid();
@@ -622,7 +622,7 @@ void HALSignalGenerator::queryDeviceStreamFormat(AudioDeviceID devId)
 
     propAddr.mSelector = kAudioDevicePropertyStreamFormat;
     propAddr.mScope = kAudioDevicePropertyScopeOutput;
-    propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
     propSize = sizeof(AudioStreamBasicDescription);
 
     ::memset(&deviceFormat,0,sizeof(AudioStreamBasicDescription));
@@ -927,7 +927,7 @@ QVector<AudioStreamID> HALSignalGenerator::getAudioStreamsForDevice(AudioDeviceI
 
 	propAddr.mSelector = kAudioDevicePropertyStreams;
 	propAddr.mScope = kAudioDevicePropertyScopeOutput;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 	
 	err = AudioObjectGetPropertyDataSize(devID,&propAddr,0,0,&paramSize);
 	if(err==noErr)
@@ -1433,7 +1433,7 @@ bool HALSignalGenerator::audioRunLoopSetup()
 
 	propAddr.mSelector = kAudioHardwarePropertyRunLoop;
 	propAddr.mScope = kAudioObjectPropertyScopeGlobal;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 	
     err = AudioObjectSetPropertyData(kAudioObjectSystemObject,&propAddr,0,0,sizeof(CFRunLoopRef),&runLoop);
 	if(err==noErr)
@@ -1489,7 +1489,7 @@ bool HALSignalGenerator::setAudioStream(AudioStreamID streamID,AudioStreamBasicD
 
 	propAddr.mSelector = kAudioStreamPropertyPhysicalFormat;
 	propAddr.mScope = kAudioObjectPropertyScopeGlobal;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 	
 	if(getDescription(format,desc))
 	{
@@ -1565,7 +1565,7 @@ bool HALSignalGenerator::disableMixingIfPossible(AudioDeviceID devId)
 
 	propAddr.mSelector = kAudioDevicePropertySupportsMixing;
 	propAddr.mScope = kAudioObjectPropertyScopeGlobal;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 
 	if(AudioObjectHasProperty(devId,&propAddr))
 	{
@@ -1618,7 +1618,7 @@ void HALSignalGenerator::reenableMixing(AudioDeviceID devId)
 
 	propAddr.mSelector = kAudioDevicePropertySupportsMixing;
 	propAddr.mScope = kAudioObjectPropertyScopeGlobal;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	propAddr.mElement = kAudioObjectPropertyElementMain;
 
 	if(AudioObjectHasProperty(devId,&propAddr))
 	{

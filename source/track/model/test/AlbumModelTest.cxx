@@ -1802,8 +1802,8 @@ class AlbumModelBuildModelSortedIndexTest : public AlbumModelTest
 {
 	public:
 		AlbumModelBuildModelSortedIndexTest();
-		MOCK_METHOD2(addToModelForGivenMap,void(const QueryResult& results,const QMap<QString,int>& map));
-		void dummyAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map);
+		MOCK_METHOD2(addToModelForGivenMap,void(const QueryResult& results,const QMultiMap<QString,int>& map));
+		void dummyAddToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map);
 	protected:
 		int m_count;
 };
@@ -1811,7 +1811,7 @@ class AlbumModelBuildModelSortedIndexTest : public AlbumModelTest
 AlbumModelBuildModelSortedIndexTest::AlbumModelBuildModelSortedIndexTest() : m_count(1)
 {}
 
-void AlbumModelBuildModelSortedIndexTest::dummyAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map)
+void AlbumModelBuildModelSortedIndexTest::dummyAddToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map)
 {
 	for(int i=0;i<m_count;i++)
 	{
@@ -1870,7 +1870,7 @@ TEST(AlbumModel,buildModelFromSortedIndexIsIndexedAtExpectedPositions)
 	sectionMap.insert(QChar('f'),fMap);
 
 	AlbumModelBuildModelSortedIndexTest model;
-    EXPECT_CALL(model,addToModelForGivenMap(A<const QueryResult&>(),A<const QMap<QString,int>& >())).Times(3)
+	EXPECT_CALL(model,addToModelForGivenMap(A<const QueryResult&>(),A<const QMultiMap<QString,int>& >())).Times(3)
         .WillRepeatedly(Invoke(&model,&AlbumModelBuildModelSortedIndexTest::dummyAddToModelForGivenMap));
 
     model.testBuildModelFromSortedIndex(results,alphabet,sectionMap);
@@ -1905,8 +1905,8 @@ class AlbumModelEnumerateSectionsTest : public AlbumModelTest
 	public:
 		MOCK_CONST_METHOD0(getIndexAlphabet,QVector<QChar>());
 		MOCK_CONST_METHOD2(buildIndexMap,void(const QVector<QChar>& alphabet,QMap<QChar,int>& indexMap));
-		MOCK_CONST_METHOD4(mapResultsToAlphabetIndex,void(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMap<QString,int> >& sectionMap));
-		MOCK_METHOD3(buildModelFromSortedIndex,void(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMap<QString,int> >& sectionMap));
+		MOCK_CONST_METHOD4(mapResultsToAlphabetIndex,void(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMultiMap<QString,int> >& sectionMap));
+		MOCK_METHOD3(buildModelFromSortedIndex,void(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMultiMap<QString,int> >& sectionMap));
 };
 
 //-------------------------------------------------------------------------------------------
@@ -1919,8 +1919,8 @@ TEST(AlbumModel,enumerateSectionsMethods)
 	AlbumModelEnumerateSectionsTest model;
 	EXPECT_CALL(model,getIndexAlphabet()).Times(1).WillOnce(Return(alphabet));
 	EXPECT_CALL(model,buildIndexMap(alphabet,A<QMap<QChar,int>&>())).Times(1);
-    EXPECT_CALL(model,mapResultsToAlphabetIndex(A<const QueryResult&>(),A<const QMap<QChar,int>&>(),alphabet,A<QMap<QChar,QMap<QString,int> >& >())).Times(1);
-    EXPECT_CALL(model,buildModelFromSortedIndex(A<const QueryResult&>(),alphabet,A<const QMap<QChar,QMap<QString,int> >& >())).Times(1);
+	EXPECT_CALL(model,mapResultsToAlphabetIndex(A<const QueryResult&>(),A<const QMap<QChar,int>&>(),alphabet,A<QMap<QChar,QMultiMap<QString,int> >& >())).Times(1);
+	EXPECT_CALL(model,buildModelFromSortedIndex(A<const QueryResult&>(),alphabet,A<const QMap<QChar,QMultiMap<QString,int> >& >())).Times(1);
 	
 	model.testEnumerateSections(result);
 }

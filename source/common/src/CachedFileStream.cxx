@@ -689,7 +689,7 @@ void CachedFileStream::insertIntoMasks(tint offset,tint length,QMap<tint,tint>& 
 	{
 		intersectLoop = false;
 					
-        for(QMap<tint,tint>::iterator ppK=maskMap.begin();!intersectLoop && ppK!=maskMap.end();++ppK)
+		for(QMap<tint,tint>::iterator ppK=maskMap.begin();!intersectLoop && ppK!=maskMap.end();ppK++)
 		{
             if(isOffsetIntersection(offset,length,ppK.key(),ppK.value()))
 			{
@@ -719,6 +719,10 @@ void CachedFileStream::insertIntoMasks(tint offset,tint length,QMap<tint,tint>& 
 					}
 				}
 				intersectLoop = true;
+				if(ppK == maskMap.end())
+				{
+					break;
+				}
 			}
 		}
 	} while(intersectLoop && insertFlag);

@@ -18,7 +18,9 @@ add_library(widget SHARED ${WIDGET_HEADER} ${WIDGET_SOURCE} ${WIDGET_UI_HEADERS}
 
 if (OMEGA_WIN32)
 	target_link_libraries(widget common http mime network_omega trackinfo xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets winmm ws2_32)
-else (OMEGA_WIN32)
+elseif (OMEGA_MACOSX)
+	target_link_libraries(widget common http mime network_omega trackinfo xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets ${URLTYPE_FRAMEWORK_UNIT})
+elseif (OMEGA_LINUX)
 	target_link_libraries(widget common http mime network_omega trackinfo xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets)
 endif (OMEGA_WIN32)
 

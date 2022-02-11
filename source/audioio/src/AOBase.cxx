@@ -314,6 +314,7 @@ void AudioThread::run()
 		if(audioOutput->init())
 		{
 			m_audioOutput = audioOutput;
+			QThread::yieldCurrentThread();
 			m_condition.wakeAll();
 			exec();
 			m_audioOutput->stopCodec();
