@@ -24,7 +24,7 @@ class OmegaAudioIOInterface : public QObject, public OmegaAudioInterface
 	Q_OBJECT
 	
 	public:
-		OmegaAudioIOInterface(OmegaPlaylistInterface *pPLInterface, QObject *parent = 0);
+		OmegaAudioIOInterface(QSharedPointer<OmegaPlaylistInterface>& pPLInterface, QObject *parent = 0);
 		virtual ~OmegaAudioIOInterface();
 		
 		virtual void playFile(const QString& fileName, bool isNext);
@@ -37,7 +37,7 @@ class OmegaAudioIOInterface : public QObject, public OmegaAudioInterface
 	private:
 	
 		QSharedPointer<audioio::AOBase> m_audio;
-		OmegaPlaylistInterface *m_pPLInterface;
+		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		

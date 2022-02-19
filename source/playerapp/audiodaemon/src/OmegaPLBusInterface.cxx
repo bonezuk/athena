@@ -5,8 +5,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaPLBusInterface::OmegaPLBusInterface(QObject *parent) : OmegaPlaylistInterface(),
-	QObject(parent)
+OmegaPLBusInterface::OmegaPLBusInterface(QObject *parent) : OmegaPlaylistInterface(parent)
 {}
 
 //-------------------------------------------------------------------------------------------

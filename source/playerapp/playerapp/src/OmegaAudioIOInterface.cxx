@@ -9,7 +9,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaAudioIOInterface::OmegaAudioIOInterface(OmegaPlaylistInterface *pPLInterface, QObject *parent) : QObject(parent),
+OmegaAudioIOInterface::OmegaAudioIOInterface(QSharedPointer<OmegaPlaylistInterface>& pPLInterface, QObject *parent) : QObject(parent),
 	OmegaAudioInterface(),
 	m_audio(),
 	m_pPLInterface(pPLInterface)
@@ -18,7 +18,10 @@ OmegaAudioIOInterface::OmegaAudioIOInterface(OmegaPlaylistInterface *pPLInterfac
 //-------------------------------------------------------------------------------------------
 
 OmegaAudioIOInterface::~OmegaAudioIOInterface()
-{}
+{
+	m_audio.clear();
+	m_pPLInterface.clear();
+}
 
 //-------------------------------------------------------------------------------------------
 

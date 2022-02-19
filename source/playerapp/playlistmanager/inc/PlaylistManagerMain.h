@@ -21,7 +21,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class PlaylistManagerApp : public QGuiApplication, public OmegaPlaylistInterface
+class PlaylistManagerApp : public QGuiApplication
 {
 	Q_OBJECT
 	
@@ -30,23 +30,14 @@ class PlaylistManagerApp : public QGuiApplication, public OmegaPlaylistInterface
 		virtual ~PlaylistManagerApp();
 		
 		virtual void initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB);
-		virtual PlaybackStateController *getPlaybackState();
-		virtual PlayListModel *getPlayListModel();
-		
-		virtual void playbackTime(quint64 tS);
-		virtual void onAudioStart(const QString& name);
-		virtual void onAudioPlay();
-		virtual void onAudioPause();
-		virtual void onAudioStop();
-		virtual void onAudioBuffer(tfloat32 percent);
-		virtual void onAudioReadyForNext();
-		virtual void onAudioNoNext();
-		virtual void onAudioCrossfade();
+		virtual QSharedPointer<PlaybackStateController>& getPlaybackState();
+		virtual QSharedPointer<PlayListModel>& getPlayListModel();
+		virtual QSharedPointer<OmegaPlaylistInterface>& getPlayListInterface();
 
 	private:
-		PlaybackStateController *m_pState;
-		PlayListModel *m_pModel;
-		OmegaAudioBusInterface *m_pAudioInterface;
+		QSharedPointer<PlayListModel> m_pModel;
+		QSharedPointer<OmegaAudioBusInterface> m_pAudioInterface;
+		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
 };
 
 //-------------------------------------------------------------------------------------------

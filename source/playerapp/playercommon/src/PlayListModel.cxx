@@ -13,23 +13,20 @@ PlayListModel::PlayListModel(QObject *parent) : QAbstractListModel(parent),
 
 //-------------------------------------------------------------------------------------------
 
-PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, OmegaAudioInterface *pAudioInterface, QObject *parent) : QAbstractListModel(parent),
+PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : QAbstractListModel(parent),
 	m_playList(playList),
 	m_pAudioInterface(pAudioInterface),
 	m_pPlaybackState(0)
 {
-	m_pPlaybackState = new PlaybackStateController(pAudioInterface, this);
+	m_pPlaybackState = QSharedPointer<PlaybackStateController>(new PlaybackStateController(pAudioInterface, this));
 }
 
 //-------------------------------------------------------------------------------------------
 
 PlayListModel::~PlayListModel()
 {
-	if(m_pPlaybackState != 0)
-	{
-		delete m_pPlaybackState;
-		m_pPlaybackState = 0;
-	}
+	m_pAudioInterface.clear();
+	m_pPlaybackState.clear();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -41,7 +38,7 @@ void PlayListModel::printError(const char *strR, const char *strE) const
 
 //-------------------------------------------------------------------------------------------
 
-PlaybackStateController *PlayListModel::playbackState()
+QSharedPointer<PlaybackStateController>& PlayListModel::playbackState()
 {
 	return m_pPlaybackState;
 }

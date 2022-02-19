@@ -29,7 +29,7 @@ void setPluginLocation(const char *appPath)
 #endif
 	d.cd("Plugins");
 	pluginDir = d.absolutePath();
-	QCoreApplication::setLibraryPaths(QStringList(pluginDir));
+	QCoreApplication::addLibraryPath(pluginDir);
 #elif defined(Q_OS_WIN)
 	QFileInfo appFile(appPath);
 	QDir d = appFile.absolutePath();

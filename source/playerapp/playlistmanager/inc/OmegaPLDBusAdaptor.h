@@ -19,7 +19,7 @@ class OmegaPLDBusAdaptor : public QDBusAbstractAdaptor
 	Q_CLASSINFO("D-Bus Interface", OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME)
 	
 	public:
-		OmegaPLDBusAdaptor(OmegaPlaylistInterface *pPLInterface, QObject *parent = 0);
+		OmegaPLDBusAdaptor(QSharedPointer<OmegaPlaylistInterface>& pPLInterface, QObject *parent = 0);
 		virtual ~OmegaPLDBusAdaptor();
 		
 	public slots:
@@ -34,7 +34,7 @@ class OmegaPLDBusAdaptor : public QDBusAbstractAdaptor
 		Q_NOREPLY void onAudioCrossfade();
 
 	private:
-		OmegaPlaylistInterface *m_pPLInterface;
+		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
 };
 
 

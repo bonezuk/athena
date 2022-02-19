@@ -36,7 +36,7 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 
 	public:
 		PlaybackStateController(QObject *parent = 0);
-		PlaybackStateController(OmegaAudioInterface *pAudioInterface, QObject *parent = 0);
+		PlaybackStateController(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlaybackStateController();
 		
 		quint32 getTimeInSeconds() const;
@@ -59,7 +59,7 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 		void onStateChanged();
 		
 	private:
-		OmegaAudioInterface *m_pAudioInterface;
+		QSharedPointer<OmegaAudioInterface> m_pAudioInterface;
 		common::TimeStamp m_playbackTime;
 
 		qint32 m_pbIndex;

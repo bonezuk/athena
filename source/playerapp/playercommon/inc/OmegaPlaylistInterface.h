@@ -4,29 +4,36 @@
 //-------------------------------------------------------------------------------------------
 
 #include <QtGlobal>
+#include <QSharedPointer>
 
 #include "common/inc/CommonTypes.h"
-#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+#include "playerapp/playercommon/inc/PlayListModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class PLAYERCOMMON_EXPORT OmegaPlaylistInterface
+class PLAYERCOMMON_EXPORT OmegaPlaylistInterface : public QObject
 {
 	public:
-		OmegaPlaylistInterface();
+		OmegaPlaylistInterface(QObject *parent = 0);
+		virtual ~OmegaPlaylistInterface();
+
+		virtual void init(QSharedPointer<PlayListModel>& pModel);
 		
-		virtual void playbackTime(quint64 tS) = 0;
-		virtual void onAudioStart(const QString& name) = 0;
-		virtual void onAudioPlay() = 0;
-		virtual void onAudioPause() = 0;
-		virtual void onAudioStop() = 0;
-		virtual void onAudioBuffer(tfloat32 percent) = 0;
-		virtual void onAudioReadyForNext() = 0;
-		virtual void onAudioNoNext() = 0;
-		virtual void onAudioCrossfade() = 0;
+		virtual void playbackTime(quint64 tS);
+		virtual void onAudioStart(const QString& name);
+		virtual void onAudioPlay();
+		virtual void onAudioPause();
+		virtual void onAudioStop();
+		virtual void onAudioBuffer(tfloat32 percent);
+		virtual void onAudioReadyForNext();
+		virtual void onAudioNoNext();
+		virtual void onAudioCrossfade();
+		
+	private:
+		QSharedPointer<PlayListModel> m_pModel;
 };
 
 //-------------------------------------------------------------------------------------------

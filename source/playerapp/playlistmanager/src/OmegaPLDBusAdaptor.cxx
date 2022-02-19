@@ -6,7 +6,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaPLDBusAdaptor::OmegaPLDBusAdaptor(OmegaPlaylistInterface *pPLInterface, QObject *parent) : QDBusAbstractAdaptor(parent),
+OmegaPLDBusAdaptor::OmegaPLDBusAdaptor(QSharedPointer<OmegaPlaylistInterface>& pPLInterface, QObject *parent) : QDBusAbstractAdaptor(parent),
 	m_pPLInterface(pPLInterface)
 {}
 

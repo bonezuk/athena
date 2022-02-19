@@ -17,7 +17,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaPLBusInterface : public QObject, public OmegaPlaylistInterface
+class OmegaPLBusInterface : public OmegaPlaylistInterface
 {
 	Q_OBJECT
 		

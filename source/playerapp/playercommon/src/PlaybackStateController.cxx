@@ -6,7 +6,7 @@ namespace orcus
 //-------------------------------------------------------------------------------------------
 
 PlaybackStateController::PlaybackStateController(QObject *parent) : QObject(parent),
-	m_pAudioInterface(0),
+	m_pAudioInterface(),
 	m_playbackTime(),
 	m_pbIndex(-1),
 	m_pbItem(),
@@ -17,7 +17,7 @@ PlaybackStateController::PlaybackStateController(QObject *parent) : QObject(pare
 
 //-------------------------------------------------------------------------------------------
 
-PlaybackStateController::PlaybackStateController(OmegaAudioInterface *pAudioInterface, QObject *parent) : QObject(parent),
+PlaybackStateController::PlaybackStateController(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : QObject(parent),
 	m_pAudioInterface(pAudioInterface),
 	m_playbackTime(),
 	m_pbIndex(-1),
@@ -30,7 +30,9 @@ PlaybackStateController::PlaybackStateController(OmegaAudioInterface *pAudioInte
 //-------------------------------------------------------------------------------------------
 
 PlaybackStateController::~PlaybackStateController()
-{}
+{
+	m_pAudioInterface.clear();
+}
 
 //-------------------------------------------------------------------------------------------
 

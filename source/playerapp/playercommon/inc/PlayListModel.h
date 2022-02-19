@@ -40,7 +40,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		
 	public:
 		PlayListModel(QObject *parent = 0);
-		PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, OmegaAudioInterface *pAudioInterface, QObject *parent = 0);
+		PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlayListModel();
 		
 		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -50,13 +50,13 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		Q_INVOKABLE void onPlayPausePressed();
 		Q_INVOKABLE void playItemAtIndex(int index);
 		
-		virtual PlaybackStateController *playbackState();
+		virtual QSharedPointer<PlaybackStateController>& playbackState();
 		virtual void playNextItem(bool isNext);
 
 	private:
 		QVector<QPair<track::db::DBInfoSPtr,tint> > m_playList;
-		OmegaAudioInterface *m_pAudioInterface;
-		PlaybackStateController *m_pPlaybackState;
+		QSharedPointer<OmegaAudioInterface> m_pAudioInterface;
+		QSharedPointer<PlaybackStateController> m_pPlaybackState;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 
