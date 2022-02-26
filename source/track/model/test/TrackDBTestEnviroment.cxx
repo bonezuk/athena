@@ -37,6 +37,8 @@ TrackDBTestEnviroment::TrackDBTestEnviroment()
 		engine::blackomega::MPCodecInitialize::start();
 		engine::silveromega::SilverCodecInitialize::start();
 		engine::whiteomega::WhiteCodecInitialize::start();
+		
+		m_execPath = "";
 }
 
 //-------------------------------------------------------------------------------------------
@@ -62,6 +64,20 @@ TrackDBTestEnviroment *TrackDBTestEnviroment::instance()
 		m_instance = new TrackDBTestEnviroment;
 	}
 	return m_instance;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TrackDBTestEnviroment::setExecPath(const QString &path)
+{
+	m_execPath = path;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const QString& TrackDBTestEnviroment::execPath() const
+{
+	return m_execPath;
 }
 
 //-------------------------------------------------------------------------------------------

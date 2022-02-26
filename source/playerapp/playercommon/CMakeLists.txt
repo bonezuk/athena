@@ -18,3 +18,4 @@ endif (OMEGA_WIN32)
 if (${TIGER_LINUX_DISTRO})
 	install(TARGETS playercommon DESTINATION lib)
 endif (${TIGER_LINUX_DISTRO})
+

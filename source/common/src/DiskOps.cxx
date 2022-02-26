@@ -273,11 +273,7 @@ bool DiskOps::existLatin1(const QString& name, bool& useLatin)
 	}
 	if(!r)
 	{
-		if(S_IFREG & pathStat.st_mode)
-		{
-			return true;
-		}
-		else if(S_IFDIR & pathStat.st_mode)
+		if(S_IFREG & pathStat.st_mode || S_IFDIR & pathStat.st_mode || S_IFIFO & pathStat.st_mode)
 		{
 			return true;
 		}

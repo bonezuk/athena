@@ -33,8 +33,10 @@ class TrackDBTestEnviroment
 		static QString testUtilitySQLNormaliseWhitespace(const QString& iSql);
 
 		QString getDBDirectory();
-
 		QString getTempDirectory();
+		
+		void setExecPath(const QString &path);
+		const QString& execPath() const;
 
 	protected:
 
@@ -49,6 +51,7 @@ class TrackDBTestEnviroment
 		HMODULE m_greenOmegaDLL;
 		HMODULE m_RTPsilverOmegaDLL;
 #endif
+		QString m_execPath;
 
 		TrackDBTestEnviroment();
 
