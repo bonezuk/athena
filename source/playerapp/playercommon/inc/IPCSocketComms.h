@@ -7,6 +7,7 @@
 #include "common/inc/BIOStream.h"
 #include "common/inc/DiskOps.h"
 #include "common/inc/TimeStamp.h"
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -57,13 +58,14 @@ class PLAYERCOMMON_EXPORT IPCSocketComms : public QObject
 		virtual network::socket_type getClientConnection();
 		virtual network::socket_type closeSocket(network::socket_type s);
 		virtual void closeConnection();
-		virtual bool canDoSocketIO(network::socket_type s, bool isRead) const
-		virtual bool canReadFromSocket(network::socket_type s) const
-		virtual bool canWriteToSocket(network::socket_type s) const
+		virtual bool canDoSocketIO(network::socket_type s, bool isRead) const;
+		virtual bool canReadFromSocket(network::socket_type s) const;
+		virtual bool canWriteToSocket(network::socket_type s) const;
 		virtual bool isValidSocketAndBuffer(network::socket_type s, const uint8_t *data, int len, bool isEof) const;
 		virtual int readFromSocket(network::socket_type s, uint8_t *data, int len, bool& isEof);
 		virtual tint32 readMessageSize(network::socket_type s, bool& isEof);
 		virtual tint32 readMessageHeader(network::socket_type s, bool& isEof);
+		virtual int writeToSocket(network::socket_type s, const uint8_t *data, int len, bool& isEof);
 		virtual bool writeMessageHeader(network::socket_type s, tint32 msgLen, bool& isEof);
 };
 

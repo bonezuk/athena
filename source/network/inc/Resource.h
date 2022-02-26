@@ -38,6 +38,7 @@ const socket_type c_invalidSocket = INVALID_SOCKET;
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/select.h>
+#include <sys/un.h>
 #include <unistd.h>
 #include <errno.h>
 #include <netdb.h>

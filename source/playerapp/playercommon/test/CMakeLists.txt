@@ -1,9 +1,6 @@
-add_definitions(-DIPCSOCKETCOMMS_TEST_PROG_A)
+set ( IPCSOCKCOMMSTEST_PROG_SOURCE ./IPCSocketCommsTest_ProgA.cxx )
 
-set ( IPCSOCKCOMMSTEST_PROG_HEADER ./IPCSocketCommsTest.h )
-set ( IPCSOCKCOMMSTEST_PROG_SOURCE ./IPCSocketCommsTest.cxx )
-
-add_executable( ipcsocketcomms_test_prog_a ${IPCSOCKCOMMSTEST_PROG_HEADER} ${IPCSOCKCOMMSTEST_PROG_SOURCE} )
+add_executable( ipcsocketcomms_test_prog_a ${IPCSOCKCOMMSTEST_PROG_SOURCE} )
 if (OMEGA_WIN32)
 	target_link_libraries(ipcsocketcomms_test_prog_a playercommon engine common blackomega silveromega whiteomega network_omega trackdb trackinfo xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Quick ${QTVER}::Qml winmm ws2_32 wavpack)
 elseif (OMEGA_MACOSX)

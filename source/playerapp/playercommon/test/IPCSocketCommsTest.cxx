@@ -1,75 +1,8 @@
-//-------------------------------------------------------------------------------------------
-// Test program
-//-------------------------------------------------------------------------------------------
-#if defined(IPCSOCKETCOMMS_TEST_PROG_A)
-//-------------------------------------------------------------------------------------------
+#include "dlna/inc/DiskIF.h"
+#include "playerapp/playercommon/test/IPCSocketCommsTest.h"
+#include "track/model/test/TrackDBTestEnviroment.h"
 
-#include "playerapp/playercommon/inc/IPCSocketComms.h"
-
-//-------------------------------------------------------------------------------------------
-
-void sendAndReceiveOnUNIXDomainSocket_TestProcess(const char *socketPath)
-{
-	IPCSocketComms comm(e_Client);
-	
-	fprintf(stdout, "B - open client to '%s'\n", socketPath);
-	if(comm.open(QString::fromUtf8(socketPath)))
-	{
-		for(int i = 0; i < 100; i++)
-		{
-			int res;
-			QString testStr = QString("test no=%1").arg(i);
-			QByteArray txArr, rxArr;
-			
-			txArr = testStr.toUtf8();
-			fprintf(stdout, "B - send: %s\n", txArr.constData());
-			res = comm.write(txArr);
-			if(res == txArr.size())
-			{
-				fprintf(stdout, "B - ready to receive\n");
-				res = comm.read(rxArr);
-				if(res > 0)
-				{
-					fprintf(stdout, "B - receive: %s\n");
-				}
-				else
-				{
-					fprintf(stdout, "B - failed to read data from comms\n");
-				}
-			}
-			else
-			{
-				fprintf(stdout, "B - failed to write data to comms\n");
-			}
-		}
-		fprintf("B - closing client\n");
-		comm.close();
-	}
-	else
-	{
-		fprintf(stdout, "B - failed to open client connection to '%s'\n", socketPath);
-	}
-}
-
-//-------------------------------------------------------------------------------------------
-
-int main(int argc, char **argv)
-{
-	fprintf(stdout, "B - process started\n");
-	if(argc < 2)
-	{
-		fprintf(stdout, "B - no path to socket defined\n");
-	}
-	sendAndReceiveOnUNIXDomainSocket_TestProcess()
-	fprintf("B - process complete\n");
-	return 0;
-}
-
-// TODO - Add to CMAKE test program - ipcsocketcomms_test_prog_a
-
-//-------------------------------------------------------------------------------------------
-#else
-//-------------------------------------------------------------------------------------------
+using namespace orcus;
 
 //-------------------------------------------------------------------------------------------
 // IPCSocketComms_QtTestClass
@@ -87,7 +20,7 @@ QString IPCSocketComms_QtTestClass::pathToTestProgramA()
 	QString testProgName = "ipcsocketcomms_test_prog_a";
 	QFileInfo appFile(m_pathToTestExec);
 	QString progPath = dlna::DiskIF::mergeName(appFile.absolutePath(), testProgName);
-	if(!DiskOps::exist(progPath))
+	if(!common::DiskOps::exist(progPath))
 	{
 		fprintf(stdout, "Cannot find test exec '%s'\n", progPath.toUtf8().constData());
 		fprintf(stdout, "Check the build system to ensure test program is compiled and in place\n");
@@ -100,19 +33,20 @@ QString IPCSocketComms_QtTestClass::pathToTestProgramA()
 
 void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 {
+	int i = 0;
 	QString auxProgAPath = pathToTestProgramA();
-	QVERIFY(!auxProgAPath.isEmpty())
+	QVERIFY(!auxProgAPath.isEmpty());
 	
-	IPCSocketComms serverComm(e_Server);
+	IPCSocketComms serverComm(IPCSocketComms::e_Server);
 	bool res = false;
 	
-	fprintf(stdout, "A - open server to '%s'\n");
+	fprintf(stdout, "A - open server to '%s'\n", m_socketPath.toUtf8().constData());
 	if(serverComm.open(m_socketPath))
 	{
 		QProcess *processA = new QProcess(this);
 		QStringList argsA;
 		
-		argsA.push(m_socketPath);
+		argsA.append(m_socketPath);
 		fprintf(stdout, "A - starting process B\n");
 		processA->start(auxProgAPath, argsA);
 		
@@ -124,9 +58,9 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 		
 		if(processA->state() == QProcess::Running)
 		{
-			int i = 0;
-			
 			fprintf(stdout, "A - process B started\n");
+
+			i = 0;
 			while(i < 100)
 			{
 				int r;
@@ -175,7 +109,7 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 			}
 			else
 			{
-				fprintf(stdout, "A - error in send and receive of messages from B\n")
+				fprintf(stdout, "A - error in send and receive of messages from B\n");
 			}
 		}
 		else
@@ -192,7 +126,7 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 	}
 	else
 	{
-		fprintf(stdout, "A - failed to open server connection to '%s'\n", m_socketPath);
+		fprintf(stdout, "A - failed to open server connection to '%s'\n", m_socketPath.toUtf8().constData());
 	}
 	
 	QVERIFY(res);
@@ -202,7 +136,7 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 // IPCSocketComms_QtTestApplication
 //-------------------------------------------------------------------------------------------
 
-IPCSocketComms_QtTestApplication(const QString& pathExec, const QString& socketPath, int argc,char **argv) : QCoreApplication(argc,argv),
+IPCSocketComms_QtTestApplication::IPCSocketComms_QtTestApplication(const QString& pathExec, const QString& socketPath, int argc,char **argv) : QCoreApplication(argc,argv),
 	m_succeeded(false),
 	m_pathToTestExec(pathExec),
 	m_socketPath(socketPath)
@@ -221,7 +155,7 @@ bool IPCSocketComms_QtTestApplication::testSucceeded() const
 
 void IPCSocketComms_QtTestApplication::runTests()
 {
-	IPCSocketComms_QtTestClass tests(m_pathToTestExec, m_socketPath);
+	IPCSocketComms_QtTestClass tests(m_pathToTestExec, m_socketPath, this);
 	m_succeeded = (QTest::qExec(&tests)==0) ? true : false;
 	quit();
 }
@@ -242,7 +176,4 @@ TEST(IPCSocketComms,RunQtUnitTests)
     QApplication::setLibraryPaths(libPaths);
 }
 
-
-//-------------------------------------------------------------------------------------------
-#endif
 //-------------------------------------------------------------------------------------------

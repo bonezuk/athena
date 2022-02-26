@@ -9,7 +9,7 @@ IPCSocketComms::IPCSocketComms(Type type, QObject *parent) : QObject(parent),
 	m_type(type),
 	m_socketPath(),
 	m_socket(network::c_invalidSocket),
-	m_clientSocket(network::c_invalidSocket),
+	m_clientSocket(network::c_invalidSocket)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ void IPCSocketComms::setTimeout(const common::TimeStamp& t)
 
 void IPCSocketComms::printError(const char *strR, const char *strE) const
 {
-	common::g_Log << "IPCSocketComms:: - " << strR << " - " << strE << common::c_endl;
+	common::Log::g_Log << "IPCSocketComms:: - " << strR << " - " << strE << common::c_endl;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -180,7 +180,8 @@ bool IPCSocketComms::open(const QString& socketPath)
 		printError("openServer", err.toUtf8().constData());
 		return false;
 	}
-	
+
+	QByteArray sName = socketPath.toUtf8();
 	len = (sName.size() < sizeof(addr.sun_path) - 1) ? sName.size() : sizeof(addr.sun_path) - 1;
 	::memset(&addr, 0, sizeof(struct sockaddr_un));
 	addr.sun_family = AF_UNIX;
@@ -276,11 +277,11 @@ network::socket_type IPCSocketComms::openConnectionFromClient()
 {
 	struct sockaddr_un addr;
 	network::socket_type cSocket = network::c_invalidSocket;
-	addrlen_type len = sizeof(struct sockaddr_in);
+	network::addrlen_type len = sizeof(struct sockaddr_in);
 
 	if(type() == e_Server && m_socket == network::c_invalidSocket)
 	{
-		printError("openConnectionFromClient", "Invalid state to open connection from client")
+		printError("openConnectionFromClient", "Invalid state to open connection from client");
 		return cSocket;
 	}
 	cSocket = ::accept(m_socket, reinterpret_cast<struct sockaddr *>(&addr), &len);
@@ -294,8 +295,8 @@ network::socket_type IPCSocketComms::openConnectionFromClient()
 	}
 	else
 	{
-		QStrint err = QString("Error accepting connection from client on socket '%1'. %2")
-			.arg(socketPath).arg(strerror(errno));
+		QString err = QString("Error accepting connection from client on socket '%1'. %2")
+			.arg(m_socketPath).arg(strerror(errno));
 		printError("openConnectionFromClient", err.toUtf8().constData());
 	}
 	return cSocket;
@@ -475,7 +476,7 @@ int IPCSocketComms::readFromSocket(network::socket_type s, uint8_t *data, int le
 			else if(errno != EINTR)
 			{
 				QString err = QString("Error reading from socket. %1").arg(::strerror(errno));
-				printError("readFromSocket", err.toUft8().constData());
+				printError("readFromSocket", err.toUtf8().constData());
 				return -1;
 			}
 		}
@@ -504,7 +505,7 @@ tint32 IPCSocketComms::readMessageSize(network::socket_type s, bool& isEof)
 	}
 	else if(res < 0)
 	{
-		pritnError("readMessageSize", "Error reading message size");
+		printError("readMessageSize", "Error reading message size");
 	}
 	else
 	{
@@ -601,7 +602,7 @@ int IPCSocketComms::read(QByteArray& arr)
 	}
 	else if(msgSize < 0)
 	{
-		printError("read", "Error reading message header")
+		printError("read", "Error reading message header");
 	}
 	
 	if(isEof)
@@ -625,7 +626,7 @@ int IPCSocketComms::writeToSocket(network::socket_type s, const uint8_t *data, i
 
 	for(pos = 0; pos < len;)
 	{
-		res = write(s, &data[pos], len - pos);
+		res = ::write(s, &data[pos], len - pos);
 		if(res > 0)
 		{
 			pos += res;
@@ -647,7 +648,7 @@ int IPCSocketComms::writeToSocket(network::socket_type s, const uint8_t *data, i
 			else if(errno != EINTR)
 			{
 				QString err = QString("Error reading from socket. %1").arg(::strerror(errno));
-				printError("readFromSocket", err.toUft8().constData());
+				printError("readFromSocket", err.toUtf8().constData());
 				return -1;
 			}
 		}
@@ -662,7 +663,7 @@ bool IPCSocketComms::writeMessageHeader(network::socket_type s, tint32 msgLen, b
 	const char c_headerID[4] = {'M', '#', 'G', '_'};
 	bool res = false;
 	
-	if(writeToSocket(s, c_headerID, 4, isEof) == 4)
+	if(writeToSocket(s, reinterpret_cast<const uint8_t *>(c_headerID), 4, isEof) == 4)
 	{
 		if(writeToSocket(s, reinterpret_cast<const uint8_t *>(&msgLen), 4, isEof) == 4)
 		{
@@ -684,7 +685,9 @@ bool IPCSocketComms::writeMessageHeader(network::socket_type s, tint32 msgLen, b
 
 int IPCSocketComms::write(const QByteArray& arr)
 {
-	int res;
+	bool isEof = false;
+	network::socket_type s;
+	int res = -1;
 	
 	if(arr.size() > 0)
 	{
@@ -697,7 +700,7 @@ int IPCSocketComms::write(const QByteArray& arr)
 		
 		if(writeMessageHeader(s, static_cast<tint32>(arr.size()), isEof))
 		{
-			if(writeToSocket(s, reinterpret_cast<const uint8_t *>(arr.constData(), arr.size(), isEof) == arr.size())
+			if(writeToSocket(s, reinterpret_cast<const uint8_t *>(arr.constData()), arr.size(), isEof) == arr.size())
 			{
 				res = arr.size();
 			}
@@ -709,7 +712,6 @@ int IPCSocketComms::write(const QByteArray& arr)
 		else
 		{
 			printError("write", "Failed to write message header");
-			res = -1;
 		}
 		
 		if(isEof)
