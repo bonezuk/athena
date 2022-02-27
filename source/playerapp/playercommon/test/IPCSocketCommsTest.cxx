@@ -37,6 +37,9 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 	QString auxProgAPath = pathToTestProgramA();
 	QVERIFY(!auxProgAPath.isEmpty());
 	
+	QCoreApplication *app = dynamic_cast<QCoreApplication *>(parent());
+	QVERIFY(app != 0);
+	
 	IPCSocketComms serverComm(IPCSocketComms::e_Server);
 	bool res = false;
 	
@@ -50,18 +53,21 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 		fprintf(stdout, "A - starting process B\n");
 		processA->start(auxProgAPath, argsA);
 		
+		app->processEvents();
 		while(processA->state() == QProcess::Starting)
 		{
 			QThread::msleep(50);
-			fprintf(stdout, "A - waiting on B to start\n");
+			app->processEvents();
+			fprintf(stdout, "A(%d) - waiting on B to start\n", getpid());
 		}
 		
 		if(processA->state() == QProcess::Running)
 		{
-			fprintf(stdout, "A - process B started\n");
+			int timeoutCount = 0;
 
+			fprintf(stdout, "A(%d) - process B started\n", getpid());
 			i = 0;
-			while(i < 100)
+			while(i < 10000 & timeoutCount < 3)
 			{
 				int r;
 				QByteArray rxArr, txArr;
@@ -70,27 +76,34 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 				if(r > 0)
 				{
 					QString testStr = QString::fromUtf8(rxArr);
-					fprintf(stdout, "A - receive: %s\n", testStr.toUtf8().constData());
+					fprintf(stdout, "A(%d) - receive: %s\n", getpid(), testStr.toUtf8().constData());
 					txArr = testStr.toUtf8();
 					if(serverComm.write(txArr) == txArr.size())
 					{
-						fprintf(stdout, "A - send: %s\n", txArr.constData());
+						fprintf(stdout, "A(%d) - send: %s\n", getpid(), txArr.constData());
 						i++;
 					}
 					else
 					{
-						fprintf(stdout, "A - error writing data to comms\n");
+						fprintf(stdout, "A(%d) - error writing data to comms\n", getpid());
 						break;
 					}
 				}
 				else if(!r)
 				{
-					fprintf(stdout, "A - waiting to receive data from B.\n");
+					fprintf(stdout, "A(%d) - waiting to receive data from B.\n", getpid());
+					timeoutCount++;
+					QThread::msleep(50);
 				}
 				else
 				{
-					fprintf(stdout, "A - error reading data from comms");
+					fprintf(stdout, "A(%d) - error reading data from comms", getpid());
 					break;
+				}
+
+				if(!(i % 100))
+				{
+					app->processEvents();
 				}
 			}
 		}
@@ -99,10 +112,11 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 			fprintf(stdout, "A - process B is not running\n");
 		}
 		
-		if(!processA->waitForFinished())
+		fprintf(stdout, "A - wait for B to finish\n");
+		if(processA->waitForFinished(1000))
 		{
 			fprintf(stdout, "A - process B has exited\n");
-			if(i == 100)
+			if(i == 10000)
 			{
 				fprintf(stdout, "A - all expected messages from B received\n");
 				res = true;
@@ -120,6 +134,11 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 				processA->kill();
 			} while(processA->waitForFinished());
 		}
+
+		{
+			QString stdA = QString::fromUtf8(processA->readAllStandardOutput());
+			fprintf(stdout,"B Process final output\n%s", stdA.toUtf8().constData());
+		}
 		delete processA;
 		
 		serverComm.close();
@@ -131,6 +150,66 @@ void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
 	
 	QVERIFY(res);
 }
+
+
+/*
+void IPCSocketComms_QtTestClass::sendAndReceiveFromClient()
+{
+	int i = 0;
+	IPCSocketComms serverComm(IPCSocketComms::e_Server);
+	bool res = false;
+	
+	fprintf(stdout, "A - open server to '%s'\n", m_socketPath.toUtf8().constData());
+	if(serverComm.open(m_socketPath))
+	{
+		int timeoutCount = 0;
+
+		fprintf(stdout, "A(%d) - process B started\n", getpid());
+		i = 0;
+		while(i < 1000000000 & timeoutCount < 30)
+		{
+			int r;
+			QByteArray rxArr, txArr;
+			
+			r = serverComm.read(rxArr);
+			if(r > 0)
+			{
+				QString testStr = QString::fromUtf8(rxArr);
+				fprintf(stdout, "A(%d) - receive: %s\n", getpid(), testStr.toUtf8().constData());
+				txArr = testStr.toUtf8();
+				if(serverComm.write(txArr) == txArr.size())
+				{
+					fprintf(stdout, "A(%d) - send: %s\n", getpid(), txArr.constData());
+					i++;
+				}
+				else
+				{
+					fprintf(stdout, "A(%d) - error writing data to comms\n", getpid());
+					break;
+				}
+			}
+			else if(!r)
+			{
+				fprintf(stdout, "A(%d) - waiting to receive data from B.\n", getpid());
+				timeoutCount++;
+			}
+			else
+			{
+				fprintf(stdout, "A(%d) - error reading data from comms", getpid());
+				break;
+			}
+		}
+		serverComm.close();
+	}
+	else
+	{
+		fprintf(stdout, "A - failed to open server connection to '%s'\n", m_socketPath.toUtf8().constData());
+	}
+	
+	res = true;
+	QVERIFY(res);
+}
+*/
 
 //-------------------------------------------------------------------------------------------
 // IPCSocketComms_QtTestApplication

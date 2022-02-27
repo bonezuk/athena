@@ -9,7 +9,8 @@ IPCSocketComms::IPCSocketComms(Type type, QObject *parent) : QObject(parent),
 	m_type(type),
 	m_socketPath(),
 	m_socket(network::c_invalidSocket),
-	m_clientSocket(network::c_invalidSocket)
+	m_clientSocket(network::c_invalidSocket),
+	m_timeout(c_timeoutDefault)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -44,7 +45,7 @@ void IPCSocketComms::setTimeout(const common::TimeStamp& t)
 
 void IPCSocketComms::printError(const char *strR, const char *strE) const
 {
-	common::Log::g_Log << "IPCSocketComms:: - " << strR << " - " << strE << common::c_endl;
+	common::Log::g_Log << "IPCSocketComms::" << strR << " - " << strE << common::c_endl;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -77,9 +78,6 @@ bool IPCSocketComms::openServer(const QString& socketPath, struct sockaddr_un *a
 		m_socket = ::socket(AF_UNIX, SOCK_STREAM, 0);
 		if(m_socket != network::c_invalidSocket)
 		{
-			int len;
-			QByteArray sName = socketPath.toUtf8().constData();
-			
 			if(!bind(m_socket, reinterpret_cast<struct sockaddr *>(addr), sizeof(struct sockaddr_un)))
 			{
 				if(!listen(m_socket, c_maxBacklog))
@@ -587,7 +585,11 @@ int IPCSocketComms::read(QByteArray& arr)
 		
 		inArr.resize(msgSize);
 		len = readFromSocket(s, reinterpret_cast<uint8_t *>(inArr.data()), msgSize, isEof);
-		if(len != msgSize)
+		if(len == msgSize)
+		{
+			arr = inArr;
+		}
+		else
 		{
 			if(len < 0)
 			{
