@@ -118,32 +118,18 @@ int main(int argc, char **argv)
 			engine.rootContext()->setContextProperty("playbackStateController", app->getPlaybackState().data());
 
 			engine.load(QUrl("qrc:/Resources/playlist.qml"));
-
-#if defined(OMEGA_LINUX)
-			QDBusConnection bus = QDBusConnection::systemBus();
-#else
-			QDBusConnection bus = QDBusConnection::sessionBus();
-#endif
-			if(bus.isConnected())
+			
+			OmegaPLService *plService = new OmegaPLService(app->getPlayListInterface());
+			if(plService->start())
 			{
-				QObject plIFaceObj;
-				OmegaPLDBusAdaptor *pIFace = new OmegaPLDBusAdaptor(app->getPlayListInterface(), &plIFaceObj);
-				bus.registerObject("/", &plIFaceObj);
-				if(bus.registerService(OMEGAPLAYLISTMANAGER_SERVICE_NAME))
-				{
-					res = app->exec();
-				}
-				else
-				{
-					common::Log::g_Log << "Failed to present register dbus service for Playlist Manager." << common::c_endl;
-					common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
-				}
+				res = app->exec();
+				plService->stop();
 			}
 			else
 			{
-				common::Log::g_Log << "Failed to connect to session D-Bus" << common::c_endl;
-				common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
+				common::Log::g_Log << "Failed to start IPC service" << common::c_endl;
 			}
+			delete plService;
     	}
     	delete trackDB;
     }

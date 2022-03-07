@@ -5,7 +5,7 @@
 
 #include "common/inc/SBService.h"
 #include "common/inc/CommonFunctions.h"
-
+#include "dlna/inc/DiskIF.h"
 #include "engine/blackomega/inc/MPCodec.h"
 #include "engine/silveromega/inc/SilverCodec.h"
 #include "engine/whiteomega/inc/WhiteCodec.h"
@@ -105,6 +105,15 @@ void releaseCodecs()
 	engine::silveromega::SilverCodecInitialize::end();
 	engine::blackomega::MPCodecInitialize::end();
 	engine::CodecInitialize::end();
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString pathToUNIXSocket(const QString& serviceName)
+{
+	QString fileName = serviceName + ".usock";
+	QString path = dlna::DiskIF::mergeName(userApplicationDataDirectory(), fileName);
+	return path;
 }
 
 //-------------------------------------------------------------------------------------------

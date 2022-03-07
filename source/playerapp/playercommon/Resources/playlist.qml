@@ -86,7 +86,7 @@ Window {
                         Image {
                             height: parent.height
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: timeContainer.horizontalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
                             fillMode: Image.PreserveAspectFit
                             source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeHourUpperDigit, playbackStateController.timeInSeconds)
                         }
@@ -100,7 +100,7 @@ Window {
                         Image {
                             height: parent.height
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: timeContainer.horizontalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
                             fillMode: Image.PreserveAspectFit
                             source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeHourLowerDigit, playbackStateController.timeInSeconds)
                         }
@@ -114,7 +114,7 @@ Window {
                         Image {
                             height: parent.height
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: timeContainer.horizontalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
                             fillMode: Image.PreserveAspectFit
                             source: "images/digit_colon.png"
                         }
@@ -128,7 +128,7 @@ Window {
                         Image {
                             height: parent.height
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: timeContainer.horizontalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
                             fillMode: Image.PreserveAspectFit
                             source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeMinuteUpperDigit, playbackStateController.timeInSeconds)
                         }
@@ -142,7 +142,7 @@ Window {
                         Image {
                             height: parent.height
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: timeContainer.horizontalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
                             fillMode: Image.PreserveAspectFit
                             source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeMinuteLowerDigit, playbackStateController.timeInSeconds)
                         }
@@ -156,7 +156,7 @@ Window {
                         Image {
                             height: parent.height
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: timeContainer.horizontalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
                             fillMode: Image.PreserveAspectFit
                             source: "images/digit_colon.png"
                         }
@@ -170,7 +170,7 @@ Window {
                         Image {
                             height: parent.height
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: timeContainer.horizontalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
                             fillMode: Image.PreserveAspectFit
                             source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeSecondUpperDigit, playbackStateController.timeInSeconds)
                         }
@@ -184,7 +184,7 @@ Window {
                         Image {
                             height: parent.height
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: timeContainer.horizontalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
                             fillMode: Image.PreserveAspectFit
                             source: Playlist.getPlayTimeDigitImageName(Playlist.PlayTimeSecondLowerDigit, playbackStateController.timeInSeconds)
                         }

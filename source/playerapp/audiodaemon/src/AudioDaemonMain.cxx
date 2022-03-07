@@ -3,7 +3,7 @@
 #include "audioio/inc/WasAPIIF.h"
 #endif
 #include "playerapp/audiodaemon/inc/AudioDaemonMain.h"
-#include "playerapp/audiodaemon/inc/OmegaAudioDBusAdaptor.h"
+#include "playerapp/audiodaemon/inc/OmegaAudioService.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -13,7 +13,7 @@ namespace orcus
 AudioDaemonMain::AudioDaemonMain(int argc, char **argv) : QCoreApplication(argc, argv),
 	m_pAudio(0),
 	m_pPLInterface(0),
-	m_pDBusAudio(0)
+	m_pAudioIPC(0)
 {
 	QTimer::singleShot(100, this, SLOT(onInit()));
 	QObject::connect(this, SIGNAL(aboutToQuit()), this, SLOT(onQuitDaemon()));
@@ -44,7 +44,7 @@ void AudioDaemonMain::onInit()
 	m_pAudio = new OmegaAudioDaemon(m_pPLInterface, this);
 	if(m_pAudio->init())
 	{
-		if(initAudioDBus())
+		if(initAudioIPC())
 		{		
 			res = true;
 		}
@@ -66,10 +66,11 @@ void AudioDaemonMain::onQuitDaemon()
 
 void AudioDaemonMain::shutdownDaemon()
 {
-	if(m_pDBusAudio != 0)
+	if(m_pAudioIPC != 0)
 	{
-		delete m_pDBusAudio;
-		m_pDBusAudio = 0;
+		m_pAudioIPC->stop();
+		delete m_pAudioIPC;
+		m_pAudioIPC = 0;
 	}
 	if(m_pAudio != 0)
 	{
@@ -86,42 +87,18 @@ void AudioDaemonMain::shutdownDaemon()
 
 //-------------------------------------------------------------------------------------------
 
-bool AudioDaemonMain::initAudioDBus()
+bool AudioDaemonMain::initAudioIPC()
 {
 	bool res = false;
 	
-#if defined(OMEGA_LINUX)
-	QDBusConnection bus = QDBusConnection::systemBus();
-#else
-	QDBusConnection bus = QDBusConnection::sessionBus();
-#endif
-
-	if(bus.isConnected())
+	m_pAudioIPC = new OmegaAudioService(m_pAudio, this);
+	if(m_pAudioIPC->start())
 	{
-		m_pDBusAudio = new OmegaAudioDBusAdaptor(m_pAudio, this);
-		
-		if(bus.registerObject("/", this))
-		{
-			if(bus.registerService(OMEGAAUDIODAEMON_SERVICE_NAME))
-			{
-				res = true;
-			}
-			else
-			{
-				QString err = QString("Failed to register AudioDaemon interface to DBus. %1").arg(bus.lastError().message());
-				printError("initAudioDBus", err.toUtf8().constData());
-			}
-		}
-		else
-		{
-			QString err = QString("Failed to register root object to DBus. %1").arg(bus.lastError().message());
-			printError("initAudioDBus", err.toUtf8().constData());		
-		}
+		res = true;
 	}
 	else
 	{
-		QString err = QString("Failed to connect to DBus. %1").arg(bus.lastError().message());
-		printError("initAudioDBus", err.toUtf8().constData());
+		printError("initAudioIPC", "Failed to start IPC service");
 	}
 	return res;
 }

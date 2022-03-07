@@ -1,6 +1,3 @@
-#include "network/inc/Resource.h"
-#include "common/inc/Log.h"
-#include "playerapp/playercommon/inc/OmegaPiDBusServiceNames.h"
 #include "playerapp/playlistmanager/inc/OmegaAudioBusInterface.h"
 
 //-------------------------------------------------------------------------------------------
@@ -8,9 +5,8 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaAudioBusInterface::OmegaAudioBusInterface(QObject *parent) : OmegaAudioInterface(),
-	QObject(parent),
-	m_pAudioInterface()
+OmegaAudioBusInterface::OmegaAudioBusInterface(QObject *parent)  : OmegaAudioInterface(parent),
+	IPCInterfaceBase(QString::fromUtf8(OMEGAAUDIOINTERFACE_SERVICE_NAME))
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -26,69 +22,33 @@ void OmegaAudioBusInterface::printError(const char *strR, const char *strE) cons
 }
 
 //-------------------------------------------------------------------------------------------
+// { "function": "playFile", "fileName": "/Music/file_to_play.wav", "isNext": true }
+//-------------------------------------------------------------------------------------------
 
 void OmegaAudioBusInterface::playFile(const QString& fileName, bool isNext)
 {
-	QSharedPointer<QDBusInterface> pIface = getAudioInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call(QLatin1String("playFile"), fileName, isNext);
-	}
+	QVariantMap rpcMap;
+	rpcMap.insert(QString::fromUtf8("fileName"), QVariant(fileName));
+	rpcMap.insert(QString::fromUtf8("isNext"), QVariant(isNext));
+	sendRPCCall("playFile", rpcMap);
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "play" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioBusInterface::play()
 {
-	QSharedPointer<QDBusInterface> pIface = getAudioInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call(QLatin1String("play"));
-	}
+	sendRPCCall("play");
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "pause" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioBusInterface::pause()
 {
-	QSharedPointer<QDBusInterface> pIface = getAudioInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call(QLatin1String("pause"));
-	}
-}
-
-//-------------------------------------------------------------------------------------------
-
-QSharedPointer<QDBusInterface> OmegaAudioBusInterface::getAudioInterface()
-{
-	if(m_pAudioInterface.isNull() || !m_pAudioInterface->isValid())
-	{
-#if defined(OMEGA_LINUX)
-		QDBusConnection bus = QDBusConnection::systemBus();
-#else
-		QDBusConnection bus = QDBusConnection::sessionBus();
-#endif
-		if(bus.isConnected())
-		{
-			QSharedPointer<QDBusInterface> pInterface(new QDBusInterface(OMEGAAUDIODAEMON_SERVICE_NAME, "/", OMEGAAUDIODAEMON_DBUS_IFACE_NAME, bus, this));
-			if(pInterface->isValid())
-			{
-				m_pAudioInterface = pInterface;
-			}
-			else
-			{
-				QString err = QString("Failed to connect to Omega Audio Daemon. %1").arg(bus.lastError().message());
-				printError("getAudioInterface", err.toUtf8().constData());
-			}
-		}
-		else
-		{
-			QString err = QString("Failed to connect to D-Bus. %1").arg(bus.lastError().message());
-			printError("getAudioInterface", err.toUtf8().constData());
-		}
-	}
-	return m_pAudioInterface;
+	sendRPCCall("pause");
 }
 
 //-------------------------------------------------------------------------------------------

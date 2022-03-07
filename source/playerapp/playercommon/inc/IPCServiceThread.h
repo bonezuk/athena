@@ -1,29 +1,41 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_PLAYLISTMANAGER_OMEGAAUDIOBUSINTERFACE_H
-#define __PLAYERAPP_PLAYLISTMANAGER_OMEGAAUDIOBUSINTERFACE_H
+#ifndef __PLAYERAPP_PLAYERCOMMON_IPCSERVICETHREAD_H
+#define __PLAYERAPP_PLAYERCOMMON_IPCSERVICETHREAD_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
-#include "playerapp/playercommon/inc/OmegaAudioInterface.h"
+#include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
+#include "playerapp/playercommon/inc/OmegaPiBusServiceNames.h"
+#include "playerapp/playercommon/inc/IPCSocketComms.h"
+#include "playerapp/playercommon/inc/EmbeddedEnv.h"
+
+#include <QCoreApplication>
+#include <QThread>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaAudioBusInterface : public OmegaAudioInterface, public IPCInterfaceBase
+class IPCServiceThread : public QThread
 {
 	Q_OBJECT
 	public:
-		OmegaAudioBusInterface(QObject *parent = 0);
-		virtual ~OmegaAudioBusInterface();
+		IPCServiceThread(const QString& serviceName, QObject *parent = 0);
+		virtual ~IPCServiceThread();
 		
-		virtual void playFile(const QString& fileName, bool isNext);
-		virtual void play();
-		virtual void pause();
+		virtual bool startService();
+		virtual void stopService();
 		
-	private:
+	protected:
+		QString m_serviceName;
+		QSharedPointer<IPCSocketComms> m_pComms;
+		volatile bool m_running;
+		
 		virtual void printError(const char *strR, const char *strE) const;
+		virtual void run() override;
+		
+	signals:
+		void onProcessRPC(QByteArray);
 };
 
 //-------------------------------------------------------------------------------------------

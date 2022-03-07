@@ -21,6 +21,8 @@ PLAYERCOMMON_EXPORT QString userApplicationDataDirectory();
 PLAYERCOMMON_EXPORT void initCodecs();
 PLAYERCOMMON_EXPORT void releaseCodecs();
 
+PLAYERCOMMON_EXPORT QString pathToUNIXSocket(const QString& serviceName);
+
 //-------------------------------------------------------------------------------------------
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

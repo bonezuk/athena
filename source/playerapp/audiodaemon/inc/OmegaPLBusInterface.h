@@ -3,21 +3,19 @@
 #define __ORCUS_PLAYERAPP_AUDIODAEMON_OMEGAPLDBUSINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
-#include <QtDBus/QDBusAbstractAdaptor>
-#include <QtDBus/QDBusVariant>
-#include <QtDBus/QDBusInterface>
+#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
+
 #include <QSharedPointer>
 
 #include "common/inc/Log.h"
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
-#include "playerapp/playercommon/inc/OmegaPiDBusServiceNames.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaPLBusInterface : public OmegaPlaylistInterface
+class OmegaPLBusInterface : public OmegaPlaylistInterface, public IPCInterfaceBase
 {
 	Q_OBJECT
 		
@@ -35,13 +33,9 @@ class OmegaPLBusInterface : public OmegaPlaylistInterface
 		virtual void onAudioReadyForNext();
 		virtual void onAudioNoNext();
 		virtual void onAudioCrossfade();
-
+		
 	private:
-		QSharedPointer<QDBusInterface> m_pPLManagerInterface;
-		
 		virtual void printError(const char *strR, const char *strE) const;
-		
-		QSharedPointer<QDBusInterface> getPLManagerInterface();
 };
 
 //-------------------------------------------------------------------------------------------

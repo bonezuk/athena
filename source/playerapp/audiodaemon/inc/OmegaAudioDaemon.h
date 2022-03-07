@@ -10,7 +10,6 @@
 #include "common/inc/DiskOps.h"
 
 #include "playerapp/playercommon/inc/EmbeddedEnv.h"
-#include "playerapp/playercommon/inc/OmegaPiDBusServiceNames.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
 

@@ -13,7 +13,7 @@
 #include "playerapp/playercommon/inc/PlaylistLoadFunctions.h"
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
 
-#include "playerapp/playlistmanager/inc/OmegaPLDBusAdaptor.h"
+#include "playerapp/playlistmanager/inc/OmegaPLService.h"
 #include "playerapp/playlistmanager/inc/OmegaAudioBusInterface.h"
 
 //-------------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 
 #include "playerapp/audiodaemon/inc/OmegaAudioDaemon.h"
 #include "playerapp/audiodaemon/inc/OmegaPLBusInterface.h"
-#include "playerapp/audiodaemon/inc/OmegaAudioDBusAdaptor.h"
+#include "playerapp/audiodaemon/inc/OmegaAudioService.h"
 
 #include <QCoreApplication>
 
@@ -27,11 +27,11 @@ class AudioDaemonMain : public QCoreApplication
 	private:
 		OmegaAudioDaemon *m_pAudio;
 		OmegaPLBusInterface *m_pPLInterface;
-		OmegaAudioDBusAdaptor *m_pDBusAudio;
+		OmegaAudioService *m_pAudioIPC;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		
-		virtual bool initAudioDBus();
+		virtual bool initAudioIPC();
 		
 	private slots:
 		void onInit();

@@ -10,7 +10,6 @@
 #include "common/inc/DiskOps.h"
 
 #include "playerapp/playercommon/inc/EmbeddedEnv.h"
-#include "playerapp/playercommon/inc/OmegaPiDBusServiceNames.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
 
@@ -19,7 +18,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaAudioIOInterface : public QObject, public OmegaAudioInterface
+class OmegaAudioIOInterface : public OmegaAudioInterface
 {
 	Q_OBJECT
 	
