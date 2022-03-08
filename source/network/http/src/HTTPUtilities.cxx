@@ -1,4 +1,5 @@
 #include "network/http/inc/HTTPUtilities.h"
+#include "engine/inc/Codec.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -21,7 +22,7 @@ void populateContentExtensionMap(QMap<QString, QString>& map)
 	map.insert("aif", "audio/x-aiff");
 	map.insert("avif", "image/avif");
 	map.insert("avi", "video/x-msvideo");
-	map.insert('azw", "application/vnd.amazon.ebook");
+	map.insert("azw", "application/vnd.amazon.ebook");
 	map.insert("bin", "application/octet-stream");
 	map.insert("bmp", "image/bmp");
 	map.insert("bz", "application/x-bzip");
@@ -112,7 +113,7 @@ QString contentTypeFromExtension(const QString& fileName)
 		populateContentExtensionMap(extMap);
 	}
 	ppI = extMap.find(ext);
-	if(ppI != extMap.end())
+	if(ppI != extMap.constEnd())
 	{
 		type = ppI.value();
 	}

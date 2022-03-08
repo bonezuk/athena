@@ -1,5 +1,8 @@
-#include "playerapp/webservice/inc/OmegaWebServer.h"
+#include "playerapp/webservice/inc/OmegaWebService.h"
 #include "playerapp/playercommon/inc/EmbeddedEnv.h"
+
+#include <QFileInfo>
+#include <QDir>
 
 using namespace orcus;
 

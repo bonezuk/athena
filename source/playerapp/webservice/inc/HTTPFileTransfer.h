@@ -29,7 +29,7 @@ class HTTPFileTransfer
 		virtual void printError(const tchar *strR, const tchar *strE) const;
 		virtual bool isValid(network::http::HTTPReceive *recieve) const;
 		virtual void postErrorResponse(int code, network::http::HTTPReceive *recieve);
-		virtual void transferFile(const QString& fileName, network::http::HTTPReceive *recieve, const network::http::Unit& hdr);
+		virtual void transferFile(const QString& fileName, network::http::HTTPReceive *recieve, network::http::Unit& hdr);
 };
 
 //-------------------------------------------------------------------------------------------

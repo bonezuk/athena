@@ -1,4 +1,9 @@
 #include "playerapp/webservice/inc/HTTPFileTransfer.h"
+#include "common/inc/BIOStream.h"
+#include "dlna/inc/DiskIF.h"
+
+#include <QFileInfo>
+#include <QDir>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -46,7 +51,7 @@ bool HTTPFileTransfer::isValid(network::http::HTTPReceive *recieve) const
 
 void HTTPFileTransfer::postErrorResponse(int code, network::http::HTTPReceive *recieve)
 {
-	common::http::Unit hdr;
+	network::http::Unit hdr;
 	
 	hdr.response(code);
 	hdr.add("Connection","close");
@@ -55,7 +60,7 @@ void HTTPFileTransfer::postErrorResponse(int code, network::http::HTTPReceive *r
 
 //-------------------------------------------------------------------------------------------
 
-void HTTPFileTransfer::transferFile(const QString& fileName, network::http::HTTPReceive *recieve, const network::http::Unit& hdr)
+void HTTPFileTransfer::transferFile(const QString& fileName, network::http::HTTPReceive *recieve, network::http::Unit& hdr)
 {
 	const int c_blockLength = 128000;
 	// Timeout period where transfer is canceled if no progress occurs.
@@ -73,12 +78,12 @@ void HTTPFileTransfer::transferFile(const QString& fileName, network::http::HTTP
 		
 		for(amount = 0, loopCount = 1; amount < file.size() && !timeoutFlag; loopCount++)
 		{
-			if(revieve->connection()->getMessageQueueSize() < 5)
+			if(recieve->connection()->getMessageQueueSize() < 5)
 			{
 				int len = ((file.size() - amount) < c_blockLength) ? (file.size() - amount) : c_blockLength;
 				network::NetArraySPtr dataArray(new network::NetArray);
 				
-				dataArray->SetSize(len)
+				dataArray->SetSize(len);
 				if(file.read(dataArray->GetData(), len) == len)
 				{
 					recieve->connection()->postBody(dataArray);

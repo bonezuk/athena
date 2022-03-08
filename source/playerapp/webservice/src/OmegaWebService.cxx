@@ -1,12 +1,14 @@
 #include "playerapp/webservice/inc/OmegaWebService.h"
 
+#include <QFileInfo>
+
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
 OmegaWebService::OmegaWebService(const QString& rootDir, int argc, char **argv) : QCoreApplication(argc, argv),
-	m_rootDir(),
+	m_rootDir(rootDir),
 	m_webService(0),
 	m_webServer(0)
 {
@@ -50,7 +52,8 @@ void OmegaWebService::onStartService()
 	if(!isValidSetup())
 	{
 		printError("onStartService", "Invalid configuration, cannot start server");
-		return false;
+		quit();
+		return;
 	}
 	
 	try
@@ -80,7 +83,7 @@ void OmegaWebService::onStartService()
 			}
 			else
 			{
-				printError("startService", "Failed to instantiate HTTP service")
+				printError("startService", "Failed to instantiate HTTP service");
 			}
 		}
 		else

@@ -14,7 +14,7 @@ class OmegaWebService : public QCoreApplication
 {
 	Q_OBJECT
 	public:
-		const int c_serverPort = 5000;
+		const int c_serverPort = 5121;
 	
 	public:
 		OmegaWebService(const QString& rootDir, int argc, char **argv);
