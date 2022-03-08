@@ -165,6 +165,18 @@ void HTTPConnection::complete()
 
 //-------------------------------------------------------------------------------------------
 
+int HTTPConnection::getMessageQueueSize()
+{
+	int s;
+	
+	m_mutex.lock();
+	s = m_processList.size();
+	m_mutex.unlock();
+	return s;
+}
+
+//-------------------------------------------------------------------------------------------
+
 HTTPConnection::Message *HTTPConnection::getMessage()
 {
 	Message *msg;
