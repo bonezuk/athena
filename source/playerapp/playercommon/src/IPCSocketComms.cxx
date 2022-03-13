@@ -10,7 +10,8 @@ IPCSocketComms::IPCSocketComms(Type type, QObject *parent) : QObject(parent),
 	m_socketPath(),
 	m_socket(network::c_invalidSocket),
 	m_clientSocket(network::c_invalidSocket),
-	m_timeout(c_timeoutDefault)
+	m_timeout(c_timeoutDefault),
+	m_isTimeout(true)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -18,6 +19,13 @@ IPCSocketComms::IPCSocketComms(Type type, QObject *parent) : QObject(parent),
 IPCSocketComms::~IPCSocketComms()
 {
 	IPCSocketComms::close();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCSocketComms::printError(const char *strR, const char *strE) const
+{
+	common::Log::g_Log << "IPCSocketComms::" << strR << " - " << strE << common::c_endl;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -43,9 +51,9 @@ void IPCSocketComms::setTimeout(const common::TimeStamp& t)
 
 //-------------------------------------------------------------------------------------------
 
-void IPCSocketComms::printError(const char *strR, const char *strE) const
+void IPCSocketComms::setNoTimeout(bool isTimeout)
 {
-	common::Log::g_Log << "IPCSocketComms::" << strR << " - " << strE << common::c_endl;
+	m_isTimeout = isTimeout;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -194,7 +202,6 @@ network::socket_type IPCSocketComms::closeSocket(network::socket_type s)
 {
 	if(s != network::c_invalidSocket)
 	{
-		::shutdown(s, SHUT_RDWR);
 		::close(s);	
 	}
 	return network::c_invalidSocket;
@@ -324,8 +331,15 @@ network::socket_type IPCSocketComms::getClientConnection()
 			FD_SET(m_socket, &set);
 			tv.tv_sec = m_timeout.secondsTotal();
 			tv.tv_usec = m_timeout.microsecond();
-			
-			res = ::select(m_socket + 1, &set, 0, 0, &tv);
+
+			if(!m_isTimeout)
+			{
+				res = ::select(m_socket + 1, &set, 0, 0, 0);
+			}
+			else
+			{
+				res = ::select(m_socket + 1, &set, 0, 0, &tv);
+			}
 			if(res > 0)
 			{
 				cSocket = openConnectionFromClient();
@@ -378,11 +392,25 @@ bool IPCSocketComms::canDoSocketIO(network::socket_type s, bool isRead) const
 	
 	if(isRead)
 	{
-		res = ::select(s + 1, &set, 0, 0, &tv);
+		if(m_isTimeout)
+		{
+			res = ::select(s + 1, &set, 0, 0, &tv);
+		}
+		else
+		{
+			res = ::select(s + 1, &set, 0, 0, 0);
+		}
 	}
 	else
 	{
-		res = ::select(s + 1, 0, &set, 0, &tv);
+		if(m_isTimeout)
+		{
+			res = ::select(s + 1, 0, &set, 0, &tv);
+		}
+		else
+		{
+			res = ::select(s + 1, 0, &set, 0, 0);
+		}
 	}
 	if(res > 0)
 	{
@@ -685,7 +713,7 @@ bool IPCSocketComms::writeMessageHeader(network::socket_type s, tint32 msgLen, b
 
 //-------------------------------------------------------------------------------------------
 
-int IPCSocketComms::write(const QByteArray& arr)
+int IPCSocketComms::doWrite(const QByteArray& arr)
 {
 	bool isEof = false;
 	network::socket_type s;
@@ -724,6 +752,24 @@ int IPCSocketComms::write(const QByteArray& arr)
 	else
 	{
 		res = 0;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int IPCSocketComms::write(const QByteArray& arr)
+{
+	int res = -1;
+	
+	try
+	{
+		res = doWrite(arr);
+	}
+	catch(...)
+	{
+		printError("write", "Exception thrown");
+		res = -1;
 	}
 	return res;
 }

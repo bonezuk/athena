@@ -6,7 +6,8 @@ namespace orcus
 //-------------------------------------------------------------------------------------------
 
 IPCInterfaceBase::IPCInterfaceBase(const QString& serviceName) : m_serviceName(serviceName),
-	m_pIPCComms()
+	m_pIPCComms(),
+	m_isTimeout(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -39,6 +40,7 @@ QSharedPointer<IPCSocketComms> IPCInterfaceBase::getIPCComms()
 			QSharedPointer<IPCSocketComms> pComms(new IPCSocketComms(IPCSocketComms::e_Client));
 			if(pComms->open(socketPath))
 			{
+				pComms->setNoTimeout(m_isTimeout);
 				m_pIPCComms = pComms;
 			}
 			else
@@ -53,17 +55,29 @@ QSharedPointer<IPCSocketComms> IPCInterfaceBase::getIPCComms()
 
 //-------------------------------------------------------------------------------------------
 
-void IPCInterfaceBase::sendRPCCall(const QString& funcName)
+void IPCInterfaceBase::setNoTimeout(bool isTimeout)
 {
-	QVariantMap rpcMap;
-	sendRPCCall(funcName, rpcMap);
+	m_isTimeout = isTimeout;
+	if(!m_pIPCComms.isNull())
+	{
+		m_pIPCComms->setNoTimeout(isTimeout);
+	}
 }
 
 //-------------------------------------------------------------------------------------------
 
-void IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
+bool IPCInterfaceBase::sendRPCCall(const QString& funcName)
+{
+	QVariantMap rpcMap;
+	return sendRPCCall(funcName, rpcMap);
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 {
 	QSharedPointer<IPCSocketComms> pComms;
+	bool isSent = false;
 	
 	pComms = getIPCComms();
 	if(!pComms.isNull())
@@ -75,6 +89,7 @@ void IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 		if(rpcDocument.isObject())
 		{
 			int res = pComms->write(rpcDocument.toJson(QJsonDocument::Compact));
+			
 			if(res <= 0)
 			{
 				if(res < 0)
@@ -84,6 +99,10 @@ void IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 				pComms->close();
 				m_pIPCComms.clear();
 			}
+			else
+			{
+				isSent = true;
+			}
 		}
 		else
 		{
@@ -91,6 +110,48 @@ void IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 			printError("sendRPCCall", err.toUtf8().constData());
 		}
 	}
+	return isSent;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QJsonDocument IPCInterfaceBase::receiveJsonReply()
+{
+	QJsonDocument doc;
+	QSharedPointer<IPCSocketComms> pComms;
+	
+	pComms = getIPCComms();
+	if(!pComms.isNull())
+	{
+		int res;
+		QByteArray arr;
+		
+		res = pComms->read(arr);
+		if(res > 0)
+		{
+			QJsonParseError jError;
+			
+			doc = QJsonDocument::fromJson(arr, &jError);
+			if(doc.isNull())
+			{
+				QString err = QString("Error parsing Json data. %1").arg(jError.errorString());
+				printError("receiveJsonReply", err.toUtf8().constData());
+			}
+		}
+		else if(!res)
+		{
+			printError("receiveJsonReply", "Timeout waiting to receive Json data");
+		}
+		else
+		{
+			printError("receiveJsonReply", "Error reading IPC data");
+		}
+	}
+	else
+	{
+		printError("receiveJsonReply", "Cannot get IPC socket interface");
+	}
+	return doc;
 }
 
 //-------------------------------------------------------------------------------------------

@@ -56,6 +56,9 @@ class TRACK_DB_EXPORT DBInfo : public info::Info
 		
 		virtual bool loadRecord();
 		virtual bool loadImages() const;
+		
+		tuint64 generateHashID(tint dirID, tint fileID);
+		tuint64 loadOrGenerateHashID(tint dirID, tint fileID);
 };
 
 //-------------------------------------------------------------------------------------------

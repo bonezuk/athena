@@ -10,13 +10,14 @@
 
 #include <QCoreApplication>
 #include <QThread>
+#include <QMutex>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class IPCServiceThread : public QThread
+class PLAYERCOMMON_EXPORT IPCServiceThread : public QThread
 {
 	Q_OBJECT
 	public:
@@ -26,13 +27,18 @@ class IPCServiceThread : public QThread
 		virtual bool startService();
 		virtual void stopService();
 		
+		virtual void postResponse(const QByteArray& arr);
+		
 	protected:
 		QString m_serviceName;
 		QSharedPointer<IPCSocketComms> m_pComms;
 		volatile bool m_running;
+		QMutex m_responseMutex;
+		QList<QByteArray> m_responseList;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		virtual void run() override;
+		virtual void writeResponse();
 		
 	signals:
 		void onProcessRPC(QByteArray);

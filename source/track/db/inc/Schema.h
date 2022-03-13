@@ -53,6 +53,7 @@ class TRACK_DB_EXPORT Schema
 		virtual void createPlayListInfo();
 		virtual void createDatabaseInfo();
 		virtual void createSandBoxURL();
+		virtual void createFileHash();
 		
 		virtual void createMountPoints();
 		static void createMountPointsOps(SQLiteDatabase *db);

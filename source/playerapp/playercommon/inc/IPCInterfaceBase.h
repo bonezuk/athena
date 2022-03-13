@@ -18,14 +18,20 @@ class PLAYERCOMMON_EXPORT IPCInterfaceBase
 		IPCInterfaceBase(const QString& serviceName);
 		virtual ~IPCInterfaceBase();
 		
+		virtual void setNoTimeout(bool isTimeout);
+		
 	protected:
 		QString m_serviceName;
 		QSharedPointer<IPCSocketComms> m_pIPCComms;
+		bool m_isTimeout;
 	
 		virtual void printError(const char *strR, const char *strE) const;
+		
 		virtual QSharedPointer<IPCSocketComms> getIPCComms();
-		virtual void sendRPCCall(const QString& funcName);
-		virtual void sendRPCCall(const QString& funcName, QVariantMap& rpcMap);
+		virtual bool sendRPCCall(const QString& funcName);
+		virtual bool sendRPCCall(const QString& funcName, QVariantMap& rpcMap);
+		
+		virtual QJsonDocument receiveJsonReply();
 };
 
 //-------------------------------------------------------------------------------------------

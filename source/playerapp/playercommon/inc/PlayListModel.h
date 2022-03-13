@@ -53,7 +53,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		virtual QSharedPointer<PlaybackStateController>& playbackState();
 		virtual void playNextItem(bool isNext);
 
-	private:
+	protected:
 		QVector<QPair<track::db::DBInfoSPtr,tint> > m_playList;
 		QSharedPointer<OmegaAudioInterface> m_pAudioInterface;
 		QSharedPointer<PlaybackStateController> m_pPlaybackState;

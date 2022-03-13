@@ -8,7 +8,9 @@ namespace orcus
 IPCServiceThread::IPCServiceThread(const QString& serviceName, QObject *parent) : QThread(parent),
 	m_serviceName(serviceName),
 	m_pComms(),
-	m_running(false)
+	m_running(false),
+	m_responseMutex(),
+	m_responseList()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -78,13 +80,41 @@ void IPCServiceThread::run()
 		if(res > 0)
 		{
 			emit onProcessRPC(inArr);
+			writeResponse();
 		}
 		else if(res < 0)
 		{
 			printError("run", "Error reading from socket");
 		}
-		QCoreApplication::processEvents();
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCServiceThread::postResponse(const QByteArray& arr)
+{
+	m_responseMutex.lock();
+	m_responseList.append(arr);
+	m_responseMutex.unlock();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCServiceThread::writeResponse()
+{
+	int res;
+	
+	m_responseMutex.lock();
+	while(!m_responseList.isEmpty())
+	{
+		QByteArray arr = m_responseList.takeFirst();
+		res = m_pComms->write(arr);
+		if(res != arr.size())
+		{
+			printError("writeResponse", "Error writing response to socket");
+		}
+	}
+	m_responseMutex.unlock();
 }
 
 //-------------------------------------------------------------------------------------------

@@ -1,29 +1,29 @@
-#include "playerapp/audiodaemon/inc/OmegaAudioService.h"
+#include "playerapp/playlistmanager/inc/OmegaPLWebService.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaAudioService::OmegaAudioService(OmegaAudioDaemon *pDaemon, QObject *parent) : IPCService(OMEGAAUDIOINTERFACE_SERVICE_NAME, parent),
-	m_pDaemon(pDaemon)
+OmegaPLWebService::OmegaPLWebService(QSharedPointer<OmegaWebInterface>& pPLWebInterface, QObject *parent) : IPCService(OMEGAPLWEB_SERVICE_NAME, parent),
+	m_pPLWebInterface(pPLWebInterface)
 {}
 
 //-------------------------------------------------------------------------------------------
 
-OmegaAudioService::~OmegaAudioService()
+OmegaPLWebService::~OmegaPLWebService()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-void OmegaAudioService::printError(const char *strR, const char *strE) const
+void OmegaPLWebService::printError(const char *strR, const char *strE) const
 {
-	common::Log::g_Log << "OmegaAudioService::" << strR << " - " << strE << common::c_endl;
+	common::Log::g_Log << "OmegaPLWebService::" << strR << " - " << strE << common::c_endl;
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OmegaAudioService::handleRPCJson(const QJsonDocument& doc)
+void OmegaPLWebService::handleRPCJson(const QJsonDocument& doc)
 {
 	if(doc.isObject())
 	{
@@ -31,22 +31,13 @@ void OmegaAudioService::handleRPCJson(const QJsonDocument& doc)
 		QString funcName = json.value(OMEGA_IPC_FUNCTION_NAME).toString();
 		if(!funcName.isEmpty())
 		{
-			// { "function": "playFile", "fileName": "/Music/file_to_play.wav", "isNext": true }
-			if(funcName == "playFile")
+			// { "function": "getFullPlaylist" }
+			if(funcName == "getFullPlaylist")
 			{
-				QString fileName = json.value("fileName").toString();
-				bool isNext = json.value("isNext").toBool();
-				m_pDaemon->playFile(fileName, isNext);
-			}
-			// { "function": "play" }
-			else if(funcName == "play")
-			{
-				m_pDaemon->play();
-			}
-			// { "function": "pause" }
-			else if(funcName == "pause")
-			{
-				m_pDaemon->pause();
+				int len = m_pPLWebInterface->playlistSize();
+				QJsonDocument doc = m_pPLWebInterface->playlistAsJson(0, len);
+				QByteArray repArr = doc.toJson(QJsonDocument::Compact);
+				m_pServiceThread->postResponse(repArr);
 			}
 			else
 			{

@@ -10,7 +10,8 @@
 //-------------------------------------------------------------------------------------------
 
 #define OMEGAPLAYLISTMANAGER_SERVICE_NAME    "OmegaPlaylistManager"
-#define OMEGAAUDIOINTERFACE_SERVICE_NAME    "OmegaAudioInterface"
+#define OMEGAAUDIOINTERFACE_SERVICE_NAME     "OmegaAudioInterface"
+#define OMEGAPLWEB_SERVICE_NAME              "OmegaPLWebManager"
 
 #define OMEGA_IPC_FUNCTION_NAME "function"
 

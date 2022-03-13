@@ -1,41 +1,32 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_COMMONFUNCTIONS_H
-#define __ORCUS_COMMON_COMMONFUNCTIONS_H
+#ifndef __PLAYERAPP_WEBSERVICE_OMEGAPLWEBINTERFACE_H
+#define __PLAYERAPP_WEBSERVICE_OMEGAPLWEBINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
-#include "common/inc/CommonTypes.h"
-#include "common/inc/BString.h"
+#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
 
-#include <QString>
+#include <QJsonDocument>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace common
+//-------------------------------------------------------------------------------------------
+
+class OmegaPLWebInterface : public IPCInterfaceBase
 {
-//-------------------------------------------------------------------------------------------
-
-COMMON_EXPORT QString getOSErrorString(tint errCode);
-
-COMMON_EXPORT void msleepThread(tint msecs);
-COMMON_EXPORT void usleepThread(tint usecs);
-
-COMMON_EXPORT void loadSharedLibrary(const char *libName);
-
-COMMON_EXPORT tuint64 elfHash64(tuint8 *mem, int len);
-COMMON_EXPORT tuint64 elfHash64(tuint8 *mem, int len, tuint64 hash);
-
-//-------------------------------------------------------------------------------------------
-
-inline void xorSwap(int& x, int& y)
-{
-	x ^= y;
-	y ^= x;
-	x ^= y;
-}
+	public:
+		OmegaPLWebInterface();
+		virtual ~OmegaPLWebInterface();
+		
+		// { "function": "getFullPlaylist" }
+		QJsonDocument getFullPlaylist();
+		
+	protected:
+	
+		virtual void printError(const char *strR, const char *strE) const;
+};
 
 //-------------------------------------------------------------------------------------------
-} // namespace common
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 #endif

@@ -1,4 +1,5 @@
 #include "playerapp/webservice/inc/OmegaWebService.h"
+#include "playerapp/webservice/inc/OmegaPLWebInterface.h"
 
 #include <QFileInfo>
 
@@ -10,7 +11,8 @@ namespace orcus
 OmegaWebService::OmegaWebService(const QString& rootDir, int argc, char **argv) : QCoreApplication(argc, argv),
 	m_rootDir(rootDir),
 	m_webService(0),
-	m_webServer(0)
+	m_webServer(0),
+	m_pWebInterface()
 {
 	QTimer::singleShot(10, this, SLOT(onStartService()));
 	QObject::connect(this, SIGNAL(aboutToQuit()), this, SLOT(onStopService()));
@@ -70,6 +72,10 @@ void OmegaWebService::onStartService()
 				if(m_webServer!=0)
 				{
 					m_webServer->connect("/",this,SLOT(onWebRoot(network::http::HTTPReceive *)));
+					m_webServer->connect("/playlist",this,SLOT(onPlaylistAPI(network::http::HTTPReceive *)));
+					
+					m_pWebInterface = QSharedPointer<OmegaPLWebInterface>(new OmegaPLWebInterface());
+					m_pWebInterface->setNoTimeout(true);
 					
 					QString successMsg = QString("Web service successfully started on port=%1").arg(c_serverPort);
 					common::Log::g_Log << successMsg << common::c_endl;
@@ -128,6 +134,51 @@ void OmegaWebService::onWebRoot(network::http::HTTPReceive *recieve)
 {
 	HTTPFileTransfer transfer(m_rootDir);
 	transfer.process(recieve);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaWebService::postResponse(network::http::HTTPReceive *receive, int code)
+{
+	network::http::Unit hdr;
+	
+	hdr.response(code);
+	hdr.add("Connection","close");
+	receive->connection()->postResponse(hdr);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaWebService::onPlaylistAPI(network::http::HTTPReceive *receive)
+{
+	QJsonDocument doc;
+	
+	doc = m_pWebInterface->getFullPlaylist();
+	if(doc.isArray())
+	{
+		network::http::Unit hdr;
+		network::NetArraySPtr dataArray(new network::NetArray);				
+		QByteArray arr;
+		
+		arr = doc.toJson(QJsonDocument::Indented);
+		dataArray->SetSize(arr.size());
+		::memcpy(dataArray->GetData(), arr.data(), arr.size());
+		
+		hdr.response(200);
+		hdr.add("Content-Type", "application/json");
+		hdr.add("Content-Length", QString::number(arr.size()));
+		hdr.add("Connection","close");
+		
+		receive->connection()->postResponse(hdr);
+		receive->connection()->postBody(dataArray);
+	}
+	else
+	{
+		printError("onPlaylistAPI", "Failed to get full playlist");
+		postResponse(receive, 500);
+	}
+	receive->connection()->complete();
+	receive->endProcess();
 }
 
 //-------------------------------------------------------------------------------------------

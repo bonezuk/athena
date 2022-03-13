@@ -31,8 +31,9 @@ void PlaylistManagerApp::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr
 	m_pPLInterface = QSharedPointer<OmegaPlaylistInterface>(new OmegaPlaylistInterface(this));
 	m_pAudioInterface = QSharedPointer<OmegaAudioBusInterface>(new OmegaAudioBusInterface(this));
 	QSharedPointer<OmegaAudioInterface> pAInterface = m_pAudioInterface.dynamicCast<OmegaAudioInterface>();
-	m_pModel = QSharedPointer<PlayListModel>(new PlayListModel(playListDB, pAInterface, this));
-	m_pPLInterface->init(m_pModel);
+	m_pModel = QSharedPointer<PlayListWebModel>(new PlayListWebModel(playListDB, pAInterface, this));
+	QSharedPointer<PlayListModel> pModelBase = m_pModel.dynamicCast<PlayListModel>();
+	m_pPLInterface->init(pModelBase);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -44,7 +45,7 @@ QSharedPointer<PlaybackStateController>& PlaylistManagerApp::getPlaybackState()
 
 //-------------------------------------------------------------------------------------------
 
-QSharedPointer<PlayListModel>& PlaylistManagerApp::getPlayListModel()
+QSharedPointer<PlayListWebModel>& PlaylistManagerApp::getPlayListModel()
 {
 	return m_pModel;
 }
@@ -54,6 +55,14 @@ QSharedPointer<PlayListModel>& PlaylistManagerApp::getPlayListModel()
 QSharedPointer<OmegaPlaylistInterface>& PlaylistManagerApp::getPlayListInterface()
 {
 	return m_pPLInterface;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QSharedPointer<OmegaWebInterface> PlaylistManagerApp::getWebInterface()
+{
+	QSharedPointer<OmegaWebInterface> pWeb = m_pModel.dynamicCast<OmegaWebInterface>();
+	return pWeb;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -122,7 +131,17 @@ int main(int argc, char **argv)
 			OmegaPLService *plService = new OmegaPLService(app->getPlayListInterface());
 			if(plService->start())
 			{
-				res = app->exec();
+				QSharedPointer<OmegaWebInterface> pWeb = app->getWebInterface();
+				OmegaPLWebService *plWebService = new OmegaPLWebService(pWeb);
+				if(plWebService->start())
+				{
+					res = app->exec();
+					plWebService->stop();
+				}
+				else
+				{
+					common::Log::g_Log << "Failed to start Web IPC service" << common::c_endl;
+				}
 				plService->stop();
 			}
 			else

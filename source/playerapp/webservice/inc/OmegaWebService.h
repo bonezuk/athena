@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "playerapp/webservice/inc/HTTPFileTransfer.h"
+#include "playerapp/webservice/inc/OmegaPLWebInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -24,15 +25,18 @@ class OmegaWebService : public QCoreApplication
 		QString m_rootDir;
 		network::http::HTTPService *m_webService;
 		network::http::HTTPServer *m_webServer;
+		QSharedPointer<OmegaPLWebInterface> m_pWebInterface;
 		
 		void printError(const tchar *strR, const tchar *strE) const;
 		bool isValidSetup() const;
+		void postResponse(network::http::HTTPReceive *receive, int code);
 		
 	private slots:
 		void onStartService();
 		void onStopService();
 		
 		void onWebRoot(network::http::HTTPReceive *recieve);
+		void onPlaylistAPI(network::http::HTTPReceive *receive);
 };
 
 //-------------------------------------------------------------------------------------------

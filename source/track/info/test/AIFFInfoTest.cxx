@@ -19,6 +19,8 @@ void AIFFInfoQtUnitTest::readInfo()
 	EXPECT_TRUE(pInfo->comment()=="Encoded by Audacity");
 	EXPECT_TRUE(pInfo->genre()=="Soundtrack");
 	EXPECT_TRUE(pInfo->track()=="12");
+	
+	EXPECT_EQ(pInfo->hashID(), 0); // TODO : get ID
 }
 
 //-------------------------------------------------------------------------------------------

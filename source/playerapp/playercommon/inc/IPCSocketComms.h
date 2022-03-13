@@ -41,6 +41,7 @@ class PLAYERCOMMON_EXPORT IPCSocketComms : public QObject
 		const Type& type() const;
 		const common::TimeStamp& timeout() const;
 		void setTimeout(const common::TimeStamp& t);
+		void setNoTimeout(bool isTimeout);
 		
 	private:
 		Type m_type;
@@ -48,6 +49,7 @@ class PLAYERCOMMON_EXPORT IPCSocketComms : public QObject
 		network::socket_type m_socket;
 		network::socket_type m_clientSocket;
 		common::TimeStamp m_timeout;
+		bool m_isTimeout;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		virtual bool removePreviousSocket(const QString& socketPath);
@@ -67,6 +69,7 @@ class PLAYERCOMMON_EXPORT IPCSocketComms : public QObject
 		virtual tint32 readMessageHeader(network::socket_type s, bool& isEof);
 		virtual int writeToSocket(network::socket_type s, const uint8_t *data, int len, bool& isEof);
 		virtual bool writeMessageHeader(network::socket_type s, tint32 msgLen, bool& isEof);
+		virtual int doWrite(const QByteArray& arr);
 };
 
 //-------------------------------------------------------------------------------------------

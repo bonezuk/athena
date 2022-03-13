@@ -1,42 +1,35 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_COMMONFUNCTIONS_H
-#define __ORCUS_COMMON_COMMONFUNCTIONS_H
+#ifndef __PLAYERAPP_PLAYLISTMANAGER_OMEGAPLWEBSERVICE_H
+#define __PLAYERAPP_PLAYLISTMANAGER_OMEGAPLWEBSERVICE_H
 //-------------------------------------------------------------------------------------------
 
-#include "common/inc/CommonTypes.h"
-#include "common/inc/BString.h"
-
-#include <QString>
+#include "playerapp/playercommon/inc/IPCService.h"
+#include "playerapp/playercommon/inc/OmegaWebInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
-namespace common
+//-------------------------------------------------------------------------------------------
+
+class OmegaPLWebService : public IPCService
 {
-//-------------------------------------------------------------------------------------------
-
-COMMON_EXPORT QString getOSErrorString(tint errCode);
-
-COMMON_EXPORT void msleepThread(tint msecs);
-COMMON_EXPORT void usleepThread(tint usecs);
-
-COMMON_EXPORT void loadSharedLibrary(const char *libName);
-
-COMMON_EXPORT tuint64 elfHash64(tuint8 *mem, int len);
-COMMON_EXPORT tuint64 elfHash64(tuint8 *mem, int len, tuint64 hash);
-
-//-------------------------------------------------------------------------------------------
-
-inline void xorSwap(int& x, int& y)
-{
-	x ^= y;
-	y ^= x;
-	x ^= y;
-}
+	Q_OBJECT
+	
+	public:
+		OmegaPLWebService(QSharedPointer<OmegaWebInterface>& pPLWebInterface, QObject *parent = 0);
+		virtual ~OmegaPLWebService();
+		
+	protected:
+		QSharedPointer<OmegaWebInterface> m_pPLWebInterface;
+		
+		virtual void printError(const char *strR, const char *strE) const;
+		
+		virtual void handleRPCJson(const QJsonDocument& doc);
+};
 
 //-------------------------------------------------------------------------------------------
-} // namespace common
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
+
