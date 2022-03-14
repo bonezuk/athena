@@ -57,6 +57,7 @@ bool PlayerAppMain::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint
 	m_pAudioInterface = QSharedPointer<OmegaAudioIOInterface>(new OmegaAudioIOInterface(plInterface));
 	QSharedPointer<OmegaAudioInterface> pAInterface = m_pAudioInterface.dynamicCast<OmegaAudioInterface>();
 	m_pModel = QSharedPointer<PlayListModel>(new PlayListModel(playListDB, pAInterface));
+	m_pModel->initialise();
 	plInterface->init(m_pModel);
 	if(m_pAudioInterface->init())
 	{

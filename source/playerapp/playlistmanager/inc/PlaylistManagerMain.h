@@ -9,13 +9,13 @@
 #include "track/db/inc/DBInfo.h"
 
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
-#include "playerapp/playercommon/inc/PlayListWebModel.h"
 #include "playerapp/playercommon/inc/PlaylistLoadFunctions.h"
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
 
 #include "playerapp/playlistmanager/inc/OmegaPLService.h"
 #include "playerapp/playlistmanager/inc/OmegaAudioBusInterface.h"
 #include "playerapp/playlistmanager/inc/OmegaPLWebService.h"
+#include "playerapp/playlistmanager/inc/PlayListWebModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

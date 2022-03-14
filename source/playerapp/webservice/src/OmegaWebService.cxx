@@ -12,7 +12,8 @@ OmegaWebService::OmegaWebService(const QString& rootDir, int argc, char **argv) 
 	m_rootDir(rootDir),
 	m_webService(0),
 	m_webServer(0),
-	m_pWebInterface()
+	m_pWebInterface(),
+	m_pWebEvents()
 {
 	QTimer::singleShot(10, this, SLOT(onStartService()));
 	QObject::connect(this, SIGNAL(aboutToQuit()), this, SLOT(onStopService()));
@@ -47,6 +48,25 @@ bool OmegaWebService::isValidSetup() const
 
 //-------------------------------------------------------------------------------------------
 
+bool OmegaWebService::setupWebEvents()
+{
+	QSharedPointer<OmegaWebEventService> webEvents(new OmegaWebEventService(this));
+	bool res = false;
+	
+	if(webEvents->start())
+	{
+		m_pWebEvents = webEvents;
+		res = true;
+	}
+	else
+	{
+		printError("OmegaWebService", "Failed to start web events IPC service");
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void OmegaWebService::onStartService()
 {
 	bool res = false;
@@ -56,6 +76,13 @@ void OmegaWebService::onStartService()
 		printError("onStartService", "Invalid configuration, cannot start server");
 		quit();
 		return;
+	}
+	
+	if(!setupWebEvents())
+	{
+		printError("onStartService", "No web events service");
+		quit();
+		return;	
 	}
 	
 	try
@@ -73,6 +100,7 @@ void OmegaWebService::onStartService()
 				{
 					m_webServer->connect("/",this,SLOT(onWebRoot(network::http::HTTPReceive *)));
 					m_webServer->connect("/playlist",this,SLOT(onPlaylistAPI(network::http::HTTPReceive *)));
+					m_webServer->connect("/event",this,SLOT(onEventStream(network::http::HTTPReceive *)));
 					
 					m_pWebInterface = QSharedPointer<OmegaPLWebInterface>(new OmegaPLWebInterface());
 					m_pWebInterface->setNoTimeout(true);
@@ -112,6 +140,12 @@ void OmegaWebService::onStartService()
 
 void OmegaWebService::onStopService()
 {
+	if(!m_pWebEvents.isNull())
+	{
+		m_pWebEvents->stop();
+		m_pWebEvents.clear();
+	}
+
 	network::Controller::ControllerSPtr ctrl(network::Controller::instance());
 	if(m_webService!=0)
 	{
@@ -167,6 +201,7 @@ void OmegaWebService::onPlaylistAPI(network::http::HTTPReceive *receive)
 		hdr.response(200);
 		hdr.add("Content-Type", "application/json");
 		hdr.add("Content-Length", QString::number(arr.size()));
+		hdr.add("Cache-Control", "no-cache");
 		hdr.add("Connection","close");
 		
 		receive->connection()->postResponse(hdr);
@@ -179,6 +214,16 @@ void OmegaWebService::onPlaylistAPI(network::http::HTTPReceive *receive)
 	}
 	receive->connection()->complete();
 	receive->endProcess();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaWebService::onEventStream(network::http::HTTPReceive *receive)
+{
+	if(!m_pWebEvents.isNull())
+	{
+		m_pWebEvents->registerConnection(receive);
+	}
 }
 
 //-------------------------------------------------------------------------------------------

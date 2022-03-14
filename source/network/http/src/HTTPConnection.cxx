@@ -143,6 +143,14 @@ void HTTPConnection::postBody(NetArraySPtr x)
 
 //-------------------------------------------------------------------------------------------
 
+void HTTPConnection::postChunk(NetArraySPtr mem)
+{
+	QString str;
+	postChunk(str, mem);
+}
+
+//-------------------------------------------------------------------------------------------
+
 void HTTPConnection::postChunk(const QString& str,NetArraySPtr mem)
 {
 	Message *msg = new Message(e_PostChunk);
@@ -600,8 +608,13 @@ bool HTTPConnection::doPostData(bool& loop)
 				common::BString hStr,newLine("\r\n");
 				
 				m_chunked = true;
-				hStr  = common::BString::HexInt(msg->body()->GetSize()) + ";";
-				hStr += msg->string().toUtf8().constData() + newLine;
+				hStr  = common::BString::HexInt(msg->body()->GetSize());
+				if(!msg->string().isEmpty())
+				{
+					hStr += ";";
+					hStr += msg->string().toUtf8().constData();
+				}
+				hStr += newLine;
 				if(write(static_cast<const tchar *>(hStr),hStr.GetLength()))
 				{
 					if(write(msg->body()->GetData(),msg->body()->GetSize()))

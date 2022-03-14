@@ -17,9 +17,7 @@ PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playLi
 	m_playList(playList),
 	m_pAudioInterface(pAudioInterface),
 	m_pPlaybackState(0)
-{
-	m_pPlaybackState = QSharedPointer<PlaybackStateController>(new PlaybackStateController(pAudioInterface, this));
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
@@ -34,6 +32,13 @@ PlayListModel::~PlayListModel()
 void PlayListModel::printError(const char *strR, const char *strE) const
 {
 	common::Log::g_Log << "PlayListModel::" << strR << " - " << strE << common::c_endl;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::initialise()
+{
+	m_pPlaybackState = QSharedPointer<PlaybackStateController>(new PlaybackStateController(m_pAudioInterface, this));
 }
 
 //-------------------------------------------------------------------------------------------

@@ -137,7 +137,6 @@ void HTTPFileTransfer::process(network::http::HTTPReceive *recieve)
 			{
 				hdr.response(200);
 				hdr.add("Content-Type", type);
-				hdr.add("Connection","close");
 				transferFile(fileName, recieve, hdr);
 			}
 			else

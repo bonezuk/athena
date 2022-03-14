@@ -1,6 +1,8 @@
 const playListElement = document.getElementById('play-list');
+var eventSource = new EventSource("/event");
 
 loadPlaylist();
+setupEventListener();
 
 function loadPlaylist()
 {
@@ -44,4 +46,14 @@ function createPlaylistElement(value, index, array)
 			</div>
 		`;
 	playListElement.appendChild(listItem);
+}
+
+function setupEventListener()
+{
+	eventSource.addEventListener('message', onJsonEvent, false);
+}
+
+function onJsonEvent(e)
+{
+	console.log(e.data);
 }

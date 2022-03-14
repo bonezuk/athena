@@ -50,6 +50,7 @@ class HTTP_EXPORT HTTPConnection : public TCPConnServerSocket
 		
 		virtual void postResponse(const Unit& x);
 		virtual void postBody(NetArraySPtr x);
+		virtual void postChunk(NetArraySPtr mem);
 		virtual void postChunk(const QString& str,NetArraySPtr mem);
 		virtual void complete();
 

@@ -39,26 +39,26 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 		PlaybackStateController(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlaybackStateController();
 		
-		quint32 getTimeInSeconds() const;
-		qint32 getIndex() const;
-		qint32 getState() const;
+		virtual quint32 getTimeInSeconds() const;
+		virtual qint32 getIndex() const;
+		virtual qint32 getState() const;
 		
-		void setTime(quint64 tS);
-		void setNextItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem);
+		virtual void setTime(quint64 tS);
+		virtual void setNextItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem);
 		
-		void onAudioStart(const QString& fileName);
-		void onAudioPlay();
-		void onAudioPause();
-		void onAudioStop();
+		virtual void onAudioStart(const QString& fileName);
+		virtual void onAudioPlay();
+		virtual void onAudioPause();
+		virtual void onAudioStop();
 
-		void resumeOrPausePlayback();
+		virtual void resumeOrPausePlayback();
 
 	signals:
 		void onTimeChanged();
 		void onIndexChanged();
 		void onStateChanged();
 		
-	private:
+	protected:
 		QSharedPointer<OmegaAudioInterface> m_pAudioInterface;
 		common::TimeStamp m_playbackTime;
 
