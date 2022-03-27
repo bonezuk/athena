@@ -34,6 +34,20 @@ void OmegaAudioBusInterface::playFile(const QString& fileName, bool isNext)
 }
 
 //-------------------------------------------------------------------------------------------
+// // { "function": "playFileWithTime", "fileName": "/Music/file_to_play.wav", "isNext": true, start: 30.01, length: 40.5}
+//-------------------------------------------------------------------------------------------
+
+void OmegaAudioBusInterface::playFileWithTime(const QString& fileName, const common::TimeStamp& start,const common::TimeStamp& length, bool isNext)
+{
+	QVariantMap rpcMap;
+	rpcMap.insert(QString::fromUtf8("fileName"), QVariant(fileName));
+	rpcMap.insert(QString::fromUtf8("isNext"), QVariant(isNext));
+	rpcMap.insert(QString::fromUtf8("start"), QVariant(static_cast<tfloat64>(start)));
+	rpcMap.insert(QString::fromUtf8("length"), QVariant(static_cast<tfloat64>(length)));
+	sendRPCCall("playFileWithTime", rpcMap);
+}
+
+//-------------------------------------------------------------------------------------------
 // { "function": "play" }
 //-------------------------------------------------------------------------------------------
 

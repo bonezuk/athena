@@ -15,7 +15,6 @@ namespace orcus
 
 PlaylistManagerApp::PlaylistManagerApp(int& argc, char **argv) : QGuiApplication(argc, argv),
 	m_pModel(),
-	m_pAudioInterface(),
 	m_pPLInterface()
 {}
 
@@ -28,10 +27,9 @@ PlaylistManagerApp::~PlaylistManagerApp()
 
 void PlaylistManagerApp::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {	
-	m_pPLInterface = QSharedPointer<OmegaPlaylistInterface>(new OmegaPlaylistInterface(this));
-	m_pAudioInterface = QSharedPointer<OmegaAudioBusInterface>(new OmegaAudioBusInterface(this));
-	QSharedPointer<OmegaAudioInterface> pAInterface = m_pAudioInterface.dynamicCast<OmegaAudioInterface>();
-	m_pModel = QSharedPointer<PlayListWebModel>(new PlayListWebModel(playListDB, pAInterface, this));
+	m_pPLInterface = QSharedPointer<OmegaPlaylistInterface>(new OmegaPlaylistInterface());
+	QSharedPointer<OmegaAudioInterface> pAInterface(new OmegaAudioBusInterface());
+	m_pModel = QSharedPointer<PlayListWebModel>(new PlayListWebModel(playListDB, pAInterface));
 	m_pModel->initialise();
 	QSharedPointer<PlayListModel> pModelBase = m_pModel.dynamicCast<PlayListModel>();
 	m_pPLInterface->init(pModelBase);

@@ -38,7 +38,6 @@ class PlaylistManagerApp : public QGuiApplication
 
 	private:
 		QSharedPointer<PlayListWebModel> m_pModel;
-		QSharedPointer<OmegaAudioBusInterface> m_pAudioInterface;
 		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
 };
 

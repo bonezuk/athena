@@ -1,4 +1,5 @@
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
+#include "playerapp/playercommon/inc/PlayListModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -7,32 +8,34 @@ namespace orcus
 
 PlaybackStateController::PlaybackStateController(QObject *parent) : QObject(parent),
 	m_pAudioInterface(),
+	m_pModel(0),
 	m_playbackTime(),
-	m_pbIndex(-1),
-	m_pbItem(),
-	m_pbNextIndex(-1),
-	m_pbNextItem(),
+	m_currentId(0),
+	m_nextIdList(),
 	m_pbState(Pause)
-{}
+{
+	m_pModel = dynamic_cast<PlayListModel *>(parent);
+	Q_ASSERT(m_pModel != 0);
+}
 
 //-------------------------------------------------------------------------------------------
 
 PlaybackStateController::PlaybackStateController(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : QObject(parent),
 	m_pAudioInterface(pAudioInterface),
+	m_pModel(0),
 	m_playbackTime(),
-	m_pbIndex(-1),
-	m_pbItem(),
-	m_pbNextIndex(-1),
-	m_pbNextItem(),
+	m_currentId(0),
+	m_nextIdList(),
 	m_pbState(Pause)
-{}
+{
+	m_pModel = dynamic_cast<PlayListModel *>(parent);
+	Q_ASSERT(m_pModel != 0);
+}
 
 //-------------------------------------------------------------------------------------------
 
 PlaybackStateController::~PlaybackStateController()
-{
-	m_pAudioInterface.clear();
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
@@ -57,17 +60,22 @@ void PlaybackStateController::setTime(quint64 tS)
 
 //-------------------------------------------------------------------------------------------
 
-void PlaybackStateController::setNextItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem)
+void PlaybackStateController::setNextItem(tuint64 itemId)
 {
-	m_pbNextIndex = pbIndex;
-	m_pbNextItem = pbItem;
+	m_nextIdList.append(itemId);
 }
 
 //-------------------------------------------------------------------------------------------
 
 qint32 PlaybackStateController::getIndex() const
 {
-	return m_pbIndex;
+	qint32 idx = -1;
+	
+	if(m_currentId != 0)
+	{
+		idx = m_pModel->indexFromId(m_currentId);
+	}
+	return idx;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -79,30 +87,66 @@ qint32 PlaybackStateController::getState() const
 
 //-------------------------------------------------------------------------------------------
 
+QString PlaybackStateController::fileNameFromId(tuint64 id) const
+{
+	QString fileName;
+	
+	if(id)
+	{
+		track::db::DBInfoSPtr pItem = m_pModel->itemFromId(id);
+		if(!pItem.isNull())
+		{
+			fileName = pItem->getFilename();
+		}
+	}
+	return fileName;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void PlaybackStateController::onAudioStart(const QString& fileName)
 {
-	if(m_pbNextIndex >= 0 && !m_pbNextItem.first.isNull() && fileName == m_pbNextItem.first->getFilename())
-	{
-		m_pbIndex = m_pbNextIndex;
-		m_pbItem = m_pbNextItem;
-		m_pbNextIndex = -1;
-		m_pbNextItem = QPair<track::db::DBInfoSPtr, tint>();
+	int i;
+	bool emitFlag = false;
 
+	if(!fileName.isEmpty())
+	{
+		if(m_nextIdList.size() > 0 && fileName == fileNameFromId(m_nextIdList.first()))
+		{
+			m_currentId = m_nextIdList.takeFirst();
+			emitFlag = true;
+		}
+		else if(m_currentId > 0 && fileName == fileNameFromId(m_currentId))
+		{
+			return;
+		}
+		else
+		{
+			for(i = 0; i < m_nextIdList.size(); i++)
+			{
+				if(fileName == fileNameFromId(m_nextIdList.at(i)))
+				{
+					break;
+				}
+			}
+			if(i < m_nextIdList.size())
+			{
+				m_currentId = m_nextIdList.at(i);
+				emitFlag = true;
+				while(i >= 0 && !m_nextIdList.isEmpty())
+				{
+					m_nextIdList.removeFirst();
+					i--;
+				}
+			}
+		}
+	}
+	
+	if(emitFlag)
+	{
 		if(m_pbState == Pause)
 		{
 			m_pbState = Play;
-			emit onStateChanged();
-		}
-		emit onIndexChanged();
-	}
-	else
-	{
-		m_pbIndex = m_pbNextIndex = -1;
-		m_pbItem = m_pbNextItem = QPair<track::db::DBInfoSPtr, tint>();
-
-		if(m_pbState == Play)
-		{
-			m_pbState = Pause;
 			emit onStateChanged();
 		}
 		emit onIndexChanged();
@@ -113,10 +157,10 @@ void PlaybackStateController::onAudioStart(const QString& fileName)
 
 void PlaybackStateController::onAudioStop()
 {
-	m_pbIndex = m_pbNextIndex = -1;
-	m_pbItem = m_pbNextItem = QPair<track::db::DBInfoSPtr, tint>();
+	m_currentId = 0;
+	m_nextIdList.clear();
 
-	if (m_pbState == Play)
+	if(m_pbState == Play)
 	{
 		m_pbState = Pause;
 		emit onStateChanged();

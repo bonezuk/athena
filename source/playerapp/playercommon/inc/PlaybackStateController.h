@@ -18,6 +18,10 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
+class PlayListModel;
+
+//-------------------------------------------------------------------------------------------
+
 class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 {
 	public:
@@ -44,7 +48,7 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 		virtual qint32 getState() const;
 		
 		virtual void setTime(quint64 tS);
-		virtual void setNextItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem);
+		virtual void setNextItem(tuint64 itemId);
 		
 		virtual void onAudioStart(const QString& fileName);
 		virtual void onAudioPlay();
@@ -60,15 +64,13 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 		
 	protected:
 		QSharedPointer<OmegaAudioInterface> m_pAudioInterface;
+		PlayListModel *m_pModel;
 		common::TimeStamp m_playbackTime;
-
-		qint32 m_pbIndex;
-		QPair<track::db::DBInfoSPtr,tint> m_pbItem;
-		
-		qint32 m_pbNextIndex;
-		QPair<track::db::DBInfoSPtr, tint> m_pbNextItem;
-		
+		tuint64 m_currentId;		
+		QList<tuint64> m_nextIdList;
 		enum PlayState m_pbState;
+		
+		virtual QString fileNameFromId(tuint64 id) const;
 };
 
 //-------------------------------------------------------------------------------------------

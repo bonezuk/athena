@@ -76,7 +76,7 @@ QJsonDocument PlayListWebModel::playlistAsJson(int fromIndex, int toIndex)
 //-------------------------------------------------------------------------------------------
 /*
 {
-	"index": 1,
+	"id": 312681263,
 	"title": "Shelter in the Storm",
 	"artist": "Dare",
 	"album": "Arc of the Dawn",
@@ -99,40 +99,41 @@ QJsonDocument PlayListWebModel::playlistAsJson(int fromIndex, int toIndex)
 
 QJsonValue PlayListWebModel::playlistItemToJson(int idx)
 {
+	tuint64 id;
 	QJsonValue jValue;
 
 	if(idx >= 0 && idx < playlistSize())
 	{
-		QVariantMap tMap;
-		const QPair<track::db::DBInfoSPtr, tint>& item = m_playList.at(idx);
+		QMap<tuint64, QPair<track::db::DBInfoSPtr,tint> >::const_iterator ppI;
 		
-		tMap.insert("index", QVariant(idx));
-		if(item.second > 0 && item.second < item.first->noChildren())
+		id = m_playList.at(idx);
+		ppI = m_items.find(id);
+		if(ppI != m_items.constEnd())
 		{
-			tMap.insert("title", QVariant(item.first->child(item.second).name()));
-		}
-		else
-		{
-			tMap.insert("title", QVariant(item.first->title()));
-		}
-		tMap.insert("artist", QVariant(item.first->artist()));
-		tMap.insert("album", QVariant(item.first->album()));
-		tMap.insert("year", QVariant(item.first->year()));
-		tMap.insert("comment", QVariant(item.first->comment()));
-		tMap.insert("genre", QVariant(item.first->genre()));
-		tMap.insert("disc", QVariant(item.first->disc()));
-		tMap.insert("track", QVariant(item.first->track()));
-		tMap.insert("composer", QVariant(item.first->composer()));
-		tMap.insert("original_artist", QVariant(item.first->originalArtist()));
-		tMap.insert("copyright", QVariant(item.first->copyright()));
-		tMap.insert("encoder", QVariant(item.first->encoder()));
-		tMap.insert("length", QVariant(static_cast<tfloat64>(item.first->length())));
-		tMap.insert("bitrate", QVariant(item.first->bitrate()));
-		tMap.insert("no_channels", QVariant(item.first->noChannels()));
-		tMap.insert("frequency", QVariant(item.first->frequency()));
+			QVariantMap tMap;
+			const QPair<track::db::DBInfoSPtr,tint>& item = ppI.value();
+			
+			tMap.insert("id", QVariant(id));
+			tMap.insert("title", QVariant(titleOfItem(item)));
+			tMap.insert("artist", QVariant(item.first->artist()));
+			tMap.insert("album", QVariant(item.first->album()));
+			tMap.insert("year", QVariant(item.first->year()));
+			tMap.insert("comment", QVariant(item.first->comment()));
+			tMap.insert("genre", QVariant(item.first->genre()));
+			tMap.insert("disc", QVariant(item.first->disc()));
+			tMap.insert("track", QVariant(item.first->track()));
+			tMap.insert("composer", QVariant(item.first->composer()));
+			tMap.insert("original_artist", QVariant(item.first->originalArtist()));
+			tMap.insert("copyright", QVariant(item.first->copyright()));
+			tMap.insert("encoder", QVariant(item.first->encoder()));
+			tMap.insert("length", QVariant(static_cast<tfloat64>(item.first->length())));
+			tMap.insert("bitrate", QVariant(item.first->bitrate()));
+			tMap.insert("no_channels", QVariant(item.first->noChannels()));
+			tMap.insert("frequency", QVariant(item.first->frequency()));
 		
-		QJsonValue v(QJsonObject::fromVariantMap(tMap));
-		jValue = v;
+			QJsonValue v(QJsonObject::fromVariantMap(tMap));
+			jValue = v;
+		}
 	}
 	return jValue;
 }

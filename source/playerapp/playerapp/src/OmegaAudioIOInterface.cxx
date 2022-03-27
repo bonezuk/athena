@@ -97,6 +97,23 @@ void OmegaAudioIOInterface::playFile(const QString& fileName, bool isNext)
 
 //-------------------------------------------------------------------------------------------
 
+void OmegaAudioIOInterface::playFileWithTime(const QString& fileName, const common::TimeStamp& start,const common::TimeStamp& length, bool isNext)
+{
+	if(common::DiskOps::exist(fileName))
+	{
+		if(isNext)
+		{
+			m_audio->next(fileName, start, length);
+		}
+		else
+		{
+			m_audio->open(fileName, start, length);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void OmegaAudioIOInterface::play()
 {
 	common::Log::g_Log << "play" << common::c_endl;

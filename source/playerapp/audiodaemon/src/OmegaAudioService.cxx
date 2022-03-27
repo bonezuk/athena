@@ -38,6 +38,15 @@ void OmegaAudioService::handleRPCJson(const QJsonDocument& doc)
 				bool isNext = json.value("isNext").toBool();
 				m_pDaemon->playFile(fileName, isNext);
 			}
+			// { "function": "playFileWithTime", "fileName": "/Music/file_to_play.wav", "isNext": true, start: 30.01, length: 40.5}
+			else if(funcName == "playFileWithTime")
+			{
+				QString fileName = json.value("fileName").toString();
+				common::TimeStamp start = json.value("start").toDouble();
+				common::TimeStamp length = json.value("length").toDouble();
+				bool isNext = json.value("isNext").toBool();
+				m_pDaemon->playFileWithTime(fileName, start, length, isNext);
+			}
 			// { "function": "play" }
 			else if(funcName == "play")
 			{

@@ -79,6 +79,7 @@ void OmegaAudioDaemon::quitDaemon()
 
 void OmegaAudioDaemon::playFile(const QString& fileName, bool isNext)
 {
+	common::Log::g_Log << "playFile '" << fileName << "'" << common::c_endl;
 	if(common::DiskOps::exist(fileName))
 	{
 		if(isNext)
@@ -89,6 +90,34 @@ void OmegaAudioDaemon::playFile(const QString& fileName, bool isNext)
 		{
 			m_audio->open(fileName);
 		}
+	}
+	else
+	{
+		QString err = QString("File '%1' does not exist").arg(fileName);
+		printError("playFile", err.toUtf8().constData());
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaAudioDaemon::playFileWithTime(const QString& fileName, const common::TimeStamp& start,const common::TimeStamp& length, bool isNext)
+{
+	common::Log::g_Log << "playFileWithTime '" << fileName << "'" << common::c_endl;
+	if(common::DiskOps::exist(fileName))
+	{
+		if(isNext)
+		{
+			m_audio->next(fileName, start, length);
+		}
+		else
+		{
+			m_audio->open(fileName, start, length);
+		}
+	}
+	else
+	{
+		QString err = QString("File '%1' does not exist").arg(fileName);
+		printError("playFileWithTime", err.toUtf8().constData());
 	}
 }
 
