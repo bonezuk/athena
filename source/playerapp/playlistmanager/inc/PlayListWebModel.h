@@ -25,7 +25,12 @@ class PlayListWebModel : public PlayListModel, public OmegaWebInterface
 		
 		virtual int playlistSize();
 		virtual QJsonDocument playlistAsJson(int fromIndex, int toIndex);
-	
+		
+		virtual QJsonDocument getPlaybackState();
+		
+		virtual void onPressPlay();
+		virtual void onStartPlaying(tuint64 id);
+		
 	private:
 	
 		virtual QJsonValue playlistItemToJson(int idx);

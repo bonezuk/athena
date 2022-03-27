@@ -139,5 +139,43 @@ QJsonValue PlayListWebModel::playlistItemToJson(int idx)
 }
 
 //-------------------------------------------------------------------------------------------
+/*
+{
+	"isPlaying": true.
+	"playingId": 12345,
+	"playbackTime": 12.345
+}
+*/
+//-------------------------------------------------------------------------------------------
+
+QJsonDocument PlayListWebModel::getPlaybackState()
+{
+	bool isPlaying;
+	QVariantMap sMap;
+	QJsonDocument doc;
+	
+	isPlaying = (m_pPlaybackState->getState() == PlaybackStateController::Play) ? true : false;
+	sMap.insert("isPlaying", QVariant(isPlaying));
+	sMap.insert("playingId", QVariant(m_pPlaybackState->getCurrentId()));
+	sMap.insert("playbackTime", QVariant(static_cast<tfloat64>(m_pPlaybackState->getTime())));
+	doc.setObject(QJsonObject::fromVariantMap(sMap));
+	return doc;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListWebModel::onPressPlay()
+{
+	onPlayPausePressed();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListWebModel::onStartPlaying(tuint64 id)
+{
+	playItemAtIndex(indexFromId(id));
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

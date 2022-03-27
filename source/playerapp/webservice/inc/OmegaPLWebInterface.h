@@ -21,6 +21,15 @@ class OmegaPLWebInterface : public IPCInterfaceBase
 		// { "function": "getFullPlaylist" }
 		QJsonDocument getFullPlaylist();
 		
+		// { "function": "getPlaybackState" }
+		QJsonDocument getPlaybackState();
+		
+		// { "function": "onPressPlay" }
+		void onPressPlay();
+		
+		// { "function": "onStartPlaying", "id": 12345 }
+		void onStartPlaying(tuint64 id);
+		
 	protected:
 	
 		virtual void printError(const char *strR, const char *strE) const;

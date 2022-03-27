@@ -20,6 +20,11 @@ class PlaybackWebStateController : public PlaybackStateController
 		virtual ~PlaybackWebStateController();
 		
 		virtual void setTime(quint64 tS);
+
+		virtual void onAudioStart(const QString& fileName);
+		virtual void onAudioPlay();
+		virtual void onAudioPause();
+		virtual void onAudioStop();
 		
 	protected:
 	

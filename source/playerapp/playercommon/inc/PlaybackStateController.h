@@ -46,6 +46,8 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 		virtual quint32 getTimeInSeconds() const;
 		virtual qint32 getIndex() const;
 		virtual qint32 getState() const;
+		virtual tuint64 getCurrentId() const;
+		virtual const common::TimeStamp& getTime() const;
 		
 		virtual void setTime(quint64 tS);
 		virtual void setNextItem(tuint64 itemId);

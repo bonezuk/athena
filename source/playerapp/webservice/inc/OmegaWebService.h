@@ -41,6 +41,9 @@ class OmegaWebService : public QCoreApplication
 		void onWebRoot(network::http::HTTPReceive *recieve);
 		void onPlaylistAPI(network::http::HTTPReceive *receive);
 		void onEventStream(network::http::HTTPReceive *receive);
+		void onStateAPI(network::http::HTTPReceive *receive);
+		void onPressPlay(network::http::HTTPReceive *receive);
+		void onStartPlayback(network::http::HTTPReceive *receive);
 };
 
 //-------------------------------------------------------------------------------------------

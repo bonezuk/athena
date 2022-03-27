@@ -75,5 +75,43 @@ void WebEventBusInterface::onPlaybackTime(const common::TimeStamp& tS)
 }
 
 //-------------------------------------------------------------------------------------------
+//	{
+//		"event": "onAudioPlaybackEvent",
+//		"data": {
+// 			"isPlaying": true,
+//			"id": 12345
+//		}
+//	}
+//-------------------------------------------------------------------------------------------
+
+void WebEventBusInterface::onAudioPlaybackEvent(bool isPlaying, tuint64 id)
+{
+	QVariantMap map;
+	map.insert("isPlaying", QVariant(isPlaying));
+	map.insert("id", QVariant(id));
+	QJsonObject data = QJsonObject::fromVariantMap(map);
+	QJsonDocument doc = createJsonEvent("onAudioPlaybackEvent", data);
+	sendEvent(doc);
+}
+
+//-------------------------------------------------------------------------------------------
+//	{
+//		"event": "onAudioStart",
+//		"data": {
+// 			"id": 12345
+//		}
+//	}
+//-------------------------------------------------------------------------------------------
+
+void WebEventBusInterface::onAudioStart(tuint64 id)
+{
+	QVariantMap map;
+	map.insert("id", QVariant(id));
+	QJsonObject data = QJsonObject::fromVariantMap(map);
+	QJsonDocument doc = createJsonEvent("onAudioStart", data);
+	sendEvent(doc);
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

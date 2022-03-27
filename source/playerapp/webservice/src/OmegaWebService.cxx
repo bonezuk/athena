@@ -101,6 +101,10 @@ void OmegaWebService::onStartService()
 					m_webServer->connect("/",this,SLOT(onWebRoot(network::http::HTTPReceive *)));
 					m_webServer->connect("/playlist",this,SLOT(onPlaylistAPI(network::http::HTTPReceive *)));
 					m_webServer->connect("/event",this,SLOT(onEventStream(network::http::HTTPReceive *)));
+					m_webServer->connect("/state",this,SLOT(onStateAPI(network::http::HTTPReceive *)));
+					
+					m_webServer->connect("/pressplay",this,SLOT(onStateAPI(network::http::HTTPReceive *)));
+					m_webServer->connect("/startplayback",this,SLOT(onStateAPI(network::http::HTTPReceive *)));
 					
 					m_pWebInterface = QSharedPointer<OmegaPLWebInterface>(new OmegaPLWebInterface());
 					m_pWebInterface->setNoTimeout(true);
@@ -224,6 +228,79 @@ void OmegaWebService::onEventStream(network::http::HTTPReceive *receive)
 	{
 		m_pWebEvents->registerConnection(receive);
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaWebService::onStateAPI(network::http::HTTPReceive *receive)
+{
+	QJsonDocument doc;
+	
+	doc = m_pWebInterface->getPlaybackState();
+	if(doc.isObject())
+	{
+		network::http::Unit hdr;
+		network::NetArraySPtr dataArray(new network::NetArray);				
+		QByteArray arr;
+		
+		arr = doc.toJson(QJsonDocument::Indented);
+		dataArray->SetSize(arr.size());
+		::memcpy(dataArray->GetData(), arr.data(), arr.size());
+		
+		hdr.response(200);
+		hdr.add("Content-Type", "application/json");
+		hdr.add("Content-Length", QString::number(arr.size()));
+		hdr.add("Cache-Control", "no-cache");
+		hdr.add("Connection","close");
+		
+		receive->connection()->postResponse(hdr);
+		receive->connection()->postBody(dataArray);
+	}
+	else
+	{
+		printError("onStateAPI", "Failed to get playback state");
+		postResponse(receive, 500);
+	}
+	receive->connection()->complete();
+	receive->endProcess();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaWebService::onPressPlay(network::http::HTTPReceive *receive)
+{
+	m_pWebInterface->onPressPlay();
+	postResponse(receive, 200);
+	receive->connection()->complete();
+	receive->endProcess();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaWebService::onStartPlayback(network::http::HTTPReceive *receive)
+{
+	bool okFlag = true;
+	QString idStr = receive->header().query().data("id");
+	
+	if(!idStr.isEmpty())
+	{
+		tuint64 id = static_cast<tuint64>(idStr.toULongLong(&okFlag));
+		if(id > 0 && okFlag)
+		{
+			m_pWebInterface->onStartPlaying(id);
+			postResponse(receive, 200);
+		}
+		else
+		{
+			postResponse(receive, 400);
+		}
+	}
+	else
+	{
+		postResponse(receive, 400);
+	}
+	receive->connection()->complete();
+	receive->endProcess();
 }
 
 //-------------------------------------------------------------------------------------------

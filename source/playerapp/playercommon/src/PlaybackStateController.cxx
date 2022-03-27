@@ -87,6 +87,20 @@ qint32 PlaybackStateController::getState() const
 
 //-------------------------------------------------------------------------------------------
 
+const common::TimeStamp& PlaybackStateController::getTime() const
+{
+	return m_playbackTime;
+}
+
+//-------------------------------------------------------------------------------------------
+
+tuint64 PlaybackStateController::getCurrentId() const
+{
+	return m_currentId;
+}
+
+//-------------------------------------------------------------------------------------------
+
 QString PlaybackStateController::fileNameFromId(tuint64 id) const
 {
 	QString fileName;

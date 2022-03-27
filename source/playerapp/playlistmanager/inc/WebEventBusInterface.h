@@ -18,6 +18,9 @@ class WebEventBusInterface : public IPCInterfaceBase
 		
 		virtual void onPlaybackTime(const common::TimeStamp& tS);
 		
+		virtual void onAudioPlaybackEvent(bool isPlaying, tuint64 id);
+		virtual void onAudioStart(tuint64 id);
+		
 	protected:
 	
 		virtual void printError(const char *strR, const char *strE) const;

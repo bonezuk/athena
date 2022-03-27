@@ -36,5 +36,40 @@ QJsonDocument OmegaPLWebInterface::getFullPlaylist()
 }
 
 //-------------------------------------------------------------------------------------------
+// { "function": "getPlaybackState" }
+//-------------------------------------------------------------------------------------------
+
+QJsonDocument OmegaPLWebInterface::getPlaybackState()
+{
+	QJsonDocument doc;
+	
+	if(sendRPCCall("getPlaybackState"))
+	{
+		doc = receiveJsonReply();
+	}
+	return doc;
+}
+
+//-------------------------------------------------------------------------------------------
+// { "function": "onPressPlay" }
+//-------------------------------------------------------------------------------------------
+
+void OmegaPLWebInterface::onPressPlay()
+{
+	sendRPCCall("onPressPlay");
+}
+
+//-------------------------------------------------------------------------------------------
+// { "function": "onStartPlaying", "id": 12345 }
+//-------------------------------------------------------------------------------------------
+
+void OmegaPLWebInterface::onStartPlaying(tuint64 id)
+{
+	QVariantMap rpcMap;
+	rpcMap.insert("id", QVariant(id));
+	sendRPCCall("onStartPlaying", rpcMap);
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

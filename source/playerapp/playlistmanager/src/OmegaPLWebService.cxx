@@ -39,6 +39,27 @@ void OmegaPLWebService::handleRPCJson(const QJsonDocument& doc)
 				QByteArray repArr = doc.toJson(QJsonDocument::Compact);
 				m_pServiceThread->postResponse(repArr);
 			}
+			// { "function": "getPlaybackState" }
+			else if(funcName == "getPlaybackState")
+			{
+				QJsonDocument doc = m_pPLWebInterface->getPlaybackState();
+				QByteArray repArr = doc.toJson(QJsonDocument::Compact);
+				m_pServiceThread->postResponse(repArr);				
+			}
+			// { "function": "onPressPlay" }
+			else if(funcName == "onPressPlay")
+			{
+				m_pPLWebInterface->onPressPlay();
+			}
+			// { "function": "onStartPlaying", "id": 12345 }
+			else if(funcName == "onStartPlaying")
+			{
+				tuint64 id = static_cast<tuint64>(json.value("id").toVariant().toLongLong());
+				if(id > 0)
+				{
+					m_pPLWebInterface->onStartPlaying(id);
+				}
+			}
 			else
 			{
 				QString err = QString("Unknown RPC function '%1'").arg(funcName);
