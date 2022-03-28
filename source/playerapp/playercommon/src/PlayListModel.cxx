@@ -79,6 +79,7 @@ void PlayListModel::appendToPlaylist(const QVector<QPair<track::db::DBInfoSPtr,t
 	
 	for(ppI = list.constBegin(); ppI != list.constEnd(); ppI++)
 	{
+		const QPair<track::db::DBInfoSPtr,tint>& item = *ppI;
 		tuint64 id = generateNewId();
 		m_items.insert(id, *ppI);
 		m_idToIndexMap.insert(id, m_playList.size());

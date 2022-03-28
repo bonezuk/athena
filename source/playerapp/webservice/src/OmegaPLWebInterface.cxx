@@ -66,7 +66,8 @@ void OmegaPLWebInterface::onPressPlay()
 void OmegaPLWebInterface::onStartPlaying(tuint64 id)
 {
 	QVariantMap rpcMap;
-	rpcMap.insert("id", QVariant(id));
+	QString idStr = QString::number(id);
+	rpcMap.insert("id", QVariant(idStr));
 	sendRPCCall("onStartPlaying", rpcMap);
 }
 

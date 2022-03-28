@@ -54,7 +54,10 @@ void OmegaPLWebService::handleRPCJson(const QJsonDocument& doc)
 			// { "function": "onStartPlaying", "id": 12345 }
 			else if(funcName == "onStartPlaying")
 			{
-				tuint64 id = static_cast<tuint64>(json.value("id").toVariant().toLongLong());
+				QByteArray arr = doc.toJson(QJsonDocument::Compact);
+				QString idStr = json.value("id").toVariant().toString();
+				tuint64 id = static_cast<tuint64>(idStr.toULongLong());
+				
 				if(id > 0)
 				{
 					m_pPLWebInterface->onStartPlaying(id);

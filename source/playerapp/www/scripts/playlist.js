@@ -3,6 +3,8 @@
 //-------------------------------------------------------------------------------------------
 
 const playListElement = document.getElementById('pl-list');
+const playListIdMap = new Map();
+var currentPlaybackId = 0;
 
 //-------------------------------------------------------------------------------------------
 // init page
@@ -20,8 +22,55 @@ function loadPlaylist()
 		if(err === null) 
 		{
 			data.forEach(createPlaylistElement);
+			loadPlaybackState();
 		}
 	});
+}
+
+//-------------------------------------------------------------------------------------------
+
+function loadPlaybackState()
+{
+	var stateURL = window.location.protocol + "//" + window.location.host + "/state";
+
+	getJSON(stateURL, function(err, data) {
+		if(err === null) 
+		{
+			setPlaybackItem(data.playingId);
+			onPlaybackTimeEvent(data.playbackTime);
+			setPlaybackButton(data.isPlaying);
+		}
+	});
+}
+
+//-------------------------------------------------------------------------------------------
+
+function onPlayPressed()
+{
+	var url = window.location.protocol + "//" + window.location.host + "/pressplay";
+	var req = new XMLHttpRequest();
+	req.open('GET', url);
+	req.onload = function() {
+		var status = req.status;
+		console.log(status);
+	};
+	req.send();
+}
+
+//-------------------------------------------------------------------------------------------
+
+function onStartPlayback(id)
+{
+	var url = window.location.protocol + "//" + window.location.host + "/startplayback?id=" + id;
+	console.log(url);
+	console.log(id);
+	var req = new XMLHttpRequest();
+	req.open('GET', url);
+	req.onload = function() {
+		var status = req.status;
+		console.log(status);
+	};
+	req.send();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -47,12 +96,50 @@ function getJSON(url, callback)
 
 //-------------------------------------------------------------------------------------------
 
+function setPlaybackItem(currentId)
+{
+	if(currentPlaybackId !== 0)
+	{
+		const rListItem = playListIdMap.get(currentPlaybackId);
+		rListItem.classList.remove('isplaying');
+	}
+	if(currentId !== 0)
+	{
+		const aListItem = playListIdMap.get(currentId);
+		aListItem.classList.add('isplaying');
+	}
+	currentPlaybackId = currentId;
+	if(currentId === 0)
+	{
+		onPlaybackTimeEvent(0);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+function setPlaybackButton(isPlaying)
+{
+	const pbButton = document.getElementById('pt-play-button');
+	if(isPlaying)
+	{
+		pbButton.src = "images/pc_pause_normal.png";
+	}
+	else
+	{
+		pbButton.src = "images/pc_play_normal.png";
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 function createPlaylistElement(value, index, array)
 {
+	var idValue = value.id.toString();
 	const listItem = document.createElement('li');
-	listItem.setAttribute('data-index', index);
+	listItem.setAttribute('data-id', idValue);
 	listItem.innerHTML = generatePlaylistHTMLFromJSON(index, value);
 	playListElement.appendChild(listItem);
+	playListIdMap.set(value.id, listItem);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -60,10 +147,17 @@ function createPlaylistElement(value, index, array)
 function generatePlaylistHTMLFromJSON(index, value)
 {
 	let idx = index + 1;
-	let h = '<div class="pl-item-index">' + idx.toString() + '</div>';
-	h += '<div class="pl-item-name">' + value.title + '</div>';
-	h += '<div class="pl-item-time">' + timeStampAsString(value.length) + '</div>';
+	let h = '<div class="pl-item-index" ondblclick="onDblClickPlaylistItem(\'' + value.id + '\')">' + idx.toString() + '</div>';
+	h += '<div class="pl-item-name" ondblclick="onDblClickPlaylistItem(\'' + value.id + '\')">' + value.title + '</div>';
+	h += '<div class="pl-item-time" ondblclick="onDblClickPlaylistItem(\'' + value.id + '\')">' + timeStampAsString(value.length) + '</div>';
 	return h;
+}
+
+//-------------------------------------------------------------------------------------------
+
+function onDblClickPlaylistItem(id)
+{
+	onStartPlayback(id);
 }
 
 //-------------------------------------------------------------------------------------------

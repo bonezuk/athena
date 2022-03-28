@@ -103,8 +103,8 @@ void OmegaWebService::onStartService()
 					m_webServer->connect("/event",this,SLOT(onEventStream(network::http::HTTPReceive *)));
 					m_webServer->connect("/state",this,SLOT(onStateAPI(network::http::HTTPReceive *)));
 					
-					m_webServer->connect("/pressplay",this,SLOT(onStateAPI(network::http::HTTPReceive *)));
-					m_webServer->connect("/startplayback",this,SLOT(onStateAPI(network::http::HTTPReceive *)));
+					m_webServer->connect("/pressplay",this,SLOT(onPressPlay(network::http::HTTPReceive *)));
+					m_webServer->connect("/startplayback",this,SLOT(onStartPlayback(network::http::HTTPReceive *)));
 					
 					m_pWebInterface = QSharedPointer<OmegaPLWebInterface>(new OmegaPLWebInterface());
 					m_pWebInterface->setNoTimeout(true);

@@ -87,8 +87,9 @@ void WebEventBusInterface::onPlaybackTime(const common::TimeStamp& tS)
 void WebEventBusInterface::onAudioPlaybackEvent(bool isPlaying, tuint64 id)
 {
 	QVariantMap map;
+	QString idStr = QString::number(id);
 	map.insert("isPlaying", QVariant(isPlaying));
-	map.insert("id", QVariant(id));
+	map.insert("id", QVariant(idStr));
 	QJsonObject data = QJsonObject::fromVariantMap(map);
 	QJsonDocument doc = createJsonEvent("onAudioPlaybackEvent", data);
 	sendEvent(doc);
@@ -106,7 +107,8 @@ void WebEventBusInterface::onAudioPlaybackEvent(bool isPlaying, tuint64 id)
 void WebEventBusInterface::onAudioStart(tuint64 id)
 {
 	QVariantMap map;
-	map.insert("id", QVariant(id));
+	QString idStr = QString::number(id);
+	map.insert("id", QVariant(idStr));
 	QJsonObject data = QJsonObject::fromVariantMap(map);
 	QJsonDocument doc = createJsonEvent("onAudioStart", data);
 	sendEvent(doc);

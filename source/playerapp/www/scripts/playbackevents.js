@@ -30,6 +30,20 @@ function onJsonEvent(e)
 		{
 			onPlaybackTimeEvent(evt.data.time);
 		}
+		else if(evtName == "onAudioStart")
+		{
+			setPlaybackButton(true);
+			setPlaybackItem(evt.data.id);
+		}
+		else if(evtName== "onAudioPlaybackEvent")
+		{
+			setPlaybackButton(evt.data.isPlaying);
+			setPlaybackItem(evt.data.id);
+		}
+		else
+		{
+			console.log(evt);
+		}
 	}
 }
 

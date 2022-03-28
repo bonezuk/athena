@@ -174,6 +174,9 @@ void PlaybackStateController::onAudioStop()
 	m_currentId = 0;
 	m_nextIdList.clear();
 
+	m_playbackTime = 0;
+	emit onTimeChanged();
+
 	if(m_pbState == Play)
 	{
 		m_pbState = Pause;

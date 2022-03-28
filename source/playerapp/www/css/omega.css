@@ -27,7 +27,7 @@ body {
 	flex-flow: row;
 }
 
-.ctrl-media-buttons img {
+.ctrl-media-buttons input {
 	display: block;
 	height: 90%;
 	margin-top: auto;
@@ -88,12 +88,16 @@ body {
 	flex-flow: row;
 }
 
-.pl-list li:nth-child(odd) {
+.pl-list li:nth-child(odd):not(.isplaying) {
 	background-color: aliceblue;
 }
 
-.pl-list li:nth-child(even) {
+.pl-list li:nth-child(even):not(.isplaying) {
 	background-color: azure;
+}
+
+.pl-list li.isplaying {
+	background-color: lightgreen;
 }
 
 .pl-item-index {

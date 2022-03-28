@@ -111,9 +111,10 @@ QJsonValue PlayListWebModel::playlistItemToJson(int idx)
 		if(ppI != m_items.constEnd())
 		{
 			QVariantMap tMap;
-			const QPair<track::db::DBInfoSPtr,tint>& item = ppI.value();
+			const QPair<track::db::DBInfoSPtr,tint>& item = ppI.value();			
+			QString idStr = QString::number(id);
 			
-			tMap.insert("id", QVariant(id));
+			tMap.insert("id", QVariant(idStr));
 			tMap.insert("title", QVariant(titleOfItem(item)));
 			tMap.insert("artist", QVariant(item.first->artist()));
 			tMap.insert("album", QVariant(item.first->album()));
