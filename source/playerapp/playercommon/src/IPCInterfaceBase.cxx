@@ -89,7 +89,9 @@ bool IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 		if(rpcDocument.isObject())
 		{
 			QByteArray arr = rpcDocument.toJson(QJsonDocument::Compact);
-			// common::Log::g_Log << QString::fromUtf8(arr) << common::c_endl;
+			
+			common::Log::g_Log << "client - "<< QString::fromUtf8(arr) << common::c_endl;
+			
 			int res = pComms->write(arr);
 			
 			if(res <= 0)
@@ -112,6 +114,11 @@ bool IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 			printError("sendRPCCall", err.toUtf8().constData());
 		}
 	}
+	else
+	{
+		printError("sendRPCCall", "No IPC Comms socker");
+	}
+	common::Log::g_Log << "client - " << ((isSent) ? "sent" : "fail") << common::c_endl;
 	return isSent;
 }
 

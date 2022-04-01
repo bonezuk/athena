@@ -62,6 +62,8 @@ void IPCService::stop()
 
 void IPCService::processRPC(QByteArray rpcArray)
 {
+	common::Log::g_Log << "processRPC - a" << common::c_endl;
+
 	QJsonParseError jsonErr;
 	QJsonDocument doc = QJsonDocument::fromJson(rpcArray, &jsonErr);
 	if(!doc.isNull())
@@ -73,6 +75,8 @@ void IPCService::processRPC(QByteArray rpcArray)
 		QString err = QString("Error parsing expected JSON object. %1").arg(jsonErr.errorString());
 		printError("processRPC", err.toUtf8().constData());
 	}
+
+	common::Log::g_Log << "processRPC - b" << common::c_endl;
 }
 
 //-------------------------------------------------------------------------------------------

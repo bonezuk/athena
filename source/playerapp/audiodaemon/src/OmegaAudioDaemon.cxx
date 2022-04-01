@@ -40,6 +40,12 @@ bool OmegaAudioDaemon::init()
 	m_audio = audioio::AOBase::get("alsa");
 #endif
 
+	m_timer	= new QTimer(this);
+	m_timer->setInterval(500);
+	m_timer->setSingleShot(false);
+	connect(m_timer, SIGNAL(timeout()), this, SLOT(onTimer()));
+	m_timer->start();
+
 	if(!m_audio.isNull())
 	{
 		connect(m_audio.data(),SIGNAL(onStart(const QString&)),this,SLOT(onAudioStart(const QString&)));
@@ -171,9 +177,18 @@ void OmegaAudioDaemon::onAudioPause()
 
 //-------------------------------------------------------------------------------------------
 
+void OmegaAudioDaemon::onTimer()
+{
+	common::Log::g_Log << "onTimer" << common::c_endl;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void OmegaAudioDaemon::onAudioTime(quint64 t)
 {
 	common::TimeStamp tS(t);
+	QString str = QString("onAudioTime - %1").arg(static_cast<tfloat64>(tS));
+	common::Log::g_Log << str << common::c_endl;
 	m_pPLInterface->playbackTime(t);
 }
 

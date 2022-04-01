@@ -38,6 +38,7 @@ class OmegaAudioDaemon : public QObject
 	
 		QSharedPointer<audioio::AOBase> m_audio;
 		OmegaPlaylistInterface *m_pPLInterface;
+		QTimer *m_timer;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		
@@ -52,6 +53,8 @@ class OmegaAudioDaemon : public QObject
 		void onAudioReadyForNext();
 		void onAudioNoNext();
 		void onAudioCrossfade();
+
+		void onTimer();
 };
 
 //-------------------------------------------------------------------------------------------

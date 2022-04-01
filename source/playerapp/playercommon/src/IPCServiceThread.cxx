@@ -79,6 +79,8 @@ void IPCServiceThread::run()
 		res = m_pComms->read(inArr);
 		if(res > 0)
 		{
+			// common::Log::g_Log << "server - " << QString::fromUtf8(inArr) << common::c_endl;
+			
 			emit onProcessRPC(inArr);
 			writeResponse();
 		}
