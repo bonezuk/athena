@@ -5,6 +5,10 @@
 #include <QtQml/qqml.h>
 #include <QtQml/qqmlcontext.h>
 
+#if defined(ORCUS_WIN32)
+#include "audioio/inc/WasAPIIF.h"
+#endif
+
 #include "playerapp/playercommon/inc/EmbeddedEnv.h"
 #include "playerapp/playerapp/inc/PlayerAppMain.h"
 
@@ -166,6 +170,10 @@ int main(int argc, char **argv)
 	
 	setupEnviroment(argv[0]);
 	initCodecs();
+
+#if defined(OMEGA_WIN32)
+	orcus::audioio::WasAPIIF::instance("wasapi");
+#endif
 
 	QString trackDBFilename = userApplicationDataDirectory() + "track_playlist_dev.db";
 	track::db::TrackDB *trackDB = track::db::TrackDB::instance(trackDBFilename);

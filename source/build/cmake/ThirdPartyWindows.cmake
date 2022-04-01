@@ -19,6 +19,10 @@ file(MAKE_DIRECTORY "${TIGER_INSTALL}/plugins")
 file(MAKE_DIRECTORY "${TIGER_INSTALL}/plugins/platforms")
 file(MAKE_DIRECTORY "${TIGER_INSTALL}/plugins/imageformats")
 file(MAKE_DIRECTORY "${TIGER_INSTALL}/plugins/sqldrivers")
+
+file(MAKE_DIRECTORY "${TIGER_INSTALL}/qml")
+file(MAKE_DIRECTORY "${TIGER_INSTALL}/qml/QtQuick.2")
+
 file(MAKE_DIRECTORY "${TIGER_INSTALL}/data")
 file(MAKE_DIRECTORY "${TIGER_INSTALL}/data/license")
 file(MAKE_DIRECTORY "${TIGER_INSTALL}/help")
@@ -84,9 +88,11 @@ message("Copy Qt image formats")
 if (TIGER_DEBUG_BUILD)
 	set(QTPLUGIN_PLATFORM_FILES "qwindowsd.dll" "qwindows.dll")
 	set(QTPLUGIN_IMAGE_FILES "qjpegd.dll" "qgifd.dll" )
+	set(QTPLUGIN_QML_FILES "qtquick2plugind.dll" )
 else (TIGER_DEBUG_BUILD)
 	set(QTPLUGIN_PLATFORM_FILES "qwindows.dll")
 	set(QTPLUGIN_IMAGE_FILES "qjpeg.dll" "qgif.dll" )
+	set(QTPLUGIN_QML_FILES "qtquick2plugin.dll" )
 endif (TIGER_DEBUG_BUILD)
 
 foreach (QTPLUGIN_PLATFORM_FILE ${QTPLUGIN_PLATFORM_FILES})
@@ -96,6 +102,10 @@ endforeach (QTPLUGIN_PLATFORM_FILE)
 foreach (QTPLUGIN_IMAGE_FILE ${QTPLUGIN_IMAGE_FILES})
 	file(COPY "${QT_HOME}/plugins/imageformats/${QTPLUGIN_IMAGE_FILE}" DESTINATION "${TIGER_INSTALL}/plugins/imageformats")
 endforeach (QTPLUGIN_IMAGE_FILE)
+
+foreach (QTPLUGIN_QML_FILE ${QTPLUGIN_QML_FILES})
+	file(COPY "${QT_HOME}/qml/QtQuick.2/${QTPLUGIN_QML_FILE}" DESTINATION "${TIGER_INSTALL}/qml/QtQuick.2")
+endforeach (QTPLUGIN_QML_FILE)
 
 file(COPY "${QT_HOME}/plugins/sqldrivers/qsqlite.dll" DESTINATION "${TIGER_INSTALL}/plugins/sqldrivers")
 

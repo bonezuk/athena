@@ -3,6 +3,8 @@
 #define __PLAYERAPP_PLAYERAPP_OMEGAAUDIOIOINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
+#include "network/inc/Resource.h"
+
 #include "audioio/inc/AOBase.h"
 
 #include "engine/inc/Codec.h"
