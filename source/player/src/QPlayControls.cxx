@@ -1817,7 +1817,11 @@ bool QPlayControls::onMouseMoveWindowPress(QMouseEvent *e)
 	{
 		if(e->button()==Qt::LeftButton)
 		{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+			QPoint gPos(e->globalPos());
+#else
 			QPoint gPos(static_cast<int>(e->globalPosition().x()), static_cast<int>(e->globalPosition().y()));
+#endif
 			m_moveWindowState = 1;
 			m_moveWindowOffset = gPos - window()->pos();
 			res = true;
@@ -1834,7 +1838,11 @@ bool QPlayControls::onMouseMoveWindowMove(QMouseEvent *e)
 	
 	if(m_moveWindowState==1)
 	{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+		QPoint gPos(e->globalPos());
+#else
 		QPoint gPos(static_cast<int>(e->globalPosition().x()), static_cast<int>(e->globalPosition().y()));
+#endif
 		QPoint nP = gPos - m_moveWindowOffset;
 		window()->move(nP);
 		res = true;

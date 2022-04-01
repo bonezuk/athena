@@ -59,19 +59,19 @@ void AlbumModelKey::copy(const QVariant& v)
 {
 	bool res = false;
 
-#if QT_VERSION >= 0x050000
-    if(v.canConvert(QMetaType(QMetaType::QVariantList)))
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	if(v.canConvert(QMetaType::QVariantList))
 #else
-    if(v.canConvert(QVariant::List))
+	if(v.canConvert(QMetaType(QMetaType::QVariantList)))
 #endif
 	{
 		QList<QVariant> vList = v.toList();
 		if(vList.size()==2)
 		{
-#if QT_VERSION >= 0x050000
-            if(vList.at(0).canConvert(QMetaType(QMetaType::Bool)) && vList.at(1).canConvert(QMetaType(QMetaType::Int)))
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+			if(vList.at(0).canConvert(QMetaType::Bool) && vList.at(1).canConvert(QMetaType::Int))
 #else
-			if(vList.at(0).canConvert(QVariant::Bool) && vList.at(1).canConvert(QVariant::Int))
+			if(vList.at(0).canConvert(QMetaType(QMetaType::Bool)) && vList.at(1).canConvert(QMetaType(QMetaType::Int)))
 #endif
 			{
 				m_group = vList.at(0).toBool();

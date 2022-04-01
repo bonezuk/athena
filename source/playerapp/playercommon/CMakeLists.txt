@@ -3,7 +3,7 @@ add_definitions(-DORCUS_PLAYERCOMMON_DLL)
 file(GLOB PLAYERCOMMON_HEADER inc/*.h)
 file(GLOB PLAYERCOMMON_SOURCE src/*.cxx)
 
-qt_add_resources(PLAYERCOMMON_RESOURCES playercommon.qrc)
+qt5_add_resources(PLAYERCOMMON_RESOURCES playercommon.qrc)
 
 add_library(playercommon SHARED ${PLAYERCOMMON_HEADER} ${PLAYERCOMMON_SOURCE} ${PLAYERCOMMON_RESOURCES})
 

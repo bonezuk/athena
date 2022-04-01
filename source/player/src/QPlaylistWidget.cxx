@@ -1485,8 +1485,12 @@ void QPlaylistWidget::mousePressEvent(QMouseEvent *e)
 		{
 			tint yPos,treeNodeI;
 			QPLItemBase *item;
-			
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+			yPos = e->pos().y();
+#else
 			yPos = e->position().y();
+#endif
 			
 			treeNodeI = viewIndexFromPosition(yPos,false);
 			if(treeNodeI>=0)
@@ -1545,7 +1549,11 @@ void QPlaylistWidget::mouseReleaseEvent(QMouseEvent *e)
 		tint yPos,treeNodeI;
 		QPLItemBase *item;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+		yPos = e->pos().y();
+#else
 		yPos = e->position().y();
+#endif
 		
 		treeNodeI = viewIndexFromPosition(yPos,false);
 		if(treeNodeI>=0)
@@ -1599,7 +1607,11 @@ void QPlaylistWidget::mouseDoubleClickEvent(QMouseEvent *e)
 			tint yPos,treeNodeI;
 			QPLItemBase *item;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+			yPos = e->pos().y();
+#else
 			yPos = e->position().y();
+#endif
 
 			treeNodeI = viewIndexFromPosition(yPos);
 			item = m_viewList[treeNodeI];
@@ -2335,8 +2347,12 @@ void QPlaylistWidget::dragMoveEvent(QDragMoveEvent *e)
 		{
 			tint yPos,treeNodeI;
 			QPLItemBase *item;
-				
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+			yPos = e->pos().y();
+#else
 			yPos = e->position().y();
+#endif
 
 			treeNodeI = viewIndexFromPosition(yPos);
 			if(treeNodeI>=0 && treeNodeI<m_viewList.size())
@@ -2433,8 +2449,12 @@ void QPlaylistWidget::dropEvent(QDropEvent *e)
 	QPLItemBase *pItem;
 
 	m_currentDragPosition = -1;
-	
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	QPoint dropPosition(static_cast<int>(e->pos().x()), static_cast<int>(e->pos().y()));
+#else
 	QPoint dropPosition(static_cast<int>(e->position().x()), static_cast<int>(e->position().y()));
+#endif
 	pItem = itemFromPosition(dropPosition,firstNodeI);
 
 	if(mimeData->hasFormat("application/blackomega-urllist"))
@@ -4477,7 +4497,11 @@ bool QFixedHorizontalScrollArea::eventFilter(QObject *watched,QEvent *event)
 								// bounds of up scroll area in widget coordinates.
                                 tfloat32 D = v + wC;
 								// Y position of mouse in widget coordinates.
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+								tfloat32 mY = static_cast<tfloat32>(moveEvent->pos().y());
+#else
 								tfloat32 mY = static_cast<tfloat32>(moveEvent->position().y());
+#endif
 								// bottom Y position of the given view port in widget coordinates.
 								tfloat32 vH = v + H;
 								// bounds of down scroll area in widget coordinates.

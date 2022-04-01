@@ -88,7 +88,9 @@ template <class X> class BOQueueTree {
 		tint Position(QTItem *item);
 };
 
+#if defined(OMEGA_MACOSX)
 template <typename T> T BOQueueTree<T>::nullObject;
+#endif
 
 //-------------------------------------------------------------------------------------
 //	Method:

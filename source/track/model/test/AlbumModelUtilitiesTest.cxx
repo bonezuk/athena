@@ -487,7 +487,16 @@ TEST(AlbumModelUtilities,createAlbumArtistRecord)
 	AlbumModelUtilitiesTest a;
     QueryRecord r = a.testCreateRecordAlbumArtist(key,artist,artistCount);
 
-#if QT_VERSION >= 0x050000	
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	EXPECT_TRUE(r.at(0).canConvert(QMetaType::Bool));
+	EXPECT_TRUE(r.at(0).toBool()==true);
+	EXPECT_TRUE(r.at(1).canConvert(QMetaType::Int));
+	EXPECT_TRUE(r.at(1).toInt()==3);
+	EXPECT_TRUE(r.at(2).canConvert(QMetaType::QString));
+	EXPECT_TRUE(r.at(2).toString()=="Artist");
+	EXPECT_TRUE(r.at(3).canConvert(QMetaType::Int));
+	EXPECT_TRUE(r.at(3).toInt()==5);
+#else
 	EXPECT_TRUE(r.at(0).canConvert(QMetaType(QMetaType::Bool)));
 	EXPECT_TRUE(r.at(0).toBool()==true);
 	EXPECT_TRUE(r.at(1).canConvert(QMetaType(QMetaType::Int)));
@@ -495,15 +504,6 @@ TEST(AlbumModelUtilities,createAlbumArtistRecord)
 	EXPECT_TRUE(r.at(2).canConvert(QMetaType(QMetaType::QString)));
 	EXPECT_TRUE(r.at(2).toString()=="Artist");
 	EXPECT_TRUE(r.at(3).canConvert(QMetaType(QMetaType::Int)));
-	EXPECT_TRUE(r.at(3).toInt()==5);
-#else
-	EXPECT_TRUE(r.at(0).canConvert(QVariant::Bool));
-	EXPECT_TRUE(r.at(0).toBool()==true);
-	EXPECT_TRUE(r.at(1).canConvert(QVariant::Int));
-	EXPECT_TRUE(r.at(1).toInt()==3);
-    EXPECT_TRUE(r.at(2).canConvert(QVariant::String));
-	EXPECT_TRUE(r.at(2).toString()=="Artist");
-	EXPECT_TRUE(r.at(3).canConvert(QVariant::Int));
 	EXPECT_TRUE(r.at(3).toInt()==5);
 #endif
 }

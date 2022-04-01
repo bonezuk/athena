@@ -1937,7 +1937,11 @@ void QKeyLineEditDelegate::paint(QPainter *painter,const QStyleOptionViewItem& o
     if(!keys.isEmpty() && !(index.row()==m_editRow && index.column()==m_editColumn))
 	{
 		QList<KeyCode>::const_iterator ppI;
-        float backCHue,backCSat,backCVal;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+		qreal backCHue,backCSat,backCVal;
+#else
+		float backCHue,backCSat,backCVal;
+#endif
 
 		option.palette.color(QPalette::Base).getHsvF(&backCHue,&backCSat,&backCVal);
 		backCVal += (backCVal < 0.5) ? 0.06 : -0.06;

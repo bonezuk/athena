@@ -451,6 +451,36 @@ void ITunesConfig::getDBDictionary(QMap<QString,QSet<QString> >& iTunesDict)
 }
 
 //-------------------------------------------------------------------------------------------
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+//-------------------------------------------------------------------------------------------
+
+QString ITunesConfig::getDataItem(const QVariant& v)
+{
+	QString d;
+
+	switch(v.type())
+	{
+		case QVariant::String:
+			d = v.toString();
+			break;
+
+		case QVariant::Int:
+			d = QString::number(v.toInt());
+			break;
+
+		case QVariant::Double:
+			d = QString::number(v.toDouble(),'f',8);
+			break;
+
+		default:
+			break;
+	}
+	return d;
+}
+
+//-------------------------------------------------------------------------------------------
+#else
+//-------------------------------------------------------------------------------------------
 
 QString ITunesConfig::getDataItem(const QVariant& v)
 {
@@ -476,6 +506,8 @@ QString ITunesConfig::getDataItem(const QVariant& v)
 	return d;
 }
 
+//-------------------------------------------------------------------------------------------
+#endif
 //-------------------------------------------------------------------------------------------
 
 QString ITunesConfig::parseURL(const QString& pUrl)
@@ -589,7 +621,12 @@ QString ITunesConfig::getURLFilename(const QString& uPath)
 void ITunesConfig::processTracks(const QVariant& tRoot,QMap<int,track::info::InfoSPtr>& trackMap)
 {
 	trackMap.clear();
-    if(tRoot.metaType().id()==QMetaType::Type::QVariantMap)
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	if(tRoot.type()==QVariant::Map)
+#else
+	if(tRoot.metaType().id()==QMetaType::Type::QVariantMap)
+#endif
 	{
 		QMap<QString,QVariant> tMap = tRoot.toMap();
 		QMap<QString,QVariant>::iterator ppI,ppJ,ppK;
@@ -597,7 +634,11 @@ void ITunesConfig::processTracks(const QVariant& tRoot,QMap<int,track::info::Inf
 		for(ppI=tMap.begin();ppI!=tMap.end();ppI++)
 		{
 			const QVariant& dV = ppI.value();
-            if(dV.metaType().id()==QMetaType::Type::QVariantMap)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+			if(dV.type()==QVariant::Map)
+#else
+			if(dV.metaType().id()==QMetaType::Type::QVariantMap)
+#endif
 			{
 				QMap<QString,QVariant> dMap = dV.toMap();
 				ppJ = dMap.find("Track ID");
@@ -668,7 +709,11 @@ void ITunesConfig::processTracks(const QVariant& tRoot,QMap<int,track::info::Inf
 void ITunesConfig::processPlaylist(const QVariant& pRoot,QString& name,QList<int>& pList)
 {
 	pList.clear();
-    if(pRoot.metaType().id()==QMetaType::Type::QVariantMap)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	if(pRoot.type()==QVariant::Map)
+#else
+	if(pRoot.metaType().id()==QMetaType::Type::QVariantMap)
+#endif
 	{
 		QMap<QString,QVariant> rMap = pRoot.toMap();
 		QMap<QString,QVariant>::iterator ppI,ppK;
@@ -681,7 +726,11 @@ void ITunesConfig::processPlaylist(const QVariant& pRoot,QString& name,QList<int
 			if(ppI!=rMap.end())
 			{
 				const QVariant& vA = ppI.value();
-                if(vA.metaType().id()==QMetaType::Type::QVariantList)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+				if(vA.type()==QVariant::List)
+#else
+				if(vA.metaType().id()==QMetaType::Type::QVariantList)
+#endif
 				{
 					QList<QVariant> aList = vA.toList();
 					QList<QVariant>::iterator ppJ;
@@ -689,14 +738,22 @@ void ITunesConfig::processPlaylist(const QVariant& pRoot,QString& name,QList<int
 					for(ppJ=aList.begin();ppJ!=aList.end();ppJ++)
 					{
 						const QVariant& dV = *ppJ;
-                        if(dV.metaType().id()==QMetaType::Type::QVariantMap)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+						if(dV.type()==QVariant::Map)
+#else
+						if(dV.metaType().id()==QMetaType::Type::QVariantMap)
+#endif
 						{
 							QMap<QString,QVariant> dMap = dV.toMap();
 							ppK = dMap.find("Track ID");
 							if(ppK!=dMap.end())
 							{
 								const QVariant& tV = ppK.value();
-                                if(tV.metaType().id()==QMetaType::Type::Int)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+								if(tV.type()==QVariant::Int)
+#else
+								if(tV.metaType().id()==QMetaType::Type::Int)
+#endif
 								{
 									pList.append(tV.toInt());
 								}
@@ -714,7 +771,12 @@ void ITunesConfig::processPlaylist(const QVariant& pRoot,QString& name,QList<int
 void ITunesConfig::processPlaylists(const QVariant& pRoot,QList<QPair<QString,QList<int> > >& pLists)
 {
 	pLists.clear();
-    if(pRoot.metaType().id()==QMetaType::Type::QVariantList)
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	if(pRoot.type()==QVariant::List)
+#else
+	if(pRoot.metaType().id()==QMetaType::Type::QVariantList)
+#endif
 	{
 		QList<QVariant> aList = pRoot.toList();
 		QList<QVariant>::iterator ppI;
@@ -757,7 +819,11 @@ void ITunesConfig::parseDatabase(const QString& fileName)
 		{
 			const QVariant& v = rootList.at(i);
 			
-            if(v.metaType().id()==QMetaType::Type::QVariantMap)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+			if(v.type()==QVariant::Map)
+#else
+			if(v.metaType().id()==QMetaType::Type::QVariantMap)
+#endif
 			{
 				QMap<QString,QVariant> dMap = v.toMap();
 				QMap<QString,QVariant>::iterator ppI;

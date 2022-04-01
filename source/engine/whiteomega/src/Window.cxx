@@ -111,7 +111,7 @@ void Window::start()
 	}
 	
 	m_winBessel240 = reinterpret_cast<sample_t *>(m_alloc.MemAllocAlign(240,sizeof(sample_t),16));
-	for(i=0,j=239;i<128;++i,--j)
+	for(i=0,j=239;i<120;++i,--j)
 	{
 		m_winBessel240[i] = m_windowBessel_240[i];
 		m_winBessel240[j] = m_windowBessel_240[i];

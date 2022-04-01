@@ -119,8 +119,10 @@ template <class T,class S> class BOTree
 		void Set(const T& index,const S& item);
 };
 
+#if defined(OMEGA_MACOSX)
 template <typename T, typename S> S BOTree<T,S>::nullObject;
 template <typename T, typename S> T BOTree<T,S>::nullIndex;
+#endif
 
 //-------------------------------------------------------------------------------------------
 

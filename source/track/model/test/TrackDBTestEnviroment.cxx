@@ -447,7 +447,20 @@ bool TrackDBTestEnviroment::isAnyEqual(const QVariant& a,const QVariant& b)
 {
 	bool res = false;
 
-#if QT_VERSION >= 0x050000	
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	if(!res || (a.canConvert(QMetaType::Double) && b.canConvert(QMetaType::Double)))
+	{
+		res = isEqual(a.toDouble(),b.toDouble());
+	}
+	if(!res || (a.canConvert(QMetaType::Int) && b.canConvert(QMetaType::Int)))
+	{
+		res = (a.toInt()==b.toInt()) ? true : false;
+	}
+	if(!res || (a.canConvert(QMetaType::QString) && b.canConvert(QMetaType::QString)))
+	{
+		res = (a.toString()==b.toString()) ? true : false;
+	}
+#else
 	if(!res || (a.canConvert(QMetaType(QMetaType::Double)) && b.canConvert(QMetaType(QMetaType::Double))))
 	{
 		res = isEqual(a.toDouble(),b.toDouble());
@@ -457,19 +470,6 @@ bool TrackDBTestEnviroment::isAnyEqual(const QVariant& a,const QVariant& b)
 		res = (a.toInt()==b.toInt()) ? true : false;
 	}
 	if(!res || (a.canConvert(QMetaType(QMetaType::QString)) && b.canConvert(QMetaType(QMetaType::QString))))
-	{
-		res = (a.toString()==b.toString()) ? true : false;
-	}
-#else
-	if(!res || (a.canConvert(QVariant::Double) && b.canConvert(QVariant::Double)))
-	{
-		res = isEqual(a.toDouble(),b.toDouble());
-	}
-	if(!res || (a.canConvert(QVariant::Int) && b.canConvert(QVariant::Int)))
-	{
-		res = (a.toInt()==b.toInt()) ? true : false;
-	}
-	if(!res || (a.canConvert(QVariant::String) && b.canConvert(QVariant::String)))
 	{
 		res = (a.toString()==b.toString()) ? true : false;
 	}
