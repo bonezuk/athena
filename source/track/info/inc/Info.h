@@ -181,7 +181,9 @@ class TRACK_INFO_EXPORT Info : public QObject
 
 		static bool playPreGap();
 		static void setPlayPreGap(bool flag);
-
+		
+		virtual tuint64 hashID() const;
+		
 	protected:
 	
 		static ChildInfo m_nullChild;
@@ -210,6 +212,8 @@ class TRACK_INFO_EXPORT Info : public QObject
 		
 		ImageFormat m_dirImageFormat;
 		ImageInfoArray *m_dirImageArray;
+		
+		tuint64 m_hash;
 	
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		
@@ -224,6 +228,9 @@ class TRACK_INFO_EXPORT Info : public QObject
 		virtual void setNoChannels(tint v);
 
 		static bool isAppleFinderFile(const QString& name,common::BIOStream *reader);
+
+		static tuint64 calculateELFHash(common::BIOStream *input);
+		virtual void calcHashID(common::BIOStream *input);
 };
 
 //-------------------------------------------------------------------------------------------

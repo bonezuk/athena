@@ -1338,7 +1338,7 @@ bool FTPSession::processRETR(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true);
 			if(!fileName.isEmpty() && fileExist(fileName))
 			{
@@ -1412,7 +1412,7 @@ bool FTPSession::processSTOR(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true,false);
 			if(!fileName.isEmpty())
 			{
@@ -1485,7 +1485,7 @@ bool FTPSession::processSTOU(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true,false);
 			if(!fileName.isEmpty())
 			{
@@ -1560,7 +1560,7 @@ bool FTPSession::processAPPE(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true);
 			if(!fileName.isEmpty())
 			{
@@ -1786,7 +1786,7 @@ bool FTPSession::processDELE(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true);
 			
 			if(!fileName.isEmpty())
@@ -1845,7 +1845,7 @@ bool FTPSession::processRMD(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true);
 			
 			if(!fileName.isEmpty() && dirExist(fileName))
@@ -1890,7 +1890,7 @@ bool FTPSession::processMKD(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true,false);
 			
 			if(!fileName.isEmpty())
@@ -1950,7 +1950,7 @@ bool FTPSession::processLIST(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true);
 			if(!fileName.isEmpty())
 			{
@@ -2024,7 +2024,7 @@ bool FTPSession::processNLST(const common::BString& cmd)
 		{
 			QString cmdName,fileName;
 			
-			cmdName = QString::fromUtf8(cmd.mid(lItem->start + lItem->length).trim());
+            cmdName = QString::fromUtf8(static_cast<const char *>(cmd.mid(lItem->start + lItem->length).trim()));
 			fileName = changeDirectoryPath(m_path,cmdName,true);
 			if(!fileName.isEmpty())
 			{

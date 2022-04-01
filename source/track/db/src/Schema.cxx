@@ -75,6 +75,7 @@ bool Schema::createDB(SQLiteDatabase *db)
 				createPlayListInfo();
 				createSandBoxURL();
 				createMountPoints();
+				createFileHash();
 			}
 		}
 		catch(const SQLiteException& e)
@@ -392,6 +393,26 @@ void Schema::createSandBoxURL()
 		cmd += "  bookmark BLOB,";
 		cmd += "  PRIMARY KEY(url,docUrl)";
 		cmd += ");";
+		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::createFileHash()
+{
+	if(!isTableDefined("fileHash"))
+	{
+		QString cmd;
+		
+		cmd  = "CREATE TABLE fileHash (";
+		cmd += "	directoryID INTEGER NOT NULL,";
+		cmd += "	fileID INTEGER NOT NULL,";
+		cmd += "	hashID INTEGER NOT NULL,";
+		cmd += "	PRIMARY KEY(directoryID, hashID)";
+		cmd += ");";
+		m_db->exec(cmd);
+		cmd = "CREATE INDEX fileHashIDIndex ON fileHash (hashID);";
 		m_db->exec(cmd);
 	}
 }

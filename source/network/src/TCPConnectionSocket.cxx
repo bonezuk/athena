@@ -121,19 +121,13 @@ void TCPConnectionSocket::close()
 	if(m_socket!=c_invalidSocket)
 	{
 #if defined(OMEGA_WIN32)
-		if(::shutdown(m_socket,SD_BOTH)!=0)
-		{
-			printError("close","Error in shutting down socket");
-		}
+		::shutdown(m_socket,SD_BOTH);
 		if(::closesocket(m_socket)!=0)
 		{
 			printError("close","Error closing socket");
 		}
 #elif defined(OMEGA_POSIX)
-		if(::shutdown(m_socket,SHUT_RDWR)!=0)
-		{
-			printError("close","Error in shutting down socket");
-		}
+		::shutdown(m_socket,SHUT_RDWR);
 		if(::close(m_socket)!=0)
 		{
 			printError("close","Error closing socket");

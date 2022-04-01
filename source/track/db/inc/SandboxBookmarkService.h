@@ -8,7 +8,7 @@
 #include "track/db/inc/SBBookmarkTrackDB.h"
 #include "track/info/inc/SBBookmarkService.h"
 
-#include <QMutex>
+#include <QRecursiveMutex>
 #include <QSet>
 
 #import <Foundation/Foundation.h>
@@ -52,7 +52,7 @@ class TRACK_DB_EXPORT SandboxBookmarkService : public track::info::SBBookmarkSer
 		
 	protected:
 	
-		QMutex m_mutex;
+        QRecursiveMutex m_mutex;
 		QMap<QString,QMap<QString,QPair<void *,int> > > m_referenceCountMap;
 		
 		virtual void lock();

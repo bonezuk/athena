@@ -1433,6 +1433,7 @@ BString BString::HexNumberToString(tuint x,tint n,bool minus,bool ex)
 					{
 						t[0] = static_cast<tchar>(y - 10) + 'a';
 					}
+					a = t + a;
 					x >>= 4;
 					n--;
 				}
@@ -1450,6 +1451,7 @@ BString BString::HexNumberToString(tuint x,tint n,bool minus,bool ex)
 					{
 						t[0] = static_cast<tchar>(y - 10) + 'a';
 					}
+					a = t + a;
 					x >>= 4;
 					n--;
 				}
@@ -1468,6 +1470,7 @@ BString BString::HexNumberToString(tuint x,tint n,bool minus,bool ex)
 				{
 					t[0] = static_cast<tchar>(y - 10) + 'a';
 				}
+				a = t + a;
 				x >>= 4;
 			}
 		}

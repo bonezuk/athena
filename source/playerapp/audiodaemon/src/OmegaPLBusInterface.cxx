@@ -5,8 +5,8 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaPLBusInterface::OmegaPLBusInterface(QObject *parent) : OmegaPlaylistInterface(),
-	QObject(parent)
+OmegaPLBusInterface::OmegaPLBusInterface(QObject *parent) : OmegaPlaylistInterface(parent),
+	IPCInterfaceBase(QString::fromUtf8(OMEGAPLAYLISTMANAGER_SERVICE_NAME))
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -22,135 +22,91 @@ void OmegaPLBusInterface::printError(const char *strR, const char *strE) const
 }
 
 //-------------------------------------------------------------------------------------------
+// { "function": "playbackTime", "timestamp": 12.3456 }
+//-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::playbackTime(quint64 tS)
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("playbackTime", tS);
-	}
+	QVariantMap rpcMap;
+	common::TimeStamp tStamp(tS);
+	rpcMap.insert("timestamp", QVariant(static_cast<tfloat64>(tStamp)));
+	sendRPCCall("playbackTime", rpcMap);
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "onAudioStart", "name": "audio_filename.mp3" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::onAudioStart(const QString& name)
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("onAudioStart", name);
-	}
+	QVariantMap rpcMap;
+	rpcMap.insert("name", QVariant(name));
+	sendRPCCall("onAudioStart", rpcMap);
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "onAudioPlay" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::onAudioPlay()
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("onAudioPlay");
-	}
+	sendRPCCall("onAudioPlay");
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "onAudioPause" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::onAudioPause()
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("onAudioPause");
-	}
+	sendRPCCall("onAudioPause");
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "onAudioStop" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::onAudioStop()
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("onAudioStop");
-	}
+	sendRPCCall("onAudioStop");
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "onAudioBuffer", "percent": 12.3456 }
 //-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::onAudioBuffer(tfloat32 percent)
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("onAudioBuffer", percent);
-	}
+	QVariantMap rpcMap;
+	rpcMap.insert("percent", QVariant(percent));
+	sendRPCCall("onAudioBuffer", rpcMap);
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "onAudioReadyForNext" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::onAudioReadyForNext()
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("onAudioReadyForNext");
-	}
+	sendRPCCall("onAudioReadyForNext");
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "onAudioNoNext" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::onAudioNoNext()
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("onAudioNoNext");
-	}
+	sendRPCCall("onAudioNoNext");
 }
 
+//-------------------------------------------------------------------------------------------
+// { "function": "onAudioCrossfade" }
 //-------------------------------------------------------------------------------------------
 
 void OmegaPLBusInterface::onAudioCrossfade()
 {
-	QSharedPointer<QDBusInterface> pIface = getPLManagerInterface();
-	if(!pIface.isNull())
-	{
-		pIface->call("onAudioCrossfade");
-	}
-}
-
-//-------------------------------------------------------------------------------------------
-
-QSharedPointer<QDBusInterface> OmegaPLBusInterface::getPLManagerInterface()
-{
-	if(m_pPLManagerInterface.isNull() || !m_pPLManagerInterface->isValid())
-	{
-#if defined(OMEGA_LINUX)
-		QDBusConnection bus = QDBusConnection::systemBus();
-#else
-		QDBusConnection bus = QDBusConnection::sessionBus();
-#endif
-		if(bus.isConnected())
-		{
-			QSharedPointer<QDBusInterface> pInterface(new QDBusInterface(OMEGAPLAYLISTMANAGER_SERVICE_NAME, "/", OMEGAPLMANAGERAUDIO_DBUS_IFACE_NAME, bus, this));
-			if(pInterface->isValid())
-			{
-				m_pPLManagerInterface = pInterface;
-			}
-			else
-			{
-				QString err = QString("Failed to connect to Playlist Manager. %1").arg(bus.lastError().message());
-				printError("getPLManagerInterface", err.toUtf8().constData());
-			}
-		}
-		else
-		{
-			QString err = QString("Failed to connect to D-Bus. %1").arg(bus.lastError().message());
-			printError("getPLManagerInterface", err.toUtf8().constData());
-		}
-	}
-	return m_pPLManagerInterface;
+	sendRPCCall("onAudioCrossfade");
 }
 
 //-------------------------------------------------------------------------------------------

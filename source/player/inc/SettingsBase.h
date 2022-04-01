@@ -30,7 +30,7 @@ class SettingsBase : public QWidget
 		Q_OBJECT
 
 	public:
-		SettingsBase(QWidget *parent,Qt::WindowFlags f = 0);
+        SettingsBase(QWidget *parent,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~SettingsBase();
 		
 		virtual void onSelected(int index) = 0;

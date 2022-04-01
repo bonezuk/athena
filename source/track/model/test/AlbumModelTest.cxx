@@ -36,7 +36,7 @@ class AlbumModelTest : public AlbumModel
 		void testEnumerateSections(const QueryResult& results);
         QVector<int>& getPositionIndex();
 		void testInsertIntoAlbum(QVector<QueryRecord>& recordList);
-		void testAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map);
+		void testAddToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map);
 		void testBuildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMultiMap<QString,int> >& sectionMap);
 		
 	protected:
@@ -161,7 +161,7 @@ void AlbumModelTest::testInsertIntoAlbum(QVector<QueryRecord>& recordList)
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumModelTest::testAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map)
+void AlbumModelTest::testAddToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map)
 {
 	addToModelForGivenMap(results,map);
 }
@@ -1406,9 +1406,9 @@ TEST(AlbumModel,mapResultsToAlphabetIndexDuplicateAlbumNameButDifferentCaseBothI
 	
 	ppI = sectionMap.find(QChar('a'));
 	EXPECT_TRUE(ppI!=sectionMap.end());
-	QMap<QString,int>& mapA = ppI.value();
+	QMultiMap<QString,int>& mapA = ppI.value();
 	EXPECT_TRUE(mapA.size()==2);
-	for(QMap<QString,int>::iterator ppI=mapA.begin();ppI!=mapA.end();ppI++)
+	for(QMultiMap<QString,int>::iterator ppI=mapA.begin();ppI!=mapA.end();ppI++)
 	{
 		EXPECT_TRUE(ppI.key()=="alpha");
 		EXPECT_TRUE(ppI.value()==0 || ppI.value()==1);
@@ -1584,7 +1584,7 @@ TEST(AlbumModel,addToModelForGivenMapWhenMapIsEmpty)
 {
 	AlbumModelTest model;
 	QueryResult result;
-	QMap<QString,int> sectionMap;
+	QMultiMap<QString,int> sectionMap;
 	
 	model.testAddToModelForGivenMap(result,sectionMap);
 	
@@ -1802,8 +1802,8 @@ class AlbumModelBuildModelSortedIndexTest : public AlbumModelTest
 {
 	public:
 		AlbumModelBuildModelSortedIndexTest();
-		MOCK_METHOD2(addToModelForGivenMap,void(const QueryResult& results,const QMap<QString,int>& map));
-		void dummyAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map);
+		MOCK_METHOD2(addToModelForGivenMap,void(const QueryResult& results,const QMultiMap<QString,int>& map));
+		void dummyAddToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map);
 	protected:
 		int m_count;
 };
@@ -1811,7 +1811,7 @@ class AlbumModelBuildModelSortedIndexTest : public AlbumModelTest
 AlbumModelBuildModelSortedIndexTest::AlbumModelBuildModelSortedIndexTest() : m_count(1)
 {}
 
-void AlbumModelBuildModelSortedIndexTest::dummyAddToModelForGivenMap(const QueryResult& results,const QMap<QString,int>& map)
+void AlbumModelBuildModelSortedIndexTest::dummyAddToModelForGivenMap(const QueryResult& results,const QMultiMap<QString,int>& map)
 {
 	for(int i=0;i<m_count;i++)
 	{
@@ -1863,14 +1863,14 @@ TEST(AlbumModel,buildModelFromSortedIndexIsIndexedAtExpectedPositions)
 
 	QueryResult results;
 
-	QMap<QString,int> bMap,dMap,fMap;
-	QMultiMap<QChar, QMultiMap<QString,int> > sectionMap;
+	QMultiMap<QString,int> bMap,dMap,fMap;
+	QMap<QChar, QMultiMap<QString,int> > sectionMap;
 	sectionMap.insert(QChar('b'),bMap);
 	sectionMap.insert(QChar('d'),dMap);
 	sectionMap.insert(QChar('f'),fMap);
 
 	AlbumModelBuildModelSortedIndexTest model;
-    EXPECT_CALL(model,addToModelForGivenMap(A<const QueryResult&>(),A<const QMap<QString,int>& >())).Times(3)
+	EXPECT_CALL(model,addToModelForGivenMap(A<const QueryResult&>(),A<const QMultiMap<QString,int>& >())).Times(3)
         .WillRepeatedly(Invoke(&model,&AlbumModelBuildModelSortedIndexTest::dummyAddToModelForGivenMap));
 
     model.testBuildModelFromSortedIndex(results,alphabet,sectionMap);
@@ -1905,8 +1905,8 @@ class AlbumModelEnumerateSectionsTest : public AlbumModelTest
 	public:
 		MOCK_CONST_METHOD0(getIndexAlphabet,QVector<QChar>());
 		MOCK_CONST_METHOD2(buildIndexMap,void(const QVector<QChar>& alphabet,QMap<QChar,int>& indexMap));
-		MOCK_CONST_METHOD4(mapResultsToAlphabetIndex,void(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMap<QString,int> >& sectionMap));
-		MOCK_METHOD3(buildModelFromSortedIndex,void(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMap<QString,int> >& sectionMap));
+		MOCK_CONST_METHOD4(mapResultsToAlphabetIndex,void(const QueryResult& results,const QMap<QChar,int>& indexMap,const QVector<QChar>& alphabet,QMap<QChar,QMultiMap<QString,int> >& sectionMap));
+		MOCK_METHOD3(buildModelFromSortedIndex,void(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMultiMap<QString,int> >& sectionMap));
 };
 
 //-------------------------------------------------------------------------------------------
@@ -1919,8 +1919,8 @@ TEST(AlbumModel,enumerateSectionsMethods)
 	AlbumModelEnumerateSectionsTest model;
 	EXPECT_CALL(model,getIndexAlphabet()).Times(1).WillOnce(Return(alphabet));
 	EXPECT_CALL(model,buildIndexMap(alphabet,A<QMap<QChar,int>&>())).Times(1);
-    EXPECT_CALL(model,mapResultsToAlphabetIndex(A<const QueryResult&>(),A<const QMap<QChar,int>&>(),alphabet,A<QMap<QChar,QMap<QString,int> >& >())).Times(1);
-    EXPECT_CALL(model,buildModelFromSortedIndex(A<const QueryResult&>(),alphabet,A<const QMap<QChar,QMap<QString,int> >& >())).Times(1);
+	EXPECT_CALL(model,mapResultsToAlphabetIndex(A<const QueryResult&>(),A<const QMap<QChar,int>&>(),alphabet,A<QMap<QChar,QMultiMap<QString,int> >& >())).Times(1);
+	EXPECT_CALL(model,buildModelFromSortedIndex(A<const QueryResult&>(),alphabet,A<const QMap<QChar,QMultiMap<QString,int> >& >())).Times(1);
 	
 	model.testEnumerateSections(result);
 }
@@ -2427,7 +2427,7 @@ TEST(AlbumModel,modelHandlesUnicode)
 	QueryResult results;
 
 	tuint16 inTxt[] = { 0xBA0, 0x1C00, 0x1C10, 0x06A0, 0x2230, 0x0000 };
-    QString inString = QString::fromUtf16(inTxt);
+	QString inString = QString::fromUtf16(reinterpret_cast<const char16_t *>(inTxt));
     results.push_back(model.testCreateRecordAlbum(AlbumModelKey(std::pair<bool,int>(false,1)),inString));
 	
 	model.testEnumerateSections(results);

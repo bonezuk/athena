@@ -570,7 +570,7 @@ void AOCoreAudio::calcAudioLatency()
 
 	AudioObjectPropertyAddress theAddress = { kAudioHardwarePropertyDefaultOutputDevice,
                                               kAudioObjectPropertyScopeGlobal,
-                                              kAudioObjectPropertyElementMaster };
+                                              kAudioObjectPropertyElementMain };
 
 	propSize = sizeof(devId);
 	err = AudioObjectGetPropertyData(kAudioObjectSystemObject,&theAddress,0,0,&propSize,&devId);
@@ -591,14 +591,14 @@ void AOCoreAudio::calcAudioLatency()
 		AudioObjectPropertyAddress propertyAddress;
 		propertyAddress.mSelector = kAudioDevicePropertyStreamFormat;
 		propertyAddress.mScope = kAudioDevicePropertyScopeOutput;    
-		propertyAddress.mElement = kAudioObjectPropertyElementMaster;
+        propertyAddress.mElement = kAudioObjectPropertyElementMain;
 
 		err = AudioObjectSetPropertyData(devId,&propertyAddress,0,0,sizeof(streamFormat),&streamFormat);
 		if(err==noErr)
 		{
 			count = sizeof(bufferSize);
 			
-			AudioObjectPropertyAddress bufferAddress = { kAudioDevicePropertyBufferSize, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMaster};
+            AudioObjectPropertyAddress bufferAddress = { kAudioDevicePropertyBufferSize, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain};
 			
 			err = AudioObjectGetPropertyData(devId,&bufferAddress,0,0,&count,&bufferSize);
 			if(err==noErr)
@@ -715,7 +715,7 @@ void AOCoreAudio::addListenerDevices()
 	
 	propAddr.mSelector = kAudioHardwarePropertyDevices;
 	propAddr.mScope = kAudioObjectPropertyScopeGlobal;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+    propAddr.mElement = kAudioObjectPropertyElementMain;
 	
 	err = AudioObjectAddPropertyListener(kAudioObjectSystemObject,&propAddr,AOCoreAudio::corePropertyChangeProc,this);
 	if(err!=noErr)
@@ -733,7 +733,7 @@ void AOCoreAudio::removeListenerDevices()
 	
 	propAddr.mSelector = kAudioHardwarePropertyDevices;
 	propAddr.mScope = kAudioObjectPropertyScopeGlobal;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+    propAddr.mElement = kAudioObjectPropertyElementMain;
 	
 	err = AudioObjectRemovePropertyListener(kAudioObjectSystemObject,&propAddr,AOCoreAudio::corePropertyChangeProc,this);
 	if(err!=noErr)
@@ -751,7 +751,7 @@ void AOCoreAudio::addListenerJackConnection(AudioDeviceID devID)
 
 	propAddr.mSelector = kAudioDevicePropertyJackIsConnected;
 	propAddr.mScope = kAudioDevicePropertyScopeOutput;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+    propAddr.mElement = kAudioObjectPropertyElementMain;
 	if(AudioObjectHasProperty(devID,&propAddr))
 	{
 		err = AudioObjectAddPropertyListener(devID,&propAddr,AOCoreAudio::corePropertyChangeProc,this);
@@ -771,7 +771,7 @@ void AOCoreAudio::removeListenerJackConnection(AudioDeviceID devID)
 
 	propAddr.mSelector = kAudioDevicePropertyJackIsConnected;
 	propAddr.mScope = kAudioDevicePropertyScopeOutput;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+    propAddr.mElement = kAudioObjectPropertyElementMain;
 	if(AudioObjectHasProperty(devID,&propAddr))
 	{
 		err = AudioObjectRemovePropertyListener(devID,&propAddr,AOCoreAudio::corePropertyChangeProc,this);
@@ -937,7 +937,7 @@ bool AOCoreAudio::setupPropertyRunLoop()
 	bool res;
 	OSStatus err;
 	CFRunLoopRef runLoop = 0;
-	AudioObjectPropertyAddress property = { kAudioHardwarePropertyRunLoop, kAudioObjectPropertyScopeGlobal,kAudioObjectPropertyElementMaster };	
+    AudioObjectPropertyAddress property = { kAudioHardwarePropertyRunLoop, kAudioObjectPropertyScopeGlobal,kAudioObjectPropertyElementMain };
 	
 	err = CoreAudioIF::instance()->AudioObjectSetPropertyData(kAudioObjectSystemObject,&property,0,0,sizeof(CFRunLoopRef),
 		reinterpret_cast<const void *>(&runLoop));
@@ -965,7 +965,7 @@ pid_t AOCoreAudio::getCurrentProcessID() const
 bool AOCoreAudio::useExclusiveModeIfAvailable(AudioDeviceID devId)
 {
 	bool res = false;
-    AudioObjectPropertyAddress property = { kAudioDevicePropertyHogMode, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property = { kAudioDevicePropertyHogMode, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
 	
     if(CoreAudioIF::instance()->AudioObjectHasProperty(devId,&property))
 	{
@@ -1031,7 +1031,7 @@ bool AOCoreAudio::useExclusiveModeIfAvailable(AudioDeviceID devId)
 
 void AOCoreAudio::releaseExclusiveMode(AudioDeviceID devID)
 {
-	AudioObjectPropertyAddress property = { kAudioDevicePropertyHogMode, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property = { kAudioDevicePropertyHogMode, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
 	
     if(CoreAudioIF::instance()->AudioObjectHasProperty(devID,&property))
 	{
@@ -1062,7 +1062,7 @@ void AOCoreAudio::releaseExclusiveMode(AudioDeviceID devID)
 
 bool AOCoreAudio::disableMixingIfPossible(AudioDeviceID devID)
 {
-	AudioObjectPropertyAddress property = { kAudioDevicePropertySupportsMixing, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property = { kAudioDevicePropertySupportsMixing, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
 	bool res = false;
 	
 	if(CoreAudioIF::instance()->AudioObjectHasProperty(devID,&property))
@@ -1122,7 +1122,7 @@ bool AOCoreAudio::disableMixingIfPossible(AudioDeviceID devID)
 
 void AOCoreAudio::reEnableMixing(AudioDeviceID devID)
 {
-	AudioObjectPropertyAddress property = { kAudioDevicePropertySupportsMixing, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property = { kAudioDevicePropertySupportsMixing, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
 	
 	if(CoreAudioIF::instance()->AudioObjectHasProperty(devID,&property))
 	{
@@ -1167,7 +1167,7 @@ QVector<AudioStreamID> AOCoreAudio::getAudioStreamsForDevice(AudioDeviceID devID
 	OSStatus err;
 	UInt32 paramSize = 0;
 	QVector<AudioStreamID> streamIDs;
-	AudioObjectPropertyAddress property = { kAudioDevicePropertyStreams, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property = { kAudioDevicePropertyStreams, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
 	
 	err = CoreAudioIF::instance()->AudioObjectGetPropertyDataSize(devID,&property,0,0,&paramSize);
 	if(err==noErr)
@@ -1566,7 +1566,7 @@ bool AOCoreAudio::setAudioStream(AudioStreamID streamID,const AudioStreamBasicDe
 	if(formatFromStreamDescription(format,desc))
 	{
 		OSStatus err;
-		AudioObjectPropertyAddress property = { kAudioStreamPropertyPhysicalFormat, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
+        AudioObjectPropertyAddress property = { kAudioStreamPropertyPhysicalFormat, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
 		
         err = CoreAudioIF::instance()->AudioObjectAddPropertyListener(streamID,&property,AOCoreAudio::audioStreamChangeListener,reinterpret_cast<void *>(this));
 		if(err==noErr)
@@ -1638,7 +1638,7 @@ AudioStreamBasicDescription *AOCoreAudio::saveAudioDescriptionForStream(AudioStr
 {
 	OSStatus err;
 	UInt32 paramSize = sizeof(AudioStreamBasicDescription);
-	AudioObjectPropertyAddress property = { kAudioStreamPropertyPhysicalFormat, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property = { kAudioStreamPropertyPhysicalFormat, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
 	AudioStreamBasicDescription *format = new AudioStreamBasicDescription;
 	
 	memset(format,0,sizeof(AudioStreamBasicDescription));
@@ -1660,7 +1660,7 @@ tint AOCoreAudio::setSampleRateIfPossible(AudioDeviceID devID,int sampleRate)
 	tint oldRate = -1;
 	OSStatus err;
 	Boolean settable = false;
-	AudioObjectPropertyAddress property = { kAudioDevicePropertyNominalSampleRate, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property = { kAudioDevicePropertyNominalSampleRate, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
 	
 	if(CoreAudioIF::instance()->AudioObjectHasProperty(devID,&property))
 	{
@@ -2032,7 +2032,7 @@ bool AOCoreAudio::isDeviceAlive(QSharedPointer<AOQueryCoreAudio::DeviceCoreAudio
 	OSStatus err;
 	bool isAlive = false;
 	UInt32 paramSize = sizeof(bool);
-	AudioObjectPropertyAddress property = { kAudioDevicePropertyDeviceIsAlive, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMaster };
+    AudioObjectPropertyAddress property = { kAudioDevicePropertyDeviceIsAlive, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
 	
 	err = CoreAudioIF::instance()->AudioObjectGetPropertyData(pDevice->deviceID(),&property,0,0,&paramSize,&isAlive);
 	if(err!=noErr)

@@ -1,4 +1,5 @@
 #include "remote/inc/KeyCodesContainer.h"
+#include <QSequentialIterable>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

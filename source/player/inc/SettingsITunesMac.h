@@ -18,7 +18,7 @@ class SettingsITunesMac : public SettingsITunes
 		Q_OBJECT
 		
 	public:
-		SettingsITunesMac(QWidget *parent = 0,Qt::WindowFlags f = 0);
+		SettingsITunesMac(QWidget *parent = 0,Qt::WindowFlags f = Qt::WindowFlags());
 		virtual ~SettingsITunesMac();
 		
         void onFolderOpen(const QStringList& files);

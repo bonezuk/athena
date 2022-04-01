@@ -390,7 +390,7 @@ void ID3Info2::frameToString(QString& str,const tchar *mem,tint size)
 	common::UString t;
 	
 	frameToString(t,mem,size);
-	str = QString::fromUtf16(static_cast<const tushort *>(t));
+    str = QString::fromUtf16(reinterpret_cast<const char16_t *>(t.Ptr()));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -529,7 +529,7 @@ void ID3Info2::decodeString(QString& str,const tchar *mem,tint size,tint& offset
 	common::UString t;
 	
 	decodeString(t,mem,size,offset);
-	str = QString::fromUtf16(static_cast<const tushort *>(t));
+    str = QString::fromUtf16(reinterpret_cast<const char16_t *>(t.Ptr()));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -748,7 +748,7 @@ void ID3Info2::frameToImage(const tchar *mem,tint size)
 			}
 			
 			{
-				QString mType(QString::fromUtf16(mimeType.getString(),mimeType.length()));
+                QString mType(QString::fromUtf16(reinterpret_cast<const char16_t *>(mimeType.getString()),mimeType.length()));
 				
 				if(mType.contains("jpeg",Qt::CaseInsensitive) || mType.contains("jpg",Qt::CaseInsensitive))
 				{

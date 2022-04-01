@@ -17,31 +17,30 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
+//-------------------------------------------------------------------------------------------
+// PlayerAppMain
+//-------------------------------------------------------------------------------------------
+
 PlayerAppMain::PlayerAppMain(int& argc, char **argv) : QGuiApplication(argc, argv),
-	OmegaPlaylistInterface(),
-	m_pState(0),
-	m_pModel(0),
-	m_pAudioInterface(0)
+	m_pModel(),
+	m_pAudioInterface()
 {}
 
 //-------------------------------------------------------------------------------------------
 
 PlayerAppMain::~PlayerAppMain()
 {
-	if(m_pAudioInterface != 0)
+	if(!m_pModel.isNull())
 	{
-		delete m_pAudioInterface;
-		m_pAudioInterface = 0;
+		m_pModel.clear();
 	}
-	if(m_pModel != 0)
+	if(!m_pAudioInterface.isNull())
 	{
-		delete m_pModel;
-		m_pModel = 0;
+		m_pAudioInterface.clear();
 	}
-	if(m_pAudioInterface != 0)
+	if(!m_pPLInterface.isNull())
 	{
-		delete m_pAudioInterface;
-		m_pAudioInterface = 0;
+		m_pPLInterface.clear();
 	}
 }
 
@@ -56,12 +55,16 @@ void PlayerAppMain::printError(const char *strR, const char *strE) const
 
 bool PlayerAppMain::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {	
+	QSharedPointer<OmegaPlaylistInterface> plInterface(new OmegaPlaylistInterface());
 	bool res = false;
 	
-	m_pAudioInterface = new OmegaAudioIOInterface(this);
+	m_pAudioInterface = QSharedPointer<OmegaAudioIOInterface>(new OmegaAudioIOInterface(plInterface));
+	QSharedPointer<OmegaAudioInterface> pAInterface = m_pAudioInterface.dynamicCast<OmegaAudioInterface>();
+	m_pModel = QSharedPointer<PlayListModel>(new PlayListModel(playListDB, pAInterface));
+	m_pModel->initialise();
+	plInterface->init(m_pModel);
 	if(m_pAudioInterface->init())
 	{
-		m_pModel = new PlayListModel(playListDB, m_pAudioInterface, this);
 		res = true;
 	}
 	else
@@ -73,74 +76,17 @@ bool PlayerAppMain::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint
 
 //-------------------------------------------------------------------------------------------
 
-void PlayerAppMain::playbackTime(quint64 tS)
-{
-	m_pModel->playbackState()->setTime(tS);
-}
-
-//-------------------------------------------------------------------------------------------
-
-PlaybackStateController *PlayerAppMain::getPlaybackState()
+QSharedPointer<PlaybackStateController>& PlayerAppMain::getPlaybackState()
 {
 	return m_pModel->playbackState();
 }
 
 //-------------------------------------------------------------------------------------------
 
-PlayListModel *PlayerAppMain::getPlayListModel()
+QSharedPointer<PlayListModel>& PlayerAppMain::getPlayListModel()
 {
 	return m_pModel;
 }
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerAppMain::onAudioStart(const QString& name)
-{
-	m_pModel->playbackState()->onAudioStart(name);
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerAppMain::onAudioPlay()
-{
-	m_pModel->playbackState()->onAudioPlay();
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerAppMain::onAudioPause()
-{
-	m_pModel->playbackState()->onAudioPause();
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerAppMain::onAudioStop()
-{
-	m_pModel->playNextItem(false);
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerAppMain::onAudioBuffer(tfloat32 percent)
-{}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerAppMain::onAudioReadyForNext()
-{
-	m_pModel->playNextItem(true);
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerAppMain::onAudioNoNext()
-{}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayerAppMain::onAudioCrossfade()
-{}
 
 //-------------------------------------------------------------------------------------------
 } // namespace orcus
@@ -179,7 +125,7 @@ int main(int argc, char **argv)
 	track::db::TrackDB *trackDB = track::db::TrackDB::instance(trackDBFilename);
 	if(trackDB != 0)
 	{
-		PlayerAppMain app(argc, argv);
+		QSharedPointer<PlayerAppMain> app(new PlayerAppMain (argc, argv));
 		QString mountPoint;
 		QVector<QPair<track::db::DBInfoSPtr,tint> > playListDB;
 		
@@ -199,17 +145,17 @@ int main(int argc, char **argv)
 		{
 			QQmlApplicationEngine engine;
 
-			if(app.initPlaylistManager(playListDB))
+			if(app->initPlaylistManager(playListDB))
 			{
 				qmlRegisterType<PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
 				qmlRegisterType<PlaybackStateController>("uk.co.blackomega", 1, 0, "PlaybackStateController");
 
-				engine.rootContext()->setContextProperty("playListModel", app.getPlayListModel());
-				engine.rootContext()->setContextProperty("playbackStateController", app.getPlaybackState());
+				engine.rootContext()->setContextProperty("playListModel", app->getPlayListModel().data());
+				engine.rootContext()->setContextProperty("playbackStateController", app->getPlaybackState().data());
 
 				engine.load(QUrl("qrc:/Resources/playlist.qml"));
 
-				res = app.exec();
+				res = app->exec();
 			}
 			else
 			{

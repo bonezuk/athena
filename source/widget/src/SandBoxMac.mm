@@ -12,6 +12,8 @@
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import <UniformTypeIdentifiers/UTType.h>
 
 #if defined(OMEGA_MAC_STORE)
 #include <sys/types.h>
@@ -67,11 +69,11 @@
 	[loadPanel setCanCreateDirectories:NO];
 	if(filterArray!=nil)
 	{
-		[loadPanel setAllowedFileTypes:filterArray];
-	}
+		[loadPanel setAllowedContentTypes:filterArray];
+    }
 	
 	[loadPanel beginSheetModalForWindow:win completionHandler: ^(NSInteger result) {
-		if(result == NSFileHandlingPanelOKButton) 
+        if(result == NSModalResponseOK)
 		{
 			int i;
 			QStringList aList;
@@ -104,7 +106,7 @@
 	[loadPanel setCanCreateDirectories:NO];
 	
 	[loadPanel beginSheetModalForWindow:win completionHandler: ^(NSInteger result) {
-		if(result == NSFileHandlingPanelOKButton) 
+        if(result == NSModalResponseOK)
 		{
 			int i;
 			QStringList aList;
@@ -139,12 +141,16 @@
 	[savePanel setCanCreateDirectories:NO];
 	if(filterArray!=nil)
 	{
-		NSArray *fArray = [NSArray arrayWithObjects:@"xspf",@"m3u",@"m3u8",@"pls",nil];
-		[savePanel setAllowedFileTypes:fArray];
+		NSMutableArray *arr = [NSMutableArray arrayWithCapacity:4];
+		[arr addObject: [UTType typeWithFilenameExtension: @"xspf"]];
+		[arr addObject: [UTType typeWithFilenameExtension: @"m3u"]];
+		[arr addObject: [UTType typeWithFilenameExtension: @"m3u8"]];
+		[arr addObject: [UTType typeWithFilenameExtension: @"pls"]];
+		[savePanel setAllowedContentTypes:arr];
 	}
 	
 	[savePanel beginSheetModalForWindow:win completionHandler: ^(NSInteger result) {
-		if(result == NSFileHandlingPanelOKButton) 
+        if(result == NSModalResponseOK)
 		{
 			QStringList aList;
 		
@@ -483,7 +489,11 @@ void *SBServiceMac::fromFilter(const QString& filter)
 			{
 				const QString& s = *ppI;
 				NSString *nS = [NSString stringWithUTF8String:(s.toUtf8().constData())];
-				[arr addObject:nS];
+				UTType *type = [UTType typeWithFilenameExtension: nS];
+				if(type != nil)
+				{
+					[arr addObject:type];
+				}
 			}
 			return (void *)arr;
 		}

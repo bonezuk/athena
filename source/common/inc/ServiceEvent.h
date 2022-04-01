@@ -4,7 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include <QEvent>
-#include <QMutex>
+#include <QRecursiveMutex>
 #include <QWaitCondition>
 #include <QThread>
 #include <QMap>
@@ -147,7 +147,7 @@ class COMMON_EXPORT ServiceEventAndCondition : public QObject
 		
 	protected:
 		
-		QMutex m_mutex;
+        QRecursiveMutex m_mutex;
 		QMap<Qt::HANDLE,ServiceWaitCondition *> m_waitConditionMap;
 		
 		QThread *m_thread;

@@ -8,6 +8,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
+#include "common/inc/Random.h"
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 
@@ -24,6 +25,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		enum TrackRoles
 		{
 			ArtistRole = Qt::UserRole + 1,
+			IdRole,
 			TitleRole,
 			AlbumRole,
 			YearRole,
@@ -40,8 +42,10 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		
 	public:
 		PlayListModel(QObject *parent = 0);
-		PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, OmegaAudioInterface *pAudioInterface, QObject *parent = 0);
+		PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlayListModel();
+		
+		virtual void initialise();
 		
 		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -50,16 +54,26 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		Q_INVOKABLE void onPlayPausePressed();
 		Q_INVOKABLE void playItemAtIndex(int index);
 		
-		virtual PlaybackStateController *playbackState();
+		virtual QSharedPointer<PlaybackStateController>& playbackState();
 		virtual void playNextItem(bool isNext);
+		
+		virtual qint32 indexFromId(tuint64 id) const;
+		virtual track::db::DBInfoSPtr itemFromId(tuint64 id) const;
+		virtual tint childIndexFromId(tuint64 id) const;
 
-	private:
-		QVector<QPair<track::db::DBInfoSPtr,tint> > m_playList;
-		OmegaAudioInterface *m_pAudioInterface;
-		PlaybackStateController *m_pPlaybackState;
+	protected:
+		QMap<tuint64, QPair<track::db::DBInfoSPtr,tint> > m_items;
+		QVector<tuint64> m_playList;
+		QMap<tuint64, tint> m_idToIndexMap;
+		
+		QSharedPointer<OmegaAudioInterface> m_pAudioInterface;
+		QSharedPointer<PlaybackStateController> m_pPlaybackState;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 
+		virtual tuint64 generateNewId() const;
+		virtual void appendToPlaylist(const QVector<QPair<track::db::DBInfoSPtr,tint> >& list);
+		virtual QString titleOfItem(const QPair<track::db::DBInfoSPtr,tint>& item) const;
 		virtual void playItemAtIndexWithNext(int index, bool isNext);
 };
 

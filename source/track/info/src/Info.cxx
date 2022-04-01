@@ -9,6 +9,7 @@
 #include "track/info/inc/APEInfo.h"
 #include "track/info/inc/WavInfo.h"
 #include "engine/inc/Codec.h"
+#include "common/inc/CommonFunctions.h"
 
 #if defined(OMEGA_POSIX)
 #include <dirent.h>
@@ -96,7 +97,8 @@ Info::Info(QObject *parent) : QObject(parent),
 	m_frequency(0),
 	m_noChannels(0),
 	m_dirImageFormat(e_imageUnknown),
-	m_dirImageArray(0)
+	m_dirImageArray(0),
+	m_hash(0)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -135,6 +137,7 @@ void Info::blank()
 	m_Encoder = "";
 	m_fileName = "";
 	m_length = 0;
+	m_hash = 0;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -494,6 +497,7 @@ QSharedPointer<Info> Info::readInfo(common::BIOStream *input)
 				delete codec;
 			}
 			tag->setFilename(input->name());
+			tag->calcHashID(input);
 		}
 	}
 	return tag;
@@ -891,6 +895,51 @@ void Info::setFrequency(tint v)
 void Info::setNoChannels(tint v)
 {
 	m_noChannels = v;
+}
+
+//-------------------------------------------------------------------------------------------
+
+tuint64 Info::calculateELFHash(common::BIOStream *input)
+{
+	const int c_numberOfSamples = 8;
+	tuint64 hash = 0;
+	tint64 totalSize = input->size64();
+	
+	if(totalSize > 0)
+	{
+		tint i, len;
+		tint64 samplePosition;
+		tubyte mem[128];
+		
+		for(i = 0; i < c_numberOfSamples; i++)
+		{
+			samplePosition = ((totalSize * i) / c_numberOfSamples);			
+			len = static_cast<tint>(((samplePosition + 128) < totalSize) ? 128 : (totalSize - samplePosition));
+			
+			if(input->seek64(samplePosition, common::e_Seek_Start))
+			{
+				if(input->read(mem, len) == len)
+				{
+					hash = common::elfHash64(mem, len, hash);
+				}
+			}
+		}
+	}
+	return hash;
+}
+
+//-------------------------------------------------------------------------------------------
+
+tuint64 Info::hashID() const
+{
+	return m_hash;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Info::calcHashID(common::BIOStream *input)
+{
+	m_hash = calculateELFHash(input);
 }
 
 //-------------------------------------------------------------------------------------------

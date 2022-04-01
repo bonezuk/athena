@@ -100,9 +100,9 @@ bool PlaylistM3UIO::load(const QString& fileName,QVector<track::info::InfoSPtr>&
 			{
 				QFileInfo fInfo(fileName);
 				QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-				QStringList pathList = pathSet.toList();
+                QStringList pathList(pathSet.begin(), pathSet.end());
 				
-				widget::ImportPlaylistDialog importDialog(m_parent);
+                widget::ImportPlaylistDialog importDialog(dynamic_cast<QWidget *>(m_parent));
 				importDialog.setPlaylistFileName(fInfo.fileName());
 				importDialog.setDirectories(pathList);
                 importDialog.setModal(true);

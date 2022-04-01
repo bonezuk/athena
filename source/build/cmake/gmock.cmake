@@ -4,9 +4,13 @@ if (${TIGER_LINUX_DISTRO})
 	find_package(GTest REQUIRED)
 
 else (${TIGER_LINUX_DISTRO})
-
-	set(GTEST_VERSION "1.7.0")
-	set(GMOCK_VERSION "1.7.0")
+	if (OMEGA_IS_MACOSX_ARM)
+		set(GTEST_VERSION "1.11.0")
+		set(GMOCK_VERSION "1.11.0")	
+	else (OMEGA_IS_MACOSX_ARM)
+		set(GTEST_VERSION "1.7.0")
+		set(GMOCK_VERSION "1.7.0")
+	endif (OMEGA_IS_MACOSX_ARM)
 
 	set(GTEST_LIBNAME "gtest")
 	set(GTEST_MAIN_LIBNAME "gtest_main")

@@ -14,103 +14,55 @@ namespace orcus
 //-------------------------------------------------------------------------------------------
 
 PlaylistManagerApp::PlaylistManagerApp(int& argc, char **argv) : QGuiApplication(argc, argv),
-	OmegaPlaylistInterface()
+	m_pModel(),
+	m_pPLInterface()
 {}
 
 //-------------------------------------------------------------------------------------------
 
 PlaylistManagerApp::~PlaylistManagerApp()
-{
-	if(m_pModel != 0)
-	{
-		delete m_pModel;
-		m_pModel = 0;
-	}
-	if(m_pAudioInterface != 0)
-	{
-		delete m_pAudioInterface;
-		m_pAudioInterface = 0;
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
 void PlaylistManagerApp::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {	
-	m_pAudioInterface = new OmegaAudioBusInterface(this);
-	m_pModel = new PlayListModel(playListDB, m_pAudioInterface, this);
+	m_pPLInterface = QSharedPointer<OmegaPlaylistInterface>(new OmegaPlaylistInterface());
+	QSharedPointer<OmegaAudioInterface> pAInterface(new OmegaAudioBusInterface());
+	m_pModel = QSharedPointer<PlayListWebModel>(new PlayListWebModel(playListDB, pAInterface));
+	m_pModel->initialise();
+	QSharedPointer<PlayListModel> pModelBase = m_pModel.dynamicCast<PlayListModel>();
+	m_pPLInterface->init(pModelBase);
 }
 
 //-------------------------------------------------------------------------------------------
 
-void PlaylistManagerApp::playbackTime(quint64 tS)
-{
-	m_pModel->playbackState()->setTime(tS);
-}
-
-//-------------------------------------------------------------------------------------------
-
-PlaybackStateController *PlaylistManagerApp::getPlaybackState()
+QSharedPointer<PlaybackStateController>& PlaylistManagerApp::getPlaybackState()
 {
 	return m_pModel->playbackState();
 }
 
 //-------------------------------------------------------------------------------------------
 
-PlayListModel *PlaylistManagerApp::getPlayListModel()
+QSharedPointer<PlayListWebModel>& PlaylistManagerApp::getPlayListModel()
 {
 	return m_pModel;
 }
 
 //-------------------------------------------------------------------------------------------
 
-void PlaylistManagerApp::onAudioStart(const QString& name)
+QSharedPointer<OmegaPlaylistInterface>& PlaylistManagerApp::getPlayListInterface()
 {
-	m_pModel->playbackState()->onAudioStart(name);
+	return m_pPLInterface;
 }
 
 //-------------------------------------------------------------------------------------------
 
-void PlaylistManagerApp::onAudioPlay()
+QSharedPointer<OmegaWebInterface> PlaylistManagerApp::getWebInterface()
 {
-	m_pModel->playbackState()->onAudioPlay();
+	QSharedPointer<OmegaWebInterface> pWeb = m_pModel.dynamicCast<OmegaWebInterface>();
+	return pWeb;
 }
-
-//-------------------------------------------------------------------------------------------
-
-void PlaylistManagerApp::onAudioPause()
-{
-	m_pModel->playbackState()->onAudioPause();
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlaylistManagerApp::onAudioStop()
-{
-	m_pModel->playNextItem(false);
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlaylistManagerApp::onAudioBuffer(tfloat32 percent)
-{}
-
-//-------------------------------------------------------------------------------------------
-
-void PlaylistManagerApp::onAudioReadyForNext()
-{
-	m_pModel->playNextItem(true);
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlaylistManagerApp::onAudioNoNext()
-{}
-
-//-------------------------------------------------------------------------------------------
-
-void PlaylistManagerApp::onAudioCrossfade()
-{}
 
 //-------------------------------------------------------------------------------------------
 } // namespace orcus
@@ -145,7 +97,7 @@ int main(int argc, char **argv)
 	track::db::TrackDB *trackDB = track::db::TrackDB::instance(trackDBFilename);
 	if(trackDB != 0)
 	{
-		PlaylistManagerApp app(argc, argv);
+		QSharedPointer<PlaylistManagerApp> app(new PlaylistManagerApp(argc, argv));
 		QString mountPoint;
 		QVector<QPair<track::db::DBInfoSPtr,tint> > playListDB;
 		
@@ -165,41 +117,37 @@ int main(int argc, char **argv)
 		{
 			QQmlApplicationEngine engine;
 
-			app.initPlaylistManager(playListDB);
+			app->initPlaylistManager(playListDB);
 
 			qmlRegisterType<PlayListModel>("uk.co.blackomega", 1, 0, "PlayListModel");
 			qmlRegisterType<PlaybackStateController>("uk.co.blackomega", 1, 0, "PlaybackStateController");
 
-			engine.rootContext()->setContextProperty("playListModel", app.getPlayListModel());
-			engine.rootContext()->setContextProperty("playbackStateController", app.getPlaybackState());
+			engine.rootContext()->setContextProperty("playListModel", app->getPlayListModel().data());
+			engine.rootContext()->setContextProperty("playbackStateController", app->getPlaybackState().data());
 
 			engine.load(QUrl("qrc:/Resources/playlist.qml"));
-
-#if defined(OMEGA_LINUX)
-			QDBusConnection bus = QDBusConnection::systemBus();
-#else
-			QDBusConnection bus = QDBusConnection::sessionBus();
-#endif
-			if(bus.isConnected())
+			
+			OmegaPLService *plService = new OmegaPLService(app->getPlayListInterface());
+			if(plService->start())
 			{
-				QObject plIFaceObj;
-				OmegaPLDBusAdaptor *pIFace = new OmegaPLDBusAdaptor(&app, &plIFaceObj);
-				bus.registerObject("/", &plIFaceObj);
-				if(bus.registerService(OMEGAPLAYLISTMANAGER_SERVICE_NAME))
+				QSharedPointer<OmegaWebInterface> pWeb = app->getWebInterface();
+				OmegaPLWebService *plWebService = new OmegaPLWebService(pWeb);
+				if(plWebService->start())
 				{
-					res = app.exec();
+					res = app->exec();
+					plWebService->stop();
 				}
 				else
 				{
-					common::Log::g_Log << "Failed to present register dbus service for Playlist Manager." << common::c_endl;
-					common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
+					common::Log::g_Log << "Failed to start Web IPC service" << common::c_endl;
 				}
+				plService->stop();
 			}
 			else
 			{
-				common::Log::g_Log << "Failed to connect to session D-Bus" << common::c_endl;
-				common::Log::g_Log << qPrintable(bus.lastError().message()) << common::c_endl;
+				common::Log::g_Log << "Failed to start IPC service" << common::c_endl;
 			}
+			delete plService;
     	}
     	delete trackDB;
     }

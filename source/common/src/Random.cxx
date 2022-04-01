@@ -211,6 +211,18 @@ tint Random::randomInt31()
 }
 
 //-------------------------------------------------------------------------------------------
+// generates a random number on [0,0xffffffffffffffff]-interval
+//-------------------------------------------------------------------------------------------
+
+tuint64 Random::randomUInt64()
+{
+	tuint64 a = static_cast<tuint64>(generateRandomUInt32());
+	tuint64 b = static_cast<tuint64>(generateRandomUInt32());
+	a = ((a << 32) & 0xffffffff00000000ULL) | (b & 0x00000000ffffffffULL);
+	return a;
+}
+
+//-------------------------------------------------------------------------------------------
 // generates a random number on [0,1]-real-interval
 //-------------------------------------------------------------------------------------------
 

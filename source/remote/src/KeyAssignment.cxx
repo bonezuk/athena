@@ -1,5 +1,6 @@
 #include "remote/inc/KeyAssignment.h"
 #include "remote/inc/QKeyLineEdit.h"
+#include <QFile>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

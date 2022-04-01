@@ -12,7 +12,6 @@
 #include "common/inc/DiskOps.h"
 
 #include "playerapp/playercommon/inc/EmbeddedEnv.h"
-#include "playerapp/playercommon/inc/OmegaPiDBusServiceNames.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
 
@@ -21,15 +20,16 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaAudioIOInterface : public QObject, public OmegaAudioInterface
+class OmegaAudioIOInterface : public OmegaAudioInterface
 {
 	Q_OBJECT
 	
 	public:
-		OmegaAudioIOInterface(OmegaPlaylistInterface *pPLInterface, QObject *parent = 0);
+		OmegaAudioIOInterface(QSharedPointer<OmegaPlaylistInterface>& pPLInterface, QObject *parent = 0);
 		virtual ~OmegaAudioIOInterface();
 		
 		virtual void playFile(const QString& fileName, bool isNext);
+		virtual void playFileWithTime(const QString& fileName, const common::TimeStamp& start,const common::TimeStamp& length, bool isNext);
 		virtual void play();
 		virtual void pause();
 
@@ -39,7 +39,7 @@ class OmegaAudioIOInterface : public QObject, public OmegaAudioInterface
 	private:
 	
 		QSharedPointer<audioio::AOBase> m_audio;
-		OmegaPlaylistInterface *m_pPLInterface;
+		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		

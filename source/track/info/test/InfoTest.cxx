@@ -142,6 +142,8 @@ int InfoIsAppleFinderFileWithOpenAndAppleDoubleMagicNumberRead(tubyte *mem)
 	return 4;
 }
 
+//-------------------------------------------------------------------------------------------
+
 TEST(Info,isAppleFinderFileWithOpenAndAppleDoubleMagicNumber)
 {
 	QString name = "C:\\Users\\Music\\._name.m4a";

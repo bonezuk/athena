@@ -367,6 +367,8 @@ bool DBInfo::loadRecord()
 						subtrack.length() = timeLength;
 						m_chapters.append(subtrack);
 					}
+					
+					m_hash = loadOrGenerateHashID(dirID, fileID);
 
 					res = true;
 				}
@@ -470,6 +472,94 @@ QString DBInfo::directoryGroup() const
 	{
 		return info::Info::directoryGroup();
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+tuint64 DBInfo::generateHashID(tint dirID, tint fileID)
+{
+	tuint64 hashID = 0;
+	SQLiteDatabase *db = TrackDB::instance()->db();
+	
+	try
+	{
+		bool res = false;
+		QString cmd;
+		SQLiteInsert hashI(db);
+		common::BIOBufferedStream fileIO(common::e_BIOStream_FileRead);
+		
+		db->exec("SAVEPOINT generateHashID");
+		if(fileIO.open(m_fileName))
+		{
+			hashID = Info::calculateELFHash(&fileIO);
+			
+			cmd = "INSERT INTO fileHash VALUES (?, ?, ?);";
+			hashI.prepare(cmd);
+			hashI.bind(dirID);
+			hashI.bind(fileID);
+			hashI.bind(hashID);
+			if(hashI.next())
+			{
+				res = true;
+			}
+			else
+			{
+				printError("generateHashID", "Failed to insert hash record");
+			}
+			fileIO.close();
+		}
+		else
+		{
+			QString err = QString("Failed to open file '%1'").arg(m_fileName);
+			printError("generateHashID", err.toUtf8().constData());
+		}
+		if(res)
+		{
+			db->exec("RELEASE generateHashID");
+		}
+		else
+		{
+			db->exec("ROLLBACK TO SAVEPOINT generateHashID");
+		}
+	}
+	catch(const SQLiteException& e)
+	{
+		QString errStr;
+		db->exec("ROLLBACK TO SAVEPOINT generateHashID");
+		errStr = "Database exception thrown. " + e.error();
+		printError("generateHashID",errStr.toUtf8().constData());
+	}
+	return hashID;
+}
+
+//-------------------------------------------------------------------------------------------
+
+tuint64 DBInfo::loadOrGenerateHashID(tint dirID, tint fileID)
+{
+	tuint64 hashID = 0;
+	QString cmd;
+	SQLiteDatabase *db = TrackDB::instance()->db();
+	
+	try
+	{
+		SQLiteQuery hashQ(db);
+		
+		cmd  = "SELECT a.hashID FROM fileHash AS a ";
+		cmd += "WHERE a.directoryID=" + QString::number(dirID) + " AND a.fileID=" + QString::number(fileID);
+		hashQ.prepare(cmd);
+		hashQ.bind(hashID);
+		if(!hashQ.next())
+		{
+			hashID = generateHashID(dirID, fileID);
+		}
+	}
+	catch(const SQLiteException& e)
+	{
+		QString errStr;
+		errStr = "Database exception thrown. " + e.error();
+		printError("loadOrGenerateHashID",errStr.toUtf8().constData());
+	}
+	return hashID;
 }
 
 //-------------------------------------------------------------------------------------------

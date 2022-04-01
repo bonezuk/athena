@@ -44,6 +44,8 @@ TEST(APEInfo,readGather1APE)
 	ImageInfoArray *imageData = tag.getImageData(format);
 	ASSERT_TRUE(imageData!=0);
 	EXPECT_FALSE(QImage::fromData(imageData->GetData(),imageData->GetSize()).isNull());
+	
+	EXPECT_EQ(tag.hashID(), 0); // TODO : get ID
 }
 
 //-------------------------------------------------------------------------------------------

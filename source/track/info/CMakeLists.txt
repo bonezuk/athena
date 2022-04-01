@@ -11,10 +11,15 @@ endif (OMEGA_WIN32 OR OMEGA_LINUX)
 
 add_library(trackinfo SHARED ${TRACK_INFO_HEADER} ${TRACK_INFO_SOURCE})
 
+set(QTLIBS_LIST ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml)
+if (TIGER_QT6_FLAG)
+	list(APPEND QTLIBS_LIST ${QTVER}::Core5Compat)
+endif (TIGER_QT6_FLAG)
+
 if (OMEGA_WIN32)
-	target_link_libraries(trackinfo engine common greenomega silveromega violetomega whiteomega cyanomega mpcdec xml2 Qt5::Core Qt5::Gui Qt5::Xml winmm ws2_32)
+	target_link_libraries(trackinfo engine common greenomega silveromega violetomega whiteomega cyanomega mpcdec xml2 ${QTLIBS_LIST} winmm ws2_32)
 else (OMEGA_WIN32)
-	target_link_libraries(trackinfo engine common greenomega silveromega violetomega whiteomega cyanomega mpcdec xml2 Qt5::Core Qt5::Gui Qt5::Xml)
+	target_link_libraries(trackinfo engine common greenomega silveromega violetomega whiteomega cyanomega mpcdec xml2 ${QTLIBS_LIST})
 endif (OMEGA_WIN32)
 
 if (${TIGER_LINUX_DISTRO})

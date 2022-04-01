@@ -9,19 +9,20 @@
 #include "track/db/inc/DBInfo.h"
 
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
-#include "playerapp/playercommon/inc/PlayListModel.h"
 #include "playerapp/playercommon/inc/PlaylistLoadFunctions.h"
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
 
-#include "playerapp/playlistmanager/inc/OmegaPLDBusAdaptor.h"
+#include "playerapp/playlistmanager/inc/OmegaPLService.h"
 #include "playerapp/playlistmanager/inc/OmegaAudioBusInterface.h"
+#include "playerapp/playlistmanager/inc/OmegaPLWebService.h"
+#include "playerapp/playlistmanager/inc/PlayListWebModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class PlaylistManagerApp : public QGuiApplication, public OmegaPlaylistInterface
+class PlaylistManagerApp : public QGuiApplication
 {
 	Q_OBJECT
 	
@@ -30,23 +31,14 @@ class PlaylistManagerApp : public QGuiApplication, public OmegaPlaylistInterface
 		virtual ~PlaylistManagerApp();
 		
 		virtual void initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB);
-		virtual PlaybackStateController *getPlaybackState();
-		virtual PlayListModel *getPlayListModel();
-		
-		virtual void playbackTime(quint64 tS);
-		virtual void onAudioStart(const QString& name);
-		virtual void onAudioPlay();
-		virtual void onAudioPause();
-		virtual void onAudioStop();
-		virtual void onAudioBuffer(tfloat32 percent);
-		virtual void onAudioReadyForNext();
-		virtual void onAudioNoNext();
-		virtual void onAudioCrossfade();
+		virtual QSharedPointer<PlaybackStateController>& getPlaybackState();
+		virtual QSharedPointer<PlayListWebModel>& getPlayListModel();
+		virtual QSharedPointer<OmegaPlaylistInterface>& getPlayListInterface();
+		virtual QSharedPointer<OmegaWebInterface> getWebInterface();
 
 	private:
-		PlaybackStateController *m_pState;
-		PlayListModel *m_pModel;
-		OmegaAudioBusInterface *m_pAudioInterface;
+		QSharedPointer<PlayListWebModel> m_pModel;
+		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
 };
 
 //-------------------------------------------------------------------------------------------

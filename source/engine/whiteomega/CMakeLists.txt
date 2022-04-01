@@ -6,9 +6,9 @@ file(GLOB WHITEOMEGA_ENGINE_SOURCE src/*.cxx)
 add_library(whiteomega SHARED ${WHITEOMEGA_ENGINE_HEADER} ${WHITEOMEGA_ENGINE_SOURCE})
 
 if (OMEGA_WIN32)
-	target_link_libraries(whiteomega engine common redomega xml2 Qt5::Core Qt5::Gui Qt5::Xml winmm)
+	target_link_libraries(whiteomega engine common redomega xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml winmm)
 else (OMEGA_WIN32)
-	target_link_libraries(whiteomega engine common redomega xml2 Qt5::Core Qt5::Gui Qt5::Xml)
+	target_link_libraries(whiteomega engine common redomega xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml)
 endif (OMEGA_WIN32)
 
 if (${TIGER_LINUX_DISTRO})

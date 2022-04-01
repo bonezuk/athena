@@ -37,6 +37,8 @@ TrackDBTestEnviroment::TrackDBTestEnviroment()
 		engine::blackomega::MPCodecInitialize::start();
 		engine::silveromega::SilverCodecInitialize::start();
 		engine::whiteomega::WhiteCodecInitialize::start();
+		
+		m_execPath = "";
 }
 
 //-------------------------------------------------------------------------------------------
@@ -62,6 +64,20 @@ TrackDBTestEnviroment *TrackDBTestEnviroment::instance()
 		m_instance = new TrackDBTestEnviroment;
 	}
 	return m_instance;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TrackDBTestEnviroment::setExecPath(const QString &path)
+{
+	m_execPath = path;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const QString& TrackDBTestEnviroment::execPath() const
+{
+	return m_execPath;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -432,15 +448,15 @@ bool TrackDBTestEnviroment::isAnyEqual(const QVariant& a,const QVariant& b)
 	bool res = false;
 
 #if QT_VERSION >= 0x050000	
-	if(!res || (a.canConvert(QMetaType::Double) && b.canConvert(QMetaType::Double)))
+	if(!res || (a.canConvert(QMetaType(QMetaType::Double)) && b.canConvert(QMetaType(QMetaType::Double))))
 	{
 		res = isEqual(a.toDouble(),b.toDouble());
 	}
-	if(!res || (a.canConvert(QMetaType::Int) && b.canConvert(QMetaType::Int)))
+	if(!res || (a.canConvert(QMetaType(QMetaType::Int)) && b.canConvert(QMetaType(QMetaType::Int))))
 	{
 		res = (a.toInt()==b.toInt()) ? true : false;
 	}
-	if(!res || (a.canConvert(QMetaType::QString) && b.canConvert(QMetaType::QString)))
+	if(!res || (a.canConvert(QMetaType(QMetaType::QString)) && b.canConvert(QMetaType(QMetaType::QString))))
 	{
 		res = (a.toString()==b.toString()) ? true : false;
 	}

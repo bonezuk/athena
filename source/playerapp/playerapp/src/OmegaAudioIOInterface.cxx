@@ -9,8 +9,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaAudioIOInterface::OmegaAudioIOInterface(OmegaPlaylistInterface *pPLInterface, QObject *parent) : QObject(parent),
-	OmegaAudioInterface(),
+OmegaAudioIOInterface::OmegaAudioIOInterface(QSharedPointer<OmegaPlaylistInterface>& pPLInterface, QObject *parent) : OmegaAudioInterface(parent),
 	m_audio(),
 	m_pPLInterface(pPLInterface)
 {}
@@ -18,7 +17,10 @@ OmegaAudioIOInterface::OmegaAudioIOInterface(OmegaPlaylistInterface *pPLInterfac
 //-------------------------------------------------------------------------------------------
 
 OmegaAudioIOInterface::~OmegaAudioIOInterface()
-{}
+{
+	m_audio.clear();
+	m_pPLInterface.clear();
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -89,6 +91,23 @@ void OmegaAudioIOInterface::playFile(const QString& fileName, bool isNext)
 		else
 		{
 			m_audio->open(fileName);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaAudioIOInterface::playFileWithTime(const QString& fileName, const common::TimeStamp& start,const common::TimeStamp& length, bool isNext)
+{
+	if(common::DiskOps::exist(fileName))
+	{
+		if(isNext)
+		{
+			m_audio->next(fileName, start, length);
+		}
+		else
+		{
+			m_audio->open(fileName, start, length);
 		}
 	}
 }

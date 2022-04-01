@@ -92,6 +92,37 @@ void loadSharedLibrary(const char *libName)
 }
 
 //-------------------------------------------------------------------------------------------
+
+tuint64 elfHash64(tuint8 *mem, int len)
+{
+	tuint64 hash = 0;
+	return elfHash64(mem, len, hash);
+}
+
+//-------------------------------------------------------------------------------------------
+
+tuint64 elfHash64(tuint8 *mem, int len, tuint64 hash)
+{
+	int i;
+	tuint64 high;
+	
+	if(mem != 0)
+	{
+		for(i = 0; i < len; i++)
+		{
+			hash = (hash << 4) + static_cast<tuint64>(mem[i]);
+			high = hash & 0xf000000000000000ULL;
+			if(high)
+			{
+				hash ^= high >> (24 + 32);
+			}
+			hash &= ~high;
+		}
+	}
+	return hash;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace common
 } // namespace orcus
 //-------------------------------------------------------------------------------------------

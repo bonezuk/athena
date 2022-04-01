@@ -15,15 +15,15 @@ QString qStringFromCFStringRef(CFStringRef cfStr)
 {
 	tint i;
 	tint len = static_cast<tint>(CFStringGetLength(cfStr));
-	tuint16 *cName = new tuint16 [len + 1];
+    char16_t *cName = new char16_t [len + 1];
 	QString qStr;
 	
 	for(i=0;i<len;i++)
 	{
-		cName[i] = static_cast<tuint16>(CFStringGetCharacterAtIndex(cfStr,i));
+        cName[i] = static_cast<char16_t>(CFStringGetCharacterAtIndex(cfStr,i));
 	}
 	cName[len] = 0;
-	qStr = QString::fromUtf16(cName,len);
+    qStr = QString::fromUtf16(cName,len);
 	delete [] cName;
 	return qStr;
 }
@@ -135,7 +135,7 @@ bool AOQueryCoreAudio::queryNames()
 	
 	propAddr.mSelector = kAudioHardwarePropertyDevices;
 	propAddr.mScope = kAudioObjectPropertyScopeGlobal;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+    propAddr.mElement = kAudioObjectPropertyElementMain;
 	devIdSize = 0;
 	
 	err = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject,&propAddr,0,0,&devIdSize);
@@ -181,7 +181,7 @@ bool AOQueryCoreAudio::queryNames()
 							{					
 								propAddr.mSelector = kAudioObjectPropertyName;
 								propAddr.mScope = kAudioDevicePropertyScopeOutput;
-								propAddr.mElement = kAudioObjectPropertyElementMaster;
+                                propAddr.mElement = kAudioObjectPropertyElementMain;
 
 								err = AudioObjectGetPropertyData(devIDArray[i],&propAddr,0,0,&devNameSize,&devNameRef);
 								if(err==noErr)
@@ -194,7 +194,7 @@ bool AOQueryCoreAudio::queryNames()
 						
 									propAddr.mSelector = kAudioDevicePropertyDeviceUID;
 									propAddr.mScope = kAudioDevicePropertyScopeOutput;
-									propAddr.mElement = kAudioObjectPropertyElementMaster;						
+                                    propAddr.mElement = kAudioObjectPropertyElementMain;
 						
 									err = AudioObjectGetPropertyData(devIDArray[i],&propAddr,0,0,&devUIDSize,&devUID);
 									if(err==noErr)
@@ -294,7 +294,7 @@ bool AOQueryCoreAudio::queryDevice(AudioDeviceID devID,Device& dev)
 	
 	propAddr.mSelector = kAudioDevicePropertyAvailableNominalSampleRates;
 	propAddr.mScope = kAudioDevicePropertyScopeOutput;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+    propAddr.mElement = kAudioObjectPropertyElementMain;
 	propSize = 0;
 
 	err = AudioObjectGetPropertyDataSize(devID,&propAddr,0,0,&propSize);
@@ -437,7 +437,7 @@ bool AOQueryCoreAudio::setupChannelLayout(AudioDeviceID devID,Device& dev)
 
 				propAddr.mSelector = kAudioDevicePropertyStreamConfiguration;
 				propAddr.mScope = kAudioDevicePropertyScopeOutput;
-				propAddr.mElement = kAudioObjectPropertyElementMaster;
+                propAddr.mElement = kAudioObjectPropertyElementMain;
 				propSize = 0;
 				
 				err = AudioObjectGetPropertyDataSize(devID,&propAddr,0,0,&propSize);
@@ -460,7 +460,7 @@ bool AOQueryCoreAudio::setupChannelLayout(AudioDeviceID devID,Device& dev)
 
 							propAddr.mSelector = kAudioDevicePropertyPreferredChannelLayout;
 							propAddr.mScope = kAudioDevicePropertyScopeOutput;
-							propAddr.mElement = kAudioObjectPropertyElementMaster;
+                            propAddr.mElement = kAudioObjectPropertyElementMain;
 							propSize = 0;
 							
 							err = AudioObjectGetPropertyDataSize(devID,&propAddr,0,0,&propSize);
@@ -636,7 +636,7 @@ int AOQueryCoreAudio::defaultDeviceIndex()
 	
 	propAddr.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 	propAddr.mScope = kAudioObjectPropertyScopeGlobal;
-	propAddr.mElement = kAudioObjectPropertyElementMaster;
+    propAddr.mElement = kAudioObjectPropertyElementMain;
 	propSize = sizeof(AudioDeviceID);
 	
 	err = AudioObjectGetPropertyData(kAudioObjectSystemObject,&propAddr,0,0,&propSize,&devId);

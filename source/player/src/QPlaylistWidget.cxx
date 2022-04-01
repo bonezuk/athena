@@ -187,7 +187,7 @@ void QPlaylistWidget::initPainterPens()
 	m_blackDisablePen.setColor(QColor(128,128,128));
 	m_grayDisablePen.setColor(QColor(192,192,192));
 
-	m_timeColumnWidth = m_darkFontMetric->width("0:00:00") + 5.0;
+	m_timeColumnWidth = m_darkFontMetric->horizontalAdvance("0:00:00") + 5.0;
 	m_trackColumnWidth = (((m_darkFontMetric->height() * 2.0) + 4.0) * 1.112);
 }
 
@@ -770,9 +770,9 @@ void QPlaylistWidget::addTracks(QVector<track::info::InfoSPtr>& tracks,QPLItemBa
 				}
 			}
 			
-			for(ppJ=nonAlbumMap.begin();ppJ!=nonAlbumMap.end();++ppJ)
+			for(QMultiMap<QString,tint>::iterator ppK=nonAlbumMap.begin();ppK!=nonAlbumMap.end();++ppK)
 			{
-				tint tIdx = ppJ.value();
+				tint tIdx = ppK.value();
 				track::info::InfoSPtr tInfo = tracks[tIdx];
 				if(tInfo->isChildren())
 				{
@@ -883,7 +883,7 @@ void QPlaylistWidget::addFile(const QString& name,QPLItemBase *prevItem)
 		{
 			QFileInfo fInfo(name);
 			QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-			QStringList pathList = pathSet.toList();
+			QStringList pathList(pathSet.begin(), pathSet.end());
 			
 			widget::ImportPlaylistDialog importDialog(this);
 			importDialog.setDirectories(pathList);
@@ -951,7 +951,7 @@ void QPlaylistWidget::addFiles(const QStringList& name,QPLItemBase *prevItem,boo
 	{
 		QFileInfo fInfo(name.at(0));
 		QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-		QStringList pathList = pathSet.toList();
+		QStringList pathList(pathSet.begin(), pathSet.end());
 			
 		widget::ImportPlaylistDialog importDialog(this);
 		importDialog.setDirectories(pathList);
@@ -1029,7 +1029,7 @@ void QPlaylistWidget::addDirectory(const QString& name,bool recursive,QPLItemBas
 		{
 			QFileInfo fInfo(name);
 			QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-			QStringList pathList = pathSet.toList();
+			QStringList pathList(pathSet.begin(), pathSet.end());
 				
 			widget::ImportPlaylistDialog importDialog(this);
 			importDialog.setDirectories(pathList);
@@ -1486,7 +1486,7 @@ void QPlaylistWidget::mousePressEvent(QMouseEvent *e)
 			tint yPos,treeNodeI;
 			QPLItemBase *item;
 			
-			yPos = e->y();
+			yPos = e->position().y();
 			
 			treeNodeI = viewIndexFromPosition(yPos,false);
 			if(treeNodeI>=0)
@@ -1545,7 +1545,7 @@ void QPlaylistWidget::mouseReleaseEvent(QMouseEvent *e)
 		tint yPos,treeNodeI;
 		QPLItemBase *item;
 
-		yPos = e->y();
+		yPos = e->position().y();
 		
 		treeNodeI = viewIndexFromPosition(yPos,false);
 		if(treeNodeI>=0)
@@ -1599,7 +1599,7 @@ void QPlaylistWidget::mouseDoubleClickEvent(QMouseEvent *e)
 			tint yPos,treeNodeI;
 			QPLItemBase *item;
 
-			yPos = e->y();
+			yPos = e->position().y();
 
 			treeNodeI = viewIndexFromPosition(yPos);
 			item = m_viewList[treeNodeI];
@@ -2336,8 +2336,8 @@ void QPlaylistWidget::dragMoveEvent(QDragMoveEvent *e)
 			tint yPos,treeNodeI;
 			QPLItemBase *item;
 				
-			yPos = e->pos().y();
-				
+			yPos = e->position().y();
+
 			treeNodeI = viewIndexFromPosition(yPos);
 			if(treeNodeI>=0 && treeNodeI<m_viewList.size())
 			{
@@ -2410,7 +2410,7 @@ void QPlaylistWidget::dropEventProcessBookmarks(const QList<QUrl>& urlList)
 	if(accessFileList.size() > 0)
 	{
 		QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-		QStringList pathList = pathSet.toList();
+		QStringList pathList(pathSet.begin(), pathSet.end());
 			
 		widget::ImportPlaylistDialog importDialog(this);
 		importDialog.setDirectories(pathList);
@@ -2434,7 +2434,8 @@ void QPlaylistWidget::dropEvent(QDropEvent *e)
 
 	m_currentDragPosition = -1;
 	
-	pItem = itemFromPosition(e->pos(),firstNodeI);
+	QPoint dropPosition(static_cast<int>(e->position().x()), static_cast<int>(e->position().y()));
+	pItem = itemFromPosition(dropPosition,firstNodeI);
 
 	if(mimeData->hasFormat("application/blackomega-urllist"))
 	{
@@ -3169,7 +3170,7 @@ void QPlaylistWidget::setFont(const QFont& f,tint size)
 	m_lightFont->setWeight(QFont::Light);
 	m_lightFontMetric = new QFontMetricsF(*m_lightFont);
 	m_mediumFontMetric = new QFontMetricsF(*m_mediumFont);
-	m_timeColumnWidth = m_darkFontMetric->width("0:00:00") + 5.0;
+	m_timeColumnWidth = m_darkFontMetric->horizontalAdvance("0:00:00") + 5.0;
 	m_trackColumnWidth = (((m_darkFontMetric->height() * 2.0) + 4.0) * 1.112);
 	buildViewList();
 	
@@ -4476,7 +4477,7 @@ bool QFixedHorizontalScrollArea::eventFilter(QObject *watched,QEvent *event)
 								// bounds of up scroll area in widget coordinates.
                                 tfloat32 D = v + wC;
 								// Y position of mouse in widget coordinates.
-								tfloat32 mY = static_cast<tfloat32>(moveEvent->pos().y());
+								tfloat32 mY = static_cast<tfloat32>(moveEvent->position().y());
 								// bottom Y position of the given view port in widget coordinates.
 								tfloat32 vH = v + H;
 								// bounds of down scroll area in widget coordinates.

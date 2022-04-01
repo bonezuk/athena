@@ -18,6 +18,10 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
+class PlayListModel;
+
+//-------------------------------------------------------------------------------------------
+
 class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 {
 	public:
@@ -36,39 +40,39 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 
 	public:
 		PlaybackStateController(QObject *parent = 0);
-		PlaybackStateController(OmegaAudioInterface *pAudioInterface, QObject *parent = 0);
+		PlaybackStateController(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlaybackStateController();
 		
-		quint32 getTimeInSeconds() const;
-		qint32 getIndex() const;
-		qint32 getState() const;
+		virtual quint32 getTimeInSeconds() const;
+		virtual qint32 getIndex() const;
+		virtual qint32 getState() const;
+		virtual tuint64 getCurrentId() const;
+		virtual const common::TimeStamp& getTime() const;
 		
-		void setTime(quint64 tS);
-		void setNextItem(qint32 pbIndex, const QPair<track::db::DBInfoSPtr,tint>& pbItem);
+		virtual void setTime(quint64 tS);
+		virtual void setNextItem(tuint64 itemId);
 		
-		void onAudioStart(const QString& fileName);
-		void onAudioPlay();
-		void onAudioPause();
-		void onAudioStop();
+		virtual void onAudioStart(const QString& fileName);
+		virtual void onAudioPlay();
+		virtual void onAudioPause();
+		virtual void onAudioStop();
 
-		void resumeOrPausePlayback();
+		virtual void resumeOrPausePlayback();
 
 	signals:
 		void onTimeChanged();
 		void onIndexChanged();
 		void onStateChanged();
 		
-	private:
-		OmegaAudioInterface *m_pAudioInterface;
+	protected:
+		QSharedPointer<OmegaAudioInterface> m_pAudioInterface;
+		PlayListModel *m_pModel;
 		common::TimeStamp m_playbackTime;
-
-		qint32 m_pbIndex;
-		QPair<track::db::DBInfoSPtr,tint> m_pbItem;
-		
-		qint32 m_pbNextIndex;
-		QPair<track::db::DBInfoSPtr, tint> m_pbNextItem;
-		
+		tuint64 m_currentId;		
+		QList<tuint64> m_nextIdList;
 		enum PlayState m_pbState;
+		
+		virtual QString fileNameFromId(tuint64 id) const;
 };
 
 //-------------------------------------------------------------------------------------------

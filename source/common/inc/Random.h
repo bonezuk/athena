@@ -38,7 +38,9 @@ class COMMON_EXPORT Random
 		tuint randomUInt32();
 		// generates a random number on [0,0x7fffffff]-interval
 		tint randomInt31();
-
+		// generates a random number on [0,0xffffffffffffffff]-interval
+		tuint64 randomUInt64();
+		
 		// generates a random number on [0,1]-real-interval
 		tfloat64 randomReal1();
 		// generates a random number on [0,1)-real-interval

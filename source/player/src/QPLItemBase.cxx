@@ -347,7 +347,7 @@ QString QPLItemBase::displayString(const QString& org,qreal width,QFontMetricsF&
 {
 	QString dis;
 	
-	if(fm.width(org)>width && org.length()>3)
+	if(fm.horizontalAdvance(org)>width && org.length()>3)
 	{
 		tint min,max,mid;
 		QString midS;
@@ -358,14 +358,14 @@ QString QPLItemBase::displayString(const QString& org,qreal width,QFontMetricsF&
 		{
 			mid = (min + max) / 2;
 			midS = org.mid(0,mid) + "...";
-			if(fm.width(midS) > width)
+			if(fm.horizontalAdvance(midS) > width)
 			{
 				max = mid - 1;
 			}
 			else
 			{
 				midS = org.mid(0,mid+1) + "...";
-				if(fm.width(midS) > width)
+				if(fm.horizontalAdvance(midS) > width)
 				{
 					min = max;
 				}

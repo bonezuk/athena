@@ -6,6 +6,7 @@
 #include <QProcess>
 #include <QDir>
 #include <QCoreApplication>
+#include <QStandardPaths>
 
 #if defined(OMEGA_MAC_STORE)
 #include "common/inc/SBService.h"
@@ -19,7 +20,7 @@ namespace player
 //-------------------------------------------------------------------------------------------
 
 ITunesConfig::ITunesConfig(QObject *parent) : common::ProcessService(parent),
-	m_mutex(QMutex::Recursive),
+    m_mutex(),
 	m_musicFolder(),
 	m_fileMaps(),
 	m_playlistMaps(),
@@ -455,17 +456,17 @@ QString ITunesConfig::getDataItem(const QVariant& v)
 {
 	QString d;
 	
-	switch(v.type())
+    switch(v.metaType().id())
 	{
-		case QVariant::String:
+        case QMetaType::Type::QString:
 			d = v.toString();
 			break;
 			
-		case QVariant::Int:
+        case QMetaType::Type::Int:
 			d = QString::number(v.toInt());
 			break;
 			
-		case QVariant::Double:
+        case QMetaType::Type::Double:
 			d = QString::number(v.toDouble(),'f',8);
 			break;
 			
@@ -588,7 +589,7 @@ QString ITunesConfig::getURLFilename(const QString& uPath)
 void ITunesConfig::processTracks(const QVariant& tRoot,QMap<int,track::info::InfoSPtr>& trackMap)
 {
 	trackMap.clear();
-	if(tRoot.type()==QVariant::Map)
+    if(tRoot.metaType().id()==QMetaType::Type::QVariantMap)
 	{
 		QMap<QString,QVariant> tMap = tRoot.toMap();
 		QMap<QString,QVariant>::iterator ppI,ppJ,ppK;
@@ -596,7 +597,7 @@ void ITunesConfig::processTracks(const QVariant& tRoot,QMap<int,track::info::Inf
 		for(ppI=tMap.begin();ppI!=tMap.end();ppI++)
 		{
 			const QVariant& dV = ppI.value();
-			if(dV.type()==QVariant::Map)
+            if(dV.metaType().id()==QMetaType::Type::QVariantMap)
 			{
 				QMap<QString,QVariant> dMap = dV.toMap();
 				ppJ = dMap.find("Track ID");
@@ -667,7 +668,7 @@ void ITunesConfig::processTracks(const QVariant& tRoot,QMap<int,track::info::Inf
 void ITunesConfig::processPlaylist(const QVariant& pRoot,QString& name,QList<int>& pList)
 {
 	pList.clear();
-	if(pRoot.type()==QVariant::Map)
+    if(pRoot.metaType().id()==QMetaType::Type::QVariantMap)
 	{
 		QMap<QString,QVariant> rMap = pRoot.toMap();
 		QMap<QString,QVariant>::iterator ppI,ppK;
@@ -680,7 +681,7 @@ void ITunesConfig::processPlaylist(const QVariant& pRoot,QString& name,QList<int
 			if(ppI!=rMap.end())
 			{
 				const QVariant& vA = ppI.value();
-				if(vA.type()==QVariant::List)
+                if(vA.metaType().id()==QMetaType::Type::QVariantList)
 				{
 					QList<QVariant> aList = vA.toList();
 					QList<QVariant>::iterator ppJ;
@@ -688,14 +689,14 @@ void ITunesConfig::processPlaylist(const QVariant& pRoot,QString& name,QList<int
 					for(ppJ=aList.begin();ppJ!=aList.end();ppJ++)
 					{
 						const QVariant& dV = *ppJ;
-						if(dV.type()==QVariant::Map)
+                        if(dV.metaType().id()==QMetaType::Type::QVariantMap)
 						{
 							QMap<QString,QVariant> dMap = dV.toMap();
 							ppK = dMap.find("Track ID");
 							if(ppK!=dMap.end())
 							{
 								const QVariant& tV = ppK.value();
-								if(tV.type()==QVariant::Int)
+                                if(tV.metaType().id()==QMetaType::Type::Int)
 								{
 									pList.append(tV.toInt());
 								}
@@ -713,7 +714,7 @@ void ITunesConfig::processPlaylist(const QVariant& pRoot,QString& name,QList<int
 void ITunesConfig::processPlaylists(const QVariant& pRoot,QList<QPair<QString,QList<int> > >& pLists)
 {
 	pLists.clear();
-	if(pRoot.type()==QVariant::List)
+    if(pRoot.metaType().id()==QMetaType::Type::QVariantList)
 	{
 		QList<QVariant> aList = pRoot.toList();
 		QList<QVariant>::iterator ppI;
@@ -756,7 +757,7 @@ void ITunesConfig::parseDatabase(const QString& fileName)
 		{
 			const QVariant& v = rootList.at(i);
 			
-			if(v.type()==QVariant::Map)
+            if(v.metaType().id()==QMetaType::Type::QVariantMap)
 			{
 				QMap<QString,QVariant> dMap = v.toMap();
 				QMap<QString,QVariant>::iterator ppI;
@@ -970,7 +971,7 @@ QStringList ITunesConfig::processFileListForAppSandbox(const QStringList& fileLi
 	if(accessFileList.size() > 0)
 	{
 		QSet<QString> pathSet = common::CommonDirectoriesForFiles::find(accessFileList);
-		QStringList pathList = pathSet.toList();
+        QStringList pathList(pathSet.begin(), pathSet.end());
 		
 		widget::ImportPlaylistDialog importDialog(m_playlistWidget->parentWidget());
 		importDialog.setDirectories(pathList);

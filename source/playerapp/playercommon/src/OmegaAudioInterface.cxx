@@ -5,7 +5,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaAudioInterface::OmegaAudioInterface()
+OmegaAudioInterface::OmegaAudioInterface(QObject *parent) : QObject(parent)
 {}
 
 //-------------------------------------------------------------------------------------------

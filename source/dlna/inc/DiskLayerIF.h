@@ -31,7 +31,7 @@ class DLNA_EXPORT DiskLayerIF : public DiskIF
 
 	protected:
 
-		mutable QMutex m_mutex;
+        mutable QRecursiveMutex m_mutex;
 #if defined(OMEGA_WIN32)
 		mutable QMap<DiskIF::DirHandle,QPair<QString,WIN32_FIND_DATAW> > m_dirHandleMap;
 #elif defined(OMEGA_POSIX)

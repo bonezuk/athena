@@ -6,6 +6,7 @@
 #include "network/inc/Resource.h"
 
 #include <QDesktopServices>
+#include <QRecursiveMutex>
 #include <QMenu>
 
 #include "common/inc/ProcessThread.h"
@@ -47,7 +48,7 @@ class ITunesConfig : public common::ProcessService
 	
 		volatile bool m_editFlag;
 
-		QMutex m_mutex;
+        QRecursiveMutex m_mutex;
 		
 		QString m_musicFolder;
 		QMap<QString,QMap<tint,track::info::InfoSPtr> > m_fileMaps;

@@ -20,7 +20,7 @@ JaroWinklerDistance::~JaroWinklerDistance()
 
 //-------------------------------------------------------------------------------------------
 
-void JaroWinklerDistance::buildIndexMap(const QString& s2,QVector<QHash<QChar,int> >& iMapList,int noEntries)
+void JaroWinklerDistance::buildIndexMap(const QString& s2,QVector<QMultiHash<QChar,int> >& iMapList,int noEntries)
 {
 	int i,j;
 	int s1Len,s2Len,searchWindow;
@@ -33,14 +33,14 @@ void JaroWinklerDistance::buildIndexMap(const QString& s2,QVector<QHash<QChar,in
 	
 	for(i=0;i<noEntries;i++)
 	{
-		QHash<QChar,int> indexMap;
+        QMultiHash<QChar,int> indexMap;
 		
 		int sPos = maxLength(0,i - searchWindow);
 		int sEnd = minLength(i + searchWindow + 1,s2Len);
 		
 		for(j=sPos;j<sEnd;j++)
 		{
-			indexMap.insertMulti(s2.at(j),j);
+            indexMap.insert(s2.at(j),j);
 		}
 		iMapList.append(indexMap);
 	}
@@ -55,20 +55,20 @@ const QString& JaroWinklerDistance::getComparisonString(bool caseSensitive) cons
 
 //-------------------------------------------------------------------------------------------
 
-QMap<int,QVector<QHash<QChar,int> > >& JaroWinklerDistance::getLookupIndexMap(bool caseSensitive)
+QMap<int,QVector<QMultiHash<QChar,int> > >& JaroWinklerDistance::getLookupIndexMap(bool caseSensitive)
 {
 	return (caseSensitive) ? m_lookupIndexMap : m_lookupLowerIndexMap;
 }
 
 //-------------------------------------------------------------------------------------------
 
-const QVector<QHash<QChar,int> >& JaroWinklerDistance::getIndexMap(const QString& s1,bool caseSensitive)
+const QVector<QMultiHash<QChar,int> >& JaroWinklerDistance::getIndexMap(const QString& s1,bool caseSensitive)
 {
 	int len = s1.length();
 	
 	if(getLookupIndexMap(caseSensitive).find(len)==getLookupIndexMap(caseSensitive).end())
 	{
-		QVector<QHash<QChar,int> > indexMap;
+        QVector<QMultiHash<QChar,int> > indexMap;
 		getLookupIndexMap(caseSensitive).insert(len,indexMap);
 		buildIndexMap(getComparisonString(caseSensitive),getLookupIndexMap(caseSensitive).find(len).value(),len);	
 	}
@@ -83,7 +83,7 @@ int JaroWinklerDistance::findMatches(const QString& s,int *match,bool caseSensit
 {
 	int m,s1Len;
 	QString s1 = (caseSensitive) ? s : s.toLower();
-	const QVector<QHash<QChar,int> >& indexMap = getIndexMap(s1,caseSensitive);
+    const QVector<QMultiHash<QChar,int> >& indexMap = getIndexMap(s1,caseSensitive);
 
 	m = 0;
 	s1Len = s1.length();
@@ -92,7 +92,7 @@ int JaroWinklerDistance::findMatches(const QString& s,int *match,bool caseSensit
 		int pos,iCount;
 		const QChar& a = s1.at(i);
 		
-		const QHash<QChar,int>& indexEntry = indexMap.at(i);
+        const QMultiHash<QChar,int>& indexEntry = indexMap.at(i);
 	
 		pos = -1;
 		iCount = indexEntry.count(a);

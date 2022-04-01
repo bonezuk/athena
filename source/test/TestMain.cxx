@@ -142,5 +142,9 @@ int main(int argc,char **argv)
     ::testing::InitGoogleTest(&argc,argv);
 	::testing::InitGoogleMock(&argc,argv);
 	::testing::AddGlobalTestEnvironment(new GlobalEnviroment);
+	
+	orcus::track::model::TrackDBTestEnviroment *pTrackDBTest = orcus::track::model::TrackDBTestEnviroment::instance();
+	pTrackDBTest->setExecPath(QString::fromUtf8(argv[0]));
+	
 	return RUN_ALL_TESTS();
 }
