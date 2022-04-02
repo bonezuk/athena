@@ -60,17 +60,17 @@ void OmegaAudioService::handleRPCJson(const QJsonDocument& doc)
 			else
 			{
 				QString err = QString("Unknown RPC function '%1'").arg(funcName);
-				printError("processRPC", err.toUtf8().constData());
+				printError("handleRPCJson", err.toUtf8().constData());
 			}
 		}
 		else
 		{
-			printError("processRPC", "Expected function name not in JSON data");
+			printError("handleRPCJson", "Expected function name not in JSON data");
 		}
 	}
 	else
 	{
-		printError("processRPC", "RPC JSON data is not an object");
+		printError("handleRPCJson", "RPC JSON data is not an object");
 	}
 }
 

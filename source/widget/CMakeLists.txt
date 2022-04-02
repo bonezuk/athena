@@ -12,7 +12,11 @@ elseif (OMEGA_MACOSX)
 	qt_wrap_ui(WIDGET_UI_HEADERS inc/AboutDialog.ui inc/ImportPlaylistDialog.ui)
 endif (OMEGA_WIN32 OR OMEGA_LINUX)
 
-qt5_add_resources(WIDGET_UI_RESOURCES widget.qrc)
+if (TIGER_QT6_FLAG)
+	qt_add_resources(WIDGET_UI_RESOURCES widget.qrc)
+else (TIGER_QT6_FLAG)
+	qt5_add_resources(WIDGET_UI_RESOURCES widget.qrc)
+endif (TIGER_QT6_FLAG)
 
 add_library(widget SHARED ${WIDGET_HEADER} ${WIDGET_SOURCE} ${WIDGET_UI_HEADERS} ${WIDGET_UI_RESOURCES})
 

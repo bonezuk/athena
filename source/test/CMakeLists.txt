@@ -29,6 +29,8 @@ set ( TEST_HEADERS
 	../track/model/test/ImageRepositaryMock.h
 	../track/model/test/TrackDBTestEnviroment.h
 	../playerapp/playercommon/test/IPCSocketCommsTest.h
+	../playerapp/playercommon/test/IPCServiceTestCommon.h
+	../playerapp/playercommon/test/IPCServiceTest.h
 	QUnitTestTimer.h
 )
 
@@ -133,6 +135,7 @@ set ( TEST_SOURCE
 	../track/model/test/TrackModelKeyTest.cxx
 	
 	../playerapp/playercommon/test/IPCSocketCommsTest.cxx
+	../playerapp/playercommon/test/IPCServiceTest.cxx
 	
 	QUnitTestTimer.cxx
 	TestMain.cxx
@@ -185,7 +188,11 @@ if (OMEGA_LINUX)
 	)
 endif (OMEGA_LINUX)
 
-qt5_add_resources(TEST_UI_RESOURCES test.qrc)
+if (TIGER_QT6_FLAG)
+	qt_add_resources(TEST_UI_RESOURCES test.qrc)
+else (TIGER_QT6_FLAG)
+	qt5_add_resources(TEST_UI_RESOURCES test.qrc)
+endif (TIGER_QT6_FLAG)
 
 if (OMEGA_WIN32)
 	add_executable(OmegaUnitTests ${TEST_HEADERS} ${TEST_SOURCE} ${TEST_UI_RESOURCES} ${TEST_WIN_HEADERS} ${TEST_WIN_SOURCE})
