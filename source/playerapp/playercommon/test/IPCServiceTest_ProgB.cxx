@@ -24,7 +24,7 @@ ProgBInterface::~ProgBInterface()
 
 void ProgBInterface::printError(const tchar *strR, const tchar *strE) const
 {
-	common::Log::g_Log << "ProgBInterface::" << strR << " - " << strE << common:c_endl;
+	common::Log::g_Log << "ProgBInterface::" << strR << " - " << strE << common::c_endl;
 	m_isError = true;
 }
 
@@ -73,7 +73,7 @@ IPCServiceTestProgB::~IPCServiceTestProgB()
 
 void IPCServiceTestProgB::printError(const tchar *strR, const tchar *strE) const
 {
-	common::Log::g_Log << "IPCServiceTestProgB::" << strR << " - " << strE << common:c_endl;
+	common::Log::g_Log << "IPCServiceTestProgB::" << strR << " - " << strE << common::c_endl;
 	m_isError = true;
 }
 
@@ -148,8 +148,14 @@ int main(int argc, char **argv)
 	QCoreApplication::setOrganizationDomain("www.blackomega.co.uk");
 	QCoreApplication::setApplicationName("BlackOmega2Test");
 #endif
+	if(argc < 2)
+	{
+		fprintf(stdout, "B - test number not given in args\n");
+		return -1;
+	}
+
 	int testNo = atoi(argv[1]);
-	IPCServiceTestProgB prog(testNo, argc, argv);
+	orcus::IPCServiceTestProgB prog(testNo, argc, argv);
 	prog.exec();
 	res = prog.isError() ? -1 : 0;
 	fprintf(stdout, "B - process finished\n");

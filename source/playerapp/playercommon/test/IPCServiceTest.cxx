@@ -1,4 +1,6 @@
+#include "dlna/inc/DiskIF.h"
 #include "playerapp/playercommon/test/IPCServiceTest.h"
+#include "track/model/test/TrackDBTestEnviroment.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -21,7 +23,7 @@ IPCTestService::~IPCTestService()
 
 void IPCTestService::printError(const char *strR, const char *strE) const
 {
-	common::Log::g_Log << "IPCTestService::" << strR << " - " << strE << common:c_endl;
+	common::Log::g_Log << "IPCTestService::" << strR << " - " << strE << common::c_endl;
 	m_isError = true;
 }
 
@@ -34,7 +36,7 @@ bool IPCTestService::isError() const
 
 //-------------------------------------------------------------------------------------------
 
-int timeEventCounter() const
+int IPCTestService::timeEventCounter() const
 {
 	return m_timeEventCounter;
 }
@@ -89,8 +91,15 @@ IPCService_QtTestApplication::IPCService_QtTestApplication(TestType testNo, cons
 
 void IPCService_QtTestApplication::printError(const tchar *strR, const tchar *strE) const
 {
-	common::Log::g_Log << "IPCService_QtTestApplication::" << strR << " - " << strE << common:c_endl;
+	common::Log::g_Log << "IPCService_QtTestApplication::" << strR << " - " << strE << common::c_endl;
 	m_isError = true;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool IPCService_QtTestApplication::isError() const
+{
+	return m_isError;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -154,7 +163,7 @@ void IPCService_QtTestApplication::runProcessTest(IPCTestService *service)
 			int res;
 			fprintf(stdout, "A - process B has exited\n");
 			res = processA->exitCode();
-			if(!res)
+			if(res < 0)
 			{
 				QString err = QString("Process B exited with error code %1").arg(res);
 				printError("runProcessTest", err.toUtf8().constData());
@@ -226,7 +235,7 @@ TEST(IPCService,handleServiceEventsOnlyWithNoResponse)
     {
         char *argv = 0;
         track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
-        IPCService_QtTestApplication test(IPCService_QtTestApplication::e_handleServiceEventsOnlyWithNoResponse, 
+		IPCService_QtTestApplication tester(IPCService_QtTestApplication::e_handleServiceEventsOnlyWithNoResponse,
         	pTrackDBTest->execPath(), 0, &argv);
         tester.exec();
         ASSERT_FALSE(tester.isError());

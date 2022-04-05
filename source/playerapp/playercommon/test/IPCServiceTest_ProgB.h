@@ -20,7 +20,7 @@ class ProgBInterface : public IPCInterfaceBase
 		virtual void onTime(tfloat64 val);
 		
 	protected:
-		bool m_isError;
+		mutable bool m_isError;
 		
 		virtual void printError(const tchar *strR, const tchar *strE) const;
 };
@@ -38,7 +38,7 @@ class IPCServiceTestProgB : public QCoreApplication
 		
 	private:
 		int m_testNo;
-		bool m_isError;
+		mutable bool m_isError;
 		int m_timeEventCounter;
 		ProgBInterface *m_pInterface;
 		

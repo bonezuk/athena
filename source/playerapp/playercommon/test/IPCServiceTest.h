@@ -21,7 +21,7 @@ class IPCTestService : public IPCService
 		int timeEventCounter() const;
 		
 	protected:
-		bool m_isError;
+		mutable bool m_isError;
 		int m_timeEventCounter;
 		
 		virtual void printError(const char *strR, const char *strE) const;		
@@ -36,7 +36,7 @@ class IPCService_QtTestApplication : public QCoreApplication
 	public:
 		typedef enum
 		{
-			e_handleServiceEventsOnlyWithNoResponse = 1;
+			e_handleServiceEventsOnlyWithNoResponse = 1
 		} TestType;
 		
 	public:
@@ -45,12 +45,12 @@ class IPCService_QtTestApplication : public QCoreApplication
 		bool isError() const;
 	private:
 		TestType m_testNo;
-		bool m_isError;
+		mutable bool m_isError;
 		QString m_pathToTestExec;
 		
 		virtual void printError(const tchar *strR, const tchar *strE) const;
 		virtual QString pathToTestProgramB();
-		virtual void runProcessTest(IPCTestService *service)
+		virtual void runProcessTest(IPCTestService *service);
 		virtual void handleServiceEventsOnlyWithNoResponse(IPCTestService *service);
 	private slots:
 		virtual void onRunTest();
