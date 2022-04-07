@@ -8,6 +8,76 @@
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
+// IPCProgBService
+//-------------------------------------------------------------------------------------------
+
+IPCProgBService::IPCProgBService(const char *serviceName, QObject *parent) : IPCService(serviceName, parent),
+	m_isError(false),
+	m_timeEventCounter(0)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+IPCProgBService::~IPCProgBService()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCProgBService::printError(const char *strR, const char *strE) const
+{
+	common::Log::g_Log << "IPCProgBService::" << strR << " - " << strE << common::c_endl;
+	m_isError = true;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool IPCProgBService::isError() const
+{
+	return m_isError;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int IPCProgBService::timeEventCounter() const
+{
+	return m_timeEventCounter;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCProgBService::handleRPCJson(const QJsonDocument& doc)
+{
+	if(doc.isObject())
+	{
+		QJsonObject json = doc.object();
+		QString funcName = json.value(OMEGA_IPC_FUNCTION_NAME).toString();
+		if(!funcName.isEmpty())
+		{
+			// { "function": "onTime", "value": 12.345 }
+			if(funcName == "onClientTime")
+			{
+				common::TimeStamp tS = json.value("timestamp").toDouble();
+				common::Log::g_Log.print("B - onTime - %.8f", static_cast<tfloat64>(tS));
+				m_timeEventCounter++;
+			}
+			else
+			{
+				QString err = QString("Unknown RPC function '%1'").arg(funcName);
+				printError("handleRPCJson", err.toUtf8().constData());
+			}
+		}
+		else
+		{
+			printError("handleRPCJson", "Expected function name not in JSON data");
+		}
+	}
+	else
+	{
+		printError("handleRPCJson", "RPC JSON data is not an object");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 // ProgBInterface
 //-------------------------------------------------------------------------------------------
 
@@ -93,6 +163,10 @@ void IPCServiceTestProgB::onRunTest()
 	{
 		runOnTimeEventsOnly();
 	}
+	else if(m_testNo == 2)
+	{
+		runServiceForTimeClientEventsOnly();
+	}
 	else
 	{
 		QString err = QString("Unknown test number %1").arg(m_testNo);
@@ -128,6 +202,28 @@ void IPCServiceTestProgB::runOnTimeEventsOnly()
 		processEvents();
 	}
 	fprintf(stdout, "B - runOnTimeEventsOnly complete\n");
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCServiceTestProgB::runServiceForTimeClientEventsOnly()
+{
+	fprintf(stdout, "B - runServiceForTimeClientEventsOnly start\n");
+	IPCProgBService *service = new IPCProgBService(IPC_SERVICE_PROGB_NAME, this);
+	if(service->start())
+	{
+		while(service->timeEventCounter() < c_testIPCServiceCountLimit && !service->isError() && !isError())
+		{
+			processEvents();
+		}
+		service->stop();
+	}
+	else
+	{
+		printError("runServiceForTimeClientEventsOnly", "Failed to start service");
+	}
+	delete service;
+	fprintf(stdout, "B - runServiceForTimeClientEventsOnly complete\n");
 }
 
 //-------------------------------------------------------------------------------------------

@@ -118,7 +118,6 @@ bool IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 	{
 		printError("sendRPCCall", "No IPC Comms socker");
 	}
-	common::Log::g_Log << "client - " << ((isSent) ? "sent" : "fail") << common::c_endl;
 	return isSent;
 }
 

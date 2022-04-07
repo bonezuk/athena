@@ -18,7 +18,8 @@ namespace orcus
 
 const int c_testIPCServiceCountLimit = 1000;
 
-#define IPC_SERVICE_TEST_NAME "ipctestservice"
+#define IPC_SERVICE_TEST_NAME  "ipctestservice"
+#define IPC_SERVICE_PROGB_NAME "ipcprogbservice"
 
 //-------------------------------------------------------------------------------------------
 } // namespace orcus

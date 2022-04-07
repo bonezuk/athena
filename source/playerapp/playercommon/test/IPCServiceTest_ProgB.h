@@ -27,6 +27,26 @@ class ProgBInterface : public IPCInterfaceBase
 
 //-------------------------------------------------------------------------------------------
 
+class IPCProgBService : public IPCService
+{
+	Q_OBJECT
+	public:
+		IPCProgBService(const char *serviceName, QObject *parent = 0);
+		virtual ~IPCProgBService();
+		
+		bool isError() const;
+		int timeEventCounter() const;
+		
+	protected:
+		mutable bool m_isError;
+		int m_timeEventCounter;
+		
+		virtual void printError(const char *strR, const char *strE) const;		
+		virtual void handleRPCJson(const QJsonDocument& doc);
+};
+
+//-------------------------------------------------------------------------------------------
+
 class IPCServiceTestProgB : public QCoreApplication
 {
 	Q_OBJECT
@@ -44,6 +64,7 @@ class IPCServiceTestProgB : public QCoreApplication
 		
 		virtual void printError(const tchar *strR, const tchar *strE) const;
 		virtual void runOnTimeEventsOnly();
+		virtual void runServiceForTimeClientEventsOnly();
 		
 	private slots:
 		virtual void onRunTest();
