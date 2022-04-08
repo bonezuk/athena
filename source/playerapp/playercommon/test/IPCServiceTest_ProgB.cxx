@@ -210,7 +210,14 @@ void IPCServiceTestProgB::printError(const tchar *strR, const tchar *strE) const
 
 bool IPCServiceTestProgB::isError() const
 {
-	return (m_isError || m_pInterface->isError());
+	if(m_pInterface != 0)
+	{
+		return (m_isError || m_pInterface->isError());
+	}
+	else
+	{
+		return m_isError;
+	}
 }
 
 //-------------------------------------------------------------------------------------------
