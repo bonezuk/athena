@@ -51,12 +51,28 @@ void IPCTestService::handleRPCJson(const QJsonDocument& doc)
 		QString funcName = json.value(OMEGA_IPC_FUNCTION_NAME).toString();
 		if(!funcName.isEmpty())
 		{
-			// { "function": "onTime", "value": 12.345 }
+			// get - { "function": "onTime", "value": 12.345 }
+			// no response
 			if(funcName == "onTime")
 			{
 				common::TimeStamp tS = json.value("timestamp").toDouble();
 				common::Log::g_Log.print("A - onTime - %.8f", static_cast<tfloat64>(tS));
 				m_timeEventCounter++;
+			}
+			// get - { "function": "onResponse", "value": 12.345 }
+			// return - { "count: 123, "value": 12.345 }
+			else if(funcName == "onResponse")
+			{
+				m_timeEventCounter++;
+				tfloat64 v = json.value("value").toDouble();
+				int count = m_timeEventCounter;
+				QVariantMap sMap;
+				QJsonDocument respDoc;
+				sMap.insert("count", QVariant(count));
+				sMap.insert("value", QVariant(v));
+				respDoc.setObject(QJsonObject::fromVariantMap(sMap));
+				QByteArray rArr = respDoc.toJson(QJsonDocument::Compact);
+				m_pServiceThread->postResponse(rArr);
 			}
 			else
 			{
@@ -114,6 +130,43 @@ void IPCProgBInterface::onClientTime(tfloat64 val)
 	{
 		printError("onClientTime", "Failed to send RPC call");
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+tfloat64 IPCProgBInterface::onClientResponse(tfloat64 val, int& count)
+{
+	tfloat64 res = 0.0;
+	QVariantMap rpcMap;
+	rpcMap.insert("value", QVariant(val));
+	if(sendRPCCall("onClientResponse", rpcMap))
+	{
+		QJsonDocument doc = receiveJsonReply();
+		if(doc.isObject())
+		{
+			QJsonValue countJ = doc.object().value("count");
+			QJsonValue valueJ = doc.object().value("value");
+			if(countJ.isDouble() && valueJ.isDouble())
+			{
+				count = countJ.toInt();
+				res = valueJ.toDouble();
+			}
+			else
+			{
+				QString err = QString("JSON unexpected '%1'").arg(QString::fromUtf8(doc.toJson(QJsonDocument::Compact)));
+				printError("onClientResponse", err.toUtf8().constData());
+			}
+		}
+		else
+		{
+			printError("onClientResponse", "Unexpected JSON response");
+		}
+	}
+	else
+	{
+		printError("onClientResponse", "Failed to send RPC call");
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -175,9 +228,13 @@ bool IPCService_QtTestApplication::isTestService()
 	switch(m_testNo)
 	{
 		case e_handleServiceEventsOnlyWithNoResponse:
+		case e_handleServiceEventsOnlyWithResponse:
+		case e_sendAndReceiveEventsWithNoResponse:
+		case e_sendAndReceiveEventsWithResponse:
 			isService = true;
 			break;
 		case e_sendEventsToClientWithNoResponse:
+		case e_sendEventsToClientWithResponse:
 			isService = false;
 			break;
 		default:
@@ -196,9 +253,13 @@ bool IPCService_QtTestApplication::isClientService()
 	switch(m_testNo)
 	{
 		case e_handleServiceEventsOnlyWithNoResponse:
+		case e_handleServiceEventsOnlyWithResponse:
 			isClient = false;
 			break;
 		case e_sendEventsToClientWithNoResponse:
+		case e_sendEventsToClientWithResponse:
+		case e_sendAndReceiveEventsWithNoResponse:
+		case e_sendAndReceiveEventsWithResponse:
 			isClient = true;
 			break;
 		default:
@@ -249,55 +310,63 @@ void IPCService_QtTestApplication::stopProgBInterface()
 
 //-------------------------------------------------------------------------------------------
 
-void IPCService_QtTestApplication::runProcessTest(IPCTestService *service)
+bool IPCService_QtTestApplication::startProgBProcess(QProcess **pProcessA)
 {
-	QString auxProgAPath = pathToTestProgramB();
+	track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
+	bool res = false;
 	
-	if(!auxProgAPath.isEmpty())
+	if(pTrackDBTest->spawnICSProcess())
 	{
-		QProcess *processA = new QProcess(this);
-		QStringList argsA;
-	
-		argsA.append(QString::number(static_cast<int>(m_testNo)));
-		fprintf(stdout, "A - starting process B\n");
-		processA->start(auxProgAPath, argsA);
-		
-		processEvents();
-		while(processA->state() == QProcess::Starting)
-		{
-			QThread::msleep(50);
-			processEvents();
-			fprintf(stdout, "A(%d) - waiting on B to start\n", getpid());		
-		}
+		QString auxProgAPath = pathToTestProgramB();
 
-		if(processA->state() == QProcess::Running)
+		if(!auxProgAPath.isEmpty())
 		{
-			if(startProgBInterface())
+			QProcess *processA = new QProcess(this);
+			QStringList argsA;
+	
+			argsA.append(QString::number(static_cast<int>(m_testNo)));
+			fprintf(stdout, "A - starting process B\n");
+			processA->start(auxProgAPath, argsA);
+		
+			processEvents();
+			while(processA->state() == QProcess::Starting)
 			{
-				if(m_testNo == e_handleServiceEventsOnlyWithNoResponse)
-				{
-					handleServiceEventsOnlyWithNoResponse(service);
-				}
-				else if(m_testNo == e_sendEventsToClientWithNoResponse)
-				{
-					sendEventsToClientWithNoResponse();
-				}
-				else
-				{
-					printError("runProcessTest", "Unknown unit test process");
-				}
-				stopProgBInterface();
+				QThread::msleep(50);
+				processEvents();
+				fprintf(stdout, "A(%d) - waiting on B to start\n", getpid());		
+			}
+
+			if(processA->state() == QProcess::Running)
+			{
+				*pProcessA = processA;
+				res = true;
 			}
 			else
 			{
-				printError("runProcessTest", "Failed to get test interface");
+				printError("startProgBProcess", "A - process B is not running");
+				delete processA;
 			}
 		}
 		else
 		{
-			printError("runProcessTest", "A - process B is not running");
+			printError("runProcessTest", "Failed to find path to test program");
 		}
+	}
+	else
+	{
+		res = true;
+	}
+	return res;
+}
 
+//-------------------------------------------------------------------------------------------
+
+void IPCService_QtTestApplication::stopProgBProcess(QProcess *processA)
+{
+	track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
+	
+	if(pTrackDBTest->spawnICSProcess())
+	{
 		fprintf(stdout, "A - wait for B to finish\n");
 		if(processA->waitForFinished(5000))
 		{
@@ -317,13 +386,61 @@ void IPCService_QtTestApplication::runProcessTest(IPCTestService *service)
 				fprintf(stdout, "A - killing B\n");
 				processA->kill();
 			} while(processA->waitForFinished());
-			printError("runProcessTest", "Program didn't finish as expected");
+			printError("stopProgBProcess", "Program didn't finish as expected");
 		}
 		delete processA;
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCService_QtTestApplication::runProcessTest(IPCTestService *service)
+{
+	QProcess *processA = 0;
+
+	if(startProgBProcess(&processA))
+	{
+		if(startProgBInterface())
+		{
+			if(m_testNo == e_handleServiceEventsOnlyWithNoResponse)
+			{
+				handleServiceEventsOnlyWithNoResponse(service);
+			}
+			else if(m_testNo == e_sendEventsToClientWithNoResponse)
+			{
+				sendEventsToClientWithNoResponse();
+			}
+			else if(m_testNo == e_handleServiceEventsOnlyWithResponse)
+			{
+				handleServiceEventsOnlyWithResponse(service);
+			}
+			else if(m_testNo == e_sendEventsToClientWithResponse)
+			{
+				sendEventsToClientWithResponse();
+			}
+			else if(m_testNo == e_sendAndReceiveEventsWithNoResponse)
+			{
+				sendAndReceiveEventsWithNoResponse(service);
+			}
+			else if(m_testNo == e_sendAndReceiveEventsWithResponse)
+			{
+				sendAndReceiveEventsWithResponse(service);
+			}
+			else
+			{
+				printError("runProcessTest", "Unknown unit test process");
+			}
+			stopProgBInterface();
+		}
+		else
+		{
+			printError("runProcessTest", "Failed to get test interface");
+		}
+		stopProgBProcess(processA);
+	}
 	else
 	{
-		printError("runProcessTest", "Failed to find path to test program");
+		printError("runProcessTest", "Failed to start test program");
 	}
 }
 
@@ -404,6 +521,103 @@ void IPCService_QtTestApplication::sendEventsToClientWithNoResponse()
 }
 
 //-------------------------------------------------------------------------------------------
+
+void IPCService_QtTestApplication::handleServiceEventsOnlyWithResponse(IPCTestService *service)
+{
+	while(service->timeEventCounter() < c_testIPCServiceCountLimit && !service->isError())
+	{
+		processEvents();
+	}
+	service->stop();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCService_QtTestApplication::onSendClientResponseEvent()
+{
+	if(m_pInterface != 0 && !m_pInterface->isError())
+	{
+		int count;
+		tfloat64 val, res;
+		common::TimeStamp tS = common::TimeStamp::now();
+		
+		count = 0;
+		val = static_cast<tfloat64>(tS);
+		res = m_pInterface->onClientResponse(val, count);
+		if(isEqual(val, res))
+		{
+			common::Log::g_Log.print("A - onClientResponse: val=%.8f, res=%.8f, count=%d\n", val, res, count);
+			m_testCount = count;
+		}
+		else
+		{
+			QString err = QString("Unexpected difference between value=%1 and result=%2").arg(val).arg(res);
+			printError("onSendClientResponseEvent", err.toUtf8().constData());
+		}
+	}
+	else
+	{
+		printError("onSendClientResponseEvent", "Invalid interface state");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCService_QtTestApplication::sendEventsToClientWithResponse()
+{
+	QTimer *timer = new QTimer(this);
+	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(onSendClientResponseEvent()));
+	timer->setInterval(1);
+	timer->setSingleShot(false);
+	timer->start();
+	
+	while(m_testCount < c_testIPCServiceCountLimit && !isError() && !m_pInterface->isError())
+	{
+		processEvents();
+	}
+
+	delete timer;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCService_QtTestApplication::sendAndReceiveEventsWithNoResponse(IPCTestService *service)
+{
+	QTimer *timer = new QTimer(this);
+	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(onSendClientTimeEvent()));
+	timer->setInterval(1);
+	timer->setSingleShot(false);
+	timer->start();
+	
+	while((m_testCount < c_testIPCServiceCountLimit || service->timeEventCounter() < c_testIPCServiceCountLimit) && 
+		!isError() && !m_pInterface->isError())
+	{
+		processEvents();
+	}
+
+	delete timer;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCService_QtTestApplication::sendAndReceiveEventsWithResponse(IPCTestService *service)
+{
+	QTimer *timer = new QTimer(this);
+	QObject::connect(timer, SIGNAL(timeout()), this, SLOT(onSendClientResponseEvent()));
+	timer->setInterval(1);
+	timer->setSingleShot(false);
+	timer->start();
+	
+	while((m_testCount < c_testIPCServiceCountLimit || service->timeEventCounter() < c_testIPCServiceCountLimit) && 
+		!isError() && !m_pInterface->isError())
+	{
+		processEvents();
+	}
+
+	delete timer;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 
@@ -414,16 +628,20 @@ using namespace orcus;
 void clearIPCServiceTestEnv()
 {
 	QString path;
-	
+	track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
+
 	path = pathToUNIXSocket(IPC_SERVICE_TEST_NAME);
 	if(common::DiskOps::exist(path))
 	{
 		common::DiskOps::remove(path);
-	}
-	path = pathToUNIXSocket(IPC_SERVICE_PROGB_NAME);
-	if(common::DiskOps::exist(path))
+	}	
+	if(pTrackDBTest->spawnICSProcess())
 	{
-		common::DiskOps::remove(path);
+		path = pathToUNIXSocket(IPC_SERVICE_PROGB_NAME);
+		if(common::DiskOps::exist(path))
+		{
+			common::DiskOps::remove(path);
+		}
 	}
 }
 
@@ -465,3 +683,74 @@ TEST(IPCService,sendEventsToClientWithNoResponse)
 
 //-------------------------------------------------------------------------------------------
 	
+TEST(IPCService,handleServiceEventsOnlyWithResponse)
+{
+	clearIPCServiceTestEnv();
+    QStringList libPaths = QApplication::libraryPaths();
+    {
+        char *argv = 0;
+        track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
+		IPCService_QtTestApplication tester(IPCService_QtTestApplication::e_handleServiceEventsOnlyWithNoResponse,
+        	pTrackDBTest->execPath(), 0, &argv);
+        tester.exec();
+        ASSERT_FALSE(tester.isError());
+    }
+    QApplication::setLibraryPaths(libPaths);
+    clearIPCServiceTestEnv();
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(IPCService,sendEventsToClientWithResponse)
+{
+	clearIPCServiceTestEnv();
+    QStringList libPaths = QApplication::libraryPaths();
+    {
+        char *argv = 0;
+        track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
+		IPCService_QtTestApplication tester(IPCService_QtTestApplication::e_sendEventsToClientWithResponse,
+        	pTrackDBTest->execPath(), 0, &argv);
+        tester.exec();
+        ASSERT_FALSE(tester.isError());
+    }
+    QApplication::setLibraryPaths(libPaths);
+    clearIPCServiceTestEnv();
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(IPCService,sendAndReceiveEventsWithNoResponse)
+{
+	clearIPCServiceTestEnv();
+    QStringList libPaths = QApplication::libraryPaths();
+    {
+        char *argv = 0;
+        track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
+		IPCService_QtTestApplication tester(IPCService_QtTestApplication::e_sendAndReceiveEventsWithNoResponse,
+        	pTrackDBTest->execPath(), 0, &argv);
+        tester.exec();
+        ASSERT_FALSE(tester.isError());
+    }
+    QApplication::setLibraryPaths(libPaths);
+    clearIPCServiceTestEnv();
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(IPCService,sendAndReceiveEventsWithResponse)
+{
+	clearIPCServiceTestEnv();
+    QStringList libPaths = QApplication::libraryPaths();
+    {
+        char *argv = 0;
+        track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
+		IPCService_QtTestApplication tester(IPCService_QtTestApplication::e_sendAndReceiveEventsWithResponse,
+        	pTrackDBTest->execPath(), 0, &argv);
+        tester.exec();
+        ASSERT_FALSE(tester.isError());
+    }
+    QApplication::setLibraryPaths(libPaths);
+    clearIPCServiceTestEnv();
+}
+
+//-------------------------------------------------------------------------------------------

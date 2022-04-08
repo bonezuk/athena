@@ -74,6 +74,23 @@ TEST(TrackDBTestEnviroment,buildTestDB)
 
 //-------------------------------------------------------------------------------------------
 
+bool setSpawnICSProcess(int argc, char **argv)
+{
+	bool spawn = true;
+	
+	for(int i = 1; i < argc && spawn; i++)
+	{
+		QString a = QString::fromUtf8(argv[i]);
+		if(a.toLower().trimmed() == "--no-spawn")
+		{
+			spawn = false;
+		}
+	}
+	return spawn;
+}
+
+//-------------------------------------------------------------------------------------------
+
 int main(int argc,char **argv)
 {
 #if defined(Q_OS_MAC)
@@ -145,6 +162,7 @@ int main(int argc,char **argv)
 	
 	orcus::track::model::TrackDBTestEnviroment *pTrackDBTest = orcus::track::model::TrackDBTestEnviroment::instance();
 	pTrackDBTest->setExecPath(QString::fromUtf8(argv[0]));
+	pTrackDBTest->setSpawnICSProcess(setSpawnICSProcess(argc, argv));
 	
 	return RUN_ALL_TESTS();
 }

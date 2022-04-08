@@ -18,12 +18,10 @@ class PLAYERCOMMON_EXPORT IPCInterfaceBase
 		IPCInterfaceBase(const QString& serviceName);
 		virtual ~IPCInterfaceBase();
 		
-		virtual void setNoTimeout(bool isTimeout);
-		
 	protected:
 		QString m_serviceName;
 		QSharedPointer<IPCSocketComms> m_pIPCComms;
-		bool m_isTimeout;
+		bool m_recursive;
 	
 		virtual void printError(const char *strR, const char *strE) const;
 		

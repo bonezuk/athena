@@ -38,6 +38,7 @@ class IPCProgBInterface : public IPCInterfaceBase
 		
 		virtual bool isError() const;
 		virtual void onClientTime(tfloat64 val);
+		virtual tfloat64 onClientResponse(tfloat64 val, int& count);
 		
 	protected:
 		mutable bool m_isError;
@@ -56,6 +57,10 @@ class IPCService_QtTestApplication : public QCoreApplication
 		{
 			e_handleServiceEventsOnlyWithNoResponse = 1,
 			e_sendEventsToClientWithNoResponse = 2,
+			e_handleServiceEventsOnlyWithResponse = 3,
+			e_sendEventsToClientWithResponse = 4,
+			e_sendAndReceiveEventsWithNoResponse = 5,
+			e_sendAndReceiveEventsWithResponse = 6
 		} TestType;
 		
 	public:
@@ -76,12 +81,20 @@ class IPCService_QtTestApplication : public QCoreApplication
 		virtual bool isClientService();
 		virtual bool startProgBInterface();
 		virtual void stopProgBInterface();
+		virtual bool startProgBProcess(QProcess **pProcessA);
+		virtual void stopProgBProcess(QProcess *processA);
 		virtual void runProcessTest(IPCTestService *service);
 		virtual void handleServiceEventsOnlyWithNoResponse(IPCTestService *service);
 		virtual void sendEventsToClientWithNoResponse();
+		virtual void handleServiceEventsOnlyWithResponse(IPCTestService *service);
+		virtual void sendEventsToClientWithResponse();
+		virtual void sendAndReceiveEventsWithNoResponse(IPCTestService *service);
+		virtual void sendAndReceiveEventsWithResponse(IPCTestService *service);
+		
 	private slots:
 		virtual void onRunTest();
 		virtual void onSendClientTimeEvent();
+		virtual void onSendClientResponseEvent();
 };
 
 //-------------------------------------------------------------------------------------------

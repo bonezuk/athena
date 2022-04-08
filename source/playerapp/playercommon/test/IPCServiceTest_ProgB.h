@@ -18,6 +18,7 @@ class ProgBInterface : public IPCInterfaceBase
 		
 		virtual bool isError() const;
 		virtual void onTime(tfloat64 val);
+		virtual tfloat64 onResponse(tfloat64 val, int& count);
 		
 	protected:
 		mutable bool m_isError;
@@ -63,12 +64,25 @@ class IPCServiceTestProgB : public QCoreApplication
 		ProgBInterface *m_pInterface;
 		
 		virtual void printError(const tchar *strR, const tchar *strE) const;
+		
+		virtual bool isService() const;
+		virtual bool isClientInterface() const;
+		virtual bool startServiceAsRequired(IPCProgBService **pService);
+		virtual void stopService(IPCProgBService *service);
+		virtual void waitForClientInterface();
+		virtual void stopClientInterface();
+
 		virtual void runOnTimeEventsOnly();
-		virtual void runServiceForTimeClientEventsOnly();
+		virtual void runServiceForTimeClientEventsOnly(IPCProgBService *service);
+		virtual void runOnTimeEventsWithResponse();
+		virtual void runServiceForResponseClientEventsOnly(IPCProgBService *service);
+		virtual void runSendAndReceiveEventsWithNoResponse(IPCProgBService *service);
+		virtual void runSendAndReceiveEventsWithResponse(IPCProgBService *service);
 		
 	private slots:
 		virtual void onRunTest();
 		virtual void onTimeEvent();
+		virtual void onTimeResponseEvent();
 };
 
 //-------------------------------------------------------------------------------------------

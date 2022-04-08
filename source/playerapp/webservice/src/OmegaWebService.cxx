@@ -107,7 +107,6 @@ void OmegaWebService::onStartService()
 					m_webServer->connect("/startplayback",this,SLOT(onStartPlayback(network::http::HTTPReceive *)));
 					
 					m_pWebInterface = QSharedPointer<OmegaPLWebInterface>(new OmegaPLWebInterface());
-					m_pWebInterface->setNoTimeout(true);
 					
 					QString successMsg = QString("Web service successfully started on port=%1").arg(c_serverPort);
 					common::Log::g_Log << successMsg << common::c_endl;

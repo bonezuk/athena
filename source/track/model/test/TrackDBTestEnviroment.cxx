@@ -39,6 +39,7 @@ TrackDBTestEnviroment::TrackDBTestEnviroment()
 		engine::whiteomega::WhiteCodecInitialize::start();
 		
 		m_execPath = "";
+		m_spawnICSProcess = true;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -78,6 +79,20 @@ void TrackDBTestEnviroment::setExecPath(const QString &path)
 const QString& TrackDBTestEnviroment::execPath() const
 {
 	return m_execPath;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TrackDBTestEnviroment::setSpawnICSProcess(bool flag)
+{
+	m_spawnICSProcess = flag;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool TrackDBTestEnviroment::spawnICSProcess() const
+{
+	return m_spawnICSProcess;
 }
 
 //-------------------------------------------------------------------------------------------

@@ -37,6 +37,8 @@ class TrackDBTestEnviroment
 		
 		void setExecPath(const QString &path);
 		const QString& execPath() const;
+		void setSpawnICSProcess(bool flag);
+		bool spawnICSProcess() const;
 
 	protected:
 
@@ -52,6 +54,7 @@ class TrackDBTestEnviroment
 		HMODULE m_RTPsilverOmegaDLL;
 #endif
 		QString m_execPath;
+		bool m_spawnICSProcess;
 
 		TrackDBTestEnviroment();
 
