@@ -68,6 +68,7 @@ void IPCService::processRPC(QByteArray rpcArray)
 	QJsonDocument doc = QJsonDocument::fromJson(rpcArray, &jsonErr);
 	if(!doc.isNull())
 	{
+		common::Log::g_Log << QString::fromUtf8(rpcArray) << common::c_endl;
 		handleRPCJson(doc);
 	}
 	else

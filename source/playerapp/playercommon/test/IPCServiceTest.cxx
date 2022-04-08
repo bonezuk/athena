@@ -45,6 +45,8 @@ int IPCTestService::timeEventCounter() const
 
 void IPCTestService::handleRPCJson(const QJsonDocument& doc)
 {
+	common::Log::g_Log << "A - handle -  " << QString::fromUtf8(doc.toJson(QJsonDocument::Compact)) << common::c_endl;
+
 	if(doc.isObject())
 	{
 		QJsonObject json = doc.object();
@@ -70,6 +72,7 @@ void IPCTestService::handleRPCJson(const QJsonDocument& doc)
 				QJsonDocument respDoc;
 				sMap.insert("count", QVariant(count));
 				sMap.insert("value", QVariant(v));
+				common::Log::g_Log.print("A - onResponse - count=%d, value=%.8f\n", count, v);
 				respDoc.setObject(QJsonObject::fromVariantMap(sMap));
 				QByteArray rArr = respDoc.toJson(QJsonDocument::Compact);
 				m_pServiceThread->postResponse(rArr);
@@ -125,6 +128,8 @@ void IPCProgBInterface::onClientTime(tfloat64 val)
 {
 	QVariantMap rpcMap;
 	common::TimeStamp tStamp(val);
+	
+	common::Log::g_Log.print("A - onClientTime - timestamp=%.8f\n", static_cast<tfloat64>(tStamp));
 	rpcMap.insert("timestamp", QVariant(static_cast<tfloat64>(tStamp)));
 	if(!sendRPCCall("onClientTime", rpcMap))
 	{
@@ -138,12 +143,16 @@ tfloat64 IPCProgBInterface::onClientResponse(tfloat64 val, int& count)
 {
 	tfloat64 res = 0.0;
 	QVariantMap rpcMap;
+	
+	common::Log::g_Log.print("A - onClientResponse - value=%.8f\n", val);
 	rpcMap.insert("value", QVariant(val));
 	if(sendRPCCall("onClientResponse", rpcMap))
 	{
 		QJsonDocument doc = receiveJsonReply();
 		if(doc.isObject())
 		{
+			common::Log::g_Log << "A - onClientResponse - " << QString::fromUtf8(doc.toJson(QJsonDocument::Compact)) << common::c_endl;
+		
 			QJsonValue countJ = doc.object().value("count");
 			QJsonValue valueJ = doc.object().value("value");
 			if(countJ.isDouble() && valueJ.isDouble())

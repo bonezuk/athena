@@ -47,6 +47,8 @@ int IPCProgBService::timeEventCounter() const
 
 void IPCProgBService::handleRPCJson(const QJsonDocument& doc)
 {
+	common::Log::g_Log << "B - handle -  " << QString::fromUtf8(doc.toJson(QJsonDocument::Compact)) << common::c_endl;
+
 	if(doc.isObject())
 	{
 		QJsonObject json = doc.object();
@@ -71,6 +73,7 @@ void IPCProgBService::handleRPCJson(const QJsonDocument& doc)
 				QJsonDocument respDoc;
 				sMap.insert("count", QVariant(count));
 				sMap.insert("value", QVariant(v));
+				common::Log::g_Log.print("B - onClientResponse - count=%d, value=%.8f\n", count, v);
 				respDoc.setObject(QJsonObject::fromVariantMap(sMap));
 				QByteArray rArr = respDoc.toJson(QJsonDocument::Compact);
 				m_pServiceThread->postResponse(rArr);
@@ -126,6 +129,7 @@ void ProgBInterface::onTime(tfloat64 val)
 {
 	QVariantMap rpcMap;
 	common::TimeStamp tStamp(val);
+	common::Log::g_Log.print("B - onTime - timestamp=%.8f\n", static_cast<tfloat64>(tStamp));
 	rpcMap.insert("timestamp", QVariant(static_cast<tfloat64>(tStamp)));
 	if(!sendRPCCall("onTime", rpcMap))
 	{
@@ -139,18 +143,22 @@ tfloat64 ProgBInterface::onResponse(tfloat64 val, int& count)
 {
 	tfloat64 res = 0.0;
 	QVariantMap rpcMap;
+	
+	common::Log::g_Log.print("B - onResponse - value=%.8f\n", val);
 	rpcMap.insert("value", QVariant(val));
 	if(sendRPCCall("onResponse", rpcMap))
 	{
 		QJsonDocument doc = receiveJsonReply();
 		if(doc.isObject())
 		{
+			common::Log::g_Log << "B - onResponse - " << QString::fromUtf8(doc.toJson(QJsonDocument::Compact)) << common::c_endl;
+		
 			QJsonValue countJ = doc.object().value("count");
 			QJsonValue valueJ = doc.object().value("value");
 			if(countJ.isDouble() && valueJ.isDouble())
 			{
 				count = countJ.toInt();
-				res = countJ.toDouble();
+				res = valueJ.toDouble();
 			}
 			else
 			{
@@ -186,7 +194,9 @@ IPCServiceTestProgB::IPCServiceTestProgB(int testNo, int argc,char **argv) : QCo
 //-------------------------------------------------------------------------------------------
 
 IPCServiceTestProgB::~IPCServiceTestProgB()
-{}
+{
+	IPCServiceTestProgB::stopClientInterface();
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -507,8 +517,6 @@ void IPCServiceTestProgB::onRunTest()
 			QString err = QString("Unknown test number %1").arg(m_testNo);
 			printError("onRunTest", err.toUtf8().constData());
 		}
-		
-		stopClientInterface();
 	}
 	else
 	{

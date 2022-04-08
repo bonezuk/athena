@@ -140,7 +140,9 @@ QJsonDocument IPCInterfaceBase::receiveJsonReply()
 		printError("sendRPCCall", "Recursive call into interface");
 		return doc;
 	}
-
+	
+	common::Log::g_Log << "receiveJsonReply - a" << common::c_endl;
+	
 	m_recursive = true;
 	pComms = getIPCComms();
 	if(!pComms.isNull())
@@ -174,12 +176,17 @@ QJsonDocument IPCInterfaceBase::receiveJsonReply()
 				isDone = true;
 			}
 		}
+		
+		common::Log::g_Log << "receiveJsonReply - " << QString::fromUtf8(doc.toJson(QJsonDocument::Compact)) << common::c_endl;
 	}
 	else
 	{
 		printError("receiveJsonReply", "Cannot get IPC socket interface");
 	}
 	m_recursive = false;
+	
+	common::Log::g_Log << "receiveJsonReply - b" << common::c_endl;
+	
 	return doc;
 }
 
