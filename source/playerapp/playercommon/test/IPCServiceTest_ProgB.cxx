@@ -572,6 +572,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	setupPlatform();
 	cleanEnv();
 
 	int testNo = atoi(argv[1]);

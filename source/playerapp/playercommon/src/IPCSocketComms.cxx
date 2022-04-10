@@ -10,7 +10,8 @@ IPCSocketComms::IPCSocketComms(Type type, QObject *parent) : QObject(parent),
 	m_socketPath(),
 	m_socket(network::c_invalidSocket),
 	m_clientSocket(network::c_invalidSocket),
-	m_timeout(c_timeoutDefault),
+	m_timeoutRead(c_timeoutDefault),
+	m_timeoutWrite(c_timeoutDefault),
 	m_isTimeout(true)
 {}
 
@@ -37,16 +38,30 @@ const IPCSocketComms::Type& IPCSocketComms::type() const
 
 //-------------------------------------------------------------------------------------------
 
-const common::TimeStamp& IPCSocketComms::timeout() const
+const common::TimeStamp& IPCSocketComms::timeoutRead() const
 {
-	return m_timeout;
+	return m_timeoutRead;
 }
 
 //-------------------------------------------------------------------------------------------
 
-void IPCSocketComms::setTimeout(const common::TimeStamp& t)
+void IPCSocketComms::setReadTimeout(const common::TimeStamp& t)
 {
-	m_timeout = t;
+	m_timeoutRead = t;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const common::TimeStamp& IPCSocketComms::timeoutWrite() const
+{
+	return m_timeoutWrite;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void IPCSocketComms::setWriteTimeout(const common::TimeStamp& t)
+{
+	m_timeoutWrite = t;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -329,8 +344,8 @@ network::socket_type IPCSocketComms::getClientConnection()
 			
 			FD_ZERO(&set);
 			FD_SET(m_socket, &set);
-			tv.tv_sec = m_timeout.secondsTotal();
-			tv.tv_usec = m_timeout.microsecond();
+			tv.tv_sec = m_timeoutRead.secondsTotal();
+			tv.tv_usec = m_timeoutRead.microsecond();
 
 			if(!m_isTimeout)
 			{
@@ -387,13 +402,14 @@ bool IPCSocketComms::canDoSocketIO(network::socket_type s, bool isRead) const
 
 	FD_ZERO(&set);
 	FD_SET(s, &set);
-	tv.tv_sec = m_timeout.secondsTotal();
-	tv.tv_usec = m_timeout.microsecond();
 	
 	if(isRead)
 	{
-		if(m_isTimeout)
+		if(m_isTimeout && !m_isMessage)
 		{
+			tv.tv_sec = m_timeoutRead.secondsTotal();
+			tv.tv_usec = m_timeoutRead.microsecond();
+
 			res = ::select(s + 1, &set, 0, 0, &tv);
 		}
 		else
@@ -403,8 +419,11 @@ bool IPCSocketComms::canDoSocketIO(network::socket_type s, bool isRead) const
 	}
 	else
 	{
-		if(m_isTimeout)
+		if(m_isTimeout && !m_isMessage)
 		{
+			tv.tv_sec = m_timeoutWrite.secondsTotal();
+			tv.tv_usec = m_timeoutWrite.microsecond();
+
 			res = ::select(s + 1, 0, &set, 0, &tv);
 		}
 		else
@@ -418,7 +437,8 @@ bool IPCSocketComms::canDoSocketIO(network::socket_type s, bool isRead) const
 	}
 	else if(res < 0)
 	{
-		QString err = QString("Error waiting to read from socket. %1").arg(::strerror(errno));
+		QString err = QString("Error waiting to %1 socket. %2")
+				.arg(QString::fromUtf8(isRead ? "read from" : "write to")).arg(::strerror(errno));
 		printError("canReadFromSocket", err.toUtf8().constData());
 	}
 	return false;
@@ -656,16 +676,18 @@ int IPCSocketComms::writeToSocket(network::socket_type s, const uint8_t *data, i
 
 	for(pos = 0; pos < len;)
 	{
-		res = ::write(s, &data[pos], len - pos);
-		if(res > 0)
+		res = ::send(s, &data[pos], len - pos, 0);
+		if(res >= 0)
 		{
 			pos += res;
 		}
+/*
 		else if(res == 0)
 		{
 			isEof = true;
 			return pos;
 		}
+*/
 		else
 		{
 			if(errno == EAGAIN || errno == EWOULDBLOCK)
@@ -727,7 +749,13 @@ int IPCSocketComms::doWrite(const QByteArray& arr)
 			printError("write", "No UNIX domain socket open to write to");
 			return -1;
 		}
-		
+		if(!canDoSocketIO(s, false))
+		{
+			printError("write", "Timeout waiting to write to socket");
+			return 0;
+		}
+
+		m_isMessage = true;
 		if(writeMessageHeader(s, static_cast<tint32>(arr.size()), isEof))
 		{
 			if(writeToSocket(s, reinterpret_cast<const uint8_t *>(arr.constData()), arr.size(), isEof) == arr.size())
@@ -743,6 +771,7 @@ int IPCSocketComms::doWrite(const QByteArray& arr)
 		{
 			printError("write", "Failed to write message header");
 		}
+		m_isMessage = false;
 		
 		if(isEof)
 		{

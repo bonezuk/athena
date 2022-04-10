@@ -42,7 +42,7 @@ QSharedPointer<IPCSocketComms> IPCInterfaceBase::getIPCComms()
 			if(pComms->open(socketPath))
 			{
 				common::TimeStamp timeOut = 0.01;
-				pComms->setTimeout(timeOut);
+				pComms->setReadTimeout(timeOut);
 				m_pIPCComms = pComms;
 			}
 			else

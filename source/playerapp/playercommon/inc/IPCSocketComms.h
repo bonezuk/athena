@@ -26,30 +26,34 @@ class PLAYERCOMMON_EXPORT IPCSocketComms : public QObject
 		
 		// Set socket up such that only one client can connect at any given time
 		const int c_maxBacklog = 1;
-		const tfloat64 c_timeoutDefault = 1.0;
+		const tfloat64 c_timeoutDefault = 0.2;
 		
 	public:
 		IPCSocketComms(Type type, QObject *parent = 0);
 		virtual ~IPCSocketComms();
 		
-		bool open(const QString& socketPath);
-		void close();
+		virtual bool open(const QString& socketPath);
+		virtual void close();
 		
-		int read(QByteArray& arr);
-		int write(const QByteArray& arr);
+		virtual int read(QByteArray& arr);
+		virtual int write(const QByteArray& arr);
 		
-		const Type& type() const;
-		const common::TimeStamp& timeout() const;
-		void setTimeout(const common::TimeStamp& t);
-		void setNoTimeout(bool isTimeout);
+		virtual const Type& type() const;
+		virtual const common::TimeStamp& timeoutRead() const;
+		virtual void setReadTimeout(const common::TimeStamp& t);
+		virtual const common::TimeStamp& timeoutWrite() const;
+		virtual void setWriteTimeout(const common::TimeStamp& t);
+		virtual void setNoTimeout(bool isTimeout);
 		
 	private:
 		Type m_type;
 		QString m_socketPath;
 		network::socket_type m_socket;
 		network::socket_type m_clientSocket;
-		common::TimeStamp m_timeout;
+		common::TimeStamp m_timeoutRead;
+		common::TimeStamp m_timeoutWrite;
 		bool m_isTimeout;
+		bool m_isMessage;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		virtual bool removePreviousSocket(const QString& socketPath);

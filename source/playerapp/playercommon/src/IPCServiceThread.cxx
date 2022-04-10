@@ -33,10 +33,13 @@ bool IPCServiceThread::startService()
 	QSharedPointer<IPCSocketComms> pComms(new IPCSocketComms(IPCSocketComms::e_Server));
 	bool res = false;
 	
+	common::Log::g_Log << "Start service" << common::c_endl;
 	if(pComms->open(socketPath))
 	{
 		common::TimeStamp timeOut(0.2);
-		pComms->setTimeout(timeOut);
+		pComms->setReadTimeout(timeOut);
+		timeOut = 1.0;
+		pComms->setWriteTimeout(timeOut);
 		m_pComms = pComms;
 		m_running = true;
 		start();
@@ -54,6 +57,7 @@ bool IPCServiceThread::startService()
 
 void IPCServiceThread::stopService()
 {
+	common::Log::g_Log << "Stop service" << common::c_endl;
 	m_running = false;
 	while(isRunning())
 	{
@@ -74,12 +78,13 @@ void IPCServiceThread::run()
 	int res;
 	QByteArray inArr;
 	
+	common::Log::g_Log << "Service thread started" << common::c_endl;
 	while(m_running)
 	{
 		res = m_pComms->read(inArr);
 		if(res > 0)
 		{
-			// common::Log::g_Log << "server - " << QString::fromUtf8(inArr) << common::c_endl;
+			common::Log::g_Log << "server - " << QString::fromUtf8(inArr) << common::c_endl;
 			
 			emit onProcessRPC(inArr);
 			writeResponse();
@@ -88,6 +93,7 @@ void IPCServiceThread::run()
 		{
 			printError("run", "Error reading from socket");
 		}
+		common::Log::g_Log << "Service tick" << common::c_endl;
 	}
 }
 
@@ -104,19 +110,26 @@ void IPCServiceThread::postResponse(const QByteArray& arr)
 
 void IPCServiceThread::writeResponse()
 {
+	QList<QByteArray> wList;
 	int res;
 	
 	m_responseMutex.lock();
 	while(!m_responseList.isEmpty())
 	{
 		QByteArray arr = m_responseList.takeFirst();
+		wList.append(arr);
+	}
+	m_responseMutex.unlock();
+
+	while(!wList.isEmpty())
+	{
+		QByteArray arr = wList.takeFirst();
 		res = m_pComms->write(arr);
 		if(res != arr.size())
 		{
 			printError("writeResponse", "Error writing response to socket");
 		}
 	}
-	m_responseMutex.unlock();
 }
 
 //-------------------------------------------------------------------------------------------
