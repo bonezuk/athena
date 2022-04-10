@@ -21,10 +21,8 @@ class OmegaPLService : public IPCService
 
 	private:
 		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
-		IPCServiceThread *m_pServiceThread;
-		
+
 		virtual void printError(const char *strR, const char *strE) const;
-		
 		virtual void handleRPCJson(const QJsonDocument& doc);
 };
 

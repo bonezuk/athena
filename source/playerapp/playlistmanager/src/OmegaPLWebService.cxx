@@ -37,14 +37,14 @@ void OmegaPLWebService::handleRPCJson(const QJsonDocument& doc)
 				int len = m_pPLWebInterface->playlistSize();
 				QJsonDocument doc = m_pPLWebInterface->playlistAsJson(0, len);
 				QByteArray repArr = doc.toJson(QJsonDocument::Compact);
-				m_pServiceThread->postResponse(repArr);
+				m_pServiceHandler->postResponse(repArr);
 			}
 			// { "function": "getPlaybackState" }
 			else if(funcName == "getPlaybackState")
 			{
 				QJsonDocument doc = m_pPLWebInterface->getPlaybackState();
 				QByteArray repArr = doc.toJson(QJsonDocument::Compact);
-				m_pServiceThread->postResponse(repArr);
+				m_pServiceHandler->postResponse(repArr);
 			}
 			// { "function": "onPressPlay" }
 			else if(funcName == "onPressPlay")

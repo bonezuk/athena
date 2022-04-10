@@ -25,7 +25,7 @@ class PLAYERCOMMON_EXPORT IPCService : public QObject
 		
 	protected:
 		QString m_serviceName;
-		IPCServiceThread *m_pServiceThread;
+		QSharedPointer<IPCServiceHandler> m_pServiceHandler;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		

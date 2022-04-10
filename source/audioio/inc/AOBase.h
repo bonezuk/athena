@@ -903,7 +903,7 @@ ABSTRACT_FACTORY_CLASS(AUDIOIO_EXPORT,AOFactory,AOBase)
 
 //-------------------------------------------------------------------------------------------
 
-class AudioThread : public QThread
+class AUDIOIO_EXPORT AudioThread : public QThread
 {
 	public:
 		Q_OBJECT

@@ -75,7 +75,7 @@ void IPCTestService::handleRPCJson(const QJsonDocument& doc)
 				common::Log::g_Log.print("A - onResponse - count=%d, value=%.8f\n", count, v);
 				respDoc.setObject(QJsonObject::fromVariantMap(sMap));
 				QByteArray rArr = respDoc.toJson(QJsonDocument::Compact);
-				m_pServiceThread->postResponse(rArr);
+				m_pServiceHandler->postResponse(rArr);
 			}
 			else
 			{

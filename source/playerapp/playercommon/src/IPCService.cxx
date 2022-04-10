@@ -7,7 +7,7 @@ namespace orcus
 
 IPCService::IPCService(const char *serviceName, QObject *parent) : QObject(parent),
 	m_serviceName(QString::fromLatin1(serviceName)),
-	m_pServiceThread(0)
+	m_pServiceHandler()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -32,10 +32,10 @@ bool IPCService::start()
 	
 	stop();
 	
-	m_pServiceThread = new IPCServiceThread(m_serviceName);
-	QObject::connect(m_pServiceThread, SIGNAL(onProcessRPC(QByteArray)), this, SLOT(processRPC(QByteArray)), Qt::BlockingQueuedConnection);
-	if(m_pServiceThread->startService())
+	m_pServiceHandler = IPCServiceHandler::instance(m_serviceName);
+	if(!m_pServiceHandler.isNull())
 	{
+		QObject::connect(m_pServiceHandler.get(), SIGNAL(onProcessRPC(QByteArray)), this, SLOT(processRPC(QByteArray)));
 		res = true;
 	}
 	else
@@ -49,12 +49,11 @@ bool IPCService::start()
 
 void IPCService::stop()
 {
-	if(m_pServiceThread != 0)
+	if(!m_pServiceHandler.isNull())
 	{
-		QObject::disconnect(m_pServiceThread, SIGNAL(onProcessRPC(QByteArray)), this, SLOT(processRPC(QByteArray)));
-		m_pServiceThread->stopService();
-		delete m_pServiceThread;
-		m_pServiceThread = 0;
+		QObject::disconnect(m_pServiceHandler.get(), SIGNAL(onProcessRPC(QByteArray)), this, SLOT(processRPC(QByteArray)));
+		m_pServiceHandler->release();
+		m_pServiceHandler.clear();
 	}
 }
 		
@@ -70,6 +69,7 @@ void IPCService::processRPC(QByteArray rpcArray)
 	{
 		common::Log::g_Log << QString::fromUtf8(rpcArray) << common::c_endl;
 		handleRPCJson(doc);
+		m_pServiceHandler->wakeupIfNoResponse();
 	}
 	else
 	{

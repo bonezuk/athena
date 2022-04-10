@@ -230,6 +230,7 @@ template <typename X> void ServiceEventThread<X>::run()
 	bool startFlag;
 
 	startFlag = startService();
+	QThread::yieldCurrentThread();
 	m_condition.wakeAll();
 	if(startFlag)
 	{
