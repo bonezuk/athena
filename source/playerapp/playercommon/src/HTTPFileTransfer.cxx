@@ -1,4 +1,4 @@
-#include "playerapp/webservice/inc/HTTPFileTransfer.h"
+#include "playerapp/playercommon/inc/HTTPFileTransfer.h"
 #include "common/inc/BIOStream.h"
 #include "dlna/inc/DiskIF.h"
 

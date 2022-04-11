@@ -1,26 +1,26 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_PLAYLISTMANAGER_WEBEVENTBUSINTERFACE_H
-#define __PLAYERAPP_PLAYLISTMANAGER_WEBEVENTBUSINTERFACE_H
+#ifndef __PLAYERAPP_PLAYLISTMANAGER_PLAYBACKWEBSTATECTRLPLM_H
+#define __PLAYERAPP_PLAYLISTMANAGER_PLAYBACKWEBSTATECTRLPLM_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
-#include "playerapp/playercommon/inc/WebEventInterface.h"
+#include "playerapp/playercommon/inc/PlaybackWebStateController.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class WebEventBusInterface : public IPCInterfaceBase, public WebEventInterface
+class PlaybackWebStateCtrlPLM : public PlaybackWebStateController
 {
+	Q_OBJECT
 	public:
-		WebEventBusInterface();
-		virtual ~WebEventBusInterface();
+		PlaybackWebStateCtrlPLM(QObject *parent = 0);
+		PlaybackWebStateCtrlPLM(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
+		virtual ~PlaybackWebStateCtrlPLM();
 
 	protected:
 	
-		virtual void printError(const char *strR, const char *strE) const;
-		virtual void sendEvent(const QJsonDocument& doc);
+		virtual void initWebController();
 };
 
 //-------------------------------------------------------------------------------------------

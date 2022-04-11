@@ -1,26 +1,33 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_PLAYLISTMANAGER_WEBEVENTBUSINTERFACE_H
-#define __PLAYERAPP_PLAYLISTMANAGER_WEBEVENTBUSINTERFACE_H
+#ifndef __PLAYERAPP_PLAYERAPP_OMEGAPLWEBHANDLER_H
+#define __PLAYERAPP_PLAYERAPP_OMEGAPLWEBHANDLER_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
-#include "playerapp/playercommon/inc/WebEventInterface.h"
+#include "playerapp/playercommon/inc/OmegaPLWebInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class WebEventBusInterface : public IPCInterfaceBase, public WebEventInterface
+class OmegaPLWebHandler : public OmegaPLWebInterface
 {
 	public:
-		WebEventBusInterface();
-		virtual ~WebEventBusInterface();
-
+		OmegaPLWebInterface(QSharedPointer<OmegaWebInterface>& pPLWebInterface);
+		virtual ~OmegaPLWebInterface();
+		
+		virtual QJsonDocument getFullPlaylist();
+		
+		virtual QJsonDocument getPlaybackState();
+		
+		virtual void onPressPlay();
+		
+		virtual void onStartPlaying(tuint64 id);
+		
 	protected:
+		QSharedPointer<OmegaWebInterface> m_pPLWebInterface;
 	
 		virtual void printError(const char *strR, const char *strE) const;
-		virtual void sendEvent(const QJsonDocument& doc);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -28,3 +35,4 @@ class WebEventBusInterface : public IPCInterfaceBase, public WebEventInterface
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
+

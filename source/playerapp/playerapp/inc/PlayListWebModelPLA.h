@@ -1,32 +1,24 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_WEBSERVICE_HTTPEVENTBROKER_H
-#define __PLAYERAPP_WEBSERVICE_HTTPEVENTBROKER_H
+#ifndef __PLAYERAPP_PLAYERAPP_PLAYLISTWEBMODELPLA_H
+#define __PLAYERAPP_PLAYERAPP_PLAYLISTWEBMODELPLA_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/webservice/inc/HTTPFileTransfer.h"
-
-#include <QJsonDocument>
+#include "playerapp/playercommon/inc/PlayListWebModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class HTTPEventBroker
+class PlayListWebModelPLA : public PlayListWebModel, public OmegaWebInterface
 {
+	Q_OBJECT
 	public:
-		HTTPEventBroker();
-		virtual ~HTTPEventBroker();
+		PlayListWebModelPLA(QObject *parent = 0);
+		PlayListWebModelPLA(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
+		virtual ~PlayListWebModelPLA();
 		
-		virtual bool registerConnection(network::http::HTTPReceive *recieve);
-		
-		virtual void postEvent(const QJsonDocument& data);
-		
-	private:
-		int m_nextID;
-		QList<network::http::HTTPReceive *> m_connections;
-	
-		virtual void printError(const char *strR, const char *strE) const;
+		virtual void initialise();
 };
 
 //-------------------------------------------------------------------------------------------
@@ -34,4 +26,3 @@ class HTTPEventBroker
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
-

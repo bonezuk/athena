@@ -1,3 +1,4 @@
+#include "playerapp/playlistmanager/inc/PlaybackWebStateCtrlPLM.h"
 #include "playerapp/playlistmanager/inc/WebEventBusInterface.h"
 
 //-------------------------------------------------------------------------------------------
@@ -5,41 +6,24 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-WebEventBusInterface::WebEventBusInterface() : IPCInterfaceBase(QString::fromUtf8(OMEGAWEBEVENT_SERVICE_NAME))
+PlaybackWebStateCtrlPLM::PlaybackWebStateCtrlPLM(QObject *parent) : PlaybackWebStateController(parent)
 {}
 
 //-------------------------------------------------------------------------------------------
 
-WebEventBusInterface::~WebEventBusInterface()
+PlaybackWebStateCtrlPLM::PlaybackWebStateCtrlPLM(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : PlaybackWebStateController(pAudioInterface, parent)
 {}
 
 //-------------------------------------------------------------------------------------------
 
-void WebEventBusInterface::printError(const char *strR, const char *strE) const
-{
-	common::Log::g_Log << "WebEventBusInterface::" << strR << " - " << strE << common::c_endl;
-}
+PlaybackWebStateCtrlPLM::~PlaybackWebStateCtrlPLM()
+{}
 
 //-------------------------------------------------------------------------------------------
 
-void WebEventBusInterface::sendEvent(const QJsonDocument& doc)
+void PlaybackWebStateCtrlPLM::initWebController()
 {
-	QSharedPointer<IPCSocketComms> pComms;
-	
-	pComms = getIPCComms();
-	if(!pComms.isNull())
-	{
-		int res = pComms->write(doc.toJson(QJsonDocument::Compact));
-		if(res <= 0)
-		{
-			if(res < 0)
-			{
-				printError("sendEvent", "Error writing JSON event to IPC socket");
-			}
-			pComms->close();
-			m_pIPCComms.clear();
-		}
-	}
+	m_pEventInterface = new WebEventBusInterface();
 }
 
 //-------------------------------------------------------------------------------------------

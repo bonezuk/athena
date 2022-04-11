@@ -1,30 +1,31 @@
-#include "playerapp/webservice/inc/OmegaPLWebInterface.h"
+#include "playerapp/webservice/inc/OmegaPLWebInterfaceWS.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaPLWebInterface::OmegaPLWebInterface() : IPCInterfaceBase(QString::fromLatin1(OMEGAPLWEB_SERVICE_NAME))
+OmegaPLWebInterfaceWS::OmegaPLWebInterfaceWS() : IPCInterfaceBase(QString::fromLatin1(OMEGAPLWEB_SERVICE_NAME)),
+	OmegaPLWebInterface()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-OmegaPLWebInterface::~OmegaPLWebInterface()
+OmegaPLWebInterfaceWS::~OmegaPLWebInterfaceWS()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-void OmegaPLWebInterface::printError(const char *strR, const char *strE) const
+void OmegaPLWebInterfaceWS::printError(const char *strR, const char *strE) const
 {
-	common::Log::g_Log << "OmegaPLWebInterface::" << strR << " - " << strE << common::c_endl;
+	common::Log::g_Log << "OmegaPLWebInterfaceWS::" << strR << " - " << strE << common::c_endl;
 }
 
 //-------------------------------------------------------------------------------------------
 // { "function": "getFullPlaylist" }
 //-------------------------------------------------------------------------------------------
 
-QJsonDocument OmegaPLWebInterface::getFullPlaylist()
+QJsonDocument OmegaPLWebInterfaceWS::getFullPlaylist()
 {
 	QJsonDocument doc;
 	
@@ -39,7 +40,7 @@ QJsonDocument OmegaPLWebInterface::getFullPlaylist()
 // { "function": "getPlaybackState" }
 //-------------------------------------------------------------------------------------------
 
-QJsonDocument OmegaPLWebInterface::getPlaybackState()
+QJsonDocument OmegaPLWebInterfaceWS::getPlaybackState()
 {
 	QJsonDocument doc;
 	
@@ -54,7 +55,7 @@ QJsonDocument OmegaPLWebInterface::getPlaybackState()
 // { "function": "onPressPlay" }
 //-------------------------------------------------------------------------------------------
 
-void OmegaPLWebInterface::onPressPlay()
+void OmegaPLWebInterfaceWS::onPressPlay()
 {
 	sendRPCCall("onPressPlay");
 }
@@ -63,7 +64,7 @@ void OmegaPLWebInterface::onPressPlay()
 // { "function": "onStartPlaying", "id": 12345 }
 //-------------------------------------------------------------------------------------------
 
-void OmegaPLWebInterface::onStartPlaying(tuint64 id)
+void OmegaPLWebInterfaceWS::onStartPlaying(tuint64 id)
 {
 	QVariantMap rpcMap;
 	QString idStr = QString::number(id);

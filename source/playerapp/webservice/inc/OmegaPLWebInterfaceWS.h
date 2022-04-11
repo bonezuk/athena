@@ -1,39 +1,39 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_PLAYERCOMMON_PLAYLISTWEBMODEL_H
-#define __PLAYERAPP_PLAYERCOMMON_PLAYLISTWEBMODEL_H
+#ifndef __PLAYERAPP_WEBSERVICE_OMEGAPLWEBINTERFACEWS_H
+#define __PLAYERAPP_WEBSERVICE_OMEGAPLWEBINTERFACEWS_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/PlayListModel.h"
-#include "playerapp/playercommon/inc/OmegaWebInterface.h"
-#include "common/inc/CommonFunctions.h"
-#include "playerapp/playlistmanager/inc/PlaybackWebStateController.h"
+#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
+#include "playerapp/playercommon/inc/OmegaPLWebInterface.h"
+
+#include <QJsonDocument>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class PlayListWebModel : public PlayListModel, public OmegaWebInterface
+class OmegaPLWebInterfaceWS : public IPCInterfaceBase, public OmegaPLWebInterface
 {
-	Q_OBJECT
 	public:
-		PlayListWebModel(QObject *parent = 0);
-		PlayListWebModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
-		virtual ~PlayListWebModel();
+		OmegaPLWebInterfaceWS();
+		virtual ~OmegaPLWebInterfaceWS();
 		
-		virtual void initialise();
+		// { "function": "getFullPlaylist" }
+		virtual QJsonDocument getFullPlaylist();
 		
-		virtual int playlistSize();
-		virtual QJsonDocument playlistAsJson(int fromIndex, int toIndex);
-		
+		// { "function": "getPlaybackState" }
 		virtual QJsonDocument getPlaybackState();
 		
+		// { "function": "onPressPlay" }
 		virtual void onPressPlay();
+		
+		// { "function": "onStartPlaying", "id": 12345 }
 		virtual void onStartPlaying(tuint64 id);
 		
-	private:
+	protected:
 	
-		virtual QJsonValue playlistItemToJson(int idx);
+		virtual void printError(const char *strR, const char *strE) const;
 };
 
 //-------------------------------------------------------------------------------------------

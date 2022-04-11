@@ -1,4 +1,4 @@
-#include "playerapp/playlistmanager/inc/PlayListWebModel.h"
+#include "playerapp/playercommon/inc/PlayListWebModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -19,14 +19,6 @@ PlayListWebModel::PlayListWebModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& 
 
 PlayListWebModel::~PlayListWebModel()
 {}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayListWebModel::initialise()
-{
-	QSharedPointer<PlaybackWebStateController> plState(new PlaybackWebStateController(m_pAudioInterface, this));
-	m_pPlaybackState = plState.dynamicCast<PlaybackStateController>();
-}
 
 //-------------------------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_WEBSERVICE_HTTPFILETRANSFER_H
-#define __PLAYERAPP_WEBSERVICE_HTTPFILETRANSFER_H
+#ifndef __PLAYERAPP_PLAYERCOMMON_HTTPFILETRANSFER_H
+#define __PLAYERAPP_PLAYERCOMMON_HTTPFILETRANSFER_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -15,7 +15,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class HTTPFileTransfer
+class PLAYERCOMMON_EXPORT HTTPFileTransfer
 {
 	public:
 		HTTPFileTransfer(const QString& rootDir);

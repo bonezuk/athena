@@ -1,38 +1,26 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_WEBSERVICE_OMEGAPLWEBINTERFACE_H
-#define __PLAYERAPP_WEBSERVICE_OMEGAPLWEBINTERFACE_H
+#ifndef __PLAYERAPP_PLAYERAPP_PLAYBACKWEBSTATECTRLPLA_H
+#define __PLAYERAPP_PLAYERAPP_PLAYBACKWEBSTATECTRLPLA_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
-
-#include <QJsonDocument>
+#include "playerapp/playercommon/inc/PlaybackWebStateController.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaPLWebInterface : public IPCInterfaceBase
+class PlaybackWebStateCtrlPLA : public PlaybackWebStateController
 {
+	Q_OBJECT
 	public:
-		OmegaPLWebInterface();
-		virtual ~OmegaPLWebInterface();
-		
-		// { "function": "getFullPlaylist" }
-		QJsonDocument getFullPlaylist();
-		
-		// { "function": "getPlaybackState" }
-		QJsonDocument getPlaybackState();
-		
-		// { "function": "onPressPlay" }
-		void onPressPlay();
-		
-		// { "function": "onStartPlaying", "id": 12345 }
-		void onStartPlaying(tuint64 id);
-		
+		PlaybackWebStateCtrlPLA(QObject *parent = 0);
+		PlaybackWebStateCtrlPLA(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
+		virtual ~PlaybackWebStateCtrlPLA();
+
 	protected:
 	
-		virtual void printError(const char *strR, const char *strE) const;
+		virtual void initWebController();
 };
 
 //-------------------------------------------------------------------------------------------

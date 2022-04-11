@@ -1,4 +1,4 @@
-#include "playerapp/webservice/inc/HTTPEventBroker.h"
+#include "playerapp/playercommon/inc/HTTPEventBroker.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

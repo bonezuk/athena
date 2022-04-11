@@ -1,26 +1,24 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_PLAYLISTMANAGER_WEBEVENTBUSINTERFACE_H
-#define __PLAYERAPP_PLAYLISTMANAGER_WEBEVENTBUSINTERFACE_H
+#ifndef __PLAYERAPP_PLAYLISTMANAGER_PLAYLISTWEBMODELPLM_H
+#define __PLAYERAPP_PLAYLISTMANAGER_PLAYLISTWEBMODELPLM_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
-#include "playerapp/playercommon/inc/WebEventInterface.h"
+#include "playerapp/playercommon/inc/PlayListWebModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class WebEventBusInterface : public IPCInterfaceBase, public WebEventInterface
+class PlayListWebModelPLM : public PlayListWebModel, public OmegaWebInterface
 {
+	Q_OBJECT
 	public:
-		WebEventBusInterface();
-		virtual ~WebEventBusInterface();
-
-	protected:
-	
-		virtual void printError(const char *strR, const char *strE) const;
-		virtual void sendEvent(const QJsonDocument& doc);
+		PlayListWebModelPLM(QObject *parent = 0);
+		PlayListWebModelPLM(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
+		virtual ~PlayListWebModelPLM();
+		
+		virtual void initialise();
 };
 
 //-------------------------------------------------------------------------------------------

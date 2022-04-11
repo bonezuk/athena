@@ -1,10 +1,10 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_PLAYLISTMANAGER_PLAYBACKWEBSTATECONTROLLER_H
-#define __PLAYERAPP_PLAYLISTMANAGER_PLAYBACKWEBSTATECONTROLLER_H
+#ifndef __PLAYERAPP_PLAYERCOMMON_PLAYBACKWEBSTATECONTROLLER_H
+#define __PLAYERAPP_PLAYERCOMMON_PLAYBACKWEBSTATECONTROLLER_H
 //-------------------------------------------------------------------------------------------
 
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
-#include "playerapp/playlistmanager/inc/WebEventBusInterface.h"
+#include "playerapp/playercommon/inc/WebEventInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -19,6 +19,8 @@ class PlaybackWebStateController : public PlaybackStateController
 		PlaybackWebStateController(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlaybackWebStateController();
 		
+		virtual void init();
+		
 		virtual void setTime(quint64 tS);
 
 		virtual void onAudioStart(const QString& fileName);
@@ -28,9 +30,9 @@ class PlaybackWebStateController : public PlaybackStateController
 		
 	protected:
 	
-		WebEventBusInterface *m_pEventInterface;
+		WebEventInterface *m_pEventInterface;
 		
-		virtual void initWebController();
+		virtual void initWebController() = 0;
 };
 
 //-------------------------------------------------------------------------------------------

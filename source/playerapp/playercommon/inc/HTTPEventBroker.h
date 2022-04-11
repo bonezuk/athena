@@ -1,26 +1,32 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_PLAYLISTMANAGER_WEBEVENTBUSINTERFACE_H
-#define __PLAYERAPP_PLAYLISTMANAGER_WEBEVENTBUSINTERFACE_H
+#ifndef __PLAYERAPP_PLAYERCOMMON_HTTPEVENTBROKER_H
+#define __PLAYERAPP_PLAYERCOMMON_HTTPEVENTBROKER_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/IPCInterfaceBase.h"
-#include "playerapp/playercommon/inc/WebEventInterface.h"
+#include "playerapp/playercommon/inc/HTTPFileTransfer.h"
+
+#include <QJsonDocument>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class WebEventBusInterface : public IPCInterfaceBase, public WebEventInterface
+class PLAYERCOMMON_EXPORT HTTPEventBroker
 {
 	public:
-		WebEventBusInterface();
-		virtual ~WebEventBusInterface();
-
-	protected:
+		HTTPEventBroker();
+		virtual ~HTTPEventBroker();
+		
+		virtual bool registerConnection(network::http::HTTPReceive *recieve);
+		
+		virtual void postEvent(const QJsonDocument& data);
+		
+	private:
+		int m_nextID;
+		QList<network::http::HTTPReceive *> m_connections;
 	
 		virtual void printError(const char *strR, const char *strE) const;
-		virtual void sendEvent(const QJsonDocument& doc);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -28,3 +34,4 @@ class WebEventBusInterface : public IPCInterfaceBase, public WebEventInterface
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
+
