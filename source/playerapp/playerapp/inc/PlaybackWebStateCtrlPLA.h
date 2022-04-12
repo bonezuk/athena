@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "playerapp/playercommon/inc/PlaybackWebStateController.h"
+#include "playerapp/playercommon/inc/WebEventRegisterInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

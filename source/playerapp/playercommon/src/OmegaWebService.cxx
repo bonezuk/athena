@@ -8,7 +8,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaWebService::OmegaWebService(const QString& rootDir, int argc, char **argv) : QCoreApplication(argc, argv),
+OmegaWebService::OmegaWebService(const QString& rootDir, QObject *parent) : QObject(parent),
 	m_rootDir(rootDir),
 	m_webService(0),
 	m_webServer(0),
@@ -124,12 +124,8 @@ void OmegaWebService::onStartService()
 
 void OmegaWebService::onStopService()
 {
-	if(!m_pWebEvents.isNull())
-	{
-		m_pWebEvents->stop();
-		m_pWebEvents.clear();
-	}
-
+	stopEvents();
+	
 	network::Controller::ControllerSPtr ctrl(network::Controller::instance());
 	if(m_webService!=0)
 	{

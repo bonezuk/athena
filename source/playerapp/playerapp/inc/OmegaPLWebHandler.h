@@ -3,7 +3,10 @@
 #define __PLAYERAPP_PLAYERAPP_OMEGAPLWEBHANDLER_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/OmegaWebInterface.h"
 #include "playerapp/playercommon/inc/OmegaPLWebInterface.h"
+
+#include <QSharedPointer>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -13,8 +16,8 @@ namespace orcus
 class OmegaPLWebHandler : public OmegaPLWebInterface
 {
 	public:
-		OmegaPLWebInterface(QSharedPointer<OmegaWebInterface>& pPLWebInterface);
-		virtual ~OmegaPLWebInterface();
+		OmegaPLWebHandler(QSharedPointer<OmegaWebInterface>& pPLWebInterface);
+		virtual ~OmegaPLWebHandler();
 		
 		virtual QJsonDocument getFullPlaylist();
 		

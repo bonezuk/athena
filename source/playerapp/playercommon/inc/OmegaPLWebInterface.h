@@ -3,6 +3,8 @@
 #define __PLAYERAPP_PLAYERCOMMON_OMEGAPLWEBINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
+#include "common/inc/Log.h"
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include <QJsonDocument>
 
 //-------------------------------------------------------------------------------------------
@@ -10,7 +12,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaPLWebInterface
+class PLAYERCOMMON_EXPORT OmegaPLWebInterface
 {
 	public:
 		OmegaPLWebInterface();

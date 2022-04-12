@@ -1,4 +1,4 @@
-#include "playerapp/playlistmanager/inc/PlaybackWebStateController.h"
+#include "playerapp/playercommon/inc/PlaybackWebStateController.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

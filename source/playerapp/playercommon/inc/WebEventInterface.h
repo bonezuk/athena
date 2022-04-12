@@ -3,6 +3,7 @@
 #define __PLAYERAPP_PLAYERCOMMON_WEBEVENTINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
+#include "common/inc/Log.h"
 #include "playerapp/playercommon/inc/OmegaWebInterface.h"
 
 //-------------------------------------------------------------------------------------------

@@ -19,7 +19,7 @@ class OmegaWebService : public QObject
 		const int c_serverPort = 5121;
 	
 	public:
-		OmegaWebService(const QString& rootDir);
+		OmegaWebService(const QString& rootDir, QObject *parent = 0);
 		virtual ~OmegaWebService();
 		
 	protected:
@@ -35,6 +35,7 @@ class OmegaWebService : public QObject
 		
 		virtual bool setupWebEvents() = 0;
 		virtual void setupPLWebInterface() = 0;
+		virtual void stopEvents() = 0;
 		
 	protected slots:
 		void onStartService();

@@ -103,11 +103,13 @@ class HTTP_EXPORT HTTPServer : public TCPServerSocket
 		
 		ResourceSlot *m_default;
 		Directory<ResourceSlot *> m_resource;
+		QMap<HTTPReceive *, HTTPConnection *> m_connectionReceiveMap;
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		
 		virtual HTTPReceive *getReceive(const QString& url,HTTPConnection *conn);
-		virtual void freeReceive(HTTPReceive *rec);
+		virtual void freeReceive(HTTPReceive *rec, bool delMap = true);
+		void freeReceivers();
 		
 		virtual TCPConnServerSocket *newIO();
 };

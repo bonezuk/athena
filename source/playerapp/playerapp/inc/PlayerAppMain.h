@@ -33,7 +33,7 @@ class PlayerAppMain : public QGuiApplication
 		
 		virtual bool initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB);
 		virtual QSharedPointer<PlaybackStateController>& getPlaybackState();
-		virtual QSharedPointer<PlayListModel>& getPlayListModel();
+		virtual QSharedPointer<PlayListModel> getPlayListModel();
 		
 	private:
 		QString m_rootDir;

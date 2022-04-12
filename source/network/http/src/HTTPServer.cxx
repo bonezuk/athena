@@ -97,13 +97,16 @@ HTTPServer::ResourceSlot::ResourceSlot() : m_receiver(0),
 
 HTTPServer::HTTPServer(Service *svr,QObject *parent) : TCPServerSocket(svr,parent),
 	m_default(0),
-	m_resource()
+	m_resource(),
+	m_connectionReceiveMap()
 {}
 
 //-------------------------------------------------------------------------------------------
 
 HTTPServer::~HTTPServer()
-{}
+{
+	HTTPServer::freeReceivers();
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -163,6 +166,8 @@ HTTPReceive *HTTPServer::getReceive(const QString& url,HTTPConnection *conn)
 			rcv->connection()->lock();
 		}
 		QObject::connect(rcv,SIGNAL(onReceive(network::http::HTTPReceive *)),rSlot->m_receiver,static_cast<const tchar *>(rSlot->m_method),rSlot->m_type);
+		
+		m_connectionReceiveMap.insert(rcv, conn);
 	}
 	else
 	{
@@ -173,12 +178,22 @@ HTTPReceive *HTTPServer::getReceive(const QString& url,HTTPConnection *conn)
 
 //-------------------------------------------------------------------------------------------
 
-void HTTPServer::freeReceive(HTTPReceive *rec)
+void HTTPServer::freeReceive(HTTPReceive *rec, bool delMap)
 {	
 	if(rec!=0)
 	{
 		QString tail;
+		QMap<HTTPReceive *, HTTPConnection *>::iterator ppI;
 		ResourceSlot *rSlot = m_resource.get(rec->url(),tail);
+		
+		if(delMap)
+		{
+			ppI = m_connectionReceiveMap.find(rec);
+			if(ppI != m_connectionReceiveMap.end())
+			{
+				m_connectionReceiveMap.erase(ppI);
+			}
+		}
 		
 		if(rSlot!=0)
 		{
@@ -190,6 +205,20 @@ void HTTPServer::freeReceive(HTTPReceive *rec)
 		}
 		delete rec;
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void HTTPServer::freeReceivers()
+{
+	QMap<HTTPReceive *, HTTPConnection *>::iterator ppI;
+	
+	for(ppI = m_connectionReceiveMap.begin(); ppI != m_connectionReceiveMap.end(); ppI++)
+	{
+		ppI.value()->releaseReceiver();
+		HTTPServer::freeReceive(ppI.key(), false);
+	}
+	m_connectionReceiveMap.clear();
 }
 
 //-------------------------------------------------------------------------------------------

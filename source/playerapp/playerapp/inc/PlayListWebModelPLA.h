@@ -10,9 +10,8 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class PlayListWebModelPLA : public PlayListWebModel, public OmegaWebInterface
+class PlayListWebModelPLA : public PlayListWebModel
 {
-	Q_OBJECT
 	public:
 		PlayListWebModelPLA(QObject *parent = 0);
 		PlayListWebModelPLA(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);

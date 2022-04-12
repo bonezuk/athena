@@ -29,7 +29,7 @@ void PlaylistManagerApp::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr
 {	
 	m_pPLInterface = QSharedPointer<OmegaPlaylistInterface>(new OmegaPlaylistInterface());
 	QSharedPointer<OmegaAudioInterface> pAInterface(new OmegaAudioBusInterface());
-	m_pModel = QSharedPointer<PlayListWebModel>(new PlayListWebModel(playListDB, pAInterface));
+	m_pModel = QSharedPointer<PlayListWebModelPLM>(new PlayListWebModelPLM(playListDB, pAInterface));
 	m_pModel->initialise();
 	QSharedPointer<PlayListModel> pModelBase = m_pModel.dynamicCast<PlayListModel>();
 	m_pPLInterface->init(pModelBase);
@@ -44,7 +44,7 @@ QSharedPointer<PlaybackStateController>& PlaylistManagerApp::getPlaybackState()
 
 //-------------------------------------------------------------------------------------------
 
-QSharedPointer<PlayListWebModel>& PlaylistManagerApp::getPlayListModel()
+QSharedPointer<PlayListWebModelPLM>& PlaylistManagerApp::getPlayListModel()
 {
 	return m_pModel;
 }

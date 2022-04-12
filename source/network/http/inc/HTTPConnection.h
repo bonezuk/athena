@@ -56,7 +56,9 @@ class HTTP_EXPORT HTTPConnection : public TCPConnServerSocket
 
 		virtual Message *getMessage();
 		virtual int getMessageQueueSize();
-
+		
+		virtual void releaseReceiver();
+		
 	protected:
 		
 		HTTPServer *m_server;

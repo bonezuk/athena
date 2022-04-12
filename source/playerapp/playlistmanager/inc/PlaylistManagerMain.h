@@ -15,7 +15,7 @@
 #include "playerapp/playlistmanager/inc/OmegaPLService.h"
 #include "playerapp/playlistmanager/inc/OmegaAudioBusInterface.h"
 #include "playerapp/playlistmanager/inc/OmegaPLWebService.h"
-#include "playerapp/playlistmanager/inc/PlayListWebModel.h"
+#include "playerapp/playlistmanager/inc/PlayListWebModelPLM.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -32,12 +32,12 @@ class PlaylistManagerApp : public QGuiApplication
 		
 		virtual void initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB);
 		virtual QSharedPointer<PlaybackStateController>& getPlaybackState();
-		virtual QSharedPointer<PlayListWebModel>& getPlayListModel();
+		virtual QSharedPointer<PlayListWebModelPLM>& getPlayListModel();
 		virtual QSharedPointer<OmegaPlaylistInterface>& getPlayListInterface();
 		virtual QSharedPointer<OmegaWebInterface> getWebInterface();
 
 	private:
-		QSharedPointer<PlayListWebModel> m_pModel;
+		QSharedPointer<PlayListWebModelPLM> m_pModel;
 		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
 };
 

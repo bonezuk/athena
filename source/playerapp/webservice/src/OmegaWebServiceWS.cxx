@@ -1,5 +1,6 @@
-#include "playerapp/webservice/inc/OmegaWebService.h"
-#include "playerapp/webservice/inc/OmegaPLWebInterface.h"
+#include "playerapp/webservice/inc/OmegaWebServiceWS.h"
+#include "playerapp/webservice/inc/OmegaWebEventService.h"
+#include "playerapp/webservice/inc/OmegaPLWebInterfaceWS.h"
 
 #include <QFileInfo>
 
@@ -8,7 +9,7 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaWebServiceWS::OmegaWebServiceWS(const QString& rootDir) : OmegaWebServiceWS(rootDir)
+OmegaWebServiceWS::OmegaWebServiceWS(const QString& rootDir) : OmegaWebService(rootDir)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -46,7 +47,20 @@ bool OmegaWebServiceWS::setupWebEvents()
 
 void OmegaWebServiceWS::setupPLWebInterface()
 {
-	m_pWebInterface = QSharedPointer<OmegaPLWebInterface>(new OmegaPLWebInterface());
+	QSharedPointer<OmegaPLWebInterfaceWS> pWebInterface(new OmegaPLWebInterfaceWS());
+	m_pWebInterface = pWebInterface.dynamicCast<OmegaPLWebInterface>();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaWebServiceWS::stopEvents()
+{
+	if(!m_pWebEvents.isNull())
+	{
+		QSharedPointer<OmegaWebEventService> webEvents = m_pWebEvents.dynamicCast<OmegaWebEventService>();
+		webEvents->stop();
+		m_pWebEvents.clear();
+	}
 }
 
 //-------------------------------------------------------------------------------------------

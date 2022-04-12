@@ -4,15 +4,15 @@
 //-------------------------------------------------------------------------------------------
 
 #include "playerapp/playercommon/inc/PlayListWebModel.h"
+#include "playerapp/playercommon/inc/OmegaWebInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class PlayListWebModelPLM : public PlayListWebModel, public OmegaWebInterface
+class PlayListWebModelPLM : public PlayListWebModel
 {
-	Q_OBJECT
 	public:
 		PlayListWebModelPLM(QObject *parent = 0);
 		PlayListWebModelPLM(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);

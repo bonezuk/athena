@@ -19,7 +19,7 @@ class OmegaWebServerMain : public QCoreApplication
 		
 	private:
 		OmegaWebServiceWS *m_webService;
-}
+};
 
 //-------------------------------------------------------------------------------------------
 } // namespace orcus

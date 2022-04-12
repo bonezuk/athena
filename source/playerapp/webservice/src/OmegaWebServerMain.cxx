@@ -9,9 +9,9 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-OmegaWebServerMain::OmegaWebServerMain(const QString& rootDir, int& argc, char **argv)
+OmegaWebServerMain::OmegaWebServerMain(const QString& rootDir, int& argc, char **argv) : QCoreApplication(argc, argv)
 {
-	m_webService = new OmegaWebServiceWS(rootDir;)
+	m_webService = new OmegaWebServiceWS(rootDir);
 }
 
 //-------------------------------------------------------------------------------------------

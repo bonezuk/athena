@@ -11,6 +11,7 @@
 
 #include "playerapp/playercommon/inc/EmbeddedEnv.h"
 #include "playerapp/playerapp/inc/PlayerAppMain.h"
+#include "playerapp/playerapp/inc/PlaybackWebStateCtrlPLA.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
@@ -56,10 +57,11 @@ bool PlayerAppMain::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint
 	// Init playlist model and controller state
 	m_pModel = QSharedPointer<PlayListWebModelPLA>(new PlayListWebModelPLA(playListDB, pAInterface));
 	m_pModel->initialise();
-	plInterface->init(m_pModel.dynamicCast<PlayListModel>());
+	QSharedPointer<PlayListModel> pPLModel = m_pModel.dynamicCast<PlayListModel>();
+	plInterface->init(pPLModel);
 	if(m_pAudioInterface->init())
 	{
-		QSharedPointer<PlaybackWebStateCtrlPLA> pPLStateCtrl = getPlaybackState().dynamicCast<PlaybackWebStateCtrlPLA>();
+		QSharedPointer<PlaybackWebStateCtrlPLA> pPLStateCtrl = m_pModel->playbackState().dynamicCast<PlaybackWebStateCtrlPLA>();
 		QSharedPointer<WebEventRegisterInterface> pEventI = pPLStateCtrl->webEventRegisterInterface();
 		
 		QSharedPointer<OmegaWebInterface> pWebI = m_pModel.dynamicCast<OmegaWebInterface>();
@@ -88,9 +90,10 @@ QSharedPointer<PlaybackStateController>& PlayerAppMain::getPlaybackState()
 
 //-------------------------------------------------------------------------------------------
 
-QSharedPointer<PlayListModel>& PlayerAppMain::getPlayListModel()
+QSharedPointer<PlayListModel> PlayerAppMain::getPlayListModel()
 {
-	return m_pModel;
+	QSharedPointer<PlayListModel> pModel = m_pModel.dynamicCast<PlayListModel>();
+	return pModel;
 }
 
 //-------------------------------------------------------------------------------------------

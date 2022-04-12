@@ -23,7 +23,8 @@ PlaybackWebStateCtrlPLM::~PlaybackWebStateCtrlPLM()
 
 void PlaybackWebStateCtrlPLM::initWebController()
 {
-	m_pEventInterface = new WebEventBusInterface();
+	QSharedPointer<WebEventBusInterface> pEventInterface(new WebEventBusInterface());
+	m_pEventInterface = pEventInterface.dynamicCast<WebEventInterface>();
 }
 
 //-------------------------------------------------------------------------------------------

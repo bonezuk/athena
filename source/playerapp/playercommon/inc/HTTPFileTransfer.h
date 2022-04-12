@@ -9,6 +9,7 @@
 #include "network/http/inc/HTTPServer.h"
 #include "network/http/inc/HTTPConnection.h"
 #include "network/http/inc/HTTPUtilities.h"
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus

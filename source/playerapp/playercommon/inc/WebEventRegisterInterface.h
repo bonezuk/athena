@@ -3,6 +3,7 @@
 #define __PLAYERAPP_PLAYERCOMMON_WEBEVENTREGISTERINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/HTTPFileTransfer.h"
 #include "playerapp/playercommon/inc/OmegaWebInterface.h"
 
 //-------------------------------------------------------------------------------------------

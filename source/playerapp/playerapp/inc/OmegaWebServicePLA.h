@@ -20,6 +20,7 @@ class OmegaWebServicePLA : public OmegaWebService
 		virtual void printError(const tchar *strR, const tchar *strE) const;
 		virtual bool setupWebEvents();
 		virtual void setupPLWebInterface();
+		virtual void stopEvents();
 };
 
 //-------------------------------------------------------------------------------------------

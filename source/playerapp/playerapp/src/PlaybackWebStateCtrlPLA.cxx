@@ -31,7 +31,7 @@ QSharedPointer<WebEventRegisterInterface>& PlaybackWebStateCtrlPLA::webEventRegi
 
 void PlaybackWebStateCtrlPLA::initWebController()
 {
-	QSharedPointer<OmegaWebEventHandler> pEventInterface(new OmegaWebEventHandler())
+	QSharedPointer<OmegaWebEventHandler> pEventInterface(new OmegaWebEventHandler());
 	m_pEventInterface = pEventInterface.dynamicCast<WebEventInterface>();
 	m_webEventRegisterInterface = pEventInterface.dynamicCast<WebEventRegisterInterface>();
 }

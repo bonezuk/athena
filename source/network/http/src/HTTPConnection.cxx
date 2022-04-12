@@ -690,6 +690,13 @@ void HTTPConnection::resetState()
 
 //-------------------------------------------------------------------------------------------
 
+void HTTPConnection::releaseReceiver()
+{
+	m_receiver = 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool HTTPConnection::sendErrorResponse(tint code)
 {
 	QString s;

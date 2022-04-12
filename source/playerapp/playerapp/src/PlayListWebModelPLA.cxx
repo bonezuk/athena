@@ -6,14 +6,12 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-PlayListWebModelPLA::PlayListWebModelPLA(QObject *parent) : PlayListWebModel(parent),
-	OmegaWebInterface()
+PlayListWebModelPLA::PlayListWebModelPLA(QObject *parent) : PlayListWebModel(parent)
 {}
 
 //-------------------------------------------------------------------------------------------
 
-PlayListWebModelPLA::PlayListWebModelPLA(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : PlayListWebModel(playList, pAudioInterface, parent),
-	OmegaWebInterface()
+PlayListWebModelPLA::PlayListWebModelPLA(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : PlayListWebModel(playList, pAudioInterface, parent)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -27,6 +25,7 @@ void PlayListWebModelPLA::initialise()
 {
 	QSharedPointer<PlaybackWebStateCtrlPLA> plState(new PlaybackWebStateCtrlPLA(m_pAudioInterface, this));
 	m_pPlaybackState = plState.dynamicCast<PlaybackStateController>();
+	plState->init();
 }
 
 //-------------------------------------------------------------------------------------------

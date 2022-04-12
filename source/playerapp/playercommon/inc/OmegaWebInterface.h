@@ -19,7 +19,8 @@ class PLAYERCOMMON_EXPORT OmegaWebInterface
 {
 	public:
 		OmegaWebInterface();
-		
+		virtual ~OmegaWebInterface();
+
 		virtual int playlistSize() = 0;
 		virtual QJsonDocument playlistAsJson(int fromIndex, int toIndex) = 0;
 		
