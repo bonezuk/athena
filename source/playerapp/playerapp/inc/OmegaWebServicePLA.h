@@ -1,34 +1,25 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_WEBSERVICE_OMEGAWEBEVENTSERVICE_H
-#define __PLAYERAPP_WEBSERVICE_OMEGAWEBEVENTSERVICE_H
+#ifndef __PLAYERAPP_PLAYERAPP_OMEGAWEBSERVICEPLA_H
+#define __PLAYERAPP_PLAYERAPP_OMEGAWEBSERVICEPLA_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/IPCService.h"
-#include "playerapp/playercommon/inc/WebEventRegisterInterface.h"
-#include "playerapp/playercommon/inc/HTTPEventBroker.h"
+#include "playerapp/playercommon/inc/OmegaWebService.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaWebEventService : public IPCService, public WebEventRegisterInterface
+class OmegaWebServicePLA : public OmegaWebService
 {
-	Q_OBJECT
-	
 	public:
-		OmegaWebEventService(QObject *parent = 0);
-		virtual ~OmegaWebEventService();
-		
-		virtual bool registerConnection(network::http::HTTPReceive *recieve);
+		OmegaWebServicePLA(QSharedPointer<OmegaPLWebInterface>& pPLWebI, QSharedPointer<WebEventRegisterInterface>& pWebEvents, const QString& rootDir);
+		virtual ~OmegaWebServicePLA();
 		
 	protected:
-		
-		HTTPEventBroker m_broker;
-	
-		virtual void printError(const char *strR, const char *strE) const;
-		
-		virtual void handleRPCJson(const QJsonDocument& doc);
+		virtual void printError(const tchar *strR, const tchar *strE) const;
+		virtual bool setupWebEvents();
+		virtual void setupPLWebInterface();
 };
 
 //-------------------------------------------------------------------------------------------
@@ -36,4 +27,3 @@ class OmegaWebEventService : public IPCService, public WebEventRegisterInterface
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
-

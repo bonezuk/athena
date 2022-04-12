@@ -1,5 +1,5 @@
-#include "playerapp/webservice/inc/OmegaWebService.h"
-#include "playerapp/webservice/inc/OmegaPLWebInterface.h"
+#include "playerapp/playercommon/inc/OmegaWebService.h"
+#include "playerapp/playercommon/inc/OmegaPLWebInterface.h"
 
 #include <QFileInfo>
 
@@ -16,7 +16,7 @@ OmegaWebService::OmegaWebService(const QString& rootDir, int argc, char **argv) 
 	m_pWebEvents()
 {
 	QTimer::singleShot(10, this, SLOT(onStartService()));
-	QObject::connect(this, SIGNAL(aboutToQuit()), this, SLOT(onStopService()));
+	QObject::connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(onStopService()));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -48,25 +48,6 @@ bool OmegaWebService::isValidSetup() const
 
 //-------------------------------------------------------------------------------------------
 
-bool OmegaWebService::setupWebEvents()
-{
-	QSharedPointer<OmegaWebEventService> webEvents(new OmegaWebEventService(this));
-	bool res = false;
-	
-	if(webEvents->start())
-	{
-		m_pWebEvents = webEvents;
-		res = true;
-	}
-	else
-	{
-		printError("OmegaWebService", "Failed to start web events IPC service");
-	}
-	return res;
-}
-
-//-------------------------------------------------------------------------------------------
-
 void OmegaWebService::onStartService()
 {
 	bool res = false;
@@ -74,14 +55,14 @@ void OmegaWebService::onStartService()
 	if(!isValidSetup())
 	{
 		printError("onStartService", "Invalid configuration, cannot start server");
-		quit();
+		QCoreApplication::instance()->quit();
 		return;
 	}
 	
 	if(!setupWebEvents())
 	{
 		printError("onStartService", "No web events service");
-		quit();
+		QCoreApplication::instance()->quit();
 		return;	
 	}
 	
@@ -106,8 +87,8 @@ void OmegaWebService::onStartService()
 					m_webServer->connect("/pressplay",this,SLOT(onPressPlay(network::http::HTTPReceive *)));
 					m_webServer->connect("/startplayback",this,SLOT(onStartPlayback(network::http::HTTPReceive *)));
 					
-					m_pWebInterface = QSharedPointer<OmegaPLWebInterface>(new OmegaPLWebInterface());
-					
+					setupPLWebInterface();
+										
 					QString successMsg = QString("Web service successfully started on port=%1").arg(c_serverPort);
 					common::Log::g_Log << successMsg << common::c_endl;
 					res = true;
@@ -135,7 +116,7 @@ void OmegaWebService::onStartService()
 	
 	if(!res)
 	{
-		quit();
+		QCoreApplication::instance()->quit();
 	}
 }
 

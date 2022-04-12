@@ -6,7 +6,8 @@ namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-PlaybackWebStateCtrlPLA::PlaybackWebStateCtrlPLA(QObject *parent) : PlaybackWebStateController(parent)
+PlaybackWebStateCtrlPLA::PlaybackWebStateCtrlPLA(QObject *parent) : PlaybackWebStateController(parent),
+	m_webEventRegisterInterface()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -21,9 +22,18 @@ PlaybackWebStateCtrlPLA::~PlaybackWebStateCtrlPLA()
 
 //-------------------------------------------------------------------------------------------
 
+QSharedPointer<WebEventRegisterInterface>& PlaybackWebStateCtrlPLA::webEventRegisterInterface()
+{
+	return m_webEventRegisterInterface;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void PlaybackWebStateCtrlPLA::initWebController()
 {
-	m_pEventInterface = new OmegaWebEventHandler();
+	QSharedPointer<OmegaWebEventHandler> pEventInterface(new OmegaWebEventHandler())
+	m_pEventInterface = pEventInterface.dynamicCast<WebEventInterface>();
+	m_webEventRegisterInterface = pEventInterface.dynamicCast<WebEventRegisterInterface>();
 }
 
 //-------------------------------------------------------------------------------------------

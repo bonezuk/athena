@@ -1,39 +1,28 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_WEBSERVICE_OMEGAWEBEVENTSERVICE_H
-#define __PLAYERAPP_WEBSERVICE_OMEGAWEBEVENTSERVICE_H
+#ifndef __PLAYERAPP_WEBSERVICE_OMEGAWEBSERVERMAIN_H
+#define __PLAYERAPP_WEBSERVICE_OMEGAWEBSERVERMAIN_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/playercommon/inc/IPCService.h"
-#include "playerapp/playercommon/inc/WebEventRegisterInterface.h"
-#include "playerapp/playercommon/inc/HTTPEventBroker.h"
+#include "playerapp/webservice/inc/OmegaWebServiceWS.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaWebEventService : public IPCService, public WebEventRegisterInterface
+class OmegaWebServerMain : public QCoreApplication
 {
 	Q_OBJECT
-	
 	public:
-		OmegaWebEventService(QObject *parent = 0);
-		virtual ~OmegaWebEventService();
+		OmegaWebServerMain(const QString& rootDir, int& argc, char **argv);
+		virtual ~OmegaWebServerMain();
 		
-		virtual bool registerConnection(network::http::HTTPReceive *recieve);
-		
-	protected:
-		
-		HTTPEventBroker m_broker;
-	
-		virtual void printError(const char *strR, const char *strE) const;
-		
-		virtual void handleRPCJson(const QJsonDocument& doc);
-};
+	private:
+		OmegaWebServiceWS *m_webService;
+}
 
 //-------------------------------------------------------------------------------------------
 } // namespace orcus
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
-

@@ -6,6 +6,7 @@ namespace orcus
 //-------------------------------------------------------------------------------------------
 
 OmegaWebEventHandler::OmegaWebEventHandler() : WebEventInterface(),
+	WebEventRegisterInterface(),
 	m_broker()
 {}
 

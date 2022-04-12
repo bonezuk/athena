@@ -30,7 +30,7 @@ class PlaybackWebStateController : public PlaybackStateController
 		
 	protected:
 	
-		WebEventInterface *m_pEventInterface;
+		QSharedPointer<WebEventInterface> m_pEventInterface;
 		
 		virtual void initWebController() = 0;
 };

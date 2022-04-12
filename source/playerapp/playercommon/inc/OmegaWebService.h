@@ -1,40 +1,42 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __PLAYERAPP_WEBSERVICE_OMEGAWEBSERVICE_H
-#define __PLAYERAPP_WEBSERVICE_OMEGAWEBSERVICE_H
+#ifndef __PLAYERAPP_PLAYERCOMMON_OMEGAWEBSERVICE_H
+#define __PLAYERAPP_PLAYERCOMMON_OMEGAWEBSERVICE_H
 //-------------------------------------------------------------------------------------------
 
-#include "playerapp/webservice/inc/HTTPFileTransfer.h"
-#include "playerapp/webservice/inc/OmegaPLWebInterface.h"
-#include "playerapp/webservice/inc/OmegaWebEventService.h"
+#include "playerapp/playercommon/inc/HTTPFileTransfer.h"
+#include "playerapp/playercommon/inc/OmegaPLWebInterface.h"
+#include "playerapp/playercommon/inc/WebEventRegisterInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaWebService : public QCoreApplication
+class OmegaWebService : public QObject
 {
 	Q_OBJECT
 	public:
 		const int c_serverPort = 5121;
 	
 	public:
-		OmegaWebService(const QString& rootDir, int argc, char **argv);
+		OmegaWebService(const QString& rootDir);
 		virtual ~OmegaWebService();
 		
-	private:
+	protected:
 		QString m_rootDir;
 		network::http::HTTPService *m_webService;
 		network::http::HTTPServer *m_webServer;
 		QSharedPointer<OmegaPLWebInterface> m_pWebInterface;
-		QSharedPointer<OmegaWebEventService> m_pWebEvents;
+		QSharedPointer<WebEventRegisterInterface> m_pWebEvents;
 		
-		void printError(const tchar *strR, const tchar *strE) const;
-		bool isValidSetup() const;
-		void postResponse(network::http::HTTPReceive *receive, int code);
-		bool setupWebEvents();
+		virtual void printError(const tchar *strR, const tchar *strE) const;
+		virtual bool isValidSetup() const;
+		virtual void postResponse(network::http::HTTPReceive *receive, int code);
 		
-	private slots:
+		virtual bool setupWebEvents() = 0;
+		virtual void setupPLWebInterface() = 0;
+		
+	protected slots:
 		void onStartService();
 		void onStopService();
 		

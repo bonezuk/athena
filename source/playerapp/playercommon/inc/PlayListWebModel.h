@@ -21,8 +21,6 @@ class PlayListWebModel : public PlayListModel, public OmegaWebInterface
 		PlayListWebModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlayListWebModel();
 		
-		virtual void initialise() = 0;
-		
 		virtual int playlistSize();
 		virtual QJsonDocument playlistAsJson(int fromIndex, int toIndex);
 		

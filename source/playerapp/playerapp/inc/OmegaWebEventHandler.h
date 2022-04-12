@@ -5,13 +5,14 @@
 
 #include "playerapp/playercommon/inc/HTTPEventBroker.h"
 #include "playerapp/playercommon/inc/WebEventInterface.h"
+#include "playerapp/playercommon/inc/WebEventRegisterInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaWebEventHandler : public WebEventInterface
+class OmegaWebEventHandler : public WebEventInterface, public WebEventRegisterInterface
 {
 	public:
 		OmegaWebEventHandler();

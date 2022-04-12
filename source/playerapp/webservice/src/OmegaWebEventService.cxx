@@ -8,6 +8,7 @@ namespace orcus
 //-------------------------------------------------------------------------------------------
 
 OmegaWebEventService::OmegaWebEventService(QObject *parent) : IPCService(OMEGAWEBEVENT_SERVICE_NAME, parent),
+	WebEventRegisterInterface(),
 	m_broker()
 {}
 

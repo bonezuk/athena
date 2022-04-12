@@ -6,25 +6,19 @@ namespace orcus
 //-------------------------------------------------------------------------------------------
 
 PlaybackWebStateController::PlaybackWebStateController(QObject *parent) : PlaybackStateController(parent),
-	m_pEventInterface(0)
+	m_pEventInterface()
 {}
 
 //-------------------------------------------------------------------------------------------
 
 PlaybackWebStateController::PlaybackWebStateController(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : PlaybackStateController(pAudioInterface, parent),
-	m_pEventInterface(0)
+	m_pEventInterface()
 {}
 
 //-------------------------------------------------------------------------------------------
 
 PlaybackWebStateController::~PlaybackWebStateController()
-{
-	if(m_pEventInterface != 0)
-	{
-		delete m_pEventInterface;
-		m_pEventInterface = 0;
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 

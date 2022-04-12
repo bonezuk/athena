@@ -21,28 +21,19 @@ namespace orcus
 // PlayerAppMain
 //-------------------------------------------------------------------------------------------
 
-PlayerAppMain::PlayerAppMain(int& argc, char **argv) : QGuiApplication(argc, argv),
+PlayerAppMain::PlayerAppMain(const QString& rootDir, int& argc, char **argv) : QGuiApplication(argc, argv),
+	m_rootDir(rootDir),
 	m_pModel(),
-	m_pAudioInterface()
+	m_pAudioInterface(),
+	m_pPLInterface(),
+	m_pWebService(),
+	m_pWebHandler()
 {}
 
 //-------------------------------------------------------------------------------------------
 
 PlayerAppMain::~PlayerAppMain()
-{
-	if(!m_pModel.isNull())
-	{
-		m_pModel.clear();
-	}
-	if(!m_pAudioInterface.isNull())
-	{
-		m_pAudioInterface.clear();
-	}
-	if(!m_pPLInterface.isNull())
-	{
-		m_pPLInterface.clear();
-	}
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 
@@ -58,13 +49,27 @@ bool PlayerAppMain::initPlaylistManager(QVector<QPair<track::db::DBInfoSPtr,tint
 	QSharedPointer<OmegaPlaylistInterface> plInterface(new OmegaPlaylistInterface());
 	bool res = false;
 	
+	// Audio Interface
 	m_pAudioInterface = QSharedPointer<OmegaAudioIOInterface>(new OmegaAudioIOInterface(plInterface));
 	QSharedPointer<OmegaAudioInterface> pAInterface = m_pAudioInterface.dynamicCast<OmegaAudioInterface>();
-	m_pModel = QSharedPointer<PlayListModel>(new PlayListModel(playListDB, pAInterface));
+	
+	// Init playlist model and controller state
+	m_pModel = QSharedPointer<PlayListWebModelPLA>(new PlayListWebModelPLA(playListDB, pAInterface));
 	m_pModel->initialise();
-	plInterface->init(m_pModel);
+	plInterface->init(m_pModel.dynamicCast<PlayListModel>());
 	if(m_pAudioInterface->init())
 	{
+		QSharedPointer<PlaybackWebStateCtrlPLA> pPLStateCtrl = getPlaybackState().dynamicCast<PlaybackWebStateCtrlPLA>();
+		QSharedPointer<WebEventRegisterInterface> pEventI = pPLStateCtrl->webEventRegisterInterface();
+		
+		QSharedPointer<OmegaWebInterface> pWebI = m_pModel.dynamicCast<OmegaWebInterface>();
+		QSharedPointer<OmegaPLWebHandler> pWebHandler(new OmegaPLWebHandler(pWebI));
+		m_pWebHandler = pWebHandler;
+		
+		QSharedPointer<OmegaPLWebInterface> pPLWebI = pWebHandler.dynamicCast<OmegaPLWebInterface>();
+		QSharedPointer<OmegaWebServicePLA> pWebService(new OmegaWebServicePLA(pPLWebI, pEventI, m_rootDir));
+		m_pWebService = pWebService;
+		
 		res = true;
 	}
 	else
@@ -109,8 +114,20 @@ QStringList listFromArguements(int argc, char **argv)
 
 //-------------------------------------------------------------------------------------------
 
+QString pathToRootWWWDirectory(char *appPath)
+{
+	QFileInfo appFile(appPath);
+	QDir d = appFile.absolutePath();
+	d.cdUp();
+	d.cd("www");
+	return d.absolutePath();
+}
+
+//-------------------------------------------------------------------------------------------
+
 int main(int argc, char **argv)
 {
+	QString rootWWW = pathToRootWWWDirectory(argv[0]);
 	QStringList args = listFromArguements(argc, argv);
 	int res = -1;
 	
@@ -125,7 +142,7 @@ int main(int argc, char **argv)
 	track::db::TrackDB *trackDB = track::db::TrackDB::instance(trackDBFilename);
 	if(trackDB != 0)
 	{
-		QSharedPointer<PlayerAppMain> app(new PlayerAppMain (argc, argv));
+		QSharedPointer<PlayerAppMain> app(new PlayerAppMain (rootWWW, argc, argv));
 		QString mountPoint;
 		QVector<QPair<track::db::DBInfoSPtr,tint> > playListDB;
 		

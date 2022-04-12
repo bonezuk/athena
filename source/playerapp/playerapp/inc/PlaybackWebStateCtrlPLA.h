@@ -18,7 +18,10 @@ class PlaybackWebStateCtrlPLA : public PlaybackWebStateController
 		PlaybackWebStateCtrlPLA(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlaybackWebStateCtrlPLA();
 
+		QSharedPointer<WebEventRegisterInterface>& webEventRegisterInterface();
+
 	protected:
+		QSharedPointer<WebEventRegisterInterface> m_webEventRegisterInterface;
 	
 		virtual void initWebController();
 };
