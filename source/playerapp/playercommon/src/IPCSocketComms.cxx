@@ -193,7 +193,7 @@ bool IPCSocketComms::open(const QString& socketPath)
 	int len;
 	struct sockaddr_un addr;
 
-	common::Log::g_Log.print("(%d) - IPCSocketComms::open - a\n", (tuint64)(QThread::currentThreadId()));	
+	common::Log::g_Log.print("(%d) - IPCSocketComms::open - '%s'\n", (tuint64)(QThread::currentThreadId()), socketPath.toUtf8().constData());
 	close();
 	
 	if(socketPath.toUtf8().size() > sizeof(addr.sun_path) - 1)

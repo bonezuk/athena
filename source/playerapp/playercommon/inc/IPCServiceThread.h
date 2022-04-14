@@ -10,8 +10,7 @@
 
 #include <QCoreApplication>
 #include <QThread>
-#include <QMutex>
-#include <QWaitCondition>
+#include <QSemaphore>
 #include <QTimer>
 
 //-------------------------------------------------------------------------------------------
@@ -43,8 +42,9 @@ class PLAYERCOMMON_EXPORT IPCServiceHandler : public QObject
 		QTimer *m_timer;
 		QSharedPointer<IPCSocketComms> m_pComms;
 		QMutex m_mutex;
-		QWaitCondition m_condition;
+		QSemaphore m_semaphore;
 		QByteArray m_responseArray;
+		volatile bool m_isResponse;
 	
 		IPCServiceHandler(const QString& name, QObject *parent = 0);
 		
@@ -74,8 +74,7 @@ class PLAYERCOMMON_EXPORT IPCServiceThread : public QThread
 		
 	protected:
 		QString m_serviceName;
-		QMutex m_mutex;
-		QWaitCondition m_condition;
+		QSemaphore m_semaphore;
 		QSharedPointer<IPCServiceHandler> m_handler;
 		
 		virtual void printError(const tchar *strR, const tchar *strE) const;

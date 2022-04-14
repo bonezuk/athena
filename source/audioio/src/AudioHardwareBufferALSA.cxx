@@ -17,7 +17,7 @@ AudioHardwareBufferALSA::AudioHardwareBufferALSA(tint formatType, tint noFrames,
 	m_noChannels(noChannels),
 	m_buffer(0)
 {
-	if(pBuffer != 0 && numberOfBytesInBuffer() <= bufferSize)
+	if(pBuffer != 0 && AudioHardwareBufferALSA::numberOfBytesInBuffer() <= bufferSize)
 	{
 		m_buffer = pBuffer;
 	}
@@ -114,7 +114,7 @@ tint AudioHardwareBufferALSA::numberOfBuffers()
 
 tint AudioHardwareBufferALSA::numberOfBytesInBuffer()
 {
-	return sampleSize(0) * m_noFrames * m_noChannels;
+	return AudioHardwareBufferALSA::sampleSize(0) * m_noFrames * m_noChannels;
 }
 
 //-------------------------------------------------------------------------------------------

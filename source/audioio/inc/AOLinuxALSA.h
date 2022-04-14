@@ -11,6 +11,8 @@
 #include "audioio/inc/SampleConverter.h"
 #include "audioio/inc/FormatDescriptionUtils.h"
 
+#include <QQueue>
+
 //-------------------------------------------------------------------------------------------
 namespace orcus
 {

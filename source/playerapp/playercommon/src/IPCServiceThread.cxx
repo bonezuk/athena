@@ -9,8 +9,7 @@ namespace orcus
 
 IPCServiceThread::IPCServiceThread(const QString& name, QObject *parent) : QThread(parent),
 	m_serviceName(name),
-	m_mutex(),
-	m_condition(),
+	m_semaphore(0),
 	m_handler()
 {}
 
@@ -38,10 +37,8 @@ QSharedPointer<IPCServiceHandler> IPCServiceThread::handler()
 bool IPCServiceThread::ignite()
 {
 	common::Log::g_Log.print("(%d) - IPCServiceThread::ignite - a\n", (tuint64)(QThread::currentThreadId()));
-	m_mutex.lock();
 	start();
-	m_condition.wait(&m_mutex);
-	m_mutex.unlock();
+	m_semaphore.acquire(1);
 	common::Log::g_Log.print("(%d) - IPCServiceThread::ignite - b\n", (tuint64)(QThread::currentThreadId()));
 	return (!m_handler.isNull()) ? true : false;
 }
@@ -63,7 +60,7 @@ void IPCServiceThread::run()
 	}
 
 	QThread::yieldCurrentThread();
-	m_condition.wakeAll();
+	m_semaphore.release(1);
 	exec();	
 	
 	m_handler->stopService();
@@ -84,9 +81,9 @@ IPCServiceHandler::IPCServiceHandler(const QString& name, QObject *parent) : QOb
 	m_serviceName(name),
 	m_timer(0),
 	m_pComms(),
-	m_mutex(),
-	m_condition(),
-	m_responseArray()
+	m_semaphore(0),
+	m_responseArray(),
+	m_isResponse(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -235,6 +232,7 @@ void IPCServiceHandler::onProcess()
 		m_responseArray.clear();
 		m_mutex.unlock();
 		
+		m_isResponse = false;
 		emit onProcessRPC(inArr);
 		writeResponse();
 	}
@@ -254,15 +252,14 @@ void IPCServiceHandler::postResponse(const QByteArray& arr)
 	if(!arr.isNull())
 	{
 		m_responseArray = arr;
-		m_mutex.unlock();
-		QThread::yieldCurrentThread();
-		m_condition.wakeAll();
 	}
 	else
 	{
 		m_responseArray.clear();
-		m_mutex.unlock();
 	}
+	m_isResponse = true;
+	m_mutex.unlock();
+	m_semaphore.release(1);
 	common::Log::g_Log.print("(%d) - IPCServiceHandler::postResponse - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
@@ -271,16 +268,10 @@ void IPCServiceHandler::postResponse(const QByteArray& arr)
 void IPCServiceHandler::wakeupIfNoResponse()
 {
 	common::Log::g_Log.print("(%d) - IPCServiceHandler::wakeupIfNoResponse - a\n", (tuint64)(QThread::currentThreadId()));
-	m_mutex.lock();
-	if(m_responseArray.isNull())
+	if(!m_isResponse)
 	{
-		m_mutex.unlock();
-		QThread::yieldCurrentThread();
-		m_condition.wakeAll();
-	}
-	else
-	{
-		m_mutex.unlock();
+		m_isResponse = true;
+		m_semaphore.release(1);
 	}
 	common::Log::g_Log.print("(%d) - IPCServiceHandler::wakeupIfNoResponse - b\n", (tuint64)(QThread::currentThreadId()));
 }
@@ -290,9 +281,9 @@ void IPCServiceHandler::wakeupIfNoResponse()
 void IPCServiceHandler::writeResponse()
 {
 	common::Log::g_Log.print("(%d) - IPCServiceHandler::writeResponse - a\n", (tuint64)(QThread::currentThreadId()));
-	m_mutex.lock();
-	m_condition.wait(&m_mutex);
+	m_semaphore.acquire(1);
 	
+	m_mutex.lock();
 	if(!m_responseArray.isNull())
 	{
 		int res = m_pComms->write(m_responseArray);

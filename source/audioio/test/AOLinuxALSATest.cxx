@@ -913,7 +913,8 @@ TEST(AOLinuxALSA,writeToAudioOutputBufferFromPartData)
 	engine::RData::Part& part = data.nextPart();
     memcpy(data.partDataOut(0),c_sampleInput,12 * sizeof(sample_t));
 	
-	AudioHardwareBufferALSA outBuffer(SND_PCM_FORMAT_S24_3LE,6,2);
+	tbyte *mem = new tbyte [12 * 3];
+	AudioHardwareBufferALSA outBuffer(SND_PCM_FORMAT_S24_3LE,6,2,mem,12*3);
 	
 	AOLinuxALSAWriteToAudioOutputBufferFromPartDataTest audio;
 	
@@ -924,6 +925,8 @@ TEST(AOLinuxALSA,writeToAudioOutputBufferFromPartData)
     audio.testWriteToAudioOutputBufferFromPartData(&outBuffer,&data,0,1,0,1,0,0,6);
 	
     testSampleOutputConvertionALSA(c_expectOutput,reinterpret_cast<const tubyte *>(outBuffer.buffer(0)),24,3,12);
+
+	delete [] mem;
 }
 
 //-------------------------------------------------------------------------------------------

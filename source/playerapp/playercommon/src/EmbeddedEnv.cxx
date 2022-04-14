@@ -112,6 +112,8 @@ void releaseCodecs()
 QString pathToUNIXSocket(const QString& serviceName)
 {
 	QString fileName = serviceName + ".usock";
+	QString userDir = userApplicationDataDirectory();
+	common::Log::g_Log << "UserDataDir - " << userDir << ", socket - " << fileName << common::c_endl;
 	QString path = dlna::DiskIF::mergeName(userApplicationDataDirectory(), fileName);
 	return path;
 }

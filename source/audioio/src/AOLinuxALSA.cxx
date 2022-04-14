@@ -29,8 +29,8 @@ AOLinuxALSA::AOLinuxALSA(QObject *parent) : AOBase(parent),
 	m_pSampleConverter(0),
 	m_flagInit(false),
 	m_flagStart(false),
-	m_playbackALSAMemoryBuffers()
-	m_playbackALSAMemoryBufferSize(0);
+	m_playbackALSAMemoryBuffers(),
+	m_playbackALSAMemoryBufferSize(0)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -693,12 +693,12 @@ void AOLinuxALSA::writeAudioToALSA(snd_pcm_t *handle,tint noFrames)
 #endif
 	if(!m_playbackALSAMemoryBuffers.isEmpty())
 	{
-		tbyte *buffer = m_playbackALSAMemoryBuffers.dequeue();
-		AudioHardwareBufferALSA buffer(m_formatTypeALSA, noFrames, m_noChannels, buffer, m_playbackALSAMemoryBufferSize);
+		tbyte *pBuffer = m_playbackALSAMemoryBuffers.dequeue();
+		AudioHardwareBufferALSA buffer(m_formatTypeALSA, noFrames, m_noChannels, pBuffer, m_playbackALSAMemoryBufferSize);
 		IOTimeStamp systemTime = createIOTimeStamp(handle);
 		writeToAudioIOCallback(&buffer,systemTime);
 		LinuxALSAIF::instance()->snd_pcm_writei(handle,buffer.buffer(0),noFrames);
-		m_playbackALSAMemoryBuffers.enqueue(buffer);
+		m_playbackALSAMemoryBuffers.enqueue(pBuffer);
 	}
 	else
 	{
@@ -868,10 +868,18 @@ void AOLinuxALSA::setFlagStart(bool v)
 void AOLinuxALSA::allocALSAPlaybackBuffers(tint formatType, tint noChannels)
 {
 	tint i;
-	AudioHardwareBufferALSA buffer(m_formatTypeALSA, m_noSamplesInBufferALSA, m_noChannels, 0, 0);
-	tint bytesPerBuffer = m_noSamplesInBufferALSA * m_noChannels * buffer.numberOfBytesInBuffer();
+	AudioHardwareBufferALSA aBuf(m_formatTypeALSA, m_noSamplesInBufferALSA, noChannels, 0, 0);
+	tint sampleSize = aBuf.sampleSize(0);
+	tint bytesPerBuffer = m_noSamplesInBufferALSA * noChannels * sampleSize;
 	tint totalNumberOfBuffers = (m_codec->frequency() / m_noSamplesInBufferALSA) + 1;
 	
+	if(totalNumberOfBuffers < 6)
+	{
+		totalNumberOfBuffers = 6;
+	}
+	common::Log::g_Log.print("AOLinuxALSA::allocALSAPlaybackBuffers total=%d, sampleSize=%d, size=%d, freq=%d, chs=%d\n",
+							 totalNumberOfBuffers, sampleSize, bytesPerBuffer, m_codec->frequency(), noChannels);
+
 	freeALSAPlaybackBuffers();
 	for(i = 0; i < totalNumberOfBuffers; i++)
 	{
@@ -885,6 +893,7 @@ void AOLinuxALSA::allocALSAPlaybackBuffers(tint formatType, tint noChannels)
 
 void AOLinuxALSA::freeALSAPlaybackBuffers()
 {
+	common::Log::g_Log.print("AOLinuxALSA::freeALSAPlaybackBuffers\n");
 	while(!m_playbackALSAMemoryBuffers.isEmpty())
 	{
 		tbyte *buffer = m_playbackALSAMemoryBuffers.dequeue();
