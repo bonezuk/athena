@@ -33,6 +33,8 @@ void IPCInterfaceBase::printError(const char *strR, const char *strE) const
 
 QSharedPointer<IPCSocketComms> IPCInterfaceBase::getIPCComms()
 {
+	common::Log::g_Log.print("(%d) - IPCInterfaceBase::getIPCComms - a\n", (tuint64)(QThread::currentThreadId()));
+
 	if(m_pIPCComms.isNull())
 	{
 		QString socketPath = pathToUNIXSocket(m_serviceName);
@@ -52,6 +54,7 @@ QSharedPointer<IPCSocketComms> IPCInterfaceBase::getIPCComms()
 			}
 		}
 	}
+	common::Log::g_Log.print("(%d) - IPCInterfaceBase::getIPCComms - b\n", (tuint64)(QThread::currentThreadId()));
 	return m_pIPCComms;
 }
 
@@ -70,6 +73,7 @@ bool IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 	QSharedPointer<IPCSocketComms> pComms;
 	bool isSent = false;
 	
+	common::Log::g_Log.print("(%d) - IPCInterfaceBase::sendRPCCall - a\n", (tuint64)(QThread::currentThreadId()));
 	if(m_recursive)
 	{
 		printError("sendRPCCall", "Recursive call into interface");
@@ -125,6 +129,8 @@ bool IPCInterfaceBase::sendRPCCall(const QString& funcName, QVariantMap& rpcMap)
 	m_recursive = false;
 	
 	common::Log::g_Log << "client - " << ((isSent) ? "sent" : "fail") << common::c_endl;
+	common::Log::g_Log.print("(%d) - IPCInterfaceBase::sendRPCCall - b\n", (tuint64)(QThread::currentThreadId()));
+	
 	return isSent;
 }
 
@@ -135,6 +141,7 @@ QJsonDocument IPCInterfaceBase::receiveJsonReply()
 	QJsonDocument doc;
 	QSharedPointer<IPCSocketComms> pComms;
 
+	common::Log::g_Log.print("(%d) - IPCInterfaceBase::receiveJsonReply - a\n", (tuint64)(QThread::currentThreadId()));
 	if(m_recursive)
 	{
 		printError("sendRPCCall", "Recursive call into interface");
@@ -186,6 +193,7 @@ QJsonDocument IPCInterfaceBase::receiveJsonReply()
 	m_recursive = false;
 	
 	common::Log::g_Log << "receiveJsonReply - b" << common::c_endl;
+	common::Log::g_Log.print("(%d) - IPCInterfaceBase::receiveJsonReply - b\n", (tuint64)(QThread::currentThreadId()));
 	
 	return doc;
 }

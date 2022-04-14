@@ -192,7 +192,8 @@ bool IPCSocketComms::open(const QString& socketPath)
 {
 	int len;
 	struct sockaddr_un addr;
-	
+
+	common::Log::g_Log.print("(%d) - IPCSocketComms::open - a\n", (tuint64)(QThread::currentThreadId()));	
 	close();
 	
 	if(socketPath.toUtf8().size() > sizeof(addr.sun_path) - 1)
@@ -208,7 +209,11 @@ bool IPCSocketComms::open(const QString& socketPath)
 	addr.sun_family = AF_UNIX;
 	::strncpy(addr.sun_path, sName.data(), len);
 	
-	return (type() == e_Server) ? openServer(socketPath, &addr) : openClient(socketPath, &addr);
+	bool res =  (type() == e_Server) ? openServer(socketPath, &addr) : openClient(socketPath, &addr);
+	
+	common::Log::g_Log.print("(%d) - IPCSocketComms::open - b\n", (tuint64)(QThread::currentThreadId()));
+	
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -240,6 +245,7 @@ void IPCSocketComms::closeConnection()
 
 void IPCSocketComms::close()
 {
+	common::Log::g_Log.print("(%d) - IPCSocketComms::close - a\n", (tuint64)(QThread::currentThreadId()));
 	if(type() == e_Server)
 	{
 		if(m_clientSocket != network::c_invalidSocket)
@@ -256,6 +262,7 @@ void IPCSocketComms::close()
 		removePreviousSocket(m_socketPath);
 	}
 	m_socketPath = "";
+	common::Log::g_Log.print("(%d) - IPCSocketComms::close - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -611,6 +618,7 @@ int IPCSocketComms::read(QByteArray& arr)
 	bool isEof = false;
 	network::socket_type s;
 	
+	common::Log::g_Log.print("(%d) - IPCSocketComms::read - a\n", (tuint64)(QThread::currentThreadId()));
 	s = (type() == e_Client) ? m_socket : getClientConnection();
 	if(s == network::c_invalidSocket)
 	{
@@ -621,6 +629,7 @@ int IPCSocketComms::read(QByteArray& arr)
 		}
 		else
 		{
+			common::Log::g_Log.print("(%d) - IPCSocketComms::read - c\n", (tuint64)(QThread::currentThreadId()));
 			return 0;
 		}
 	}
@@ -659,6 +668,7 @@ int IPCSocketComms::read(QByteArray& arr)
 	{
 		closeConnection();
 	}
+	common::Log::g_Log.print("(%d) - IPCSocketComms::read - b\n", (tuint64)(QThread::currentThreadId()));
 	return msgSize;
 }
 
@@ -791,6 +801,7 @@ int IPCSocketComms::write(const QByteArray& arr)
 {
 	int res = -1;
 	
+	common::Log::g_Log.print("(%d) - IPCSocketComms::write - a\n", (tuint64)(QThread::currentThreadId()));
 	try
 	{
 		res = doWrite(arr);
@@ -800,6 +811,7 @@ int IPCSocketComms::write(const QByteArray& arr)
 		printError("write", "Exception thrown");
 		res = -1;
 	}
+	common::Log::g_Log.print("(%d) - IPCSocketComms::write - b\n", (tuint64)(QThread::currentThreadId()));
 	return res;
 }
 

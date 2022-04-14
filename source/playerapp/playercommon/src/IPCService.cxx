@@ -30,6 +30,8 @@ bool IPCService::start()
 {
 	bool res = false;
 	
+	common::Log::g_Log.print("(%d) - IPCService::start - a\n", (tuint64)(QThread::currentThreadId()));
+	
 	stop();
 	
 	m_pServiceHandler = IPCServiceHandler::instance(m_serviceName);
@@ -42,6 +44,9 @@ bool IPCService::start()
 	{
 		printError("start", "Failed to start RPC playlist service");
 	}
+	
+	common::Log::g_Log.print("(%d) - IPCService::start - b\n", (tuint64)(QThread::currentThreadId()));
+	
 	return res;
 }
 
@@ -49,19 +54,22 @@ bool IPCService::start()
 
 void IPCService::stop()
 {
+	common::Log::g_Log.print("(%d) - IPCService::stop - a\n", (tuint64)(QThread::currentThreadId()));
+	
 	if(!m_pServiceHandler.isNull())
 	{
 		QObject::disconnect(m_pServiceHandler.get(), SIGNAL(onProcessRPC(QByteArray)), this, SLOT(processRPC(QByteArray)));
 		m_pServiceHandler->release();
 		m_pServiceHandler.clear();
 	}
+	common::Log::g_Log.print("(%d) - IPCService::stop - b\n", (tuint64)(QThread::currentThreadId()));
 }
 		
 //-------------------------------------------------------------------------------------------
 
 void IPCService::processRPC(QByteArray rpcArray)
 {
-	common::Log::g_Log << "processRPC - a" << common::c_endl;
+	common::Log::g_Log.print("(%d) - IPCService::processRPC - a\n", (tuint64)(QThread::currentThreadId()));
 
 	QJsonParseError jsonErr;
 	QJsonDocument doc = QJsonDocument::fromJson(rpcArray, &jsonErr);
@@ -76,8 +84,8 @@ void IPCService::processRPC(QByteArray rpcArray)
 		QString err = QString("Error parsing expected JSON object. %1").arg(jsonErr.errorString());
 		printError("processRPC", err.toUtf8().constData());
 	}
-
-	common::Log::g_Log << "processRPC - b" << common::c_endl;
+	
+	common::Log::g_Log.print("(%d) - IPCService::processRPC - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------

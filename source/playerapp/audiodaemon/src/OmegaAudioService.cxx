@@ -25,6 +25,7 @@ void OmegaAudioService::printError(const char *strR, const char *strE) const
 
 void OmegaAudioService::handleRPCJson(const QJsonDocument& doc)
 {
+	common::Log::g_Log.print("(%d) - OmegaAudioService::handleRPCJson - a\n", (tuint64)(QThread::currentThreadId()));
 	if(doc.isObject())
 	{
 		QJsonObject json = doc.object();
@@ -72,6 +73,7 @@ void OmegaAudioService::handleRPCJson(const QJsonDocument& doc)
 	{
 		printError("handleRPCJson", "RPC JSON data is not an object");
 	}
+	common::Log::g_Log.print("(%d) - OmegaAudioService::handleRPCJson - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------

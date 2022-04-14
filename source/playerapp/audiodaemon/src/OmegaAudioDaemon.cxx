@@ -31,7 +31,8 @@ void OmegaAudioDaemon::printError(const char *strR, const char *strE) const
 bool OmegaAudioDaemon::init()
 {
 	bool res = false;
-	
+
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::init- a\n", (tuint64)(QThread::currentThreadId()));		
 #if defined(ORCUS_WIN32)
 	m_audio = audioio::AOBase::get("win32");
 #elif defined(OMEGA_MACOSX)
@@ -66,6 +67,7 @@ bool OmegaAudioDaemon::init()
 		printError("OmegaAudioDaemon", "Failed to start audio engine");
 		quitDaemon();
 	}
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::init- b\n", (tuint64)(QThread::currentThreadId()));		
 	return res;
 }
 
@@ -73,19 +75,20 @@ bool OmegaAudioDaemon::init()
 
 void OmegaAudioDaemon::quitDaemon()
 {
-	common::Log::g_Log << "quitDaemon" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::quitDaemon- a\n", (tuint64)(QThread::currentThreadId()));
 	if(!m_audio.isNull())
 	{
 		m_audio->stop();
 		m_audio.clear();
 	}
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::quitDaemon- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::playFile(const QString& fileName, bool isNext)
 {
-	common::Log::g_Log << "playFile '" << fileName << "'" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::playFile- a\n", (tuint64)(QThread::currentThreadId()));
 	if(common::DiskOps::exist(fileName))
 	{
 		if(isNext)
@@ -102,13 +105,14 @@ void OmegaAudioDaemon::playFile(const QString& fileName, bool isNext)
 		QString err = QString("File '%1' does not exist").arg(fileName);
 		printError("playFile", err.toUtf8().constData());
 	}
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::playFile- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::playFileWithTime(const QString& fileName, const common::TimeStamp& start,const common::TimeStamp& length, bool isNext)
 {
-	common::Log::g_Log << "playFileWithTime '" << fileName << "'" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::playFileWithTime- a\n", (tuint64)(QThread::currentThreadId()));
 	if(common::DiskOps::exist(fileName))
 	{
 		if(isNext)
@@ -125,61 +129,69 @@ void OmegaAudioDaemon::playFileWithTime(const QString& fileName, const common::T
 		QString err = QString("File '%1' does not exist").arg(fileName);
 		printError("playFileWithTime", err.toUtf8().constData());
 	}
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::playFileWithTime- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::play()
 {
-	common::Log::g_Log << "play" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::play- a\n", (tuint64)(QThread::currentThreadId()));
 	m_audio->play();
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::play- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::pause()
 {
-	common::Log::g_Log << "pause" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::pause- a\n", (tuint64)(QThread::currentThreadId()));
 	m_audio->pause();
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::pause- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onAudioStart(const QString& name)
 {
-	common::Log::g_Log << "onAudioStart - " << name << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioStart- a\n", (tuint64)(QThread::currentThreadId()));
 	m_pPLInterface->onAudioStart(name);
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioStart- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onAudioPlay()
 {
-	common::Log::g_Log << "onAudioPlay" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioPlay- a\n", (tuint64)(QThread::currentThreadId()));
 	m_pPLInterface->onAudioPlay();
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioPlay- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onAudioStop()
 {
-	common::Log::g_Log << "onAudioStop" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioStop- a\n", (tuint64)(QThread::currentThreadId()));
 	m_pPLInterface->onAudioStop();
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioStop- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onAudioPause()
 {
-	common::Log::g_Log << "onAudioPause" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioPause- a\n", (tuint64)(QThread::currentThreadId()));
 	m_pPLInterface->onAudioPause();
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioPause- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onTimer()
 {
-	common::Log::g_Log << "onTimer" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onTimer- a\n", (tuint64)(QThread::currentThreadId()));
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onTimer- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -187,41 +199,47 @@ void OmegaAudioDaemon::onTimer()
 void OmegaAudioDaemon::onAudioTime(quint64 t)
 {
 	common::TimeStamp tS(t);
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioTime- a\n", (tuint64)(QThread::currentThreadId()));
 	QString str = QString("onAudioTime - %1").arg(static_cast<tfloat64>(tS));
 	common::Log::g_Log << str << common::c_endl;
 	m_pPLInterface->playbackTime(t);
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioTime- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onAudioBuffer(tfloat32 percent)
 {
-	common::Log::g_Log << "onAudioBuffer" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioBuffer- a\n", (tuint64)(QThread::currentThreadId()));
 	m_pPLInterface->onAudioBuffer(percent);
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioBuffer- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onAudioReadyForNext()
 {
-	common::Log::g_Log << "onAudioReadyForNext" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioReadyForNext- a\n", (tuint64)(QThread::currentThreadId()));
 	m_pPLInterface->onAudioReadyForNext();
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioReadyForNext- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onAudioNoNext()
 {
-	common::Log::g_Log << "onAudioNoNext" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioNoNext- a\n", (tuint64)(QThread::currentThreadId()));
 	m_pPLInterface->onAudioNoNext();
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioNoNext- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void OmegaAudioDaemon::onAudioCrossfade()
 {
-	common::Log::g_Log << "onAudioCrossfade" << common::c_endl;
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioCrossfade- a\n", (tuint64)(QThread::currentThreadId()));
 	m_pPLInterface->onAudioCrossfade();
+	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::onAudioCrossfade- b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------

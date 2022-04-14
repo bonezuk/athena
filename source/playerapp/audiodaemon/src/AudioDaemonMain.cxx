@@ -39,6 +39,7 @@ void AudioDaemonMain::onInit()
 {
 	bool res = false;
 	
+	common::Log::g_Log.print("(%d) - AudioDaemonMain::onInit- a\n", (tuint64)(QThread::currentThreadId()));	
 	m_pPLInterface = new OmegaPLBusInterface(this);
 	
 	m_pAudio = new OmegaAudioDaemon(m_pPLInterface, this);
@@ -53,19 +54,23 @@ void AudioDaemonMain::onInit()
 	{
 		quit();
 	}
+	common::Log::g_Log.print("(%d) - AudioDaemonMain::onInit- b\n", (tuint64)(QThread::currentThreadId()));	
 }
 
 //-------------------------------------------------------------------------------------------
 
 void AudioDaemonMain::onQuitDaemon()
 {
+	common::Log::g_Log.print("(%d) - AudioDaemonMain::onQuitDaemon- a\n", (tuint64)(QThread::currentThreadId()));	
 	shutdownDaemon();
+	common::Log::g_Log.print("(%d) - AudioDaemonMain::onQuitDaemon- b\n", (tuint64)(QThread::currentThreadId()));	
 }
 
 //-------------------------------------------------------------------------------------------
 
 void AudioDaemonMain::shutdownDaemon()
 {
+	common::Log::g_Log.print("(%d) - AudioDaemonMain::shutdownDaemon- a\n", (tuint64)(QThread::currentThreadId()));	
 	if(m_pAudioIPC != 0)
 	{
 		m_pAudioIPC->stop();
@@ -83,6 +88,7 @@ void AudioDaemonMain::shutdownDaemon()
 		delete m_pPLInterface;
 		m_pPLInterface = 0;
 	}
+	common::Log::g_Log.print("(%d) - AudioDaemonMain::shutdownDaemon- b\n", (tuint64)(QThread::currentThreadId()));	
 }
 
 //-------------------------------------------------------------------------------------------
@@ -91,6 +97,7 @@ bool AudioDaemonMain::initAudioIPC()
 {
 	bool res = false;
 	
+	common::Log::g_Log.print("(%d) - AudioDaemonMain::initAudioIPC- a\n", (tuint64)(QThread::currentThreadId()));	
 	m_pAudioIPC = new OmegaAudioService(m_pAudio, this);
 	if(m_pAudioIPC->start())
 	{
@@ -100,6 +107,7 @@ bool AudioDaemonMain::initAudioIPC()
 	{
 		printError("initAudioIPC", "Failed to start IPC service");
 	}
+	common::Log::g_Log.print("(%d) - AudioDaemonMain::initAudioIPC- b\n", (tuint64)(QThread::currentThreadId()));	
 	return res;
 }
 
@@ -117,10 +125,12 @@ BOOL WINAPI termSignalHandler(DWORD)
 void termSignalHandler(int)
 #endif
 {
+	orcus::common::Log::g_Log.print("(%d) - termSignalHandler- a\n", (tuint64)(QThread::currentThreadId()));
 	if(g_audioDaemonApp != 0)
 	{
 		g_audioDaemonApp->shutdownDaemon();
 	}
+	orcus::common::Log::g_Log.print("(%d) - termSignalHandler- b\n", (tuint64)(QThread::currentThreadId()));
 #if defined(OMEGA_WIN32)
 	return TRUE;
 #endif

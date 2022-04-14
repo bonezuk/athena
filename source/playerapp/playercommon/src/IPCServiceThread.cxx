@@ -37,10 +37,12 @@ QSharedPointer<IPCServiceHandler> IPCServiceThread::handler()
 
 bool IPCServiceThread::ignite()
 {
+	common::Log::g_Log.print("(%d) - IPCServiceThread::ignite - a\n", (tuint64)(QThread::currentThreadId()));
 	m_mutex.lock();
 	start();
 	m_condition.wait(&m_mutex);
 	m_mutex.unlock();
+	common::Log::g_Log.print("(%d) - IPCServiceThread::ignite - b\n", (tuint64)(QThread::currentThreadId()));
 	return (!m_handler.isNull()) ? true : false;
 }
 
@@ -48,6 +50,7 @@ bool IPCServiceThread::ignite()
 
 void IPCServiceThread::run()
 {
+	common::Log::g_Log.print("(%d) - IPCServiceThread::run - a\n", (tuint64)(QThread::currentThreadId()));
 	QSharedPointer<IPCServiceHandler> handler(new IPCServiceHandler(m_serviceName));
 	if(handler->startService())
 	{
@@ -65,6 +68,7 @@ void IPCServiceThread::run()
 	
 	m_handler->stopService();
 	m_handler.clear();
+	common::Log::g_Log.print("(%d) - IPCServiceThread::run - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -104,6 +108,7 @@ QSharedPointer<IPCServiceHandler> IPCServiceHandler::instance(const QString& nam
 	QMap<QString, IPCServiceThread *>::iterator ppI;
 	QSharedPointer<IPCServiceHandler> handler;
 	
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::instance - a\n", (tuint64)(QThread::currentThreadId()));
 	m_handlersMutex.lock();
 	ppI = m_handlers.find(name);
 	if(ppI != m_handlers.end())
@@ -127,6 +132,7 @@ QSharedPointer<IPCServiceHandler> IPCServiceHandler::instance(const QString& nam
 			delete thread;
 		}
 	}
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::instance - b\n", (tuint64)(QThread::currentThreadId()));
 	return handler;
 }
 
@@ -137,6 +143,7 @@ void IPCServiceHandler::release()
 	IPCServiceThread *thread = 0;
 	QMap<QString, IPCServiceThread *>::iterator ppI;
 	
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::release - a\n", (tuint64)(QThread::currentThreadId()));
 	m_handlersMutex.lock();
 	ppI = m_handlers.find(m_serviceName);
 	if(ppI != m_handlers.end())
@@ -157,6 +164,7 @@ void IPCServiceHandler::release()
 		thread->wait();
 		delete thread;
 	}
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::release - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -167,7 +175,7 @@ bool IPCServiceHandler::startService()
 	QSharedPointer<IPCSocketComms> pComms(new IPCSocketComms(IPCSocketComms::e_Server));
 	bool res = false;
 	
-	common::Log::g_Log << "Start service" << common::c_endl;
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::startService - a\n", (tuint64)(QThread::currentThreadId()));
 	if(pComms->open(socketPath))
 	{
 		common::TimeStamp timeOut(0.2);
@@ -187,6 +195,7 @@ bool IPCServiceHandler::startService()
 		QString err = QString("Failed to create UNIX socket '%1'").arg(socketPath);
 		printError("startService", err.toUtf8().constData());
 	}
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::startService - b\n", (tuint64)(QThread::currentThreadId()));
 	return res;	
 }
 
@@ -194,6 +203,7 @@ bool IPCServiceHandler::startService()
 
 void IPCServiceHandler::stopService()
 {
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::stopService - a\n", (tuint64)(QThread::currentThreadId()));
 	if(m_timer != 0)
 	{
 		m_timer->stop();
@@ -205,6 +215,7 @@ void IPCServiceHandler::stopService()
 		m_pComms->close();
 		m_pComms.clear();
 	}
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::stopService - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -214,6 +225,7 @@ void IPCServiceHandler::onProcess()
 	QByteArray inArr;
 	int res;
 	
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::onProcess - a\n", (tuint64)(QThread::currentThreadId()));
 	res = m_pComms->read(inArr);
 	if(res > 0)
 	{
@@ -230,13 +242,14 @@ void IPCServiceHandler::onProcess()
 	{
 		printError("run", "Error reading from socket");
 	}
-	common::Log::g_Log << "Service tick" << common::c_endl;
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::onProcess - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void IPCServiceHandler::postResponse(const QByteArray& arr)
 {
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::postResponse - a\n", (tuint64)(QThread::currentThreadId()));
 	m_mutex.lock();
 	if(!arr.isNull())
 	{
@@ -250,12 +263,14 @@ void IPCServiceHandler::postResponse(const QByteArray& arr)
 		m_responseArray.clear();
 		m_mutex.unlock();
 	}
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::postResponse - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void IPCServiceHandler::wakeupIfNoResponse()
 {
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::wakeupIfNoResponse - a\n", (tuint64)(QThread::currentThreadId()));
 	m_mutex.lock();
 	if(m_responseArray.isNull())
 	{
@@ -267,12 +282,14 @@ void IPCServiceHandler::wakeupIfNoResponse()
 	{
 		m_mutex.unlock();
 	}
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::wakeupIfNoResponse - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
 
 void IPCServiceHandler::writeResponse()
 {
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::writeResponse - a\n", (tuint64)(QThread::currentThreadId()));
 	m_mutex.lock();
 	m_condition.wait(&m_mutex);
 	
@@ -286,6 +303,7 @@ void IPCServiceHandler::writeResponse()
 	}
 	m_responseArray.clear();
 	m_mutex.unlock();
+	common::Log::g_Log.print("(%d) - IPCServiceHandler::writeResponse - b\n", (tuint64)(QThread::currentThreadId()));
 }
 
 //-------------------------------------------------------------------------------------------
