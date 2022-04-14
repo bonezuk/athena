@@ -18,7 +18,7 @@ namespace audioio
 class AudioHardwareBufferALSA : public AbstractAudioHardwareBuffer
 {
 	public:
-		AudioHardwareBufferALSA(tint formatType,tint noFrames,tint noChannels);
+		AudioHardwareBufferALSA(tint formatType,tint noFrames,tint noChannels, tbyte *pBuffer, tint bufferSize);
 		virtual ~AudioHardwareBufferALSA();
 		
 		virtual tbyte *buffer(tint bufferIdx);

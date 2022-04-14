@@ -28,13 +28,17 @@ AOLinuxALSA::AOLinuxALSA(QObject *parent) : AOBase(parent),
 	m_pCallback(0),
 	m_pSampleConverter(0),
 	m_flagInit(false),
-	m_flagStart(false)
+	m_flagStart(false),
+	m_playbackALSAMemoryBuffers()
+	m_playbackALSAMemoryBufferSize(0);
 {}
 
 //-------------------------------------------------------------------------------------------
 
 AOLinuxALSA::~AOLinuxALSA()
-{}
+{
+	AOLinuxALSA::freeALSAPlaybackBuffers();
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -125,6 +129,7 @@ bool AOLinuxALSA::openAudio()
 							initCyclicBuffer();
 							m_formatTypeALSA = formatType;
 							m_noChannels = closestDescription.channels();
+							allocALSAPlaybackBuffers(m_formatTypeALSA, m_noChannels);
 							m_flagInit = true;
 							res = true;
 						}
@@ -197,6 +202,7 @@ void AOLinuxALSA::closeAudio()
 		}
 		m_handleALSA = 0;
 	}
+	freeALSAPlaybackBuffers();
 	m_flagInit = false;
 }
 
@@ -685,11 +691,19 @@ void AOLinuxALSA::writeAudioToALSA(snd_pcm_t *handle,tint noFrames)
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
 	common::Log::g_Log.print("AOLinuxALSA::writeAudioToALSA\n");
 #endif
-
-	AudioHardwareBufferALSA buffer(m_formatTypeALSA,noFrames,m_noChannels);
-	IOTimeStamp systemTime = createIOTimeStamp(handle);
-	writeToAudioIOCallback(&buffer,systemTime);
-	LinuxALSAIF::instance()->snd_pcm_writei(handle,buffer.buffer(0),noFrames);
+	if(!m_playbackALSAMemoryBuffers.isEmpty())
+	{
+		tbyte *buffer = m_playbackALSAMemoryBuffers.dequeue();
+		AudioHardwareBufferALSA buffer(m_formatTypeALSA, noFrames, m_noChannels, buffer, m_playbackALSAMemoryBufferSize);
+		IOTimeStamp systemTime = createIOTimeStamp(handle);
+		writeToAudioIOCallback(&buffer,systemTime);
+		LinuxALSAIF::instance()->snd_pcm_writei(handle,buffer.buffer(0),noFrames);
+		m_playbackALSAMemoryBuffers.enqueue(buffer);
+	}
+	else
+	{
+		printError("writeAudioToALSA","No direct audio buffers available");	
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -847,6 +861,36 @@ bool AOLinuxALSA::getFlagStart() const
 void AOLinuxALSA::setFlagStart(bool v)
 {
 	m_flagStart = v;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOLinuxALSA::allocALSAPlaybackBuffers(tint formatType, tint noChannels)
+{
+	tint i;
+	AudioHardwareBufferALSA buffer(m_formatTypeALSA, m_noSamplesInBufferALSA, m_noChannels, 0, 0);
+	tint bytesPerBuffer = m_noSamplesInBufferALSA * m_noChannels * buffer.numberOfBytesInBuffer();
+	tint totalNumberOfBuffers = (m_codec->frequency() / m_noSamplesInBufferALSA) + 1;
+	
+	freeALSAPlaybackBuffers();
+	for(i = 0; i < totalNumberOfBuffers; i++)
+	{
+		tbyte *buffer = new tbyte [bytesPerBuffer];
+		m_playbackALSAMemoryBuffers.enqueue(buffer);
+	}
+	m_playbackALSAMemoryBufferSize = bytesPerBuffer;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOLinuxALSA::freeALSAPlaybackBuffers()
+{
+	while(!m_playbackALSAMemoryBuffers.isEmpty())
+	{
+		tbyte *buffer = m_playbackALSAMemoryBuffers.dequeue();
+		delete [] buffer;
+	}
+	m_playbackALSAMemoryBufferSize = 0;
 }
 
 //-------------------------------------------------------------------------------------------

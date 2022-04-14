@@ -11,21 +11,22 @@ namespace audioio
 {
 //-------------------------------------------------------------------------------------------
 
-AudioHardwareBufferALSA::AudioHardwareBufferALSA(tint formatType,tint noFrames,tint noChannels) : AbstractAudioHardwareBuffer(),
+AudioHardwareBufferALSA::AudioHardwareBufferALSA(tint formatType, tint noFrames, tint noChannels, tbyte *pBuffer, tint bufferSize) : AbstractAudioHardwareBuffer(),
 	m_formatType(formatType),
 	m_noFrames(noFrames),
 	m_noChannels(noChannels),
 	m_buffer(0)
 {
-	m_buffer = new tbyte [numberOfBytesInBuffer()];
+	if(pBuffer != 0 && numberOfBytesInBuffer() <= bufferSize)
+	{
+		m_buffer = pBuffer;
+	}
 }
 
 //-------------------------------------------------------------------------------------------
 
 AudioHardwareBufferALSA::~AudioHardwareBufferALSA()
-{
-	delete [] m_buffer;
-}
+{}
 
 //-------------------------------------------------------------------------------------------
 

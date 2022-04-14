@@ -41,6 +41,9 @@ class AUDIOIO_EXPORT AOLinuxALSA : public AOBase
 
 		bool m_flagInit;
 		bool m_flagStart;
+		
+		QQueue<tbyte *> m_playbackALSAMemoryBuffers;
+		tint m_playbackALSAMemoryBufferSize;
 
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printErrorOS(const tchar *strR,const tchar *strE,tint errCode) const;
@@ -94,6 +97,9 @@ class AUDIOIO_EXPORT AOLinuxALSA : public AOBase
 		virtual void setFlagInit(bool v);
 		virtual bool getFlagStart() const;
 		virtual void setFlagStart(bool v);
+		
+		virtual void allocALSAPlaybackBuffers(tint formatType, tint noChannels);
+		virtual void freeALSAPlaybackBuffers();
 		
 	protected slots:
 	
