@@ -45,7 +45,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlayListModel();
 		
-		virtual void initialise() = 0;
+		virtual void initialise();
 		
 		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

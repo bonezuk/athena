@@ -39,6 +39,11 @@ void PlayListModel::printError(const char *strR, const char *strE) const
 
 //-------------------------------------------------------------------------------------------
 
+void PlayListModel::initialise()
+{}
+
+//-------------------------------------------------------------------------------------------
+
 QSharedPointer<PlaybackStateController>& PlayListModel::playbackState()
 {
 	return m_pPlaybackState;

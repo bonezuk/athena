@@ -1,4 +1,5 @@
 #include "playerapp/playercommon/inc/WebEventInterface.h"
+#include <QVariantMap>
 
 //-------------------------------------------------------------------------------------------
 namespace orcus
