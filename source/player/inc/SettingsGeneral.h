@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_SETTINGSGENERAL_H
-#define __ORCUS_PLAYER_SETTINGSGENERAL_H
+#ifndef __OMEGA_PLAYER_SETTINGSGENERAL_H
+#define __OMEGA_PLAYER_SETTINGSGENERAL_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/SettingsBase.h"
 #include "player/ui_SettingsGeneral.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -37,7 +37,7 @@ class SettingsGeneral : public SettingsBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

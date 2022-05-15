@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVERFLOORDATA1_H
-#define __ORCUS_ENGINE_SILVEROMEGA_VSILVERFLOORDATA1_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVERFLOORDATA1_H
+#define __OMEGA_ENGINE_SILVEROMEGA_VSILVERFLOORDATA1_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/silveromega/inc/SilverOmegaDLL.h"
 #include "engine/silveromega/inc/VSilverFloorBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -87,7 +87,7 @@ inline tint VSilverFloorData1::renderPoint(tint x0,tint x1,tint y0,tint y1,tint 
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/greenomega/inc/FLACMetaStreamInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -66,5 +66,5 @@ common::TimeStamp FLACMetaStreamInfo::length() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 #include "engine/silveromega/inc/VSilverWindow.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -488,5 +488,5 @@ tint VSilverWindow::getPCM(sample_t *mem,tint len)
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

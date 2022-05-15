@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_TEST_AOBASETEST_H
-#define __ORCUS_AUDIOIO_TEST_AOBASETEST_H
+#ifndef __OMEGA_AUDIOIO_TEST_AOBASETEST_H
+#define __OMEGA_AUDIOIO_TEST_AOBASETEST_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -15,7 +15,7 @@
 
 #include <QtTest/QtTest>
 
-using namespace orcus::audioio;
+using namespace omega::audioio;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

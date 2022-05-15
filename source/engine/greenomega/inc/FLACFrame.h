@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_GREENOMEGA_FLACFRAME_H
-#define __ORCUS_ENGINE_GREENOMEGA_FLACFRAME_H
+#ifndef __OMEGA_ENGINE_GREENOMEGA_FLACFRAME_H
+#define __OMEGA_ENGINE_GREENOMEGA_FLACFRAME_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Allocation.h"
@@ -9,7 +9,7 @@
 #include "engine/greenomega/inc/FLACFramework.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -108,7 +108,7 @@ inline const common::TimeStamp& FLACFrame::end() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

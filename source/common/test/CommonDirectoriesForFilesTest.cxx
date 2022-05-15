@@ -4,8 +4,8 @@
 #include "common/inc/CommonDirectoriesForFiles.h"
 
 using namespace testing;
-using namespace orcus;
-using namespace orcus::common;
+using namespace omega;
+using namespace omega::common;
 
 //-------------------------------------------------------------------------------------------
 

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_TMEMORYOBJECTS_H
-#define __ORCUS_COMMON_TMEMORYOBJECTS_H
+#ifndef __OMEGA_COMMON_TMEMORYOBJECTS_H
+#define __OMEGA_COMMON_TMEMORYOBJECTS_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -26,7 +26,7 @@ COMMON_EXPORT void stringToMemory(const BString& str,tchar *mem,tint len);
 //-------------------------------------------------------------------------------------------
 } // namespace memory
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

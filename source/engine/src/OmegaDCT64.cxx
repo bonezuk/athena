@@ -1,4 +1,4 @@
-#include "engine/inc/OrcusDCT64.h"
+#include "engine/inc/OmegaDCT64.h"
 
 //-------------------------------------------------------------------------------------------
 // Cosine definitions
@@ -42,25 +42,25 @@
 #define D_Delta_15Pi16 (10.190008123548056811212109201036)
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
 //-------------------------------------------------------------------------------------------
 
-tint OrcusDCT64::m_DCTCounter = 0;
-common::Allocation OrcusDCT64::m_DCTAllocation;
+tint OmegaDCT64::m_DCTCounter = 0;
+common::Allocation OmegaDCT64::m_DCTAllocation;
 
 //-------------------------------------------------------------------------------------------
 
-QMap<tint,OrcusDCT64 *> OrcusDCT64::m_DCTCollection;
+QMap<tint,OmegaDCT64 *> OmegaDCT64::m_DCTCollection;
 
 //-------------------------------------------------------------------------------------------
 
-OrcusDCT64 *OrcusDCT64::get(tint N)
+OmegaDCT64 *OmegaDCT64::get(tint N)
 {
-	OrcusDCT64 *DCT;
-	QMap<tint,OrcusDCT64 *>::iterator ppI;
+	OmegaDCT64 *DCT;
+	QMap<tint,OmegaDCT64 *>::iterator ppI;
 	
 	ppI = m_DCTCollection.find(N);
 	if(ppI!=m_DCTCollection.end())
@@ -69,7 +69,7 @@ OrcusDCT64 *OrcusDCT64::get(tint N)
 	}
 	else
 	{
-		DCT = new OrcusDCT64(N);
+		DCT = new OmegaDCT64(N);
 		m_DCTCollection.insert(N,DCT);
 	}
 	return DCT;
@@ -77,10 +77,10 @@ OrcusDCT64 *OrcusDCT64::get(tint N)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::stop()
+void OmegaDCT64::stop()
 {
-	OrcusDCT64 *DCT;
-	QMap<tint,OrcusDCT64 *>::iterator ppI;
+	OmegaDCT64 *DCT;
+	QMap<tint,OmegaDCT64 *>::iterator ppI;
 	
 	for(ppI=m_DCTCollection.begin();ppI!=m_DCTCollection.end();++ppI)
 	{
@@ -94,7 +94,7 @@ void OrcusDCT64::stop()
 // DCT 
 //-------------------------------------------------------------------------------------------
 
-OrcusDCT64::OrcusDCT64(int N) : m_alloc(),
+OmegaDCT64::OmegaDCT64(int N) : m_alloc(),
 	m_N(N),
 	m_x(0),
 	m_X(0),
@@ -109,7 +109,7 @@ OrcusDCT64::OrcusDCT64(int N) : m_alloc(),
 
 //-------------------------------------------------------------------------------------------
 
-OrcusDCT64::~OrcusDCT64()
+OmegaDCT64::~OmegaDCT64()
 {
 	try
 	{
@@ -120,7 +120,7 @@ OrcusDCT64::~OrcusDCT64()
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 OrcusDCT64::dctD4Factor(int k,int N) const
+tfloat64 OmegaDCT64::dctD4Factor(int k,int N) const
 {
 	tfloat64 v,t,tA,tB;
 	const tfloat64 c_PI64 = 3.141592653589793238464264338832795;
@@ -134,7 +134,7 @@ tfloat64 OrcusDCT64::dctD4Factor(int k,int N) const
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::init()
+void OmegaDCT64::init()
 {
 	tint i,k,N = 32,lN = mod2(),s = 0;
 
@@ -163,7 +163,7 @@ void OrcusDCT64::init()
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::free()
+void OmegaDCT64::free()
 {
 	tint i,lN = mod2();
 	
@@ -195,28 +195,28 @@ void OrcusDCT64::free()
 
 //-------------------------------------------------------------------------------------------
 
-bool OrcusDCT64::isMod2() const
+bool OmegaDCT64::isMod2() const
 {
 	return isMod2(m_N);
 }
 
 //-------------------------------------------------------------------------------------------
 
-bool OrcusDCT64::isMod2(int N) const
+bool OmegaDCT64::isMod2(int N) const
 {
 	return (mod2(N)>=0);
 }
 
 //-------------------------------------------------------------------------------------------
 
-int OrcusDCT64::mod2() const
+int OmegaDCT64::mod2() const
 {
 	return mod2(m_N);
 }
 
 //-------------------------------------------------------------------------------------------
 
-int OrcusDCT64::mod2(int N) const
+int OmegaDCT64::mod2(int N) const
 {
 	static tuint32 mask[32] = {
 		0x00000001, 0x00000002, 0x00000004, 0x00000008,
@@ -245,14 +245,14 @@ int OrcusDCT64::mod2(int N) const
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::Type2(tfloat64 *x,tfloat64 *X,int N)
+void OmegaDCT64::Type2(tfloat64 *x,tfloat64 *X,int N)
 {
 	Type2(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::Type2(tfloat64 *x,tfloat64 *X,int N,int lN)
+void OmegaDCT64::Type2(tfloat64 *x,tfloat64 *X,int N,int lN)
 {
 	tint i,j,halfN = N >> 1;
 	tfloat64 *xA,*xB,*Xa,*Xb;
@@ -293,14 +293,14 @@ void OrcusDCT64::Type2(tfloat64 *x,tfloat64 *X,int N,int lN)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::Type3(tfloat64 *x,tfloat64 *X,int N)
+void OmegaDCT64::Type3(tfloat64 *x,tfloat64 *X,int N)
 {
 	Type3(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::Type3(tfloat64 *x,tfloat64 *X,int N,int lN)
+void OmegaDCT64::Type3(tfloat64 *x,tfloat64 *X,int N,int lN)
 {
 	tint i,j,halfN = N >> 1;
 	tfloat64 *xA,*xB,*Xa,*Xb;
@@ -340,14 +340,14 @@ void OrcusDCT64::Type3(tfloat64 *x,tfloat64 *X,int N,int lN)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::Type4(tfloat64 *x,tfloat64 *X,int N)
+void OmegaDCT64::Type4(tfloat64 *x,tfloat64 *X,int N)
 {
 	Type4(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::Type4(tfloat64 *x,tfloat64 *X,int N,int lN)
+void OmegaDCT64::Type4(tfloat64 *x,tfloat64 *X,int N,int lN)
 {
 	tint i,j,halfN = N >> 1;
 	tfloat64 *xA,*xB,*Xa,*Xb;
@@ -391,7 +391,7 @@ void OrcusDCT64::Type4(tfloat64 *x,tfloat64 *X,int N,int lN)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::T2L16(tfloat64 *x,tfloat64 *X)
+void OmegaDCT64::T2L16(tfloat64 *x,tfloat64 *X)
 {
 	tfloat64 y[32],Y[12];
 	
@@ -493,7 +493,7 @@ void OrcusDCT64::T2L16(tfloat64 *x,tfloat64 *X)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::T3L16(tfloat64 *x,tfloat64 *X)
+void OmegaDCT64::T3L16(tfloat64 *x,tfloat64 *X)
 {
 	tfloat64 y[13],Y[28];
 
@@ -596,7 +596,7 @@ void OrcusDCT64::T3L16(tfloat64 *x,tfloat64 *X)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::T4L16(tfloat64 *x,tfloat64 *X)
+void OmegaDCT64::T4L16(tfloat64 *x,tfloat64 *X)
 {
 	tfloat64 y[29],Y[28];
 	
@@ -716,35 +716,35 @@ void OrcusDCT64::T4L16(tfloat64 *x,tfloat64 *X)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 *OrcusDCT64::input()
+tfloat64 *OmegaDCT64::input()
 {
 	return m_x;
 }
 
 //-------------------------------------------------------------------------------------------
 
-const tfloat64 *OrcusDCT64::input() const
+const tfloat64 *OmegaDCT64::input() const
 {
 	return m_x;
 }
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 *OrcusDCT64::output()
+tfloat64 *OmegaDCT64::output()
 {
 	return m_X;
 }
 
 //-------------------------------------------------------------------------------------------
 
-const tfloat64 *OrcusDCT64::output() const
+const tfloat64 *OmegaDCT64::output() const
 {
 	return m_X;
 }
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 *OrcusDCT64::TypeII(tfloat64 *x)
+tfloat64 *OmegaDCT64::TypeII(tfloat64 *x)
 {
 	if(x!=m_x)
 	{
@@ -758,7 +758,7 @@ tfloat64 *OrcusDCT64::TypeII(tfloat64 *x)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 *OrcusDCT64::TypeIII(tfloat64 *x)
+tfloat64 *OmegaDCT64::TypeIII(tfloat64 *x)
 {
 	if(x!=m_x)
 	{
@@ -772,7 +772,7 @@ tfloat64 *OrcusDCT64::TypeIII(tfloat64 *x)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 *OrcusDCT64::TypeIV(tfloat64 *x)
+tfloat64 *OmegaDCT64::TypeIV(tfloat64 *x)
 {
 	if(x!=m_x)
 	{
@@ -786,7 +786,7 @@ tfloat64 *OrcusDCT64::TypeIV(tfloat64 *x)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 *OrcusDCT64::MDCT(tfloat64 *x)
+tfloat64 *OmegaDCT64::MDCT(tfloat64 *x)
 {
 	tint i,idxA,idxB,Na,Nb,Nc;
 	
@@ -830,7 +830,7 @@ tfloat64 *OrcusDCT64::MDCT(tfloat64 *x)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 *OrcusDCT64::InverseMDCT(tfloat64 *x)
+tfloat64 *OmegaDCT64::InverseMDCT(tfloat64 *x)
 {
 	tint i,j,Na,Nb,Nc;
 	
@@ -876,7 +876,7 @@ tfloat64 *OrcusDCT64::InverseMDCT(tfloat64 *x)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::WMDCT(tfloat64 *x,tfloat64 *X,tint offset)
+void OmegaDCT64::WMDCT(tfloat64 *x,tfloat64 *X,tint offset)
 {
 	tint i,idxA,idxB,Na,Nb,Nc;
 	
@@ -926,7 +926,7 @@ void OrcusDCT64::WMDCT(tfloat64 *x,tfloat64 *X,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::WInverseMDCT(tfloat64 *x,tfloat64 *X,tint offset)
+void OmegaDCT64::WInverseMDCT(tfloat64 *x,tfloat64 *X,tint offset)
 {
 	tint i,j,Na,Nb,Nc;
 	
@@ -972,7 +972,7 @@ void OrcusDCT64::WInverseMDCT(tfloat64 *x,tfloat64 *X,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT64::VSInverseMDCT(tfloat64 *x,tfloat64 *X)
+void OmegaDCT64::VSInverseMDCT(tfloat64 *x,tfloat64 *X)
 {
 	tint i,j,Na,Nb,Nc;
 	
@@ -1014,5 +1014,5 @@ void OrcusDCT64::VSInverseMDCT(tfloat64 *x,tfloat64 *X)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -9,8 +9,8 @@
 #include "gmock/gmock.h"
 
 
-using namespace orcus::dlna;
-using namespace orcus;
+using namespace omega::dlna;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ TEST(UPnPProvider,getDigestKeyProper)
 
 //-------------------------------------------------------------------------------------------
 
-class UPnPProviderHardwareIdentification : public orcus::common::HardwareIdentification
+class UPnPProviderHardwareIdentification : public omega::common::HardwareIdentification
 {
 	public:
 		UPnPProviderHardwareIdentification();

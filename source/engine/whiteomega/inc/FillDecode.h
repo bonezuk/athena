@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_FILLDECODE_H
-#define __ORCUS_WHITEOMEGA_FILLDECODE_H
+#ifndef __OMEGA_WHITEOMEGA_FILLDECODE_H
+#define __OMEGA_WHITEOMEGA_FILLDECODE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/whiteomega/inc/CPEDecode.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -43,7 +43,7 @@ class FillDecode
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

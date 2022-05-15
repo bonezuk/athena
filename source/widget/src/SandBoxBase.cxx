@@ -12,7 +12,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace widget
 {
@@ -66,7 +66,7 @@ QString SBServiceBase::getApplicationDataDirectory()
 		userDir += "/";
 	}
 	userDir = QDir::toNativeSeparators(userDir);
-	orcus::common::DiskOps::path(userDir,true);
+	omega::common::DiskOps::path(userDir,true);
 	return userDir;
 }
 
@@ -121,5 +121,5 @@ void SBServiceBase::releasePool(void *pPtr)
 
 //-------------------------------------------------------------------------------------------
 } // namespace widget
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

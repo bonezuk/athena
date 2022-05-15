@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/Prediction.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -641,7 +641,7 @@ const sample_t Prediction::m_expTable[128] = {
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 

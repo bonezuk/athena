@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLUEOMEGA_BLUEOMEGADLL_H
-#define __ORCUS_ENGINE_BLUEOMEGA_BLUEOMEGADLL_H
+#ifndef __OMEGA_ENGINE_BLUEOMEGA_BLUEOMEGADLL_H
+#define __OMEGA_ENGINE_BLUEOMEGA_BLUEOMEGADLL_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_ENGINE_BLUEOMEGA_DLL)
+#if defined(OMEGA_ENGINE_BLUEOMEGA_DLL)
 #define BLUEOMEGA_EXPORT __declspec(dllexport)
 #define BLUEOMEGA_TEMPLATE
 #else
@@ -21,7 +21,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 	namespace engine
 	{
@@ -29,7 +29,7 @@ namespace orcus
 		{
 		} // namespace blueomega
 	} // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

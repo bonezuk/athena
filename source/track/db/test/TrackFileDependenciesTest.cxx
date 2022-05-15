@@ -6,7 +6,7 @@
 #include "dlna/test/DiskMockIF.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace track::db;
 using namespace testing;
 

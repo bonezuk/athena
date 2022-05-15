@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_SANDBOXBOOKMARKSERVICE_H
-#define __ORCUS_TRACK_DB_SANDBOXBOOKMARKSERVICE_H
+#ifndef __OMEGA_TRACK_DB_SANDBOXBOOKMARKSERVICE_H
+#define __OMEGA_TRACK_DB_SANDBOXBOOKMARKSERVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/SBService.h"
@@ -15,7 +15,7 @@
 #import <Cocoa/Cocoa.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -129,7 +129,7 @@ class TRACK_DB_EXPORT SandboxBookmarkService : public track::info::SBBookmarkSer
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

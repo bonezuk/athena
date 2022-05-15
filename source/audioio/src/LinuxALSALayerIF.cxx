@@ -5,7 +5,7 @@
 #include "audioio/inc/LinuxALSALayerIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -279,7 +279,7 @@ snd_pcm_t *LinuxALSALayerIF::snd_async_handler_get_pcm(snd_async_handler_t *hand
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

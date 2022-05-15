@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WHITEOMEGA_TNS_H
-#define __ORCUS_ENGINE_WHITEOMEGA_TNS_H
+#ifndef __OMEGA_ENGINE_WHITEOMEGA_TNS_H
+#define __OMEGA_ENGINE_WHITEOMEGA_TNS_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/whiteomega/inc/ICS.h"
@@ -11,7 +11,7 @@
 #define TNS_MAX_ORDER 20
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -54,7 +54,7 @@ class WHITEOMEGA_EXPORT TNS
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

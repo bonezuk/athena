@@ -3,7 +3,7 @@
 
 #include "engine/inc/RData.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace engine;
 using namespace testing;
 

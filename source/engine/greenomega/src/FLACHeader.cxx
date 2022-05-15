@@ -1,7 +1,7 @@
 #include "engine/greenomega/inc/FLACHeader.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -591,5 +591,5 @@ tubyte FLACHeader::crc8(tubyte *mem,tint len)
 //-----------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-----------------------------------------------------------------------------------------

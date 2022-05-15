@@ -6,7 +6,7 @@
 #include <Avrt.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -779,7 +779,7 @@ common::TimeStamp AOWin32::getTimeFromASIO(const ASIOTimeStamp *tS) const
 
 //-------------------------------------------------------------------------------------------
 
-void AOWin32::getTimeFromOrcus(const common::TimeStamp& t,ASIOTimeStamp *tS) const
+void AOWin32::getTimeFromOmega(const common::TimeStamp& t,ASIOTimeStamp *tS) const
 {
 	tuint64 x = t.nano64();
 #if NATIVE_INT64
@@ -1381,5 +1381,5 @@ void AOWin32::writeWASAudio()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

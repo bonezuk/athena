@@ -14,7 +14,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -693,6 +693,6 @@ QStringList ITunesLocation::getITunesConfigFileNames()
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

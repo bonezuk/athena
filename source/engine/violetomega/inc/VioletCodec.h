@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_VIOLETCODEC_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_VIOLETCODEC_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_VIOLETCODEC_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_VIOLETCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
@@ -12,7 +12,7 @@
 #include "engine/violetomega/inc/IFFSoundChunk.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -67,7 +67,7 @@ class VIOLETOMEGA_EXPORT VioletCodec : public InterleavedCodec
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

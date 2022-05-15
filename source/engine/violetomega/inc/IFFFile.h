@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_IFFFILE_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_IFFFILE_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_IFFFILE_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_IFFFILE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
 #include "engine/violetomega/inc/IFFChunk.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -41,7 +41,7 @@ typedef QSharedPointer<IFFFile> IFFFileSPtr;
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

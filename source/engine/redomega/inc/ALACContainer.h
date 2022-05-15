@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACCONTAINER_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACCONTAINER_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACCONTAINER_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACCONTAINER_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/ALACDescription.h"
@@ -8,7 +8,7 @@
 #include "engine/redomega/inc/ALACFrameIndex.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -80,7 +80,7 @@ inline const tint& ALACContainer::dataLength() const
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

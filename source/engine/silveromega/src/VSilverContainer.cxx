@@ -1,7 +1,7 @@
 #include "engine/silveromega/inc/VSilverContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -217,6 +217,6 @@ bool VSilverContainer::readData(Sequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

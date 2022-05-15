@@ -6,9 +6,9 @@
 #include "track/db/test/SQLiteMock.h"
 
 using namespace ::testing;
-using namespace orcus::track::model;
-using namespace orcus::track;
-using namespace orcus;
+using namespace omega::track::model;
+using namespace omega::track;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 

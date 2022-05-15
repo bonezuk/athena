@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_MODEL_IMAGEREPOSITARY_H
-#define __ORCUS_TRACK_MODEL_IMAGEREPOSITARY_H
+#ifndef __OMEGA_TRACK_MODEL_IMAGEREPOSITARY_H
+#define __OMEGA_TRACK_MODEL_IMAGEREPOSITARY_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/TrackDB.h"
@@ -11,7 +11,7 @@
 #include <QtCore/QFile>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -83,7 +83,7 @@ class TRACK_MODEL_EXPORT ImageRepositaryImpl : public ImageRepositary
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

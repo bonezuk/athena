@@ -1,7 +1,7 @@
 #include "remote/test/WinLIRCSettingsMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -19,5 +19,5 @@ WinLIRCSettingsMock::~WinLIRCSettingsMock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

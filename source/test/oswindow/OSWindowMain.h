@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_OSWINDOWTEST_OSWINDOWMAIN_H
-#define __ORCUS_OSWINDOWTEST_OSWINDOWMAIN_H
+#ifndef __OMEGA_OSWINDOWTEST_OSWINDOWMAIN_H
+#define __OMEGA_OSWINDOWTEST_OSWINDOWMAIN_H
 //-------------------------------------------------------------------------------------------
 
 #include <QWidget>

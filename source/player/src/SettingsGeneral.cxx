@@ -1,7 +1,7 @@
 #include "player/inc/SettingsGeneral.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -57,5 +57,5 @@ void SettingsGeneral::onBufferMemory(bool checked)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

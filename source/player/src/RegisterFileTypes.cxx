@@ -4,7 +4,7 @@
 #include <QFileInfo>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -603,5 +603,5 @@ void RegisterFileType::delDirectoryShellR(bool allFlag)
 #endif
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

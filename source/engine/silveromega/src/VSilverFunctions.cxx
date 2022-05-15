@@ -1,7 +1,7 @@
 #include "engine/silveromega/inc/VSilverFunctions.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -111,5 +111,5 @@ const tfloat32 g_fromDB2Lookup[c_fromDB2_LookupSize2]={
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

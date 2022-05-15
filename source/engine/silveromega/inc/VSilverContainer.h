@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVERCONTAINER_H
-#define __ORCUS_ENGINE_SILVEROMEGA_VSILVERCONTAINER_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVERCONTAINER_H
+#define __OMEGA_ENGINE_SILVEROMEGA_VSILVERCONTAINER_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/silveromega/inc/SilverOmegaDLL.h"
@@ -10,7 +10,7 @@
 #include "engine/silveromega/inc/VSilverOgg.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -44,7 +44,7 @@ class SILVEROMEGA_EXPORT VSilverContainer
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

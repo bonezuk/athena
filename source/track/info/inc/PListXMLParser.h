@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_DICTXMLPARSER_H
-#define __ORCUS_TRACK_INFO_DICTXMLPARSER_H
+#ifndef __OMEGA_TRACK_INFO_DICTXMLPARSER_H
+#define __OMEGA_TRACK_INFO_DICTXMLPARSER_H
 //-------------------------------------------------------------------------------------------
 
 #include <libxml/parser.h>
@@ -23,7 +23,7 @@
 #include "track/info/inc/InfoDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -231,7 +231,7 @@ inline const QList<QVariant>& PListXMLParser::data() const
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_QSPEAKERBUTTON_H
-#define __ORCUS_PLAYER_QSPEAKERBUTTON_H
+#ifndef __OMEGA_PLAYER_QSPEAKERBUTTON_H
+#define __OMEGA_PLAYER_QSPEAKERBUTTON_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/QPlaylistWidget.h"
 #include "audioio/inc/AOBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -56,7 +56,7 @@ class QSpeakerButton : public QWidget
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 #import <Cocoa/Cocoa.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -30,9 +30,9 @@ QString qStringFromCFStringRef(CFStringRef cfStr)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -663,5 +663,5 @@ int AOQueryCoreAudio::defaultDeviceIndex()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

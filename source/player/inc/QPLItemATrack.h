@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_QPLITEMATRACK_H
-#define __ORCUS_PLAYER_QPLITEMATRACK_H
+#ifndef __OMEGA_PLAYER_QPLITEMATRACK_H
+#define __OMEGA_PLAYER_QPLITEMATRACK_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/QPLItemAlbum.h"
 #include "player/inc/QPlaylistWidget.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -35,7 +35,7 @@ class QPLItemATrack : public QPLItemBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

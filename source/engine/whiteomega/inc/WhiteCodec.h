@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_WHITECODEC_H
-#define __ORCUS_WHITEOMEGA_WHITECODEC_H
+#ifndef __OMEGA_WHITEOMEGA_WHITECODEC_H
+#define __OMEGA_WHITEOMEGA_WHITECODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/Codec.h"
@@ -14,7 +14,7 @@
 #include "engine/redomega/inc/ALACDecoder.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -100,7 +100,7 @@ class WHITEOMEGA_EXPORT WhiteCodec : public engine::Codec
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

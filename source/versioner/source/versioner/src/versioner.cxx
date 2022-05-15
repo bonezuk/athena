@@ -9,7 +9,7 @@
 
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace versioner
 {
@@ -248,7 +248,7 @@ bool readBuildInfo(const QString& fileName,int buildNumber)
 
 //-------------------------------------------------------------------------------------------
 } // namespace versioner
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 // Usage:
 // versioner <buildInfo.xml> <build number> <input.plist> <output.plist> <player.rc> <NSIS version header> <inputhelp.plist> <outputhelp.plist>
@@ -261,21 +261,21 @@ int main(int argc,char **argv)
 	if(argc >= 7)
 	{
 		fprintf(stdout,"Reading version information\n");
-		if(orcus::versioner::readBuildInfo(QString::fromUtf8(argv[1]),QString::fromUtf8(argv[2]).toInt()))
+		if(omega::versioner::readBuildInfo(QString::fromUtf8(argv[1]),QString::fromUtf8(argv[2]).toInt()))
 		{
 			fprintf(stdout,"Create MacOS PList\n");
-			if(orcus::versioner::processPList(QString::fromUtf8(argv[3]),QString::fromUtf8(argv[4])))
+			if(omega::versioner::processPList(QString::fromUtf8(argv[3]),QString::fromUtf8(argv[4])))
 			{
 				fprintf(stdout,"Create Win32 resource file\n");
-				if(orcus::versioner::writeWindowsResource(QString::fromUtf8(argv[5])))
+				if(omega::versioner::writeWindowsResource(QString::fromUtf8(argv[5])))
 				{
 					fprintf(stdout,"Create nullsoft installer version\n");
-					if(orcus::versioner::writeNullSoftVersion(QString::fromUtf8(argv[6])))
+					if(omega::versioner::writeNullSoftVersion(QString::fromUtf8(argv[6])))
 					{
                         fprintf(stdout,"Create MacOS PList Help\n");
 						if(argc >= 9)
 						{
-							if(orcus::versioner::processPList(QString::fromUtf8(argv[7]),QString::fromUtf8(argv[8])))
+							if(omega::versioner::processPList(QString::fromUtf8(argv[7]),QString::fromUtf8(argv[8])))
 							{
 								fprintf(stdout,"Version information setup done!\n");
 								result = 0;

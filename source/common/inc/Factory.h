@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef ORCUS_COMMON_FACTORY_H
-#define ORCUS_COMMON_FACTORY_H
+#ifndef OMEGA_COMMON_FACTORY_H
+#define OMEGA_COMMON_FACTORY_H
 //-------------------------------------------------------------------------------------------
 
 #include <QString>

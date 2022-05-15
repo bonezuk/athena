@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERIOS_PLAYERIOSBASEMODEL_H
-#define __ORCUS_PLAYERAPP_PLAYERIOS_PLAYERIOSBASEMODEL_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERIOS_PLAYERIOSBASEMODEL_H
+#define __OMEGA_PLAYERAPP_PLAYERIOS_PLAYERIOSBASEMODEL_H
 //-------------------------------------------------------------------------------------------
 
 #include <QAbstractListModel>
@@ -9,7 +9,7 @@
 #include <QQmlContext>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ class PlayerIOSBaseModel : public QAbstractListModel
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

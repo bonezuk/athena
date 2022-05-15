@@ -4,7 +4,7 @@
 #include "engine/greenomega/inc/FLACMetaPicture.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -143,5 +143,5 @@ QString FLACMetaPicture::readString(engine::Sequence *seq) const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

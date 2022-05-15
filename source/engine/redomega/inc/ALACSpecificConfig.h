@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACSPECIFICONFIG_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACSPECIFICONFIG_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACSPECIFICONFIG_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACSPECIFICONFIG_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/ALACSequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -220,7 +220,7 @@ inline const tint& ALACSpecificConfig::sampleRate() const
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

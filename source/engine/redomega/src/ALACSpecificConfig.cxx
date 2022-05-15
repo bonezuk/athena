@@ -1,7 +1,7 @@
 #include "engine/redomega/inc/ALACSpecificConfig.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -66,5 +66,5 @@ bool ALACSpecificConfig::read(ALACSequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_CACHEDFILESTREAM_H
-#define __ORCUS_COMMON_CACHEDFILESTREAM_H
+#ifndef __OMEGA_COMMON_CACHEDFILESTREAM_H
+#define __OMEGA_COMMON_CACHEDFILESTREAM_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
@@ -8,7 +8,7 @@
 #include "common/inc/AsynchronousFileReader.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -127,7 +127,7 @@ inline tint64 CachedFileStream::positionFromIndex(tint64 blockIdx) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

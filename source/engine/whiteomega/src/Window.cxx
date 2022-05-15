@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/Window.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -193,9 +193,9 @@ sample_t *Window::process(tint& len)
 {
 	tint i,j;
 #if defined(SINGLE_FLOAT_SAMPLE)
-	OrcusDCT *dct;
+	OmegaDCT *dct;
 #else
-	OrcusDCT64 *dct;
+	OmegaDCT64 *dct;
 #endif
 	ICSInfo *info = &(m_channel->m_info);
 	sample_t *win0,*win1;
@@ -220,9 +220,9 @@ sample_t *Window::process(tint& len)
 					win1 = (info->windowShape==0) ? m_winSine1920 : m_winBessel1920;
 				}
 #if defined(SINGLE_FLOAT_SAMPLE)
-				dct = OrcusDCT::get(2048);
+				dct = OmegaDCT::get(2048);
 #else
-				dct = OrcusDCT64::get(2048);
+				dct = OmegaDCT64::get(2048);
 #endif
 				dct->WInverseMDCT(m_channel->m_spectralCoef,m_X,0);
 				doLong(m_X,m_out,win0,win1);
@@ -243,9 +243,9 @@ sample_t *Window::process(tint& len)
 				}
 
 #if defined(SINGLE_FLOAT_SAMPLE)
-				dct = OrcusDCT::get(2048);
+				dct = OmegaDCT::get(2048);
 #else
-				dct = OrcusDCT64::get(2048);
+				dct = OmegaDCT64::get(2048);
 #endif
 				dct->WInverseMDCT(m_channel->m_spectralCoef,m_X,0);
 				doStart(m_X,m_out,win0,win1);
@@ -266,9 +266,9 @@ sample_t *Window::process(tint& len)
 				}
 				
 #if defined(SINGLE_FLOAT_SAMPLE)
-				dct = OrcusDCT::get(2048);
+				dct = OmegaDCT::get(2048);
 #else
-				dct = OrcusDCT64::get(2048);
+				dct = OmegaDCT64::get(2048);
 #endif
 				dct->WInverseMDCT(m_channel->m_spectralCoef,m_X,0);
 				doStop(m_X,m_out,win0,win1);
@@ -291,9 +291,9 @@ sample_t *Window::process(tint& len)
 				}
 
 #if defined(SINGLE_FLOAT_SAMPLE)
-				dct = OrcusDCT::get(256);
+				dct = OmegaDCT::get(256);
 #else
-				dct = OrcusDCT64::get(256);
+				dct = OmegaDCT64::get(256);
 #endif
 				for(i=0,j=0;i<8;++i,j+=nshort)
 				{
@@ -451,9 +451,9 @@ void Window::doStop(sample_t *x,sample_t *z,sample_t *win0,sample_t *win1)
 sample_t *Window::processLTP(sample_t *in,tint& len)
 {
 #if defined(SINGLE_FLOAT_SAMPLE)
-	OrcusDCT *dct = OrcusDCT::get(2048);
+	OmegaDCT *dct = OmegaDCT::get(2048);
 #else
-	OrcusDCT64 *dct = OrcusDCT64::get(2048);
+	OmegaDCT64 *dct = OmegaDCT64::get(2048);
 #endif
 	ICSInfo *info = &(m_channel->m_info);
 	sample_t *win0,*win1;
@@ -2932,5 +2932,5 @@ const sample_t Window::m_windowSine_240[120] =
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

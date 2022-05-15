@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACFRAMEINDEX_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACFRAMEINDEX_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACFRAMEINDEX_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACFRAMEINDEX_H
 //-------------------------------------------------------------------------------------------
 
 #include <QVector>
 #include "engine/redomega/inc/ALACSequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -42,7 +42,7 @@ inline const QVector<QPair<tuint32,tuint32> >& ALACFrameIndex::list() const
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

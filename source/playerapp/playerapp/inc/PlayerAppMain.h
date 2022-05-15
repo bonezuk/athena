@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERAPP_PLAYERAPPMAIN_H
-#define __ORCUS_PLAYERAPP_PLAYERAPP_PLAYERAPPMAIN_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERAPP_PLAYERAPPMAIN_H
+#define __OMEGA_PLAYERAPP_PLAYERAPP_PLAYERAPPMAIN_H
 //-------------------------------------------------------------------------------------------
 
 #include <QGuiApplication>
@@ -19,7 +19,7 @@
 #include "playerapp/playerapp/inc/OmegaPLWebHandler.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ class PlayerAppMain : public QGuiApplication
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

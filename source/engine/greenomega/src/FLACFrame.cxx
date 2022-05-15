@@ -1,11 +1,11 @@
 #include "engine/greenomega/inc/FLACFrame.h"
-#if defined(ORCUS_FLAC_COMPARE)
+#if defined(OMEGA_FLAC_COMPARE)
 #include "engine/inc/Compare.h"
 #endif
 #include "engine/inc/FormatTypeFromFloat.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -258,7 +258,7 @@ void FLACFrame::processOutput()
 	tint i,j,size = m_header.blockSize();
 	SampleFromInteger s(m_header.bitsPerSample());
 
-#if defined(ORCUS_FLAC_COMPARE)
+#if defined(OMEGA_FLAC_COMPARE)
 	engine::Compare *comp = &g_Compare;
 
 	if(comp->isThreadA())
@@ -467,5 +467,5 @@ bool FLACFrame::seek(FLACFramework *framework,common::TimeStamp& t)
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

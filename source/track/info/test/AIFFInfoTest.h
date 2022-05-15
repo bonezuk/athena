@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_AIFFINFOTEST_H
-#define __ORCUS_TRACK_INFO_AIFFINFOTEST_H
+#ifndef __OMEGA_TRACK_INFO_AIFFINFOTEST_H
+#define __OMEGA_TRACK_INFO_AIFFINFOTEST_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -14,7 +14,7 @@
 #include <QCoreApplication>
 #include <QtTest/QtTest>
 
-using namespace orcus;
+using namespace omega;
 using namespace track::info;
 using namespace testing;
 

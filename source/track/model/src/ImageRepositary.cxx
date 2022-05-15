@@ -1,7 +1,7 @@
 #include "track/model/inc/ImageRepositary.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -393,6 +393,6 @@ void ImageRepositaryImpl::deleteImage(QImage *img)
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

@@ -7,8 +7,8 @@
 #include "track/model/test/ImageRepositaryMock.h"
 
 using namespace testing;
-using namespace orcus::track::model;
-using namespace orcus::track;
+using namespace omega::track::model;
+using namespace omega::track;
 
 //-------------------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ class AlbumModelUtilitiesTest : public AlbumModelUtilities
 		AlbumModelKey testKeyAlbumImageRecord(const QueryRecord& record) const;
 		int testImageIDAlbumImageRecord(const QueryRecord& record) const;
 		int testImageCountAlbumImageRecord(const QueryRecord& record) const;
-		orcus::track::info::IDTagImageType testImageTypeAlbumImageRecord(const QueryRecord& record) const;
+		omega::track::info::IDTagImageType testImageTypeAlbumImageRecord(const QueryRecord& record) const;
 
 		bool testRunAlbumImageQuery(const QString& cmdQ,QueryResult& results) const;
 
@@ -193,7 +193,7 @@ int AlbumModelUtilitiesTest::testImageCountAlbumImageRecord(const QueryRecord& r
 
 //-------------------------------------------------------------------------------------------
 
-orcus::track::info::IDTagImageType AlbumModelUtilitiesTest::testImageTypeAlbumImageRecord(const QueryRecord& record) const
+omega::track::info::IDTagImageType AlbumModelUtilitiesTest::testImageTypeAlbumImageRecord(const QueryRecord& record) const
 {
 	return imageTypeAlbumImageRecord(record);
 }
@@ -385,7 +385,7 @@ bool testUtilitySQLAlbumModelUtilitiesAlbumArtist(const QString& cmd,int resultI
 	}
 	catch(const db::SQLiteException& e)
 	{
-        orcus::common::Log::g_Log.print("SQLite exception on query\n%s\n%s\n",cmd.toUtf8().constData(),e.error().toUtf8().constData());
+        omega::common::Log::g_Log.print("SQLite exception on query\n%s\n%s\n",cmd.toUtf8().constData(),e.error().toUtf8().constData());
 		res = false;
 	}
 	return res;
@@ -1312,7 +1312,7 @@ bool testUtilitySQLAlbumModelUtilitiesAlbumImage(const QString& cmd,int resultID
 	}
 	catch(const db::SQLiteException& e)
 	{
-        orcus::common::Log::g_Log.print("SQLite exception on query\n%s\n%s\n",cmd.toUtf8().constData(),e.error().toUtf8().constData());
+        omega::common::Log::g_Log.print("SQLite exception on query\n%s\n%s\n",cmd.toUtf8().constData(),e.error().toUtf8().constData());
 		res = false;
 	}
 	return res;
@@ -1366,7 +1366,7 @@ TEST(AlbumModelUtilities,imageTypeAlbumImageRecordOutOfRange)
 	QueryRecord recordB = util.testCreateRecordAlbumImage(key,4,5,0x15);
 	EXPECT_TRUE(util.testImageTypeAlbumImageRecord(recordB)==0);
 	QueryRecord recordC = util.testCreateRecordAlbumImage(key,4,5,0x14);
-	EXPECT_TRUE(util.testImageTypeAlbumImageRecord(recordC)==orcus::track::info::e_TagImage_StudioLogo);
+	EXPECT_TRUE(util.testImageTypeAlbumImageRecord(recordC)==omega::track::info::e_TagImage_StudioLogo);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1457,18 +1457,18 @@ TEST(AlbumModelUtilities,runAlbumImageQuery)
 
 TEST(AlbumModelUtilities,preferedImageTypeOutOfRange)
 {
-	orcus::track::info::IDTagImageType a,b;
+	omega::track::info::IDTagImageType a,b;
 
-	a = static_cast<orcus::track::info::IDTagImageType>(-1);
-	b = static_cast<orcus::track::info::IDTagImageType>(-1);
+	a = static_cast<omega::track::info::IDTagImageType>(-1);
+	b = static_cast<omega::track::info::IDTagImageType>(-1);
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 
-	a = orcus::track::info::e_TagImage_Band;
-	b = static_cast<orcus::track::info::IDTagImageType>(-1);
+	a = omega::track::info::e_TagImage_Band;
+	b = static_cast<omega::track::info::IDTagImageType>(-1);
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
-	a = static_cast<orcus::track::info::IDTagImageType>(-1);
-	b = orcus::track::info::e_TagImage_Band;
+	a = static_cast<omega::track::info::IDTagImageType>(-1);
+	b = omega::track::info::e_TagImage_Band;
 	EXPECT_FALSE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 }
 
@@ -1476,88 +1476,88 @@ TEST(AlbumModelUtilities,preferedImageTypeOutOfRange)
 
 TEST(AlbumModelUtilities,preferedImageTypeOrdering)
 {
-	orcus::track::info::IDTagImageType a,b;
+	omega::track::info::IDTagImageType a,b;
 
-	b = orcus::track::info::e_TagImage_CoverFront;
+	b = omega::track::info::e_TagImage_CoverFront;
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Band;
-	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
-
-	a = b;
-	b = orcus::track::info::e_TagImage_Leaflet;
+	b = omega::track::info::e_TagImage_Band;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 
 	a = b;
-	b = orcus::track::info::e_TagImage_Media;
+	b = omega::track::info::e_TagImage_Leaflet;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 
 	a = b;
-	b = orcus::track::info::e_TagImage_Performance;
+	b = omega::track::info::e_TagImage_Media;
+	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
+
+	a = b;
+	b = omega::track::info::e_TagImage_Performance;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_CoverBack;
+	b = omega::track::info::e_TagImage_CoverBack;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_LeadArtist;
+	b = omega::track::info::e_TagImage_LeadArtist;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Artist;
+	b = omega::track::info::e_TagImage_Artist;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Conductor;
+	b = omega::track::info::e_TagImage_Conductor;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Composer;
+	b = omega::track::info::e_TagImage_Composer;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Lyricist;
+	b = omega::track::info::e_TagImage_Lyricist;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_RecLocation;
+	b = omega::track::info::e_TagImage_RecLocation;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Recording;
+	b = omega::track::info::e_TagImage_Recording;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Illustration;
+	b = omega::track::info::e_TagImage_Illustration;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_BandLogo;
+	b = omega::track::info::e_TagImage_BandLogo;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_StudioLogo;
+	b = omega::track::info::e_TagImage_StudioLogo;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Icon32x32;
+	b = omega::track::info::e_TagImage_Icon32x32;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Other;
+	b = omega::track::info::e_TagImage_Other;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_OtherIcon;
+	b = omega::track::info::e_TagImage_OtherIcon;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_VidCaptute;
+	b = omega::track::info::e_TagImage_VidCaptute;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 	
 	a = b;
-	b = orcus::track::info::e_TagImage_Fish;
+	b = omega::track::info::e_TagImage_Fish;
 	EXPECT_TRUE(AlbumModelUtilitiesTest::testPreferedImageType(a,b));
 }
 

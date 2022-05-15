@@ -1,7 +1,7 @@
 #include "track/info/inc/ID3Info2.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -875,5 +875,5 @@ ImageInfoArray *ID3Info2::getImageData(IDTagImageType type,ImageFormat& format) 
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

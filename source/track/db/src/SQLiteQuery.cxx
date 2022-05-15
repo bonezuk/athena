@@ -1,7 +1,7 @@
 #include "track/db/inc/SQLiteQuery.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -211,5 +211,5 @@ QByteArray SQLiteQuery::columnBlob(int cNo)
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

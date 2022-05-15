@@ -1,5 +1,5 @@
-#ifndef __ORCUS_COMMON_ALLOCATION_H
-#define __ORCUS_COMMON_ALLOCATION_H
+#ifndef __OMEGA_COMMON_ALLOCATION_H
+#define __OMEGA_COMMON_ALLOCATION_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +14,7 @@
 #define ALLOC_MEMORY_ALIGN 1
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -66,7 +66,7 @@ class COMMON_EXPORT Allocation
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

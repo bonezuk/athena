@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_FORMATSSUPPORTED_H
-#define __ORCUS_AUDIOIO_FORMATSSUPPORTED_H
+#ifndef __OMEGA_AUDIOIO_FORMATSSUPPORTED_H
+#define __OMEGA_AUDIOIO_FORMATSSUPPORTED_H
 //-------------------------------------------------------------------------------------------
 
 #include <QSet>
@@ -8,7 +8,7 @@
 #include "audioio/inc/FormatDescription.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -39,7 +39,7 @@ class AUDIOIO_EXPORT FormatsSupported
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

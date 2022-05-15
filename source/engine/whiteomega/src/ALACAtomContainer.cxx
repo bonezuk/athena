@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/ALACAtomContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -79,5 +79,5 @@ bool ALACAtomContainer::initWithAtom(Atom *a)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

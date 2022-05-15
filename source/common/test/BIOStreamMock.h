@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_TEST_BIOSTREAMMOCK_H
-#define __ORCUS_COMMON_TEST_BIOSTREAMMOCK_H
+#ifndef __OMEGA_COMMON_TEST_BIOSTREAMMOCK_H
+#define __OMEGA_COMMON_TEST_BIOSTREAMMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
@@ -9,7 +9,7 @@
 #include "gmock/gmock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -58,7 +58,7 @@ class BIOStreamMock : public BIOStream
 //-------------------------------------------------------------------------------------------
 } // namespace test
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_SQLITEEXCEPTION_H
-#define __ORCUS_TRACK_DB_SQLITEEXCEPTION_H
+#ifndef __OMEGA_TRACK_DB_SQLITEEXCEPTION_H
+#define __OMEGA_TRACK_DB_SQLITEEXCEPTION_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/SQLiteDatabase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -46,7 +46,7 @@ inline const QString& SQLiteException::error() const
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

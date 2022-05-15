@@ -2,7 +2,7 @@
 #include "common/inc/Log.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -581,5 +581,5 @@ tint Resample::process(tfloat64 factor,sample_t *inBuffer,tint inBufferLen,tint 
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

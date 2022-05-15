@@ -83,7 +83,7 @@ set ( TEST_SOURCE
 	../engine/test/FormatType8BitTest.cxx
 	../engine/test/FormatTypeFromFloatTest.cxx
 	../engine/test/InterleavedCodecTest.cxx
-	../engine/test/OrcusDCT64Test.cxx
+	../engine/test/OmegaDCT64Test.cxx
 	../engine/test/RDataMock.cxx
 	../engine/test/RDataTest.cxx
 

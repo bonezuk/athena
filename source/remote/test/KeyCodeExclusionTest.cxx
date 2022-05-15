@@ -3,7 +3,7 @@
 
 #include "remote/inc/KeyCodeExclusion.h"
 
-using namespace orcus::remote;
+using namespace omega::remote;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #include "player/inc/QPlayerApplication.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -278,5 +278,5 @@ QString QPLItemAlbum::getTime()
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

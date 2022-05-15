@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_ITUNESLOCATIONMAC_H
-#define __ORCUS_TRACK_DB_ITUNESLOCATIONMAC_H
+#ifndef __OMEGA_TRACK_DB_ITUNESLOCATIONMAC_H
+#define __OMEGA_TRACK_DB_ITUNESLOCATIONMAC_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/ITunesLocation.h"

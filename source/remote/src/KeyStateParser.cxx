@@ -1,7 +1,7 @@
 #include "remote/inc/KeyStateParser.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -295,5 +295,5 @@ int KeyStateParser::findRecursive(const int *mem,int len,const Item *parent,int 
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

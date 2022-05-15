@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WIDGET_WIDGETDLL_H
-#define __ORCUS_WIDGET_WIDGETDLL_H
+#ifndef __OMEGA_WIDGET_WIDGETDLL_H
+#define __OMEGA_WIDGET_WIDGETDLL_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_WIDGET_DLL)
+#if defined(OMEGA_WIDGET_DLL)
 #define WIDGET_EXPORT __declspec(dllexport)
 #define WIDGET_TEMPLATE
 #else
@@ -21,12 +21,12 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 	namespace widget
 	{
 	} // namespace widget
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

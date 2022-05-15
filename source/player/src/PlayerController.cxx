@@ -11,7 +11,7 @@
 #include "remote/inc/KeyCodeExclusion.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -132,7 +132,7 @@ void PlayerController::onStart()
 	{
 		QStringList aList;
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 		audioio::WasAPIIF::instance("wasapi");
 #endif
 
@@ -209,7 +209,7 @@ void PlayerController::onStop()
 		m_playerDialog = 0;
 	}
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	if(m_cliTimer!=0)
 	{
 		m_cliTimer->stop();
@@ -246,7 +246,7 @@ void PlayerController::onStop()
 
 	network::Controller::end();
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	audioio::WasAPIIF::release();
 #endif
 
@@ -373,7 +373,7 @@ void PlayerController::createActions()
 	m_repeatAction->setEnabled(true);
 
 	m_cutAction = new QAction(tr("Cu&t"),this);
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	m_cutAction->setShortcuts(QKeySequence::Cut);
 	m_cutAction->setIcon(QIcon(":/player/Resources/cut.png"));
 #endif
@@ -381,7 +381,7 @@ void PlayerController::createActions()
 	m_cutAction->setEnabled(false);
 
 	m_copyAction = new QAction(tr("&Copy"),this);
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	m_copyAction->setShortcuts(QKeySequence::Copy);
 	m_copyAction->setIcon(QIcon(":/player/Resources/page_copy.png"));
 #endif
@@ -389,7 +389,7 @@ void PlayerController::createActions()
 	m_copyAction->setEnabled(false);
 
 	m_pasteAction = new QAction(tr("&Paste"),this);
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	m_pasteAction->setShortcuts(QKeySequence::Paste);
 	m_pasteAction->setIcon(QIcon(":player/Resources/page_paste.png"));
 #endif
@@ -397,14 +397,14 @@ void PlayerController::createActions()
 	m_pasteAction->setEnabled(false);
 	
 	m_deleteAction = new QAction(tr("Remove Tracks"),this);
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	m_deleteAction->setShortcuts(QKeySequence::Delete);
 #endif
 	connect(m_deleteAction,SIGNAL(triggered()),this,SLOT(onDelete()));
 	m_deleteAction->setEnabled(false);
 
 	m_selectAllAction = new QAction(tr("Select All"),this);
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	m_selectAllAction->setShortcuts(QKeySequence::SelectAll);
 #endif
 	connect(m_selectAllAction,SIGNAL(triggered()),this,SLOT(onSelectAll()));
@@ -985,5 +985,5 @@ void PlayerController::setStartupSplashScreen(QSplashScreen& screen)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

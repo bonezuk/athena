@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVERFLOORBASE_H
-#define __ORCUS_ENGINE_SILVEROMEGA_VSILVERFLOORBASE_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVERFLOORBASE_H
+#define __OMEGA_ENGINE_SILVEROMEGA_VSILVERFLOORBASE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/silveromega/inc/SilverOmegaDLL.h"
@@ -8,7 +8,7 @@
 #include "engine/silveromega/inc/VSilverCodecInformation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -23,7 +23,7 @@ typedef enum
 	e_floorUnknown
 } VSilverFloorType;
 
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVERWINDOW_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVERWINDOW_H
 class VSilverWindow;
 #endif
 
@@ -54,7 +54,7 @@ class SILVEROMEGA_EXPORT VSilverFloorBase : public VSilverInfoObject
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

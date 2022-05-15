@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AOQUERYDEVICE_H
-#define __ORCUS_AUDIOIO_AOQUERYDEVICE_H
+#ifndef __OMEGA_AUDIOIO_AOQUERYDEVICE_H
+#define __OMEGA_AUDIOIO_AOQUERYDEVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QSet>
@@ -10,7 +10,7 @@
 #include "audioio/inc/AudioIODLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -125,7 +125,7 @@ class AUDIOIO_EXPORT AOQueryDevice::Device
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

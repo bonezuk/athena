@@ -4,7 +4,7 @@
 #include <QApplication>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace widget
 {
@@ -28,7 +28,7 @@ QString BuildVersionDialog::getFormatedVersionText()
 	s << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">";
 	s << "<html><head><meta name=\"qrichtext\" content=\"1\" />";
 	s << "<style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:";
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	s << "8";
 #else
 	s << "12";
@@ -106,5 +106,5 @@ AboutDialog::~AboutDialog()
 
 //-------------------------------------------------------------------------------------------
 } // namespace widget
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

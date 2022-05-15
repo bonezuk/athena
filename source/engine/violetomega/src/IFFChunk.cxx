@@ -1,7 +1,7 @@
 #include "engine/violetomega/inc/IFFChunk.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -175,6 +175,6 @@ bool IFFChunk::scan()
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

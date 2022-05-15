@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_INTEGRATION_APPLEREMOTESERVICE_H
-#define __ORCUS_REMOTE_INTEGRATION_APPLEREMOTESERVICE_H
+#ifndef __OMEGA_REMOTE_INTEGRATION_APPLEREMOTESERVICE_H
+#define __OMEGA_REMOTE_INTEGRATION_APPLEREMOTESERVICE_H
 //-------------------------------------------------------------------------------------------
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"

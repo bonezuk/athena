@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_PLAYLISTLOADFUNCTIONS_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_PLAYLISTLOADFUNCTIONS_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYLISTLOADFUNCTIONS_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYLISTLOADFUNCTIONS_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/TrackDB.h"
@@ -10,7 +10,7 @@
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ PLAYERCOMMON_EXPORT void playlistSubtrackToDBList(QVector<QPair<track::info::Inf
 PLAYERCOMMON_EXPORT bool loadPlaylistFromDBOrArguments(const QStringList& args, QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB);
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

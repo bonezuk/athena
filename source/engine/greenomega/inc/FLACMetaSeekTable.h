@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_GREENOMEGA_FLACMETASEEKTABLE_H
-#define __ORCUS_GREENOMEGA_FLACMETASEEKTABLE_H
+#ifndef __OMEGA_GREENOMEGA_FLACMETASEEKTABLE_H
+#define __OMEGA_GREENOMEGA_FLACMETASEEKTABLE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QVector>
@@ -8,7 +8,7 @@
 #include "engine/greenomega/inc/FLACMetaBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -92,7 +92,7 @@ inline const tint& FLACMetaSeekTable::SeekPoint::samplesInFrame() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

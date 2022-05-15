@@ -13,7 +13,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -305,5 +305,5 @@ bool ProcessInfo::parseProcessInfo(const QString& pidDir,QString& name)
 #endif
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

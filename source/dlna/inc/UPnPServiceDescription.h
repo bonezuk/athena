@@ -1,11 +1,11 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_DLNA_UPNPSERVICEDESCRIPTION_H
-#define __ORCUS_DLNA_UPNPSERVICEDESCRIPTION_H
+#ifndef __OMEGA_DLNA_UPNPSERVICEDESCRIPTION_H
+#define __OMEGA_DLNA_UPNPSERVICEDESCRIPTION_H
 //-------------------------------------------------------------------------------------------
 #include "dlna/inc/XMLNodeParser.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -56,7 +56,7 @@ typedef QSharedPointer<UPnPServiceDescription> UPnPServiceDescriptionSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_REORDER_H
-#define __ORCUS_ENGINE_BLACKOMEGA_REORDER_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_REORDER_H
+#define __OMEGA_ENGINE_BLACKOMEGA_REORDER_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Allocation.h"
 #include "engine/blackomega/inc/Stereo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -64,7 +64,7 @@ inline void Reorder::set(sample_t *p)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AOWIN32_H
-#define __ORCUS_AUDIOIO_AOWIN32_H
+#ifndef __OMEGA_AUDIOIO_AOWIN32_H
+#define __OMEGA_AUDIOIO_AOWIN32_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOBase.h"
@@ -9,7 +9,7 @@
 #include "audioio/inc/SampleConverter.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -119,7 +119,7 @@ class AUDIOIO_EXPORT AOWin32 : public AOBase
 		virtual ASIOTime *bufferSwitchTimeInfoI(ASIOTime *timeInfo,long index,ASIOBool processNow);
 
 		virtual common::TimeStamp getTimeFromASIO(const ASIOTimeStamp *tS) const;
-		virtual void getTimeFromOrcus(const common::TimeStamp& t,ASIOTimeStamp *tS) const;
+		virtual void getTimeFromOmega(const common::TimeStamp& t,ASIOTimeStamp *tS) const;
 
 		virtual void processMessages();
 		virtual void processStopTimeMessage();
@@ -180,7 +180,7 @@ class AUDIOIO_EXPORT AOWin32 : public AOBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

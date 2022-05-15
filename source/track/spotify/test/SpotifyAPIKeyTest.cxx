@@ -3,7 +3,7 @@
 
 #include "track/spotify/inc/SpotifyAPIKey.h"
 
-using namespace orcus::track::spotify;
+using namespace omega::track::spotify;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

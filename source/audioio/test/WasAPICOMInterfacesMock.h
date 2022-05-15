@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_WASAPICOMINTERFACESMOCK_H
-#define __ORCUS_AUDIOIO_WASAPICOMINTERFACESMOCK_H
+#ifndef __OMEGA_AUDIOIO_WASAPICOMINTERFACESMOCK_H
+#define __OMEGA_AUDIOIO_WASAPICOMINTERFACESMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -9,7 +9,7 @@
 #include "audioio/inc/WasAPICOMInterfaces.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -208,7 +208,7 @@ class IAudioClockIFMock : public IAudioClockIF
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

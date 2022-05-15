@@ -1,7 +1,7 @@
 #include "audioio/inc/WasAPILayerIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -1164,5 +1164,5 @@ void WasAPIDeviceLayer::releaseAudioClient()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

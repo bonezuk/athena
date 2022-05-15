@@ -1,7 +1,7 @@
 #include "track/db/inc/SQLiteOperation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -133,5 +133,5 @@ const QString& SQLiteOperation::sqlCommand() const
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/silveromega/inc/VSilverCodecComments.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -222,5 +222,5 @@ const QString& VSilverCodecComments::diskNumber() const
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

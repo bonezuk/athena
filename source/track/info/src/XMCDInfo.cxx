@@ -4,7 +4,7 @@
 #include "track/info/inc/XMCDInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -606,5 +606,5 @@ QVector<InfoSPtr> XMCDInfo::readXMCD(common::BIOStream *input)
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

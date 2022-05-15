@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_BANDINDEX_H
-#define __ORCUS_ENGINE_BLACKOMEGA_BANDINDEX_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_BANDINDEX_H
+#define __OMEGA_ENGINE_BLACKOMEGA_BANDINDEX_H
 //-------------------------------------------------------------------------------------------
 
 #include <math.h>
@@ -10,7 +10,7 @@
 #include "engine/blackomega/inc/BlackOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -91,7 +91,7 @@ class BLACKOMEGA_EXPORT Band
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

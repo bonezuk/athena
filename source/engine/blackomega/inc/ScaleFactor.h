@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_SCALEFACTOR_H
-#define __ORCUS_ENGINE_BLACKOMEGA_SCALEFACTOR_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_SCALEFACTOR_H
+#define __OMEGA_ENGINE_BLACKOMEGA_SCALEFACTOR_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/blackomega/inc/SideInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -86,7 +86,7 @@ inline void ScaleFactor::set(SideInfoS *info,tint ch,tint gr)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

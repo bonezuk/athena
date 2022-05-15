@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WIDGET_SANDBOXWINDOWS_H
-#define __ORCUS_WIDGET_SANDBOXWINDOWS_H
+#ifndef __OMEGA_WIDGET_SANDBOXWINDOWS_H
+#define __OMEGA_WIDGET_SANDBOXWINDOWS_H
 //-------------------------------------------------------------------------------------------
 
 #include "widget/inc/SandBoxBase.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_WIN32) || defined(OMEGA_LINUX)
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace widget
 {
@@ -26,7 +26,7 @@ class WIDGET_EXPORT SBServiceWin : public SBServiceBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace widget
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

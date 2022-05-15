@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RTP_RTCPPACKETSR_H
-#define __ORCUS_NETWORK_RTP_RTCPPACKETSR_H
+#ifndef __OMEGA_NETWORK_RTP_RTCPPACKETSR_H
+#define __OMEGA_NETWORK_RTP_RTCPPACKETSR_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/rtp/inc/RTCPPacket.h"
 #include "network/rtp/inc/RTCPReportBlock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -58,7 +58,7 @@ class NETWORKRTP_EXPORT RTCPPacketSR : public RTCPPacket
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

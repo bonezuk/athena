@@ -4,7 +4,7 @@
 #include <QDir>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -112,5 +112,5 @@ QStringList TrackDBMountPoints::mountPoints()
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

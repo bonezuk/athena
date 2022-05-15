@@ -1,7 +1,7 @@
 #include "network/ftp/inc/FTPSession.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -2141,5 +2141,5 @@ bool FTPSession::processUnknown(const common::BString& cmd)
 //-------------------------------------------------------------------------------------------
 } // namespace ftp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_PNS_H
-#define __ORCUS_WHITEOMEGA_PNS_H
+#ifndef __OMEGA_WHITEOMEGA_PNS_H
+#define __OMEGA_WHITEOMEGA_PNS_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/whiteomega/inc/GAConfig.h"
@@ -8,7 +8,7 @@
 #include "engine/whiteomega/inc/Common.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -121,7 +121,7 @@ inline void PNS::generateRandomVector(sample_t *spec,tint scaleFactor,tint size)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

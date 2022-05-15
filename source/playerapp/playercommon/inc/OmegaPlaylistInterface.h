@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_OMEGAPLAYLISTINTERFACE_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_OMEGAPLAYLISTINTERFACE_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAPLAYLISTINTERFACE_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAPLAYLISTINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QtGlobal>
@@ -10,7 +10,7 @@
 #include "playerapp/playercommon/inc/PlayListModel.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ class PLAYERCOMMON_EXPORT OmegaPlaylistInterface : public QObject
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

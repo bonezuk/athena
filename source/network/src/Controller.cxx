@@ -1,15 +1,15 @@
 #include "network/inc/Controller.h"
 #include "network/inc/Service.h"
 
-//#define ORCUS_NETWORK_CONTROLLER_DB 1
-#if defined(ORCUS_NETWORK_CONTROLLER_DB)
+//#define OMEGA_NETWORK_CONTROLLER_DB 1
+#if defined(OMEGA_NETWORK_CONTROLLER_DB)
 #define DB(x) x
 #else
 #define DB(x)
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -835,5 +835,5 @@ void Controller::delSocket(Service::ServicePtr svr,Socket::SocketPtr s)
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

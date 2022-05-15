@@ -1,12 +1,12 @@
 #include "engine/blackomega/inc/MPCodec.h"
-#if defined(ORCUS_MP3_COMPARE)
+#if defined(OMEGA_MP3_COMPARE)
 #include "engine/inc/Compare.h"
 #endif
 #include "engine/inc/RData.h"
 #include "engine/inc/FormatTypeFromFloat.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -273,7 +273,7 @@ void MPCodec::link(HeaderItem *item)
 
 //-------------------------------------------------------------------------------------------
 
-#if defined(ORCUS_MP3_COMPARE)
+#if defined(OMEGA_MP3_COMPARE)
 tint g_debug_frameCount = 254;
 #endif
 
@@ -309,7 +309,7 @@ bool MPCodec::decode()
 								return false;
 							}
 							
-#if defined(ORCUS_MP3_COMPARE)
+#if defined(OMEGA_MP3_COMPARE)
 							if(g_Compare.isThreadA())
 							{
 								tint frame = g_Compare.frameA();
@@ -334,7 +334,7 @@ bool MPCodec::decode()
 								printError("decode","Error dequantizing stereo stream");
 								return false;
 							}
-#if defined(ORCUS_MP3_COMPARE)
+#if defined(OMEGA_MP3_COMPARE)
 							if(g_Compare.isThreadA())
 							{
 								tint frame = g_Compare.frameA();
@@ -364,7 +364,7 @@ bool MPCodec::decode()
 					                  m_dequantizeStereo[gr]->getStereo(DequantizeStereo::e_stereoShort2));
 					m_stereo[gr]->process();
 
-#if defined(ORCUS_MP3_COMPARE)
+#if defined(OMEGA_MP3_COMPARE)
 					if(g_Compare.isThreadA())
 					{
 						tint frame = g_Compare.frameA();
@@ -406,7 +406,7 @@ bool MPCodec::decode()
 							}
 						}
 
-#if defined(ORCUS_MP3_COMPARE)
+#if defined(OMEGA_MP3_COMPARE)
 						if(g_Compare.isThreadA())
 						{
 							tint frame = g_Compare.frameA();
@@ -747,5 +747,5 @@ tint MPCodec::bitrate() const
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

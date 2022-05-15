@@ -1,7 +1,7 @@
 #include "track/model/inc/AlbumModel.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -471,5 +471,5 @@ bool AlbumModel::runAlbumQuery(const QString& cmdQ,QueryResult& results) const
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namepsace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_DLNA_UPNPPROVIDER_H
-#define __ORCUS_DLNA_UPNPPROVIDER_H
+#ifndef __OMEGA_DLNA_UPNPPROVIDER_H
+#define __OMEGA_DLNA_UPNPPROVIDER_H
 //-------------------------------------------------------------------------------------------
 
 #include "dlna/inc/UPnPLayerIF.h"
@@ -9,7 +9,7 @@
 #include "common/inc/SHA1Digest.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -49,7 +49,7 @@ typedef QSharedPointer<UPnPProvider> UPnPProviderSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_WASAPIIFMOCK_H
-#define __ORCUS_AUDIOIO_WASAPIIFMOCK_H
+#ifndef __OMEGA_AUDIOIO_WASAPIIFMOCK_H
+#define __OMEGA_AUDIOIO_WASAPIIFMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -9,7 +9,7 @@
 #include "audioio/inc/WasAPIIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -57,7 +57,7 @@ class WasAPIDeviceMock : public WasAPIDevice
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

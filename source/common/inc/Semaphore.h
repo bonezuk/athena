@@ -1,5 +1,5 @@
-#ifndef __ORCUS_COMMON_SEMAPHORE_H
-#define __ORCUS_COMMON_SEMAPHORE_H
+#ifndef __OMEGA_COMMON_SEMAPHORE_H
+#define __OMEGA_COMMON_SEMAPHORE_H
 
 #include "common/inc/CommonTypes.h"
 #include "common/inc/BOQueueTree.h"
@@ -10,7 +10,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -36,7 +36,7 @@ typedef struct
 
 #if !defined(COMP_UNIT_Semaphore)
 OMEGA_EXPORT_TEMPLATE template class COMMON_EXPORT BOQueueTree<SemaphoreItem *>;
-#elif defined(ORCUS_WIN32)
+#elif defined(OMEGA_WIN32)
 template class COMMON_EXPORT BOQueueTree<SemaphoreItem *>;
 #endif
 
@@ -88,7 +88,7 @@ inline tint Semaphore::Get() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

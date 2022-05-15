@@ -1,7 +1,7 @@
 #include "engine/inc/WavChannelMask.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -495,5 +495,5 @@ void WavChannelMask::setup(tint noOutChannels,tint chMask)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

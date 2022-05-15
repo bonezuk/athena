@@ -18,7 +18,7 @@
 #include <QSettings>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -945,5 +945,5 @@ void Info::calcHashID(common::BIOStream *input)
 //-------------------------------------------------------------------------------------------
 } // namespace idtag
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

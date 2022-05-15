@@ -4,7 +4,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -812,5 +812,5 @@ void PListXMLParser::error(void *userData,const char *msg,...)
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

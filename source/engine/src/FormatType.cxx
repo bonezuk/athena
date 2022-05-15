@@ -3,7 +3,7 @@
 #include <limits>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -3212,5 +3212,5 @@ tfloat64 readSample64BigEndian(const tubyte *mem,int noBits)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

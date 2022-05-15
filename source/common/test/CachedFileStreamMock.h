@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_CACHEDFILESTREAMMOCK_H
-#define __ORCUS_COMMON_CACHEDFILESTREAMMOCK_H
+#ifndef __OMEGA_COMMON_CACHEDFILESTREAMMOCK_H
+#define __OMEGA_COMMON_CACHEDFILESTREAMMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -9,7 +9,7 @@
 #include "common/inc/CachedFileStream.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -41,7 +41,7 @@ class CachedFileStreamMock : public CachedFileStream
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

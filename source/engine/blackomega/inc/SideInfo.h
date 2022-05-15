@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_SIDEINFO_H
-#define __ORCUS_ENGINE_BLACKOMEGA_SIDEINFO_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_SIDEINFO_H
+#define __OMEGA_ENGINE_BLACKOMEGA_SIDEINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/BitStream.h"
@@ -8,7 +8,7 @@
 #include "engine/blackomega/inc/BandIndex.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -132,7 +132,7 @@ inline void SideInfo::set(SideInfoS *p)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

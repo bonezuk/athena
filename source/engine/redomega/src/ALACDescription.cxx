@@ -1,7 +1,7 @@
 #include "engine/redomega/inc/ALACDescription.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -48,5 +48,5 @@ bool ALACDescription::read(ALACSequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

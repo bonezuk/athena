@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_TEST_BIOTIMECACHEDSTREAMTEST_H
-#define __ORCUS_COMMON_TEST_BIOTIMECACHEDSTREAMTEST_H
+#ifndef __OMEGA_COMMON_TEST_BIOTIMECACHEDSTREAMTEST_H
+#define __OMEGA_COMMON_TEST_BIOTIMECACHEDSTREAMTEST_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -19,7 +19,7 @@
 #include <QtTest/QtTest>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -68,7 +68,7 @@ class BIOTimeCachedStreamQtUnitApplication : public QCoreApplication
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

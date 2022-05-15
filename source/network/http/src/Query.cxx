@@ -1,7 +1,7 @@
 #include "network/http/inc/Query.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -485,5 +485,5 @@ void Query::map(QMap<QString,QString>& m) const
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_COMMON_H
-#define __ORCUS_WHITEOMEGA_COMMON_H
+#ifndef __OMEGA_WHITEOMEGA_COMMON_H
+#define __OMEGA_WHITEOMEGA_COMMON_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 #include "engine/whiteomega/inc/WhiteOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {

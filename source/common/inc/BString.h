@@ -1,5 +1,5 @@
-#ifndef __ORCUS_COMMON_BSTRING_H
-#define __ORCUS_COMMON_BSTRING_H
+#ifndef __OMEGA_COMMON_BSTRING_H
+#define __OMEGA_COMMON_BSTRING_H
 
 #include <string.h>
 #include <stddef.h>
@@ -8,7 +8,7 @@
 #define BSTRING_BLOCKSIZE 32L
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -353,7 +353,7 @@ inline tint BString::GetLength() const
 
 //-------------------------------------------------------------------------------------------
 } // common namespace
-} // orcus namespace
+} // omega namespace
 //-------------------------------------------------------------------------------------------
 
 #endif

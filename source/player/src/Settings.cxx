@@ -10,7 +10,7 @@
 #include "player/inc/PlayerController.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -358,5 +358,5 @@ void SettingsCentralWidget::hideEvent(QHideEvent *evt)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

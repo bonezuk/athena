@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_TRACKFILEDEPENDENCIES_H
-#define __ORCUS_TRACK_DB_TRACKFILEDEPENDENCIES_H
+#ifndef __OMEGA_TRACK_DB_TRACKFILEDEPENDENCIES_H
+#define __OMEGA_TRACK_DB_TRACKFILEDEPENDENCIES_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -9,7 +9,7 @@
 #include <QMap>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -74,7 +74,7 @@ class TRACK_DB_EXPORT TrackFileDependencies
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_BSEMAPHOREQUEUE_H
-#define __ORCUS_COMMON_BSEMAPHOREQUEUE_H
+#ifndef __OMEGA_COMMON_BSEMAPHOREQUEUE_H
+#define __OMEGA_COMMON_BSEMAPHOREQUEUE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 #include "common/inc/Semaphore.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -362,7 +362,7 @@ template <class X> tint BSemaphoreQueue<X>::Count() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

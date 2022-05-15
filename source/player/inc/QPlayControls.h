@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_QPLAYCONTROLS_H
-#define __ORCUS_PLAYER_QPLAYCONTROLS_H
+#ifndef __OMEGA_PLAYER_QPLAYCONTROLS_H
+#define __OMEGA_PLAYER_QPLAYCONTROLS_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/QPlaylistWidget.h"
@@ -8,7 +8,7 @@
 #include <QTimer>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -189,7 +189,7 @@ class QPlayControls : public QWidget
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

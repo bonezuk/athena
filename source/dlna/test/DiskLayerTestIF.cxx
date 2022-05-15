@@ -4,7 +4,7 @@
 #include "dlna/inc/DiskLayerIF.h"
 #include "dlna/test/UPnPProviderTestEnviroment.h"
 
-using namespace orcus::dlna;
+using namespace omega::dlna;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

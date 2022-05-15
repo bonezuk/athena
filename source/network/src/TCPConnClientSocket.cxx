@@ -2,7 +2,7 @@
 #include "network/inc/TCPService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -108,5 +108,5 @@ bool TCPConnClientSocket::open(const QString& name,tint port)
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

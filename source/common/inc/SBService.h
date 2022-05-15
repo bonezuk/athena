@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_SBSERVICE_H
-#define __ORCUS_COMMON_SBSERVICE_H
+#ifndef __OMEGA_COMMON_SBSERVICE_H
+#define __OMEGA_COMMON_SBSERVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QString>
@@ -10,7 +10,7 @@
 #include "common/inc/Factory.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -94,7 +94,7 @@ typedef QSharedPointer<SBBookmark> SBBookmarkPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

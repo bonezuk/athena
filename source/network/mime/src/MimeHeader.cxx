@@ -1,7 +1,7 @@
 #include "network/mime/inc/MimeHeader.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -358,5 +358,5 @@ MimeHeader::operator QString () const
 //-------------------------------------------------------------------------------------------
 } // namespace mime
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

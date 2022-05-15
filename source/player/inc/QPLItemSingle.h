@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_QPLITEMSINGLE_H
-#define __ORCUS_PLAYER_QPLITEMSINGLE_H
+#ifndef __OMEGA_PLAYER_QPLITEMSINGLE_H
+#define __OMEGA_PLAYER_QPLITEMSINGLE_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/QPLItemBase.h"
 #include "player/inc/QPlaylistWidget.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -33,7 +33,7 @@ class QPLItemSingle : public QPLItemBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_IFFCOMMONCHUNK_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_IFFCOMMONCHUNK_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_IFFCOMMONCHUNK_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_IFFCOMMONCHUNK_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/violetomega/inc/IFFChunk.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -44,7 +44,7 @@ typedef QSharedPointer<IFFCommonChunk> IFFCommonChunkSPtr;
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

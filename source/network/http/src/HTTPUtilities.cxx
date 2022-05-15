@@ -2,7 +2,7 @@
 #include "engine/inc/Codec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -123,5 +123,5 @@ QString contentTypeFromExtension(const QString& fileName)
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

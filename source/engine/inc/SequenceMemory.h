@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SEQUENCEMEMORY_H
-#define __ORCUS_ENGINE_SEQUENCEMEMORY_H
+#ifndef __OMEGA_ENGINE_SEQUENCEMEMORY_H
+#define __OMEGA_ENGINE_SEQUENCEMEMORY_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BString.h"
@@ -18,7 +18,7 @@
 
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -67,7 +67,7 @@ class ENGINE_EXPORT SequenceMemory : public Sequence
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

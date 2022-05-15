@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVEROGG_H
-#define __ORCUS_ENGINE_SILVEROMEGA_VSILVEROGG_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVEROGG_H
+#define __OMEGA_ENGINE_SILVEROMEGA_VSILVEROGG_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BOQueueTree.h"
@@ -8,7 +8,7 @@
 #include "engine/silveromega/inc/VSilverInfoObject.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -71,7 +71,7 @@ class SILVEROMEGA_EXPORT VSilverOgg
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

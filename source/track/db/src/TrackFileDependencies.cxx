@@ -4,7 +4,7 @@
 #include "common/inc/JaroWinklerDistance.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -460,5 +460,5 @@ QSet<QString> TrackFileDependencies::allDependencies() const
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

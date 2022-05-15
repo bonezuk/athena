@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RESOURCE_H
-#define __ORCUS_NETWORK_RESOURCE_H
+#ifndef __OMEGA_NETWORK_RESOURCE_H
+#define __OMEGA_NETWORK_RESOURCE_H
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_WIN32)
 //-------------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 
 #include <process.h>
 
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -28,7 +28,7 @@ typedef int addrlen_type;
 const socket_type c_invalidSocket = INVALID_SOCKET;
 
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #elif defined(OMEGA_POSIX)
 //-------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ const socket_type c_invalidSocket = INVALID_SOCKET;
 #include <arpa/inet.h>
 #include <pwd.h>
 
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -59,7 +59,7 @@ typedef socklen_t addrlen_type;
 const socket_type c_invalidSocket = -1;
 
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ const socket_type c_invalidSocket = -1;
 #include "common/inc/SHA1Digest.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -152,7 +152,7 @@ class NETWORK_EXPORT Resource
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

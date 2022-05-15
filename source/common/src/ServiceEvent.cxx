@@ -1,7 +1,7 @@
 #include "common/inc/ServiceEvent.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -216,5 +216,5 @@ bool ServiceEventAndCondition::eventSuper(QEvent *evt)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RTP_SILVEROMEGA_SILVERRTPCODEC_H
-#define __ORCUS_NETWORK_RTP_SILVEROMEGA_SILVERRTPCODEC_H
+#ifndef __OMEGA_NETWORK_RTP_SILVEROMEGA_SILVERRTPCODEC_H
+#define __OMEGA_NETWORK_RTP_SILVEROMEGA_SILVERRTPCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/UDPRead.h"
@@ -13,7 +13,7 @@
 #include "common/inc/DebugOutput.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -107,7 +107,7 @@ class RTPSILVEROMEGA_EXPORT SilverRTPCodec : public engine::silveromega::SilverC
 } // namespace silveromega
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

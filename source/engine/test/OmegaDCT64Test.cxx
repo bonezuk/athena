@@ -1,15 +1,15 @@
 #include "gtest/gtest.h"
 
-#include "engine/inc/OrcusDCT64.h"
+#include "engine/inc/OmegaDCT64.h"
 #include "common/inc/Random.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace engine;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------
 
-TEST(OrcusDCT,MDCT1024)
+TEST(OmegaDCT,MDCT1024)
 {
 	const tfloat64 c_Tolerance = 0.0000001;
 	
@@ -45,7 +45,7 @@ TEST(OrcusDCT,MDCT1024)
 		formulaOutput[k] = X;
 	}
 	
-	OrcusDCT64 *dct = OrcusDCT64::get(c_N * 2);
+	OmegaDCT64 *dct = OmegaDCT64::get(c_N * 2);
 
 	tfloat64 *actualOutput = dct->MDCT(input);
 
@@ -77,7 +77,7 @@ TEST(OrcusDCT,MDCT1024)
 		EXPECT_NEAR(formulaInverse[k],actualInverse[k],c_Tolerance);
 	}
 	
-	OrcusDCT64::stop();
+	OmegaDCT64::stop();
 	
 	delete [] input;
 	delete [] formulaOutput;

@@ -2,7 +2,7 @@
 #include "player/inc/QPlayerApplication.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -228,5 +228,5 @@ void QPLItemSingle::paint(tint yTop,QPainter *painter)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

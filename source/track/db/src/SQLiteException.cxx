@@ -1,7 +1,7 @@
 #include "track/db/inc/SQLiteException.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -28,5 +28,5 @@ SQLiteException::SQLiteException(SQLiteDatabase *db,const SQLiteOperation *op,co
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

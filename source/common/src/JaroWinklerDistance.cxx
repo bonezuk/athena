@@ -1,7 +1,7 @@
 #include "common/inc/JaroWinklerDistance.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -434,6 +434,6 @@ tfloat64 JaroWinklerDistance::distance(const QString& s1,bool caseSensitive)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

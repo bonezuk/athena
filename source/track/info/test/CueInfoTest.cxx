@@ -7,8 +7,8 @@
 #include "dlna/inc/DiskIF.h"
 #include "track/info/inc/CueInfo.h"
 
-using namespace orcus;
-using namespace orcus::track::info;
+using namespace omega;
+using namespace omega::track::info;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "audioio/inc/AOQueryASIO.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -123,5 +123,5 @@ bool AOQueryASIO::queryDevice(int idx)
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

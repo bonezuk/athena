@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_ENGINE_REDOMEGA_DLL)
+add_definitions(-DOMEGA_ENGINE_REDOMEGA_DLL)
 
 file(GLOB REDOMEGA_ENGINE_HEADER inc/*.h)
 file(GLOB REDOMEGA_ENGINE_SOURCE src/*.cxx)

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_MIME_MIMEFORM_H
-#define __ORCUS_NETWORK_MIME_MIMEFORM_H
+#ifndef __OMEGA_NETWORK_MIME_MIMEFORM_H
+#define __OMEGA_NETWORK_MIME_MIMEFORM_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/mime/inc/MimeSection.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -67,7 +67,7 @@ class MIME_EXPORT MimeForm
 //-------------------------------------------------------------------------------------------
 } // namespace mime
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

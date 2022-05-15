@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_WCOMPARE_H
-#define __ORCUS_WHITEOMEGA_WCOMPARE_H
+#ifndef __OMEGA_WHITEOMEGA_WCOMPARE_H
+#define __OMEGA_WHITEOMEGA_WCOMPARE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/Compare.h"
@@ -8,7 +8,7 @@
 #include "engine/whiteomega/inc/ICS.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -32,7 +32,7 @@ extern WHITEOMEGA_EXPORT WCompare *g_WCompare;
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_WSEQUENCE_H
-#define __ORCUS_WHITEOMEGA_WSEQUENCE_H
+#ifndef __OMEGA_WHITEOMEGA_WSEQUENCE_H
+#define __OMEGA_WHITEOMEGA_WSEQUENCE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Exception.h"
@@ -9,7 +9,7 @@
 #include "engine/whiteomega/inc/WhiteOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -255,7 +255,7 @@ inline tint WSequence::rbARevFast()
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_FTP_FTPTRANSFER_H
-#define __ORCUS_NETWORK_FTP_FTPTRANSFER_H
+#ifndef __OMEGA_NETWORK_FTP_FTPTRANSFER_H
+#define __OMEGA_NETWORK_FTP_FTPTRANSFER_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -19,7 +19,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -148,7 +148,7 @@ class FTP_EXPORT FTPTransfer : public QObject
 //-------------------------------------------------------------------------------------------
 } // namespace ftp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

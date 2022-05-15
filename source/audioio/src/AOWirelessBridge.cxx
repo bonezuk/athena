@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AOBASE_AOWIRELESSBRIDGE_H
-#define __ORCUS_AOBASE_AOWIRELESSBRIDGE_H
+#ifndef __OMEGA_AOBASE_AOWIRELESSBRIDGE_H
+#define __OMEGA_AOBASE_AOWIRELESSBRIDGE_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -38,7 +38,7 @@ class AUDIOIO_EXPORT AOWirelessBridge : public AOBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ class AUDIOIO_EXPORT AOWirelessBridge : public AOBase
 #include "audioio/inc/AOWirelessBridge.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -54,5 +54,5 @@ namespace audioio
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

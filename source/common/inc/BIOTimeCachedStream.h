@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_BIOTIMECACHEDSTREAM_H
-#define __ORCUS_COMMON_BIOTIMECACHEDSTREAM_H
+#ifndef __OMEGA_COMMON_BIOTIMECACHEDSTREAM_H
+#define __OMEGA_COMMON_BIOTIMECACHEDSTREAM_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
@@ -10,7 +10,7 @@
 #include <QSettings>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -237,7 +237,7 @@ inline tint BIOTimeCachedStream::offsetL2Cache(const tint64& pos) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

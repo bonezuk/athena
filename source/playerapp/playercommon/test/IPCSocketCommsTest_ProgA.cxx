@@ -1,6 +1,6 @@
 #include "playerapp/playercommon/inc/IPCSocketComms.h"
 
-using namespace orcus;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 

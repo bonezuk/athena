@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(QT_INCLUDE)\QtGui\5.3.0\QtGui&quot;"
-				PreprocessorDefinitions="_CONSOLE;OMEGA_WIN32;ORCUS_TESTSPACE_AUDIO_DLL;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="_CONSOLE;OMEGA_WIN32;OMEGA_TESTSPACE_AUDIO_DLL;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -123,7 +123,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(QT_INCLUDE)\QtGui\5.3.0\QtGui&quot;"
-				PreprocessorDefinitions="OMEGA_WIN32;ORCUS_TESTSPACE_AUDIO_DLL;_CRT_SECURE_NO_DEPRECATE"
+				PreprocessorDefinitions="OMEGA_WIN32;OMEGA_TESTSPACE_AUDIO_DLL;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"

@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVERFLOORDATA0_H
-#define __ORCUS_ENGINE_SILVEROMEGA_VSILVERFLOORDATA0_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVERFLOORDATA0_H
+#define __OMEGA_ENGINE_SILVEROMEGA_VSILVERFLOORDATA0_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/silveromega/inc/SilverOmegaDLL.h"
 #include "engine/silveromega/inc/VSilverFloorBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -54,7 +54,7 @@ class SILVEROMEGA_EXPORT VSilverFloorData0 : public VSilverFloorBase
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

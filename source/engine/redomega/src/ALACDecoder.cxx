@@ -2,12 +2,12 @@
 #include "engine/redomega/inc/ALACAdaptiveDecode.h"
 #include "engine/redomega/inc/ALACMatrix.h"
 
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 #include "engine/inc/Compare.h"
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -23,7 +23,7 @@ ALACDecoder::ALACDecoder(ALACContainer *container) : m_container(container),
 	m_predictor(0),
 	m_shiftBuffer(0)
 {
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 	m_frameCounter = 0;
 	m_dynamicCounter = 0;
 #endif
@@ -145,7 +145,7 @@ tint ALACDecoder::decode(ALACSequence *seq,sample_t *mem,tint len)
 			offset = -1;
 		}
 	}
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 	m_frameCounter++;
 #endif
 	return offset;
@@ -242,7 +242,7 @@ tint ALACDecoder::decodeSCE(ALACSequence *seq,sample_t *mem,tint len)
 		
 		adaptiveDecode.set(*m_container,(config.pb() * pbFactorU)>>2,numSamples);
 		adaptiveDecode.decode(seq,chanBits,m_predictor,numSamples);
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -272,7 +272,7 @@ tint ALACDecoder::decodeSCE(ALACSequence *seq,sample_t *mem,tint len)
 			dynamicPredictor(m_predictor,m_predictor,numSamples,0,31,chanBits,0);
 			dynamicPredictor(m_predictor,m_mixBufferU,numSamples,coefsU,numU,chanBits,denShiftU);
 		}
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -319,7 +319,7 @@ tint ALACDecoder::decodeSCE(ALACSequence *seq,sample_t *mem,tint len)
 		mixBits = mixRes = 0;
 		bytesShifted = 0;
 		
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -352,7 +352,7 @@ tint ALACDecoder::decodeSCE(ALACSequence *seq,sample_t *mem,tint len)
 		}
 		seq->move(currentBitsBk);
 		
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -519,7 +519,7 @@ tint ALACDecoder::decodeCPE(ALACSequence *seq,sample_t *mem,tint len)
 		
 		adaptiveDecode.set(*m_container,(config.pb() * pbFactorU)>>2,numSamples);
 		adaptiveDecode.decode(seq,chanBits,m_predictor,numSamples);
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -550,7 +550,7 @@ tint ALACDecoder::decodeCPE(ALACSequence *seq,sample_t *mem,tint len)
 			dynamicPredictor(m_predictor,m_mixBufferU,numSamples,coefsU,numU,chanBits,denShiftU);
 		}
 
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -573,7 +573,7 @@ tint ALACDecoder::decodeCPE(ALACSequence *seq,sample_t *mem,tint len)
 		
 		adaptiveDecode.set(*m_container,(config.pb() * pbFactorV)>>2,numSamples);
 		adaptiveDecode.decode(seq,chanBits,m_predictor,numSamples);
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -603,7 +603,7 @@ tint ALACDecoder::decodeCPE(ALACSequence *seq,sample_t *mem,tint len)
 			dynamicPredictor(m_predictor,m_mixBufferV,numSamples,coefsV,numV,chanBits,denShiftV);
 		}
 		
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -658,7 +658,7 @@ tint ALACDecoder::decodeCPE(ALACSequence *seq,sample_t *mem,tint len)
 		}
 		mixBits = mixRes = bytesShifted = 0;
 		
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -707,7 +707,7 @@ tint ALACDecoder::decodeCPE(ALACSequence *seq,sample_t *mem,tint len)
 		}
 		seq->move(currentBitsBk);
 		
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		{
 			engine::Compare *comp = &g_Compare;
 
@@ -1171,7 +1171,7 @@ void ALACDecoder::dynamicPredictor(tint *pc,tint *out,tint num,tint16 *coefs,tin
 			}
 		}
 	}
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 	m_dynamicCounter++;
 #endif
 }
@@ -1179,5 +1179,5 @@ void ALACDecoder::dynamicPredictor(tint *pc,tint *out,tint num,tint16 *coefs,tin
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "common/inc/QBIOStreamDevice.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -83,5 +83,5 @@ bool QBIOStreamDevice::seek(qint64 pos)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_KEYSTATEPARSER_H
-#define __ORCUS_REMOTE_KEYSTATEPARSER_H
+#ifndef __OMEGA_REMOTE_KEYSTATEPARSER_H
+#define __OMEGA_REMOTE_KEYSTATEPARSER_H
 //-------------------------------------------------------------------------------------------
 
 #include "remote/inc/RemoteDLL.h"
@@ -8,7 +8,7 @@
 #include <QMap>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -77,7 +77,7 @@ class REMOTE_EXPORT KeyStateParser::Item
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

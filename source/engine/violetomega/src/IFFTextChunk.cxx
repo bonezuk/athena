@@ -1,7 +1,7 @@
 #include "engine/violetomega/inc/IFFTextChunk.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -74,6 +74,6 @@ const QString& IFFTextChunk::text() const
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

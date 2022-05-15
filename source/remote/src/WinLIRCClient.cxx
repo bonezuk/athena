@@ -3,7 +3,7 @@
 #include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -471,6 +471,6 @@ network::socket_type WinLIRCClient::getSocket()
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

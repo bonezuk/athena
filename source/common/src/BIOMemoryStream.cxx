@@ -1,7 +1,7 @@
 #include "common/inc/BIOMemoryStream.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -530,5 +530,5 @@ tint BIOMemoryStream::bookmark(tint offset)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

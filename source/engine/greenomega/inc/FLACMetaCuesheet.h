@@ -1,12 +1,12 @@
 	//-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_GREENOMEGA_FLACMETACUESHEET_H
-#define __ORCUS_GREENOMEGA_FLACMETACUESHEET_H
+#ifndef __OMEGA_GREENOMEGA_FLACMETACUESHEET_H
+#define __OMEGA_GREENOMEGA_FLACMETACUESHEET_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/greenomega/inc/FLACMetaBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -82,7 +82,7 @@ inline const QVector<FLACMetaCuesheet::Track>& FLACMetaCuesheet::tracks() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

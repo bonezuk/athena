@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_FTP_FTPSESSION_H
-#define __ORCUS_NETWORK_FTP_FTPSESSION_H
+#ifndef __OMEGA_NETWORK_FTP_FTPSESSION_H
+#define __OMEGA_NETWORK_FTP_FTPSESSION_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/ftp/inc/FTPServer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -113,7 +113,7 @@ class FTP_EXPORT FTPSession : public TCPConnServerSocket
 //-------------------------------------------------------------------------------------------
 } // namespace ftp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

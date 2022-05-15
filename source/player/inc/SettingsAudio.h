@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_SETTINGSAUDIO_H
-#define __ORCUS_PLAYER_SETTINGSAUDIO_H
+#ifndef __OMEGA_PLAYER_SETTINGSAUDIO_H
+#define __OMEGA_PLAYER_SETTINGSAUDIO_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/SettingsBase.h"
@@ -9,7 +9,7 @@
 #include <QDialog>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -110,7 +110,7 @@ class SettingsAudio : public SettingsBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

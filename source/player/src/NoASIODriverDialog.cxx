@@ -1,7 +1,7 @@
 #include "player/inc/NoASIODriverDialog.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -27,5 +27,5 @@ void NoASIODriverDialog::onClose()
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

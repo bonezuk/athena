@@ -3,12 +3,12 @@
 #include "engine/silveromega/inc/VSilverCodecData.h"
 #include "engine/silveromega/inc/VSilverFunctions.h"
 #include "engine/silveromega/inc/VSilverWindow.h"
-#if defined(ORCUS_OGG_COMPARE)
+#if defined(OMEGA_OGG_COMPARE)
 #include "engine/inc/Compare.h"
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -182,7 +182,7 @@ void *VSilverFloorData0::decode(VSilverCodecData *info,engine::Sequence *seq)
 			
 			lsp[m_order] = static_cast<tfloat32>(amp) / static_cast<tfloat32>((1 << m_amplitudeBits) - 1) * static_cast<tfloat32>(m_amplitudeOffset);
 			
-#if defined(ORCUS_OGG_COMPARE)
+#if defined(OMEGA_OGG_COMPARE)
 			if(g_Compare.isThreadA())
 			{
 				int frame = g_Compare.frameA();
@@ -326,5 +326,5 @@ void VSilverFloorData0::product(VSilverWindow *win,void *memo,tfloat32 *out)
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

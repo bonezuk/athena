@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_PLAYLISTPLSIO_H
-#define __ORCUS_TRACK_DB_PLAYLISTPLSIO_H
+#ifndef __OMEGA_TRACK_DB_PLAYLISTPLSIO_H
+#define __OMEGA_TRACK_DB_PLAYLISTPLSIO_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/PlaylistAbstractIO.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -47,7 +47,7 @@ class TRACK_DB_EXPORT PlaylistPLSIO : public PlaylistAbstractIO
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_WASAPICOMINTERFACES_H
-#define __ORCUS_AUDIOIO_WASAPICOMINTERFACES_H
+#ifndef __OMEGA_AUDIOIO_WASAPICOMINTERFACES_H
+#define __OMEGA_AUDIOIO_WASAPICOMINTERFACES_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AudioIODLL.h"
@@ -15,7 +15,7 @@
 #include <QSharedPointer>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -297,7 +297,7 @@ typedef QSharedPointer<IAudioClockIF> IAudioClockIFSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_TEST_AOQUERYDEVICEMOCK_H
-#define __ORCUS_AUDIOIO_TEST_AOQUERYDEVICEMOCK_H
+#ifndef __OMEGA_AUDIOIO_TEST_AOQUERYDEVICEMOCK_H
+#define __OMEGA_AUDIOIO_TEST_AOQUERYDEVICEMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -8,7 +8,7 @@
 
 #include "audioio/inc/AOQueryDevice.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace audioio;
 using namespace testing;
 

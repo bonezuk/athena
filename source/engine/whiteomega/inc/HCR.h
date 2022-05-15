@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_HCR_H
-#define __ORCUS_WHITEOMEGA_HCR_H
+#ifndef __OMEGA_WHITEOMEGA_HCR_H
+#define __OMEGA_WHITEOMEGA_HCR_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/whiteomega/inc/WSequence.h"
@@ -9,7 +9,7 @@
 #include "engine/whiteomega/inc/Common.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -61,7 +61,7 @@ class HCR
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

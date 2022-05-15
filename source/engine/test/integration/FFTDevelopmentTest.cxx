@@ -2127,7 +2127,7 @@ tfloat32 *FFT16_Sub1_A(const tfloat32 *x)
 }
 
 
-tfloat32 *FFT16_IntelSIMD_B(const tfloat32 *x,orcus::common::Allocation& alloc)
+tfloat32 *FFT16_IntelSIMD_B(const tfloat32 *x,omega::common::Allocation& alloc)
 {
 	const tfloat32 kA = 0.70710678118654752440084436210485f;
 	const tfloat32 kB = 0.92387953251128675612818318939679f;
@@ -2526,7 +2526,7 @@ tfloat32 *FFT16_IntelSIMD_B(const tfloat32 *x,orcus::common::Allocation& alloc)
 
 
 /*
-tfloat32 *FFT16_IntelSIMD_B(const tfloat32 *x,orcus::common::Allocation& alloc)
+tfloat32 *FFT16_IntelSIMD_B(const tfloat32 *x,omega::common::Allocation& alloc)
 {
 	const tfloat32 kA = 0.70710678118654752440084436210485f;
 	const tfloat32 kB = 0.92387953251128675612818318939679f;
@@ -3222,7 +3222,7 @@ class FFT_SIMD1
 		
 	protected:
 	
-		orcus::common::Allocation m_alloc;
+		omega::common::Allocation m_alloc;
 		tuint32 *m_K;
 		tfloat32 *m_X;
 };
@@ -3450,7 +3450,7 @@ TEST(FFT,Radix2DevFFT16_IntelSIMD_A)
 	                                0.1f, 1.3f, 0.7f, 0.5f, 1.4f, 1.1f, 1.5f, 1.6f };
 
 	tfloat32 *XOutA,*XOutB,*XIn;
-	orcus::common::Allocation alloc;
+	omega::common::Allocation alloc;
 
 	XIn = reinterpret_cast<tfloat32 *>(alloc.MemAllocAlign(16,sizeof(tfloat32),16));
 	::memcpy(XIn,c_xInput,16 * sizeof(tfloat32));
@@ -3512,7 +3512,7 @@ TEST(FFT,Radix2DevFFT16_IntelSIMD_B)
 	                                0.1f, 1.3f, 0.7f, 0.5f, 1.4f, 1.1f, 1.5f, 1.6f };
 
 	tfloat32 *XOutA,*XOutB,*XIn;
-	orcus::common::Allocation alloc;
+	omega::common::Allocation alloc;
 
 	XIn = reinterpret_cast<tfloat32 *>(alloc.MemAllocAlign(16,sizeof(tfloat32),16));
 	::memcpy(XIn,c_xInput,16 * sizeof(tfloat32));
@@ -3576,30 +3576,30 @@ TEST(FFT,Radix2DevFFT16_IntelSIMD_C)
 	                                0.1f, 1.3f, 0.7f, 0.5f, 1.4f, 1.1f, 1.5f, 1.6f };
 
 	tfloat32 *XOutA,*XOutB,*XOutC,*XIn;
-	orcus::common::Allocation alloc;
+	omega::common::Allocation alloc;
 
 	XIn = reinterpret_cast<tfloat32 *>(alloc.MemAllocAlign(16,sizeof(tfloat32),16));
 	::memcpy(XIn,c_xInput,16 * sizeof(tfloat32));
 	XOutC = reinterpret_cast<tfloat32 *>(alloc.MemAllocAlign(32,sizeof(tfloat32),16));
 
 	const int c_IterationCount = 10000000;
-	orcus::common::TimeStamp tA,tB,tC,tD,tDiffA,tDiffB;
+	omega::common::TimeStamp tA,tB,tC,tD,tDiffA,tDiffB;
 
-	tA = orcus::common::TimeStamp::reference();
+	tA = omega::common::TimeStamp::reference();
 	for(int i=0;i<c_IterationCount;i++)
 	{
 		XOutA = engine::test::FFT16_E3(c_xInput,XOutC);
 	}
-	tB = orcus::common::TimeStamp::reference();
+	tB = omega::common::TimeStamp::reference();
 	
 	engine::test::FFT_SIMD1 FFT;
 
-	tC = orcus::common::TimeStamp::reference();
+	tC = omega::common::TimeStamp::reference();
 	for(int i=0;i<c_IterationCount;i++)
 	{
 		XOutB = FFT.FFT16(XIn);
 	}
-	tD = orcus::common::TimeStamp::reference();
+	tD = omega::common::TimeStamp::reference();
 
 	tDiffA = tB - tA;
 	tDiffB = tD - tC;

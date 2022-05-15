@@ -3,15 +3,15 @@
 
 #include <QDir>
 
-//#define ORCUS_NETWORK_SILVERRTPCODEC_DB 1
-#if defined(ORCUS_NETWORK_SILVERRTPCODEC_DB)
+//#define OMEGA_NETWORK_SILVERRTPCODEC_DB 1
+#if defined(OMEGA_NETWORK_SILVERRTPCODEC_DB)
 #define DB(x) x
 #else
 #define DB(x)
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -704,5 +704,5 @@ void SilverRTPCodec::resync()
 } // namespace silveromega
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

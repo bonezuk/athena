@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_CYANOMEGA_INTEGRATION_CYANPLAYBACK_H
-#define __ORCUS_ENGINE_CYANOMEGA_INTEGRATION_CYANPLAYBACK_H
+#ifndef __OMEGA_ENGINE_CYANOMEGA_INTEGRATION_CYANPLAYBACK_H
+#define __OMEGA_ENGINE_CYANOMEGA_INTEGRATION_CYANPLAYBACK_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -19,7 +19,7 @@
 #include <QThread>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace testspace
 {
@@ -67,7 +67,7 @@ class CyanPlayback : public QCoreApplication
 //-------------------------------------------------------------------------------------------
 } // namespace audio
 } // namespace testspace
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_PLAYBACKSTATE_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_PLAYBACKSTATE_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYBACKSTATE_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYBACKSTATE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QtGlobal>
@@ -14,7 +14,7 @@
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

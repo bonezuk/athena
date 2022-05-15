@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/FillDecode.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -115,5 +115,5 @@ tint FillDecode::extensionPayload(WSequence *seq,tint cnt)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

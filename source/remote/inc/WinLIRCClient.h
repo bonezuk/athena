@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_WINLIRCCLIENT_H
-#define __ORCUS_REMOTE_WINLIRCCLIENT_H
+#ifndef __OMEGA_REMOTE_WINLIRCCLIENT_H
+#define __OMEGA_REMOTE_WINLIRCCLIENT_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/TCPConnClientSocket.h"
@@ -9,7 +9,7 @@
 #include "common/inc/TimeStamp.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -115,7 +115,7 @@ class REMOTE_EXPORT WinLIRCClient::LIRCCommand
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

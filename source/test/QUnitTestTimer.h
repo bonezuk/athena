@@ -1,11 +1,11 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TEST_QUNITTESTTIMER_H
-#define __ORCUS_TEST_QUNITTESTTIMER_H
+#ifndef __OMEGA_TEST_QUNITTESTTIMER_H
+#define __OMEGA_TEST_QUNITTESTTIMER_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/TimeStamp.h"
 
-using namespace orcus;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 

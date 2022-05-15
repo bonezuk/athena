@@ -5,7 +5,7 @@
 #include <QStringList>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -89,5 +89,5 @@ bool DictionaryXMLMap::write(const QString& fileName,const QMap<QString,QString>
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

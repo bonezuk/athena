@@ -1,15 +1,15 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_LINUX)
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AUDIOHARDWAREBUFFERALSA_H
-#define __ORCUS_AUDIOIO_AUDIOHARDWAREBUFFERALSA_H
+#ifndef __OMEGA_AUDIOIO_AUDIOHARDWAREBUFFERALSA_H
+#define __OMEGA_AUDIOIO_AUDIOHARDWAREBUFFERALSA_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOQueryALSA.h"
 #include "audioio/inc/AbstractAudioHardwareBuffer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -43,7 +43,7 @@ class AudioHardwareBufferALSA : public AbstractAudioHardwareBuffer
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

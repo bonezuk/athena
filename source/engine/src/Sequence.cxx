@@ -1,7 +1,7 @@
 #include "engine/inc/Sequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -862,5 +862,5 @@ bool Sequence::readBookmarkMemory(tint bkStart,tint bkEnd,common::Array<tubyte,t
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WIDGET_ABOUTDIALOG_H
-#define __ORCUS_WIDGET_ABOUTDIALOG_H
+#ifndef __OMEGA_WIDGET_ABOUTDIALOG_H
+#define __OMEGA_WIDGET_ABOUTDIALOG_H
 //-------------------------------------------------------------------------------------------
 
 #include <QDialog>
@@ -11,7 +11,7 @@
 #include "widget/inc/WidgetDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace widget
 {
@@ -48,7 +48,7 @@ class WIDGET_EXPORT AboutDialog : public BuildVersionDialog
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_FORMATTYPEFROMFLOAT_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_FORMATTYPEFROMFLOAT_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_FORMATTYPEFROMFLOAT_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_FORMATTYPEFROMFLOAT_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/FormatType.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -544,7 +544,7 @@ inline sample_t sampleFrom32Bit(tuint32 v)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

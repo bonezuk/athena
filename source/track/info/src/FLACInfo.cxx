@@ -4,7 +4,7 @@
 #include "engine/greenomega/inc/FLACMetaCuesheet.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -383,6 +383,6 @@ common::TimeStamp FLACInfo::getTrackLength()
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

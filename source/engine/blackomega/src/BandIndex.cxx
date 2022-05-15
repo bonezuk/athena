@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/BandIndex.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -790,5 +790,5 @@ void Band::initBandIndex()
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -20,7 +20,7 @@
 // bit depth can be used by the format sleection algorithm.
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -7808,5 +7808,5 @@ void AODebugItem::copy(const AODebugItem& rhs)
 #endif
 //-------------------------------------------------------------------------------------------
 } //namespace audioio
-} //namespace orcus
+} //namespace omega
 //-------------------------------------------------------------------------------------------

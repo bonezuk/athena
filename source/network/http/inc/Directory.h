@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_HTTP_DIRECTORY_H
-#define __ORCUS_NETWORK_HTTP_DIRECTORY_H
+#ifndef __OMEGA_NETWORK_HTTP_DIRECTORY_H
+#define __OMEGA_NETWORK_HTTP_DIRECTORY_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/http/inc/ResponseCodes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -345,7 +345,7 @@ template <class X> X Directory<X>::get(const QString& path,QString& tail)
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

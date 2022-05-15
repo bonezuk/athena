@@ -1,7 +1,7 @@
 #include "network/inc/Memory.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -476,5 +476,5 @@ void Memory::fromSInt24(tubyte *x,tint offset,tint32 d)
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #include "engine/whiteomega/inc/CPEDecode.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -153,5 +153,5 @@ void PNS::processBoth()
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

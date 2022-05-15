@@ -4,8 +4,8 @@
 #include "engine/wavpackomega/inc/WavPackCodec.h"
 
 using namespace testing;
-using namespace orcus;
-using namespace orcus::engine::wavpackomega;
+using namespace omega;
+using namespace omega::engine::wavpackomega;
 
 //-------------------------------------------------------------------------------------------
 

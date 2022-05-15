@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_WASAPILAYERIF_H
-#define __ORCUS_AUDIOIO_WASAPILAYERIF_H
+#ifndef __OMEGA_AUDIOIO_WASAPILAYERIF_H
+#define __OMEGA_AUDIOIO_WASAPILAYERIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/WasAPIIF.h"
@@ -12,7 +12,7 @@
 #include <QSet>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -172,7 +172,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

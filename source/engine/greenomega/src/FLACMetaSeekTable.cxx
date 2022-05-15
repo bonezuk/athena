@@ -1,7 +1,7 @@
 #include "engine/greenomega/inc/FLACMetaSeekTable.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -198,5 +198,5 @@ tint FLACMetaSeekTable::findPoints(tuint64 sampleNo,SeekPoint& lPoint,SeekPoint&
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

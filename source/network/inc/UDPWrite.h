@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_UDPWRITE_H
-#define __ORCUS_NETWORK_UDPWRITE_H
+#ifndef __OMEGA_NETWORK_UDPWRITE_H
+#define __OMEGA_NETWORK_UDPWRITE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Socket.h"
 #include "network/inc/Controller.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -64,7 +64,7 @@ class NETWORK_EXPORT UDPWrite : public Socket
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

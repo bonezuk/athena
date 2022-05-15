@@ -1,7 +1,7 @@
 #include "common/inc/LargeNumber.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -1697,5 +1697,5 @@ QString LargeNumber::toString() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

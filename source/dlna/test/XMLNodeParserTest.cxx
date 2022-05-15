@@ -3,12 +3,12 @@
 
 #include "dlna/inc/XMLNodeParser.h"
 
-using namespace orcus::dlna;
+using namespace omega::dlna;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------
 
-class XMLNodeParserTest : public orcus::dlna::XMLNodeParser
+class XMLNodeParserTest : public omega::dlna::XMLNodeParser
 {
 	public:
 		MOCK_METHOD1(processNode,void(xmlNodePtr pNode));

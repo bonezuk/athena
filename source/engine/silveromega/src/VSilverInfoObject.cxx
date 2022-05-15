@@ -1,7 +1,7 @@
 #include "engine/silveromega/inc/VSilverInfoObject.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -102,5 +102,5 @@ bool VSilverInfoObject::setup()
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

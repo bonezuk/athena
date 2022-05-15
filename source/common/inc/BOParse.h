@@ -1,5 +1,5 @@
-#ifndef __ORCUS_COMMON_BOPARSE_H
-#define __ORCUS_COMMON_BOPARSE_H
+#ifndef __OMEGA_COMMON_BOPARSE_H
+#define __OMEGA_COMMON_BOPARSE_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +8,7 @@
 #include "common/inc/Allocation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -70,7 +70,7 @@ class COMMON_EXPORT BOParse
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

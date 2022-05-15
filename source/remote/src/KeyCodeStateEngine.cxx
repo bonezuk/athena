@@ -2,7 +2,7 @@
 #include "remote/inc/QKeyLineEdit.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -750,6 +750,6 @@ void KeyCodeStateEngine::processUnassignedClick(const KeyCode& cmd)
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

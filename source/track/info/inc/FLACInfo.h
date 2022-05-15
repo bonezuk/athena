@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_FLACINFO_H
-#define __ORCUS_TRACK_INFO_FLACINFO_H
+#ifndef __OMEGA_TRACK_INFO_FLACINFO_H
+#define __OMEGA_TRACK_INFO_FLACINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include <QPair>
@@ -12,7 +12,7 @@
 #include "track/info/inc/CueInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -48,7 +48,7 @@ class TRACK_INFO_EXPORT FLACInfo : public CueInfo
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

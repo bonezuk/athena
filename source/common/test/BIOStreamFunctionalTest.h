@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_TEST_BIOSTREAMFUNCTIONTEST_H
-#define __ORCUS_COMMON_TEST_BIOSTREAMFUNCTIONTEST_H
+#ifndef __OMEGA_COMMON_TEST_BIOSTREAMFUNCTIONTEST_H
+#define __OMEGA_COMMON_TEST_BIOSTREAMFUNCTIONTEST_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -18,7 +18,7 @@
 
 //-------------------------------------------------------------------------------------------
 
-using namespace orcus;
+using namespace omega;
 using namespace common;
 using namespace testing;
 

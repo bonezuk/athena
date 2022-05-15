@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_TEST_REMOTEIFMOCK_H
-#define __ORCUS_REMOTE_TEST_REMOTEIFMOCK_H
+#ifndef __OMEGA_REMOTE_TEST_REMOTEIFMOCK_H
+#define __OMEGA_REMOTE_TEST_REMOTEIFMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include <gtest/gtest.h>
@@ -9,7 +9,7 @@
 #include "remote/inc/RemoteIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -26,7 +26,7 @@ class RemoteIFMock : public RemoteIF
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

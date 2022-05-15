@@ -1,7 +1,7 @@
 #include "track/model/inc/AlbumTrackModel.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -141,6 +141,6 @@ const AlbumModelKey& AlbumTrackModel::getAlbumID() const
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

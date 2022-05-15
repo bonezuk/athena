@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_KEYCODESCONTAINER_H
-#define __ORCUS_REMOTE_KEYCODESCONTAINER_H
+#ifndef __OMEGA_REMOTE_KEYCODESCONTAINER_H
+#define __OMEGA_REMOTE_KEYCODESCONTAINER_H
 //-------------------------------------------------------------------------------------------
 
 #include <QVariant>
@@ -11,7 +11,7 @@
 #include "remote/inc/RemoteDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -98,7 +98,7 @@ class REMOTE_EXPORT KeyCodesContainer
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_TRACKDBDUPLICATES_H
-#define __ORCUS_TRACK_DB_TRACKDBDUPLICATES_H
+#ifndef __OMEGA_TRACK_DB_TRACKDBDUPLICATES_H
+#define __OMEGA_TRACK_DB_TRACKDBDUPLICATES_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/info/inc/Info.h"
@@ -8,7 +8,7 @@
 #include "track/db/inc/SQLiteInsert.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -134,7 +134,7 @@ class TRACK_DB_EXPORT TrackDBDuplicates::Album
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ class TRACK_DB_EXPORT TrackDBDuplicates::Album
 #include "track/db/inc/TrackDBDuplicates.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -166,5 +166,5 @@ TrackDBDuplicates::~TrackDBDuplicates()
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

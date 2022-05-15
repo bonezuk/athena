@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_FTP_DLL)
+add_definitions(-DOMEGA_FTP_DLL)
 
 file(GLOB NETWORK_FTP_HEADER inc/*.h)
 file(GLOB NETWORK_FTP_SOURCE src/*.cxx)

@@ -1,7 +1,7 @@
 #include "network/http/inc/ResponseCodes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -115,5 +115,5 @@ const QString& ResponseCodes::reason(tint code)
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

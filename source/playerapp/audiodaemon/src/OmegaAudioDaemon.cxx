@@ -1,11 +1,11 @@
 #include "network/inc/Resource.h"
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 #include "audioio/inc/WasAPIIF.h"
 #endif
 #include "playerapp/audiodaemon/inc/OmegaAudioDaemon.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ bool OmegaAudioDaemon::init()
 	bool res = false;
 
 	common::Log::g_Log.print("(%d) - OmegaAudioDaemon::init- a\n", (tuint64)(QThread::currentThreadId()));		
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	m_audio = audioio::AOBase::get("win32");
 #elif defined(OMEGA_MACOSX)
 	m_audio = audioio::AOBase::get("coreaudio");
@@ -243,5 +243,5 @@ void OmegaAudioDaemon::onAudioCrossfade()
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

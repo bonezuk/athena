@@ -2,7 +2,7 @@
 #include "engine/inc/FormatTypeFromFloat.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -382,5 +382,5 @@ void ALACMatrix::clipLR(sample_t *out,tint32 numSamples,tuint32 stride)
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

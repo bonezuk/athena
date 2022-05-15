@@ -45,8 +45,8 @@ GlobalEnviroment::~GlobalEnviroment()
 
 void GlobalEnviroment::SetUp()
 {
-	orcus::dlna::test::UPnPProviderTestEnviroment::instance();
-	orcus::track::model::TrackDBTestEnviroment *pTrackDBTest = orcus::track::model::TrackDBTestEnviroment::instance();
+	omega::dlna::test::UPnPProviderTestEnviroment::instance();
+	omega::track::model::TrackDBTestEnviroment *pTrackDBTest = omega::track::model::TrackDBTestEnviroment::instance();
     ASSERT_TRUE(pTrackDBTest->load());
 }
 
@@ -54,10 +54,10 @@ void GlobalEnviroment::SetUp()
 
 void GlobalEnviroment::TearDown()
 {
-	orcus::track::model::TrackDBTestEnviroment *pTrackDBTest = orcus::track::model::TrackDBTestEnviroment::instance();
+	omega::track::model::TrackDBTestEnviroment *pTrackDBTest = omega::track::model::TrackDBTestEnviroment::instance();
 	pTrackDBTest->unload();
 	delete pTrackDBTest;
-	orcus::dlna::test::UPnPProviderTestEnviroment *pUPnPProviderTest = orcus::dlna::test::UPnPProviderTestEnviroment::instance();
+	omega::dlna::test::UPnPProviderTestEnviroment *pUPnPProviderTest = omega::dlna::test::UPnPProviderTestEnviroment::instance();
 	delete pUPnPProviderTest;
 }
 
@@ -66,7 +66,7 @@ void GlobalEnviroment::TearDown()
 /*
 TEST(TrackDBTestEnviroment,buildTestDB)
 {
-    orcus::track::model::TrackDBTestEnviroment *pTrackDBTest = orcus::track::model::TrackDBTestEnviroment::instance();
+    omega::track::model::TrackDBTestEnviroment *pTrackDBTest = omega::track::model::TrackDBTestEnviroment::instance();
     pTrackDBTest->buildTestDB("/Volumes/Iomega_HDD/TestMusicDB/track.db","/Volumes/Iomega_HDD/TestMusicDB");
     delete pTrackDBTest;
 }
@@ -96,20 +96,20 @@ int main(int argc,char **argv)
 #if defined(Q_OS_MAC)
 	QString pluginDir;
 #if defined(OMEGA_MAC_STORE)
-    orcus::common::Log::g_Log.print("Store Bundle Plugin\n");
-    pluginDir = orcus::common::Bundle::pluginDirectory();
-    orcus::common::Log::g_Log.print("%s\n",pluginDir.toLatin1().constData());
+    omega::common::Log::g_Log.print("Store Bundle Plugin\n");
+    pluginDir = omega::common::Bundle::pluginDirectory();
+    omega::common::Log::g_Log.print("%s\n",pluginDir.toLatin1().constData());
 #else
     QFileInfo appFile(argv[0]);
 	QDir d = appFile.absolutePath();
-    orcus::common::Log::g_Log.print("%s\n",d.absolutePath().toLatin1().constData());
+    omega::common::Log::g_Log.print("%s\n",d.absolutePath().toLatin1().constData());
 #if defined(OMEGA_BUNDLE_TEST)
-    orcus::common::Log::g_Log.print("Bundle Plugin\n");
+    omega::common::Log::g_Log.print("Bundle Plugin\n");
 	d.cdUp();
-    orcus::common::Log::g_Log.print("%s\n",d.absolutePath().toLatin1().constData());
+    omega::common::Log::g_Log.print("%s\n",d.absolutePath().toLatin1().constData());
 #endif
 	d.cd("Plugins");
-    orcus::common::Log::g_Log.print("%s\n",d.absolutePath().toLatin1().constData());
+    omega::common::Log::g_Log.print("%s\n",d.absolutePath().toLatin1().constData());
     pluginDir = d.absolutePath();
 #endif
 	QApplication::setLibraryPaths(QStringList(pluginDir));
@@ -124,21 +124,21 @@ int main(int argc,char **argv)
 #endif
 
 #if !defined(Q_OS_MAC)
-	orcus::common::loadSharedLibrary("blueomega");
-	orcus::common::loadSharedLibrary("silveromega");
-	orcus::common::loadSharedLibrary("blackomega");
-	orcus::common::loadSharedLibrary("whiteomega");
-	orcus::common::loadSharedLibrary("redomega");
-	orcus::common::loadSharedLibrary("greenomega");
-	orcus::common::loadSharedLibrary("rtp_silveromega");
-	orcus::common::loadSharedLibrary("widget");
-	orcus::common::loadSharedLibrary("violetomega");
-	orcus::common::loadSharedLibrary("wavpackomega");
-	orcus::common::loadSharedLibrary("toneomega");
+	omega::common::loadSharedLibrary("blueomega");
+	omega::common::loadSharedLibrary("silveromega");
+	omega::common::loadSharedLibrary("blackomega");
+	omega::common::loadSharedLibrary("whiteomega");
+	omega::common::loadSharedLibrary("redomega");
+	omega::common::loadSharedLibrary("greenomega");
+	omega::common::loadSharedLibrary("rtp_silveromega");
+	omega::common::loadSharedLibrary("widget");
+	omega::common::loadSharedLibrary("violetomega");
+	omega::common::loadSharedLibrary("wavpackomega");
+	omega::common::loadSharedLibrary("toneomega");
 #endif
 
 #if defined(OMEGA_MAC_STORE)
-	QString settingPath = orcus::common::SBService::applicationDataDirectory();
+	QString settingPath = omega::common::SBService::applicationDataDirectory();
 	QSettings::setPath(QSettings::IniFormat,QSettings::UserScope,settingPath);
 	QSettings::setPath(QSettings::NativeFormat,QSettings::UserScope,settingPath);
 		
@@ -151,16 +151,16 @@ int main(int argc,char **argv)
 	QCoreApplication::setApplicationName("BlackOmega2Test");
 #endif
 
-	orcus::engine::CodecInitialize::start();
-	orcus::engine::blackomega::MPCodecInitialize::start();
-	orcus::engine::silveromega::SilverCodecInitialize::start();
-	orcus::engine::whiteomega::WhiteCodecInitialize::start();
+	omega::engine::CodecInitialize::start();
+	omega::engine::blackomega::MPCodecInitialize::start();
+	omega::engine::silveromega::SilverCodecInitialize::start();
+	omega::engine::whiteomega::WhiteCodecInitialize::start();
 
     ::testing::InitGoogleTest(&argc,argv);
 	::testing::InitGoogleMock(&argc,argv);
 	::testing::AddGlobalTestEnvironment(new GlobalEnviroment);
 	
-	orcus::track::model::TrackDBTestEnviroment *pTrackDBTest = orcus::track::model::TrackDBTestEnviroment::instance();
+	omega::track::model::TrackDBTestEnviroment *pTrackDBTest = omega::track::model::TrackDBTestEnviroment::instance();
 	pTrackDBTest->setExecPath(QString::fromUtf8(argv[0]));
 	pTrackDBTest->setSpawnICSProcess(setSpawnICSProcess(argc, argv));
 	

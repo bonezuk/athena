@@ -1,7 +1,7 @@
 #include "player/inc/HIDRemoteController.h"
 #include "player/test/HIDRemoteControllerTest.h"
 
-using namespace orcus::player;
+using namespace omega::player;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

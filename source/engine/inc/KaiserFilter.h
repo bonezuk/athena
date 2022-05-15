@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_KAISERFILTER_H
-#define __ORCUS_ENGINE_KAISERFILTER_H
+#ifndef __OMEGA_ENGINE_KAISERFILTER_H
+#define __OMEGA_ENGINE_KAISERFILTER_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
 #include "engine/inc/EngineDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -54,7 +54,7 @@ class ENGINE_EXPORT KaiserFilter
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

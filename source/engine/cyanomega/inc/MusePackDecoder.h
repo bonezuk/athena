@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_CYANOMEGA_MUSEPACKDECODER_H
-#define __ORCUS_ENGINE_CYANOMEGA_MUSEPACKDECODER_H
+#ifndef __OMEGA_ENGINE_CYANOMEGA_MUSEPACKDECODER_H
+#define __OMEGA_ENGINE_CYANOMEGA_MUSEPACKDECODER_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Factory.h"
@@ -8,7 +8,7 @@
 #include "engine/cyanomega/inc/CyanOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -45,7 +45,7 @@ ABSTRACT_FACTORY_CLASS(CYANOMEGA_EXPORT,MusePackDecoderFactory,MusePackDecoder)
 //-------------------------------------------------------------------------------------------
 } // namespace cyanomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

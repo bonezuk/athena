@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_TEST_ASIODATAMOCK_H
-#define __ORCUS_AUDIOIO_TEST_ASIODATAMOCK_H
+#ifndef __OMEGA_AUDIOIO_TEST_ASIODATAMOCK_H
+#define __OMEGA_AUDIOIO_TEST_ASIODATAMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/ASIOData.h"
@@ -9,7 +9,7 @@
 #include <gmock/gmock.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -86,7 +86,7 @@ class ASIODataMock : public ASIOData
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

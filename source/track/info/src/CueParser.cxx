@@ -2,7 +2,7 @@
 #include "track/info/inc/XMCDInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -476,5 +476,5 @@ QString CueParser::toQString(const tbyte *mem,int len) const
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

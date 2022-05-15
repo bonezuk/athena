@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_PLAYLISTMODEL_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_PLAYLISTMODEL_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYLISTMODEL_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYLISTMODEL_H
 //-------------------------------------------------------------------------------------------
 
 #include <QAbstractListModel>
@@ -13,7 +13,7 @@
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/redomega/inc/ALACCafContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -105,5 +105,5 @@ bool ALACCafContainer::init(engine::File *f)
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

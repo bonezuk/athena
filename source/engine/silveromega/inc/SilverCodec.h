@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_SILVEROMEGA_SILVERCODEC_H
-#define __ORCUS_SILVEROMEGA_SILVERCODEC_H
+#ifndef __OMEGA_SILVEROMEGA_SILVERCODEC_H
+#define __OMEGA_SILVEROMEGA_SILVERCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Mutex.h"
@@ -13,10 +13,10 @@
 #include "engine/silveromega/inc/VSilverOgg.h"
 #include "engine/silveromega/inc/VSilverWindow.h"
 #include "engine/silveromega/inc/VSilverSeeker.h"
-#include "engine/inc/OrcusDCT.h"
+#include "engine/inc/OmegaDCT.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -99,7 +99,7 @@ extern void frameSynthesis(VSilverContainer *data,engine::Sequence *seq,VSilverW
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

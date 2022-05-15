@@ -6,7 +6,7 @@
 #include "track/info/inc/APETag.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -478,5 +478,5 @@ bool MPCChapterTag::read(common::BIOStream *file)
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

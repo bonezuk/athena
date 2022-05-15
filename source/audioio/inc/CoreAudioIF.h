@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_COREAUDIOIF_H
-#define __ORCUS_AUDIOIO_COREAUDIOIF_H
+#ifndef __OMEGA_AUDIOIO_COREAUDIOIF_H
+#define __OMEGA_AUDIOIO_COREAUDIOIF_H
 //-------------------------------------------------------------------------------------------
 
 #include <CoreServices/CoreServices.h>
@@ -22,7 +22,7 @@
 #include "audioio/inc/AOQueryDevice.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -71,7 +71,7 @@ ABSTRACT_FACTORY_CLASS(AUDIOIO_EXPORT,CoreAudioIFFactory,CoreAudioIF)
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

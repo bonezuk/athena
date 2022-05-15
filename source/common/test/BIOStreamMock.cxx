@@ -1,7 +1,7 @@
 #include "common/test/BIOStreamMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -15,5 +15,5 @@ BIOStreamMock::BIOStreamMock(int flags) : BIOStream(flags)
 //-------------------------------------------------------------------------------------------
 } // namespace test
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

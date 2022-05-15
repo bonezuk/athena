@@ -1,7 +1,7 @@
 #include "audioio/test/ASIODataMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -17,5 +17,5 @@ ASIODataMock::~ASIODataMock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

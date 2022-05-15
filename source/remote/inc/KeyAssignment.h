@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_KEYASSIGNMENT_H
-#define __ORCUS_REMOTE_KEYASSIGNMENT_H
+#ifndef __OMEGA_REMOTE_KEYASSIGNMENT_H
+#define __OMEGA_REMOTE_KEYASSIGNMENT_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -13,7 +13,7 @@
 #include <QStandardItemModel>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -101,7 +101,7 @@ typedef QSharedPointer<KeyAssignment> KeyAssignmentSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

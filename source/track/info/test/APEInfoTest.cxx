@@ -8,8 +8,8 @@
 #include "common/inc/BIOBufferedStream.h"
 #include "dlna/inc/DiskIF.h"
 
-using namespace orcus;
-using namespace orcus::track::info;
+using namespace omega;
+using namespace omega::track::info;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

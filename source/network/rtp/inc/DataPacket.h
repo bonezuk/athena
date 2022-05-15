@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RTP_DATAPACKET_H
-#define __ORCUS_NETWORK_RTP_DATAPACKET_H
+#ifndef __OMEGA_NETWORK_RTP_DATAPACKET_H
+#define __OMEGA_NETWORK_RTP_DATAPACKET_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/UDPRead.h"
@@ -8,7 +8,7 @@
 #include "network/rtp/inc/NetworkRTPDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -120,7 +120,7 @@ inline const QList<DataPacket>& DataPacketList::list() const
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

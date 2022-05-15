@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_FORMATDESCRIPTION_H
-#define __ORCUS_AUDIOIO_FORMATDESCRIPTION_H
+#ifndef __OMEGA_AUDIOIO_FORMATDESCRIPTION_H
+#define __OMEGA_AUDIOIO_FORMATDESCRIPTION_H
 //-------------------------------------------------------------------------------------------
 
 #include <QVector>
@@ -10,7 +10,7 @@
 #include "common/inc/CommonTypes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -82,7 +82,7 @@ class AUDIOIO_EXPORT FormatDescription
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

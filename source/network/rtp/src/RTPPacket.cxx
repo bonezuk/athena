@@ -3,7 +3,7 @@
 #include "common/inc/Log.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -379,5 +379,5 @@ tint RTPPacket::parse(NetArraySPtr mem,tint offset)
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 #include <QApplication>
 
 using namespace testing;
-using namespace orcus;
+using namespace omega;
 using namespace common;
 
 //-------------------------------------------------------------------------------------------

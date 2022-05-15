@@ -27,9 +27,9 @@
 
 - (void) remoteControlAvailable:(NSNotification *)notification
 {
-    if(!orcus::remote::AppleRemoteService::instance().isNull())
+    if(!omega::remote::AppleRemoteService::instance().isNull())
 	{
-        orcus::remote::AppleRemoteService::instance()->remoteControlAvailable();
+        omega::remote::AppleRemoteService::instance()->remoteControlAvailable();
 	}
 }
 
@@ -37,9 +37,9 @@
 
 - (void) processQueueCallbackWithResult:(IOReturn) result
 {
-    if(!orcus::remote::AppleRemoteService::instance().isNull())
+    if(!omega::remote::AppleRemoteService::instance().isNull())
 	{
-        orcus::remote::AppleRemoteService::instance()->processQueueCallback(result);
+        omega::remote::AppleRemoteService::instance()->processQueueCallback(result);
 	}
 }
 
@@ -47,9 +47,9 @@
 
 - (void) doTimer
 {
-    if(!orcus::remote::AppleRemoteService::instance().isNull())
+    if(!omega::remote::AppleRemoteService::instance().isNull())
 	{
-        orcus::remote::AppleRemoteService::instance()->doTimer();
+        omega::remote::AppleRemoteService::instance()->doTimer();
 	}
 }
 
@@ -57,16 +57,16 @@
 
 - (void) dealWithSecureEventInputChange
 {
-    if(!orcus::remote::AppleRemoteService::instance().isNull())
+    if(!omega::remote::AppleRemoteService::instance().isNull())
 	{
-        orcus::remote::AppleRemoteService::instance()->dealWithSecureEventInputChange();
+        omega::remote::AppleRemoteService::instance()->dealWithSecureEventInputChange();
 	}
 }
 
 //-------------------------------------------------------------------------------------------
 @end
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -1200,7 +1200,7 @@ const AppleRemoteService::Button& AppleIRRemoteServiceEvent::button() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

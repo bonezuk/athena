@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_NETWORK_DLL)
+add_definitions(-DOMEGA_NETWORK_DLL)
 
 if (OMEGA_MSVC12 OR OMEGA_MSVC16)
 	add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)

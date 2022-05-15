@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_DICTIONARYXMLMAP_H
-#define __ORCUS_COMMON_DICTIONARYXMLMAP_H
+#ifndef __OMEGA_COMMON_DICTIONARYXMLMAP_H
+#define __OMEGA_COMMON_DICTIONARYXMLMAP_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -9,7 +9,7 @@
 #include <QString>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -24,7 +24,7 @@ class COMMON_EXPORT DictionaryXMLMap
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

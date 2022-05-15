@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_QKEYLINEEDIT_H
-#define __ORCUS_REMOTE_QKEYLINEEDIT_H
+#ifndef __OMEGA_REMOTE_QKEYLINEEDIT_H
+#define __OMEGA_REMOTE_QKEYLINEEDIT_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -21,7 +21,7 @@
 #include "remote/inc/WinLIRCRemote.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -176,7 +176,7 @@ class REMOTE_EXPORT QKeyLineEditDelegate : public QStyledItemDelegate
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

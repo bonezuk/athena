@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_GREENOMEGA_FLACSUBFRAME_H
-#define __ORCUS_ENGINE_GREENOMEGA_FLACSUBFRAME_H
+#ifndef __OMEGA_ENGINE_GREENOMEGA_FLACSUBFRAME_H
+#define __OMEGA_ENGINE_GREENOMEGA_FLACSUBFRAME_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Allocation.h"
 #include "engine/greenomega/inc/FLACHeader.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -66,7 +66,7 @@ inline tint *FLACSubframe::output()
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

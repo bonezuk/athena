@@ -1,7 +1,7 @@
 #include "audioio/inc/WasAPICOMInterfaces.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -1087,5 +1087,5 @@ HRESULT IAudioClockIF::GetPosition(UINT64 *pu64Position,UINT64 *pu64QPCPosition)
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

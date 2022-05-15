@@ -7,8 +7,8 @@
 #include "dlna/test/XMLLibMockIF.h"
 #include "dlna/inc/DiskIF.h"
 
-using namespace orcus::remote;
-using namespace orcus::dlna;
+using namespace omega::remote;
+using namespace omega::dlna;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------
@@ -1846,7 +1846,7 @@ TEST(KeyAssignment,saveToXMLIntegration)
 	KeyAssignment kLoadAssign;
 	EXPECT_TRUE(kLoadAssign.loadFromXML(":/remote/Resources/remote/keyassignment.xml"));
 
-    QString fileName = orcus::dlna::DiskIF::mergeName(orcus::track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"key_save_test.xml");
+    QString fileName = omega::dlna::DiskIF::mergeName(omega::track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"key_save_test.xml");
 	EXPECT_TRUE(kLoadAssign.saveToXML(fileName));
 	
 	KeyAssignment kAssign;
@@ -1882,7 +1882,7 @@ TEST(KeyAssignment,saveToXMLOverwriteIntegration)
 	KeyAssignment kLoadAssign;
 	EXPECT_TRUE(kLoadAssign.loadFromXML(":/remote/Resources/remote/keyassignment.xml"));
 
-    QString fileName = orcus::dlna::DiskIF::mergeName(orcus::track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"key_save_test.xml");
+    QString fileName = omega::dlna::DiskIF::mergeName(omega::track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"key_save_test.xml");
 	EXPECT_TRUE(kLoadAssign.saveToXML(fileName));
 	EXPECT_TRUE(kLoadAssign.saveToXML(fileName));
 	EXPECT_TRUE(kLoadAssign.saveToXML(fileName));

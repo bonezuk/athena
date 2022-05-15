@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_SETTINGSITUNES_H
-#define __ORCUS_PLAYER_SETTINGSITUNES_H
+#ifndef __OMEGA_PLAYER_SETTINGSITUNES_H
+#define __OMEGA_PLAYER_SETTINGSITUNES_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/SettingsBase.h"
@@ -10,7 +10,7 @@
 #include <QFileDialog>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -59,7 +59,7 @@ class SettingsITunes : public SettingsBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

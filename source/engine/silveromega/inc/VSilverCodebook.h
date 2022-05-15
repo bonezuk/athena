@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVERCODEBOOK_H
-#define __ORCUS_ENGINE_SILVEROMEGA_VSILVERCODEBOOK_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVERCODEBOOK_H
+#define __OMEGA_ENGINE_SILVEROMEGA_VSILVERCODEBOOK_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/silveromega/inc/SilverOmegaDLL.h"
 #include "engine/silveromega/inc/VSilverInfoObject.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -111,7 +111,7 @@ class SILVEROMEGA_EXPORT VSilverCodebook : public VSilverInfoObject
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WHITEOMEGA_PREDICTIONLTP_H
-#define __ORCUS_ENGINE_WHITEOMEGA_PREDICTIONLTP_H
+#ifndef __OMEGA_ENGINE_WHITEOMEGA_PREDICTIONLTP_H
+#define __OMEGA_ENGINE_WHITEOMEGA_PREDICTIONLTP_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Allocation.h"
@@ -12,7 +12,7 @@
 #include "engine/whiteomega/inc/TNS.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -97,7 +97,7 @@ inline tint16 PredictionLTP::realToShort(sample_t x)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

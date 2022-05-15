@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_CYANOMEGA_CYANCODEC_H
-#define __ORCUS_ENGINE_CYANOMEGA_CYANCODEC_H
+#ifndef __OMEGA_ENGINE_CYANOMEGA_CYANCODEC_H
+#define __OMEGA_ENGINE_CYANOMEGA_CYANCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/cyanomega/inc/CyanOmegaDLL.h"
@@ -8,7 +8,7 @@
 #include "engine/inc/InterleavedCodec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -58,7 +58,7 @@ class CYANOMEGA_EXPORT CyanCodec : public InterleavedCodec
 //-------------------------------------------------------------------------------------------
 } // namespace cyanomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

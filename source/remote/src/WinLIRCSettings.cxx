@@ -1,7 +1,7 @@
 #include "remote/inc/WinLIRCSettings.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -188,5 +188,5 @@ void WinLIRCSettings::setDelayTime(double dTime)
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

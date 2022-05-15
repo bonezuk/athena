@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACDECODER_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACDECODER_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACDECODER_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACDECODER_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/ALACSequence.h"
 #include "engine/redomega/inc/ALACContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -49,7 +49,7 @@ class REDOMEGA_EXPORT ALACDecoder
 		tint32 *m_predictor;
 		tuint16 *m_shiftBuffer;
 
-#if defined(ORCUS_ALAC_COMPARE)
+#if defined(OMEGA_ALAC_COMPARE)
 		tint m_frameCounter;
 		tint m_dynamicCounter;
 #endif
@@ -78,7 +78,7 @@ inline tint ALACDecoder::signOfInt(tint i)
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/silveromega/inc/VSilverSeeker.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -799,5 +799,5 @@ tint VSilverSeeker::bitrate() const
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

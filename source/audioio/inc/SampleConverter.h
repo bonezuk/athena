@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_SAMPLECONVERTER_H
-#define __ORCUS_AUDIOIO_SAMPLECONVERTER_H
+#ifndef __OMEGA_AUDIOIO_SAMPLECONVERTER_H
+#define __OMEGA_AUDIOIO_SAMPLECONVERTER_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/FormatTypeFromFloat.h"
 #include "audioio/inc/FormatDescription.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -161,7 +161,7 @@ inline tint SampleConverter::sampleToInteger(sample_t v,const sample_t& dA,const
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

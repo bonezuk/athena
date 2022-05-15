@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_SPEAKERINFO_H
-#define __ORCUS_PLAYER_SPEAKERINFO_H
+#ifndef __OMEGA_PLAYER_SPEAKERINFO_H
+#define __OMEGA_PLAYER_SPEAKERINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/info/inc/Info.h"
 #include "audioio/inc/AOBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -35,7 +35,7 @@ class SpeakerInfo : public track::info::Info
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

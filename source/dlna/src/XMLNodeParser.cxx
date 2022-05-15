@@ -1,7 +1,7 @@
 #include "dlna/inc/XMLNodeParser.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -43,6 +43,6 @@ bool XMLNodeParser::isSpecifiedNode(xmlNodePtr pNode,const tchar *name) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

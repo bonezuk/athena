@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_TCPSERVERSOCKET_H
-#define __ORCUS_NETWORK_TCPSERVERSOCKET_H
+#ifndef __OMEGA_NETWORK_TCPSERVERSOCKET_H
+#define __OMEGA_NETWORK_TCPSERVERSOCKET_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Socket.h"
 #include "network/inc/Controller.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -57,7 +57,7 @@ inline tint TCPServerSocket::port() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -10,9 +10,9 @@
 #include "common/inc/DiskOps.h"
 #include "dlna/inc/DiskIF.h"
 
-using namespace orcus::track::db;
-using namespace orcus::track::model;
-using namespace orcus;
+using namespace omega::track::db;
+using namespace omega::track::model;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

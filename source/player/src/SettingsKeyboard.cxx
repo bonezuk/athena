@@ -5,7 +5,7 @@
 #include "player/inc/Player.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -535,5 +535,5 @@ void SettingsKeyboard::onRemoteLIRCTimer()
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

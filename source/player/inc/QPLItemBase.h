@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_QPLITEMBASE_H
-#define __ORCUS_PLAYER_QPLITEMBASE_H
+#ifndef __OMEGA_PLAYER_QPLITEMBASE_H
+#define __OMEGA_PLAYER_QPLITEMBASE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -21,7 +21,7 @@
 #include "track/info/inc/Info.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -253,7 +253,7 @@ inline tint QPLItemBase::subTrackIndex() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

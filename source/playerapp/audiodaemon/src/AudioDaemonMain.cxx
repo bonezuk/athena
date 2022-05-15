@@ -1,12 +1,12 @@
 #include "network/inc/Resource.h"
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 #include "audioio/inc/WasAPIIF.h"
 #endif
 #include "playerapp/audiodaemon/inc/AudioDaemonMain.h"
 #include "playerapp/audiodaemon/inc/OmegaAudioService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -112,10 +112,10 @@ bool AudioDaemonMain::initAudioIPC()
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
-static orcus::AudioDaemonMain *g_audioDaemonApp = 0;
+static omega::AudioDaemonMain *g_audioDaemonApp = 0;
 
 //-------------------------------------------------------------------------------------------
 
@@ -125,12 +125,12 @@ BOOL WINAPI termSignalHandler(DWORD)
 void termSignalHandler(int)
 #endif
 {
-	orcus::common::Log::g_Log.print("(%d) - termSignalHandler- a\n", (tuint64)(QThread::currentThreadId()));
+	omega::common::Log::g_Log.print("(%d) - termSignalHandler- a\n", (tuint64)(QThread::currentThreadId()));
 	if(g_audioDaemonApp != 0)
 	{
 		g_audioDaemonApp->shutdownDaemon();
 	}
-	orcus::common::Log::g_Log.print("(%d) - termSignalHandler- b\n", (tuint64)(QThread::currentThreadId()));
+	omega::common::Log::g_Log.print("(%d) - termSignalHandler- b\n", (tuint64)(QThread::currentThreadId()));
 #if defined(OMEGA_WIN32)
 	return TRUE;
 #endif
@@ -142,24 +142,24 @@ int main(int argc, char *argv[])
 {
 	int res;
 	
-	orcus::setupEnviroment(argv[0]);
-	orcus::initCodecs();
+	omega::setupEnviroment(argv[0]);
+	omega::initCodecs();
 
 #if defined(OMEGA_WIN32)
 	::SetConsoleCtrlHandler(termSignalHandler,TRUE);
-	orcus::audioio::WasAPIIF::instance("wasapi");
+	omega::audioio::WasAPIIF::instance("wasapi");
 #else
 	signal(SIGTERM, termSignalHandler);
 #endif
 
-	g_audioDaemonApp = new orcus::AudioDaemonMain(argc, argv);
+	g_audioDaemonApp = new omega::AudioDaemonMain(argc, argv);
 	res = g_audioDaemonApp->exec();
 	delete g_audioDaemonApp;
 	g_audioDaemonApp = 0;
 
-    orcus::releaseCodecs();
-#if defined(ORCUS_WIN32)
-	orcus::audioio::WasAPIIF::release();
+    omega::releaseCodecs();
+#if defined(OMEGA_WIN32)
+	omega::audioio::WasAPIIF::release();
 #endif
 
     return res;

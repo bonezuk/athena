@@ -3,7 +3,7 @@
 #include <QFile>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -580,5 +580,5 @@ QString KeyAssignment::getDisplayNameForKey(Key key) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

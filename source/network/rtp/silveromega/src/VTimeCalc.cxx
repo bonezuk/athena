@@ -3,7 +3,7 @@
 #include "network/rtp/silveromega/inc/VTimeCalc.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -185,6 +185,6 @@ tint VTimeCalc::frequency() const
 } // namespace silveromega
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

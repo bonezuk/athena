@@ -3,7 +3,7 @@
 #include "audioio/inc/WasAPILayerIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -187,5 +187,5 @@ void AOQueryWasAPI::DeviceWasAPI::print() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

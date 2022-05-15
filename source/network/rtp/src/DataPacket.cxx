@@ -1,7 +1,7 @@
 #include "network/rtp/inc/DataPacket.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -70,5 +70,5 @@ DataPacketList::DataPacketList(QList<DataPacket>& list) : m_list(list)
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

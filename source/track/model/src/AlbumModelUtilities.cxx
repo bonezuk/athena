@@ -1,7 +1,7 @@
 #include "track/model/inc/AlbumModelUtilities.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -650,5 +650,5 @@ int AlbumModelUtilities::year() const
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/greenomega/inc/FLACMetaComment.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -218,5 +218,5 @@ const QString& FLACMetaComment::diskNumber() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

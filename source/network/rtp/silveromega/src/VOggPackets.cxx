@@ -4,7 +4,7 @@
 #include "network/rtp/silveromega/inc/VOggPackets.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -873,5 +873,5 @@ common::TimeStamp VOggPackets::length() const
 } // namespace silveromega
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

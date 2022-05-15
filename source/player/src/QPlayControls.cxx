@@ -6,7 +6,7 @@
 #include <QSettings>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -2009,5 +2009,5 @@ void QPlayControls::savePlaySetting(bool value,bool repeatFlag)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_DLNA_UPNPCONTROLPOINT_H
-#define __ORCUS_DLNA_UPNPCONTROLPOINT_H
+#ifndef __OMEGA_DLNA_UPNPCONTROLPOINT_H
+#define __OMEGA_DLNA_UPNPCONTROLPOINT_H
 //-------------------------------------------------------------------------------------------
 
 #include "dlna/inc/UPnPLayerIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -19,7 +19,7 @@ class DLNA_EXPORT UPnPControlPoint
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ class DLNA_EXPORT UPnPControlPoint
 #include "dlna/inc/UPnPControlPoint.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -35,5 +35,5 @@ namespace dlna
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

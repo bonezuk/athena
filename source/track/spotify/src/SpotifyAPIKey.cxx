@@ -1,7 +1,7 @@
 #include "track/spotify/inc/SpotifyAPIKey.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -69,5 +69,5 @@ const QByteArray& SpotifyAPIKey::key() const
 //-------------------------------------------------------------------------------------------
 } // namespace spotify
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

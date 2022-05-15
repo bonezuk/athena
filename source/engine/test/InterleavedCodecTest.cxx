@@ -4,8 +4,8 @@
 
 #include "engine/inc/InterleavedCodec.h"
 
-using namespace orcus;
-using namespace orcus::engine;
+using namespace omega;
+using namespace omega::engine;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

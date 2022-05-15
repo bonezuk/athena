@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/TNS.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -390,5 +390,5 @@ const sample_t TNS::m_winCoef_1_1[16] = {
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

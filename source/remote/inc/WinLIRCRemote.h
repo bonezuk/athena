@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_WINLIRCREMOTE_H
-#define __ORCUS_REMOTE_WINLIRCREMOTE_H
+#ifndef __OMEGA_REMOTE_WINLIRCREMOTE_H
+#define __OMEGA_REMOTE_WINLIRCREMOTE_H
 //-------------------------------------------------------------------------------------------
 
 #include "remote/inc/WinLIRCClient.h"
@@ -11,7 +11,7 @@
 #include <QtCore/QSettings>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -77,7 +77,7 @@ typedef QSharedPointer<WinLIRCRemote> WinLIRCRemoteSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

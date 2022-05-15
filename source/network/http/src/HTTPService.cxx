@@ -1,7 +1,7 @@
 #include "network/http/inc/HTTPService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -213,5 +213,5 @@ void HTTPService::onDeleteServer(HTTPServer *svr)
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

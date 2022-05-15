@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_TIMESTAMP_H
-#define __ORCUS_COMMON_TIMESTAMP_H
+#ifndef __OMEGA_COMMON_TIMESTAMP_H
+#define __OMEGA_COMMON_TIMESTAMP_H
 //-------------------------------------------------------------------------------------------
 
 #include <math.h>
@@ -13,7 +13,7 @@
 #include "common/inc/UString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -345,7 +345,7 @@ COMMON_EXPORT TimeStamp operator % (const TimeStamp& a,const TimeStamp& b);
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

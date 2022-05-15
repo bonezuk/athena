@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACADAPTIVEDECODE_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACADAPTIVEDECODE_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACADAPTIVEDECODE_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACADAPTIVEDECODE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/ALACSequence.h"
 #include "engine/redomega/inc/ALACContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -87,7 +87,7 @@ inline tint32 ALACAdaptiveDecode::lg3a(tint32 x)
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

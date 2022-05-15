@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_DLNA_DLL)
+#if defined(OMEGA_DLNA_DLL)
 #define DLNA_EXPORT __declspec(dllexport)
 #define DLNA_TEMPLATE
 #else
@@ -22,12 +22,12 @@
 
 //-------------------------------------------------------------------------------------------
 
-namespace orcus
+namespace omega
 {
 	namespace dlna
 	{
 	} // namespace dlna
-} // namespace orcus
+} // namespace omega
 
 //-------------------------------------------------------------------------------------------
 #endif

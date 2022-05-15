@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_HARDWAREIDENTIFICATION_H
-#define __ORCUS_COMMON_HARDWAREIDENTIFICATION_H
+#ifndef __OMEGA_COMMON_HARDWAREIDENTIFICATION_H
+#define __OMEGA_COMMON_HARDWAREIDENTIFICATION_H
 //-------------------------------------------------------------------------------------------
 
 #include <QString>
@@ -10,7 +10,7 @@
 #include "common/inc/Allocation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -53,7 +53,7 @@ class COMMON_EXPORT HardwareIdentification
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "track/info/inc/FileInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -65,5 +65,5 @@ bool FileInfo::read(common::BIOStream *input)
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #include "common/inc/BIOBufferedStream.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -296,6 +296,6 @@ common::TimeStamp VioletCodec::length() const
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

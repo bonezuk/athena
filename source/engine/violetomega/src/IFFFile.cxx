@@ -1,7 +1,7 @@
 #include "engine/violetomega/inc/IFFFile.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -156,5 +156,5 @@ IFFChunkSPtr IFFFile::root()
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

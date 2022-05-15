@@ -2,7 +2,7 @@
 #include "track/model/inc/AbstractTrackModel.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -48,5 +48,5 @@ db::SQLiteQuerySPtr AbstractTrackItem::getDBQuery() const
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

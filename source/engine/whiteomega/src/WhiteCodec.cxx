@@ -3,7 +3,7 @@
 #include "engine/inc/FormatTypeFromFloat.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -712,5 +712,5 @@ tint WhiteCodec::bitrate() const
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_PLAYLISTXSPFIO_H
-#define __ORCUS_TRACK_DB_PLAYLISTXSPFIO_H
+#ifndef __OMEGA_TRACK_DB_PLAYLISTXSPFIO_H
+#define __OMEGA_TRACK_DB_PLAYLISTXSPFIO_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/PlaylistAbstractIO.h"
@@ -8,7 +8,7 @@
 #include <QStack>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -40,7 +40,7 @@ class PlaylistXSPFIO : public PlaylistAbstractIO
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

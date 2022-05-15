@@ -19,7 +19,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -2234,5 +2234,5 @@ int TrackDB::savePlaylist(const QString& name, QVector<QPair<info::InfoSPtr, tin
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

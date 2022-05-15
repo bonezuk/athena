@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_TEST_CODECTEST_H
-#define __ORCUS_COMMON_TEST_CODECTEST_H
+#ifndef __OMEGA_COMMON_TEST_CODECTEST_H
+#define __OMEGA_COMMON_TEST_CODECTEST_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -15,8 +15,8 @@
 #include "track/model/test/TrackDBTestEnviroment.h"
 #include "dlna/inc/DiskIF.h"
 
-using namespace orcus;
-using namespace orcus::engine;
+using namespace omega;
+using namespace omega::engine;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

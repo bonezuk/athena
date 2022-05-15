@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_KEYCODEEXCLUSION_H
-#define __ORCUS_REMOTE_KEYCODEEXCLUSION_H
+#ifndef __OMEGA_REMOTE_KEYCODEEXCLUSION_H
+#define __OMEGA_REMOTE_KEYCODEEXCLUSION_H
 //-------------------------------------------------------------------------------------------
 
 #include "remote/inc/KeyCodesContainer.h"
@@ -8,7 +8,7 @@
 #include <QSharedPointer>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -40,7 +40,7 @@ typedef QSharedPointer<KeyCodeExclusion> KeyCodeExclusionSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

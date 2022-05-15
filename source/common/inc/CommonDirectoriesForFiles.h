@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_COMMONDIRECTORIESFORFILES_H
-#define __ORCUS_COMMON_COMMONDIRECTORIESFORFILES_H
+#ifndef __OMEGA_COMMON_COMMONDIRECTORIESFORFILES_H
+#define __OMEGA_COMMON_COMMONDIRECTORIESFORFILES_H
 //-------------------------------------------------------------------------------------------
 
 #include <QString>
@@ -12,7 +12,7 @@
 #include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -86,7 +86,7 @@ class COMMON_EXPORT CommonDirectoriesForFiles::Node
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

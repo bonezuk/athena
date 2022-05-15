@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_LINUX)
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_LINUXALSAIF_H
-#define __ORCUS_AUDIOIO_LINUXALSAIF_H
+#ifndef __OMEGA_AUDIOIO_LINUXALSAIF_H
+#define __OMEGA_AUDIOIO_LINUXALSAIF_H
 //-------------------------------------------------------------------------------------------
 
 #include <alsa/asoundlib.h>
@@ -11,7 +11,7 @@
 #include "audioio/inc/AOQueryDevice.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -84,7 +84,7 @@ ABSTRACT_FACTORY_CLASS(AUDIOIO_EXPORT,LinuxALSAIFFactory,LinuxALSAIF)
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

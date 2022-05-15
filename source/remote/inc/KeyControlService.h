@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_KEYCONTROLSERVICE_H
-#define __ORCUS_REMOTE_KEYCONTROLSERVICE_H
+#ifndef __OMEGA_REMOTE_KEYCONTROLSERVICE_H
+#define __OMEGA_REMOTE_KEYCONTROLSERVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include "remote/inc/QKeyLineEdit.h"
@@ -9,7 +9,7 @@
 #include "remote/inc/KeyCodeStateEngine.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -74,7 +74,7 @@ typedef QSharedPointer<KeyControlService> KeyControlServiceSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

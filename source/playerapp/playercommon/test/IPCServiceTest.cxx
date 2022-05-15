@@ -3,7 +3,7 @@
 #include "track/model/test/TrackDBTestEnviroment.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 // IPCTestService
@@ -627,10 +627,10 @@ void IPCService_QtTestApplication::sendAndReceiveEventsWithResponse(IPCTestServi
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
-using namespace orcus;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 

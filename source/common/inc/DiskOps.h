@@ -1,5 +1,5 @@
-#ifndef __ORCUS_COMMON_DISKOPS_H
-#define __ORCUS_COMMON_DISKOPS_H
+#ifndef __OMEGA_COMMON_DISKOPS_H
+#define __OMEGA_COMMON_DISKOPS_H
 
 #include "common/inc/BIOStream.h"
 #include "common/inc/TimeStamp.h"
@@ -12,7 +12,7 @@
 #include <QVector>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -119,7 +119,7 @@ class DiskOps::TreeCommonRoot
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

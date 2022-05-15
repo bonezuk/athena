@@ -12,7 +12,7 @@
 #include "engine/greenomega/inc/FLACMetaSeekTable.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -148,7 +148,7 @@ inline const QVector<FLACMetaBase *>& FLACFramework::metaData() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

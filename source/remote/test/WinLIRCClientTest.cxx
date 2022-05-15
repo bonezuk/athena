@@ -4,8 +4,8 @@
 #include "remote/inc/WinLIRCClient.h"
 #include "remote/test/WinLIRCSettingsMock.h"
 
-using namespace orcus::remote;
-using namespace orcus;
+using namespace omega::remote;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

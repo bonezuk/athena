@@ -6,7 +6,7 @@
 #include "common/inc/BSemaphoreQueue.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -320,5 +320,5 @@ bool Semaphore::Down(tint timeout)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

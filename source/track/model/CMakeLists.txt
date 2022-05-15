@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_TRACK_MODEL_DLL)
+add_definitions(-DOMEGA_TRACK_MODEL_DLL)
 
 file(GLOB TRACK_MODEL_HEADER inc/*.h)
 file(GLOB TRACK_MODEL_SOURCE src/*.cxx)

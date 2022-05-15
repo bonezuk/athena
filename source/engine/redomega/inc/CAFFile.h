@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_CAFFILE_H
-#define __ORCUS_ENGINE_REDOMEGA_CAFFILE_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_CAFFILE_H
+#define __OMEGA_ENGINE_REDOMEGA_CAFFILE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/File.h"
@@ -8,7 +8,7 @@
 #include "engine/redomega/inc/ALACSequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -52,7 +52,7 @@ class REDOMEGA_EXPORT CAFFile
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

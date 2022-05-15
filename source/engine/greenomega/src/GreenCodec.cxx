@@ -1,7 +1,7 @@
 #include "engine/greenomega/inc/GreenCodec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -359,5 +359,5 @@ tint GreenCodec::bitrate() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

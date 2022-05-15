@@ -4,8 +4,8 @@
 #include "common/test/BIOStreamMock.h"
 #include "engine/wavpackomega/inc/WavPackBIOReader.h"
 
-using namespace orcus;
-using namespace orcus::engine::wavpackomega;
+using namespace omega;
+using namespace omega::engine::wavpackomega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

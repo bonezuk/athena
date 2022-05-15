@@ -1,5 +1,5 @@
-#ifndef __ORCUS_BLACKOMEGA_BFILESTREAM_H
-#define __ORCUS_BLACKOMEGA_BFILESTREAM_H
+#ifndef __OMEGA_BLACKOMEGA_BFILESTREAM_H
+#define __OMEGA_BLACKOMEGA_BFILESTREAM_H
 
 #include "engine/inc/EngineDLL.h"
 
@@ -25,7 +25,7 @@
 #include "common/inc/BIOStream.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -128,7 +128,7 @@ class ENGINE_EXPORT BFileStream
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

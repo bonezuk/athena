@@ -3,7 +3,7 @@
 #include "remote/inc/KeyControlService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -250,6 +250,6 @@ void WinLIRCRemote::remoteStatus(QString text,int statusCode)
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

@@ -3,7 +3,7 @@
 #include "engine/silveromega/inc/VSilverWindow.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -59,5 +59,5 @@ void VSilverFloorBase::product(VSilverWindow *win,void *memo,tfloat32 *out)
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

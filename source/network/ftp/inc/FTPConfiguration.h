@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_FTP_FTPCONFIGURATION_H
-#define __ORCUS_NETWORK_FTP_FTPCONFIGURATION_H
+#ifndef __OMEGA_NETWORK_FTP_FTPCONFIGURATION_H
+#define __OMEGA_NETWORK_FTP_FTPCONFIGURATION_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/ftp/inc/FTPTransfer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -37,7 +37,7 @@ class FTP_EXPORT FTPConfiguration
 //-------------------------------------------------------------------------------------------
 } // namespace ftp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

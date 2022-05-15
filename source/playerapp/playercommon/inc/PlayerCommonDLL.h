@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_PLAYERCOMMONDLL_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_PLAYERCOMMONDLL_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYERCOMMONDLL_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYERCOMMONDLL_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -9,7 +9,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_PLAYERCOMMON_DLL)
+#if defined(OMEGA_PLAYERCOMMON_DLL)
 #define PLAYERCOMMON_EXPORT __declspec(dllexport)
 #define PLAYERCOMMON_TEMPLATE
 #else
@@ -22,9 +22,9 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
-}// namespace orcus
+}// namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

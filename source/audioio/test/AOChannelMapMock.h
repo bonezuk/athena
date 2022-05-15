@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_TEST_AOCHANNELMAPMOCK_H
-#define __ORCUS_AUDIOIO_TEST_AOCHANNELMAPMOCK_H
+#ifndef __OMEGA_AUDIOIO_TEST_AOCHANNELMAPMOCK_H
+#define __OMEGA_AUDIOIO_TEST_AOCHANNELMAPMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOBase.h"
@@ -8,7 +8,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-using namespace orcus::audioio;
+using namespace omega::audioio;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

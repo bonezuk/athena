@@ -1,7 +1,7 @@
 #include "track/model/inc/AlbumModelKey.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -136,5 +136,5 @@ bool operator != (const AlbumModelKey& a,const AlbumModelKey& b)
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

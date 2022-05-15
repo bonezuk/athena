@@ -1,7 +1,7 @@
 #include "audioio/inc/FormatsSupported.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -110,6 +110,6 @@ FormatDescription FormatsSupported::fromKey(tuint32 key) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

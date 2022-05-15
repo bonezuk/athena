@@ -1,7 +1,7 @@
 #include "remote/inc/KeyCodeExclusion.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -73,5 +73,5 @@ QString KeyCodeExclusion::description(const KeyCode& k) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

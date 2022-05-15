@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_KEYASSIGNMENTMOCK_H
-#define __ORCUS_REMOTE_KEYASSIGNMENTMOCK_H
+#ifndef __OMEGA_REMOTE_KEYASSIGNMENTMOCK_H
+#define __OMEGA_REMOTE_KEYASSIGNMENTMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -9,7 +9,7 @@
 #include "remote/inc/KeyAssignment.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -30,7 +30,7 @@ class KeyAssignmentMock : public KeyAssignment
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

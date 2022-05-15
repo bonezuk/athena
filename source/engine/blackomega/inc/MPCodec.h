@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_MPCODEC_H
-#define __ORCUS_ENGINE_BLACKOMEGA_MPCODEC_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_MPCODEC_H
+#define __OMEGA_ENGINE_BLACKOMEGA_MPCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/Codec.h"
@@ -17,7 +17,7 @@
 #include "engine/blackomega/inc/Subband.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -113,7 +113,7 @@ class BLACKOMEGA_EXPORT MPCodec : public engine::Codec
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

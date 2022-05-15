@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_SETTINGSBASE_H
-#define __ORCUS_PLAYER_SETTINGSBASE_H
+#ifndef __OMEGA_PLAYER_SETTINGSBASE_H
+#define __OMEGA_PLAYER_SETTINGSBASE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -13,7 +13,7 @@
 #include <QDialog>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -45,7 +45,7 @@ class SettingsBase : public QWidget
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

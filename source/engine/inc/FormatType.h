@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_FORMATTYPE_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_FORMATTYPE_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_FORMATTYPE_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_FORMATTYPE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/EngineDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -386,7 +386,7 @@ ENGINE_EXPORT tfloat64 toSample64FromBits(tint32 x,tint N);
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

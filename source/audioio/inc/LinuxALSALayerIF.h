@@ -1,14 +1,14 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_LINUX)
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_LINUXALSALAYERIF_H
-#define __ORCUS_AUDIOIO_LINUXALSALAYERIF_H
+#ifndef __OMEGA_AUDIOIO_LINUXALSALAYERIF_H
+#define __OMEGA_AUDIOIO_LINUXALSALAYERIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/LinuxALSAIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -68,7 +68,7 @@ class AUDIOIO_EXPORT LinuxALSALayerIF : public LinuxALSAIF
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

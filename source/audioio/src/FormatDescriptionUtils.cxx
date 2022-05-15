@@ -1,7 +1,7 @@
 #include "audioio/inc/FormatDescriptionUtils.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -309,6 +309,6 @@ bool FormatDescriptionUtils::findClosestFormatType(const FormatDescription& form
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

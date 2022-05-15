@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_COMMONFUNCTIONS_H
-#define __ORCUS_COMMON_COMMONFUNCTIONS_H
+#ifndef __OMEGA_COMMON_COMMONFUNCTIONS_H
+#define __OMEGA_COMMON_COMMONFUNCTIONS_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -9,7 +9,7 @@
 #include <QString>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -36,7 +36,7 @@ inline void xorSwap(int& x, int& y)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_SETTINGSITUNESMAC_H
-#define __ORCUS_PLAYER_SETTINGSITUNESMAC_H
+#ifndef __OMEGA_PLAYER_SETTINGSITUNESMAC_H
+#define __OMEGA_PLAYER_SETTINGSITUNESMAC_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/SettingsITunes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -35,7 +35,7 @@ class SettingsITunesMac : public SettingsITunes
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

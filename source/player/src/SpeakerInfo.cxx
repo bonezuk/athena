@@ -3,7 +3,7 @@
 #include <QFile>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -147,5 +147,5 @@ track::info::ImageInfoArray *SpeakerInfo::getImageData(track::info::IDTagImageTy
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

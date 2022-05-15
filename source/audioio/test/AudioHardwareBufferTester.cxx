@@ -4,7 +4,7 @@
 #include "audioio/test/AudioHardwareBufferTester.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -108,5 +108,5 @@ AudioHardwareBufferMock::~AudioHardwareBufferMock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

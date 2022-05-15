@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_LINUX)
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AOQUERYALSA_H
-#define __ORCUS_AUDIOIO_AOQUERYALSA_H
+#ifndef __OMEGA_AUDIOIO_AOQUERYALSA_H
+#define __OMEGA_AUDIOIO_AOQUERYALSA_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOQueryDevice.h"
@@ -11,7 +11,7 @@
 #include "audioio/inc/FormatsSupported.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -81,7 +81,7 @@ class AUDIOIO_EXPORT AOQueryALSA::DeviceALSA : public AOQueryDevice::Device
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

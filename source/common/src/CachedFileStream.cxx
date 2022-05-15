@@ -2,7 +2,7 @@
 #include "common/inc/Log.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -916,5 +916,5 @@ void CachedFileStream::setCheckOutFlag(bool flag)
 #endif
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

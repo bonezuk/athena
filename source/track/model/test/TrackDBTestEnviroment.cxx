@@ -9,7 +9,7 @@
 #include "common/inc/SBService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -23,7 +23,7 @@ TrackDBTestEnviroment *TrackDBTestEnviroment::m_instance = 0;
 
 TrackDBTestEnviroment::TrackDBTestEnviroment()
 {
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 		m_blueOmegaDLL = LoadLibraryA("blueomega.dll");
 		m_silverOmegaDLL = LoadLibraryA("silveromega.dll");
 		m_blackOmegaDLL = LoadLibraryA("blackomega.dll");
@@ -827,5 +827,5 @@ QString TrackDBTestEnviroment::testUtilitySQLNormaliseWhitespace(const QString& 
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,20 +1,20 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WHITEOMEGA_WINDOW_H
-#define __ORCUS_ENGINE_WHITEOMEGA_WINDOW_H
+#ifndef __OMEGA_ENGINE_WHITEOMEGA_WINDOW_H
+#define __OMEGA_ENGINE_WHITEOMEGA_WINDOW_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Allocation.h"
 #if defined(SINGLE_FLOAT_SAMPLE)
-#include "engine/inc/OrcusDCT.h"
+#include "engine/inc/OmegaDCT.h"
 #else
-#include "engine/inc/OrcusDCT64.h"
+#include "engine/inc/OmegaDCT64.h"
 #endif
 #include "engine/whiteomega/inc/ICS.h"
 #include "engine/whiteomega/inc/GAConfig.h"
 #include "engine/whiteomega/inc/AACDecode.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -89,7 +89,7 @@ class WHITEOMEGA_EXPORT Window
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

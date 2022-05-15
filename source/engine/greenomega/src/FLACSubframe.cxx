@@ -1,7 +1,7 @@
 #include "engine/greenomega/inc/FLACSubframe.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -922,5 +922,5 @@ tint FLACSubframe::iLog2(tint v)
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

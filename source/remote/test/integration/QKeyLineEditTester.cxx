@@ -106,7 +106,7 @@ WinLIRCRemoteSPtr QKeyLineEditTestDialog::getWinLIRCRemote()
 
 void QKeyLineEditTestDialog::onStatusUpdate(QString text,int statusCode)
 {
-    orcus::common::Log::g_Log.print("WinLIRC Status %d - %s\n",statusCode,text.toLatin1().constData());
+    omega::common::Log::g_Log.print("WinLIRC Status %d - %s\n",statusCode,text.toLatin1().constData());
 }
 
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_WASAPIIF_H
-#define __ORCUS_AUDIOIO_WASAPIIF_H
+#ifndef __OMEGA_AUDIOIO_WASAPIIF_H
+#define __OMEGA_AUDIOIO_WASAPIIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Factory.h"
@@ -14,7 +14,7 @@
 #include <QStringList>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -103,7 +103,7 @@ typedef QSharedPointer<WasAPIDevice> WasAPIDeviceSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

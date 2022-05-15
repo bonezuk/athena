@@ -6,7 +6,7 @@
 #include "audioio/inc/WasAPICOMInterfaces.h"
 #include "audioio/inc/WasAPILayerIF.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace audioio;
 using namespace testing;
 

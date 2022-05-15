@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_JAROWINKLERDISTANCE_H
-#define __ORCUS_COMMON_JAROWINKLERDISTANCE_H
+#ifndef __OMEGA_COMMON_JAROWINKLERDISTANCE_H
+#define __OMEGA_COMMON_JAROWINKLERDISTANCE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -12,7 +12,7 @@
 #include <QtCore/QVector>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -60,7 +60,7 @@ class COMMON_EXPORT JaroWinklerDistance
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

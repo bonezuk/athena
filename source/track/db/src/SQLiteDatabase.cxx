@@ -2,7 +2,7 @@
 #include "track/db/inc/SQLiteException.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -179,5 +179,5 @@ bool SQLiteDatabase::setJournal(bool flag)
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WAVPACKOMEGA_WAVPACKBIOREADER_H
-#define __ORCUS_ENGINE_WAVPACKOMEGA_WAVPACKBIOREADER_H
+#ifndef __OMEGA_ENGINE_WAVPACKOMEGA_WAVPACKBIOREADER_H
+#define __OMEGA_ENGINE_WAVPACKOMEGA_WAVPACKBIOREADER_H
 //-------------------------------------------------------------------------------------------
 
 #include "wavpack/wavpack.h"
@@ -9,7 +9,7 @@
 #include "engine/wavpackomega/inc/WavPackOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -38,7 +38,7 @@ WAVPACKOMEGA_EXPORT void WavPackBIOReaderSetupReader(WavpackStreamReader *reader
 //-------------------------------------------------------------------------------------------
 } // namespace wavpackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

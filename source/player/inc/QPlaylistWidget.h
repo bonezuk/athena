@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_QPLAYLISTWIDGET_H
-#define __ORCUS_PLAYER_QPLAYLISTWIDGET_H
+#ifndef __OMEGA_PLAYER_QPLAYLISTWIDGET_H
+#define __OMEGA_PLAYER_QPLAYLISTWIDGET_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/QPLItemBase.h"
@@ -15,7 +15,7 @@
 #include <QDrag>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -494,7 +494,7 @@ inline QPen& QPlaylistWidget::grayDisablePen()
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_SQLITEOPERATION_H
-#define __ORCUS_TRACK_DB_SQLITEOPERATION_H
+#ifndef __OMEGA_TRACK_DB_SQLITEOPERATION_H
+#define __OMEGA_TRACK_DB_SQLITEOPERATION_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/SQLiteDatabase.h"
@@ -9,7 +9,7 @@
 #include <QSharedPointer>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -79,7 +79,7 @@ class TRACK_DB_EXPORT SQLiteOperation
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

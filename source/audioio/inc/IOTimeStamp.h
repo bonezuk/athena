@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_IOTIMESTAMP_H
-#define __ORCUS_AUDIOIO_IOTIMESTAMP_H
+#ifndef __OMEGA_AUDIOIO_IOTIMESTAMP_H
+#define __OMEGA_AUDIOIO_IOTIMESTAMP_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/TimeStamp.h"
 #include "audioio/inc/FormatDescription.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -38,7 +38,7 @@ class AUDIOIO_EXPORT IOTimeStamp
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

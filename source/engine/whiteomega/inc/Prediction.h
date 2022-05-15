@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WHITEOMEGA_PREDICTION_H
-#define __ORCUS_ENGINE_WHITEOMEGA_PREDICTION_H
+#ifndef __OMEGA_ENGINE_WHITEOMEGA_PREDICTION_H
+#define __OMEGA_ENGINE_WHITEOMEGA_PREDICTION_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/whiteomega/inc/ICS.h"
 #include "engine/whiteomega/inc/AACDecode.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -69,7 +69,7 @@ class WHITEOMEGA_EXPORT Prediction
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_ASIODATA_H
-#define __ORCUS_AUDIOIO_ASIODATA_H
+#ifndef __OMEGA_AUDIOIO_ASIODATA_H
+#define __OMEGA_AUDIOIO_ASIODATA_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/RData.h"
 #include "audioio/inc/ASIODriver.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -108,7 +108,7 @@ inline sample_t ASIOData::volumeAndClip(sample_t x)
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

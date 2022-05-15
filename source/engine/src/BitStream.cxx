@@ -2,7 +2,7 @@
 #include "engine/inc/Sequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -16,9 +16,9 @@ COMMON_TEMPLATE_MEMBER engine::Sequence *BOTree<tint,engine::Sequence *>::nullOb
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -1230,5 +1230,5 @@ bool Bitstream::isLittleEndian()
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

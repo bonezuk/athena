@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_MIME_DLL)
+add_definitions(-DOMEGA_MIME_DLL)
 
 file(GLOB NETWORK_MIME_HEADER inc/*.h)
 file(GLOB NETWORK_MIME_SOURCE src/*.cxx)

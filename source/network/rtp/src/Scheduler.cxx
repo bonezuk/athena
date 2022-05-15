@@ -3,15 +3,15 @@
 
 #include <QCoreApplication>
 
-//#define ORCUS_NETWORK_RTP_SCHEDULER_DB
-#if defined(ORCUS_NETWORK_RTP_SCHEDULER_DB)
+//#define OMEGA_NETWORK_RTP_SCHEDULER_DB
+#if defined(OMEGA_NETWORK_RTP_SCHEDULER_DB)
 #define DB(x) x
 #else
 #define DB(x)
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -493,5 +493,5 @@ bool Scheduler::process()
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,10 +1,10 @@
-#ifndef __ORCUS_COMMON_DLONG_H
-#define __ORCUS_COMMON_DLONG_H
+#ifndef __OMEGA_COMMON_DLONG_H
+#define __OMEGA_COMMON_DLONG_H
 
 #include "common/inc/CommonTypes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -159,7 +159,7 @@ COMMON_EXPORT DLong operator >> (const DLong& in,tuint x);
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

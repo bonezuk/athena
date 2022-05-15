@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_CLIPROGRESS_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_CLIPROGRESS_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_CLIPROGRESS_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_CLIPROGRESS_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/AbstractProgressInterface.h"
 #include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ class PLAYERCOMMON_EXPORT CLIProgress : public common::AbstractProgressInterface
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

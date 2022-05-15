@@ -1,7 +1,7 @@
 #include "network/rtp/inc/RTCPReportBlock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -163,5 +163,5 @@ void RTCPReportBlock::delayLastSR(const common::TimeStamp& x)
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

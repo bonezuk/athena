@@ -1,7 +1,7 @@
 #include "common/inc/SBService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -92,5 +92,5 @@ bool SBBookmark::isReadOnly(const QString& fileName)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

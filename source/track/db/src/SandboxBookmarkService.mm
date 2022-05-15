@@ -7,7 +7,7 @@
 #include <pwd.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -1219,6 +1219,6 @@ QString SandboxBookmarkService::formatFileName(const QString& fileName) const
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

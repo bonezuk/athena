@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AUDIOHARDWAREBUFFERCOREAUDIO_H
-#define __ORCUS_AUDIOIO_AUDIOHARDWAREBUFFERCOREAUDIO_H
+#ifndef __OMEGA_AUDIOIO_AUDIOHARDWAREBUFFERCOREAUDIO_H
+#define __OMEGA_AUDIOIO_AUDIOHARDWAREBUFFERCOREAUDIO_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOQueryCoreAudio.h"
 #include "audioio/inc/AbstractAudioHardwareBuffer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -38,7 +38,7 @@ class AUDIOIO_EXPORT AudioHardwareBufferCoreAudio : public AbstractAudioHardware
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLUEOMEGA_WAVEINFORMATION_H
-#define __ORCUS_ENGINE_BLUEOMEGA_WAVEINFORMATION_H
+#ifndef __OMEGA_ENGINE_BLUEOMEGA_WAVEINFORMATION_H
+#define __OMEGA_ENGINE_BLUEOMEGA_WAVEINFORMATION_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
@@ -9,7 +9,7 @@
 #include "engine/blueomega/inc/BlueOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -165,7 +165,7 @@ inline tint WaveInformation::offset() const
 //-------------------------------------------------------------------------------------------
 } // namespace blueomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 #include "network/rtp/inc/RTCPPacketSDES.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -206,5 +206,5 @@ tint RTCPPacket::length(NetArraySPtr mem,tint offset)
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/greenomega/inc/FLACFramework.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -334,5 +334,5 @@ tint FLACFramework::bitrate() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

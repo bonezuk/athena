@@ -10,9 +10,9 @@
 
 @interface ImportPlaylistDialogLoader : NSObject
 {
-	orcus::widget::ImportPlaylistDialog *dialog;
+	omega::widget::ImportPlaylistDialog *dialog;
 };
-- (id)initWithDialog:(orcus::widget::ImportPlaylistDialog *)dlg;
+- (id)initWithDialog:(omega::widget::ImportPlaylistDialog *)dlg;
 - (void)dealloc;
 - (void)doFolderDialogWithWindow:(NSWindow *)win Directory:(NSURL *)dir;
 @end
@@ -21,7 +21,7 @@
 @implementation ImportPlaylistDialogLoader
 //-------------------------------------------------------------------------------------------
 
-- (id)initWithDialog:(orcus::widget::ImportPlaylistDialog *)dlg
+- (id)initWithDialog:(omega::widget::ImportPlaylistDialog *)dlg
 {
 	self = [super init];
 	if(self!=nil)
@@ -77,7 +77,7 @@
 //-------------------------------------------------------------------------------------------
 @end
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace widget
 {
@@ -415,5 +415,5 @@ void ImportPlaylistDialog::setFileDependAccessOn()
 
 //-------------------------------------------------------------------------------------------
 } // namespace widget
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

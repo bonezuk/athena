@@ -1,7 +1,7 @@
 #include "network/rtp/silveromega/inc/SilverSession.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -381,5 +381,5 @@ void SilverSession::setTCalc(VTimeCalc *calc)
 } // namespace silveromega
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

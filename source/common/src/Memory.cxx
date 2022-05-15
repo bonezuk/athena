@@ -1,7 +1,7 @@
 #include "common/inc/Memory.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -128,5 +128,5 @@ void stringToMemory(const BString& str,tchar *mem,tint len)
 //-------------------------------------------------------------------------------------------
 } // namespace memory
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

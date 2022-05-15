@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/Atom.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -1849,5 +1849,5 @@ tint Atom::noSamples(tint trackIdx)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

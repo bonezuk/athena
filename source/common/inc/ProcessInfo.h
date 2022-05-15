@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_PROCESSINFO_H
-#define __ORCUS_COMMON_PROCESSINFO_H
+#ifndef __OMEGA_COMMON_PROCESSINFO_H
+#define __OMEGA_COMMON_PROCESSINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -11,7 +11,7 @@
 #include <QStringList>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -46,7 +46,7 @@ class COMMON_EXPORT ProcessInfo
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

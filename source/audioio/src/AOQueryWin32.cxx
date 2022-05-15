@@ -1,7 +1,7 @@
 #include "audioio/inc/AOQueryWin32.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -91,5 +91,5 @@ const AOQueryDevice::Device& AOQueryWin32::device(int idx) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

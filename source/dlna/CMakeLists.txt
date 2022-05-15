@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_DLNA_DLL)
+add_definitions(-DOMEGA_DLNA_DLL)
 
 file(GLOB DLNA_HEADER inc/*.h)
 file(GLOB DLNA_SOURCE src/*.cxx)

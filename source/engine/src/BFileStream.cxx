@@ -8,7 +8,7 @@
 #include "common/inc/Log.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -19,11 +19,11 @@ COMMON_TEMPLATE_MEMBER DLong BOTree<tint,DLong>::nullObject = DLong(0);
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -435,5 +435,5 @@ const common::BString& BFileStream::Name() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

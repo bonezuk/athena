@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_FORMATDESCRIPTIONUTILS_H
-#define __ORCUS_AUDIOIO_FORMATDESCRIPTIONUTILS_H
+#ifndef __OMEGA_AUDIOIO_FORMATDESCRIPTIONUTILS_H
+#define __OMEGA_AUDIOIO_FORMATDESCRIPTIONUTILS_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/FormatDescription.h"
 #include "audioio/inc/FormatsSupported.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -31,7 +31,7 @@ class AUDIOIO_EXPORT FormatDescriptionUtils
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 #include "engine/greenomega/inc/FLACMetaStreamInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -90,5 +90,5 @@ bool FLACMetaBase::read(engine::Sequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

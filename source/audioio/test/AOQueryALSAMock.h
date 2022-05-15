@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_LINUX)
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_TEST_AOQUERYALSAMOCK_H
-#define __ORCUS_AUDIOIO_TEST_AOQUERYALSAMOCK_H
+#ifndef __OMEGA_AUDIOIO_TEST_AOQUERYALSAMOCK_H
+#define __OMEGA_AUDIOIO_TEST_AOQUERYALSAMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -10,7 +10,7 @@
 
 #include "audioio/inc/AOQueryALSA.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace audioio;
 using namespace testing;
 

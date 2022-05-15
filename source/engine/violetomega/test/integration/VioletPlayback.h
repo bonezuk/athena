@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_INTEGRATION_VIOLETPLAYBACK_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_INTEGRATION_VIOLETPLAYBACK_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_INTEGRATION_VIOLETPLAYBACK_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_INTEGRATION_VIOLETPLAYBACK_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOBase.h"
@@ -17,7 +17,7 @@
 #include <QThread>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace testspace
 {
@@ -65,7 +65,7 @@ class VioletPlayback : public QCoreApplication
 //-------------------------------------------------------------------------------------------
 } // namespace audio
 } // namespace testspace
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

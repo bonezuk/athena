@@ -1,7 +1,7 @@
 #include "engine/inc/RData.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -488,5 +488,5 @@ void RData::clipToTime(const common::TimeStamp& clipT)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

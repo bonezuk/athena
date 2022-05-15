@@ -6,7 +6,7 @@
 
 #include <QDir>
 
-using namespace orcus::common;
+using namespace omega::common;
 
 //-------------------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ TEST(DictionaryXMLMap,read)
 
 TEST(DictionaryXMLMap,write)
 {
-    QString tempFileName = orcus::track::model::TrackDBTestEnviroment::instance()->getTempDirectory();
+    QString tempFileName = omega::track::model::TrackDBTestEnviroment::instance()->getTempDirectory();
     if(tempFileName.at(tempFileName.length()-1)!=QChar('/') && tempFileName.at(tempFileName.length()-1)!=QChar('\\'))
 	{
 		tempFileName += "/";

@@ -1,7 +1,7 @@
 #include "player/inc/QPlayerApplication.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -68,5 +68,5 @@ bool QPlayerApplication::eventFilter(QObject *obj,QEvent *evt)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

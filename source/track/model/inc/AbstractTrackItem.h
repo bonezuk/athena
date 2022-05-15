@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_MODEL_ABSTRACTTRACKITEM_H
-#define __ORCUS_TRACK_MODEL_ABSTRACTTRACKITEM_H
+#ifndef __OMEGA_TRACK_MODEL_ABSTRACTTRACKITEM_H
+#define __OMEGA_TRACK_MODEL_ABSTRACTTRACKITEM_H
 //-------------------------------------------------------------------------------------------
 
 #include <QVector>
@@ -10,7 +10,7 @@
 #include "track/model/inc/TrackModelKey.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -51,7 +51,7 @@ class TRACK_MODEL_EXPORT AbstractTrackItem
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

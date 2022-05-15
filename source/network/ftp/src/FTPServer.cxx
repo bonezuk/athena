@@ -2,7 +2,7 @@
 #include "network/ftp/inc/FTPSession.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -44,5 +44,5 @@ TCPConnServerSocket *FTPServer::newIO()
 //-------------------------------------------------------------------------------------------
 } // namespace ftp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

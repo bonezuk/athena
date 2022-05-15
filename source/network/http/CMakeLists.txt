@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_HTTP_DLL)
+add_definitions(-DOMEGA_HTTP_DLL)
 
 file(GLOB NETWORK_HTTP_HEADER inc/*.h)
 file(GLOB NETWORK_HTTP_SOURCE src/*.cxx)

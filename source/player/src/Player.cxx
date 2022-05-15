@@ -10,7 +10,7 @@
 #include <QBitmap>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -1197,7 +1197,7 @@ void Player::mouseReleaseEvent(QMouseEvent *e)
 
 void Player::onCLITimer()
 {
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	CLIPipe *cliPipe = CLIPipe::instance();
 
 	if(cliPipe!=0)
@@ -1920,5 +1920,5 @@ void Player::onRepeat(bool on)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

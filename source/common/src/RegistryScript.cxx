@@ -2,7 +2,7 @@
 #include "common/inc/Log.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -20,7 +20,7 @@ RegistryScript::~RegistryScript()
 
 bool RegistryScript::exec(const QString& xmlStr)
 {
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	bool res = false;
 
 	if(!xmlStr.isEmpty())
@@ -48,7 +48,7 @@ bool RegistryScript::exec(const QString& xmlStr)
 }
 
 //-------------------------------------------------------------------------------------------
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 //-------------------------------------------------------------------------------------------
 
 void RegistryScript::printError(const tchar *strR,const tchar *strE) const
@@ -637,5 +637,5 @@ bool RegistryScript::runXMLScript(xmlNode *pNode,HKEY parentKey)
 #endif
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

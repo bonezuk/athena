@@ -2,7 +2,7 @@
 #include "track/info/inc/ID3Info1.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -136,5 +136,5 @@ void EmbeddedID3Info::copyInfo(Info *pInfo)
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

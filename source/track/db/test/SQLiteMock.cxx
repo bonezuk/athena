@@ -1,7 +1,7 @@
 #include "track/db/test/SQLiteMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -25,5 +25,5 @@ SQLiteInsertMock::SQLiteInsertMock(SQLiteDatabase *db) : SQLiteInsert(db)
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

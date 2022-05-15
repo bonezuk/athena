@@ -3,7 +3,7 @@
 #include "common/inc/BStringCollection.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -162,5 +162,5 @@ bool BStringCollection::Group(BString& str,bool reverse)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

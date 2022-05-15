@@ -4,7 +4,7 @@
 #include "track/model/inc/AlbumModelKey.h"
 
 using namespace testing;
-using namespace orcus::track::model;
+using namespace omega::track::model;
 
 //-------------------------------------------------------------------------------------------
 

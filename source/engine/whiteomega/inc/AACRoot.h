@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_AACROOT_H
-#define __ORCUS_WHITEOMEGA_AACROOT_H
+#ifndef __OMEGA_WHITEOMEGA_AACROOT_H
+#define __OMEGA_WHITEOMEGA_AACROOT_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/Sequence.h"
@@ -11,7 +11,7 @@
 #include "engine/whiteomega/inc/CPEDecode.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -65,7 +65,7 @@ class WHITEOMEGA_EXPORT AACRoot
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

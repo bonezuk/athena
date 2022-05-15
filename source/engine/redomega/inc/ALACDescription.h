@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACDESCRIPTION_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACDESCRIPTION_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACDESCRIPTION_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACDESCRIPTION_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/ALACSequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -170,7 +170,7 @@ inline const tint& ALACDescription::bitsPerChannel() const
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

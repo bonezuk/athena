@@ -1,7 +1,7 @@
 #include "engine/redomega/inc/ALACContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -37,5 +37,5 @@ bool ALACContainer::init(engine::File *f)
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

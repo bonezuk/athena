@@ -3,7 +3,7 @@
 
 #include "audioio/inc/AOQueryASIO.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace audioio;
 using namespace testing;
 

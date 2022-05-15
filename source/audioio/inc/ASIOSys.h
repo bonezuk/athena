@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_ASIOSYS_H
-#define __ORCUS_AUDIOIO_ASIOSYS_H
+#ifndef __OMEGA_AUDIOIO_ASIOSYS_H
+#define __OMEGA_AUDIOIO_ASIOSYS_H
 //-------------------------------------------------------------------------------------------
 
 	#if defined(_WIN32) || defined(_WIN64)

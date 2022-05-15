@@ -2,7 +2,7 @@
 #include "player/inc/Player.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -65,7 +65,7 @@ void SettingsAudio::init()
 
     QObject::connect(ui.m_exclusiveFlag,SIGNAL(toggled(bool)),this,SLOT(onCheckExclusive(bool)));
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	ui.m_exclusiveFlag->setText("Exclusive Mode");
 	ui.m_exclusiveFlag->setToolTip("Take full control of audio device communicating with DAC in its native format\nand preventing other applications from using it during playback.");
 #elif defined(OMEGA_MACOSX)
@@ -79,7 +79,7 @@ void SettingsAudio::init()
         ui.m_audioDeviceCombo->blockSignals(true);
 		for(i=0;i<nDevices;i++)
 		{
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 			QString deviceName = m_audio->deviceName(i);
 			deviceName += (m_audio->device(i)->type()==audioio::AOQueryDevice::Device::e_deviceASIO) ? " (ASIO)" : " (WasAPI)";
 			ui.m_audioDeviceCombo->addItem(deviceName);
@@ -1068,5 +1068,5 @@ void SettingsAudio::onCheckExclusive(bool checked)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

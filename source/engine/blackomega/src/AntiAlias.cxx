@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/AntiAlias.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -93,5 +93,5 @@ sample_t *AntiAlias::process()
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

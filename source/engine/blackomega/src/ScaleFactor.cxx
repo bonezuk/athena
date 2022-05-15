@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/ScaleFactor.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -525,5 +525,5 @@ void ScaleFactor::readScaleFactorMPEG2(engine::Sequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

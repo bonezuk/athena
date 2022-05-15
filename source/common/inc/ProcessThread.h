@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_PROCESSTHREAD_H
-#define __ORCUS_COMMON_PROCESSTHREAD_H
+#ifndef __OMEGA_COMMON_PROCESSTHREAD_H
+#define __OMEGA_COMMON_PROCESSTHREAD_H
 //-------------------------------------------------------------------------------------------
 
 #include <QThread>
@@ -11,7 +11,7 @@
 #include "common/inc/CommonTypes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -54,7 +54,7 @@ class COMMON_EXPORT ProcessThread : public QThread
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

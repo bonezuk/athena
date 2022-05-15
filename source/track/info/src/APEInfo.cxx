@@ -4,7 +4,7 @@
 #include "track/info/inc/FileInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -220,5 +220,5 @@ bool APEInfo::isMusepack(const QString& name) const
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_QPLPROGRESS_H
-#define __ORCUS_PLAYER_QPLPROGRESS_H
+#ifndef __OMEGA_PLAYER_QPLPROGRESS_H
+#define __OMEGA_PLAYER_QPLPROGRESS_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/QPLItemBase.h"
@@ -9,7 +9,7 @@
 #include <QTimer>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -70,7 +70,7 @@ class QPLProgress : public common::AbstractProgressInterface
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

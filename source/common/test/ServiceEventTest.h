@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_SERVICEEVENTTEST_H
-#define __ORCUS_COMMON_SERVICEEVENTTEST_H
+#ifndef __OMEGA_COMMON_SERVICEEVENTTEST_H
+#define __OMEGA_COMMON_SERVICEEVENTTEST_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -14,7 +14,7 @@
 #include <QTimer>
 #include <QSharedPointer>
 
-using namespace orcus::common;
+using namespace omega::common;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

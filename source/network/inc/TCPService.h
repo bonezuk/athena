@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_TCPSERVICE_H
-#define __ORCUS_NETWORK_TCPSERVICE_H
+#ifndef __OMEGA_NETWORK_TCPSERVICE_H
+#define __OMEGA_NETWORK_TCPSERVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Service.h"
@@ -10,7 +10,7 @@
 #include "network/inc/TCPConnServerSocket.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -43,7 +43,7 @@ class NETWORK_EXPORT TCPService : public Service
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/cyanomega/inc/CyanCodec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -174,5 +174,5 @@ common::TimeStamp CyanCodec::length() const
 //-------------------------------------------------------------------------------------------
 } // namespace cyanomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

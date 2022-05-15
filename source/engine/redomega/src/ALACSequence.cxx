@@ -1,7 +1,7 @@
 #include "engine/redomega/inc/ALACSequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -77,5 +77,5 @@ tfloat64 ALACSequence::readDouble()
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

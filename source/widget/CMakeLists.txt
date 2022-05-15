@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_WIDGET_DLL)
+add_definitions(-DOMEGA_WIDGET_DLL)
 
 file(GLOB WIDGET_HEADER inc/*.h)
 if (OMEGA_WIN32 OR OMEGA_LINUX)

@@ -4,7 +4,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -224,5 +224,5 @@ tint MusePackDecoderImpl::bitrate() const
 //-------------------------------------------------------------------------------------------
 } // namespace cyanomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

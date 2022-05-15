@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_PROGRESSMESSAGEDIALOG_H
-#define __ORCUS_PLAYER_PROGRESSMESSAGEDIALOG_H
+#ifndef __OMEGA_PLAYER_PROGRESSMESSAGEDIALOG_H
+#define __OMEGA_PLAYER_PROGRESSMESSAGEDIALOG_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/ui_ProgressMessageDialog.h"
@@ -11,7 +11,7 @@
 #include <QPixmap>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -48,7 +48,7 @@ class ProgressMessageDialog : public QDialog
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #include "network/inc/TCPService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -88,5 +88,5 @@ bool TCPConnServerSocket::open(socket_type serverS)
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

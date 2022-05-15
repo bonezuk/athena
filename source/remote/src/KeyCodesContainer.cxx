@@ -2,7 +2,7 @@
 #include <QSequentialIterable>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -467,5 +467,5 @@ bool operator != (const KeyCodesContainer& a,const KeyCodesContainer& b)
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

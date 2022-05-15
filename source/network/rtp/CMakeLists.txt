@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_NETWORKRTP_DLL)
+add_definitions(-DOMEGA_NETWORKRTP_DLL)
 
 file(GLOB NETWORK_RTP_HEADER inc/*.h)
 file(GLOB NETWORK_RTP_SOURCE src/*.cxx)

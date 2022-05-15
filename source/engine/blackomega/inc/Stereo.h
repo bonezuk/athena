@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_STEREO_H
-#define __ORCUS_ENGINE_BLACKOMEGA_STEREO_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_STEREO_H
+#define __OMEGA_ENGINE_BLACKOMEGA_STEREO_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/blackomega/inc/DequantizeStereo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -127,7 +127,7 @@ inline sample_t *Stereo::getRight()
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

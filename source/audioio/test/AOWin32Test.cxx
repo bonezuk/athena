@@ -4,7 +4,7 @@
 #include "audioio/test/AudioHardwareBufferTester.h"
 #include "audioio/inc/AOQueryWasAPI.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace audioio;
 using namespace testing;
 

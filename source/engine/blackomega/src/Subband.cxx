@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/Subband.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -589,5 +589,5 @@ void Subband::window(sample_t *b0,tint bo1,sample_t *samples)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

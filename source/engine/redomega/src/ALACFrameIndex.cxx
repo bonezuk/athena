@@ -1,7 +1,7 @@
 #include "engine/redomega/inc/ALACFrameIndex.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -65,5 +65,5 @@ bool ALACFrameIndex::read(ALACSequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

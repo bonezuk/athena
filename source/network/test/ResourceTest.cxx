@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace network;
 using namespace testing;
 

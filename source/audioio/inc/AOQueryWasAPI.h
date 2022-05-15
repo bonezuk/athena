@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AOQUERYWASAPI_H
-#define __ORCUS_AUDIOIO_AOQUERYWASAPI_H
+#ifndef __OMEGA_AUDIOIO_AOQUERYWASAPI_H
+#define __OMEGA_AUDIOIO_AOQUERYWASAPI_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOQueryDevice.h"
 #include "audioio/inc/WasAPIIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -51,7 +51,7 @@ class AUDIOIO_EXPORT AOQueryWasAPI::DeviceWasAPI : public AOQueryDevice::Device
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

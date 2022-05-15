@@ -1,11 +1,11 @@
-#ifndef __ORCUS_COMMON_TTIME_H
-#define __ORCUS_COMMON_TTIME_H
+#ifndef __OMEGA_COMMON_TTIME_H
+#define __OMEGA_COMMON_TTIME_H
 
 #include <time.h>
 #include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -127,7 +127,7 @@ COMMON_EXPORT TTime operator - (const TTime& a,const TTime& b);
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

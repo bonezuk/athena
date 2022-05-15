@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AOQUERYWIN32_H
-#define __ORCUS_AUDIOIO_AOQUERYWIN32_H
+#ifndef __OMEGA_AUDIOIO_AOQUERYWIN32_H
+#define __OMEGA_AUDIOIO_AOQUERYWIN32_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOQueryASIO.h"
 #include "audioio/inc/AOQueryWasAPI.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -35,7 +35,7 @@ class AUDIOIO_EXPORT AOQueryWin32 : public AOQueryDevice
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

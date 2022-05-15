@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_SQLITEMOCK_H
-#define __ORCUS_TRACK_DB_SQLITEMOCK_H
+#ifndef __OMEGA_TRACK_DB_SQLITEMOCK_H
+#define __OMEGA_TRACK_DB_SQLITEMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -11,7 +11,7 @@
 #include "track/db/inc/SQLiteQuery.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -78,7 +78,7 @@ class SQLiteInsertMock : public SQLiteInsert
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

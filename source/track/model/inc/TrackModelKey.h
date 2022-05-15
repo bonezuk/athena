@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_MODEL_TRACKMODELKEY_H
-#define __ORCUS_TRACK_MODEL_TRACKMODELKEY_H
+#ifndef __OMEGA_TRACK_MODEL_TRACKMODELKEY_H
+#define __OMEGA_TRACK_MODEL_TRACKMODELKEY_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/model/inc/AlbumModelKey.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -59,7 +59,7 @@ class TRACK_MODEL_EXPORT TrackModelKey
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

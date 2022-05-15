@@ -2,7 +2,7 @@
 #include "common/inc/DiskOps.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -220,5 +220,5 @@ common::TimeStamp CueInfo::getTrackLength()
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

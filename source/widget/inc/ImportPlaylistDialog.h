@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WIDGET_IMPORTPLAYLISTDIALOG_H
-#define __ORCUS_WIDGET_IMPORTPLAYLISTDIALOG_H
+#ifndef __OMEGA_WIDGET_IMPORTPLAYLISTDIALOG_H
+#define __OMEGA_WIDGET_IMPORTPLAYLISTDIALOG_H
 //-------------------------------------------------------------------------------------------
 
 #include "widget/inc/SandBoxMac.h"
 #include "widget/ui_ImportPlaylistDialog.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace widget
 {
@@ -66,7 +66,7 @@ class WIDGET_EXPORT ImportPlaylistDialog : public QDialog
 
 //-------------------------------------------------------------------------------------------
 } // namespace widget
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

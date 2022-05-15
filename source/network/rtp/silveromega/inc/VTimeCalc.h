@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RTP_SILVEROMEGA_VTIMECALC_H
-#define __ORCUS_NETWORK_RTP_SILVEROMEGA_VTIMECALC_H
+#ifndef __OMEGA_NETWORK_RTP_SILVEROMEGA_VTIMECALC_H
+#define __OMEGA_NETWORK_RTP_SILVEROMEGA_VTIMECALC_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Array.h"
@@ -10,7 +10,7 @@
 #include "network/rtp/silveromega/inc/RTPSilverOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -57,7 +57,7 @@ class RTPSILVEROMEGA_EXPORT VTimeCalc
 } // namespace silveromega
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

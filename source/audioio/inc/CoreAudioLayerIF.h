@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_COREAUDIOLAYERIF_H
-#define __ORCUS_AUDIOIO_COREAUDIOLAYERIF_H
+#ifndef __OMEGA_AUDIOIO_COREAUDIOLAYERIF_H
+#define __OMEGA_AUDIOIO_COREAUDIOLAYERIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/CoreAudioIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -41,7 +41,7 @@ class AUDIOIO_EXPORT CoreAudioLayerIF : public CoreAudioIF
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

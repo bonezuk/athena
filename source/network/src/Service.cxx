@@ -3,7 +3,7 @@
 #include "network/inc/TCPConnectionSocket.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -202,5 +202,5 @@ void Service::delConnection(TCPConnectionSocket *s)
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/inc/FormatTypeFromFloat.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -757,5 +757,5 @@ sample_t SampleFromInteger::convert(tint32 v)
 }
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

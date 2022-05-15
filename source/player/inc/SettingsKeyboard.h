@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_SETTINGSKEYBOARD_H
-#define __ORCUS_PLAYER_SETTINGSKEYBOARD_H
+#ifndef __OMEGA_PLAYER_SETTINGSKEYBOARD_H
+#define __OMEGA_PLAYER_SETTINGSKEYBOARD_H
 //-------------------------------------------------------------------------------------------
 
 #include "remote/inc/QKeyLineEdit.h"
@@ -9,7 +9,7 @@
 #include "player/ui_SettingsKeyboard.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -80,7 +80,7 @@ class SettingsKeyboard : public SettingsBase, public remote::WinLIRCRemoteProxyI
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

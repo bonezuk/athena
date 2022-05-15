@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/GAConfig.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -766,5 +766,5 @@ tint GAConfig::m_swbOffsetShortWindow_128_8[15] =
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

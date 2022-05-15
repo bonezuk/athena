@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/MPHeader.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -936,5 +936,5 @@ tint MPHeader::bitrate() const
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_APPLEIRREMOTECONTROLLER_H
-#define __ORCUS_REMOTE_APPLEIRREMOTECONTROLLER_H
+#ifndef __OMEGA_REMOTE_APPLEIRREMOTECONTROLLER_H
+#define __OMEGA_REMOTE_APPLEIRREMOTECONTROLLER_H
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_MACOSX)
 //-------------------------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 #include "remote/inc/AppleRemoteService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -43,7 +43,7 @@ class AppleIRRemoteController : public RemoteIF
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

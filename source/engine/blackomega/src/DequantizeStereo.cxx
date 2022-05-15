@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/DequantizeStereo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -900,5 +900,5 @@ void DequantizeStereo::decodeMixed(BSequence *seq,tint *reg)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

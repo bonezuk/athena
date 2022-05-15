@@ -1,10 +1,10 @@
-#ifndef __ORCUS_COMMON_MUTEX_H
-#define __ORCUS_COMMON_MUTEX_H
+#ifndef __OMEGA_COMMON_MUTEX_H
+#define __OMEGA_COMMON_MUTEX_H
 
 #include "common/inc/CommonTypes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -52,7 +52,7 @@ inline void Mutex::unlock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

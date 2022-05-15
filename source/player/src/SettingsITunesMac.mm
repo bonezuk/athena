@@ -11,9 +11,9 @@
 
 @interface SettingsITunesLoader : NSObject
 {
-    orcus::player::SettingsITunesMac *dialog;
+    omega::player::SettingsITunesMac *dialog;
 };
-- (id)initWithDialog:(orcus::player::SettingsITunesMac *)dlg;
+- (id)initWithDialog:(omega::player::SettingsITunesMac *)dlg;
 - (void)dealloc;
 - (void)doFolderDialogWithWindow:(NSWindow *)win Directory:(NSURL *)dir;
 @end
@@ -22,7 +22,7 @@
 @implementation SettingsITunesLoader
 //-------------------------------------------------------------------------------------------
 
-- (id)initWithDialog:(orcus::player::SettingsITunesMac *)dlg
+- (id)initWithDialog:(omega::player::SettingsITunesMac *)dlg
 {
 	self = [super init];
 	if(self!=nil)
@@ -78,7 +78,7 @@
 //-------------------------------------------------------------------------------------------
 @end
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -163,5 +163,5 @@ void SettingsITunesMac::onCancel()
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

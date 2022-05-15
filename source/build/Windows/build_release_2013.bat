@@ -7,8 +7,8 @@ set P4CLIENT=IcestormMk3
 
 "D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
 
-git clone https://github.com/bonezuk/orcusversioner.git
-cd orcusversioner
+git clone https://github.com/bonezuk/omegaversioner.git
+cd omegaversioner
 git checkout master
 git pull
 
@@ -17,13 +17,13 @@ p4 sync
 cmake "-DTIGER_DEBUG_BUILD:BOOL=OFF" "-DQT_HOME=D:\Development\depot\utils\qt\install\qt-5_4_1-WIN32.VC12" -G "NMake Makefiles"
 nmake
 
-git clone https://github.com/bonezuk/orcus.git
-cd orcus
+git clone https://github.com/bonezuk/omega.git
+cd omega
 git fetch
 git checkout main
 git pull
 
-"%WORKSPACE%\install\%BUILD_TYPE%\orcus\bin\versioner.exe" "%WORKSPACE%\source\player\Resources\buildInfo.xml" %BUILD_NUMBER% "%WORKSPACE%\source\player\Info.plist" "%WORKSPACE%\source\player\Info.plist" "%WORKSPACE%\source\player\player.rc" "%WORKSPACE%\source\installer\Version.nsh" "%WORKSPACE%\source\help\apple\Black Omega.help\Contents\Info.plist" "%WORKSPACE%\source\help\apple\Black Omega.help\Contents\Info.plist"
+"%WORKSPACE%\install\%BUILD_TYPE%\omega\bin\versioner.exe" "%WORKSPACE%\source\player\Resources\buildInfo.xml" %BUILD_NUMBER% "%WORKSPACE%\source\player\Info.plist" "%WORKSPACE%\source\player\Info.plist" "%WORKSPACE%\source\player\player.rc" "%WORKSPACE%\source\installer\Version.nsh" "%WORKSPACE%\source\help\apple\Black Omega.help\Contents\Info.plist" "%WORKSPACE%\source\help\apple\Black Omega.help\Contents\Info.plist"
 
 cmake "-DTIGER_DEBUG_BUILD:BOOL=OFF" "-DQT_HOME=D:\Development\depot\utils\qt\install\qt-5_4_1-WIN32.VC12" -G "NMake Makefiles"
 nmake

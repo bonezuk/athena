@@ -1,7 +1,7 @@
 #include "dlna/inc/UPnPSpecVersion.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -62,5 +62,5 @@ void UPnPSpecVersion::processNode(xmlNodePtr pNode)
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

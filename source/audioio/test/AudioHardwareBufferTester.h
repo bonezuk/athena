@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIOTEST_AUDIOHARDWAREBUFFERTESTER_H
-#define __ORCUS_AUDIOIOTEST_AUDIOHARDWAREBUFFERTESTER_H
+#ifndef __OMEGA_AUDIOIOTEST_AUDIOHARDWAREBUFFERTESTER_H
+#define __OMEGA_AUDIOIOTEST_AUDIOHARDWAREBUFFERTESTER_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -9,7 +9,7 @@
 #include "audioio/inc/AbstractAudioHardwareBuffer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -65,7 +65,7 @@ class AudioHardwareBufferMock : public AbstractAudioHardwareBuffer
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

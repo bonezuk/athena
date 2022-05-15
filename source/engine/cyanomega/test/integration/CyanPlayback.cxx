@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace testspace
 {
@@ -37,7 +37,7 @@ void CyanPlayback::onInit()
 	QString fileName;
 
 	m_songIdx = 0;
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	m_audio = audioio::AOBase::get("win32");
 	fileName = "C:\\Encode\\Rip\\hobbit\\quest.mpc";
 #elif defined(OMEGA_MACOSX)
@@ -195,10 +195,10 @@ void CyanPlayback::onAudioCrossfade()
 //-------------------------------------------------------------------------------------------
 } // namespace audio
 } // namespace testspace
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
-orcus::testspace::audio::CyanPlayback *g_coreCyanPlayback = 0;
+omega::testspace::audio::CyanPlayback *g_coreCyanPlayback = 0;
 
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_WIN32)
@@ -226,7 +226,7 @@ TEST(CyanPlayback,play)
 	{
 		int argc = 0;
 		char **argv = 0;
-		g_coreCyanPlayback = new orcus::testspace::audio::CyanPlayback(argc,argv);
+		g_coreCyanPlayback = new omega::testspace::audio::CyanPlayback(argc,argv);
 		g_coreCyanPlayback->exec();
 		g_coreCyanPlayback = 0;
 	}

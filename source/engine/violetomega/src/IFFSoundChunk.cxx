@@ -2,7 +2,7 @@
 #include "engine/inc/FormatType.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -479,5 +479,5 @@ tint IFFSoundChunk::bitrate() const
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

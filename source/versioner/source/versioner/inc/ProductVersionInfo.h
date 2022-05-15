@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_VERSIONER_PRODUCTVERSIONINFO_H
-#define __ORCUS_VERSIONER_PRODUCTVERSIONINFO_H
+#ifndef __OMEGA_VERSIONER_PRODUCTVERSIONINFO_H
+#define __OMEGA_VERSIONER_PRODUCTVERSIONINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include <QSharedPointer>
 #include "inc/DictionaryXMLMap.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace versioner
 {
@@ -49,7 +49,7 @@ typedef QSharedPointer<ProductVersionInfo> ProductVersionInfoSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace versioner
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

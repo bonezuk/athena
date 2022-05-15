@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_MPHEADER_H
-#define __ORCUS_ENGINE_BLACKOMEGA_MPHEADER_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_MPHEADER_H
+#define __OMEGA_ENGINE_BLACKOMEGA_MPHEADER_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/TimeStamp.h"
@@ -10,7 +10,7 @@
 #include "engine/blackomega/inc/SideInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -142,7 +142,7 @@ inline const common::TimeStamp& MPHeader::length() const
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

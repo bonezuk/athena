@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_QBIOSTREAMDEVICE_H
-#define __ORCUS_COMMON_QBIOSTREAMDEVICE_H
+#ifndef __OMEGA_COMMON_QBIOSTREAMDEVICE_H
+#define __OMEGA_COMMON_QBIOSTREAMDEVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
 #include <QIODevice>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -40,7 +40,7 @@ class COMMON_EXPORT QBIOStreamDevice : public QIODevice
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

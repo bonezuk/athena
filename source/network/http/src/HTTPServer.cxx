@@ -2,7 +2,7 @@
 #include "network/http/inc/HTTPConnection.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -232,5 +232,5 @@ TCPConnServerSocket *HTTPServer::newIO()
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_MACOSX)
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AOCOREAUDIO_H
-#define __ORCUS_AUDIOIO_AOCOREAUDIO_H
+#ifndef __OMEGA_AUDIOIO_AOCOREAUDIO_H
+#define __OMEGA_AUDIOIO_AOCOREAUDIO_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOBase.h"
@@ -18,7 +18,7 @@
 #include "audioio/inc/AOQueryCoreAudio.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -188,7 +188,7 @@ class AUDIOIO_EXPORT AOCoreAudio : public AOBase
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

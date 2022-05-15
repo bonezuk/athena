@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_KEYCODESTATEENGINE_H
-#define __ORCUS_REMOTE_KEYCODESTATEENGINE_H
+#ifndef __OMEGA_REMOTE_KEYCODESTATEENGINE_H
+#define __OMEGA_REMOTE_KEYCODESTATEENGINE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -13,7 +13,7 @@
 #include "remote/inc/KeyAssignment.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -109,7 +109,7 @@ class REMOTE_EXPORT KeyCodeStateEngine : public RemoteIF
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

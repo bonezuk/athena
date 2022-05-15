@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AOBASE_H
-#define __ORCUS_AUDIOIO_AOBASE_H
+#ifndef __OMEGA_AUDIOIO_AOBASE_H
+#define __OMEGA_AUDIOIO_AOBASE_H
 //-------------------------------------------------------------------------------------------
 
 // Qt
@@ -15,7 +15,7 @@
 #include <QStringList>
 #include <QSharedPointer>
 
-// Orcus
+// Omega
 #include "common/inc/TimeStamp.h"
 #include "common/inc/Factory.h"
 #include "engine/inc/RData.h"
@@ -27,7 +27,7 @@
 #include "audioio/inc/AbstractAudioHardwareBuffer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -1380,7 +1380,7 @@ inline const tint& AODebugItem::total() const
 #endif
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_INTERLEAVEDCODEC_H
-#define __ORCUS_ENGINE_INTERLEAVEDCODEC_H
+#ifndef __OMEGA_ENGINE_INTERLEAVEDCODEC_H
+#define __OMEGA_ENGINE_INTERLEAVEDCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/Codec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -39,7 +39,7 @@ class ENGINE_EXPORT InterleavedCodec : public Codec
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

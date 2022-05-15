@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_NOASIODRIVERDIALOG_H
-#define __ORCUS_PLAYER_NOASIODRIVERDIALOG_H
+#ifndef __OMEGA_PLAYER_NOASIODRIVERDIALOG_H
+#define __OMEGA_PLAYER_NOASIODRIVERDIALOG_H
 //-------------------------------------------------------------------------------------------
 
 #include <QDialog>
 #include "player/ui_NoASIODriverWidget.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -32,7 +32,7 @@ class NoASIODriverDialog : public QDialog
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

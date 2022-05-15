@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_TONEOMEGA_TONEOMEGA_H
-#define __ORCUS_ENGINE_TONEOMEGA_TONEOMEGA_H
+#ifndef __OMEGA_ENGINE_TONEOMEGA_TONEOMEGA_H
+#define __OMEGA_ENGINE_TONEOMEGA_TONEOMEGA_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/toneomega/inc/ToneOmegaDLL.h"
 #include "engine/inc/Codec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -84,7 +84,7 @@ class TONEOMEGA_EXPORT ToneCodec : public Codec
 //-------------------------------------------------------------------------------------------
 } // namespace toneomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

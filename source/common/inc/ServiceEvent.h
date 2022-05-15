@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_SERVICEEVENT_H
-#define __ORCUS_COMMON_SERVICEEVENT_H
+#ifndef __OMEGA_COMMON_SERVICEEVENT_H
+#define __OMEGA_COMMON_SERVICEEVENT_H
 //-------------------------------------------------------------------------------------------
 
 #include <QEvent>
@@ -13,7 +13,7 @@
 #include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -265,7 +265,7 @@ template <typename X> void ServiceEventThread<X>::stopService()
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

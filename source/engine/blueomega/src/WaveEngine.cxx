@@ -7,7 +7,7 @@
 #include <QFile>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -764,5 +764,5 @@ void WaveEngine::copyFromBE32Float(tubyte *src,sample_t *dst,tint noSamples)
 //-------------------------------------------------------------------------------------------
 } // namespace blueomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 
 #include <QStringList>
 
-using namespace orcus::remote;
+using namespace omega::remote;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

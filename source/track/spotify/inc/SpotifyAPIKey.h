@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_SPOTIFY_SPOTIFTYAPIKEY_H
-#define __ORCUS_TRACK_SPOTIFY_SPOTIFTYAPIKEY_H
+#ifndef __OMEGA_TRACK_SPOTIFY_SPOTIFTYAPIKEY_H
+#define __OMEGA_TRACK_SPOTIFY_SPOTIFTYAPIKEY_H
 //-------------------------------------------------------------------------------------------
 
 #include "api.h"
@@ -10,7 +10,7 @@
 #include "track/spotify/inc/SpotifyDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -41,7 +41,7 @@ typedef QSharedPointer<SpotifyAPIKey> SpotifyAPIKeySPtr;
 //-------------------------------------------------------------------------------------------
 } // namespace spotify
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

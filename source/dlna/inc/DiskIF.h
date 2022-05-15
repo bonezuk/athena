@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_DLNA_DISKIF_H
-#define __ORCUS_DLNA_DISKIF_H
+#ifndef __OMEGA_DLNA_DISKIF_H
+#define __OMEGA_DLNA_DISKIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "dlna/inc/UPnPIF.h"
@@ -14,7 +14,7 @@
 #include <QtCore/QDir>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -24,7 +24,7 @@ class DLNA_EXPORT DiskIF
 {
 	public:
 	
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	typedef HANDLE DirHandle;
 	static const DirHandle c_invalidDirectoryHandle;
 #elif defined(OMEGA_POSIX)
@@ -70,7 +70,7 @@ ABSTRACT_FACTORY_CLASS(DLNA_EXPORT,DiskIFFactory,DiskIF)
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

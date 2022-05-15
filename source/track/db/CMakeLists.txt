@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_TRACK_DB_DLL)
+add_definitions(-DOMEGA_TRACK_DB_DLL)
 
 file(GLOB TRACK_DB_HEADER inc/*.h)
 if (OMEGA_WIN32 OR OMEGA_LINUX)

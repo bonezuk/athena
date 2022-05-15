@@ -3,7 +3,7 @@
 #include "network/rtp/inc/Session.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -222,5 +222,5 @@ const QList<RTCPReportBlock>& RTCPPacketSR::blockList() const
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

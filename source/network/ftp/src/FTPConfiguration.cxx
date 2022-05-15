@@ -1,7 +1,7 @@
 #include "network/ftp/inc/FTPConfiguration.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -56,5 +56,5 @@ bool FTPConfiguration::isUser(const QString& username,const QString& password)
 //-------------------------------------------------------------------------------------------
 } // namespace ftp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

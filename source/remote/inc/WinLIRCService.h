@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_WINLIRCSERVICE_H
-#define __ORCUS_REMOTE_WINLIRCSERVICE_H
+#ifndef __OMEGA_REMOTE_WINLIRCSERVICE_H
+#define __OMEGA_REMOTE_WINLIRCSERVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/TCPClientService.h"
 #include "remote/inc/RemoteDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -62,7 +62,7 @@ class REMOTE_EXPORT WinLIRCService : public network::TCPClientService
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

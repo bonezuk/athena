@@ -2,7 +2,7 @@
 #include "network/inc/TCPService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -720,5 +720,5 @@ bool TCPConnectionSocket::isError() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

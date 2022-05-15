@@ -1,7 +1,7 @@
 #include "track/model/inc/AbstractTrackModel.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -33,6 +33,6 @@ const TrackModelKey& AbstractTrackModel::filterKey() const
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

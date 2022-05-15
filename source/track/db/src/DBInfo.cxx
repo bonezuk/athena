@@ -5,7 +5,7 @@
 #include <QCoreApplication>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -565,5 +565,5 @@ tuint64 DBInfo::loadOrGenerateHashID(tint dirID, tint fileID)
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

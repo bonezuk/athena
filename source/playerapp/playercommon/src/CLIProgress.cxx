@@ -1,12 +1,12 @@
 #include "playerapp/playercommon/inc/CLIProgress.h"
 
-#if !defined(ORCUS_WIN32)
+#if !defined(OMEGA_WIN32)
 #include <termios.h>
 #include <sys/ioctl.h>
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ void CLIProgress::printProgressToConsole()
 	QString line, progressStr;
 	
 	progressStr = " " + QString::number(static_cast<tint>(floor(m_progress + 0.495f))) + "%";
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	cWidth = 80;
 #else
 	struct winsize ws;
@@ -63,7 +63,7 @@ void CLIProgress::printProgressToConsole()
 	{
 		line = progressStr;
 	}
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	printf("%s\r",line.toLatin1().constData());
 #else
 //	printf("\33[2K%s\r",line.toLatin1().constData());
@@ -119,5 +119,5 @@ void CLIProgress::deactivate(bool useReference)
 {}
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -59,8 +59,8 @@ void *ASIOFuture(long selector, void *params);
 ASIOError ASIOOutputReady(void);
 */
 //---------------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_ASIO_H
-#define __ORCUS_AUDIOIO_ASIO_H
+#ifndef __OMEGA_AUDIOIO_ASIO_H
+#define __OMEGA_AUDIOIO_ASIO_H
 //---------------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"

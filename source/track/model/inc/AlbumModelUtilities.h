@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_MODEL_ALBUMMODELUTILITIES_H
-#define __ORCUS_TRACK_MODEL_ALBUMMODELUTILITIES_H
+#ifndef __OMEGA_TRACK_MODEL_ALBUMMODELUTILITIES_H
+#define __OMEGA_TRACK_MODEL_ALBUMMODELUTILITIES_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/model/inc/AlbumModel.h"
 #include "track/model/inc/ImageRepositary.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {

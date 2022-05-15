@@ -8,8 +8,8 @@
 #include "gmock/gmock.h"
 
 using namespace testing;
-using namespace orcus;
-using namespace orcus::track::db;
+using namespace omega;
+using namespace omega::track::db;
 
 //-------------------------------------------------------------------------------------------
 

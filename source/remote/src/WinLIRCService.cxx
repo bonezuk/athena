@@ -2,7 +2,7 @@
 #include "remote/inc/WinLIRCClient.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -122,5 +122,5 @@ void WinLIRCService::processCustomEvent(WinLIRCServiceEvent *e,void *result)
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

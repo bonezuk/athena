@@ -1,7 +1,7 @@
-#include "engine/inc/OrcusDCT.h"
+#include "engine/inc/OmegaDCT.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -47,11 +47,11 @@ const tuint32 c_DCTMasks_IntelSIMD[ D_DCTMasks_IntelSIMD_Size ] = {
 
 //-------------------------------------------------------------------------------------------
 
-tint OrcusDCT::m_DCTCounter = 0;
-common::Allocation OrcusDCT::m_DCTAllocation;
+tint OmegaDCT::m_DCTCounter = 0;
+common::Allocation OmegaDCT::m_DCTAllocation;
 
-tfloat32 *OrcusDCT::m_DCTCoefficients_IntelSIMD = 0;
-tuint32 *OrcusDCT::m_DCTMasks_IntelSIMD = 0;
+tfloat32 *OmegaDCT::m_DCTCoefficients_IntelSIMD = 0;
+tuint32 *OmegaDCT::m_DCTMasks_IntelSIMD = 0;
 
 //-------------------------------------------------------------------------------------------
 // Query x86 CPU if it supports the Intel SIMD SSE instruction set
@@ -59,7 +59,7 @@ tuint32 *OrcusDCT::m_DCTMasks_IntelSIMD = 0;
 #if defined(OMEGA_INTEL)
 //-------------------------------------------------------------------------------------------
 
-bool OrcusDCT::isIntelSIMD()
+bool OmegaDCT::isIntelSIMD()
 {
 	int res = 0;
 	
@@ -88,7 +88,7 @@ DCTb_1_2:	popad
 // Initialize coefficient and mask arrays to use 16-byte aligned memory locations.
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::startIntelSIMD()
+void OmegaDCT::startIntelSIMD()
 {
 	if(m_DCTCounter==0)
 	{
@@ -111,7 +111,7 @@ void OrcusDCT::startIntelSIMD()
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::finishIntelSIMD()
+void OmegaDCT::finishIntelSIMD()
 {
 	m_DCTCounter--;
 	if(m_DCTCounter==0)
@@ -133,14 +133,14 @@ void OrcusDCT::finishIntelSIMD()
 #endif
 //-------------------------------------------------------------------------------------------
 
-QMap<tint,OrcusDCT *> OrcusDCT::m_DCTCollection;
+QMap<tint,OmegaDCT *> OmegaDCT::m_DCTCollection;
 
 //-------------------------------------------------------------------------------------------
 
-OrcusDCT *OrcusDCT::get(tint N)
+OmegaDCT *OmegaDCT::get(tint N)
 {
-	OrcusDCT *DCT;
-	QMap<tint,OrcusDCT *>::iterator ppI;
+	OmegaDCT *DCT;
+	QMap<tint,OmegaDCT *>::iterator ppI;
 	
 	ppI = m_DCTCollection.find(N);
 	if(ppI!=m_DCTCollection.end())
@@ -149,7 +149,7 @@ OrcusDCT *OrcusDCT::get(tint N)
 	}
 	else
 	{
-		DCT = new OrcusDCT(N);
+		DCT = new OmegaDCT(N);
 		m_DCTCollection.insert(N,DCT);
 	}
 	return DCT;
@@ -157,10 +157,10 @@ OrcusDCT *OrcusDCT::get(tint N)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::stop()
+void OmegaDCT::stop()
 {
-	OrcusDCT *DCT;
-	QMap<tint,OrcusDCT *>::iterator ppI;
+	OmegaDCT *DCT;
+	QMap<tint,OmegaDCT *>::iterator ppI;
 	
 	for(ppI=m_DCTCollection.begin();ppI!=m_DCTCollection.end();++ppI)
 	{
@@ -174,7 +174,7 @@ void OrcusDCT::stop()
 // DCT 
 //-------------------------------------------------------------------------------------------
 
-OrcusDCT::OrcusDCT(int N) : m_alloc(),
+OmegaDCT::OmegaDCT(int N) : m_alloc(),
 	m_isSIMD(false),
 	m_N(N),
 	m_x(0),
@@ -199,7 +199,7 @@ OrcusDCT::OrcusDCT(int N) : m_alloc(),
 
 //-------------------------------------------------------------------------------------------
 
-OrcusDCT::~OrcusDCT()
+OmegaDCT::~OmegaDCT()
 {
 	try
 	{
@@ -216,7 +216,7 @@ OrcusDCT::~OrcusDCT()
 
 //-------------------------------------------------------------------------------------------
 
-tfloat64 OrcusDCT::dctD4Factor(int k,int N) const
+tfloat64 OmegaDCT::dctD4Factor(int k,int N) const
 {
 	tfloat64 v,t,tA,tB;
 	const tfloat64 c_PI64 = 3.141592653589793238464264338832795f;
@@ -230,7 +230,7 @@ tfloat64 OrcusDCT::dctD4Factor(int k,int N) const
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::init()
+void OmegaDCT::init()
 {
 	tint i,k,N = 32,lN = mod2(),s = 0;
 
@@ -259,7 +259,7 @@ void OrcusDCT::init()
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::free()
+void OmegaDCT::free()
 {
 	tint i,lN = mod2();
 	
@@ -291,28 +291,28 @@ void OrcusDCT::free()
 
 //-------------------------------------------------------------------------------------------
 
-bool OrcusDCT::isMod2() const
+bool OmegaDCT::isMod2() const
 {
 	return isMod2(m_N);
 }
 
 //-------------------------------------------------------------------------------------------
 
-bool OrcusDCT::isMod2(int N) const
+bool OmegaDCT::isMod2(int N) const
 {
 	return (mod2(N)>=0);
 }
 
 //-------------------------------------------------------------------------------------------
 
-int OrcusDCT::mod2() const
+int OmegaDCT::mod2() const
 {
 	return mod2(m_N);
 }
 
 //-------------------------------------------------------------------------------------------
 
-int OrcusDCT::mod2(int N) const
+int OmegaDCT::mod2(int N) const
 {
 	static tuint32 mask[32] = {
 		0x00000001, 0x00000002, 0x00000004, 0x00000008,
@@ -341,14 +341,14 @@ int OrcusDCT::mod2(int N) const
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type2(tfloat32 *x,tfloat32 *X,int N)
+void OmegaDCT::Type2(tfloat32 *x,tfloat32 *X,int N)
 {
 	Type2(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type2(tfloat32 *x,tfloat32 *X,int N,int lN)
+void OmegaDCT::Type2(tfloat32 *x,tfloat32 *X,int N,int lN)
 {
 	tint i,j,halfN = N >> 1;
 	tfloat32 *xA,*xB,*Xa,*Xb;
@@ -389,14 +389,14 @@ void OrcusDCT::Type2(tfloat32 *x,tfloat32 *X,int N,int lN)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type3(tfloat32 *x,tfloat32 *X,int N)
+void OmegaDCT::Type3(tfloat32 *x,tfloat32 *X,int N)
 {
 	Type3(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type3(tfloat32 *x,tfloat32 *X,int N,int lN)
+void OmegaDCT::Type3(tfloat32 *x,tfloat32 *X,int N,int lN)
 {
 	tint i,j,halfN = N >> 1;
 	tfloat32 *xA,*xB,*Xa,*Xb;
@@ -436,14 +436,14 @@ void OrcusDCT::Type3(tfloat32 *x,tfloat32 *X,int N,int lN)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type4(tfloat32 *x,tfloat32 *X,int N)
+void OmegaDCT::Type4(tfloat32 *x,tfloat32 *X,int N)
 {
 	Type4(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type4(tfloat32 *x,tfloat32 *X,int N,int lN)
+void OmegaDCT::Type4(tfloat32 *x,tfloat32 *X,int N,int lN)
 {
 	tint i,j,halfN = N >> 1;
 	tfloat32 *xA,*xB,*Xa,*Xb;
@@ -487,7 +487,7 @@ void OrcusDCT::Type4(tfloat32 *x,tfloat32 *X,int N,int lN)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::T2L16(tfloat32 *x,tfloat32 *X)
+void OmegaDCT::T2L16(tfloat32 *x,tfloat32 *X)
 {
 	tfloat32 y[32],Y[12];
 	
@@ -589,7 +589,7 @@ void OrcusDCT::T2L16(tfloat32 *x,tfloat32 *X)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::T3L16(tfloat32 *x,tfloat32 *X)
+void OmegaDCT::T3L16(tfloat32 *x,tfloat32 *X)
 {
 	tfloat32 y[13],Y[28];
 
@@ -692,7 +692,7 @@ void OrcusDCT::T3L16(tfloat32 *x,tfloat32 *X)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::T4L16(tfloat32 *x,tfloat32 *X)
+void OmegaDCT::T4L16(tfloat32 *x,tfloat32 *X)
 {
 	tfloat32 y[29],Y[28];
 	
@@ -814,14 +814,14 @@ void OrcusDCT::T4L16(tfloat32 *x,tfloat32 *X)
 #if defined(OMEGA_INTEL)
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type2_IntelSIMD(tfloat32 *x,tfloat32 *X,int N)
+void OmegaDCT::Type2_IntelSIMD(tfloat32 *x,tfloat32 *X,int N)
 {
 	Type2_IntelSIMD(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type2_IntelSIMD(tfloat32 *x,tfloat32 *X,int N,int lN)
+void OmegaDCT::Type2_IntelSIMD(tfloat32 *x,tfloat32 *X,int N,int lN)
 {
 	tint halfN = N >> 1;
 	tfloat32 *xA,*xB,*Xa,*Xb,*x2;
@@ -969,14 +969,14 @@ T2I_2:	movaps	xmm0 , [ebx]		// xmm0 - Xa[0] : Xa[1] : Xa[2] : Xa[3]
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type3_IntelSIMD(tfloat32 *x,tfloat32 *X,int N)
+void OmegaDCT::Type3_IntelSIMD(tfloat32 *x,tfloat32 *X,int N)
 {
 	Type3_IntelSIMD(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type3_IntelSIMD(tfloat32 *x,tfloat32 *X,int N,int lN)
+void OmegaDCT::Type3_IntelSIMD(tfloat32 *x,tfloat32 *X,int N,int lN)
 {
 	tint halfN = N >> 1;
 	tfloat32 *xA,*xB,*Xa,*Xb,*X2;
@@ -1116,14 +1116,14 @@ T3I_2:	sub		ecx , 64
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type4_IntelSIMD(tfloat32 *x,tfloat32 *X,int N)
+void OmegaDCT::Type4_IntelSIMD(tfloat32 *x,tfloat32 *X,int N)
 {
 	Type4_IntelSIMD(x,X,N,mod2(N));
 }
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::Type4_IntelSIMD(tfloat32 *x,tfloat32 *X,int N,int lN)
+void OmegaDCT::Type4_IntelSIMD(tfloat32 *x,tfloat32 *X,int N,int lN)
 {
 	tint halfN = N >> 1;
 	tfloat32 *xA,*xB,*Xa,*Xb;
@@ -1322,7 +1322,7 @@ T4I_2:	sub		ebx , 64
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::T2L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
+void OmegaDCT::T2L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
 {	
 	tfloat32 *co = m_DCTCoefficients_IntelSIMD;
 	tuint *mask = m_DCTMasks_IntelSIMD;
@@ -1611,7 +1611,7 @@ void OrcusDCT::T2L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::T3L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
+void OmegaDCT::T3L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
 {
 	tfloat32 *co = m_DCTCoefficients_IntelSIMD;
 	tuint *mask = m_DCTMasks_IntelSIMD;
@@ -1892,7 +1892,7 @@ void OrcusDCT::T3L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::T4L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
+void OmegaDCT::T4L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
 {
 	tfloat32 *co = m_DCTCoefficients_IntelSIMD;
 	tuint *mask = m_DCTMasks_IntelSIMD;
@@ -2197,35 +2197,35 @@ void OrcusDCT::T4L16_IntelSIMD(tfloat32 *x,tfloat32 *X,tfloat32 *y)
 #endif
 //-------------------------------------------------------------------------------------------
 
-tfloat32 *OrcusDCT::input()
+tfloat32 *OmegaDCT::input()
 {
 	return m_x;
 }
 
 //-------------------------------------------------------------------------------------------
 
-const tfloat32 *OrcusDCT::input() const
+const tfloat32 *OmegaDCT::input() const
 {
 	return m_x;
 }
 
 //-------------------------------------------------------------------------------------------
 
-tfloat32 *OrcusDCT::output()
+tfloat32 *OmegaDCT::output()
 {
 	return m_X;
 }
 
 //-------------------------------------------------------------------------------------------
 
-const tfloat32 *OrcusDCT::output() const
+const tfloat32 *OmegaDCT::output() const
 {
 	return m_X;
 }
 
 //-------------------------------------------------------------------------------------------
 
-tfloat32 *OrcusDCT::TypeII(tfloat32 *x)
+tfloat32 *OmegaDCT::TypeII(tfloat32 *x)
 {
 	if(x!=m_x)
 	{
@@ -2249,7 +2249,7 @@ tfloat32 *OrcusDCT::TypeII(tfloat32 *x)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat32 *OrcusDCT::TypeIII(tfloat32 *x)
+tfloat32 *OmegaDCT::TypeIII(tfloat32 *x)
 {
 	if(x!=m_x)
 	{
@@ -2273,7 +2273,7 @@ tfloat32 *OrcusDCT::TypeIII(tfloat32 *x)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat32 *OrcusDCT::TypeIV(tfloat32 *x)
+tfloat32 *OmegaDCT::TypeIV(tfloat32 *x)
 {
 	if(x!=m_x)
 	{
@@ -2297,7 +2297,7 @@ tfloat32 *OrcusDCT::TypeIV(tfloat32 *x)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat32 *OrcusDCT::MDCT(tfloat32 *x)
+tfloat32 *OmegaDCT::MDCT(tfloat32 *x)
 {
 	tint i,idxA,idxB,Na,Nb,Nc;
 	
@@ -2366,7 +2366,7 @@ tfloat32 *OrcusDCT::MDCT(tfloat32 *x)
 
 //-------------------------------------------------------------------------------------------
 
-tfloat32 *OrcusDCT::InverseMDCT(tfloat32 *x)
+tfloat32 *OmegaDCT::InverseMDCT(tfloat32 *x)
 {
 	tint i,j,Na,Nb,Nc;
 	
@@ -2435,7 +2435,7 @@ tfloat32 *OrcusDCT::InverseMDCT(tfloat32 *x)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::WMDCT(tfloat32 *x,tfloat32 *X,tint offset)
+void OmegaDCT::WMDCT(tfloat32 *x,tfloat32 *X,tint offset)
 {
 	tint i,idxA,idxB,Na,Nb,Nc;
 	
@@ -2510,7 +2510,7 @@ void OrcusDCT::WMDCT(tfloat32 *x,tfloat32 *X,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::WInverseMDCT(tfloat32 *x,tfloat32 *X,tint offset)
+void OmegaDCT::WInverseMDCT(tfloat32 *x,tfloat32 *X,tint offset)
 {
 	tint i,j,Na,Nb,Nc;
 	
@@ -2579,7 +2579,7 @@ void OrcusDCT::WInverseMDCT(tfloat32 *x,tfloat32 *X,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-void OrcusDCT::VSInverseMDCT(tfloat32 *x,tfloat32 *X)
+void OmegaDCT::VSInverseMDCT(tfloat32 *x,tfloat32 *X)
 {
 	tint i,j,Na,Nb,Nc;
 	
@@ -2644,5 +2644,5 @@ void OrcusDCT::VSInverseMDCT(tfloat32 *x,tfloat32 *X)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

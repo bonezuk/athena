@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RTP_SESSION_H
-#define __ORCUS_NETWORK_RTP_SESSION_H
+#ifndef __OMEGA_NETWORK_RTP_SESSION_H
+#define __OMEGA_NETWORK_RTP_SESSION_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/UDPRead.h"
@@ -21,7 +21,7 @@
 #include "network/rtp/inc/SourceState.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -185,7 +185,7 @@ ABSTRACT_FACTORY_CLASS(NETWORKRTP_EXPORT,SessionFactory,Session)
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

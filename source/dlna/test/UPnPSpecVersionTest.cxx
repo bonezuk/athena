@@ -3,7 +3,7 @@
 
 #include "dlna/inc/UPnPSpecVersion.h"
 
-using namespace orcus::dlna;
+using namespace omega::dlna;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

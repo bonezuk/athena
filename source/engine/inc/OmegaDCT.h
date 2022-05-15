@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_ORCUSDCT_H
-#define __ORCUS_ENGINE_ORCUSDCT_H
+#ifndef __OMEGA_ENGINE_OMEGADCT_H
+#define __OMEGA_ENGINE_OMEGADCT_H
 //-------------------------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -16,7 +16,7 @@
 #include <QMap>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -63,13 +63,13 @@ namespace engine
 
 //-------------------------------------------------------------------------------------------
 
-class ENGINE_EXPORT OrcusDCT
+class ENGINE_EXPORT OmegaDCT
 {
 	public:
-		OrcusDCT(int N);
-		virtual ~OrcusDCT();
+		OmegaDCT(int N);
+		virtual ~OmegaDCT();
 		
-		static OrcusDCT *get(tint N);
+		static OmegaDCT *get(tint N);
 		static void stop();
 	
 		tfloat32 *input();
@@ -92,7 +92,7 @@ class ENGINE_EXPORT OrcusDCT
 		
 	protected:
 	
-		static QMap<tint,OrcusDCT *> m_DCTCollection;
+		static QMap<tint,OmegaDCT *> m_DCTCollection;
 	
 		static tint m_DCTCounter;
 		static common::Allocation m_DCTAllocation;
@@ -158,7 +158,7 @@ class ENGINE_EXPORT OrcusDCT
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

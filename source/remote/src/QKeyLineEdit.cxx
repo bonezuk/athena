@@ -11,7 +11,7 @@
 #include <QMessageBox>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -2012,5 +2012,5 @@ void QKeyLineEditDelegate::paint(QPainter *painter,const QStyleOptionViewItem& o
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

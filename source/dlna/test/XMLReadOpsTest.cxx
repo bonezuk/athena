@@ -1,7 +1,7 @@
 #include "dlna/inc/XMLReadOps.h"
 #include "dlna/test/XMLLibMockIF.h"
 
-using namespace orcus::dlna;
+using namespace omega::dlna;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

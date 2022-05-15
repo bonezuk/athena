@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WHITEOMEGA_GACONFIG_H
-#define __ORCUS_ENGINE_WHITEOMEGA_GACONFIG_H
+#ifndef __OMEGA_ENGINE_WHITEOMEGA_GACONFIG_H
+#define __OMEGA_ENGINE_WHITEOMEGA_GACONFIG_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/whiteomega/inc/ProgramConfig.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -133,7 +133,7 @@ class WHITEOMEGA_EXPORT GAConfig
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

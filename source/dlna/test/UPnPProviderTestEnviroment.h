@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_DLNA_TEST_UPNPPROVIDERTESTENVIROMENT
-#define __ORCUS_DLNA_TEST_UPNPPROVIDERTESTENVIROMENT
+#ifndef __OMEGA_DLNA_TEST_UPNPPROVIDERTESTENVIROMENT
+#define __OMEGA_DLNA_TEST_UPNPPROVIDERTESTENVIROMENT
 //-------------------------------------------------------------------------------------------
 
 #include <QtCore/QPair>
@@ -11,7 +11,7 @@
 #include "common/inc/DiskOps.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -45,7 +45,7 @@ class UPnPProviderTestEnviroment
 //-------------------------------------------------------------------------------------------
 } // namespace test
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

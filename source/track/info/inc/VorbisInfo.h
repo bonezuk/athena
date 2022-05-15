@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_VORBISINFO_H
-#define __ORCUS_TRACK_INFO_VORBISINFO_H
+#ifndef __OMEGA_TRACK_INFO_VORBISINFO_H
+#define __OMEGA_TRACK_INFO_VORBISINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/IOFile.h"
@@ -11,7 +11,7 @@
 #include "track/info/inc/Info.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -35,7 +35,7 @@ class TRACK_INFO_EXPORT VorbisInfo : public Info
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_REDCODEC_H
-#define __ORCUS_ENGINE_REDOMEGA_REDCODEC_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_REDCODEC_H
+#define __OMEGA_ENGINE_REDOMEGA_REDCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/ALACSequence.h"
@@ -10,7 +10,7 @@
 #include "engine/inc/Codec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -85,7 +85,7 @@ class REDOMEGA_EXPORT RedCodec : public engine::Codec
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_GREENOMEGA_FLACMETACOMMENT_H
-#define __ORCUS_GREENOMEGA_FLACMETACOMMENT_H
+#ifndef __OMEGA_GREENOMEGA_FLACMETACOMMENT_H
+#define __OMEGA_GREENOMEGA_FLACMETACOMMENT_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/greenomega/inc/FLACMetaBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -56,7 +56,7 @@ class GREENOMEGA_EXPORT FLACMetaComment : public FLACMetaBase
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

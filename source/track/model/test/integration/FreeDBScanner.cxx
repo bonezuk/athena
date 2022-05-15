@@ -7,7 +7,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-using namespace orcus;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_TCPCONNCLIENTSOCKET_H
-#define __ORCUS_NETWORK_TCPCONNCLIENTSOCKET_H
+#ifndef __OMEGA_NETWORK_TCPCONNCLIENTSOCKET_H
+#define __OMEGA_NETWORK_TCPCONNCLIENTSOCKET_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/TCPConnectionSocket.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -34,7 +34,7 @@ class NETWORK_EXPORT TCPConnClientSocket : public TCPConnectionSocket
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

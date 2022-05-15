@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_MODEL_TEST_TRACKDBTESTENVIROMENT_H
-#define __ORCUS_TRACK_MODEL_TEST_TRACKDBTESTENVIROMENT_H
+#ifndef __OMEGA_TRACK_MODEL_TEST_TRACKDBTESTENVIROMENT_H
+#define __OMEGA_TRACK_MODEL_TEST_TRACKDBTESTENVIROMENT_H
 //-------------------------------------------------------------------------------------------
 
 #include "dlna/test/UPnPProviderTestEnviroment.h"
@@ -8,7 +8,7 @@
 #include <QVariant>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -44,7 +44,7 @@ class TrackDBTestEnviroment
 
 		static TrackDBTestEnviroment *m_instance;
 	
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 		HMODULE m_blueOmegaDLL;
 		HMODULE m_silverOmegaDLL;
 		HMODULE m_blackOmegaDLL;
@@ -77,7 +77,7 @@ class TrackDBTestEnviroment
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

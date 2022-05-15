@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_REMOTEDLL_H
-#define __ORCUS_REMOTE_REMOTEDLL_H
+#ifndef __OMEGA_REMOTE_REMOTEDLL_H
+#define __OMEGA_REMOTE_REMOTEDLL_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_REMOTE_DLL)
+#if defined(OMEGA_REMOTE_DLL)
 #define REMOTE_EXPORT __declspec(dllexport)
 #define REMOTE_TEMPLATE
 #else
@@ -22,12 +22,12 @@
 
 //-------------------------------------------------------------------------------------------
 
-namespace orcus
+namespace omega
 {
 	namespace remote
 	{
 	} // namespace remote
-} // namespace orcus
+} // namespace omega
 
 //-------------------------------------------------------------------------------------------
 #endif

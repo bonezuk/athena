@@ -6,7 +6,7 @@
 #include "gmock/gmock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -156,5 +156,5 @@ void UPnPProviderTestEnviroment::removeDirectory(int testCase)
 //-------------------------------------------------------------------------------------------
 } // namespace test
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

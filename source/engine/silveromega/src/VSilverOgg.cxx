@@ -1,7 +1,7 @@
 #include "engine/silveromega/inc/VSilverOgg.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -11,9 +11,9 @@ COMMON_TEMPLATE_MEMBER engine::Sequence *BOQueueTree<engine::Sequence *>::nullOb
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -584,5 +584,5 @@ bool VSilverOgg::seek(tint offset)
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namesapce engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "common/inc/MD5Digest.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -283,5 +283,5 @@ void MD5Digest::decode(tuint32 *output,tubyte *input,tint len)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "common/inc/CommonDirectoriesForFiles.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -729,5 +729,5 @@ QString CommonDirectoriesForFiles::path(const QString& fileName,int level)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

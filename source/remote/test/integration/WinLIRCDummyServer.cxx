@@ -1,7 +1,7 @@
 #include "remote/test/integration/WinLIRCDummyServer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -346,14 +346,14 @@ void WinLIRCDummyApplication::onExecute()
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-using namespace orcus::remote;
-using namespace orcus;
+using namespace omega::remote;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

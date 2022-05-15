@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_WINLIRCDUMMYSERVER_H
-#define __ORCUS_REMOTE_WINLIRCDUMMYSERVER_H
+#ifndef __OMEGA_REMOTE_WINLIRCDUMMYSERVER_H
+#define __OMEGA_REMOTE_WINLIRCDUMMYSERVER_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/TCPServerSocket.h"
@@ -9,7 +9,7 @@
 #include "common/inc/TimeStamp.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -138,7 +138,7 @@ class WinLIRCDummyApplication : public QObject
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

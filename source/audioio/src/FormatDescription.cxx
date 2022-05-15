@@ -1,7 +1,7 @@
 #include "audioio/inc/FormatDescription.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -575,5 +575,5 @@ QSet<tint> FormatDescription::setOfFrequencies()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

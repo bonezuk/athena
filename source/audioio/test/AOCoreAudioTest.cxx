@@ -10,7 +10,7 @@
 #include "audioio/test/AOQueryDeviceMock.h"
 #include "audioio/inc/AOQueryCoreAudio.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace audioio;
 using namespace testing;
 

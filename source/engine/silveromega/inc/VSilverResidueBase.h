@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVERRESIDUEBASE_H
-#define __ORCUS_ENGINE_SILVEROMEGA_VSILVERRESIDUEBASE_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVERRESIDUEBASE_H
+#define __OMEGA_ENGINE_SILVEROMEGA_VSILVERRESIDUEBASE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Allocation.h"
@@ -9,7 +9,7 @@
 #include "engine/silveromega/inc/VSilverCodebook.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -77,7 +77,7 @@ class SILVEROMEGA_EXPORT VSilverResidueBase : public VSilverInfoObject
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

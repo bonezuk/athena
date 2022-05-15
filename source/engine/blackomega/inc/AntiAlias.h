@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_ANTIALIAS_H
-#define __ORCUS_ENGINE_BLACKOMEGA_ANTIALIAS_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_ANTIALIAS_H
+#define __OMEGA_ENGINE_BLACKOMEGA_ANTIALIAS_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/blackomega/inc/Reorder.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -55,7 +55,7 @@ inline void AntiAlias::set(sample_t *p)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

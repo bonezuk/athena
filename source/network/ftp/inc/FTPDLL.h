@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_FTP_FTPDLL_H
-#define __ORCUS_NETWORK_FTP_FTPDLL_H
+#ifndef __OMEGA_NETWORK_FTP_FTPDLL_H
+#define __OMEGA_NETWORK_FTP_FTPDLL_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_FTP_DLL)
+#if defined(OMEGA_FTP_DLL)
 #define FTP_EXPORT __declspec(dllexport)
 #define FTP_TEMPLATE
 #else
@@ -21,7 +21,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -30,7 +30,7 @@ namespace ftp
 //-------------------------------------------------------------------------------------------
 } // namespace ftp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_TRACK_MODEL_DLL)
+#if defined(OMEGA_TRACK_MODEL_DLL)
 #define TRACK_MODEL_EXPORT __declspec(dllexport)
 #define TRACK_MODEL_TEMPLATE
 #else
@@ -22,7 +22,7 @@
 
 //-------------------------------------------------------------------------------------------
 
-namespace orcus
+namespace omega
 {
 	namespace track
 	{
@@ -30,7 +30,7 @@ namespace orcus
 		{
 		} // namespace model
 	} // namespace track
-} // namespace orcus
+} // namespace omega
 
 //-------------------------------------------------------------------------------------------
 #endif

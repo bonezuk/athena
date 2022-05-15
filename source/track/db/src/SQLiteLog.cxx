@@ -3,7 +3,7 @@
 #include "track/db/inc/SQLiteOperation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -219,5 +219,5 @@ const QVector<SQLiteLog::Entry>& SQLiteLog::log() const
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

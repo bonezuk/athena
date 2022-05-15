@@ -1,7 +1,7 @@
 #include "track/model/inc/TrackModelKey.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -169,6 +169,6 @@ const QString& TrackModelKey::artist() const
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

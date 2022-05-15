@@ -1,10 +1,10 @@
-#ifndef __ORCUS_COMMON_BOTREE_H
-#define __ORCUS_COMMON_BOTREE_H
+#ifndef __OMEGA_COMMON_BOTREE_H
+#define __OMEGA_COMMON_BOTREE_H
 
 #include "common/inc/CommonTypes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -1095,7 +1095,7 @@ template <class T,class S> void BOTree<T,S>::Set(const T& index,const S& entry)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

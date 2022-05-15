@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AUDIOHARDWAREBUFFERWASAPI_H
-#define __ORCUS_AUDIOIO_AUDIOHARDWAREBUFFERWASAPI_H
+#ifndef __OMEGA_AUDIOIO_AUDIOHARDWAREBUFFERWASAPI_H
+#define __OMEGA_AUDIOIO_AUDIOHARDWAREBUFFERWASAPI_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/WasAPILayerIF.h"
 #include "audioio/inc/AbstractAudioHardwareBuffer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -38,7 +38,7 @@ class AUDIOIO_EXPORT AudioHardwareBufferWasAPI : public AbstractAudioHardwareBuf
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

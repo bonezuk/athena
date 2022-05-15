@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_VERSIONER_DICTIONARYXMLMAP_H
-#define __ORCUS_VERSIONER_DICTIONARYXMLMAP_H
+#ifndef __OMEGA_VERSIONER_DICTIONARYXMLMAP_H
+#define __OMEGA_VERSIONER_DICTIONARYXMLMAP_H
 //-------------------------------------------------------------------------------------------
 
 #include <QMap>
 #include <QString>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace versioner
 {
@@ -22,7 +22,7 @@ class DictionaryXMLMap
 
 //-------------------------------------------------------------------------------------------
 } // namespace versioner
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

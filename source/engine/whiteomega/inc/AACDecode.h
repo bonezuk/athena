@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_AACDECODE_H
-#define __ORCUS_WHITEOMEGA_AACDECODE_H
+#ifndef __OMEGA_WHITEOMEGA_AACDECODE_H
+#define __OMEGA_WHITEOMEGA_AACDECODE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/Sequence.h"
@@ -13,7 +13,7 @@
 #include <math.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -81,7 +81,7 @@ class AACDecode
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

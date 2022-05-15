@@ -1,7 +1,7 @@
 #include "audioio/inc/IOTimeStamp.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -95,6 +95,6 @@ bool IOTimeStamp::isEqual(const IOTimeStamp& rhs) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

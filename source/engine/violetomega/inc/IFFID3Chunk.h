@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_IFFID3CHUNK_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_IFFID3CHUNK_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_IFFID3CHUNK_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_IFFID3CHUNK_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOMemory.h"
 #include "engine/violetomega/inc/IFFChunk.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -35,7 +35,7 @@ typedef QSharedPointer<IFFID3Chunk> IFFID3ChunkSPtr;
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

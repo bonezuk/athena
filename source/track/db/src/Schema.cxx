@@ -6,7 +6,7 @@
 #include <QFile>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -747,5 +747,5 @@ bool Schema::upgradeVersion5To6(const QString& orgTrackDBFileName)
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

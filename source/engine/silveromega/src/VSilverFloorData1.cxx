@@ -2,12 +2,12 @@
 #include "engine/silveromega/inc/VSilverCodecData.h"
 #include "engine/silveromega/inc/VSilverFunctions.h"
 #include "engine/silveromega/inc/VSilverWindow.h"
-#if defined(ORCUS_OGG_COMPARE)
+#if defined(OMEGA_OGG_COMPARE)
 #include "engine/inc/Compare.h"
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -309,7 +309,7 @@ void *VSilverFloorData1::decode(VSilverCodecData *info,engine::Sequence *seq)
 			}
 		}
 
-#if defined(ORCUS_OGG_COMPARE)
+#if defined(OMEGA_OGG_COMPARE)
 		if(g_Compare.isThreadA())
 		{
 			tint frame = g_Compare.frameA();
@@ -481,6 +481,6 @@ void VSilverFloorData1::product(VSilverWindow *win,void *memo,tfloat32 *out)
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

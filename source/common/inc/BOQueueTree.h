@@ -1,5 +1,5 @@
-#ifndef __ORCUS_COMMON_BOQUEUETREE_H
-#define __ORCUS_COMMON_BOQUEUETREE_H
+#ifndef __OMEGA_COMMON_BOQUEUETREE_H
+#define __OMEGA_COMMON_BOQUEUETREE_H
 
 #include "common/inc/CommonTypes.h"
 
@@ -11,7 +11,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -1306,7 +1306,7 @@ template <class X> X& BOQueueTree<X>::Next() {
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

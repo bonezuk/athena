@@ -3,8 +3,8 @@
 #include "gtest/gtest.h"
 
 using namespace testing;
-using namespace orcus;
-using namespace orcus::audioio;
+using namespace omega;
+using namespace omega::audioio;
 
 //-------------------------------------------------------------------------------------------
 

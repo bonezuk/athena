@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_CODEC_H
-#define __ORCUS_ENGINE_CODEC_H
+#ifndef __OMEGA_ENGINE_CODEC_H
+#define __OMEGA_ENGINE_CODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Factory.h"
@@ -13,7 +13,7 @@
 #include "common/inc/BIOBufferedStream.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -125,7 +125,7 @@ ABSTRACT_FACTORY_CLASS(ENGINE_EXPORT,CodecFactory,Codec)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

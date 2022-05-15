@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_SANDBOX_BASE_H
-#define __ORCUS_COMMON_SANDBOX_BASE_H
+#ifndef __OMEGA_COMMON_SANDBOX_BASE_H
+#define __OMEGA_COMMON_SANDBOX_BASE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/SBService.h"
 #include "widget/inc/WidgetDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace widget
 {
@@ -38,7 +38,7 @@ class WIDGET_EXPORT SBServiceBase : public common::SBService
 
 //-------------------------------------------------------------------------------------------
 } // namespace widget
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

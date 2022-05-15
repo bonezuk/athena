@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_RECYCLER_H
-#define __ORCUS_ENGINE_RECYCLER_H
+#ifndef __OMEGA_ENGINE_RECYCLER_H
+#define __OMEGA_ENGINE_RECYCLER_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
 #include "engine/inc/EngineDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -156,7 +156,7 @@ template <class X> void Recycler<X>::put(X *c)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

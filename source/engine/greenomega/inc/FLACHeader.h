@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_GREENOMEGA_FLACHEADER_H
-#define __ORCUS_ENGINE_GREENOMEGA_FLACHEADER_H
+#ifndef __OMEGA_ENGINE_GREENOMEGA_FLACHEADER_H
+#define __OMEGA_ENGINE_GREENOMEGA_FLACHEADER_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/greenomega/inc/FLACMetaBase.h"
 #include "engine/greenomega/inc/FLACMetaStreamInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -159,7 +159,7 @@ inline tint FLACHeader::bookmarkStart() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

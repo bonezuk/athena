@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_SERVICE_H
-#define __ORCUS_NETWORK_SERVICE_H
+#ifndef __OMEGA_NETWORK_SERVICE_H
+#define __OMEGA_NETWORK_SERVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -16,7 +16,7 @@
 #include <QCoreApplication>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -103,7 +103,7 @@ ABSTRACT_FACTORY_CLASS(NETWORK_EXPORT,ServiceFactory,Service)
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

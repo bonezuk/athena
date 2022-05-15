@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_WHITEOMEGA_CPEDECODE_H
-#define __ORCUS_WHITEOMEGA_CPEDECODE_H
+#ifndef __OMEGA_WHITEOMEGA_CPEDECODE_H
+#define __OMEGA_WHITEOMEGA_CPEDECODE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/whiteomega/inc/ICS.h"
@@ -14,7 +14,7 @@
 #include "engine/whiteomega/inc/Window.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -147,7 +147,7 @@ inline tint CPEDecode::invertIntensity(tint g,tint sfb) const
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

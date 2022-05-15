@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WHITEOMEGA_ALACATOMCONTAINER_H
-#define __ORCUS_ENGINE_WHITEOMEGA_ALACATOMCONTAINER_H
+#ifndef __OMEGA_ENGINE_WHITEOMEGA_ALACATOMCONTAINER_H
+#define __OMEGA_ENGINE_WHITEOMEGA_ALACATOMCONTAINER_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/whiteomega/inc/Atom.h"
 #include "engine/redomega/inc/ALACContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -29,7 +29,7 @@ class WHITEOMEGA_EXPORT ALACAtomContainer : public redomega::ALACContainer
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

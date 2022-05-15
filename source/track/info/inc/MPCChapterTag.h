@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_MPCCHAPTERTAG_H
-#define __ORCUS_TRACK_INFO_MPCCHAPTERTAG_H
+#ifndef __OMEGA_TRACK_INFO_MPCCHAPTERTAG_H
+#define __OMEGA_TRACK_INFO_MPCCHAPTERTAG_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/info/inc/Info.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -83,7 +83,7 @@ class TRACK_INFO_EXPORT MPCChapterTag
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

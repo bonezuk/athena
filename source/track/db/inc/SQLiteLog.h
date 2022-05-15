@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_SQLITELOG_H
-#define __ORCUS_TRACK_DB_SQLITELOG_H
+#ifndef __OMEGA_TRACK_DB_SQLITELOG_H
+#define __OMEGA_TRACK_DB_SQLITELOG_H
 //-------------------------------------------------------------------------------------------
 
 #include <QTime>
@@ -13,7 +13,7 @@
 #include "track/db/inc/DbDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -128,7 +128,7 @@ inline const QString& SQLiteLog::Entry::text() const
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

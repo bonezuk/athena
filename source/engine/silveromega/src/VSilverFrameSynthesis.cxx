@@ -4,13 +4,13 @@
 #include "engine/silveromega/inc/VSilverFloorBase.h"
 #include "engine/silveromega/inc/VSilverMapData.h"
 #include "engine/silveromega/inc/VSilverWindow.h"
-#include "engine/inc/OrcusDCT.h"
-#if defined(ORCUS_OGG_COMPARE)
+#include "engine/inc/OmegaDCT.h"
+#if defined(OMEGA_OGG_COMPARE)
 #include "engine/inc/Compare.h"
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -91,7 +91,7 @@ void frameSynthesis(VSilverContainer *data,engine::Sequence *seq,VSilverWindow *
 		}
 	}
 
-#if defined(ORCUS_OGG_COMPARE)
+#if defined(OMEGA_OGG_COMPARE)
 	{
 		if(g_Compare.isThreadA())
 		{
@@ -176,7 +176,7 @@ void frameSynthesis(VSilverContainer *data,engine::Sequence *seq,VSilverWindow *
 		}
 	}
 
-#if defined(ORCUS_OGG_COMPARE)
+#if defined(OMEGA_OGG_COMPARE)
 	{
 		if(g_Compare.isThreadA())
 		{
@@ -199,7 +199,7 @@ void frameSynthesis(VSilverContainer *data,engine::Sequence *seq,VSilverWindow *
 
 	// transform to pcm data using mdct
 	{
-		OrcusDCT *MDCT = OrcusDCT::get(window->m_pcmEnd);
+		OmegaDCT *MDCT = OmegaDCT::get(window->m_pcmEnd);
 		
 		for(i=0;i<data->m_information->m_audioChannels;++i)
 		{
@@ -207,7 +207,7 @@ void frameSynthesis(VSilverContainer *data,engine::Sequence *seq,VSilverWindow *
 		}
 	}
 
-#if defined(ORCUS_OGG_COMPARE)
+#if defined(OMEGA_OGG_COMPARE)
 	{
 		if(g_Compare.isThreadA())
 		{
@@ -246,6 +246,6 @@ void frameSynthesis(VSilverContainer *data,engine::Sequence *seq,VSilverWindow *
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_TEST_HIDREMOTECONTROLLERTEST_H
-#define __ORCUS_PLAYER_TEST_HIDREMOTECONTROLLERTEST_H
+#ifndef __OMEGA_PLAYER_TEST_HIDREMOTECONTROLLERTEST_H
+#define __OMEGA_PLAYER_TEST_HIDREMOTECONTROLLERTEST_H
 //-------------------------------------------------------------------------------------------
 
 #include <gtest/gtest.h>

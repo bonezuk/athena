@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_PLAYERCONTROLLER_H
-#define __ORCUS_PLAYER_PLAYERCONTROLLER_H
+#ifndef __OMEGA_PLAYER_PLAYERCONTROLLER_H
+#define __OMEGA_PLAYER_PLAYERCONTROLLER_H
 //-------------------------------------------------------------------------------------------
 
 #include "player/inc/Player.h"
@@ -8,7 +8,7 @@
 #include <QSplashScreen>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -188,7 +188,7 @@ inline QSharedPointer<audioio::AOBase> PlayerController::audio()
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

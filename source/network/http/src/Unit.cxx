@@ -1,7 +1,7 @@
 #include "network/http/inc/Unit.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -1511,5 +1511,5 @@ void Unit::setPassword(const QString& pass)
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

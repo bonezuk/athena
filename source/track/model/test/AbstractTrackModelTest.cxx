@@ -3,7 +3,7 @@
 
 #include "track/model/test/AbstractTrackModelTest.h"
 
-using namespace orcus::track::model;
+using namespace omega::track::model;
 using namespace testing;
 
 

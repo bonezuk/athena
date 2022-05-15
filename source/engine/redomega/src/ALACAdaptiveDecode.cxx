@@ -1,7 +1,7 @@
 #include "engine/redomega/inc/ALACAdaptiveDecode.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -169,5 +169,5 @@ void ALACAdaptiveDecode::decode(ALACSequence *seq,tint maxSize,tint *out,tint le
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

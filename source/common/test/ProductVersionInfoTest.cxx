@@ -6,8 +6,8 @@
 #include "common/inc/DiskOps.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 
-using namespace orcus::common;
-using namespace orcus;
+using namespace omega::common;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

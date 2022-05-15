@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_AIFFINFO_H
-#define __ORCUS_TRACK_INFO_AIFFINFO_H
+#ifndef __OMEGA_TRACK_INFO_AIFFINFO_H
+#define __OMEGA_TRACK_INFO_AIFFINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/info/inc/EmbeddedID3Info.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -30,7 +30,7 @@ class TRACK_INFO_EXPORT AIFFInfo : public EmbeddedID3Info
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

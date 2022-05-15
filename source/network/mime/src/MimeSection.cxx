@@ -1,7 +1,7 @@
 #include "network/mime/inc/MimeSection.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -624,5 +624,5 @@ tint MimeSection::parseEndPosition() const
 //-------------------------------------------------------------------------------------------
 } // namespace mime
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -2,11 +2,11 @@
 #include "common/inc/SHA1Digest.h"
 #include "network/rtp/inc/Session.h"
 
-//#define ORCUS_SESSION_DEBUG_PRINT 1
-//#define ORCUS_SESSION_DEBUG_PRINT_REPORT 1
+//#define OMEGA_SESSION_DEBUG_PRINT 1
+//#define OMEGA_SESSION_DEBUG_PRINT_REPORT 1
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -479,7 +479,7 @@ bool Session::send()
 					tDelay *= 1000.0;
 					tDelayActual = static_cast<tint>(tDelay);	
 
-#if defined(ORCUS_SESSION_DEBUG_PRINT)
+#if defined(OMEGA_SESSION_DEBUG_PRINT)
 					common::Log::g_Log.print("SPTimer - %d\n",tDelayActual);
 #endif
 					setTimer(m_timerData,tDelayActual);
@@ -487,7 +487,7 @@ bool Session::send()
 				}
 				else
 				{
-#if defined(ORCUS_SESSION_DEBUG_PRINT)
+#if defined(OMEGA_SESSION_DEBUG_PRINT)
 					common::Log::g_Log.print("SPTimer - Recursive\n");
 #endif
 					res = send();
@@ -518,7 +518,7 @@ bool Session::sendPacket()
 		RTPPacketSPtr emptyP;
 		NetArraySPtr mem(new NetArray);
 		
-#if defined(ORCUS_SESSION_DEBUG_PRINT)
+#if defined(OMEGA_SESSION_DEBUG_PRINT)
 		common::Log::g_Log.print("SP = %d\t%d:%d.%d\n",m_sequenceNo,m_time.minute(),m_time.second(),m_time.millisecond());
 #endif
 
@@ -636,7 +636,7 @@ void Session::scheduleReport()
 	m_tn = m_tp + interval;
 	if(m_tn < curT)
 	{
-#if defined(ORCUS_SESSION_DEBUG_PRINT_REPORT)
+#if defined(OMEGA_SESSION_DEBUG_PRINT_REPORT)
 		common::Log::g_Log.print("ReportTimer - Recursive\n");
 #endif
 		onSendReport();
@@ -648,7 +648,7 @@ void Session::scheduleReport()
 		tDelay *= 1000.0;
 		tDelayActual = static_cast<tint>(tDelay);
 
-#if defined(ORCUS_SESSION_DEBUG_PRINT_REPORT)
+#if defined(OMEGA_SESSION_DEBUG_PRINT_REPORT)
 		common::Log::g_Log.print("SPTimer - %d %.3f %.3f %.3f\n",tDelayActual,
 			static_cast<tfloat64>(m_tn - m_startClockTime),
 			static_cast<tfloat64>(m_tp - m_startClockTime),
@@ -665,7 +665,7 @@ void Session::onSendReport()
 {
 	m_tp = clockTime();
 
-#if defined(ORCUS_SESSION_DEBUG_PRINT_REPORT)
+#if defined(OMEGA_SESSION_DEBUG_PRINT_REPORT)
 		common::Log::g_Log.print("SR = %d:%d.%d\n",m_tp.minute(),m_tp.second(),m_tp.millisecond());
 #endif
 
@@ -1287,5 +1287,5 @@ void Session::resync()
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

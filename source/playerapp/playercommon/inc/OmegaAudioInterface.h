@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_OMEGAAUDIOINTERFACE_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_OMEGAAUDIOINTERFACE_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAAUDIOINTERFACE_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAAUDIOINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QString>
@@ -11,7 +11,7 @@
 #include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ class PLAYERCOMMON_EXPORT OmegaAudioInterface : public QObject
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

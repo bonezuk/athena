@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_AUDIODAEMON_AUDIODAEMONMAIN_H
-#define __ORCUS_PLAYERAPP_AUDIODAEMON_AUDIODAEMONMAIN_H
+#ifndef __OMEGA_PLAYERAPP_AUDIODAEMON_AUDIODAEMONMAIN_H
+#define __OMEGA_PLAYERAPP_AUDIODAEMON_AUDIODAEMONMAIN_H
 //-------------------------------------------------------------------------------------------
 
 #include "playerapp/audiodaemon/inc/OmegaAudioDaemon.h"
@@ -10,7 +10,7 @@
 #include <QCoreApplication>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ class AudioDaemonMain : public QCoreApplication
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

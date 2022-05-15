@@ -2,7 +2,7 @@
 #include "engine/inc/FormatTypeFromFloat.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -551,5 +551,5 @@ tint ASIOData::copyToBuffer(const sample_t *src,tint len,tint oOffset,tint chInd
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

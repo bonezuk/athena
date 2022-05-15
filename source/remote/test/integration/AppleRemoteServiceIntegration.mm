@@ -4,8 +4,8 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import <AppKit/NSApplication.h>
 
-using namespace orcus;
-using namespace orcus::remote;
+using namespace omega;
+using namespace omega::remote;
 
 using namespace testing;
 

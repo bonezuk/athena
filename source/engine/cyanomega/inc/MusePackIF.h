@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_CYANOMEGA_MUSEPACKIF_H
-#define __ORCUS_ENGINE_CYANOMEGA_MUSEPACKIF_H
+#ifndef __OMEGA_ENGINE_CYANOMEGA_MUSEPACKIF_H
+#define __OMEGA_ENGINE_CYANOMEGA_MUSEPACKIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/cyanomega/inc/CyanOmegaDLL.h"
@@ -9,7 +9,7 @@
 #include "mpc/mpcdec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -44,7 +44,7 @@ class CYANOMEGA_EXPORT MusePackIF
 //-------------------------------------------------------------------------------------------
 } // namespace cyanomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

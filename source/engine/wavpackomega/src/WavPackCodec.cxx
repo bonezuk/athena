@@ -7,7 +7,7 @@
 #include <QStringList>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -1399,5 +1399,5 @@ void WavPackCodec::setupReadSampleBE()
 //-------------------------------------------------------------------------------------------
 } // namespace wavpackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -104,7 +104,7 @@ void generateTone(struct ToneGenerator *pTone,short *samples,int noSamples)
 */
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -637,5 +637,5 @@ common::TimeStamp ToneCodec::length() const
 //-------------------------------------------------------------------------------------------
 } // namespace toneomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

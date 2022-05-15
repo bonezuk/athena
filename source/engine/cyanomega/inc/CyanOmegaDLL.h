@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_CYANOMEGA_CYANOMEGADLL_H
-#define __ORCUS_ENGINE_CYANOMEGA_CYANOMEGADLL_H
+#ifndef __OMEGA_ENGINE_CYANOMEGA_CYANOMEGADLL_H
+#define __OMEGA_ENGINE_CYANOMEGA_CYANOMEGADLL_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_ENGINE_CYANOMEGA_DLL)
+#if defined(OMEGA_ENGINE_CYANOMEGA_DLL)
 #define CYANOMEGA_EXPORT __declspec(dllexport)
 #define CYANOMEGA_TEMPLATE
 #else
@@ -21,7 +21,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 	namespace engine
 	{
@@ -29,7 +29,7 @@ namespace orcus
 		{
 		} // namespace cyanomega
 	} // namespace engine
-}// namespace orcus
+}// namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

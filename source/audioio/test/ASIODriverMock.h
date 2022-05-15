@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_WIN32)
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_TEST_ASIODRIVERMOCK_H
-#define __ORCUS_AUDIOIO_TEST_ASIODRIVERMOCK_H
+#ifndef __OMEGA_AUDIOIO_TEST_ASIODRIVERMOCK_H
+#define __OMEGA_AUDIOIO_TEST_ASIODRIVERMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/ASIODriver.h"
@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-using namespace orcus::audioio;
+using namespace omega::audioio;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

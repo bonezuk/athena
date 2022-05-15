@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RTP_SCHEDULER_H
-#define __ORCUS_NETWORK_RTP_SCHEDULER_H
+#ifndef __OMEGA_NETWORK_RTP_SCHEDULER_H
+#define __OMEGA_NETWORK_RTP_SCHEDULER_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/UDPRead.h"
@@ -9,7 +9,7 @@
 #include "network/rtp/inc/RTCPPacketSDES.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -112,7 +112,7 @@ class NETWORKRTP_EXPORT Scheduler : public Service
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

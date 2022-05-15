@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_WINLIRCSETTINGS_H
-#define __ORCUS_REMOTE_WINLIRCSETTINGS_H
+#ifndef __OMEGA_REMOTE_WINLIRCSETTINGS_H
+#define __OMEGA_REMOTE_WINLIRCSETTINGS_H
 //-------------------------------------------------------------------------------------------
 
 #include "remote/inc/KeyStateParser.h"
@@ -9,7 +9,7 @@
 #include <QtCore/QSettings>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -50,7 +50,7 @@ class REMOTE_EXPORT WinLIRCSettings
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -10,7 +10,7 @@
 #include <QMutex>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -68,7 +68,7 @@ ABSTRACT_FACTORY_CLASS(TRACK_INFO_EXPORT, SBBookmarkServiceFactory, SBBookmarkSe
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "common/test/CachedFileStreamMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -17,5 +17,5 @@ CachedFileStreamMock::~CachedFileStreamMock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

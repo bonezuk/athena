@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AUDIOIODLL_H
-#define __ORCUS_AUDIOIO_AUDIOIODLL_H
+#ifndef __OMEGA_AUDIOIO_AUDIOIODLL_H
+#define __OMEGA_AUDIOIO_AUDIOIODLL_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_AUDIOIO_DLL)
+#if defined(OMEGA_AUDIOIO_DLL)
 #define AUDIOIO_EXPORT __declspec(dllexport)
 #define AUDIOIO_TEMPLATE
 #else
@@ -21,12 +21,12 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 	namespace audioio
 	{
 	} // namespace engine
-} // namespace orcus
+} // namespace omega
 
 //-------------------------------------------------------------------------------------------
 

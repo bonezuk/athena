@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WAVCHANNELMASK_H
-#define __ORCUS_ENGINE_WAVCHANNELMASK_H
+#ifndef __OMEGA_ENGINE_WAVCHANNELMASK_H
+#define __OMEGA_ENGINE_WAVCHANNELMASK_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/EngineDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -87,7 +87,7 @@ inline tint WavChannelMask::outChannelNo() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #include "engine/inc/Codec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -465,5 +465,5 @@ void PlaylistAbstractIO::setParent(QObject *w)
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

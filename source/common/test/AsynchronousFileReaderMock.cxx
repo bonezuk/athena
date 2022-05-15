@@ -1,7 +1,7 @@
 #include "common/test/AsynchronousFileReaderMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -17,5 +17,5 @@ AsynchronousFileReaderMock::~AsynchronousFileReaderMock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -7,8 +7,8 @@
 
 #include "track/info/inc/XMCDInfo.h"
 
-using namespace orcus::track::info;
-using namespace orcus;
+using namespace omega::track::info;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

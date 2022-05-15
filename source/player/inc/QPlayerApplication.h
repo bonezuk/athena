@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_QPLAYERAPPLICATION_H
-#define __ORCUS_PLAYER_QPLAYERAPPLICATION_H
+#ifndef __OMEGA_PLAYER_QPLAYERAPPLICATION_H
+#define __OMEGA_PLAYER_QPLAYERAPPLICATION_H
 //-------------------------------------------------------------------------------------------
 
 #include "remote/inc/KeyControlService.h"
@@ -8,7 +8,7 @@
 #include <QApplication>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -34,7 +34,7 @@ class QPlayerApplication : public QApplication
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

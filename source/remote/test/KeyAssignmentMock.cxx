@@ -1,7 +1,7 @@
 #include "remote/test/KeyAssignmentMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -17,5 +17,5 @@ KeyAssignmentMock::~KeyAssignmentMock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_ENGINEDLL_H
-#define __ORCUS_ENGINE_ENGINEDLL_H
+#ifndef __OMEGA_ENGINE_ENGINEDLL_H
+#define __OMEGA_ENGINE_ENGINEDLL_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/CommonTypes.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#if defined(ORCUS_ENGINE_DLL)
+#if defined(OMEGA_ENGINE_DLL)
 #define ENGINE_EXPORT __declspec(dllexport)
 #define ENGINE_TEMPLATE
 #else
@@ -21,12 +21,12 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 	namespace engine
 	{
 	} // namespace engine
-} // namespace orcus
+} // namespace omega
 
 //-------------------------------------------------------------------------------------------
 

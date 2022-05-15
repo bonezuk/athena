@@ -7,8 +7,8 @@
 #include <QApplication>
 
 using namespace testing;
-using namespace orcus;
-using namespace orcus::widget;
+using namespace omega;
+using namespace omega::widget;
 
 //-------------------------------------------------------------------------------------------
 // Test based on following remote links

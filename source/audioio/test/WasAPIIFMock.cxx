@@ -1,7 +1,7 @@
 #include "audioio/test/WasAPIIFMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -61,5 +61,5 @@ void WasAPIDeviceMock::done()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -8,8 +8,8 @@
 #include "dlna/inc/DiskIF.h"
 
 using namespace testing;
-using namespace orcus::common;
-using namespace orcus;
+using namespace omega::common;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 

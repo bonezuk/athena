@@ -1,7 +1,7 @@
 #include "common/inc/SHA1Digest.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -272,5 +272,5 @@ void SHA1Digest::processMessageBlock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

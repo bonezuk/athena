@@ -1,7 +1,7 @@
 #include "network/mime/inc/MimeForm.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -363,5 +363,5 @@ tint MimeForm::parseEndPosition() const
 //-------------------------------------------------------------------------------------------
 } // namespace mime
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

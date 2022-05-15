@@ -1,5 +1,5 @@
-#ifndef __ORCUS_COMMON_COMMONTYPES_H
-#define __ORCUS_COMMON_COMMONTYPES_H
+#ifndef __OMEGA_COMMON_COMMONTYPES_H
+#define __OMEGA_COMMON_COMMONTYPES_H
 
 //-------------------------------------------------------------------------------------------
 // OMEGA_WIN32  - Windows 32-bit development
@@ -15,17 +15,14 @@
 #define OMEGA_WINDOWS
 #define OMEGA_MSVC
 #define OMEGA_DEFINE_TEMPLATE_HEADER
-#define ORCUS_WIN32
 #endif
 
 #if defined(OMEGA_MACOSX)
 #define OMEGA_POSIX
-#define ORCUS_MACOSX
 #endif
 
 #if defined(OMEGA_LINUX)
 #define OMEGA_POSIX
-#define ORCUS_LINUX
 #endif
 
 #if !defined(OMEGA_LITTLE_ENDIAN)
@@ -219,7 +216,7 @@ typedef tfloat32 real;
 //-------------------------------------------------------------------------------------------
 
 #if defined (OMEGA_MSVC)
-#define COMMON_DB(x,y,z) { orcus::common::BString tmpErrString; tmpErrString << x << "::" << y << " - " << z << "\r\n"; ::OutputDebugStringA(static_cast<const char *>(tmpErrString)); }
+#define COMMON_DB(x,y,z) { omega::common::BString tmpErrString; tmpErrString << x << "::" << y << " - " << z << "\r\n"; ::OutputDebugStringA(static_cast<const char *>(tmpErrString)); }
 #else
 #define COMMON_DB(x,y,z)
 #endif

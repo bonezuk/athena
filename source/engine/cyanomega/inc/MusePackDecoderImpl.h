@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_CYANOMEGA_MUSEPACKDECODERIMPL_H
-#define __ORCUS_ENGINE_CYANOMEGA_MUSEPACKDECODERIMPL_H
+#ifndef __OMEGA_ENGINE_CYANOMEGA_MUSEPACKDECODERIMPL_H
+#define __OMEGA_ENGINE_CYANOMEGA_MUSEPACKDECODERIMPL_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/cyanomega/inc/MusePackIF.h"
 #include "engine/cyanomega/inc/MusePackDecoder.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -48,7 +48,7 @@ class CYANOMEGA_EXPORT MusePackDecoderImpl : public MusePackDecoder
 //-------------------------------------------------------------------------------------------
 } // namespace cyanomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

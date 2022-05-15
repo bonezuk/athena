@@ -1,7 +1,7 @@
 #include "engine/inc/InterleavedCodec.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -132,5 +132,5 @@ void InterleavedCodec::readDecodedData(sample_t *output,tint sampleOffset,tint a
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

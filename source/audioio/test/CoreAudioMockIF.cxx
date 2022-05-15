@@ -1,7 +1,7 @@
 #include "audioio/test/CoreAudioMockIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -23,5 +23,5 @@ CoreAudioMockIF::~CoreAudioMockIF()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

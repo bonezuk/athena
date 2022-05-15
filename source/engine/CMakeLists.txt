@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_ENGINE_DLL)
+add_definitions(-DOMEGA_ENGINE_DLL)
 
 file(GLOB ENGINE_HEADER inc/*.h)
 file(GLOB ENGINE_SOURCE src/*.cxx)

@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_EMBEDDEDID3INFO_H
-#define __ORCUS_TRACK_INFO_EMBEDDEDID3INFO_H
+#ifndef __OMEGA_TRACK_INFO_EMBEDDEDID3INFO_H
+#define __OMEGA_TRACK_INFO_EMBEDDEDID3INFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/info/inc/CueInfo.h"
 #include "track/info/inc/ID3Info2.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -36,7 +36,7 @@ class TRACK_INFO_EXPORT EmbeddedID3Info : public CueInfo
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

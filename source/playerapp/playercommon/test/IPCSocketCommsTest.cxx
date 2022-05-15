@@ -2,7 +2,7 @@
 #include "playerapp/playercommon/test/IPCSocketCommsTest.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 
-using namespace orcus;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 // IPCSocketComms_QtTestClass

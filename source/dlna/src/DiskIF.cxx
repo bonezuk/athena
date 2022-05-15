@@ -1,7 +1,7 @@
 #include "dlna/inc/DiskIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -10,7 +10,7 @@ namespace dlna
 QSharedPointer<DiskIF> DiskIF::m_instance;
 
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 const DiskIF::DirHandle DiskIF::c_invalidDirectoryHandle = INVALID_HANDLE_VALUE;
 #elif defined(OMEGA_POSIX)
 const DiskIF::DirHandle DiskIF::c_invalidDirectoryHandle = 0;
@@ -142,5 +142,5 @@ QString DiskIF::mergeName(const QString& dirName,const QString& fileName)
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

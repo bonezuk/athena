@@ -51,7 +51,7 @@ void GlobalEnviroment::TearDown()
 
 int main(int argc,char **argv)
 {
-	::orcus::network::Resource::instance();
+	::omega::network::Resource::instance();
 
 #if defined(Q_OS_MAC)
     QFileInfo appFile(argv[0]);
@@ -73,7 +73,7 @@ int main(int argc,char **argv)
 	QApplication::setLibraryPaths(QStringList(pluginDir));
 #endif
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	HMODULE blueOmegaDLL = ::LoadLibraryA("blueomega.dll");
 	HMODULE silverOmegaDLL = ::LoadLibraryA("silveromega.dll");
 	HMODULE blackOmegaDLL = ::LoadLibraryA("blackomega.dll");
@@ -90,7 +90,7 @@ int main(int argc,char **argv)
 #endif
 
 #if defined(OMEGA_MAC_STORE)
-	QString settingPath = orcus::common::SBService::applicationDataDirectory();
+	QString settingPath = omega::common::SBService::applicationDataDirectory();
 	QSettings::setPath(QSettings::IniFormat,QSettings::UserScope,settingPath);
 	QSettings::setPath(QSettings::NativeFormat,QSettings::UserScope,settingPath);
 		
@@ -103,10 +103,10 @@ int main(int argc,char **argv)
 	QCoreApplication::setApplicationName("BlackOmega2Test");
 #endif
 
-	orcus::engine::CodecInitialize::start();
-	orcus::engine::blackomega::MPCodecInitialize::start();
-	orcus::engine::silveromega::SilverCodecInitialize::start();
-	orcus::engine::whiteomega::WhiteCodecInitialize::start();
+	omega::engine::CodecInitialize::start();
+	omega::engine::blackomega::MPCodecInitialize::start();
+	omega::engine::silveromega::SilverCodecInitialize::start();
+	omega::engine::whiteomega::WhiteCodecInitialize::start();
 
     ::testing::InitGoogleTest(&argc,argv);
 	::testing::InitGoogleMock(&argc,argv);

@@ -1,7 +1,7 @@
 #include "track/info/inc/APETag.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -358,5 +358,5 @@ ImageInfoArray *APETagImage::imageData()
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

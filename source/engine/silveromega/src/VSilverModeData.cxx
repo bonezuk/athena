@@ -2,7 +2,7 @@
 #include "engine/silveromega/inc/VSilverCodecData.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -85,5 +85,5 @@ bool VSilverModeData::read(engine::Sequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

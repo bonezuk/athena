@@ -3,8 +3,8 @@
 
 #include "remote/inc/KeyControlService.h"
 
-using namespace orcus::remote;
-using namespace orcus;
+using namespace omega::remote;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

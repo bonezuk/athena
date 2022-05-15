@@ -2,7 +2,7 @@
 #include "engine/silveromega/inc/VSilverFunctions.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -420,5 +420,5 @@ bool VSilverCodecData::setup()
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/WCompare.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -24,5 +24,5 @@ WCompare::~WCompare()
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

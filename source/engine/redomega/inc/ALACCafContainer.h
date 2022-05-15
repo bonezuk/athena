@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACCAFCONTAINER_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACCAFCONTAINER_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACCAFCONTAINER_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACCAFCONTAINER_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/CAFFile.h"
 #include "engine/redomega/inc/ALACContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -33,7 +33,7 @@ class REDOMEGA_EXPORT ALACCafContainer : public ALACContainer
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

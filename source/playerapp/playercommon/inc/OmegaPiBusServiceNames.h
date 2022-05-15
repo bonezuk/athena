@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_OMEGAPIBUSSERVICENAMES_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_OMEGAPIBUSSERVICENAMES_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAPIBUSSERVICENAMES_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAPIBUSSERVICENAMES_H
 //-------------------------------------------------------------------------------------------
 
 #include <QJsonDocument>

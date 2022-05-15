@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_ABSTRACTPROGRESSINTERFACE_H
-#define __ORCUS_COMMON_ABSTRACTPROGRESSINTERFACE_H
+#ifndef __OMEGA_COMMON_ABSTRACTPROGRESSINTERFACE_H
+#define __OMEGA_COMMON_ABSTRACTPROGRESSINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QObject>
@@ -8,7 +8,7 @@
 #include "common/inc/CommonFunctions.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -31,7 +31,7 @@ class COMMON_EXPORT AbstractProgressInterface : public QObject
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_SQLITEDATABASE_H
-#define __ORCUS_TRACK_DB_SQLITEDATABASE_H
+#ifndef __OMEGA_TRACK_DB_SQLITEDATABASE_H
+#define __OMEGA_TRACK_DB_SQLITEDATABASE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QString>
@@ -12,7 +12,7 @@
 #include "track/db/inc/SQLiteLog.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -61,7 +61,7 @@ class TRACK_DB_EXPORT SQLiteDatabase
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

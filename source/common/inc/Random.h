@@ -2,8 +2,8 @@
 // PRNG is Mersenne Twister implementation MT19937
 // http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_RANDOM_H
-#define __ORCUS_COMMON_RANDOM_H
+#ifndef __OMEGA_COMMON_RANDOM_H
+#define __OMEGA_COMMON_RANDOM_H
 //-------------------------------------------------------------------------------------------
 
 #include <QMap>
@@ -13,7 +13,7 @@
 #include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -74,7 +74,7 @@ class COMMON_EXPORT Random
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

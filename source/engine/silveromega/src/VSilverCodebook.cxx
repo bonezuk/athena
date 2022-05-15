@@ -2,7 +2,7 @@
 #include "engine/silveromega/inc/VSilverFunctions.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -728,5 +728,5 @@ void VSilverCodebook::decodeResidue2(engine::Sequence *seq,float **out,int offse
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

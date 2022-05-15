@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/Common.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -26,5 +26,5 @@ tint maxPredSfb(tint idx)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

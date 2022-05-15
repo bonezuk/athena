@@ -6,7 +6,7 @@
 
 #include "engine/inc/FormatType.h"
 
-using namespace orcus::engine;
+using namespace omega::engine;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

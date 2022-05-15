@@ -14,7 +14,7 @@
 #include <QCoreApplication>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ void setupPlatform()
 	common::loadSharedLibrary("wavpackomega");
 	common::loadSharedLibrary("whiteomega");
 	common::loadSharedLibrary("widget");
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	CoInitialize(NULL);
 #endif
 }
@@ -119,5 +119,5 @@ QString pathToUNIXSocket(const QString& serviceName)
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

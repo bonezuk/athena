@@ -1,7 +1,7 @@
 #include "engine/greenomega/inc/FLACMetaCuesheet.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -226,5 +226,5 @@ const tuint64& FLACMetaCuesheet::leadInSamples() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_GREENOMEGA_GREENCODEC_H
-#define __ORCUS_ENGINE_GREENOMEGA_GREENCODEC_H
+#ifndef __OMEGA_ENGINE_GREENOMEGA_GREENCODEC_H
+#define __OMEGA_ENGINE_GREENOMEGA_GREENCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/RData.h"
@@ -9,7 +9,7 @@
 #include "engine/greenomega/inc/FLACFrame.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -80,7 +80,7 @@ class GREENOMEGA_EXPORT GreenCodec : public engine::Codec
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

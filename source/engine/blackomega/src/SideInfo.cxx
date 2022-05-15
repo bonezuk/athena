@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/SideInfo.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -206,5 +206,5 @@ bool SideInfo::read(Sequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

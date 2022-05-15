@@ -2,7 +2,7 @@
 
 #include "common/inc/Random.h"
 
-using namespace orcus::common;
+using namespace omega::common;
 
 //-------------------------------------------------------------------------------------------
 

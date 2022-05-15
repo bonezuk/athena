@@ -5,7 +5,7 @@
 
 #include "common/inc/BIOMemory.h"
 
-using namespace orcus::common;
+using namespace omega::common;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

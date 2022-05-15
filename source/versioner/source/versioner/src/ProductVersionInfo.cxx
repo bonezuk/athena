@@ -3,7 +3,7 @@
 #include <QDir>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace versioner
 {
@@ -152,5 +152,5 @@ const QString& ProductVersionInfo::copyright() const
 
 //-------------------------------------------------------------------------------------------
 } // namespace versioner
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

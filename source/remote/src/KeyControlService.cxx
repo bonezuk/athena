@@ -7,7 +7,7 @@
 #include <QFileInfo>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -232,7 +232,7 @@ QString KeyControlService::getKeyboardFilename() const
 		userDir += "/";
 	}
 	userDir = QDir::toNativeSeparators(userDir);
-	orcus::common::DiskOps::path(userDir,true);
+	omega::common::DiskOps::path(userDir,true);
 	QString keyboardFilename = userDir + "keyboard.xml";
 	return keyboardFilename;
 }
@@ -423,5 +423,5 @@ void KeyControlService::endAssignment()
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

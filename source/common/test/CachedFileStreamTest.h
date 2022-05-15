@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_CACHEDFILESTREAMTEST_H
-#define __ORCUS_COMMON_CACHEDFILESTREAMTEST_H
+#ifndef __OMEGA_COMMON_CACHEDFILESTREAMTEST_H
+#define __OMEGA_COMMON_CACHEDFILESTREAMTEST_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -14,7 +14,7 @@
 #include "common/inc/CachedFileStream.h"
 #include "common/test/BIOStreamFunctionalTest.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace common;
 using namespace testing;
 

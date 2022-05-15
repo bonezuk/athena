@@ -1,7 +1,7 @@
 #include "engine/violetomega/inc/IFFID3Chunk.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -40,5 +40,5 @@ common::BIOMemory *IFFID3Chunk::file()
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

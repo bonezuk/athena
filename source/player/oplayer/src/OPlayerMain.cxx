@@ -4,18 +4,18 @@
 #include "engine/whiteomega/inc/WhiteCodec.h"
 #include "track/info/inc/Info.h"
 #include "common/inc/BIOBufferedStream.h"
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 #include "audioio/inc/WasAPIIF.h"
 #endif
 #include "common/inc/CommonFunctions.h"
 
-#if !defined(ORCUS_WIN32)
+#if !defined(OMEGA_WIN32)
 #include <termios.h>
 #include <sys/ioctl.h>
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -110,7 +110,7 @@ void OPlayer::onInit()
 {
 	if(!m_fileNameList.isEmpty() || m_printDeviceInfo)
 	{
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 		m_audio = audioio::AOBase::get("win32");
 #elif defined(OMEGA_MACOSX)
 		m_audio = audioio::AOBase::get("coreaudio");
@@ -251,7 +251,7 @@ void OPlayer::onAudioTime(quint64 t)
 	{
 		tint cWidth;
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 		cWidth = 80;
 #else
         struct winsize ws;
@@ -295,7 +295,7 @@ void OPlayer::onAudioTime(quint64 t)
 			line = timeP;
 		}
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 		printf("%s\r",line.toLatin1().constData());
 #else
 		printf("\33[2K%s\r",line.toLatin1().constData());
@@ -331,7 +331,7 @@ void OPlayer::onAudioCrossfade()
 {}
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 void setPluginLocation(const char *appPath)
@@ -361,18 +361,18 @@ void setPluginLocation(const char *appPath)
 
 void setupPlatform()
 {
-	::orcus::common::loadSharedLibrary("blackomega");
-	::orcus::common::loadSharedLibrary("blueomega");
-	::orcus::common::loadSharedLibrary("cyanomega");
-	::orcus::common::loadSharedLibrary("greenomega");
-	::orcus::common::loadSharedLibrary("redomega");
-	::orcus::common::loadSharedLibrary("silveromega");
-	::orcus::common::loadSharedLibrary("toneomega");
-	::orcus::common::loadSharedLibrary("violetomega");
-	::orcus::common::loadSharedLibrary("wavpackomega");
-	::orcus::common::loadSharedLibrary("whiteomega");
-	::orcus::common::loadSharedLibrary("widget");
-#if defined(ORCUS_WIN32)
+	::omega::common::loadSharedLibrary("blackomega");
+	::omega::common::loadSharedLibrary("blueomega");
+	::omega::common::loadSharedLibrary("cyanomega");
+	::omega::common::loadSharedLibrary("greenomega");
+	::omega::common::loadSharedLibrary("redomega");
+	::omega::common::loadSharedLibrary("silveromega");
+	::omega::common::loadSharedLibrary("toneomega");
+	::omega::common::loadSharedLibrary("violetomega");
+	::omega::common::loadSharedLibrary("wavpackomega");
+	::omega::common::loadSharedLibrary("whiteomega");
+	::omega::common::loadSharedLibrary("widget");
+#if defined(OMEGA_WIN32)
 	CoInitialize(NULL);
 #endif
 }
@@ -390,7 +390,7 @@ void setupSettingsPath()
 
 void setupEnviroment(const char *appPath)
 {
-	::orcus::network::Resource::instance();
+	::omega::network::Resource::instance();
 	setPluginLocation(appPath);
 	setupPlatform();
 	setupSettingsPath();    
@@ -398,7 +398,7 @@ void setupEnviroment(const char *appPath)
 
 //-------------------------------------------------------------------------------------------
 
-orcus::OPlayer *g_OPlayer = 0;
+omega::OPlayer *g_OPlayer = 0;
 
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_WIN32)
@@ -425,26 +425,26 @@ int main(int argc,char **argv)
 
 #if defined(OMEGA_WIN32)
 	::SetConsoleCtrlHandler(ctrlHandler,TRUE);
-	orcus::audioio::WasAPIIF::instance("wasapi");
+	omega::audioio::WasAPIIF::instance("wasapi");
 #endif
 
-    orcus::engine::CodecInitialize::start();
-    orcus::engine::blackomega::MPCodecInitialize::start();
-    orcus::engine::silveromega::SilverCodecInitialize::start();
-    orcus::engine::whiteomega::WhiteCodecInitialize::start();
+    omega::engine::CodecInitialize::start();
+    omega::engine::blackomega::MPCodecInitialize::start();
+    omega::engine::silveromega::SilverCodecInitialize::start();
+    omega::engine::whiteomega::WhiteCodecInitialize::start();
 
-	g_OPlayer = new orcus::OPlayer(argc,argv);
+	g_OPlayer = new omega::OPlayer(argc,argv);
 	g_OPlayer->exec();
 	delete g_OPlayer;
 	g_OPlayer = 0;
 	
-    orcus::engine::whiteomega::WhiteCodecInitialize::end();
-    orcus::engine::silveromega::SilverCodecInitialize::end();
-    orcus::engine::blackomega::MPCodecInitialize::end();
-    orcus::engine::CodecInitialize::end();
+    omega::engine::whiteomega::WhiteCodecInitialize::end();
+    omega::engine::silveromega::SilverCodecInitialize::end();
+    omega::engine::blackomega::MPCodecInitialize::end();
+    omega::engine::CodecInitialize::end();
 
-#if defined(ORCUS_WIN32)
-	orcus::audioio::WasAPIIF::release();
+#if defined(OMEGA_WIN32)
+	omega::audioio::WasAPIIF::release();
 #endif
 
 	return res;

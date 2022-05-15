@@ -1,7 +1,7 @@
 #include "audioio/inc/CoreAudioLayerIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -121,5 +121,5 @@ OSStatus CoreAudioLayerIF::AudioDeviceStop(AudioObjectID inDevice,AudioDeviceIOP
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

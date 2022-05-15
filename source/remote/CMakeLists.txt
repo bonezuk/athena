@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_REMOTE_DLL)
+add_definitions(-DOMEGA_REMOTE_DLL)
 
 file(GLOB REMOTE_HEADER inc/*.h)
 file(GLOB REMOTE_SOURCE src/*.cxx)

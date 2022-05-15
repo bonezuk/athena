@@ -1,7 +1,7 @@
 #include "engine/redomega/inc/CAFFile.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -192,5 +192,5 @@ tint CAFFile::blockLength(tuint32 id) const
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

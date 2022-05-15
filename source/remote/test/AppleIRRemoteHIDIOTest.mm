@@ -9,7 +9,7 @@
 #include "remote/test/HIDDeviceIFMock.h"
 #include "remote/test/RemoteIFMock.h"
 
-using namespace orcus::remote;
+using namespace omega::remote;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/PredictionLTP.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -159,5 +159,5 @@ void PredictionLTP::predict(LTPInfo *ltp)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

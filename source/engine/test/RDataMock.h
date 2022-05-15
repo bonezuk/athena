@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_TEST_RDATAMOCK_H
-#define __ORCUS_ENGINE_TEST_RDATAMOCK_H
+#ifndef __OMEGA_ENGINE_TEST_RDATAMOCK_H
+#define __OMEGA_ENGINE_TEST_RDATAMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/RData.h"
@@ -8,8 +8,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-using namespace orcus::engine;
-using namespace orcus;
+using namespace omega::engine;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

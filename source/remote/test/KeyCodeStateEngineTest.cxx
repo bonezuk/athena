@@ -4,9 +4,9 @@
 #include "remote/inc/KeyCodeStateEngine.h"
 #include "remote/test/KeyAssignmentMock.h"
 
-using namespace orcus::remote;
-using namespace orcus::common;
-using namespace orcus;
+using namespace omega::remote;
+using namespace omega::common;
+using namespace omega;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

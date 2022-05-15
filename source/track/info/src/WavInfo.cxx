@@ -2,7 +2,7 @@
 #include "common/inc/BIOMemory.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -215,5 +215,5 @@ bool WavInfo::readInfoBlock(const tchar *mem,tint len)
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

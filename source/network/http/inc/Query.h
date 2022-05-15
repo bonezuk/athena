@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_HTTP_QUERY_H
-#define __ORCUS_NETWORK_HTTP_QUERY_H
+#ifndef __OMEGA_NETWORK_HTTP_QUERY_H
+#define __OMEGA_NETWORK_HTTP_QUERY_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/http/inc/ResponseCodes.h"
@@ -12,7 +12,7 @@
 #include <QStringList>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -71,7 +71,7 @@ class HTTP_EXPORT Query
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

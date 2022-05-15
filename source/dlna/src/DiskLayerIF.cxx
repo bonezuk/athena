@@ -1,7 +1,7 @@
 #include "dlna/inc/DiskLayerIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -319,6 +319,6 @@ void DiskLayerIF::closeDirectory(DirHandle h) const
 #endif
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

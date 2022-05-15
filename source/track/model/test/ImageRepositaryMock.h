@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_MODEL_TEST_IMAGEREPOSITARYMOCK_H
-#define __ORCUS_TRACK_MODEL_TEST_IMAGEREPOSITARYMOCK_H
+#ifndef __OMEGA_TRACK_MODEL_TEST_IMAGEREPOSITARYMOCK_H
+#define __OMEGA_TRACK_MODEL_TEST_IMAGEREPOSITARYMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include <gtest/gtest.h>
@@ -8,11 +8,11 @@
 
 #include "track/model/inc/ImageRepositary.h"
 
-using namespace orcus::track::model;
+using namespace omega::track::model;
 
 //-------------------------------------------------------------------------------------------
 
-class ImageRepositaryMock : public orcus::track::model::ImageRepositary
+class ImageRepositaryMock : public omega::track::model::ImageRepositary
 {
 	public:
 		MOCK_METHOD3(getImage,QImage *(int imageID,int iWidth,int iHeight));

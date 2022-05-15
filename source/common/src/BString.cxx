@@ -2,7 +2,7 @@
 #include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus 
+namespace omega 
 {
 namespace common
 {
@@ -1697,5 +1697,5 @@ tint BString::Insert(tchar chInsert, tint iAt)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

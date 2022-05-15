@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/BSequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -348,5 +348,5 @@ void BSequence::decode(tint h,tint& x,tint& y,tint& v,tint& w)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WAVPACKOMEGA_WAVPACKCODEC_H
-#define __ORCUS_ENGINE_WAVPACKOMEGA_WAVPACKCODEC_H
+#ifndef __OMEGA_ENGINE_WAVPACKOMEGA_WAVPACKCODEC_H
+#define __OMEGA_ENGINE_WAVPACKOMEGA_WAVPACKCODEC_H
 //-------------------------------------------------------------------------------------------
 
 #include "wavpack/wavpack.h"
@@ -10,7 +10,7 @@
 #include "engine/wavpackomega/inc/WavPackOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -188,7 +188,7 @@ class WAVPACKOMEGA_EXPORT WavPackCodec : public InterleavedCodec
 //-------------------------------------------------------------------------------------------
 } // namespace wavpackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

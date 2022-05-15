@@ -10,7 +10,7 @@
 #include <pwd.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -79,5 +79,5 @@ bool SBBookmarkTrackDB::checkIn(const QString& fileName,bool readOnlyFlag)
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

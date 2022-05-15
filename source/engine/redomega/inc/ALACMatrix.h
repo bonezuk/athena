@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACMATRIX_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACMATRIX_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACMATRIX_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACMATRIX_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/ALACSequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -41,7 +41,7 @@ class REDOMEGA_EXPORT ALACMatrix
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

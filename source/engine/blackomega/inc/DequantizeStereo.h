@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_DEQUANTIZESTEREO_H
-#define __ORCUS_ENGINE_BLACKOMEGA_DEQUANTIZESTEREO_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_DEQUANTIZESTEREO_H
+#define __OMEGA_ENGINE_BLACKOMEGA_DEQUANTIZESTEREO_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/blackomega/inc/Dequantize.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -51,7 +51,7 @@ class BLACKOMEGA_EXPORT DequantizeStereo : public Dequantize
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

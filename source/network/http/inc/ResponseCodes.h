@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_HTTP_RESPONSECODES_H
-#define __ORCUS_NETWORK_HTTP_RESPONSECODES_H
+#ifndef __OMEGA_NETWORK_HTTP_RESPONSECODES_H
+#define __OMEGA_NETWORK_HTTP_RESPONSECODES_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/http/inc/HTTPDLL.h"
@@ -9,7 +9,7 @@
 #include <QMap>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -34,7 +34,7 @@ class HTTP_EXPORT ResponseCodes
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

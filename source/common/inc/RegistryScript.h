@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_REGISTRYSCRIPT_H
-#define __ORCUS_COMMON_REGISTRYSCRIPT_H
+#ifndef __OMEGA_COMMON_REGISTRYSCRIPT_H
+#define __OMEGA_COMMON_REGISTRYSCRIPT_H
 //-------------------------------------------------------------------------------------------
 
 #include <QString>
@@ -14,7 +14,7 @@
 #include "common/inc/CommonTypes.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -31,7 +31,7 @@ class COMMON_EXPORT RegistryScript
 	
 		RegistryScript();
 		
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 		void printError(const tchar *strR,const tchar *strE) const;
 
 		bool processRegistryXML(xmlNode *pNode);
@@ -49,7 +49,7 @@ class COMMON_EXPORT RegistryScript
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

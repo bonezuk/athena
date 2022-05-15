@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYLISTMANAGER_PLAYLISTMANAGERMAIN_H
-#define __ORCUS_PLAYERAPP_PLAYLISTMANAGER_PLAYLISTMANAGERMAIN_H
+#ifndef __OMEGA_PLAYERAPP_PLAYLISTMANAGER_PLAYLISTMANAGERMAIN_H
+#define __OMEGA_PLAYERAPP_PLAYLISTMANAGER_PLAYLISTMANAGERMAIN_H
 //-------------------------------------------------------------------------------------------
 
 #include <QGuiApplication>
@@ -18,7 +18,7 @@
 #include "playerapp/playlistmanager/inc/PlayListWebModelPLM.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ class PlaylistManagerApp : public QGuiApplication
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "track/db/inc/SQLiteInsert.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -146,5 +146,5 @@ bool SQLiteInsert::next()
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

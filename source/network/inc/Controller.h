@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_CONTROLLER_H
-#define __ORCUS_NETWORK_CONTROLLER_H
+#ifndef __OMEGA_NETWORK_CONTROLLER_H
+#define __OMEGA_NETWORK_CONTROLLER_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Socket.h"
 #include <QMultiMap>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -172,7 +172,7 @@ class ControllerThread : public QThread
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

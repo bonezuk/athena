@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_COMMON_DLL)
+add_definitions(-DOMEGA_COMMON_DLL)
 
 if (OMEGA_WIN32)
 	add_definitions( /wd4910 )

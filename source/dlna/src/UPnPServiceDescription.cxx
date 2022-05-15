@@ -1,7 +1,7 @@
 #include "dlna/inc/UPnPServiceDescription.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -101,6 +101,6 @@ void UPnPServiceDescription::processNode(xmlNodePtr pNode)
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

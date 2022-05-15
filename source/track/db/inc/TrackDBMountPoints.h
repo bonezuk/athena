@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_TRACKDBMOUNTPOINTS_H
-#define __ORCUS_TRACK_DB_TRACKDBMOUNTPOINTS_H
+#ifndef __OMEGA_TRACK_DB_TRACKDBMOUNTPOINTS_H
+#define __OMEGA_TRACK_DB_TRACKDBMOUNTPOINTS_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/SQLiteDatabase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -32,7 +32,7 @@ class TRACK_DB_EXPORT TrackDBMountPoints
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

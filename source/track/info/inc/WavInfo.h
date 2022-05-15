@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_WAVINFO_H
-#define __ORCUS_TRACK_INFO_WAVINFO_H
+#ifndef __OMEGA_TRACK_INFO_WAVINFO_H
+#define __OMEGA_TRACK_INFO_WAVINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/info/inc/EmbeddedID3Info.h"
 #include "engine/blueomega/inc/WaveInformation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -49,7 +49,7 @@ class TRACK_INFO_EXPORT WavInfo : public EmbeddedID3Info
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

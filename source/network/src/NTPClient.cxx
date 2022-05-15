@@ -1,7 +1,7 @@
 #include "network/inc/NTPClient.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -167,5 +167,5 @@ common::TimeStamp NTPClient::getTime(const QString& host)
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

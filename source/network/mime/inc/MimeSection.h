@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_MIME_MIMESECTION_H
-#define __ORCUS_NETWORK_MIME_MIMESECTION_H
+#ifndef __OMEGA_NETWORK_MIME_MIMESECTION_H
+#define __OMEGA_NETWORK_MIME_MIMESECTION_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/mime/inc/MimeHeader.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -86,7 +86,7 @@ class MIME_EXPORT MimeSection
 //-------------------------------------------------------------------------------------------
 } // namespace mime
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

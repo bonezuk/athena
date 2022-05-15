@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_REMOTE_TEST_WINLIRCSETTINGSMOCK_H
-#define __ORCUS_REMOTE_TEST_WINLIRCSETTINGSMOCK_H
+#ifndef __OMEGA_REMOTE_TEST_WINLIRCSETTINGSMOCK_H
+#define __OMEGA_REMOTE_TEST_WINLIRCSETTINGSMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -9,7 +9,7 @@
 #include "remote/inc/WinLIRCSettings.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -35,7 +35,7 @@ class WinLIRCSettingsMock : public WinLIRCSettings
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

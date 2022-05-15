@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLUEOMEGA_WAVEENGINE_H
-#define __ORCUS_ENGINE_BLUEOMEGA_WAVEENGINE_H
+#ifndef __OMEGA_ENGINE_BLUEOMEGA_WAVEENGINE_H
+#define __OMEGA_ENGINE_BLUEOMEGA_WAVEENGINE_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
@@ -9,7 +9,7 @@
 #include "engine/blueomega/inc/WaveInformation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -93,7 +93,7 @@ class BLUEOMEGA_EXPORT WaveEngine : public engine::Codec
 //-------------------------------------------------------------------------------------------
 } // namespace blueomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

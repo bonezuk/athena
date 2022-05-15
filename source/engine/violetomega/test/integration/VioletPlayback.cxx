@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace testspace
 {
@@ -37,7 +37,7 @@ void VioletPlayback::onInit()
 	QString fileName;
 
 	m_songIdx = 0;
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	m_audio = audioio::AOBase::get("win32");
 	fileName = "C:\\Development\\Temp\\AIFSamples\\chant.aif";
 #elif defined(OMEGA_MACOSX)
@@ -198,10 +198,10 @@ void VioletPlayback::onAudioCrossfade()
 //-------------------------------------------------------------------------------------------
 } // namespace audio
 } // namespace testspace
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
-orcus::testspace::audio::VioletPlayback *g_coreVioletPlayback = 0;
+omega::testspace::audio::VioletPlayback *g_coreVioletPlayback = 0;
 
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_WIN32)
@@ -229,7 +229,7 @@ TEST(VioletPlayback,play)
 	{
 		int argc = 0;
 		char **argv = 0;
-		g_coreVioletPlayback = new orcus::testspace::audio::VioletPlayback(argc,argv);
+		g_coreVioletPlayback = new omega::testspace::audio::VioletPlayback(argc,argv);
 		g_coreVioletPlayback->exec();
 		g_coreVioletPlayback = 0;
 	}

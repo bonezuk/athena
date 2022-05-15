@@ -5,7 +5,7 @@
 #include <QtQml/qqml.h>
 #include <QtQml/qqmlcontext.h>
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 #include "audioio/inc/WasAPIIF.h"
 #endif
 
@@ -14,7 +14,7 @@
 #include "playerapp/playerapp/inc/PlaybackWebStateCtrlPLA.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -97,10 +97,10 @@ QSharedPointer<PlayListModel> PlayerAppMain::getPlayListModel()
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
-using namespace orcus;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 	initCodecs();
 
 #if defined(OMEGA_WIN32)
-	orcus::audioio::WasAPIIF::instance("wasapi");
+	omega::audioio::WasAPIIF::instance("wasapi");
 #endif
 
 	QString trackDBFilename = userApplicationDataDirectory() + "track_playlist_dev.db";

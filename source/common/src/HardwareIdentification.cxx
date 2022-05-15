@@ -11,7 +11,7 @@
 #include "common/inc/HardwareIdentification.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -284,5 +284,5 @@ bool HardwareIdentification::getMacUUID(QVector<QPair<HardwareType,QString> >& i
 #endif
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

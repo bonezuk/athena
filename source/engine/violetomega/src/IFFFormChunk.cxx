@@ -1,7 +1,7 @@
 #include "engine/violetomega/inc/IFFFormChunk.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -253,6 +253,6 @@ IFFID IFFFormChunk::formType() const
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

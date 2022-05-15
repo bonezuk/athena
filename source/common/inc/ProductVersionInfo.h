@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_PRODUCTVERSIONINFO_H
-#define __ORCUS_COMMON_PRODUCTVERSIONINFO_H
+#ifndef __OMEGA_COMMON_PRODUCTVERSIONINFO_H
+#define __OMEGA_COMMON_PRODUCTVERSIONINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include <QSharedPointer>
 #include "common/inc/DictionaryXMLMap.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -49,7 +49,7 @@ typedef QSharedPointer<ProductVersionInfo> ProductVersionInfoSPtr;
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

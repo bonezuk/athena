@@ -1,10 +1,10 @@
-#ifndef __ORCUS_COMMON_BSTRINGCOLLECTION_H
-#define __ORCUS_COMMON_BSTRINGCOLLECTION_H
+#ifndef __OMEGA_COMMON_BSTRINGCOLLECTION_H
+#define __OMEGA_COMMON_BSTRINGCOLLECTION_H
 
 #include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -44,7 +44,7 @@ class COMMON_EXPORT BStringCollection
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 
 #endif

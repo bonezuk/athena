@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_IFFCHUNK_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_IFFCHUNK_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_IFFCHUNK_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_IFFCHUNK_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
@@ -9,7 +9,7 @@
 #include "engine/violetomega/inc/VioletOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -89,7 +89,7 @@ ABSTRACT_FACTORY_CLASS(VIOLETOMEGA_EXPORT,IFFChunkFactory,IFFChunk)
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/cyanomega/inc/MusePackIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -90,5 +90,5 @@ mpc_seek_t MusePackIF::mpc_demux_pos(mpc_demux *d)
 //-------------------------------------------------------------------------------------------
 } // namespace cyanomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

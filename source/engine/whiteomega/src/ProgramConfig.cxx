@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/ProgramConfig.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -138,5 +138,5 @@ bool ProgramConfig::read(Sequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

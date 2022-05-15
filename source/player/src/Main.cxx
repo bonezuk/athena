@@ -35,16 +35,16 @@
 
 QString userApplicationDataDirectory()
 {
-	return orcus::common::SBService::applicationDataDirectory();
+	return omega::common::SBService::applicationDataDirectory();
 }
 
 //-------------------------------------------------------------------------------------------
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 //-------------------------------------------------------------------------------------------
 
 bool processCLI(int argc,char **argv)
 {
-	orcus::player::CLIPipe *cliPipe = orcus::player::CLIPipe::instance();
+	omega::player::CLIPipe *cliPipe = omega::player::CLIPipe::instance();
 	bool res = false;
 
 #if defined(OMEGA_DEBUG)
@@ -53,7 +53,7 @@ bool processCLI(int argc,char **argv)
 	{
 		cmdLine += QString::fromUtf8(argv[j]) + " ";
 	}
-	orcus::common::Log::g_Log << cmdLine.toUtf8().constData() << orcus::common::c_endl;
+	omega::common::Log::g_Log << cmdLine.toUtf8().constData() << omega::common::c_endl;
 #endif
 
 	if(cliPipe!=0)
@@ -99,7 +99,7 @@ bool isAppBundle(const char *appPath, QString& bundleDir)
 
 //-------------------------------------------------------------------------------------------
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 int CALLBACK WinMain(HINSTANCE ,HINSTANCE ,LPSTR ,int)
 {
 	int argc = 0;
@@ -141,7 +141,7 @@ int main(int argc,char **argv)
 	QCoreApplication::setApplicationName("BlackOmega2");
 #endif
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	LoadLibraryA("widget.dll");
 #endif
 
@@ -150,17 +150,17 @@ int main(int argc,char **argv)
 #else
 	QString logFilename = userApplicationDataDirectory() + "log.txt";
 #endif
-	orcus::common::Log::g_Log.set(logFilename.toUtf8().constData());
+	omega::common::Log::g_Log.set(logFilename.toUtf8().constData());
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	_putenv_s("QT_DEVICE_PIXEL_RATIO","auto");
 
 	if(processCLI(argc,argv))
 	{
 #endif
-		orcus::common::HardwareIdentification::instance();
+		omega::common::HardwareIdentification::instance();
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 		LoadLibraryA("blueomega.dll");
 		LoadLibraryA("silveromega.dll");
 		LoadLibraryA("blackomega.dll");
@@ -189,11 +189,11 @@ int main(int argc,char **argv)
 		}
 #endif
 
-		orcus::dlna::XMLLibIF::instance("xml");
-		orcus::dlna::DiskIF::instance("disk");
+		omega::dlna::XMLLibIF::instance("xml");
+		omega::dlna::DiskIF::instance("disk");
 
 #if defined(OMEGA_MACOSX)
-		orcus::player::CocoaInitializer cocoaMemPool;
+		omega::player::CocoaInitializer cocoaMemPool;
 #endif
 
 #if defined(Q_OS_MAC)
@@ -214,7 +214,7 @@ int main(int argc,char **argv)
 			QDir d = appFile.absolutePath();
 			pluginDir = d.absolutePath();
 		}
-		orcus::common::Log::g_Log.print("%s\n",pluginDir.toUtf8().constData());
+		omega::common::Log::g_Log.print("%s\n",pluginDir.toUtf8().constData());
         QApplication::setLibraryPaths(QStringList(pluginDir));
 #else
         QFileInfo appFile(argv[0]);
@@ -227,47 +227,47 @@ int main(int argc,char **argv)
         QApplication::setLibraryPaths(QStringList(pluginDir));
 #endif
 
-		orcus::engine::CodecInitialize::start();
-		orcus::engine::blackomega::MPCodecInitialize::start();
-		orcus::engine::silveromega::SilverCodecInitialize::start();
-		orcus::engine::whiteomega::WhiteCodecInitialize::start();
+		omega::engine::CodecInitialize::start();
+		omega::engine::blackomega::MPCodecInitialize::start();
+		omega::engine::silveromega::SilverCodecInitialize::start();
+		omega::engine::whiteomega::WhiteCodecInitialize::start();
 
 #if defined(OMEGA_DEBUG)
 		QString trackDBFilename = userApplicationDataDirectory() + "track_debug.db";
 #else
 		QString trackDBFilename = userApplicationDataDirectory() + "track.db";
 #endif
-		orcus::track::db::TrackDB *trackDB = orcus::track::db::TrackDB::instance(trackDBFilename);
+		omega::track::db::TrackDB *trackDB = omega::track::db::TrackDB::instance(trackDBFilename);
 		if(trackDB!=0)
 		{
 			if(trackDB->dbVersion()<4)
 			{
 				delete trackDB;	
-				orcus::common::DiskOps::remove(trackDBFilename);
-				trackDB = orcus::track::db::TrackDB::instance(trackDBFilename);
+				omega::common::DiskOps::remove(trackDBFilename);
+				trackDB = omega::track::db::TrackDB::instance(trackDBFilename);
 			}
 			else if(trackDB->dbVersion()==4)
 			{
 				delete trackDB;	
 				
-				if(orcus::track::db::Schema::upgradeVersion4To5(trackDBFilename))
+				if(omega::track::db::Schema::upgradeVersion4To5(trackDBFilename))
 				{
-					trackDB = orcus::track::db::TrackDB::instance(trackDBFilename);
+					trackDB = omega::track::db::TrackDB::instance(trackDBFilename);
 				}
 				else
 				{
-					orcus::common::DiskOps::remove(trackDBFilename);
-					trackDB = orcus::track::db::TrackDB::instance(trackDBFilename);					
+					omega::common::DiskOps::remove(trackDBFilename);
+					trackDB = omega::track::db::TrackDB::instance(trackDBFilename);					
 				}
 			}
 		}
 
-		orcus::common::ProductVersionInfo::instance(":/build/Resources/buildInfo.xml");
+		omega::common::ProductVersionInfo::instance(":/build/Resources/buildInfo.xml");
 
 		if(trackDB!=0)
 		{
 #if defined(OMEGA_MAC_STORE)
-            orcus::track::info::SBBookmarkService::instance();
+            omega::track::info::SBBookmarkService::instance();
 #endif
 
 			{
@@ -283,22 +283,22 @@ int main(int argc,char **argv)
 				{
 					QByteArray confArr = confFile.readAll();
 					QString confData = QString::fromLatin1(confArr.data(),confArr.size());
-					orcus::common::Log::g_Log.print("%s\n",confData.toLatin1().constData());
+					omega::common::Log::g_Log.print("%s\n",confData.toLatin1().constData());
 				}
 			}
 
 			{
-				orcus::player::QPlayerApplication app(argc, argv);
+				omega::player::QPlayerApplication app(argc, argv);
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 				QPixmap splashPixmap(":/splash/Resources/splash.png");
 				QSplashScreen splash(splashPixmap);
 				splash.show();
 #endif
 
-				orcus::player::PlayerController *pCtrl = orcus::player::PlayerController::instance();
+				omega::player::PlayerController *pCtrl = omega::player::PlayerController::instance();
 
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 				pCtrl->setStartupSplashScreen(splash);
 #endif
 
@@ -307,25 +307,25 @@ int main(int argc,char **argv)
 			}
 
 #if defined(OMEGA_MAC_STORE)
-            orcus::track::info::SBBookmarkService::release();
+            omega::track::info::SBBookmarkService::release();
 #endif
 		}
 		delete trackDB;
 
-		orcus::engine::whiteomega::WhiteCodecInitialize::end();
-		orcus::engine::silveromega::SilverCodecInitialize::end();
-		orcus::engine::blackomega::MPCodecInitialize::end();
-		orcus::engine::CodecInitialize::end();
+		omega::engine::whiteomega::WhiteCodecInitialize::end();
+		omega::engine::silveromega::SilverCodecInitialize::end();
+		omega::engine::blackomega::MPCodecInitialize::end();
+		omega::engine::CodecInitialize::end();
 
-#if defined(ORCUS_WIN32)
-		orcus::player::CLIPipe *cliPipe = orcus::player::CLIPipe::instance();
+#if defined(OMEGA_WIN32)
+		omega::player::CLIPipe *cliPipe = omega::player::CLIPipe::instance();
 		if(cliPipe!=0)
 		{
 			delete cliPipe;
 		}
 
-		orcus::dlna::DiskIF::release();
-		orcus::dlna::XMLLibIF::release();
+		omega::dlna::DiskIF::release();
+		omega::dlna::XMLLibIF::release();
 	}
 #endif
 

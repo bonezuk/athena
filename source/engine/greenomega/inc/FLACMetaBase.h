@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_GREENOMEGA_FLACMETABASE_H
-#define __ORCUS_GREENOMEGA_FLACMETABASE_H
+#ifndef __OMEGA_GREENOMEGA_FLACMETABASE_H
+#define __OMEGA_GREENOMEGA_FLACMETABASE_H
 //-------------------------------------------------------------------------------------------
 
 #include <QMap>
@@ -13,7 +13,7 @@
 #include "engine/greenomega/inc/GreenOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -64,7 +64,7 @@ inline const FLACMetaBase::Type& FLACMetaBase::type() const
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "engine/whiteomega/inc/HCR.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -256,5 +256,5 @@ void HCR::calcSegments(WSequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

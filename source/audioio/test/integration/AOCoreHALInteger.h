@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_INTEGRATION_TEST_AOCOREHALINTEGER_H
-#define __ORCUS_INTEGRATION_TEST_AOCOREHALINTEGER_H
+#ifndef __OMEGA_INTEGRATION_TEST_AOCOREHALINTEGER_H
+#define __OMEGA_INTEGRATION_TEST_AOCOREHALINTEGER_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -19,7 +19,7 @@
 #include "audioio/inc/SampleConverter.h"
 #include "engine/inc/FormatTypeFromFloat.h"
 
-using namespace orcus;
+using namespace omega;
 using namespace audioio;
 using namespace testing;
 

@@ -1,7 +1,7 @@
 #include "engine/inc/SequenceMemory.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -247,5 +247,5 @@ void SequenceMemory::generateArray(const tubyte *mem,tint len,QSharedPointer<com
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

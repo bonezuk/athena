@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_DLNA_UPNPDEVICEDESCRIPTION_H
-#define __ORCUS_DLNA_UPNPDEVICEDESCRIPTION_H
+#ifndef __OMEGA_DLNA_UPNPDEVICEDESCRIPTION_H
+#define __OMEGA_DLNA_UPNPDEVICEDESCRIPTION_H
 //-------------------------------------------------------------------------------------------
 
 #include "dlna/inc/UPnPServiceDescription.h"
@@ -38,7 +38,7 @@
 //    <presentationURL>/tvdevicepres.html</presentationURL>
 //  </device>
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -107,7 +107,7 @@ class DLNA_EXPORT UPnPDeviceDescription : public XMLNodeParser
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

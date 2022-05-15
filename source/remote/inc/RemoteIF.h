@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYER_REMOTEIF_H
-#define __ORCUS_PLAYER_REMOTEIF_H
+#ifndef __OMEGA_PLAYER_REMOTEIF_H
+#define __OMEGA_PLAYER_REMOTEIF_H
 //-------------------------------------------------------------------------------------------
 
 #include <QtCore/QObject>
@@ -12,7 +12,7 @@
 #include "remote/inc/RemoteDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace remote
 {
@@ -102,7 +102,7 @@ ABSTRACT_FACTORY_CLASS(REMOTE_EXPORT,RemoteIFFactory,RemoteIF)
 
 //-------------------------------------------------------------------------------------------
 } // namespace remote
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "dlna/inc/XMLReadOps.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -200,6 +200,6 @@ QString XMLReadOps::getAttribute(xmlNodePtr pNode,const QString& name) const
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 #include "audioio/inc/AudioHardwareBufferASIO.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -57,5 +57,5 @@ tint AudioHardwareBufferASIO::numberOfBuffers()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

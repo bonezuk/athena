@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_PLAYERCOMMON_DLL)
+add_definitions(-DOMEGA_PLAYERCOMMON_DLL)
 
 file(GLOB PLAYERCOMMON_HEADER inc/*.h)
 file(GLOB PLAYERCOMMON_SOURCE src/*.cxx)

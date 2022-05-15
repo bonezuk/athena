@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_VIOLETOMEGA_IFFSOUNDCHUNK_H
-#define __ORCUS_ENGINE_VIOLETOMEGA_IFFSOUNDCHUNK_H
+#ifndef __OMEGA_ENGINE_VIOLETOMEGA_IFFSOUNDCHUNK_H
+#define __OMEGA_ENGINE_VIOLETOMEGA_IFFSOUNDCHUNK_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/violetomega/inc/IFFChunk.h"
@@ -8,7 +8,7 @@
 #include "common/inc/TimeStamp.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -85,7 +85,7 @@ typedef QSharedPointer<IFFSoundChunk> IFFSoundChunkSPtr;
 //-------------------------------------------------------------------------------------------
 } // namespace violetomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

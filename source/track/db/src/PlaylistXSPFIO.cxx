@@ -10,7 +10,7 @@
 #include <QCoreApplication>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -515,5 +515,5 @@ bool PlaylistXSPFIO::saveXMLTrack(xmlTextWriterPtr writer,track::info::InfoSPtr&
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

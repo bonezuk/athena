@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RTP_SOURCESTATE_H
-#define __ORCUS_NETWORK_RTP_SOURCESTATE_H
+#ifndef __OMEGA_NETWORK_RTP_SOURCESTATE_H
+#define __OMEGA_NETWORK_RTP_SOURCESTATE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/UDPRead.h"
@@ -12,7 +12,7 @@
 #include "common/inc/DebugOutput.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -158,7 +158,7 @@ inline const common::TimeStamp& SourceState::randomClock() const
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

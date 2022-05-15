@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_PLAYLISTABSTRACTIO_H
-#define __ORCUS_TRACK_DB_PLAYLISTABSTRACTIO_H
+#ifndef __OMEGA_TRACK_DB_PLAYLISTABSTRACTIO_H
+#define __OMEGA_TRACK_DB_PLAYLISTABSTRACTIO_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -37,7 +37,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -94,7 +94,7 @@ ABSTRACT_FACTORY_CLASS(TRACK_DB_EXPORT, PlaylistIOFactory, PlaylistAbstractIO)
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

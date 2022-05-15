@@ -1,7 +1,7 @@
 #include "dlna/inc/UPnPDeviceDescription.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -244,5 +244,5 @@ UPnPServiceDescriptionSPtr UPnPDeviceDescription::createServiceDescription() con
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

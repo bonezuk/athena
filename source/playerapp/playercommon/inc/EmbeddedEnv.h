@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_PLAYERCOMMON_EMBEDDEDENV_H
-#define __ORCUS_PLAYERAPP_PLAYERCOMMON_EMBEDDEDENV_H
+#ifndef __OMEGA_PLAYERAPP_PLAYERCOMMON_EMBEDDEDENV_H
+#define __OMEGA_PLAYERAPP_PLAYERCOMMON_EMBEDDEDENV_H
 //-------------------------------------------------------------------------------------------
 
 #include <QString>
@@ -8,7 +8,7 @@
 #include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ PLAYERCOMMON_EXPORT void releaseCodecs();
 PLAYERCOMMON_EXPORT QString pathToUNIXSocket(const QString& serviceName);
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

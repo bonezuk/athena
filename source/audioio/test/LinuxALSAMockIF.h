@@ -1,8 +1,8 @@
 //-------------------------------------------------------------------------------------------
 #if defined(OMEGA_LINUX)
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_TEST_LINUXALSAMOCKIF_H
-#define __ORCUS_AUDIOIO_TEST_LINUXALSAMOCKIF_H
+#ifndef __OMEGA_AUDIOIO_TEST_LINUXALSAMOCKIF_H
+#define __OMEGA_AUDIOIO_TEST_LINUXALSAMOCKIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -11,7 +11,7 @@
 #include "audioio/inc/LinuxALSAIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -71,7 +71,7 @@ class LinuxALSAMockIF : public LinuxALSAIF
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TEST_INTEGRATION_QKEYLINEEDITTESTDIALOG_H
-#define __ORCUS_TEST_INTEGRATION_QKEYLINEEDITTESTDIALOG_H
+#ifndef __OMEGA_TEST_INTEGRATION_QKEYLINEEDITTESTDIALOG_H
+#define __OMEGA_TEST_INTEGRATION_QKEYLINEEDITTESTDIALOG_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -17,7 +17,7 @@
 #include <QTableView>
 #include <QCloseEvent>
 
-using namespace orcus::remote;
+using namespace omega::remote;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

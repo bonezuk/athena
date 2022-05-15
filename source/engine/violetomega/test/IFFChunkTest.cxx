@@ -5,8 +5,8 @@
 #include "engine/violetomega/inc/IFFChunk.h"
 
 using namespace testing;
-using namespace orcus;
-using namespace orcus::engine::violetomega;
+using namespace omega;
+using namespace omega::engine::violetomega;
 
 //-------------------------------------------------------------------------------------------
 

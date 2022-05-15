@@ -7,7 +7,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -1364,6 +1364,6 @@ void AsynchronousFileReader::setCheckOutFlag(bool flag)
 #endif
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 

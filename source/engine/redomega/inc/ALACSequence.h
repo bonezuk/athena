@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_REDOMEGA_ALACSEQUENCE_H
-#define __ORCUS_ENGINE_REDOMEGA_ALACSEQUENCE_H
+#ifndef __OMEGA_ENGINE_REDOMEGA_ALACSEQUENCE_H
+#define __OMEGA_ENGINE_REDOMEGA_ALACSEQUENCE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/redomega/inc/RedOmegaDLL.h"
@@ -8,7 +8,7 @@
 #include "engine/inc/SequenceMemory.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -35,7 +35,7 @@ class REDOMEGA_EXPORT ALACSequence : public engine::SequenceMemory
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

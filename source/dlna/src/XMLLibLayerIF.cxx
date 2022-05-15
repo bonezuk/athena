@@ -1,7 +1,7 @@
 #include "dlna/inc/XMLLibLayerIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -170,5 +170,5 @@ int XMLLibLayerIF::xmlSaveFileEnc(const char *filename,xmlDocPtr doc,const char 
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

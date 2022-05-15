@@ -8,7 +8,7 @@
 #include <pwd.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -75,5 +75,5 @@ QString SBBookmarkService::getHomeDirectory()
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

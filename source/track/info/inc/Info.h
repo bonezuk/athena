@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_INFO_H
-#define __ORCUS_TRACK_INFO_INFO_H
+#ifndef __OMEGA_TRACK_INFO_INFO_H
+#define __OMEGA_TRACK_INFO_INFO_H
 //-------------------------------------------------------------------------------------------
 
 #include <QMap>
@@ -18,7 +18,7 @@
 #include "track/info/inc/InfoDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -502,7 +502,7 @@ inline const common::TimeStamp& Info::ChildInfo::length() const
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

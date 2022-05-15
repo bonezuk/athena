@@ -1,7 +1,7 @@
 #include "network/mime/inc/MimeHeaderItem.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -810,5 +810,5 @@ bool operator != (const MimeHeaderItem& a,const MimeHeaderItem& b)
 //-------------------------------------------------------------------------------------------
 } // namespace mime
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

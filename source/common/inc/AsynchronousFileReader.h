@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_ASYNCHRONOUSFILEREADER_H
-#define __ORCUS_COMMON_ASYNCHRONOUSFILEREADER_H
+#ifndef __OMEGA_COMMON_ASYNCHRONOUSFILEREADER_H
+#define __OMEGA_COMMON_ASYNCHRONOUSFILEREADER_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
@@ -27,7 +27,7 @@
 #include "common/inc/ServiceEvent.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -277,7 +277,7 @@ class COMMON_EXPORT AsynchronousFileReader::Processor : public ServiceEventAndCo
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #include "network/http/inc/HTTPClient.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -123,5 +123,5 @@ HTTPClient *HTTPClientService::onGetClient()
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

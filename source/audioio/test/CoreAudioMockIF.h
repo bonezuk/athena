@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_COREAUDIOMOCKIF_H
-#define __ORCUS_AUDIOIO_COREAUDIOMOCKIF_H
+#ifndef __OMEGA_AUDIOIO_COREAUDIOMOCKIF_H
+#define __OMEGA_AUDIOIO_COREAUDIOMOCKIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -9,7 +9,7 @@
 #include "audioio/inc/CoreAudioIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -44,7 +44,7 @@ class CoreAudioMockIF : public CoreAudioIF
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_PLAYERAPP_AUDIODAEMON_OMEGAPLDBUSINTERFACE_H
-#define __ORCUS_PLAYERAPP_AUDIODAEMON_OMEGAPLDBUSINTERFACE_H
+#ifndef __OMEGA_PLAYERAPP_AUDIODAEMON_OMEGAPLDBUSINTERFACE_H
+#define __OMEGA_PLAYERAPP_AUDIODAEMON_OMEGAPLDBUSINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
 #include "playerapp/playercommon/inc/IPCInterfaceBase.h"
@@ -11,7 +11,7 @@
 #include "playerapp/playercommon/inc/OmegaPlaylistInterface.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ class OmegaPLBusInterface : public OmegaPlaylistInterface, public IPCInterfaceBa
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

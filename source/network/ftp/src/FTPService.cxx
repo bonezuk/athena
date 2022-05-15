@@ -1,7 +1,7 @@
 #include "network/ftp/inc/FTPService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -213,5 +213,5 @@ void FTPService::onDeleteServer(FTPServer *svr)
 //-------------------------------------------------------------------------------------------
 } // namespace ftp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

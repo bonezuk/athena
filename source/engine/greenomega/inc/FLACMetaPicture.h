@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_GREENOMEGA_FLACMETAPICTURE_H
-#define __ORCUS_GREENOMEGA_FLACMETAPICTURE_H
+#ifndef __OMEGA_GREENOMEGA_FLACMETAPICTURE_H
+#define __OMEGA_GREENOMEGA_FLACMETAPICTURE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/greenomega/inc/FLACMetaBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -77,7 +77,7 @@ class GREENOMEGA_EXPORT FLACMetaPicture : public FLACMetaBase
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_AUDIOIO_AOQUERYWIRELESSBRIDGE_H
-#define __ORCUS_AUDIOIO_AOQUERYWIRELESSBRIDGE_H
+#ifndef __OMEGA_AUDIOIO_AOQUERYWIRELESSBRIDGE_H
+#define __OMEGA_AUDIOIO_AOQUERYWIRELESSBRIDGE_H
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOQueryDevice.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -26,13 +26,13 @@ class AUDIOIO_EXPORT AOQueryWirelessBridge : public AOQueryDevice
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -63,5 +63,5 @@ int AOQueryWirelessBridge::defaultDeviceIndex()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

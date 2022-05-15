@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_BSEQUENCE_H
-#define __ORCUS_ENGINE_BLACKOMEGA_BSEQUENCE_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_BSEQUENCE_H
+#define __OMEGA_ENGINE_BLACKOMEGA_BSEQUENCE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/Sequence.h"
 #include "engine/blackomega/inc/BandIndex.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -65,7 +65,7 @@ inline tint BSequence::remain() const
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

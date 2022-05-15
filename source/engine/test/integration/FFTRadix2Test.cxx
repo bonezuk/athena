@@ -6,7 +6,7 @@
 #include "common/inc/TimeStamp.h"
 #include "common/inc/Random.h"
 
-using namespace orcus;
+using namespace omega;
 
 //-------------------------------------------------------------------------------------------
 

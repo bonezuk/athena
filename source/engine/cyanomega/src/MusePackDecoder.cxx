@@ -1,7 +1,7 @@
 #include "engine/cyanomega/inc/MusePackDecoder.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -24,5 +24,5 @@ MusePackDecoder::~MusePackDecoder()
 //-------------------------------------------------------------------------------------------
 } // namespace cyanomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

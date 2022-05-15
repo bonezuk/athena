@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_BIOBUFFEREDSTREAM_H
-#define __ORCUS_COMMON_BIOBUFFEREDSTREAM_H
+#ifndef __OMEGA_COMMON_BIOBUFFEREDSTREAM_H
+#define __OMEGA_COMMON_BIOBUFFEREDSTREAM_H
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/BIOStream.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -60,7 +60,7 @@ class COMMON_EXPORT BIOBufferedStream : public BIOStream
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

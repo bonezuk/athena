@@ -5,8 +5,8 @@
 #include "track/model/test/TrackDBTestEnviroment.h"
 #include "track/db/test/SQLiteMock.h"
 
-using namespace orcus::track::model;
-using namespace orcus::track;
+using namespace omega::track::model;
+using namespace omega::track;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------
@@ -225,7 +225,7 @@ bool testUtilitySQLAlbumModel(const QString& cmd,int resultID)
 	}
 	catch(const db::SQLiteException& e)
 	{
-        orcus::common::Log::g_Log.print("SQLite exception on query\n%s\n%s\n",cmd.toUtf8().constData(),e.error().toUtf8().constData());
+        omega::common::Log::g_Log.print("SQLite exception on query\n%s\n%s\n",cmd.toUtf8().constData(),e.error().toUtf8().constData());
 		res = false;
 	}
 	return res;

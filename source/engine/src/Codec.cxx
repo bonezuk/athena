@@ -1,12 +1,12 @@
 #include "engine/inc/Codec.h"
-#include "engine/inc/OrcusDCT.h"
+#include "engine/inc/OmegaDCT.h"
 #include "engine/inc/BitStream.h"
 #include "engine/inc/Sequence.h"
 
 #include <QSettings>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -33,7 +33,7 @@ CodecInitialize::~CodecInitialize()
 {
 	try
 	{
-		OrcusDCT::stop();
+		OmegaDCT::stop();
 		Bitstream::stop();
 	}
 	catch(...) {}
@@ -246,5 +246,5 @@ void Codec::setNoOutputChannels(tint noChs)
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_RTP_RTCPPACKET_H
-#define __ORCUS_NETWORK_RTP_RTCPPACKET_H
+#ifndef __OMEGA_NETWORK_RTP_RTCPPACKET_H
+#define __OMEGA_NETWORK_RTP_RTCPPACKET_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/rtp/inc/RTPPacket.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -62,7 +62,7 @@ typedef QSharedPointer<RTCPPacket> RTCPPacketSPtr;
 //-------------------------------------------------------------------------------------------
 } // namespace rtp
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

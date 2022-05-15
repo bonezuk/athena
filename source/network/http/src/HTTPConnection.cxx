@@ -1,7 +1,7 @@
 #include "network/http/inc/HTTPConnection.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -716,5 +716,5 @@ bool HTTPConnection::sendErrorResponse(tint code)
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

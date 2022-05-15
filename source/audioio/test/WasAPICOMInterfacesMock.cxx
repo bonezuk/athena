@@ -1,7 +1,7 @@
 #include "audioio/test/WasAPICOMInterfacesMock.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -127,5 +127,5 @@ IAudioClockIFMock::~IAudioClockIFMock()
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@
 #include "track/info/inc/Info.h"
 #include "common/test/BIOStreamMock.h"
 
-using namespace orcus::track::info;
+using namespace omega::track::info;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ class InfoTest : public Info
 {
 	public:
 		InfoTest();
-		bool testIsAppleFinderFile(const QString& name,orcus::common::BIOStream *reader);
+		bool testIsAppleFinderFile(const QString& name,omega::common::BIOStream *reader);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ InfoTest::InfoTest() : Info()
 
 //-------------------------------------------------------------------------------------------
 
-bool InfoTest::testIsAppleFinderFile(const QString& name,orcus::common::BIOStream *reader)
+bool InfoTest::testIsAppleFinderFile(const QString& name,omega::common::BIOStream *reader)
 {
 	return isAppleFinderFile(name,reader);
 }
@@ -32,7 +32,7 @@ bool InfoTest::testIsAppleFinderFile(const QString& name,orcus::common::BIOStrea
 
 TEST(Info,isAppleFinderFileWithNoName)
 {
-	orcus::common::test::BIOStreamMock reader(orcus::common::e_BIOStream_FileRead);
+	omega::common::test::BIOStreamMock reader(omega::common::e_BIOStream_FileRead);
 	InfoTest infoA;
 	EXPECT_TRUE(infoA.testIsAppleFinderFile("",&reader));
 }
@@ -49,7 +49,7 @@ TEST(Info,isAppleFinderFileWithNoReader)
 
 TEST(Info,isAppleFinderFileWithNoDirectory)
 {
-	orcus::common::test::BIOStreamMock reader(orcus::common::e_BIOStream_FileRead);
+	omega::common::test::BIOStreamMock reader(omega::common::e_BIOStream_FileRead);
 	InfoTest infoA;
 	EXPECT_TRUE(infoA.testIsAppleFinderFile("name.m4a",&reader));
 }
@@ -58,7 +58,7 @@ TEST(Info,isAppleFinderFileWithNoDirectory)
 
 TEST(Info,isAppleFinderFileWithSingleLetterName)
 {
-	orcus::common::test::BIOStreamMock reader(orcus::common::e_BIOStream_FileRead);
+	omega::common::test::BIOStreamMock reader(omega::common::e_BIOStream_FileRead);
 	InfoTest infoA;
 	EXPECT_TRUE(infoA.testIsAppleFinderFile("n",&reader));	
 }
@@ -68,7 +68,7 @@ TEST(Info,isAppleFinderFileWithSingleLetterName)
 TEST(Info,isAppleFinderFileWithMatchingNameButNoFile)
 {
 	QString name = "._name.m4a";
-	orcus::common::test::BIOStreamMock reader(orcus::common::e_BIOStream_FileRead);
+	omega::common::test::BIOStreamMock reader(omega::common::e_BIOStream_FileRead);
 	EXPECT_CALL(reader,open(name)).Times(1).WillOnce(Return(false));
 	InfoTest infoA;
 	EXPECT_FALSE(infoA.testIsAppleFinderFile(name,&reader));	
@@ -79,7 +79,7 @@ TEST(Info,isAppleFinderFileWithMatchingNameButNoFile)
 TEST(Info,isAppleFinderFileWithOpenButNoRead)
 {
 	QString name = "._name.m4a";
-	orcus::common::test::BIOStreamMock reader(orcus::common::e_BIOStream_FileRead);
+	omega::common::test::BIOStreamMock reader(omega::common::e_BIOStream_FileRead);
 	EXPECT_CALL(reader,open(name)).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(reader,read(A<tubyte*>(),4)).Times(1).WillOnce(Return(0));
 	EXPECT_CALL(reader,close()).Times(1);
@@ -101,7 +101,7 @@ int InfoIsAppleFinderFileWithOpenButNotMagicNumberRead(tubyte *mem)
 TEST(Info,isAppleFinderFileWithOpenButNotMagicNumber)
 {
 	QString name = "/Users/Music/._name.m4a";
-	orcus::common::test::BIOStreamMock reader(orcus::common::e_BIOStream_FileRead);
+	omega::common::test::BIOStreamMock reader(omega::common::e_BIOStream_FileRead);
 	EXPECT_CALL(reader,open(name)).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(reader,read(A<tubyte*>(),4)).Times(1).WillOnce(WithArg<0>(Invoke(InfoIsAppleFinderFileWithOpenButNotMagicNumberRead)));
 	EXPECT_CALL(reader,close()).Times(1);
@@ -123,7 +123,7 @@ int InfoIsAppleFinderFileWithOpenAndAppleSingleMagicNumberRead(tubyte *mem)
 TEST(Info,isAppleFinderFileWithOpenAndAppleSingleMagicNumber)
 {
 	QString name = "C:\\Users\\Music\\._name.m4a";
-	orcus::common::test::BIOStreamMock reader(orcus::common::e_BIOStream_FileRead);
+	omega::common::test::BIOStreamMock reader(omega::common::e_BIOStream_FileRead);
 	EXPECT_CALL(reader,open(name)).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(reader,read(A<tubyte*>(),4)).Times(1).WillOnce(WithArg<0>(Invoke(InfoIsAppleFinderFileWithOpenAndAppleSingleMagicNumberRead)));
 	EXPECT_CALL(reader,close()).Times(1);
@@ -147,7 +147,7 @@ int InfoIsAppleFinderFileWithOpenAndAppleDoubleMagicNumberRead(tubyte *mem)
 TEST(Info,isAppleFinderFileWithOpenAndAppleDoubleMagicNumber)
 {
 	QString name = "C:\\Users\\Music\\._name.m4a";
-	orcus::common::test::BIOStreamMock reader(orcus::common::e_BIOStream_FileRead);
+	omega::common::test::BIOStreamMock reader(omega::common::e_BIOStream_FileRead);
 	EXPECT_CALL(reader,open(name)).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(reader,read(A<tubyte*>(),4)).Times(1).WillOnce(WithArg<0>(Invoke(InfoIsAppleFinderFileWithOpenAndAppleDoubleMagicNumberRead)));
 	EXPECT_CALL(reader,close()).Times(1);

@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/Dequantize.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -588,5 +588,5 @@ void Dequantize::decodeMixed(BSequence *seq,tint *reg)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

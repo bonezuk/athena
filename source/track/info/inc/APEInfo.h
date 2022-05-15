@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_INFO_APEINFO_H
-#define __ORCUS_TRACK_INFO_APEINFO_H
+#ifndef __OMEGA_TRACK_INFO_APEINFO_H
+#define __OMEGA_TRACK_INFO_APEINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/info/inc/CueInfo.h"
 #include "track/info/inc/APETag.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -37,7 +37,7 @@ class TRACK_INFO_EXPORT APEInfo : public CueInfo
 //-------------------------------------------------------------------------------------------
 } // namespace info
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

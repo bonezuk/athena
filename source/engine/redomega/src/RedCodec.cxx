@@ -2,7 +2,7 @@
 #include "engine/redomega/inc/ALACCafContainer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -413,5 +413,5 @@ common::TimeStamp RedCodec::length() const
 //-------------------------------------------------------------------------------------------
 } // namespace redomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

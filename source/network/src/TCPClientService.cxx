@@ -1,7 +1,7 @@
 #include "network/inc/TCPClientService.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -106,5 +106,5 @@ bool TCPClientService::process()
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

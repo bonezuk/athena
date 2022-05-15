@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_WHITEOMEGA_PROGRAMCONFIG_H
-#define __ORCUS_ENGINE_WHITEOMEGA_PROGRAMCONFIG_H
+#ifndef __OMEGA_ENGINE_WHITEOMEGA_PROGRAMCONFIG_H
+#define __OMEGA_ENGINE_WHITEOMEGA_PROGRAMCONFIG_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/Sequence.h"
 #include "engine/whiteomega/inc/Atom.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -55,7 +55,7 @@ class WHITEOMEGA_EXPORT ProgramConfig
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 #include "network/http/inc/Unit.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -19,7 +19,7 @@ HTTP_EXPORT QString contentTypeFromExtension(const QString& fileName);
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

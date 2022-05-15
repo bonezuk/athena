@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_DB_SQLITEQUERY_H
-#define __ORCUS_TRACK_DB_SQLITEQUERY_H
+#ifndef __OMEGA_TRACK_DB_SQLITEQUERY_H
+#define __OMEGA_TRACK_DB_SQLITEQUERY_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/db/inc/SQLiteDatabase.h"
 #include "track/db/inc/SQLiteOperation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -39,7 +39,7 @@ typedef QSharedPointer<SQLiteQuery> SQLiteQuerySPtr;
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

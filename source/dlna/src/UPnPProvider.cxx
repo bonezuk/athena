@@ -2,7 +2,7 @@
 #include "dlna/inc/DiskIF.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -253,5 +253,5 @@ bool UPnPProvider::initDeviceFromDescription(const QString& dddFileName)
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

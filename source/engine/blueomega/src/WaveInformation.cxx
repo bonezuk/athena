@@ -1,7 +1,7 @@
 #include "engine/blueomega/inc/WaveInformation.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -266,5 +266,5 @@ void WaveInformation::setupChannelMap(tint noOutChannels)
 //-------------------------------------------------------------------------------------------
 } // namespace blueomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

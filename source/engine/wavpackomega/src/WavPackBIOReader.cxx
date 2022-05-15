@@ -1,7 +1,7 @@
 #include "engine/wavpackomega/inc/WavPackBIOReader.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -161,5 +161,5 @@ void WavPackBIOReaderSetupReader(WavpackStreamReader *reader)
 //-------------------------------------------------------------------------------------------
 } // namespace wavpackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

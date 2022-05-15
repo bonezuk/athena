@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_SUBBAND_H
-#define __ORCUS_ENGINE_BLACKOMEGA_SUBBAND_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_SUBBAND_H
+#define __OMEGA_ENGINE_BLACKOMEGA_SUBBAND_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/blackomega/inc/Hybrid.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -173,7 +173,7 @@ class BLACKOMEGA_EXPORT Subband
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_MIME_MIMEHEADERITEM_H
-#define __ORCUS_NETWORK_MIME_MIMEHEADERITEM_H
+#ifndef __OMEGA_NETWORK_MIME_MIMEHEADERITEM_H
+#define __OMEGA_NETWORK_MIME_MIMEHEADERITEM_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
@@ -15,7 +15,7 @@
 #include "network/mime/inc/MimeNetworkDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -126,7 +126,7 @@ class MIME_EXPORT MimeHeaderItem
 //-------------------------------------------------------------------------------------------
 } // namespace mime
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

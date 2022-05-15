@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_TRACK_MODEL_TEST_ABSTRACTTRACKMODELTEST_H
-#define __ORCUS_TRACK_MODEL_TEST_ABSTRACTTRACKMODELTEST_H
+#ifndef __OMEGA_TRACK_MODEL_TEST_ABSTRACTTRACKMODELTEST_H
+#define __OMEGA_TRACK_MODEL_TEST_ABSTRACTTRACKMODELTEST_H
 //-------------------------------------------------------------------------------------------
 
 #include "track/model/inc/AbstractTrackModel.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -35,7 +35,7 @@ class AbstractTrackModelTest : public AbstractTrackModel
 //-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_DLNA_UPNPSPECVERSION_H
-#define __ORCUS_DLNA_UPNPSPECVERSION_H
+#ifndef __OMEGA_DLNA_UPNPSPECVERSION_H
+#define __OMEGA_DLNA_UPNPSPECVERSION_H
 //-------------------------------------------------------------------------------------------
 
 #include "dlna/inc/XMLNodeParser.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace dlna
 {
@@ -43,7 +43,7 @@ class DLNA_EXPORT UPnPSpecVersion : public XMLNodeParser
 
 //-------------------------------------------------------------------------------------------
 } // namespace dlna
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

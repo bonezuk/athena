@@ -9,7 +9,7 @@
 #include <QMutex>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -73,7 +73,7 @@ class TRACK_DB_EXPORT SBBookmarkService
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ class TRACK_DB_EXPORT SBBookmarkService
 #include "common/inc/TimeStamp.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace track
 {
@@ -1304,7 +1304,7 @@ QByteArray SBBookmarkService::getBookmarkArray(const QString& docFile,const QStr
 //-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

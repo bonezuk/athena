@@ -1,7 +1,7 @@
 #include "audioio/inc/SampleConverter.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace audioio
 {
@@ -1299,5 +1299,5 @@ void SampleConverter::convert(const sample_t *in,tubyte *out,tint noSamples) con
 
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

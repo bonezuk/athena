@@ -1,7 +1,7 @@
 #include "engine/blackomega/inc/Hybrid.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -369,5 +369,5 @@ void Hybrid::dct36(sample_t *x,sample_t *y)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

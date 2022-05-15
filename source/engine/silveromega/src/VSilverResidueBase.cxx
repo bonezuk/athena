@@ -3,7 +3,7 @@
 #include "engine/silveromega/inc/VSilverFunctions.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -442,5 +442,5 @@ void VSilverResidueBase::decode(engine::Sequence *seq,tfloat32 **out,tint *nonze
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

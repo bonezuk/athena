@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_BLACKOMEGA_DEQUANTIZE_H
-#define __ORCUS_ENGINE_BLACKOMEGA_DEQUANTIZE_H
+#ifndef __OMEGA_ENGINE_BLACKOMEGA_DEQUANTIZE_H
+#define __OMEGA_ENGINE_BLACKOMEGA_DEQUANTIZE_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/blackomega/inc/BandIndex.h"
@@ -9,7 +9,7 @@
 #include "engine/blackomega/inc/ScaleFactor.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -80,7 +80,7 @@ inline void Dequantize::set(ScaleFactor *x)
 //-------------------------------------------------------------------------------------------
 } // namespace blackomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

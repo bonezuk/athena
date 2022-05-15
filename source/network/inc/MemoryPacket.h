@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_MEMORYPACKET_H
-#define __ORCUS_NETWORK_MEMORYPACKET_H
+#ifndef __OMEGA_NETWORK_MEMORYPACKET_H
+#define __OMEGA_NETWORK_MEMORYPACKET_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Socket.h"
 #include "network/inc/Controller.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -57,7 +57,7 @@ class NETWORK_EXPORT MemoryPacket
 
 //-------------------------------------------------------------------------------------------
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

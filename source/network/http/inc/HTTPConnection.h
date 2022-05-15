@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_HTTP_HTTPCONNECTION_H
-#define __ORCUS_NETWORK_HTTP_HTTPCONNECTION_H
+#ifndef __OMEGA_NETWORK_HTTP_HTTPCONNECTION_H
+#define __OMEGA_NETWORK_HTTP_HTTPCONNECTION_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/TCPConnServerSocket.h"
 #include "network/http/inc/HTTPServer.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -125,7 +125,7 @@ class HTTP_EXPORT HTTPConnection::Message
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_COMMON_TEST_ASYNCHRONOUSFILEREADERMOCK_H
-#define __ORCUS_COMMON_TEST_ASYNCHRONOUSFILEREADERMOCK_H
+#ifndef __OMEGA_COMMON_TEST_ASYNCHRONOUSFILEREADERMOCK_H
+#define __OMEGA_COMMON_TEST_ASYNCHRONOUSFILEREADERMOCK_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
@@ -9,7 +9,7 @@
 #include "common/inc/AsynchronousFileReader.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -34,7 +34,7 @@ class AsynchronousFileReaderMock : public AsynchronousFileReader
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

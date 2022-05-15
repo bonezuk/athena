@@ -2,7 +2,7 @@
 #include "player/inc/QPlayerApplication.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -95,5 +95,5 @@ void ProgressMessageDialog::onCancel()
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

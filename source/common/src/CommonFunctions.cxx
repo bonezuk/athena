@@ -7,7 +7,7 @@
 #endif
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace common
 {
@@ -80,7 +80,7 @@ void usleepThread(tint usecs)
 
 void loadSharedLibrary(const char *libName)
 {
-#if defined(ORCUS_WIN32)
+#if defined(OMEGA_WIN32)
 	QString name = QString::fromUtf8(libName) + ".dll";
 	Q_ASSERT(LoadLibraryA(name.toUtf8().constData()) != NULL);
 #elif defined(OMEGA_LINUX)
@@ -124,5 +124,5 @@ tuint64 elfHash64(tuint8 *mem, int len, tuint64 hash)
 
 //-------------------------------------------------------------------------------------------
 } // namespace common
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

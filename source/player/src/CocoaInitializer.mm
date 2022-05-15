@@ -4,7 +4,7 @@
 #include <AppKit/NSApplication.h>
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -36,5 +36,5 @@ CocoaInitializer::~CocoaInitializer()
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

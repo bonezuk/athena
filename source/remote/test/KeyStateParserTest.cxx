@@ -3,7 +3,7 @@
 
 #include "remote/inc/KeyStateParser.h"
 
-using namespace orcus::remote;
+using namespace omega::remote;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------

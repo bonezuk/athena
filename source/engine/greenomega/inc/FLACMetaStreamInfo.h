@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_GREENOMEGA_FLACMETASTREAMINFO_H
-#define __ORCUS_GREENOMEGA_FLACMETASTREAMINFO_H
+#ifndef __OMEGA_GREENOMEGA_FLACMETASTREAMINFO_H
+#define __OMEGA_GREENOMEGA_FLACMETASTREAMINFO_H
 //-------------------------------------------------------------------------------------------
 
 #include "engine/greenomega/inc/FLACMetaBase.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -43,7 +43,7 @@ class GREENOMEGA_EXPORT FLACMetaStreamInfo : public FLACMetaBase
 //-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

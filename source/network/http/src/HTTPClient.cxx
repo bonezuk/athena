@@ -1,7 +1,7 @@
 #include "network/http/inc/HTTPClient.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -834,5 +834,5 @@ bool HTTPClient::parseChunkHeader(const QString& str,tint& size,QString& field)
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

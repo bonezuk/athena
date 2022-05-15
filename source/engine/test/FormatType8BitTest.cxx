@@ -7,7 +7,7 @@
 #include "engine/inc/FormatType.h"
 #include "engine/inc/FormatTypeFromFloat.h"
 
-using namespace orcus::engine;
+using namespace omega::engine;
 using namespace testing;
 using namespace std;
 

@@ -3,7 +3,7 @@
 #include "player/inc/QPlayerApplication.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -781,5 +781,5 @@ void QPLItemBase::paintRetinaImage(QPainter *painter,QPointF pos,QImage *pImage)
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

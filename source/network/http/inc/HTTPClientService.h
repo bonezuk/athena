@@ -1,13 +1,13 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_NETWORK_HTTP_HTTPCLIENTSERVICE_H
-#define __ORCUS_NETWORK_HTTP_HTTPCLIENTSERVICE_H
+#ifndef __OMEGA_NETWORK_HTTP_HTTPCLIENTSERVICE_H
+#define __OMEGA_NETWORK_HTTP_HTTPCLIENTSERVICE_H
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/TCPClientService.h"
 #include "network/http/inc/Unit.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace network
 {
@@ -65,7 +65,7 @@ class HTTP_EXPORT HTTPClientService : public TCPClientService
 //-------------------------------------------------------------------------------------------
 } // namespace http
 } // namespace network
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

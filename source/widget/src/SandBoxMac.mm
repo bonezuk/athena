@@ -24,10 +24,10 @@
 
 @interface MacSandServices : NSObject
 {
-	orcus::widget::SBServiceMac *service;
+	omega::widget::SBServiceMac *service;
 };
 @property (assign) NSArray *urls;
-- (id)initWithService:(orcus::widget::SBServiceMac *)svr;
+- (id)initWithService:(omega::widget::SBServiceMac *)svr;
 - (void)dealloc;
 - (void)doFileDialogWithWindow:(NSWindow *)win Directory:(NSURL *)dir Title:(NSString *)title Filter:(NSArray *)filterArray;
 - (void)doFolderDialogWithWindow:(NSWindow *)win Directory:(NSURL *)dir Title:(NSString *)title;
@@ -38,7 +38,7 @@
 @implementation MacSandServices
 //-------------------------------------------------------------------------------------------
 
-- (id)initWithService:(orcus::widget::SBServiceMac *)svr
+- (id)initWithService:(omega::widget::SBServiceMac *)svr
 {
 	self = [super init];
 	if(self!=nil)
@@ -171,9 +171,9 @@
 //-------------------------------------------------------------------------------------------
 @end
 //-------------------------------------------------------------------------------------------
-#if defined(ORCUS_MACOSX)
+#if defined(OMEGA_MACOSX)
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace widget
 {
@@ -261,7 +261,7 @@ QString SBServiceMac::getApplicationDataDirectory()
 		hDir += "/";
 	}
 	hDir = QDir::toNativeSeparators(hDir);
-	orcus::common::DiskOps::path(hDir,true);
+	omega::common::DiskOps::path(hDir,true);
 	return hDir;
 #else
     return SBServiceBase::getApplicationDataDirectory();
@@ -537,7 +537,7 @@ void SBServiceMac::releasePool(void *pPtr)
 
 //-------------------------------------------------------------------------------------------
 } // namespace widget
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

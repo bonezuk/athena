@@ -2,7 +2,7 @@
 #include "engine/whiteomega/inc/WSequence.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -2928,5 +2928,5 @@ tint WSequence::m_rvlcCodebook2Table[54][3] = {
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

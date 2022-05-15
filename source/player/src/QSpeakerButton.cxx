@@ -2,7 +2,7 @@
 #include "player/inc/QPlayerApplication.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace player
 {
@@ -447,5 +447,5 @@ void QSpeakerButton::paintRetinaImage(QPainter *painter,QPointF pos,QImage *pIma
 
 //-------------------------------------------------------------------------------------------
 } // namespace player
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

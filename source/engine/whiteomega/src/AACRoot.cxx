@@ -2,7 +2,7 @@
 #include "engine/whiteomega/inc/FillDecode.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -198,5 +198,5 @@ bool AACRoot::readFillElement(Sequence *seq)
 //-------------------------------------------------------------------------------------------
 } // namespace whiteomega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------

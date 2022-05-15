@@ -1,4 +1,4 @@
-add_definitions(-DORCUS_AUDIOIO_DLL)
+add_definitions(-DOMEGA_AUDIOIO_DLL)
 
 if (OMEGA_WIN32)
 

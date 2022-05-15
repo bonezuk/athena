@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __ORCUS_ENGINE_SILVEROMEGA_VSILVERFUNCTIONS_H
-#define __ORCUS_ENGINE_SILVEROMEGA_VSILVERFUNCTIONS_H
+#ifndef __OMEGA_ENGINE_SILVEROMEGA_VSILVERFUNCTIONS_H
+#define __OMEGA_ENGINE_SILVEROMEGA_VSILVERFUNCTIONS_H
 //-------------------------------------------------------------------------------------------
 
 #include <math.h>
@@ -8,7 +8,7 @@
 #include "engine/silveromega/inc/SilverOmegaDLL.h"
 
 //-------------------------------------------------------------------------------------------
-namespace orcus
+namespace omega
 {
 namespace engine
 {
@@ -209,7 +209,7 @@ const tfloat32 c_PI1_8 = 0.92387953251128675613f;
 //-------------------------------------------------------------------------------------------
 } // namespace silveromega
 } // namespace engine
-} // namespace orcus
+} // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------

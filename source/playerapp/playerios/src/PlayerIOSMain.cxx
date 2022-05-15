@@ -10,9 +10,9 @@ int main(int argc, char **argv)
 	QGuiApplication app(argc, argv);
 	QQmlApplicationEngine engine;
 	
-	qmlRegisterType<orcus::PlayerIOSBaseModel>("uk.co.blackomega", 1, 0, "PlayerIOSBaseModel");
+	qmlRegisterType<omega::PlayerIOSBaseModel>("uk.co.blackomega", 1, 0, "PlayerIOSBaseModel");
 	
-	orcus::PlayerIOSBaseModel model;
+	omega::PlayerIOSBaseModel model;
 	engine.rootContext()->setContextProperty("playListModel", &model);
 	
 	QFile page(":/Resources/frontpage1.qml");
