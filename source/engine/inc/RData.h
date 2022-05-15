@@ -63,6 +63,7 @@ class ENGINE_EXPORT RData::Part
 	public:
 		Part();
 		Part(const Part& rhs);
+		virtual ~Part();
 		
 		const Part& operator = (const Part& rhs);
 	

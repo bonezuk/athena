@@ -172,12 +172,12 @@ const tchar c_SeparatorChar = '/';
 //-------------------------------------------------------------------------------------------
 
 typedef char tchar;
-typedef int8_t tbyte;
-typedef int8_t tint8;
+typedef char tbyte;
+typedef char tint8;
 
 typedef unsigned char tuchar;
-typedef uint8_t tubyte;
-typedef uint8_t tuint8;
+typedef unsigned char tubyte;
+typedef unsigned char tuint8;
 
 typedef int16_t tshort;
 typedef int16_t tint16;

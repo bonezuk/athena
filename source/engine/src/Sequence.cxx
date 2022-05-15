@@ -6,7 +6,6 @@ namespace omega
 namespace engine
 {
 //-------------------------------------------------------------------------------------------
-
 Sequence::Sequence() : m_bitstream(0),
 	m_item(0),
 	m_bitOffset(0),

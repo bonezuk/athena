@@ -93,6 +93,156 @@ SOURCES += ./common/src/TTime.cxx
 SOURCES += ./common/src/TimeStamp.cxx
 SOURCES += ./common/src/UString.cxx
 
+# --- engine ---
+
+HEADERS += ./engine/inc/AData.h
+HEADERS += ./engine/inc/BFileStream.h
+HEADERS += ./engine/inc/BTime.h
+HEADERS += ./engine/inc/BitStream.h
+HEADERS += ./engine/inc/Codec.h
+HEADERS += ./engine/inc/Compare.h
+HEADERS += ./engine/inc/EngineDLL.h
+HEADERS += ./engine/inc/File.h
+HEADERS += ./engine/inc/FormatType.h
+HEADERS += ./engine/inc/FormatTypeFromFloat.h
+HEADERS += ./engine/inc/IOFile.h
+HEADERS += ./engine/inc/InterleavedCodec.h
+HEADERS += ./engine/inc/KaiserFilter.h
+HEADERS += ./engine/inc/OmegaDCT.h
+HEADERS += ./engine/inc/OmegaDCT64.h
+HEADERS += ./engine/inc/RData.h
+HEADERS += ./engine/inc/Recycler.h
+HEADERS += ./engine/inc/Resample.h
+HEADERS += ./engine/inc/Sequence.h
+HEADERS += ./engine/inc/SequenceMemory.h
+HEADERS += ./engine/inc/WavChannelMask.h
+
+SOURCES += ./engine/src/AData.cxx
+SOURCES += ./engine/src/BFileStream.cxx
+SOURCES += ./engine/src/BTime.cxx
+SOURCES += ./engine/src/BitStream.cxx
+SOURCES += ./engine/src/Codec.cxx
+SOURCES += ./engine/src/Compare.cxx
+SOURCES += ./engine/src/File.cxx
+SOURCES += ./engine/src/FormatType.cxx
+SOURCES += ./engine/src/FormatTypeFromFloat.cxx
+SOURCES += ./engine/src/IOFile.cxx
+SOURCES += ./engine/src/InterleavedCodec.cxx
+SOURCES += ./engine/src/KaiserFilter.cxx
+SOURCES += ./engine/src/OmegaDCT.cxx
+SOURCES += ./engine/src/OmegaDCT64.cxx
+SOURCES += ./engine/src/RData.cxx
+SOURCES += ./engine/src/Resample.cxx
+SOURCES += ./engine/src/Sequence.cxx
+SOURCES += ./engine/src/SequenceMemory.cxx
+SOURCES += ./engine/src/WavChannelMask.cxx
+
+# --- engine/blackomega ---
+
+HEADERS += ./engine/blackomega/inc/AntiAlias.h
+HEADERS += ./engine/blackomega/inc/BSequence.h
+HEADERS += ./engine/blackomega/inc/BandIndex.h
+HEADERS += ./engine/blackomega/inc/BlackOmegaDLL.h
+HEADERS += ./engine/blackomega/inc/Dequantize.h
+HEADERS += ./engine/blackomega/inc/DequantizeStereo.h
+HEADERS += ./engine/blackomega/inc/Hybrid.h
+HEADERS += ./engine/blackomega/inc/MPCodec.h
+HEADERS += ./engine/blackomega/inc/MPHeader.h
+HEADERS += ./engine/blackomega/inc/Reorder.h
+HEADERS += ./engine/blackomega/inc/ScaleFactor.h
+HEADERS += ./engine/blackomega/inc/SideInfo.h
+HEADERS += ./engine/blackomega/inc/Stereo.h
+HEADERS += ./engine/blackomega/inc/Subband.h
+
+SOURCES += ./engine/blackomega/src/AntiAlias.cxx
+SOURCES += ./engine/blackomega/src/BSequence.cxx
+SOURCES += ./engine/blackomega/src/BandIndex.cxx
+SOURCES += ./engine/blackomega/src/Dequantize.cxx
+SOURCES += ./engine/blackomega/src/DequantizeStereo.cxx
+SOURCES += ./engine/blackomega/src/Hybrid.cxx
+SOURCES += ./engine/blackomega/src/MPCodec.cxx
+SOURCES += ./engine/blackomega/src/MPHeader.cxx
+SOURCES += ./engine/blackomega/src/Reorder.cxx
+SOURCES += ./engine/blackomega/src/ScaleFactor.cxx
+SOURCES += ./engine/blackomega/src/SideInfo.cxx
+SOURCES += ./engine/blackomega/src/Stereo.cxx
+SOURCES += ./engine/blackomega/src/Subband.cxx
+
+# --- engine/blueomega ---
+
+HEADERS += ./engine/blueomega/inc/BlueOmegaDLL.h
+HEADERS += ./engine/blueomega/inc/WaveEngine.h
+HEADERS += ./engine/blueomega/inc/WaveInformation.h
+
+SOURCES += ./engine/blueomega/src/WaveEngine.cxx
+SOURCES += ./engine/blueomega/src/WaveInformation.cxx
+
+# --- engine/cyanomega ---
+
+INCLUDEPATH += ./engine/cyanomega/musepack/inc
+
+HEADERS += ./engine/cyanomega/musepack/inc/cuetools/cd.h
+HEADERS += ./engine/cyanomega/musepack/inc/cuetools/cdtext.h
+HEADERS += ./engine/cyanomega/musepack/inc/cuetools/cuefile.h
+
+HEADERS += ./engine/cyanomega/musepack/src/cuefile/cue.h
+HEADERS += ./engine/cyanomega/musepack/src/cuefile/cue_parse.h
+HEADERS += ./engine/cyanomega/musepack/src/cuefile/cue_parse_prefix.h
+HEADERS += ./engine/cyanomega/musepack/src/cuefile/time.h
+HEADERS += ./engine/cyanomega/musepack/src/cuefile/toc.h
+HEADERS += ./engine/cyanomega/musepack/src/cuefile/toc_parse.h
+HEADERS += ./engine/cyanomega/musepack/src/cuefile/toc_parse_prefix.h
+
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/cd.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/cdtext.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/cue_parse.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/cue_print.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/cue_scan.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/cuefile.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/time.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/toc_parse.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/toc_print.c
+SOURCES += ./engine/cyanomega/musepack/src/cuefile/toc_scan.c
+
+HEADERS += ./engine/cyanomega/musepack/inc/replaygain/gain_analysis.h
+
+SOURCES += ./engine/cyanomega/musepack/src/replaygain/gain_analysis.c
+
+HEADERS += ./engine/cyanomega/musepack/inc/mpc/datatypes.h
+HEADERS += ./engine/cyanomega/musepack/inc/mpc/minimax.h
+HEADERS += ./engine/cyanomega/musepack/inc/mpc/mpc_types.h
+HEADERS += ./engine/cyanomega/musepack/inc/mpc/mpcdec.h
+HEADERS += ./engine/cyanomega/musepack/inc/mpc/mpcmath.h
+HEADERS += ./engine/cyanomega/musepack/inc/mpc/reader.h
+HEADERS += ./engine/cyanomega/musepack/inc/mpc/streaminfo.h
+
+HEADERS += ./engine/cyanomega/musepack/src/libmpcdec/decoder.h
+HEADERS += ./engine/cyanomega/musepack/src/libmpcdec/huffman.h
+HEADERS += ./engine/cyanomega/musepack/src/libmpcdec/internal.h
+HEADERS += ./engine/cyanomega/musepack/src/libmpcdec/mpc_bits_reader.h
+HEADERS += ./engine/cyanomega/musepack/src/libmpcdec/mpcdec_math.h
+HEADERS += ./engine/cyanomega/musepack/src/libmpcdec/requant.h
+
+SOURCES += ./engine/cyanomega/musepack/src/libmpcdec/huffman.c
+SOURCES += ./engine/cyanomega/musepack/src/libmpcdec/mpc_bits_reader.c
+SOURCES += ./engine/cyanomega/musepack/src/libmpcdec/mpc_decoder.c
+SOURCES += ./engine/cyanomega/musepack/src/libmpcdec/mpc_demux.c
+SOURCES += ./engine/cyanomega/musepack/src/libmpcdec/mpc_reader.c
+SOURCES += ./engine/cyanomega/musepack/src/libmpcdec/requant.c
+SOURCES += ./engine/cyanomega/musepack/src/libmpcdec/streaminfo.c
+SOURCES += ./engine/cyanomega/musepack/src/libmpcdec/synth_filter.c
+
+HEADERS += ./engine/cyanomega/inc/CyanCodec.h
+HEADERS += ./engine/cyanomega/inc/CyanOmegaDLL.h
+HEADERS += ./engine/cyanomega/inc/MusePackDecoder.h
+HEADERS += ./engine/cyanomega/inc/MusePackDecoderImpl.h
+HEADERS += ./engine/cyanomega/inc/MusePackIF.h
+
+SOURCES += ./engine/cyanomega/src/CyanCodec.cxx
+SOURCES += ./engine/cyanomega/src/MusePackDecoder.cxx
+SOURCES += ./engine/cyanomega/src/MusePackDecoderImpl.cxx
+SOURCES += ./engine/cyanomega/src/MusePackIF.cxx
+
 # --- playerapp/playerios ---
 
 HEADERS += ./playerapp/playerios/inc/PlayerIOSBaseModel.h

@@ -5,6 +5,8 @@
 
 #include "engine/cyanomega/inc/CyanOmegaDLL.h"
 
+#define __CYANOMEGA
+
 #include "mpc/reader.h"
 #include "mpc/mpcdec.h"
 
