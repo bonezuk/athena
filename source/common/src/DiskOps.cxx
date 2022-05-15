@@ -1020,7 +1020,7 @@ bool DiskOps::copyFile(const QString& source,const QString& dest)
 			int amount;
 			BIOStream in(e_BIOStream_FileRead);
 			BIOStream out(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
-			tchar tmp[128];
+			tint8 tmp[128];
 			bool loop = true;
 
 			if(in.open(src))
@@ -1331,8 +1331,8 @@ bool DiskOps::getTempFileName(const QString& dir,const QString& ext,QString& s)
 		{
 			SHA1Digest digest;
 		
-			digest.input(mem,64);
-			digest.getDigestFinal(mem,c_SHA1HashSize);
+			digest.input(reinterpret_cast<tint8 *>(mem),64);
+			digest.getDigestFinal(reinterpret_cast<tint8 *>(mem),c_SHA1HashSize);
 			
 			for(i=0;i<10;++i)
 			{

@@ -511,7 +511,7 @@ QString CommonDirectoriesForFiles::getVolumeName(const QString& fileName,int& in
 }
 
 //-------------------------------------------------------------------------------------------
-#elif defined(OMEGA_MACOSX) || defined(OMEGA_LINUX)
+#else
 //-------------------------------------------------------------------------------------------
 // / -> /
 // /var -> /

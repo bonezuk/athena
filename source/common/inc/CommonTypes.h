@@ -11,23 +11,14 @@
 //-------------------------------------------------------------------------------------------
 
 #if defined(OMEGA_WIN32)
-#define OMEGA_LITTLE_ENDIAN
 #define OMEGA_WINDOWS
 #define OMEGA_MSVC
 #define OMEGA_DEFINE_TEMPLATE_HEADER
-#endif
-
-#if defined(OMEGA_MACOSX)
+#else
 #define OMEGA_POSIX
 #endif
 
-#if defined(OMEGA_LINUX)
-#define OMEGA_POSIX
-#endif
-
-#if !defined(OMEGA_LITTLE_ENDIAN)
-#define OMEGA_BIG_ENDIAN
-#endif
+#define OMEGA_LITTLE_ENDIAN
 
 //-------------------------------------------------------------------------------------------
 
@@ -166,6 +157,45 @@ typedef double tfloat64;
 
 typedef long long tint64;
 typedef unsigned long long tuint64;
+
+typedef pthread_t t_thread;
+
+const tchar c_Separator[] = "/";
+const tchar c_SeparatorChar = '/';
+
+//-------------------------------------------------------------------------------------------
+#endif
+//-------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------
+#if defined(OMEGA_IOS) || defined(OMEGA_ANDROID)
+//-------------------------------------------------------------------------------------------
+
+typedef char tchar;
+typedef int8_t tbyte;
+typedef int8_t tint8;
+
+typedef unsigned char tuchar;
+typedef uint8_t tubyte;
+typedef uint8_t tuint8;
+
+typedef int16_t tshort;
+typedef int16_t tint16;
+
+typedef uint16_t tushort;
+typedef uint16_t tuint16;
+
+typedef int tint;
+typedef int32_t tint32;
+
+typedef unsigned int tuint;
+typedef uint32_t tuint32;
+
+typedef float tfloat32;
+typedef double tfloat64;
+
+typedef int64_t tint64;
+typedef uint64_t tuint64;
 
 typedef pthread_t t_thread;
 

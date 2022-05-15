@@ -20,14 +20,14 @@ QBIOStreamDevice::~QBIOStreamDevice()
 
 qint64 QBIOStreamDevice::readData(char *data,qint64 maxSize)
 {
-	return static_cast<qint64>(m_ioStream->read(data,static_cast<tint>(maxSize)));
+	return static_cast<qint64>(m_ioStream->read(reinterpret_cast<tint8 *>(data),static_cast<tint>(maxSize)));
 }
 
 //-------------------------------------------------------------------------------------------
 
 qint64 QBIOStreamDevice::writeData(const char *data,qint64 maxSize)
 {
-	return static_cast<qint64>(m_ioStream->write(data,static_cast<tint>(maxSize)));
+	return static_cast<qint64>(m_ioStream->write(reinterpret_cast<const tint8 *>(data),static_cast<tint>(maxSize)));
 }
 
 //-------------------------------------------------------------------------------------------

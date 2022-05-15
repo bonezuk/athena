@@ -12,3 +12,4 @@ CMakeLists.txt.user
 source/versioner/Build/*
 CMakeLists.txt.user.4.8-pre1
 source/embedded/playlistmanager/Resources/*.qmlc
+source/blackomega.pro.user
