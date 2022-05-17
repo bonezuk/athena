@@ -1,5 +1,5 @@
 #include "network/inc/Resource.h"
-#include "network/inc/Memory.h"
+#include "network/inc/NetMemory.h"
 #include "common/inc/Log.h"
 #include "common/inc/Exception.h"
 #include "common/inc/BString.h"
@@ -683,7 +683,11 @@ tuint32 Resource::random(tint type) const
 	s.type = type;
 	s.cpu = ::clock();
 	s.pid = ::getpid();
+#ifndef OMEGA_ANDROID
 	s.hid = ::gethostid();
+#else
+	s.hid = 0;
+#endif
 	s.uid = ::getuid();
 	s.gid = ::getgid();
 	
@@ -693,7 +697,7 @@ tuint32 Resource::random(tint type) const
 	
 	digest.input(reinterpret_cast<const tbyte *>(rmem),sizeof(s));	
 	digest.getDigestFinal(rmem,common::c_SHA1HashSize * sizeof(tchar));
-	res = Memory::toInt(rmem);
+	res = NetMemory::toInt(rmem);
 	return res;	
 }
 

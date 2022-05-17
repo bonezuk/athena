@@ -259,7 +259,7 @@ tint RTCPPacketSDES::parse(NetArraySPtr mem,tint offset)
 				SDESBlock block;
 				bool loop = true;
 				
-				block.sessionID(Memory::toInt(x,j));
+				block.sessionID(NetMemory::toInt(x,j));
 				j += 4;
 				
 				while(loop && ((j + 2) < reportLen))
@@ -361,7 +361,7 @@ bool RTCPPacketSDES::packet(NetArraySPtr mem)
 		QByteArray a;
 		const SDESBlock& block = m_blocks.at(i);
 		
-		Memory::fromInt(t,0,block.sessionID());
+		NetMemory::fromInt(t,0,block.sessionID());
 		pMem.AppendRaw(reinterpret_cast<const tbyte *>(t),4);
 		
 		// canonical name
@@ -468,7 +468,7 @@ bool RTCPPacketSDES::packet(NetArraySPtr mem)
 	x[0] = (x[0] & 0x07) | ((static_cast<tubyte>(sCount) << 3) & 0xf8);
 	len = pMem.GetSize();
 	len = (len / 4) - 1;
-	Memory::fromShort(x,2,static_cast<tuint16>(len));
+	NetMemory::fromShort(x,2,static_cast<tuint16>(len));
 	
 	mem->Append(pMem);
 	return true;

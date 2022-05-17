@@ -4,6 +4,9 @@ ios {
 	QMAKE_CXXFLAGS += -Wno-shorten-64-to-32
 }
 
+QMAKE_CFLAGS   += -Wno-unused-parameter
+QMAKE_CXXFLAGS += -Wno-unused-parameter
+
 android {
 	DEFINES += OMEGA_ANDROID
 }
@@ -242,6 +245,292 @@ SOURCES += ./engine/cyanomega/src/CyanCodec.cxx
 SOURCES += ./engine/cyanomega/src/MusePackDecoder.cxx
 SOURCES += ./engine/cyanomega/src/MusePackDecoderImpl.cxx
 SOURCES += ./engine/cyanomega/src/MusePackIF.cxx
+
+# --- engine/greenomega ---
+
+HEADERS += ./engine/greenomega/inc/FLACFrame.h
+HEADERS += ./engine/greenomega/inc/FLACFramework.h
+HEADERS += ./engine/greenomega/inc/FLACHeader.h
+HEADERS += ./engine/greenomega/inc/FLACMetaBase.h
+HEADERS += ./engine/greenomega/inc/FLACMetaComment.h
+HEADERS += ./engine/greenomega/inc/FLACMetaCuesheet.h
+HEADERS += ./engine/greenomega/inc/FLACMetaPicture.h
+HEADERS += ./engine/greenomega/inc/FLACMetaSeekTable.h
+HEADERS += ./engine/greenomega/inc/FLACMetaStreamInfo.h
+HEADERS += ./engine/greenomega/inc/FLACSubframe.h
+HEADERS += ./engine/greenomega/inc/GreenCodec.h
+HEADERS += ./engine/greenomega/inc/GreenOmegaDLL.h
+
+SOURCES += ./engine/greenomega/src/FLACFrame.cxx
+SOURCES += ./engine/greenomega/src/FLACFramework.cxx
+SOURCES += ./engine/greenomega/src/FLACHeader.cxx
+SOURCES += ./engine/greenomega/src/FLACMetaBase.cxx
+SOURCES += ./engine/greenomega/src/FLACMetaComment.cxx
+SOURCES += ./engine/greenomega/src/FLACMetaCuesheet.cxx
+SOURCES += ./engine/greenomega/src/FLACMetaPicture.cxx
+SOURCES += ./engine/greenomega/src/FLACMetaSeekTable.cxx
+SOURCES += ./engine/greenomega/src/FLACMetaStreamInfo.cxx
+SOURCES += ./engine/greenomega/src/FLACSubframe.cxx
+SOURCES += ./engine/greenomega/src/GreenCodec.cxx
+
+# --- engine/redomega ---
+
+HEADERS += ./engine/redomega/inc/ALACAdaptiveDecode.h
+HEADERS += ./engine/redomega/inc/ALACCafContainer.h
+HEADERS += ./engine/redomega/inc/ALACContainer.h
+HEADERS += ./engine/redomega/inc/ALACDecoder.h
+HEADERS += ./engine/redomega/inc/ALACDescription.h
+HEADERS += ./engine/redomega/inc/ALACFrameIndex.h
+HEADERS += ./engine/redomega/inc/ALACMatrix.h
+HEADERS += ./engine/redomega/inc/ALACSequence.h
+HEADERS += ./engine/redomega/inc/ALACSpecificConfig.h
+HEADERS += ./engine/redomega/inc/CAFFile.h
+HEADERS += ./engine/redomega/inc/RedCodec.h
+HEADERS += ./engine/redomega/inc/RedOmegaDLL.h
+
+SOURCES += ./engine/redomega/src/ALACAdaptiveDecode.cxx
+SOURCES += ./engine/redomega/src/ALACCafContainer.cxx
+SOURCES += ./engine/redomega/src/ALACContainer.cxx
+SOURCES += ./engine/redomega/src/ALACDecoder.cxx
+SOURCES += ./engine/redomega/src/ALACDescription.cxx
+SOURCES += ./engine/redomega/src/ALACFrameIndex.cxx
+SOURCES += ./engine/redomega/src/ALACMatrix.cxx
+SOURCES += ./engine/redomega/src/ALACSequence.cxx
+SOURCES += ./engine/redomega/src/ALACSpecificConfig.cxx
+SOURCES += ./engine/redomega/src/CAFFile.cxx
+SOURCES += ./engine/redomega/src/RedCodec.cxx
+
+# --- engine/silveromega ---
+
+HEADERS += ./engine/silveromega/inc/SilverCodec.h
+HEADERS += ./engine/silveromega/inc/SilverOmegaDLL.h
+HEADERS += ./engine/silveromega/inc/VSilverCodebook.h
+HEADERS += ./engine/silveromega/inc/VSilverCodecComments.h
+HEADERS += ./engine/silveromega/inc/VSilverCodecData.h
+HEADERS += ./engine/silveromega/inc/VSilverCodecInformation.h
+HEADERS += ./engine/silveromega/inc/VSilverContainer.h
+HEADERS += ./engine/silveromega/inc/VSilverFloorBase.h
+HEADERS += ./engine/silveromega/inc/VSilverFloorData0.h
+HEADERS += ./engine/silveromega/inc/VSilverFloorData1.h
+HEADERS += ./engine/silveromega/inc/VSilverFunctions.h
+HEADERS += ./engine/silveromega/inc/VSilverInfoObject.h
+HEADERS += ./engine/silveromega/inc/VSilverMapData.h
+HEADERS += ./engine/silveromega/inc/VSilverModeData.h
+HEADERS += ./engine/silveromega/inc/VSilverOgg.h
+HEADERS += ./engine/silveromega/inc/VSilverResidueBase.h
+HEADERS += ./engine/silveromega/inc/VSilverSeeker.h
+HEADERS += ./engine/silveromega/inc/VSilverWindow.h
+
+SOURCES += ./engine/silveromega/src/SilverCodec.cxx
+SOURCES += ./engine/silveromega/src/VSilverCodebook.cxx
+SOURCES += ./engine/silveromega/src/VSilverCodecComments.cxx
+SOURCES += ./engine/silveromega/src/VSilverCodecData.cxx
+SOURCES += ./engine/silveromega/src/VSilverCodecInformation.cxx
+SOURCES += ./engine/silveromega/src/VSilverContainer.cxx
+SOURCES += ./engine/silveromega/src/VSilverFloorBase.cxx
+SOURCES += ./engine/silveromega/src/VSilverFloorData0.cxx
+SOURCES += ./engine/silveromega/src/VSilverFloorData1.cxx
+SOURCES += ./engine/silveromega/src/VSilverFrameSynthesis.cxx
+SOURCES += ./engine/silveromega/src/VSilverFunctions.cxx
+SOURCES += ./engine/silveromega/src/VSilverInfoObject.cxx
+SOURCES += ./engine/silveromega/src/VSilverMapData.cxx
+SOURCES += ./engine/silveromega/src/VSilverModeData.cxx
+SOURCES += ./engine/silveromega/src/VSilverOgg.cxx
+SOURCES += ./engine/silveromega/src/VSilverResidueBase.cxx
+SOURCES += ./engine/silveromega/src/VSilverSeeker.cxx
+SOURCES += ./engine/silveromega/src/VSilverWindow.cxx
+
+# --- engine/violetomega ---
+
+HEADERS += ./engine/violetomega/inc/IFFChunk.h
+HEADERS += ./engine/violetomega/inc/IFFCommonChunk.h
+HEADERS += ./engine/violetomega/inc/IFFFile.h
+HEADERS += ./engine/violetomega/inc/IFFFormChunk.h
+HEADERS += ./engine/violetomega/inc/IFFID3Chunk.h
+HEADERS += ./engine/violetomega/inc/IFFSoundChunk.h
+HEADERS += ./engine/violetomega/inc/IFFTextChunk.h
+HEADERS += ./engine/violetomega/inc/VioletCodec.h
+HEADERS += ./engine/violetomega/inc/VioletOmegaDLL.h
+
+SOURCES += ./engine/violetomega/src/IFFChunk.cxx
+SOURCES += ./engine/violetomega/src/IFFCommonChunk.cxx
+SOURCES += ./engine/violetomega/src/IFFFile.cxx
+SOURCES += ./engine/violetomega/src/IFFFormChunk.cxx
+SOURCES += ./engine/violetomega/src/IFFID3Chunk.cxx
+SOURCES += ./engine/violetomega/src/IFFSoundChunk.cxx
+SOURCES += ./engine/violetomega/src/IFFTextChunk.cxx
+SOURCES += ./engine/violetomega/src/VioletCodec.cxx
+
+# --- engine/whiteomega ---
+
+HEADERS += ./engine/whiteomega/inc/AACDecode.h
+HEADERS += ./engine/whiteomega/inc/AACRoot.h
+HEADERS += ./engine/whiteomega/inc/ALACAtomContainer.h
+HEADERS += ./engine/whiteomega/inc/Atom.h
+HEADERS += ./engine/whiteomega/inc/CPEDecode.h
+HEADERS += ./engine/whiteomega/inc/Common.h
+HEADERS += ./engine/whiteomega/inc/FillDecode.h
+HEADERS += ./engine/whiteomega/inc/GAConfig.h
+HEADERS += ./engine/whiteomega/inc/HCR.h
+HEADERS += ./engine/whiteomega/inc/ICS.h
+HEADERS += ./engine/whiteomega/inc/PNS.h
+HEADERS += ./engine/whiteomega/inc/Prediction.h
+HEADERS += ./engine/whiteomega/inc/PredictionLTP.h
+HEADERS += ./engine/whiteomega/inc/ProgramConfig.h
+HEADERS += ./engine/whiteomega/inc/TNS.h
+HEADERS += ./engine/whiteomega/inc/WCompare.h
+HEADERS += ./engine/whiteomega/inc/WSequence.h
+HEADERS += ./engine/whiteomega/inc/WhiteCodec.h
+HEADERS += ./engine/whiteomega/inc/WhiteOmegaDLL.h
+HEADERS += ./engine/whiteomega/inc/Window.h
+
+SOURCES += ./engine/whiteomega/src/AACDecode.cxx
+SOURCES += ./engine/whiteomega/src/AACRoot.cxx
+SOURCES += ./engine/whiteomega/src/ALACAtomContainer.cxx
+SOURCES += ./engine/whiteomega/src/Atom.cxx
+SOURCES += ./engine/whiteomega/src/CPEDecode.cxx
+SOURCES += ./engine/whiteomega/src/Common.cxx
+SOURCES += ./engine/whiteomega/src/FillDecode.cxx
+SOURCES += ./engine/whiteomega/src/GAConfig.cxx
+SOURCES += ./engine/whiteomega/src/HCR.cxx
+SOURCES += ./engine/whiteomega/src/PNS.cxx
+SOURCES += ./engine/whiteomega/src/Prediction.cxx
+SOURCES += ./engine/whiteomega/src/PredictionLTP.cxx
+SOURCES += ./engine/whiteomega/src/ProgramConfig.cxx
+SOURCES += ./engine/whiteomega/src/TNS.cxx
+SOURCES += ./engine/whiteomega/src/WCompare.cxx
+SOURCES += ./engine/whiteomega/src/WSequence.cxx
+SOURCES += ./engine/whiteomega/src/WhiteCodec.cxx
+SOURCES += ./engine/whiteomega/src/Window.cxx
+
+# --- network ---
+
+HEADERS += ./network/inc/Controller.h
+HEADERS += ./network/inc/NetMemory.h
+HEADERS += ./network/inc/MemoryPacket.h
+HEADERS += ./network/inc/NTPClient.h
+HEADERS += ./network/inc/NetworkDLL.h
+HEADERS += ./network/inc/Resource.h
+HEADERS += ./network/inc/Service.h
+HEADERS += ./network/inc/Socket.h
+HEADERS += ./network/inc/TCPClientService.h
+HEADERS += ./network/inc/TCPConnClientSocket.h
+HEADERS += ./network/inc/TCPConnServerSocket.h
+HEADERS += ./network/inc/TCPConnectionSocket.h
+HEADERS += ./network/inc/TCPServerSocket.h
+HEADERS += ./network/inc/TCPService.h
+HEADERS += ./network/inc/UDPRead.h
+HEADERS += ./network/inc/UDPWrite.h
+
+SOURCES += ./network/src/Controller.cxx
+SOURCES += ./network/src/NetMemory.cxx
+SOURCES += ./network/src/MemoryPacket.cxx
+SOURCES += ./network/src/NTPClient.cxx
+SOURCES += ./network/src/Resource.cxx
+SOURCES += ./network/src/Service.cxx
+SOURCES += ./network/src/Socket.cxx
+SOURCES += ./network/src/TCPClientService.cxx
+SOURCES += ./network/src/TCPConnClientSocket.cxx
+SOURCES += ./network/src/TCPConnServerSocket.cxx
+SOURCES += ./network/src/TCPConnectionSocket.cxx
+SOURCES += ./network/src/TCPServerSocket.cxx
+SOURCES += ./network/src/TCPService.cxx
+SOURCES += ./network/src/UDPRead.cxx
+SOURCES += ./network/src/UDPWrite.cxx
+
+# --- network/http ---
+
+HEADERS += ./network/http/inc/Directory.h
+HEADERS += ./network/http/inc/HTTPClient.h
+HEADERS += ./network/http/inc/HTTPClientService.h
+HEADERS += ./network/http/inc/HTTPConnection.h
+HEADERS += ./network/http/inc/HTTPDLL.h
+HEADERS += ./network/http/inc/HTTPServer.h
+HEADERS += ./network/http/inc/HTTPService.h
+HEADERS += ./network/http/inc/HTTPUtilities.h
+HEADERS += ./network/http/inc/Query.h
+HEADERS += ./network/http/inc/ResponseCodes.h
+HEADERS += ./network/http/inc/Unit.h
+
+SOURCES += ./network/http/src/HTTPClient.cxx
+SOURCES += ./network/http/src/HTTPClientService.cxx
+SOURCES += ./network/http/src/HTTPConnection.cxx
+SOURCES += ./network/http/src/HTTPServer.cxx
+SOURCES += ./network/http/src/HTTPService.cxx
+SOURCES += ./network/http/src/HTTPUtilities.cxx
+SOURCES += ./network/http/src/Query.cxx
+SOURCES += ./network/http/src/ResponseCodes.cxx
+SOURCES += ./network/http/src/Unit.cxx
+
+# --- network/ftp ---
+
+HEADERS += ./network/ftp/inc/FTPConfiguration.h
+HEADERS += ./network/ftp/inc/FTPDLL.h
+HEADERS += ./network/ftp/inc/FTPServer.h
+HEADERS += ./network/ftp/inc/FTPService.h
+HEADERS += ./network/ftp/inc/FTPSession.h
+HEADERS += ./network/ftp/inc/FTPTransfer.h
+
+SOURCES += ./network/ftp/src/FTPConfiguration.cxx
+SOURCES += ./network/ftp/src/FTPServer.cxx
+SOURCES += ./network/ftp/src/FTPService.cxx
+SOURCES += ./network/ftp/src/FTPSession.cxx
+SOURCES += ./network/ftp/src/FTPTransfer.cxx
+
+# --- network/mime ---
+
+HEADERS += ./network/mime/inc/MimeForm.h
+HEADERS += ./network/mime/inc/MimeHeader.h
+HEADERS += ./network/mime/inc/MimeHeaderItem.h
+HEADERS += ./network/mime/inc/MimeNetworkDLL.h
+HEADERS += ./network/mime/inc/MimeSection.h
+
+SOURCES += ./network/mime/src/MimeForm.cxx
+SOURCES += ./network/mime/src/MimeHeader.cxx
+SOURCES += ./network/mime/src/MimeHeaderItem.cxx
+SOURCES += ./network/mime/src/MimeSection.cxx
+
+# --- network/rtp ---
+
+HEADERS += ./network/rtp/inc/DataPacket.h
+HEADERS += ./network/rtp/inc/NetworkRTPDLL.h
+HEADERS += ./network/rtp/inc/RTCPPacket.h
+HEADERS += ./network/rtp/inc/RTCPPacketAPP.h
+HEADERS += ./network/rtp/inc/RTCPPacketBYE.h
+HEADERS += ./network/rtp/inc/RTCPPacketRR.h
+HEADERS += ./network/rtp/inc/RTCPPacketSDES.h
+HEADERS += ./network/rtp/inc/RTCPPacketSR.h
+HEADERS += ./network/rtp/inc/RTCPReportBlock.h
+HEADERS += ./network/rtp/inc/RTPPacket.h
+HEADERS += ./network/rtp/inc/Scheduler.h
+HEADERS += ./network/rtp/inc/Session.h
+HEADERS += ./network/rtp/inc/SourceState.h
+
+SOURCES += ./network/rtp/src/DataPacket.cxx
+SOURCES += ./network/rtp/src/RTCPPacket.cxx
+SOURCES += ./network/rtp/src/RTCPPacketAPP.cxx
+SOURCES += ./network/rtp/src/RTCPPacketBYE.cxx
+SOURCES += ./network/rtp/src/RTCPPacketRR.cxx
+SOURCES += ./network/rtp/src/RTCPPacketSDES.cxx
+SOURCES += ./network/rtp/src/RTCPPacketSR.cxx
+SOURCES += ./network/rtp/src/RTCPReportBlock.cxx
+SOURCES += ./network/rtp/src/RTPPacket.cxx
+SOURCES += ./network/rtp/src/Scheduler.cxx
+SOURCES += ./network/rtp/src/Session.cxx
+SOURCES += ./network/rtp/src/SourceState.cxx
+
+# --- network/rtp/silveromega ---
+
+HEADERS += ./network/rtp/silveromega/inc/RTPSilverOmegaDLL.h
+HEADERS += ./network/rtp/silveromega/inc/SilverRTPCodec.h
+HEADERS += ./network/rtp/silveromega/inc/SilverSession.h
+HEADERS += ./network/rtp/silveromega/inc/VOggPackets.h
+HEADERS += ./network/rtp/silveromega/inc/VTimeCalc.h
+
+SOURCES += ./network/rtp/silveromega/src/SilverRTPCodec.cxx
+SOURCES += ./network/rtp/silveromega/src/SilverSession.cxx
+SOURCES += ./network/rtp/silveromega/src/VOggPackets.cxx
+SOURCES += ./network/rtp/silveromega/src/VTimeCalc.cxx
 
 # --- playerapp/playerios ---
 

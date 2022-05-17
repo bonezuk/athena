@@ -83,7 +83,7 @@ tint RTCPPacketAPP::parse(NetArraySPtr mem,tint offset)
 		x = &x[offset];
 		if((x[0] & 0x03)==0x02 && x[1]==0xcc)
 		{
-			m_sessionID = Memory::toInt(x,4);
+			m_sessionID = NetMemory::toInt(x,4);
 			::memcpy(t,&x[8],4);
 			m_name = QString::fromLatin1(reinterpret_cast<const tbyte *>(t));
 			
@@ -111,8 +111,8 @@ bool RTCPPacketAPP::packet(NetArraySPtr mem)
 	t[0] = 0x02;
 	t[0] |= (static_cast<tubyte>(m_subType) << 3) & 0xf1;
 	t[1] = 0xcc;
-	Memory::fromShort(t,2,2);
-	Memory::fromInt(t,4,m_sessionID);
+	NetMemory::fromShort(t,2,2);
+	NetMemory::fromInt(t,4,m_sessionID);
 	mem->AppendRaw(reinterpret_cast<const tbyte *>(t),8);
 	a = m_name.toLatin1();
 	if(a.length()>4)

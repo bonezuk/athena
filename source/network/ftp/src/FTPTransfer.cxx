@@ -982,7 +982,7 @@ QString FTPTransfer::printFile(const QString& name)
 				n += " ";
 			}
 			n += " " + fSize;
-#if defined(OMEGA_MACOSX)
+#if defined(OMEGA_MACOSX) || defined(OMEGA_IOS)
 			mTime.set(&fileStat.st_mtimespec);
 #else
 			mTime.set(&fileStat.st_mtime);

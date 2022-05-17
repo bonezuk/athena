@@ -1,4 +1,4 @@
-#include "network/inc/Memory.h"
+#include "network/inc/NetMemory.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -7,15 +7,15 @@ namespace network
 {
 //-------------------------------------------------------------------------------------------
 
-Memory::Memory() {}
+NetMemory::NetMemory() {}
 
 //-------------------------------------------------------------------------------------------
 
-Memory::~Memory() {}
+NetMemory::~NetMemory() {}
 
 //-------------------------------------------------------------------------------------------
 
-tuint16 Memory::toShort(NetArraySPtr mem,tint offset)
+tuint16 NetMemory::toShort(NetArraySPtr mem,tint offset)
 {
     Q_ASSERT(mem.data()!=0);
     return toShort(*(mem.data()),offset);
@@ -23,7 +23,7 @@ tuint16 Memory::toShort(NetArraySPtr mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tuint16 Memory::toShort(const NetArray& mem,tint offset)
+tuint16 NetMemory::toShort(const NetArray& mem,tint offset)
 {
 	const tubyte *x = reinterpret_cast<const tubyte *>(mem.GetData());
 	tuint16 a;
@@ -37,14 +37,14 @@ tuint16 Memory::toShort(const NetArray& mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tuint16 Memory::toShort(const tbyte *x,tint offset)
+tuint16 NetMemory::toShort(const tbyte *x,tint offset)
 {
 	return toShort(reinterpret_cast<const tubyte *>(x),offset);
 }
 
 //-------------------------------------------------------------------------------------------
 
-tuint16 Memory::toShort(const tubyte *x,tint offset)
+tuint16 NetMemory::toShort(const tubyte *x,tint offset)
 {
 	tuint16 a;
 	
@@ -56,7 +56,7 @@ tuint16 Memory::toShort(const tubyte *x,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromShort(NetArraySPtr mem,tint offset,tuint16 d)
+void NetMemory::fromShort(NetArraySPtr mem,tint offset,tuint16 d)
 {
     Q_ASSERT(mem.data()!=0);
     fromShort(*(mem.data()),offset,d);
@@ -64,7 +64,7 @@ void Memory::fromShort(NetArraySPtr mem,tint offset,tuint16 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromShort(NetArray& mem,tint offset,tuint16 d)
+void NetMemory::fromShort(NetArray& mem,tint offset,tuint16 d)
 {
 	if(mem.GetSize() < (offset + 2))
 	{
@@ -79,14 +79,14 @@ void Memory::fromShort(NetArray& mem,tint offset,tuint16 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromShort(tbyte *x,tint offset,tuint16 d)
+void NetMemory::fromShort(tbyte *x,tint offset,tuint16 d)
 {
 	fromShort(reinterpret_cast<tubyte *>(x),offset,d);
 }
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromShort(tubyte *x,tint offset,tuint16 d)
+void NetMemory::fromShort(tubyte *x,tint offset,tuint16 d)
 {
 	x = &x[offset];
 	x[0] = static_cast<tubyte>(d & 0x00ff);
@@ -95,7 +95,7 @@ void Memory::fromShort(tubyte *x,tint offset,tuint16 d)
 
 //-------------------------------------------------------------------------------------------
 
-tuint32 Memory::toInt(NetArraySPtr mem,tint offset)
+tuint32 NetMemory::toInt(NetArraySPtr mem,tint offset)
 {
     Q_ASSERT(mem.data()!=0);
     return toInt(*(mem.data()),offset);
@@ -103,7 +103,7 @@ tuint32 Memory::toInt(NetArraySPtr mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tuint32 Memory::toInt(const NetArray& mem,tint offset)
+tuint32 NetMemory::toInt(const NetArray& mem,tint offset)
 {
 	const tubyte *x = reinterpret_cast<const tubyte *>(mem.GetData());
 	tuint32 a;
@@ -119,14 +119,14 @@ tuint32 Memory::toInt(const NetArray& mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tuint32 Memory::toInt(const tbyte *x,tint offset)
+tuint32 NetMemory::toInt(const tbyte *x,tint offset)
 {
 	return toInt(reinterpret_cast<const tubyte *>(x),offset);
 }
 
 //-------------------------------------------------------------------------------------------
 
-tuint32 Memory::toInt(const tubyte *x,tint offset)
+tuint32 NetMemory::toInt(const tubyte *x,tint offset)
 {
 	tuint32 a;
 	
@@ -140,7 +140,7 @@ tuint32 Memory::toInt(const tubyte *x,tint offset)
 		
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromInt(NetArraySPtr mem,tint offset,tuint32 d)
+void NetMemory::fromInt(NetArraySPtr mem,tint offset,tuint32 d)
 {
     Q_ASSERT(mem.data()!=0);
     fromInt(*(mem.data()),offset,d);
@@ -148,7 +148,7 @@ void Memory::fromInt(NetArraySPtr mem,tint offset,tuint32 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromInt(NetArray& mem,tint offset,tuint32 d)
+void NetMemory::fromInt(NetArray& mem,tint offset,tuint32 d)
 {
 	if(mem.GetSize() < (offset + 4))
 	{
@@ -165,14 +165,14 @@ void Memory::fromInt(NetArray& mem,tint offset,tuint32 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromInt(tbyte *x,tint offset,tuint32 d)
+void NetMemory::fromInt(tbyte *x,tint offset,tuint32 d)
 {
 	fromInt(reinterpret_cast<tubyte *>(x),offset,d);
 }
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromInt(tubyte *x,tint offset,tuint32 d)
+void NetMemory::fromInt(tubyte *x,tint offset,tuint32 d)
 {
 	x = &x[offset];
 	x[0] = static_cast<tubyte>(d & 0x000000ff);
@@ -183,7 +183,7 @@ void Memory::fromInt(tubyte *x,tint offset,tuint32 d)
 
 //-------------------------------------------------------------------------------------------
 
-tuint64 Memory::toLong(NetArraySPtr mem,tint offset)
+tuint64 NetMemory::toLong(NetArraySPtr mem,tint offset)
 {
     Q_ASSERT(mem.data()!=0);
     return toLong(*(mem.data()),offset);
@@ -191,7 +191,7 @@ tuint64 Memory::toLong(NetArraySPtr mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tuint64 Memory::toLong(const NetArray& mem,tint offset)
+tuint64 NetMemory::toLong(const NetArray& mem,tint offset)
 {
 	const tubyte *x = reinterpret_cast<const tubyte *>(mem.GetData());
 	tuint64 a;
@@ -211,14 +211,14 @@ tuint64 Memory::toLong(const NetArray& mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tuint64 Memory::toLong(const tbyte *x,tint offset)
+tuint64 NetMemory::toLong(const tbyte *x,tint offset)
 {
 	return toLong(reinterpret_cast<const tubyte *>(x),offset);
 }
 
 //-------------------------------------------------------------------------------------------
 		
-tuint64 Memory::toLong(const tubyte *x,tint offset)
+tuint64 NetMemory::toLong(const tubyte *x,tint offset)
 {
 	tuint64 a;
 	
@@ -236,7 +236,7 @@ tuint64 Memory::toLong(const tubyte *x,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromLong(NetArraySPtr mem,tint offset,tuint64 d)
+void NetMemory::fromLong(NetArraySPtr mem,tint offset,tuint64 d)
 {
     Q_ASSERT(mem.data()!=0);
     fromLong(*(mem.data()),offset,d);
@@ -244,7 +244,7 @@ void Memory::fromLong(NetArraySPtr mem,tint offset,tuint64 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromLong(NetArray& mem,tint offset,tuint64 d)
+void NetMemory::fromLong(NetArray& mem,tint offset,tuint64 d)
 {
 	if(mem.GetSize() < (offset + 8))
 	{
@@ -265,14 +265,14 @@ void Memory::fromLong(NetArray& mem,tint offset,tuint64 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromLong(tbyte *x,tint offset,tuint64 d)
+void NetMemory::fromLong(tbyte *x,tint offset,tuint64 d)
 {
 	fromLong(reinterpret_cast<tubyte *>(x),offset,d);
 }
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromLong(tubyte *x,tint offset,tuint64 d)
+void NetMemory::fromLong(tubyte *x,tint offset,tuint64 d)
 {
 	x = &x[offset];
 	x[0] = static_cast<tubyte>(d & 0x00000000000000ffULL);
@@ -288,7 +288,7 @@ void Memory::fromLong(tubyte *x,tint offset,tuint64 d)
 //-------------------------------------------------------------------------------------------
 
 
-tuint32 Memory::toInt24(NetArraySPtr mem,tint offset)
+tuint32 NetMemory::toInt24(NetArraySPtr mem,tint offset)
 {
     Q_ASSERT(mem.data()!=0);
     return toInt24(*(mem.data()),offset);
@@ -296,7 +296,7 @@ tuint32 Memory::toInt24(NetArraySPtr mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tuint32 Memory::toInt24(const NetArray& mem,tint offset)
+tuint32 NetMemory::toInt24(const NetArray& mem,tint offset)
 {
 	const tubyte *x = reinterpret_cast<const tubyte *>(mem.GetData());
 	tuint32 a;
@@ -311,14 +311,14 @@ tuint32 Memory::toInt24(const NetArray& mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tuint32 Memory::toInt24(const tbyte *x,tint offset)
+tuint32 NetMemory::toInt24(const tbyte *x,tint offset)
 {
 	return toInt24(reinterpret_cast<const tubyte *>(x),offset);
 }
 
 //-------------------------------------------------------------------------------------------
 
-tuint32 Memory::toInt24(const tubyte *x,tint offset)
+tuint32 NetMemory::toInt24(const tubyte *x,tint offset)
 {
 	tuint32 a;
 	
@@ -331,7 +331,7 @@ tuint32 Memory::toInt24(const tubyte *x,tint offset)
 		
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromInt24(NetArraySPtr mem,tint offset,tuint32 d)
+void NetMemory::fromInt24(NetArraySPtr mem,tint offset,tuint32 d)
 {
     Q_ASSERT(mem.data()!=0);
     fromInt24(*(mem.data()),offset,d);
@@ -339,7 +339,7 @@ void Memory::fromInt24(NetArraySPtr mem,tint offset,tuint32 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromInt24(NetArray& mem,tint offset,tuint32 d)
+void NetMemory::fromInt24(NetArray& mem,tint offset,tuint32 d)
 {
 	if(mem.GetSize() < (offset + 3))
 	{
@@ -355,14 +355,14 @@ void Memory::fromInt24(NetArray& mem,tint offset,tuint32 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromInt24(tbyte *x,tint offset,tuint32 d)
+void NetMemory::fromInt24(tbyte *x,tint offset,tuint32 d)
 {
 	fromInt24(reinterpret_cast<tubyte *>(x),offset,d);
 }
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromInt24(tubyte *x,tint offset,tuint32 d)
+void NetMemory::fromInt24(tubyte *x,tint offset,tuint32 d)
 {
 	x = &x[offset];
 	x[0] = static_cast<tubyte>(d & 0x000000ff);
@@ -372,7 +372,7 @@ void Memory::fromInt24(tubyte *x,tint offset,tuint32 d)
 
 //-------------------------------------------------------------------------------------------
 
-tint32 Memory::toSInt24(NetArraySPtr mem,tint offset)
+tint32 NetMemory::toSInt24(NetArraySPtr mem,tint offset)
 {
     Q_ASSERT(mem.data()!=0);
     return toSInt24(*(mem.data()),offset);
@@ -380,7 +380,7 @@ tint32 Memory::toSInt24(NetArraySPtr mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tint32 Memory::toSInt24(const NetArray& mem,tint offset)
+tint32 NetMemory::toSInt24(const NetArray& mem,tint offset)
 {
 	tuint32 a = toInt24(mem,offset);
 	tint32 b;
@@ -400,14 +400,14 @@ tint32 Memory::toSInt24(const NetArray& mem,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-tint32 Memory::toSInt24(const tbyte *x,tint offset)
+tint32 NetMemory::toSInt24(const tbyte *x,tint offset)
 {
 	return toSInt24(reinterpret_cast<const tubyte *>(x),offset);
 }
 
 //-------------------------------------------------------------------------------------------
 
-tint32 Memory::toSInt24(const tubyte *x,tint offset)
+tint32 NetMemory::toSInt24(const tubyte *x,tint offset)
 {
 	tuint32 a = toInt24(x,offset);
 	tint32 b;
@@ -427,7 +427,7 @@ tint32 Memory::toSInt24(const tubyte *x,tint offset)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromSInt24(NetArraySPtr mem,tint offset,tint32 d)
+void NetMemory::fromSInt24(NetArraySPtr mem,tint offset,tint32 d)
 {
     Q_ASSERT(mem.data()!=0);
     return fromSInt24(*(mem.data()),offset,d);
@@ -435,7 +435,7 @@ void Memory::fromSInt24(NetArraySPtr mem,tint offset,tint32 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromSInt24(NetArray& mem,tint offset,tint32 d)
+void NetMemory::fromSInt24(NetArray& mem,tint offset,tint32 d)
 {
 	tuint32 a;
 	
@@ -452,14 +452,14 @@ void Memory::fromSInt24(NetArray& mem,tint offset,tint32 d)
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromSInt24(tbyte *x,tint offset,tint32 d)
+void NetMemory::fromSInt24(tbyte *x,tint offset,tint32 d)
 {
 	fromSInt24(reinterpret_cast<tubyte *>(x),offset,d);
 }
 
 //-------------------------------------------------------------------------------------------
 
-void Memory::fromSInt24(tubyte *x,tint offset,tint32 d)
+void NetMemory::fromSInt24(tubyte *x,tint offset,tint32 d)
 {
 	tuint32 a;
 	

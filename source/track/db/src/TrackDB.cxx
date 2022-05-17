@@ -1,4 +1,4 @@
-#include "network/inc/Memory.h"
+#include "network/inc/NetMemory.h"
 #include "common/inc/SHA1Digest.h"
 #include "common/inc/DiskOps.h"
 #include "common/inc/BOParse.h"
@@ -788,8 +788,8 @@ QPair<tuint64,tuint64> TrackDB::getSHA1Signature(common::Array<tubyte,tubyte> *p
 		digest.input(reinterpret_cast<const tbyte *>(pArr->GetData()),pArr->GetSize());
 	}
 	digest.getDigestFinal(sigMem,common::c_SHA1HashSize);
-	sigL = network::Memory::toLong(sigMem,0);
-	sigH = network::Memory::toLong(sigMem,8);
+	sigL = network::NetMemory::toLong(sigMem,0);
+	sigH = network::NetMemory::toLong(sigMem,8);
 	return QPair<tuint64,tuint64>(sigL,sigH);
 }
 

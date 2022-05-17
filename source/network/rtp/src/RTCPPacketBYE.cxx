@@ -88,7 +88,7 @@ tint RTCPPacketBYE::parse(NetArraySPtr mem,tint offset)
 			sCount = static_cast<tint>((x[0] >> 3) & 0x1f);
 			for(i=0;i<sCount;++i)
 			{
-				tuint32 id = Memory::toInt(x,4 + (i * 4));
+				tuint32 id = NetMemory::toInt(x,4 + (i * 4));
 				m_sessionList.append(id);
 			}
 			len = (sCount * 4) + 4;
@@ -124,7 +124,7 @@ bool RTCPPacketBYE::packet(NetArraySPtr mem)
 	pMem.AppendRaw(reinterpret_cast<const tbyte *>(t),4);
 	for(i=0;i<sCount;++i)
 	{
-		Memory::fromInt(t,0,m_sessionList.at(i));
+		NetMemory::fromInt(t,0,m_sessionList.at(i));
 		pMem.AppendRaw(reinterpret_cast<const tbyte *>(t),4);
 	}
 	if(!m_reason.isEmpty())
@@ -148,7 +148,7 @@ bool RTCPPacketBYE::packet(NetArraySPtr mem)
 	x = reinterpret_cast<tubyte *>(pMem.GetData());
 	len = pMem.GetSize();
 	len = (len / 4) - 1;
-	Memory::fromShort(x,2,static_cast<tuint16>(len));
+	NetMemory::fromShort(x,2,static_cast<tuint16>(len));
 	mem->Append(pMem);
 	
 	return true;

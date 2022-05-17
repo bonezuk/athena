@@ -4,7 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "network/inc/Resource.h"
-#include "network/inc/Memory.h"
+#include "network/inc/NetMemory.h"
 #include "network/rtp/inc/DataPacket.h"
 
 //-------------------------------------------------------------------------------------------

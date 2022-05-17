@@ -109,7 +109,7 @@ const tint& FLACMetaCuesheet::Track::trackNumber() const
 
 //-------------------------------------------------------------------------------------------
 
-const tuint64 FLACMetaCuesheet::Track::trackOffset() const
+const tuint64& FLACMetaCuesheet::Track::trackOffset() const
 {
 	return m_trackOffset;
 }
@@ -130,7 +130,7 @@ const QVector<QPair<tuint64,tint> >& FLACMetaCuesheet::Track::indexes() const
 
 //-------------------------------------------------------------------------------------------
 
-const tuint64 FLACMetaCuesheet::Track::index(int idx) const
+tuint64 FLACMetaCuesheet::Track::index(int idx) const
 {
 	for(tint i=0;i<m_trackIndexes.size();i++)
 	{
@@ -144,14 +144,14 @@ const tuint64 FLACMetaCuesheet::Track::index(int idx) const
 
 //-------------------------------------------------------------------------------------------
 
-const tuint64 FLACMetaCuesheet::Track::index0() const
+tuint64 FLACMetaCuesheet::Track::index0() const
 {
 	return index(0);
 }
 
 //-------------------------------------------------------------------------------------------
 
-const tuint64 FLACMetaCuesheet::Track::index1() const
+tuint64 FLACMetaCuesheet::Track::index1() const
 {
 	return index(1);
 }

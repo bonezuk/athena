@@ -13,11 +13,11 @@ namespace network
 {
 //-------------------------------------------------------------------------------------------
 
-class NETWORK_EXPORT Memory
+class NETWORK_EXPORT NetMemory
 {
 	public:
-		Memory();
-		~Memory();
+		NetMemory();
+		~NetMemory();
 		
 		static tuint16 toShort(NetArraySPtr mem,tint offset);
 		static tuint16 toShort(const NetArray& mem,tint offset);

@@ -88,10 +88,10 @@ class COMMON_EXPORT TimeStamp
 		void set(const struct tm *t);
 #if defined(OMEGA_WIN32)
 		void set(__time64_t *t);
-#elif defined(OMEGA_MACOSX) || defined(OMEGA_LINUX)
+#elif defined(OMEGA_MACOSX) || defined(OMEGA_LINUX) || defined(OMEGA_IOS)
 		void set(const struct timespec *t);
 #endif
-#if defined(OMEGA_LINUX)
+#if defined(OMEGA_LINUX) || defined(OMEGA_ANDROID)
 		void set(time_t *t);
 #endif
 

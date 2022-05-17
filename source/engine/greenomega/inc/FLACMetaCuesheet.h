@@ -53,11 +53,11 @@ class GREENOMEGA_EXPORT FLACMetaCuesheet::Track
 		const bool& isAudio() const;
 		const bool& preEmphasisFlag() const;
 		const tint& trackNumber() const;
-		const tuint64 trackOffset() const;
+		const tuint64& trackOffset() const;
 		const QString& ISRC() const;
 		const QVector<QPair<tuint64,tint> >& indexes() const;
-		const tuint64 index0() const;
-		const tuint64 index1() const;
+		tuint64 index0() const;
+		tuint64 index1() const;
 				
 	protected:
 
@@ -69,7 +69,7 @@ class GREENOMEGA_EXPORT FLACMetaCuesheet::Track
 		QVector<QPair<tuint64,tint> > m_trackIndexes;
 				
 		void copy(const Track& rhs);
-		const tuint64 index(int idx) const;
+		tuint64 index(int idx) const;
 };
 
 //-------------------------------------------------------------------------------------------
