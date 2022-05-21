@@ -6,7 +6,7 @@
 #include "track/info/inc/APEInfo.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 #include "common/inc/BIOBufferedStream.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 
 using namespace omega;
 using namespace omega::track::info;
@@ -17,7 +17,7 @@ using namespace testing;
 TEST(APEInfo,readGather1APE)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "gather1.ape");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "gather1.ape");
 
 	common::BIOBufferedStream fileIO(common::e_BIOStream_FileRead);
 	ASSERT_TRUE(fileIO.open(fileName));

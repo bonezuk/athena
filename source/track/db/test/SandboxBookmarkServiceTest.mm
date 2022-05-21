@@ -8,7 +8,7 @@
 #include "track/model/test/TrackDBTestEnviroment.h"
 #include "track/db/test/SQLiteMock.h"
 #include "common/inc/DiskOps.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskIF.h"
 
 using namespace omega::track::db;
 using namespace omega::track::model;
@@ -4946,7 +4946,7 @@ TEST(SandboxBookmarkService,isInAppContainerGivenEmptyFileName)
 
 TEST(SandboxBookmarkService,isInAppContainerGivenFileInDirectoryUserHome)
 {
-	QString fileName = dlna::DiskIF::mergeName(track::info::SBBookmarkService::getHomeDirectory(),"Music").trimmed();
+	QString fileName = common::DiskOps::mergeName(track::info::SBBookmarkService::getHomeDirectory(),"Music").trimmed();
 	SandboxBookmarkService svr;
 	EXPECT_FALSE(svr.isInAppContainer(fileName));
 }
@@ -4966,7 +4966,7 @@ TEST(SandboxBookmarkService,isInAppContainerGivenFileIsContainerDirectory)
 TEST(SandboxBookmarkService,isInAppContainerGivenFileIsInRootOfContainerDirectory)
 {
 	NSString *homeDir = NSHomeDirectory();
-	QString fileName = dlna::DiskIF::mergeName(QString::fromUtf8([homeDir UTF8String]),"file.txt").trimmed();
+	QString fileName = common::DiskOps::mergeName(QString::fromUtf8([homeDir UTF8String]),"file.txt").trimmed();
 	SandboxBookmarkService svr;
 	EXPECT_TRUE(svr.isInAppContainer(fileName));
 }
@@ -4976,7 +4976,7 @@ TEST(SandboxBookmarkService,isInAppContainerGivenFileIsInRootOfContainerDirector
 TEST(SandboxBookmarkService,isInAppContainerGivenFileIsInSubDirectoryOfContainerDirectory)
 {
 	NSString *homeDir = NSHomeDirectory();
-	QString fileName = dlna::DiskIF::mergeName(QString::fromUtf8([homeDir UTF8String]),"/music/temp/file.txt").trimmed();
+	QString fileName = common::DiskOps::mergeName(QString::fromUtf8([homeDir UTF8String]),"/music/temp/file.txt").trimmed();
 	SandboxBookmarkService svr;
 	EXPECT_TRUE(svr.isInAppContainer(fileName));
 }
@@ -4994,7 +4994,7 @@ TEST(SandboxBookmarkService,isInAppContainerGivenFileIsContainerTempDirectory)
 
 TEST(SandboxBookmarkService,isInAppContainerGivenFileIsInRootOfContainerTempDirectory)
 {
-	QString fileName = dlna::DiskIF::mergeName(common::SBService::tempDirectory(),"file.txt").trimmed();
+	QString fileName = common::DiskOps::mergeName(common::SBService::tempDirectory(),"file.txt").trimmed();
 	SandboxBookmarkService svr;
 	EXPECT_TRUE(svr.isInAppContainer(fileName));
 }
@@ -5004,7 +5004,7 @@ TEST(SandboxBookmarkService,isInAppContainerGivenFileIsInRootOfContainerTempDire
 TEST(SandboxBookmarkService,isInAppContainerGivenFileIsInSubDirectoryOfContainerTempDirectory)
 {
 	NSString *homeDir = NSHomeDirectory();
-	QString fileName = dlna::DiskIF::mergeName(common::SBService::tempDirectory(),"/music/temp/file.txt").trimmed();
+	QString fileName = common::DiskOps::mergeName(common::SBService::tempDirectory(),"/music/temp/file.txt").trimmed();
 	SandboxBookmarkService svr;
 	EXPECT_TRUE(svr.isInAppContainer(fileName));
 }

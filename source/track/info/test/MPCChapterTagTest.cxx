@@ -7,7 +7,7 @@
 #include "track/model/test/TrackDBTestEnviroment.h"
 #include "common/inc/BIOBufferedStream.h"
 #include "common/inc/BIOMemory.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 
 using namespace omega;
 using namespace omega::track::info;
@@ -20,7 +20,7 @@ TEST(MPCChapterTag,readTag)
 	const static tfloat64 c_TOLERANCE = 0.0000001;
 
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "mpcchapter.mpc");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "mpcchapter.mpc");
 
 	common::BIOBufferedStream fileIO(common::e_BIOStream_FileRead);
 	ASSERT_TRUE(fileIO.open(fileName));

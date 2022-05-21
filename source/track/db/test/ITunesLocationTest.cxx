@@ -1,8 +1,9 @@
 #include "network/inc/Resource.h"
 #include "track/db/inc/ITunesLocation.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
-#include "dlna/inc/DiskIF.h"
-#include "dlna/test/DiskMockIF.h"
+#include "common/inc/DiskOps.h"
+#include "common/inc/DiskIF.h"
+#include "common/test/DiskMockIF.h"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -306,7 +307,7 @@ TEST(ITunesLocation,isLinePListHeaderGivenXMLUpperCase)
 TEST(ITunesLocation,isValidPListGivenCSVFile)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(),"albumModelUtilities1.csv");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(),"albumModelUtilities1.csv");
 	ITunesLocationTest location;
     EXPECT_FALSE(location.testIsValidPList(fileName));
 }
@@ -316,7 +317,7 @@ TEST(ITunesLocation,isValidPListGivenCSVFile)
 TEST(ITunesLocation,isValidPListGivenCSVFileThatIsShort)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(),"albumModel12.csv");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(),"albumModel12.csv");
 	ITunesLocationTest location;
     EXPECT_FALSE(location.testIsValidPList(fileName));
 }
@@ -326,7 +327,7 @@ TEST(ITunesLocation,isValidPListGivenCSVFileThatIsShort)
 TEST(ITunesLocation,isValidPListGivenNonPListXMLFile)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(),"iTunesNon.xml");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(),"iTunesNon.xml");
 	ITunesLocationTest location;
     EXPECT_FALSE(location.testIsValidPList(fileName));
 }
@@ -336,7 +337,7 @@ TEST(ITunesLocation,isValidPListGivenNonPListXMLFile)
 TEST(ITunesLocation,isValidPListGivenPListFile)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(),"iTunes.xml");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(),"iTunes.xml");
 	ITunesLocationTest location;
     EXPECT_TRUE(location.testIsValidPList(fileName));
 }
@@ -551,8 +552,8 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenNoDiskIF)
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenNotADirectory)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString rootName  = "/Users/bonez/Music";
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(false));
@@ -561,19 +562,19 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenNotADirectory)
 	QString testDBName = location.testFindITunesDBInDirectory(rootName);
 	EXPECT_TRUE(testDBName.isEmpty());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenUnabletoOpenDirectoryForReading)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString rootName  = "/Users/bonez/Music";
 	
-    dlna::DiskIF::DirHandle h = dlna::DiskIF::invalidDirectory();
+	common::DiskIF::DirHandle h = common::DiskIF::invalidDirectory();
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -584,20 +585,20 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenUnabletoOpenDirectoryForReading)
 	
 	EXPECT_TRUE(testDBName.isEmpty());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenEmptyDirectory)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString emptyName;
 	QString rootName  = "/Users/bonez/Music";
 	
-	dlna::DiskIF::DirHandle h = (dlna::DiskIF::DirHandle)(1234);
+	common::DiskIF::DirHandle h = (common::DiskIF::DirHandle)(1234);
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -610,26 +611,26 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenEmptyDirectory)
 	
 	EXPECT_TRUE(testDBName.isEmpty());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenFilesButNoITunesLibrary)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QStringList parts;
 	parts << "iTunes Music Library.xml" << "music.mp3" << "iTunes Library.xml";
 	
 	QString emptyName;
 	QString rootName  = "/Users/bonez/Music";
-	QString fileNameA = dlna::DiskIF::mergeName(rootName,parts.at(0));
-	QString fileNameB = dlna::DiskIF::mergeName(rootName,parts.at(1));
-	QString fileNameC = dlna::DiskIF::mergeName(rootName,parts.at(2));
+	QString fileNameA = common::DiskOps::mergeName(rootName,parts.at(0));
+	QString fileNameB = common::DiskOps::mergeName(rootName,parts.at(1));
+	QString fileNameC = common::DiskOps::mergeName(rootName,parts.at(2));
 	
-	dlna::DiskIF::DirHandle h = (dlna::DiskIF::DirHandle)(1234);
+	common::DiskIF::DirHandle h = (common::DiskIF::DirHandle)(1234);
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -651,26 +652,26 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenFilesButNoITunesLibrary)
 	
 	EXPECT_TRUE(testDBName.isEmpty());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenFilesWithOneITunesLibrary)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QStringList parts;
 	parts << "iTunes Music Library.xml" << "music.mp3" << "iTunes Library.xml";
 	
 	QString emptyName;
 	QString rootName  = "/Users/bonez/Music";
-	QString fileNameA = dlna::DiskIF::mergeName(rootName,parts.at(0));
-	QString fileNameB = dlna::DiskIF::mergeName(rootName,parts.at(1));
-	QString fileNameC = dlna::DiskIF::mergeName(rootName,parts.at(2));
+	QString fileNameA = common::DiskOps::mergeName(rootName,parts.at(0));
+	QString fileNameB = common::DiskOps::mergeName(rootName,parts.at(1));
+	QString fileNameC = common::DiskOps::mergeName(rootName,parts.at(2));
 	
-	dlna::DiskIF::DirHandle h = (dlna::DiskIF::DirHandle)(1234);
+	common::DiskIF::DirHandle h = (common::DiskIF::DirHandle)(1234);
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -695,26 +696,26 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenFilesWithOneITunesLibrary)
 	
 	EXPECT_TRUE(testDBName==fileNameA);
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenFilesWithMultipleITunesLibrary)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QStringList parts;
 	parts << "iTunes Music Library.xml" << "music.mp3" << "iTunes Library.xml";
 	
 	QString emptyName;
 	QString rootName  = "/Users/bonez/Music";
-	QString fileNameA = dlna::DiskIF::mergeName(rootName,parts.at(0));
-	QString fileNameB = dlna::DiskIF::mergeName(rootName,parts.at(1));
-	QString fileNameC = dlna::DiskIF::mergeName(rootName,parts.at(2));
+	QString fileNameA = common::DiskOps::mergeName(rootName,parts.at(0));
+	QString fileNameB = common::DiskOps::mergeName(rootName,parts.at(1));
+	QString fileNameC = common::DiskOps::mergeName(rootName,parts.at(2));
 	
-	dlna::DiskIF::DirHandle h = (dlna::DiskIF::DirHandle)(1234);
+	common::DiskIF::DirHandle h = (common::DiskIF::DirHandle)(1234);
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -741,26 +742,26 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenFilesWithMultipleITunesLibrary)
 	
 	EXPECT_TRUE(testDBName==fileNameC);
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesWithNoITunesLibrary)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QStringList parts;
 	parts << "iTunes" << "Media" << "Groups";
 	
 	QString emptyName;
 	QString rootName  = "/Users/bonez/Music";
-	QString dirNameA  = dlna::DiskIF::mergeName(rootName,parts.at(0));
-	QString dirNameB  = dlna::DiskIF::mergeName(rootName,parts.at(1));
-	QString dirNameC  = dlna::DiskIF::mergeName(rootName,parts.at(2));
+	QString dirNameA  = common::DiskOps::mergeName(rootName,parts.at(0));
+	QString dirNameB  = common::DiskOps::mergeName(rootName,parts.at(1));
+	QString dirNameC  = common::DiskOps::mergeName(rootName,parts.at(2));
 	
-	dlna::DiskIF::DirHandle h = (dlna::DiskIF::DirHandle)(1234);
+	common::DiskIF::DirHandle h = (common::DiskIF::DirHandle)(1234);
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -786,26 +787,26 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesWithNoITunesLibrary)
 	
 	EXPECT_TRUE(testDBName.isEmpty());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesWithITunesLibrary)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QStringList parts;
 	parts << "iTunes" << "Media" << "Groups";
 	
 	QString emptyName;
 	QString rootName  = "/Users/bonez/Music";
-	QString dirNameA  = dlna::DiskIF::mergeName(rootName,parts.at(0));
-	QString dirNameB  = dlna::DiskIF::mergeName(rootName,parts.at(1));
-	QString dirNameC  = dlna::DiskIF::mergeName(rootName,parts.at(2));
+	QString dirNameA  = common::DiskOps::mergeName(rootName,parts.at(0));
+	QString dirNameB  = common::DiskOps::mergeName(rootName,parts.at(1));
+	QString dirNameC  = common::DiskOps::mergeName(rootName,parts.at(2));
 	
-	dlna::DiskIF::DirHandle h = (dlna::DiskIF::DirHandle)(1234);
+	common::DiskIF::DirHandle h = (common::DiskIF::DirHandle)(1234);
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -822,7 +823,7 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesWithITunesLibrary)
 	EXPECT_CALL(pAPI,isDirectory(Eq(dirNameC))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,closeDirectory(h)).Times(1);
 
-	QString expectDBFileName = dlna::DiskIF::mergeName(dirNameA,"iTunes Library.xml");
+	QString expectDBFileName = common::DiskOps::mergeName(dirNameA,"iTunes Library.xml");
 
 	ITunesLocationFindITunesDBInDirectoryTest location;
 	EXPECT_CALL(location,findITunesDBInDirectoryRecursive(Eq(dirNameA),A<track::db::CancelScanFunction>(),A<void *>(),A<int&>())).Times(1).WillOnce(Return(expectDBFileName));
@@ -831,28 +832,28 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesWithITunesLibrary)
 	
 	EXPECT_TRUE(testDBName==expectDBFileName);
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesAndFilesWithITunesLibraryInDirectories)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QStringList parts;
 	parts << "iTunes" << "Media" << "Groups" << "file.txt" << "music.mp3";
 	
 	QString emptyName;
 	QString rootName  = "/Users/bonez/Music";
-	QString dirNameA  = dlna::DiskIF::mergeName(rootName,parts.at(0));
-	QString dirNameB  = dlna::DiskIF::mergeName(rootName,parts.at(1));
-	QString dirNameC  = dlna::DiskIF::mergeName(rootName,parts.at(2));
-	QString fileNameA = dlna::DiskIF::mergeName(rootName,parts.at(3));
-	QString fileNameB = dlna::DiskIF::mergeName(rootName,parts.at(4));
+	QString dirNameA  = common::DiskOps::mergeName(rootName,parts.at(0));
+	QString dirNameB  = common::DiskOps::mergeName(rootName,parts.at(1));
+	QString dirNameC  = common::DiskOps::mergeName(rootName,parts.at(2));
+	QString fileNameA = common::DiskOps::mergeName(rootName,parts.at(3));
+	QString fileNameB = common::DiskOps::mergeName(rootName,parts.at(4));
 	
-	dlna::DiskIF::DirHandle h = (dlna::DiskIF::DirHandle)(1234);
+	common::DiskIF::DirHandle h = (common::DiskIF::DirHandle)(1234);
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -873,7 +874,7 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesAndFilesWithITunesLib
 	EXPECT_CALL(pAPI,isFile(Eq(fileNameB))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,closeDirectory(h)).Times(1);
 
-	QString expectDBFileName = dlna::DiskIF::mergeName(dirNameA,"iTunes Library.xml");
+	QString expectDBFileName = common::DiskOps::mergeName(dirNameA,"iTunes Library.xml");
 
 	ITunesLocationFindITunesDBInDirectoryTest location;
 	EXPECT_CALL(location,findITunesDBInDirectoryRecursive(Eq(dirNameA),A<track::db::CancelScanFunction>(),A<void *>(),A<int&>())).Times(1).WillOnce(Return(emptyName));
@@ -884,29 +885,29 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesAndFilesWithITunesLib
 	
 	EXPECT_TRUE(testDBName==expectDBFileName);
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesAndFilesWithITunesLibraryInRootDirectory)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QStringList parts;
 	parts << "iTunes" << "Media" << "Groups" << "file.txt" << "music.mp3" << "iTunes Library.xml";
 	
 	QString emptyName;
 	QString rootName  = "/Users/bonez/Music";
-	QString dirNameA  = dlna::DiskIF::mergeName(rootName,parts.at(0));
-	QString dirNameB  = dlna::DiskIF::mergeName(rootName,parts.at(1));
-	QString dirNameC  = dlna::DiskIF::mergeName(rootName,parts.at(2));
-	QString fileNameA = dlna::DiskIF::mergeName(rootName,parts.at(3));
-	QString fileNameB = dlna::DiskIF::mergeName(rootName,parts.at(4));
-	QString fileNameC = dlna::DiskIF::mergeName(rootName,parts.at(5));
+	QString dirNameA  = common::DiskOps::mergeName(rootName,parts.at(0));
+	QString dirNameB  = common::DiskOps::mergeName(rootName,parts.at(1));
+	QString dirNameC  = common::DiskOps::mergeName(rootName,parts.at(2));
+	QString fileNameA = common::DiskOps::mergeName(rootName,parts.at(3));
+	QString fileNameB = common::DiskOps::mergeName(rootName,parts.at(4));
+	QString fileNameC = common::DiskOps::mergeName(rootName,parts.at(5));
 	
-	dlna::DiskIF::DirHandle h = (dlna::DiskIF::DirHandle)(1234);
+	common::DiskIF::DirHandle h = (common::DiskIF::DirHandle)(1234);
 	
 	EXPECT_CALL(pAPI,isDirectory(Eq(rootName))).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(pAPI,openDirectory(Eq(rootName))).Times(1).WillOnce(Return(h));
@@ -939,7 +940,7 @@ TEST(ITunesLocation,findITunesDBInDirectoryGivenDirectoriesAndFilesWithITunesLib
 	
 	EXPECT_TRUE(testDBName==fileNameC);
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1302,8 +1303,8 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenNoDefaults)
 
 TEST(ITunesLocation,getDefaultITuneDBsGivenDirectoryWithNoDBFile)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString dirNameA = "/Users/bonez/Music";
 	QString fileNameA;
@@ -1326,15 +1327,15 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenDirectoryWithNoDBFile)
 	
 	location.testClearLocations();
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,getDefaultITuneDBsGivenDirectoryWithDBFile)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString dirNameA = "/Users/bonez/Music";
 	QString fileNameA = "/Users/bonez/Music/iTunes/iTunes Library.xml";
@@ -1360,15 +1361,15 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenDirectoryWithDBFile)
 	
 	location.testClearLocations();
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,getDefaultITuneDBsGivenTwoDirectoriesWithDBFile)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString dirNameA = "/Users/bonez/Music";
 	QString dirNameB = "/Users/git/Music";
@@ -1400,15 +1401,15 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenTwoDirectoriesWithDBFile)
 	
 	location.testClearLocations();
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,getDefaultITuneDBsGivenNoneDBFile)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString fileNameA = "/Users/bonez/Music/iTunes/iTunes Library.xml";
 	
@@ -1430,15 +1431,15 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenNoneDBFile)
 		
 	location.testClearLocations();
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(ITunesLocation,getDefaultITuneDBsGivenDBFile)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& pAPI = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString fileNameA = "/Users/bonez/Music/iTunes/iTunes Library.xml";
 	
@@ -1462,7 +1463,7 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenDBFile)
 		
 	location.testClearLocations();
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------

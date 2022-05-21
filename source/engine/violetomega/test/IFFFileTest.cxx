@@ -5,7 +5,7 @@
 #include "common/inc/BIOMemory.h"
 #include "engine/violetomega/inc/IFFFile.h"
 #include "engine/violetomega/inc/IFFFormChunk.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 
 using namespace testing;
@@ -44,7 +44,7 @@ IFFChunkSPtr IFFFileTest::testCreateFromFactory(common::BIOStream *file,IFFChunk
 
 TEST(IFFFile,readSampleAIFFFile)
 {
-	QString fileName = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"sample1.aiff");
+	QString fileName = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"sample1.aiff");
 	
 	common::BIOStream ioFile(common::e_BIOStream_FileRead);
 	ASSERT_TRUE(ioFile.open(fileName));

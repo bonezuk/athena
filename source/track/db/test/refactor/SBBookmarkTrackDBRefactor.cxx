@@ -1104,7 +1104,7 @@ QString SBBookmarkService::getHomeDirectory()
 
 bool SBBookmarkService::isMusicDirectory(const QString& fileName)
 {
-	QString musicDir = dlna::DiskIF::mergeName(getHomeDirectory(),"Music").trimmed();
+	QString musicDir = common::DiskOps::mergeName(getHomeDirectory(),"Music").trimmed();
 	bool res = false;
 	
 	if(fileName.trimmed().length() >= musicDir.length())

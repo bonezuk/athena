@@ -3,9 +3,9 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
+#include "common/inc/DiskOps.h"
 #include "common/inc/BIOMemoryStream.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
-#include "dlna/inc/DiskIF.h"
 
 using namespace testing;
 using namespace omega::common;
@@ -20,7 +20,7 @@ TEST(BIOMemoryStream,bookmarkAndPosition)
 	const tubyte expectMem[11] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b };
 
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "biostreamBookmark11Byte.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "biostreamBookmark11Byte.dat");
 
     int i;
 	int bkArray[5];

@@ -1,6 +1,6 @@
 #include "playerapp/playercommon/inc/HTTPFileTransfer.h"
 #include "common/inc/BIOStream.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -127,7 +127,7 @@ void HTTPFileTransfer::process(network::http::HTTPReceive *recieve)
 	if(isValid(recieve))
 	{
 		const network::http::Unit& request = recieve->header();
-		QString fileName = QDir::toNativeSeparators(dlna::DiskIF::mergeName(m_rootDir, request.resource()));
+		QString fileName = QDir::toNativeSeparators(common::DiskOps::mergeName(m_rootDir, request.resource()));
 		QFileInfo fileInfo(fileName);
 
 		if(fileInfo.isFile())

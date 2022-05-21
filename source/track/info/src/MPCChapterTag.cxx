@@ -1,5 +1,5 @@
 #include "network/inc/Resource.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 #include "track/info/inc/MPCChapterTag.h"
 #include "engine/cyanomega/inc/MusePackIF.h"

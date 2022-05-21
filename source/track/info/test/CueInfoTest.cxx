@@ -4,7 +4,7 @@
 #include "gmock/gmock.h"
 
 #include "track/model/test/TrackDBTestEnviroment.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "track/info/inc/CueInfo.h"
 
 using namespace omega;
@@ -74,8 +74,8 @@ void CueInfoTest::setLength(const common::TimeStamp& l)
 TEST(CueInfo,readCueSheetWithNoGapAndCanGetTrackLength)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(),"hobbit.cue");
-	QString mediaFileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(),"hobbit.wv");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(),"hobbit.cue");
+	QString mediaFileName = common::DiskOps::mergeName(testEnv->getDBDirectory(),"hobbit.wv");
 
     Info::setPlayPreGap(false);
 
@@ -191,8 +191,8 @@ TEST(CueInfo,readCueSheetWithNoGapAndCanGetTrackLength)
 TEST(CueInfo,readCueSheetWithPreGapAndCannotGetTrackLength)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(),"hobbit.cue");
-	QString mediaFileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(),"hobbit.wv");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(),"hobbit.cue");
+	QString mediaFileName = common::DiskOps::mergeName(testEnv->getDBDirectory(),"hobbit.wv");
 
     Info::setPlayPreGap(true);
 

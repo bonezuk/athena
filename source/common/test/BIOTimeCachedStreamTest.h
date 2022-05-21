@@ -11,7 +11,7 @@
 #include "common/inc/BIOBufferedStream.h"
 #include "engine/inc/FormatTypeFromFloat.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "common/test/AsynchronousFileReaderMock.h"
 #include "common/test/CachedFileStreamMock.h"
 

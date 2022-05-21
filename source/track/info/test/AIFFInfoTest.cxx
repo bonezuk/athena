@@ -5,7 +5,7 @@
 
 void AIFFInfoQtUnitTest::readInfo()
 {
-	QString fileName = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"sample2.aiff");
+	QString fileName = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"sample2.aiff");
 	
 	common::BIOStream ioFile(common::e_BIOStream_FileRead);
 	ASSERT_TRUE(ioFile.open(fileName));

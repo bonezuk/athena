@@ -1,6 +1,6 @@
 #include "track/db/inc/SandboxBookmarkService.h"
 #include "common/inc/TimeStamp.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "common/inc/CommonDirectoriesForFiles.h"
 
 #include <sys/types.h>
@@ -226,7 +226,7 @@ bool SandboxBookmarkService::hasURL(const QString& docKey,const QString& refKey,
 
 bool SandboxBookmarkService::isMusicDirectory(const QString& fileName)
 {
-	QString musicDir = dlna::DiskIF::mergeName(getHomeDirectory(),"Music").trimmed();
+	QString musicDir = common::DiskOps::mergeName(getHomeDirectory(),"Music").trimmed();
 	bool res = false;
 	
 	if(fileName.trimmed().length() >= musicDir.length())

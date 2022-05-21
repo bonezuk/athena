@@ -3,7 +3,7 @@
 #define __OMEGA_DLNA_DISKLAYERIF_H
 //-------------------------------------------------------------------------------------------
 
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskIF.h"
 
 #include <QtCore/QPair>
 #include <QtCore/QMap>
@@ -12,11 +12,11 @@
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-class DLNA_EXPORT DiskLayerIF : public DiskIF
+class COMMON_EXPORT DiskLayerIF : public DiskIF
 {
 	public:
 		DiskLayerIF();
@@ -42,7 +42,7 @@ class DLNA_EXPORT DiskLayerIF : public DiskIF
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif

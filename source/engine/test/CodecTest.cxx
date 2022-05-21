@@ -7,7 +7,7 @@
 void CodecQtUnitTest::bitsPerSecondAIFF()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "aiff/bps_16bit_2ch.aiff");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "aiff/bps_16bit_2ch.aiff");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -26,7 +26,7 @@ void CodecQtUnitTest::bitsPerSecondAIFF()
 void CodecQtUnitTest::bitsPerSecondFlacCompression0()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "flac/bps_16bit_2ch_comp0.flac");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "flac/bps_16bit_2ch_comp0.flac");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -44,7 +44,7 @@ void CodecQtUnitTest::bitsPerSecondFlacCompression0()
 void CodecQtUnitTest::bitsPerSecondFlacCompression5()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "flac/bps_16bit_2ch_comp5.flac");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "flac/bps_16bit_2ch_comp5.flac");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -62,7 +62,7 @@ void CodecQtUnitTest::bitsPerSecondFlacCompression5()
 void CodecQtUnitTest::bitsPerSecondFlacCompression8()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "flac/bps_16bit_2ch_comp8.flac");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "flac/bps_16bit_2ch_comp8.flac");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -80,7 +80,7 @@ void CodecQtUnitTest::bitsPerSecondFlacCompression8()
 void CodecQtUnitTest::bitsPerSecondFlacCompression8NoSeek()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "flac/bps_16bit_2ch_comp8_noseek.flac");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "flac/bps_16bit_2ch_comp8_noseek.flac");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -98,7 +98,7 @@ void CodecQtUnitTest::bitsPerSecondFlacCompression8NoSeek()
 void CodecQtUnitTest::bitsPerSecondAAC96Kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "m4a_aac/bps_16bit_2ch_96kbps.m4a");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "m4a_aac/bps_16bit_2ch_96kbps.m4a");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -116,7 +116,7 @@ void CodecQtUnitTest::bitsPerSecondAAC96Kbps()
 void CodecQtUnitTest::bitsPerSecondAAC128Kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "m4a_aac/bps_16bit_2ch_128kbps.m4a");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "m4a_aac/bps_16bit_2ch_128kbps.m4a");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -134,7 +134,7 @@ void CodecQtUnitTest::bitsPerSecondAAC128Kbps()
 void CodecQtUnitTest::bitsPerSecondAAC256Kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "m4a_aac/bps_16bit_2ch_256kbps.m4a");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "m4a_aac/bps_16bit_2ch_256kbps.m4a");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -152,7 +152,7 @@ void CodecQtUnitTest::bitsPerSecondAAC256Kbps()
 void CodecQtUnitTest::bitsPerSecondALAC()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "m4a_alac/bps_16bit_2ch.m4a");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "m4a_alac/bps_16bit_2ch.m4a");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -170,7 +170,7 @@ void CodecQtUnitTest::bitsPerSecondALAC()
 void CodecQtUnitTest::bitsPerSecondMP3At96Kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "mp3/bps_16bit_2ch_96kbps.mp3");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "mp3/bps_16bit_2ch_96kbps.mp3");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -188,7 +188,7 @@ void CodecQtUnitTest::bitsPerSecondMP3At96Kbps()
 void CodecQtUnitTest::bitsPerSecondMP3At128Kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "mp3/bps_16bit_2ch_128kbps.mp3");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "mp3/bps_16bit_2ch_128kbps.mp3");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -206,7 +206,7 @@ void CodecQtUnitTest::bitsPerSecondMP3At128Kbps()
 void CodecQtUnitTest::bitsPerSecondMP3At256Kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "mp3/bps_16bit_2ch_256kbps.mp3");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "mp3/bps_16bit_2ch_256kbps.mp3");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -224,7 +224,7 @@ void CodecQtUnitTest::bitsPerSecondMP3At256Kbps()
 void CodecQtUnitTest::bitsPerSecondMP3AtVBR()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "mp3/bps_16bit_2ch_vbr.mp3");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "mp3/bps_16bit_2ch_vbr.mp3");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -242,7 +242,7 @@ void CodecQtUnitTest::bitsPerSecondMP3AtVBR()
 void CodecQtUnitTest::bitsPerSecondMusePackAt129kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "mpc/bps_16bit_2ch_q3_129.2kbps.mpc");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "mpc/bps_16bit_2ch_q3_129.2kbps.mpc");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -260,7 +260,7 @@ void CodecQtUnitTest::bitsPerSecondMusePackAt129kbps()
 void CodecQtUnitTest::bitsPerSecondMusePackAt291kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "mpc/bps_16bit_2ch_q7_291.8kbps.mpc");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "mpc/bps_16bit_2ch_q7_291.8kbps.mpc");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -278,7 +278,7 @@ void CodecQtUnitTest::bitsPerSecondMusePackAt291kbps()
 void CodecQtUnitTest::bitsPerSecondVorisOggAt96kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "ogg/bps_16bit_2ch_96kpbs.ogg");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "ogg/bps_16bit_2ch_96kpbs.ogg");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -296,7 +296,7 @@ void CodecQtUnitTest::bitsPerSecondVorisOggAt96kbps()
 void CodecQtUnitTest::bitsPerSecondVorisOggAt128kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "ogg/bps_16bit_2ch_128kpbs.ogg");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "ogg/bps_16bit_2ch_128kpbs.ogg");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -314,7 +314,7 @@ void CodecQtUnitTest::bitsPerSecondVorisOggAt128kbps()
 void CodecQtUnitTest::bitsPerSecondVorisOggAt256kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "ogg/bps_16bit_2ch_256kpbs.ogg");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "ogg/bps_16bit_2ch_256kpbs.ogg");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -332,7 +332,7 @@ void CodecQtUnitTest::bitsPerSecondVorisOggAt256kbps()
 void CodecQtUnitTest::bitsPerSecondWAV()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "wav/bps_16bit_2ch.wav");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "wav/bps_16bit_2ch.wav");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -351,7 +351,7 @@ void CodecQtUnitTest::bitsPerSecondWAV()
 void CodecQtUnitTest::bitsPerSecondWavPackLosslessAt96kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "wv_full/bps_16bit_2ch_96kbps.wv");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "wv_full/bps_16bit_2ch_96kbps.wv");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -369,7 +369,7 @@ void CodecQtUnitTest::bitsPerSecondWavPackLosslessAt96kbps()
 void CodecQtUnitTest::bitsPerSecondWavPackLosslessAt256kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "wv_full/bps_16bit_2ch_256kbps.wv");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "wv_full/bps_16bit_2ch_256kbps.wv");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -387,7 +387,7 @@ void CodecQtUnitTest::bitsPerSecondWavPackLosslessAt256kbps()
 void CodecQtUnitTest::bitsPerSecondWavPackLossyAt96kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "wv_lossy/bps_16bit_2ch_96kbps.wv");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "wv_lossy/bps_16bit_2ch_96kbps.wv");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -405,7 +405,7 @@ void CodecQtUnitTest::bitsPerSecondWavPackLossyAt96kbps()
 void CodecQtUnitTest::bitsPerSecondWavPackLossyAt256kbps()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "wv_lossy/bps_16bit_2ch_256kbps.wv");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "wv_lossy/bps_16bit_2ch_256kbps.wv");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
@@ -423,7 +423,7 @@ void CodecQtUnitTest::bitsPerSecondWavPackLossyAt256kbps()
 void CodecQtUnitTest::bitsPerSecondALACCaf()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "caf/bps_16bit_2ch.caf");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "caf/bps_16bit_2ch.caf");
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);

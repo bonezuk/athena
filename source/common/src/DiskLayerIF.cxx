@@ -1,9 +1,9 @@
-#include "dlna/inc/DiskLayerIF.h"
+#include "common/inc/DiskLayerIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ QString DiskLayerIF::directoryName(const QString& name) const
 		{
 			dName = dName.mid(0,dName.length()-1);
 		}
-        dName = toNativeSeparators(dName);
+		dName = common::DiskOps::toNativeSeparators(dName);
 	}
 	return dName;
 }
@@ -115,7 +115,7 @@ bool DiskLayerIF::isFile(const QString& name) const
 	
 	if(!name.isEmpty())
 	{
-        QString fName = toNativeSeparators(name);
+		QString fName = common::DiskOps::toNativeSeparators(name);
 		struct stat fileStat;
 		if(::stat(fName.toUtf8().constData(),&fileStat)==0)
 		{
@@ -318,7 +318,7 @@ void DiskLayerIF::closeDirectory(DirHandle h) const
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 

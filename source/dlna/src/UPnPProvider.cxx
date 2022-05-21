@@ -1,5 +1,5 @@
 #include "dlna/inc/UPnPProvider.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -191,13 +191,13 @@ bool UPnPProvider::initializeWebDirectory()
 bool UPnPProvider::initScanWebDirectory(const QString& dirName)
 {
 	bool res = true;
-	DiskIFSPtr diskIF = DiskIF::instance();
+	common::DiskIFSPtr diskIF = common::DiskIF::instance();
 	
 	if(!dirName.isEmpty() && diskIF->isDirectory(dirName))
 	{
-		DiskIF::DirHandle h = diskIF->openDirectory(dirName);
+		common::DiskIF::DirHandle h = diskIF->openDirectory(dirName);
 
-		if(h!=DiskIF::c_invalidDirectoryHandle)
+		if(h!=common::DiskIF::c_invalidDirectoryHandle)
 		{
 			QString name;
 
@@ -206,7 +206,7 @@ bool UPnPProvider::initScanWebDirectory(const QString& dirName)
 				QString fullName;
 				
 				fullName = dirName + "/" + name;
-                fullName = DiskIF::toNativeSeparators(fullName);
+				fullName = common::DiskOps::toNativeSeparators(fullName);
 				if(diskIF->isFile(fullName))
 				{
 					res = initProcessWebFile(dirName,name);
@@ -238,7 +238,7 @@ bool UPnPProvider::initProcessWebFile(const QString& dirName,const QString& file
 
 	if(fileName.length()>=7 && fileName.right(7).toLower()=="ddd.xml")
 	{
-		res = initDeviceFromDescription(DiskIF::mergeName(dirName,fileName));
+		res = initDeviceFromDescription(common::DiskOps::mergeName(dirName,fileName));
 	}
 	return res;
 }

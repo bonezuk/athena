@@ -40,6 +40,8 @@ HEADERS += ./common/inc/CommonTypes.h
 HEADERS += ./common/inc/DLong.h
 HEADERS += ./common/inc/DebugOutput.h
 HEADERS += ./common/inc/DictionaryXMLMap.h
+HEADERS += ./common/inc/DiskIF.h
+HEADERS += ./common/inc/DiskLayerIF.h
 HEADERS += ./common/inc/DiskOps.h
 HEADERS += ./common/inc/Exception.h
 HEADERS += ./common/inc/Factory.h
@@ -76,6 +78,8 @@ SOURCES += ./common/src/CommonFunctions.cxx
 SOURCES += ./common/src/DLong.cxx
 SOURCES += ./common/src/DebugOutput.cxx
 SOURCES += ./common/src/DictionaryXMLMap.cxx
+HEADERS += ./common/src/DiskIF.cxx
+HEADERS += ./common/src/DiskLayerIF.cxx
 SOURCES += ./common/src/DiskOps.cxx
 SOURCES += ./common/src/Exception.cxx
 SOURCES += ./common/src/JaroWinklerDistance.cxx
@@ -531,6 +535,39 @@ SOURCES += ./network/rtp/silveromega/src/SilverRTPCodec.cxx
 SOURCES += ./network/rtp/silveromega/src/SilverSession.cxx
 SOURCES += ./network/rtp/silveromega/src/VOggPackets.cxx
 SOURCES += ./network/rtp/silveromega/src/VTimeCalc.cxx
+
+# --- audioio ---
+
+HEADERS += ./audioio/inc/AbstractAudioHardwareBuffer.h
+HEADERS += ./audioio/inc/AOBase.h
+HEADERS += ./audioio/inc/AudioInfo.h
+HEADERS += ./audioio/inc/AudioIODLL.h
+HEADERS += ./audioio/inc/AOQueryDevice.h
+HEADERS += ./audioio/inc/FormatDescription.h
+HEADERS += ./audioio/inc/FormatDescriptionUtils.h
+HEADERS += ./audioio/inc/FormatsSupported.h
+HEADERS += ./audioio/inc/IOTimeStamp.h
+HEADERS += ./audioio/inc/SampleConverter.h
+
+SOURCES += ./audioio/src/AbstractAudioHardwareBuffer.cxx
+SOURCES += ./audioio/src/AOBase.cxx
+SOURCES += ./audioio/src/AudioInfo.cxx
+SOURCES += ./audioio/src/AOQueryDevice.cxx
+SOURCES += ./audioio/src/FormatDescription.cxx
+SOURCES += ./audioio/src/FormatDescriptionUtils.cxx
+SOURCES += ./audioio/src/FormatsSupported.cxx
+SOURCES += ./audioio/src/IOTimeStamp.cxx
+SOURCES += ./audioio/src/SampleConverter.cxx
+
+ios
+{
+	HEADERS += ./audioio/inc/AOCoreAudioIOS.h
+	HEADERS += ./audioio/inc/AOQueryCoreAudioIOS.h
+	HEADERS += ./audioio/inc/AudioHardwareBufferCoreAudioIOS.h
+	OBJECTIVE_SOURCES += ./audioio/src/AOCoreAudioIOS.mm
+	OBJECTIVE_SOURCES += ./audioio/src/AOQueryCoreAudioIOS.mm
+	OBJECTIVE_SOURCES += ./audioio/src/AudioHardwareBufferCoreAudioIOS.mm
+}
 
 # --- playerapp/playerios ---
 

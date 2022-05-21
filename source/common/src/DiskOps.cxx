@@ -1723,6 +1723,74 @@ common::TimeStamp DiskOps::getModifiedTime(const QString& fileName,tint& fileSiz
 #endif
 //-------------------------------------------------------------------------------------------
 
+QString DiskOps::toNativeSeparators(const QString& iName)
+{
+    QString oName;
+    for(int i=0;i<iName.size();i++)
+    {
+#if defined(OMEGA_WIN32)
+        if(iName.at(i)==QChar('/'))
+        {
+            oName += '\\';
+        }
+#else
+        if(iName.at(i)==QChar('\\'))
+        {
+            oName += '/';
+        }
+#endif
+        else
+        {
+            oName += iName.at(i);
+        }
+    }
+    return oName;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString DiskOps::mergeName(const tchar *dirName,const tchar *fileName)
+{
+	return mergeName(QString::fromUtf8(dirName),QString::fromUtf8(fileName));
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString DiskOps::mergeName(const tchar *dirName,const QString& fileName)
+{
+	return mergeName(QString::fromUtf8(dirName),fileName);
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString DiskOps::mergeName(const QString& dirName,const tchar *fileName)
+{
+	return mergeName(dirName,QString::fromUtf8(fileName));
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString DiskOps::mergeName(const QString& dirName,const QString& fileName)
+{
+	QString dName(dirName),fName(fileName),fullName;
+	
+	while(!dName.isEmpty() && (dName.at(dName.length()-1)==QChar('/') || dName.at(dName.length()-1)==QChar('\\')))
+	{
+		dName = dName.mid(0,dName.length() - 1);
+	}
+	while(!fName.isEmpty() && (fName.at(0)==QChar('/') || fName.at(0)==QChar('\\')))
+	{
+		fName = fName.mid(1,fName.length() - 1);
+	}
+	fullName = dName;
+	if(!dName.isEmpty() && !fName.isEmpty())
+	{
+		fullName += "/";
+	}
+	fullName += fName;
+	fullName = toNativeSeparators(fullName);
+	return fullName;
+}
 
 //-------------------------------------------------------------------------------------------
 } // namespace common

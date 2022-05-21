@@ -5,7 +5,7 @@
 
 void WavInfoQtUnitTest::readAndTestSample()
 {
-	QString fileName = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"info1.wav");
+	QString fileName = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"info1.wav");
 	
 	common::BIOStream ioFile(common::e_BIOStream_FileRead);
 	ASSERT_TRUE(ioFile.open(fileName));

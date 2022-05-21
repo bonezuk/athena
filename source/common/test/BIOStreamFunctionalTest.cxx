@@ -254,7 +254,7 @@ void BIOStreamFunctionalTestCreateContinousReadAndWrite(const QString& name,tint
 TEST(BIOStreamFunctional,createContinousReadAndWriteWith2ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateContinousReadAndWrite(fileName,2,128);
 	DiskOps::remove(fileName);
 }
@@ -264,7 +264,7 @@ TEST(BIOStreamFunctional,createContinousReadAndWriteWith2ElementsAndOpSize128)
 TEST(BIOStreamFunctional,createContinousReadAndWriteWith4ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateContinousReadAndWrite(fileName,4,128);
 	DiskOps::remove(fileName);
 }
@@ -274,7 +274,7 @@ TEST(BIOStreamFunctional,createContinousReadAndWriteWith4ElementsAndOpSize128)
 TEST(BIOStreamFunctional,createContinousReadAndWriteWith128ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateContinousReadAndWrite(fileName,128,128);
 	DiskOps::remove(fileName);
 }
@@ -285,7 +285,7 @@ TEST(BIOStreamFunctional,createContinousReadAndWriteWith128ElementsAndOpSize128)
 TEST(BIOStreamFunctional,createContinousReadAndWriteWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateContinousReadAndWrite(fileName,1024,128);
 	DiskOps::remove(fileName);
 }
@@ -295,7 +295,7 @@ TEST(BIOStreamFunctional,createContinousReadAndWriteWith1024ElementsAndOpSize128
 TEST(BIOStreamFunctional,createContinousReadAndWriteWith1000000ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateContinousReadAndWrite(fileName,1000000,128);
 	DiskOps::remove(fileName);
 }
@@ -320,7 +320,7 @@ void BIOBufferedStreamFunctionalTestCreateContinousReadAndWrite(const QString& n
 TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith2ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateContinousReadAndWrite(fileName,2,128);
 	DiskOps::remove(fileName);
 }
@@ -330,7 +330,7 @@ TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith2ElementsAndOpSi
 TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith4ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateContinousReadAndWrite(fileName,4,128);
 	DiskOps::remove(fileName);
 }
@@ -340,7 +340,7 @@ TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith4ElementsAndOpSi
 TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith128ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateContinousReadAndWrite(fileName,128,128);
 	DiskOps::remove(fileName);
 }
@@ -351,7 +351,7 @@ TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith128ElementsAndOp
 TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateContinousReadAndWrite(fileName,1024,128);
 	DiskOps::remove(fileName);
 }
@@ -361,7 +361,7 @@ TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith1024ElementsAndO
 TEST(BIOBufferedStreamFunctional,createContinousReadAndWriteWith1000000ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateContinousReadAndWrite(fileName,1000000,128);
 	DiskOps::remove(fileName);
 }
@@ -412,7 +412,7 @@ void BIOStreamFunctionalTestAccessRead(const QString& name,tint64 noElements,tin
 TEST(BIOStreamFunctional,createWriteCloseReopenAndAccessReadWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateAndWrite(fileName,1024,128);
 	BIOStreamFunctionalTestAccessRead(fileName,1024,128);
 	DiskOps::remove(fileName);	
@@ -423,7 +423,7 @@ TEST(BIOStreamFunctional,createWriteCloseReopenAndAccessReadWith1024ElementsAndO
 TEST(BIOStreamFunctional,createWriteCloseReopenAndAccessReadWith1000000ElementsAndOpSize1000)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateAndWrite(fileName,1000000,1000);
 	BIOStreamFunctionalTestAccessRead(fileName,1000000,1000);
 	DiskOps::remove(fileName);	
@@ -434,7 +434,7 @@ TEST(BIOStreamFunctional,createWriteCloseReopenAndAccessReadWith1000000ElementsA
 TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith2ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateAndWrite(fileName,2,128);
 	BIOStreamFunctionalTestContinousRead(fileName,2,128);
 	DiskOps::remove(fileName);	
@@ -445,7 +445,7 @@ TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith2ElementsAndO
 TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith4ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateAndWrite(fileName,4,128);
 	BIOStreamFunctionalTestContinousRead(fileName,4,128);
 	DiskOps::remove(fileName);	
@@ -456,7 +456,7 @@ TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith4ElementsAndO
 TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith128ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateAndWrite(fileName,128,128);
 	BIOStreamFunctionalTestContinousRead(fileName,128,128);
 	DiskOps::remove(fileName);	
@@ -467,7 +467,7 @@ TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith128ElementsAn
 TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateAndWrite(fileName,1024,128);
 	BIOStreamFunctionalTestContinousRead(fileName,1024,128);
 	DiskOps::remove(fileName);	
@@ -478,7 +478,7 @@ TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith1024ElementsA
 TEST(BIOStreamFunctional,createWriteCloseReopenAndContinousReadWith1000000ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOStreamFunctionalTestCreateAndWrite(fileName,1000000,128);
 	BIOStreamFunctionalTestContinousRead(fileName,1000000,128);
 	DiskOps::remove(fileName);	
@@ -530,7 +530,7 @@ void BIOBufferedStreamFunctionalTestAccessRead(const QString& name,tint64 noElem
 TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndAccessReadWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1024,128);
 	BIOBufferedStreamFunctionalTestAccessRead(fileName,1024,128);
 	DiskOps::remove(fileName);	
@@ -541,7 +541,7 @@ TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndAccessReadWith1024Elem
 TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndAccessReadWith1000000ElementsAndOpSize1000)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1000000,1000);
 	BIOBufferedStreamFunctionalTestAccessRead(fileName,1000000,1000);
 	DiskOps::remove(fileName);	
@@ -552,7 +552,7 @@ TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndAccessReadWith1000000E
 TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith2ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,2,128);
 	BIOBufferedStreamFunctionalTestContinousRead(fileName,2,128);
 	DiskOps::remove(fileName);	
@@ -563,7 +563,7 @@ TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith2Elem
 TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith4ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,4,128);
 	BIOBufferedStreamFunctionalTestContinousRead(fileName,4,128);
 	DiskOps::remove(fileName);	
@@ -574,7 +574,7 @@ TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith4Elem
 TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith128ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,128,128);
 	BIOBufferedStreamFunctionalTestContinousRead(fileName,128,128);
 	DiskOps::remove(fileName);	
@@ -585,7 +585,7 @@ TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith128El
 TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1024,128);
 	BIOBufferedStreamFunctionalTestContinousRead(fileName,1024,128);
 	DiskOps::remove(fileName);	
@@ -596,7 +596,7 @@ TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith1024E
 TEST(BIOBufferedStreamFunctional,createWriteCloseReopenAndContinousReadWith1000000ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1000000,128);
 	BIOBufferedStreamFunctionalTestContinousRead(fileName,1000000,128);
 	DiskOps::remove(fileName);	
@@ -635,7 +635,7 @@ void BIOMemoryStreamFunctionalTestAccessRead(const QString& name,tint64 noElemen
 TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndAccessReadWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1024,128);
 	BIOMemoryStreamFunctionalTestAccessRead(fileName,1024,128);
 	DiskOps::remove(fileName);	
@@ -646,7 +646,7 @@ TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndAccessReadWith1024Elemen
 TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndAccessReadWith1000000ElementsAndOpSize1000)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1000000,1000);
 	BIOMemoryStreamFunctionalTestAccessRead(fileName,1000000,1000);
 	DiskOps::remove(fileName);	
@@ -657,7 +657,7 @@ TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndAccessReadWith1000000Ele
 TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith2ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,2,128);
 	BIOMemoryStreamFunctionalTestContinousRead(fileName,2,128);
 	DiskOps::remove(fileName);	
@@ -668,7 +668,7 @@ TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith2Elemen
 TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith4ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,4,128);
 	BIOMemoryStreamFunctionalTestContinousRead(fileName,4,128);
 	DiskOps::remove(fileName);	
@@ -679,7 +679,7 @@ TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith4Elemen
 TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith128ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,128,128);
 	BIOMemoryStreamFunctionalTestContinousRead(fileName,128,128);
 	DiskOps::remove(fileName);	
@@ -690,7 +690,7 @@ TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith128Elem
 TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1024,128);
 	BIOMemoryStreamFunctionalTestContinousRead(fileName,1024,128);
 	DiskOps::remove(fileName);	
@@ -701,7 +701,7 @@ TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith1024Ele
 TEST(BIOMemoryStreamFunctional,createWriteCloseReopenAndContinousReadWith1000000ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1000000,128);
 	BIOMemoryStreamFunctionalTestContinousRead(fileName,1000000,128);
 	DiskOps::remove(fileName);	
@@ -750,7 +750,7 @@ void BIOMemoryFunctionalTestAccessRead(const QString& name,tint64 noElements,tin
 TEST(BIOMemoryFunctional,createWriteCloseReopenAndAccessReadWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1024,128);
 	BIOMemoryFunctionalTestAccessRead(fileName,1024,128);
 	DiskOps::remove(fileName);	
@@ -761,7 +761,7 @@ TEST(BIOMemoryFunctional,createWriteCloseReopenAndAccessReadWith1024ElementsAndO
 TEST(BIOMemoryFunctional,createWriteCloseReopenAndAccessReadWith1000000ElementsAndOpSize1000)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1000000,1000);
 	BIOMemoryFunctionalTestAccessRead(fileName,1000000,1000);
 	DiskOps::remove(fileName);	
@@ -772,7 +772,7 @@ TEST(BIOMemoryFunctional,createWriteCloseReopenAndAccessReadWith1000000ElementsA
 TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith2ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,2,128);
 	BIOMemoryFunctionalTestContinousRead(fileName,2,128);
 	DiskOps::remove(fileName);	
@@ -783,7 +783,7 @@ TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith2ElementsAndO
 TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith4ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,4,128);
 	BIOMemoryFunctionalTestContinousRead(fileName,4,128);
 	DiskOps::remove(fileName);	
@@ -794,7 +794,7 @@ TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith4ElementsAndO
 TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith128ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,128,128);
 	BIOMemoryFunctionalTestContinousRead(fileName,128,128);
 	DiskOps::remove(fileName);	
@@ -805,7 +805,7 @@ TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith128ElementsAn
 TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith1024ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1024,128);
 	BIOMemoryFunctionalTestContinousRead(fileName,1024,128);
 	DiskOps::remove(fileName);	
@@ -816,7 +816,7 @@ TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith1024ElementsA
 TEST(BIOMemoryFunctional,createWriteCloseReopenAndContinousReadWith1000000ElementsAndOpSize128)
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "fileiotest.dat");
 	BIOBufferedStreamFunctionalTestCreateAndWrite(fileName,1000000,128);
 	BIOMemoryFunctionalTestContinousRead(fileName,1000000,128);
 	DiskOps::remove(fileName);	

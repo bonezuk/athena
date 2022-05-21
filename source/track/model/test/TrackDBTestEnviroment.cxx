@@ -1,4 +1,4 @@
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 #include "track/db/inc/TrackDB.h"
 #include "engine/blackomega/inc/MPCodec.h"
@@ -7,6 +7,7 @@
 #include "track/db/inc/TrackDB.h"
 #include "common/inc/DiskOps.h"
 #include "common/inc/SBService.h"
+#include "common/inc/DiskLayerIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -104,12 +105,12 @@ bool TrackDBTestEnviroment::buildTestDB(const QString& dbFileName,const QString&
 	
 	if(trackDB!=0)
 	{
-		dlna::DiskIFSPtr diskIF = dlna::DiskIF::instance("disk");
+		common::DiskIFSPtr diskIF = common::DiskIF::instance("disk");
 
 		if(!diskIF.isNull())
 		{
 			res = scanDBDirectory(dirName);
-			dlna::DiskIF::release();
+			common::DiskIF::release();
 		}
 		delete trackDB;
 	}
@@ -125,20 +126,20 @@ bool TrackDBTestEnviroment::scanDBDirectory(const QString& dirName)
 	
 	if(trackDB!=0)
 	{
-		dlna::DiskIF::DirHandle h;
-		dlna::DiskIFSPtr diskIF = dlna::DiskIF::instance();
+		common::DiskIF::DirHandle h;
+		common::DiskIFSPtr diskIF = common::DiskIF::instance();
 		
         if(diskIF.data()!=0)
 		{
 			h = diskIF->openDirectory(dirName);
-			if(h!=dlna::DiskIF::invalidDirectory())
+			if(h!=common::DiskIF::invalidDirectory())
 			{
 				QString name;
 			
 				res = true;
 				while(name=diskIF->nextDirectoryEntry(h),!name.isEmpty() && res)
 				{
-					QString fullName = dlna::DiskIF::mergeName(dirName,name);
+					QString fullName = common::DiskOps::mergeName(dirName,name);
 					
 					if(diskIF->isDirectory(fullName))
 					{
@@ -195,8 +196,8 @@ QString TrackDBTestEnviroment::getTempDirectory()
 
 QString TrackDBTestEnviroment::getDBDirectory()
 {
-	QString dbDirPath = dlna::DiskIF::mergeName(getTempDirectory(),"trackdbtest");
-	dbDirPath = dlna::DiskIF::toNativeSeparators(dbDirPath);
+	QString dbDirPath = common::DiskOps::mergeName(getTempDirectory(),"trackdbtest");
+	dbDirPath = common::DiskOps::toNativeSeparators(dbDirPath);
 	return dbDirPath;
 }
 
@@ -204,7 +205,7 @@ QString TrackDBTestEnviroment::getDBDirectory()
 
 QString TrackDBTestEnviroment::getDBFilename()
 {
-	QString dbFilename = dlna::DiskIF::mergeName(getDBDirectory(),"track.db");
+	QString dbFilename = common::DiskOps::mergeName(getDBDirectory(),"track.db");
 	return dbFilename;
 }
 
@@ -326,7 +327,7 @@ bool TrackDBTestEnviroment::setupDirectory(const QVector<QPair<QString,QString> 
 	for(i=0;i<fileList.size() && res;i++)
 	{
 		const QPair<QString,QString>& p = fileList.at(i);
-		QString dbFileName = dlna::DiskIF::mergeName(dbDirPath,p.second);
+		QString dbFileName = common::DiskOps::mergeName(dbDirPath,p.second);
 		QFile file(p.first);
 		
 		if(!common::DiskOps::path(dbFileName))
@@ -395,7 +396,7 @@ bool TrackDBTestEnviroment::compareResults(const QVector<QVector<QVariant> >& re
     QString resultFileName = resultPrefix + QString::number(resultID) + ".csv";
 	QVector<QVector<QVariant> > expectResults;
 	
-	resultFileName = dlna::DiskIF::mergeName(getDBDirectory(),resultFileName);
+	resultFileName = common::DiskOps::mergeName(getDBDirectory(),resultFileName);
 	if(loadCVS(resultFileName,expectResults))
 	{
 		QVector<QVector<QVariant> >::iterator ppI;

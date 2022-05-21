@@ -13,7 +13,7 @@
 
 #include "engine/inc/Codec.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 
 using namespace omega;
 using namespace omega::engine;

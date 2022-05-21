@@ -1,4 +1,4 @@
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskIF.h"
 #include "dlna/test/UPnPProviderTestEnviroment.h"
 #include "common/inc/SBService.h"
 
@@ -103,7 +103,7 @@ QString UPnPProviderTestEnviroment::getTempDirectoryPath()
 QString UPnPProviderTestEnviroment::getTempDirectoryPath(int testCase)
 {
 	QString path = getTempDirectoryPath() + "/" + "upnpprovidertest" + QString::number(testCase);
-    path = DiskIF::toNativeSeparators(path);
+	path = common::DiskOps::toNativeSeparators(path);
 	return path;
 }
 
@@ -122,7 +122,7 @@ bool UPnPProviderTestEnviroment::setupDirectory(int testCase,const QList<QPair<Q
 		{
 			const QPair<QString,QString>& p = *ppI;
 			QString destPath = dPath + "/" + p.second;
-            destPath = DiskIF::toNativeSeparators(destPath);
+			destPath = common::DiskOps::toNativeSeparators(destPath);
 			if(common::DiskOps::path(destPath))
 			{
 				if(QFile::exists(destPath))

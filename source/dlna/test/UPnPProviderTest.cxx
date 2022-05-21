@@ -3,7 +3,7 @@
 #include "dlna/inc/UPnPProvider.h"
 #include "dlna/test/UPnPMockIF.h"
 #include "dlna/test/UPnPProviderTestEnviroment.h"
-#include "dlna/test/DiskMockIF.h"
+#include "common/test/DiskMockIF.h"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -216,24 +216,24 @@ TEST(UPnPProvider,initScanWebDirectoryNoName)
 
 TEST(UPnPProvider,initScanWebDirectoryNotADirectory)
 {
-    DiskIFSPtr pMockAPI = DiskIF::instance("mock");
-    DiskMockIF& pAPI = dynamic_cast<DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+   common:: DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	EXPECT_CALL(pAPI,isDirectory(QString("/usr/test"))).Times(1).WillOnce(Return(false));
 
     UPnPProviderInitScanWebDirectoryTest provider;
     EXPECT_FALSE(provider.testInitScanWebDirectory(QString("/usr/test")));
 
-    DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(UPnPProvider,initScanWebDirectoryErrorOpeningDirectory)
 {
-    DiskIF::DirHandle invalidH = DiskIF::invalidDirectory();
-    DiskIFSPtr pMockAPI = DiskIF::instance("mock");
-    DiskMockIF& pAPI = dynamic_cast<DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIF::DirHandle invalidH = common::DiskIF::invalidDirectory();
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
     EXPECT_CALL(pAPI,isDirectory(QString("/usr/test"))).Times(1).WillOnce(Return(true));
     EXPECT_CALL(pAPI,openDirectory(QString("/usr/test"))).Times(1).WillOnce(Return(invalidH));
@@ -241,40 +241,40 @@ TEST(UPnPProvider,initScanWebDirectoryErrorOpeningDirectory)
     UPnPProviderInitScanWebDirectoryTest provider;
     EXPECT_FALSE(provider.testInitScanWebDirectory(QString("/usr/test")));
 
-    DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(UPnPProvider,initScanWebDirectoryEmptyDirectory)
 {
-    DiskIFSPtr pMockAPI = DiskIF::instance("mock");
-    DiskMockIF *pAPI = dynamic_cast<DiskMockIF *>(pMockAPI.data());
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF *pAPI = dynamic_cast<common::DiskMockIF *>(pMockAPI.data());
 
     EXPECT_CALL(*pAPI,isDirectory(QString("/usr/test"))).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(*pAPI,openDirectory(QString("/usr/test"))).Times(1).WillOnce(Return((DiskIF::DirHandle)(1)));
-    EXPECT_CALL(*pAPI,nextDirectoryEntry((DiskIF::DirHandle)(1))).Times(1).WillOnce(Return(QString("")));
-    EXPECT_CALL(*pAPI,closeDirectory((DiskIF::DirHandle)(1))).Times(1);
+	EXPECT_CALL(*pAPI,openDirectory(QString("/usr/test"))).Times(1).WillOnce(Return((common::DiskIF::DirHandle)(1)));
+	EXPECT_CALL(*pAPI,nextDirectoryEntry((common::DiskIF::DirHandle)(1))).Times(1).WillOnce(Return(QString("")));
+	EXPECT_CALL(*pAPI,closeDirectory((common::DiskIF::DirHandle)(1))).Times(1);
 
     UPnPProviderInitScanWebDirectoryTest provider;
     EXPECT_TRUE(provider.testInitScanWebDirectory(QString("/usr/test")));
 
-    DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(UPnPProvider,initScanWebDirectoryProcessTwoFiles)
 {
-    DiskIFSPtr pMockAPI = DiskIF::instance("mock");
-    DiskMockIF& pAPI = dynamic_cast<DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
     EXPECT_CALL(pAPI,isDirectory(QString("/usr/test"))).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(pAPI,openDirectory(QString("/usr/test"))).Times(1).WillOnce(Return((DiskIF::DirHandle)(1)));
-    EXPECT_CALL(pAPI,nextDirectoryEntry((DiskIF::DirHandle)(1))).Times(3).WillOnce(Return(QString("fileA.html"))).WillOnce(Return(QString("fileB.html"))).WillRepeatedly(Return(QString("")));
-    EXPECT_CALL(pAPI,closeDirectory((DiskIF::DirHandle)(1))).Times(1);
-    EXPECT_CALL(pAPI,isFile(QString(DiskIF::toNativeSeparators("/usr/test/fileA.html")))).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(pAPI,isFile(QString(DiskIF::toNativeSeparators("/usr/test/fileB.html")))).Times(1).WillOnce(Return(true));
+	EXPECT_CALL(pAPI,openDirectory(QString("/usr/test"))).Times(1).WillOnce(Return((common::DiskIF::DirHandle)(1)));
+	EXPECT_CALL(pAPI,nextDirectoryEntry((common::DiskIF::DirHandle)(1))).Times(3).WillOnce(Return(QString("fileA.html"))).WillOnce(Return(QString("fileB.html"))).WillRepeatedly(Return(QString("")));
+	EXPECT_CALL(pAPI,closeDirectory((common::DiskIF::DirHandle)(1))).Times(1);
+	EXPECT_CALL(pAPI,isFile(QString(common::DiskOps::toNativeSeparators("/usr/test/fileA.html")))).Times(1).WillOnce(Return(true));
+	EXPECT_CALL(pAPI,isFile(QString(common::DiskOps::toNativeSeparators("/usr/test/fileB.html")))).Times(1).WillOnce(Return(true));
 
     UPnPProviderInitScanWebDirectoryTest provider;
     EXPECT_CALL(provider,initProcessWebFile(QString("/usr/test"),QString("fileA.html"))).Times(1).WillOnce(Return(true));
@@ -282,36 +282,36 @@ TEST(UPnPProvider,initScanWebDirectoryProcessTwoFiles)
 
     EXPECT_TRUE(provider.testInitScanWebDirectory(QString("/usr/test")));
 
-    DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(UPnPProvider,initScanWebDirectoryProcessFileThenSubDir)
 {
-    DiskIFSPtr pMockAPI = DiskIF::instance("mock");
-    DiskMockIF& pAPI = dynamic_cast<DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& pAPI = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
     EXPECT_CALL(pAPI,isDirectory(QString("/usr/test"))).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(pAPI,openDirectory(QString("/usr/test"))).Times(1).WillOnce(Return((DiskIF::DirHandle)(1)));
-    EXPECT_CALL(pAPI,nextDirectoryEntry((DiskIF::DirHandle)(1))).Times(3).WillOnce(Return(QString("images"))).WillOnce(Return(QString("fileA.html"))).WillRepeatedly(Return(QString("")));
-    EXPECT_CALL(pAPI,closeDirectory((DiskIF::DirHandle)(1))).Times(1);
-    EXPECT_CALL(pAPI,isFile(QString(DiskIF::toNativeSeparators("/usr/test/fileA.html")))).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(pAPI,isFile(QString(DiskIF::toNativeSeparators("/usr/test/images")))).Times(1).WillOnce(Return(false));
-    EXPECT_CALL(pAPI,isDirectory(QString(DiskIF::toNativeSeparators("/usr/test/images")))).Times(2).WillRepeatedly(Return(true));
+	EXPECT_CALL(pAPI,openDirectory(QString("/usr/test"))).Times(1).WillOnce(Return((common::DiskIF::DirHandle)(1)));
+	EXPECT_CALL(pAPI,nextDirectoryEntry((common::DiskIF::DirHandle)(1))).Times(3).WillOnce(Return(QString("images"))).WillOnce(Return(QString("fileA.html"))).WillRepeatedly(Return(QString("")));
+	EXPECT_CALL(pAPI,closeDirectory((common::DiskIF::DirHandle)(1))).Times(1);
+	EXPECT_CALL(pAPI,isFile(QString(common::DiskOps::toNativeSeparators("/usr/test/fileA.html")))).Times(1).WillOnce(Return(true));
+	EXPECT_CALL(pAPI,isFile(QString(common::DiskOps::toNativeSeparators("/usr/test/images")))).Times(1).WillOnce(Return(false));
+	EXPECT_CALL(pAPI,isDirectory(QString(common::DiskOps::toNativeSeparators("/usr/test/images")))).Times(2).WillRepeatedly(Return(true));
 
-    EXPECT_CALL(pAPI,openDirectory(QString(DiskIF::toNativeSeparators("/usr/test/images")))).Times(1).WillOnce(Return((DiskIF::DirHandle)(2)));
-    EXPECT_CALL(pAPI,nextDirectoryEntry((DiskIF::DirHandle)(2))).Times(2).WillOnce(Return(QString("fileB.html"))).WillRepeatedly(Return(QString("")));
-    EXPECT_CALL(pAPI,closeDirectory((DiskIF::DirHandle)(2))).Times(1);
-    EXPECT_CALL(pAPI,isFile(QString(DiskIF::toNativeSeparators("/usr/test/images/fileB.html")))).Times(1).WillOnce(Return(true));
+	EXPECT_CALL(pAPI,openDirectory(QString(common::DiskOps::toNativeSeparators("/usr/test/images")))).Times(1).WillOnce(Return((common::DiskIF::DirHandle)(2)));
+	EXPECT_CALL(pAPI,nextDirectoryEntry((common::DiskIF::DirHandle)(2))).Times(2).WillOnce(Return(QString("fileB.html"))).WillRepeatedly(Return(QString("")));
+	EXPECT_CALL(pAPI,closeDirectory((common::DiskIF::DirHandle)(2))).Times(1);
+	EXPECT_CALL(pAPI,isFile(QString(common::DiskOps::toNativeSeparators("/usr/test/images/fileB.html")))).Times(1).WillOnce(Return(true));
 
     UPnPProviderInitScanWebDirectoryTest provider;
     EXPECT_CALL(provider,initProcessWebFile(QString("/usr/test"),QString("fileA.html"))).Times(1).WillOnce(Return(true));
-    EXPECT_CALL(provider,initProcessWebFile(QString(DiskIF::toNativeSeparators("/usr/test/images")),QString("fileB.html"))).Times(1).WillOnce(Return(true));
+	EXPECT_CALL(provider,initProcessWebFile(QString(common::DiskOps::toNativeSeparators("/usr/test/images")),QString("fileB.html"))).Times(1).WillOnce(Return(true));
 
     EXPECT_TRUE(provider.testInitScanWebDirectory(QString("/usr/test")));
 
-    DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -342,7 +342,7 @@ TEST(UPnPProvider,initProcessWebFileUnknown)
 
 TEST(UPnPProvider,initProcessWebFileDDDSuccess)
 {
-	QString fileName = DiskIF::mergeName("/usr/temp","fileDDD.xml");
+	QString fileName = common::DiskOps::mergeName("/usr/temp","fileDDD.xml");
 	UPnPProviderInitProcessWebFile provider;
 	EXPECT_CALL(provider,initDeviceFromDescription(fileName)).Times(1).WillOnce(Return(true));
 	EXPECT_TRUE(provider.testInitProcessWebFile("/usr/temp","fileDDD.xml"));
@@ -352,7 +352,7 @@ TEST(UPnPProvider,initProcessWebFileDDDSuccess)
 
 TEST(UPnPProvider,initProcessWebFileDDDFailure)
 {
-	QString fileName = DiskIF::mergeName("/usr/temp","fileDDD.xml");
+	QString fileName = common::DiskOps::mergeName("/usr/temp","fileDDD.xml");
 	UPnPProviderInitProcessWebFile provider;
 	EXPECT_CALL(provider,initDeviceFromDescription(fileName)).Times(1).WillOnce(Return(false));
 	EXPECT_FALSE(provider.testInitProcessWebFile("/usr/temp","fileDDD.xml"));

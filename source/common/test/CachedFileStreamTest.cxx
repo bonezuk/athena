@@ -1860,7 +1860,7 @@ TEST(CachedFileStream,addMaskToBlockGivenTwoMasksAndOverlappingMaskAdded)
 void CachedFileStreamQtUnitTest::readFromEmptyFile()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest7.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest7.dat");
 	
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));
@@ -1908,7 +1908,7 @@ void CachedFileStreamQtUnitTest::readFromEmptyFile()
 void CachedFileStreamQtUnitTest::readOnFileBoundaries()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest8.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest8.dat");
 	
 	const tint c_noElementsReadSize = 100;
 	
@@ -1965,7 +1965,7 @@ void CachedFileStreamQtUnitTest::readOnFileBoundaries()
 void CachedFileStreamQtUnitTest::readFileUncachedFromBeginningToEnd()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest1.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest1.dat");
 	
 	const tint c_noElementsReadSize = 200;
 	const tint c_noOfReads = 200;
@@ -2002,7 +2002,7 @@ void CachedFileStreamQtUnitTest::readFileUncachedFromBeginningToEnd()
 void CachedFileStreamQtUnitTest::readFileAfterCachingFromBeginningToEnd()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest2.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest2.dat");
 	
 	const tint c_noElementsReadSize = 200;
 	const tint c_noOfReads = 200;
@@ -2072,7 +2072,7 @@ void CachedFileStreamQtUnitTest::readFileAfterCachingFromBeginningToEnd()
 void CachedFileStreamQtUnitTest::readFileFromBeginningToEndOver4LoopsWithLookAheadCaching()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest3.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest3.dat");
 	
 	const tint c_noReadsAhead = 10;
 	const tint c_noReadsBehind = 5;
@@ -2154,7 +2154,7 @@ void CachedFileStreamQtUnitTest::readFileFromBeginningToEndOver4LoopsWithLookAhe
 void CachedFileStreamQtUnitTest::readFileFromRandomLocationsUncached()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest4.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest4.dat");
 	
 	const tint c_noElementsReadSize = 200;
 	const tint c_noOfReads = 200;
@@ -2201,7 +2201,7 @@ void CachedFileStreamQtUnitTest::readFileFromRandomLocationsUncached()
 void CachedFileStreamQtUnitTest::readFileFromRandomLocationsWithCachingLarge()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest5.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest5.dat");
 	
 	const tint c_noElementsReadSize = 200;
 	const tint c_noOfReads = 200;
@@ -2267,7 +2267,7 @@ void CachedFileStreamQtUnitTest::readFileFromRandomLocationsWithCachingLarge()
 void CachedFileStreamQtUnitTest::readFileFromRandomLocationsWithCachingSmall()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest6.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest6.dat");
 	
 	const tint c_noElementsReadSize = 200;
 	const tint c_noOfReads = 200;
@@ -2333,7 +2333,7 @@ void CachedFileStreamQtUnitTest::readFileFromRandomLocationsWithCachingSmall()
 void CachedFileStreamQtUnitTest::cachingAllFileAndSetRange()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest7.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "cachedfilestreamtest7.dat");
 	
 	const tint c_noElementsReadSize = 100000;
 	const tint c_fileLength = c_noElementsReadSize * 2;

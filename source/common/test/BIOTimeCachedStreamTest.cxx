@@ -83,7 +83,7 @@ void BIOTimeCachedStreamQtUnitTest::openAndReadFromBeginningToEndWithConstantBit
 	BIOTimeCachedStreamSettings::instance()->setCacheTimeLength(cacheTime);
 	
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "biotimecacheread1.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "biotimecacheread1.dat");
 	QVERIFY(BIOTimeCachedStreamTesterCreateTestFile(fileName,c_fileElementCount));
 	
 	tbyte *eBuffer = new tbyte [c_elementsPerBlock * sizeof(tint)];
@@ -167,7 +167,7 @@ void BIOTimeCachedStreamQtUnitTest::openAndReadBeginningToEndWithVariableBitRate
 	tint avgBps = avgBlockSize * 5 * sizeof(tint) * 8;
 	
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "biotimecacheread2.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "biotimecacheread2.dat");
 	QVERIFY(BIOTimeCachedStreamTesterCreateTestFile(fileName,fileElementCount));
 	
 	tbyte *eBuffer = new tbyte [c_highElementsPerBlock * sizeof(tint)];
@@ -298,7 +298,7 @@ void BIOTimeCachedStreamQtUnitTest::openAndReadMultiplexedVBRStreamBeginningToEn
 	BIOTimeCachedStreamSettings::instance()->setCacheTimeLength(cacheTime);
 
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "biotimecacheread3.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "biotimecacheread3.dat");
 	tint bps = BIOTimeCachedStreamTesterCreateTestMultiplexedFile(fileName,c_noBlocks,c_lowElementsPerBlock,c_highElementsPerBlock,0);
 	QVERIFY(bps > 0);
 	
@@ -400,7 +400,7 @@ void BIOTimeCachedStreamQtUnitTest::BIOTimeCachedStreamTesterReadAndSeekFromPosi
 	BIOTimeCachedStreamSettings::instance()->setCacheTimeLength(cacheTime);
 	
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "biotimecacheread4.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "biotimecacheread4.dat");
 	QVERIFY(BIOTimeCachedStreamTesterCreateTestFile(fileName,c_fileElementCount));
 	
 	BIOTimeCachedStream file;
@@ -529,7 +529,7 @@ void BIOTimeCachedStreamQtUnitTest::readBlocksWithSequentialSeeksInBlockFromMult
 	BIOTimeCachedStreamSettings::instance()->setCacheTimeLength(cacheTime);
 	
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "biotimecacheread5.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "biotimecacheread5.dat");
 
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));

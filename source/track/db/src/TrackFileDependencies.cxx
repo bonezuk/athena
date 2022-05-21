@@ -1,5 +1,6 @@
 #include "track/db/inc/TrackFileDependencies.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
+#include "common/inc/DiskLayerIF.h"
 #include "engine/inc/Codec.h"
 #include "common/inc/JaroWinklerDistance.h"
 
@@ -38,11 +39,11 @@ bool TrackFileDependencies::scanAndCacheDirectory(const QString& dirName)
 	ppI = dirCacheMap().find(dirName);
 	if(ppI==dirCacheMap().end())
 	{
-		dlna::DiskIFSPtr pDiskIF = dlna::DiskIF::instance();
+		common::DiskIFSPtr pDiskIF = common::DiskIF::instance();
 		
 		if(pDiskIF->isDirectory(dirName))
 		{
-			dlna::DiskIF::DirHandle h;
+			common::DiskIF::DirHandle h;
 			
 			h = pDiskIF->openDirectory(dirName);
 			if(pDiskIF->isValidDirectory(h))
@@ -51,7 +52,7 @@ bool TrackFileDependencies::scanAndCacheDirectory(const QString& dirName)
 				
 				while(name=pDiskIF->nextDirectoryEntry(h),!name.isEmpty())
 				{
-					QString fullName = dlna::DiskIF::mergeName(dirName,name);
+					QString fullName = common::DiskOps::mergeName(dirName,name);
 					if(pDiskIF->isFile(fullName))
 					{
 						cacheFileBasedOnExtension(dirName,name);
@@ -220,7 +221,7 @@ QString TrackFileDependencies::getFileNameWithExtension(const QString& fileName,
 
 void TrackFileDependencies::cacheDependentFileIfExists(const QString& fileName,const QString& ext)
 {
-	dlna::DiskIFSPtr pDiskIF = dlna::DiskIF::instance();
+	common::DiskIFSPtr pDiskIF = common::DiskIF::instance();
 	QString dName = getFileNameWithExtension(fileName,ext);
 	
 	if(pDiskIF->isFile(dName))
@@ -257,7 +258,7 @@ bool TrackFileDependencies::add(const QString& fileName)
 	ppI = files().find(fileName);
 	if(ppI==files().end())
 	{
-		dlna::DiskIFSPtr pDiskIF = dlna::DiskIF::instance();
+		common::DiskIFSPtr pDiskIF = common::DiskIF::instance();
 	
 		if(pDiskIF->isFile(fileName))
 		{
@@ -332,7 +333,7 @@ QSet<QString> TrackFileDependencies::dependency(const QString& fileName) const
 				}
 				if(!dName.isEmpty())
 				{
-					dName = dlna::DiskIF::mergeName(dirName,dName);
+					dName = common::DiskOps::mergeName(dirName,dName);
 					fSet.insert(dName);
 				}
 			}

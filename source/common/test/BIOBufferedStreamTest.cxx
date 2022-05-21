@@ -5,7 +5,6 @@
 
 #include "common/inc/BIOBufferedStream.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
-#include "dlna/inc/DiskIF.h"
 #include "common/inc/DiskOps.h"
 
 using namespace testing;
@@ -19,7 +18,7 @@ TEST(BIOBufferedStream,bookmarkAndPosition)
 	const tubyte expectMem[11] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b };
 
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "biostreamBookmark11Byte.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "biostreamBookmark11Byte.dat");
 
 	int bkArray[5];
 	tbyte mem[2];
@@ -58,7 +57,7 @@ TEST(BIOBufferedStream,externalBufferMallocAllocation)
 	const tint c_bufferSize = 100000;
 
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "BIOexternalBufferMallocAllocation.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "BIOexternalBufferMallocAllocation.dat");
 	
 	if(DiskOps::exist(fileName))
 	{

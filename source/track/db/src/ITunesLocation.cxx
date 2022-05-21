@@ -1,7 +1,8 @@
 #include "network/inc/Resource.h"
 #include "track/db/inc/ITunesLocation.h"
 #include "common/inc/QBIOStreamDevice.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
+#include "common/inc/DiskIF.h"
 
 #include <QSettings>
 
@@ -471,21 +472,21 @@ QString ITunesLocation::findITunesDBInDirectory(const QString& dirName,CancelSca
 QString ITunesLocation::findITunesDBInDirectoryImpl(const QString& dirName,CancelScanFunction cancelFunc,void *pUserData,int& progressCount)
 {
 	QString dbFileName;
-	dlna::DiskIFSPtr pDisk = dlna::DiskIF::instance();
+	common::DiskIFSPtr pDisk = common::DiskIF::instance();
 	
 	if(!pDisk.isNull() && pDisk->isDirectory(dirName))
 	{
 		bool res = true;
-    	dlna::DiskIF::DirHandle h = pDisk->openDirectory(dirName);
+		common::DiskIF::DirHandle h = pDisk->openDirectory(dirName);
     	
-        if(h!=dlna::DiskIF::invalidDirectory())
+		if(h!=common::DiskIF::invalidDirectory())
     	{
     		QString name;
     		QStringList dirList,nameList;
     		
     		while(name=pDisk->nextDirectoryEntry(h),!name.isEmpty() && res)
     		{
-    			QString fullName = dlna::DiskIF::mergeName(dirName,name);
+    			QString fullName = common::DiskOps::mergeName(dirName,name);
     			
     			if(pDisk->isFile(fullName))
     			{
@@ -650,7 +651,7 @@ QStringList ITunesLocation::getDefaultITuneDBs()
 	dirList = defaultITunesDirectory();
 	for(ppI=dirList.begin();ppI!=dirList.end();ppI++)
 	{
-        if(dlna::DiskIF::instance()->isDirectory(*ppI))
+		if(common::DiskIF::instance()->isDirectory(*ppI))
         {
             fileName = findITunesDBInDirectory(*ppI);
             if(!fileName.isEmpty())

@@ -388,7 +388,7 @@ bool AsynchronousFileReaderTester::cancelAllPendingForMultiple(AsynchronousFileR
 void AsynchronousFileReaderQtUnitTest::openNonExistantFile()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest_noexist.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest_noexist.dat");
 
 	QVERIFY(!DiskOps::exist(fileName));
 	
@@ -405,7 +405,7 @@ void AsynchronousFileReaderQtUnitTest::openNonExistantFile()
 void AsynchronousFileReaderQtUnitTest::readAllDataFromEmptyFile()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest1.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest1.dat");
 	
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));
@@ -465,7 +465,7 @@ bool completeSlotForReadAllDataFromFileGivenReadRequestAsksForMoreDataThanIsAvai
 void AsynchronousFileReaderQtUnitTest::readAllDataFromFileGivenReadRequestAsksForMoreDataThanIsAvailable()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest2.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest2.dat");
 	
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));
@@ -540,7 +540,7 @@ bool completeSlotForReadAllDataFromFileGivenReadRequestAsksForExactlyTheDataThat
 void AsynchronousFileReaderQtUnitTest::readAllDataFromFileGivenReadRequestAsksForExactlyTheDataThatIsAvailable()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest3.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest3.dat");
 	
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));
@@ -638,7 +638,7 @@ bool completeSlotForReadAllDataFromFileGivenAsASeriesOfReadRequests(tint testId,
 void AsynchronousFileReaderQtUnitTest::readAllDataFromFileGivenAsASeriesOfReadRequests()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest4.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest4.dat");
 
 	tint noElements = 0;
     for(tint i=4096;i>0;i-=2)
@@ -675,9 +675,9 @@ void AsynchronousFileReaderQtUnitTest::readAllDataFromMultipleFilesGivenAsASerie
 {
 	QVector<QString> fileNames;
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest7A.dat"));
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest7B.dat"));
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest7C.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest7A.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest7B.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest7C.dat"));
 
 	tint noElements = 0;
     for(tint i=4096;i>0;i-=2)
@@ -727,7 +727,7 @@ void AsynchronousFileReaderQtUnitTest::readAllDataFromMultipleFilesGivenAsASerie
 void AsynchronousFileReaderQtUnitTest::readAllDataFromMultipleReaderButSameFileGivenAsASeriesOfReadRequests()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest8.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest8.dat");
 	
 	tint noElements = 0;
     for(tint i=4096;i>0;i-=2)
@@ -827,7 +827,7 @@ bool completeSlotForReadDataFromFileWithEachReadRequestAtARandomLocation(tint te
 void AsynchronousFileReaderQtUnitTest::readDataFromFileWithEachReadRequestAtARandomLocation()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest5.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest5.dat");
 	
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));
@@ -854,9 +854,9 @@ void AsynchronousFileReaderQtUnitTest::readDataFromMultipleFilesWithEachReadRequ
 {
 	QVector<QString> fileNames;
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest6A.dat"));
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest6B.dat"));
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest6C.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest6A.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest6B.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest6C.dat"));
 	
 	for(tint idx=0;idx<fileNames.size();idx++)
 	{
@@ -897,7 +897,7 @@ void AsynchronousFileReaderQtUnitTest::readDataFromMultipleFilesWithEachReadRequ
 void AsynchronousFileReaderQtUnitTest::readDataFromMultipleReadersButSameFileWithEachReadRequestAtARandomLocation()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest9.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest9.dat");
 	
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));
@@ -956,7 +956,7 @@ bool completeSlotForCancelAllPendingForContinousReads(tint testId,QSharedPointer
 void AsynchronousFileReaderQtUnitTest::cancelAllPendingForContinousReads()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest10.dat");
+	QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest10.dat");
 	
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));
@@ -983,9 +983,9 @@ void AsynchronousFileReaderQtUnitTest::cancelAllPendingForContinousReadsOnMultip
 {
 	QVector<QString> fileNames;
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest11A.dat"));
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest11B.dat"));
-	fileNames.append(dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest11C.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest11A.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest11B.dat"));
+	fileNames.append(common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest11C.dat"));
 	
 	for(tint idx=0;idx<fileNames.size();idx++)
 	{
@@ -1025,7 +1025,7 @@ void AsynchronousFileReaderQtUnitTest::cancelAllPendingForContinousReadsOnMultip
 void AsynchronousFileReaderQtUnitTest::cancelAllPendingForContinousReadsOnSameFileWithMultipleReaders()
 {
 	track::model::TrackDBTestEnviroment *testEnv = track::model::TrackDBTestEnviroment::instance();
-    QString fileName = dlna::DiskIF::mergeName(testEnv->getDBDirectory(), "asyncfileiotest12.dat");
+    QString fileName = common::DiskOps::mergeName(testEnv->getDBDirectory(), "asyncfileiotest12.dat");
 	
 	BIOStream testFileWriter(e_BIOStream_FileCreate | e_BIOStream_FileWrite);
 	QVERIFY(testFileWriter.open(fileName));

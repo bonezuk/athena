@@ -1,4 +1,4 @@
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "playerapp/playercommon/test/IPCSocketCommsTest.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 
@@ -19,7 +19,7 @@ QString IPCSocketComms_QtTestClass::pathToTestProgramA()
 {
 	QString testProgName = "ipcsocketcomms_test_prog_a";
 	QFileInfo appFile(m_pathToTestExec);
-	QString progPath = dlna::DiskIF::mergeName(appFile.absolutePath(), testProgName);
+	QString progPath = common::DiskOps::mergeName(appFile.absolutePath(), testProgName);
 	if(!common::DiskOps::exist(progPath))
 	{
 		fprintf(stdout, "Cannot find test exec '%s'\n", progPath.toUtf8().constData());
@@ -247,7 +247,7 @@ TEST(IPCSocketComms,RunQtUnitTests)
     {
         char *argv = 0;
 		track::model::TrackDBTestEnviroment *pTrackDBTest = track::model::TrackDBTestEnviroment::instance();
-		QString socketPath = dlna::DiskIF::mergeName(pTrackDBTest->getTempDirectory(), "test_socket_A.usock");
+		QString socketPath = common::DiskOps::mergeName(pTrackDBTest->getTempDirectory(), "test_socket_A.usock");
         IPCSocketComms_QtTestApplication tester(pTrackDBTest->execPath(), socketPath, 0, &argv);
         tester.exec();
         ASSERT_TRUE(tester.testSucceeded());

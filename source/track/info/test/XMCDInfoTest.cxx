@@ -1,6 +1,6 @@
 #include "network/inc/Resource.h"
 #include "dlna/test/UPnPProviderTestEnviroment.h"
-#include "dlna/inc/DiskLayerIF.h"
+#include "common/inc/DiskLayerIF.h"
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -1605,7 +1605,7 @@ TEST(XMCDParser,findLinesThreeLinesWithEOLGivenTwoEmptyLines)
 TEST(XMCDInfo,readXMCDIntegrationTravis)
 {
     dlna::test::UPnPProviderTestEnviroment *env = dlna::test::UPnPProviderTestEnviroment::instance();
-    QString fileName = dlna::DiskIF::mergeName(env->root(2),"travis.txt");
+    QString fileName = common::DiskOps::mergeName(env->root(2),"travis.txt");
 	common::BIOStream fileIO(common::e_BIOStream_FileRead);
 	
 	const char *trackNameRaw[12] = {
@@ -1693,7 +1693,7 @@ TEST(XMCDInfo,readXMCDIntegrationTravis)
 TEST(XMCDInfo,readXMCDIntegrationKanon)
 {
     dlna::test::UPnPProviderTestEnviroment *env = dlna::test::UPnPProviderTestEnviroment::instance();
-	QString fileName = dlna::DiskIF::mergeName(env->root(2),"kanon.txt");
+	QString fileName = common::DiskOps::mergeName(env->root(2),"kanon.txt");
 	common::BIOStream fileIO(common::e_BIOStream_FileRead);
 	
 	const char *trackNameRaw[3] = {

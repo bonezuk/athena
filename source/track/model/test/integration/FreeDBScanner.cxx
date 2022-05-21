@@ -1,5 +1,5 @@
 #include "network/inc/Resource.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "track/info/inc/XMCDInfo.h"
 #include "track/db/inc/TrackDB.h"
 #include "common/inc/BIOBufferedStream.h"
@@ -132,7 +132,7 @@ tint64 DBDirectoryScanner::countFiles(const QString& dirName) const
 		
 		while(name=pDisk->nextDirectoryEntry(h),!name.isEmpty())
 		{
-			QString fullName = dlna::DiskIF::mergeName(dirName,name);
+			QString fullName = common::DiskOps::mergeName(dirName,name);
 			
 			if(pDisk->isDirectory(fullName))
 			{
@@ -168,7 +168,7 @@ void DBDirectoryScanner::processDirectory(const QString& dirName,tint64& current
 		
 		while(name=pDisk->nextDirectoryEntry(h),!name.isEmpty())
 		{
-			QString fullName = dlna::DiskIF::mergeName(dirName,name);
+			QString fullName = common::DiskOps::mergeName(dirName,name);
 			
 			if(pDisk->isDirectory(fullName))
 			{

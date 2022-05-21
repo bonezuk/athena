@@ -16,7 +16,7 @@
 #include "player/inc/PlayerController.h"
 #include "common/inc/ProductVersionInfo.h"
 #include "dlna/inc/XMLLibIF.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskIF.h"
 #include "player/inc/QPlayerApplication.h"
 
 #if defined(Q_OS_MAC)
@@ -190,7 +190,7 @@ int main(int argc,char **argv)
 #endif
 
 		omega::dlna::XMLLibIF::instance("xml");
-		omega::dlna::DiskIF::instance("disk");
+		omega::common::DiskIF::instance("disk");
 
 #if defined(OMEGA_MACOSX)
 		omega::player::CocoaInitializer cocoaMemPool;

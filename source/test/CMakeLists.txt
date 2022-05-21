@@ -11,7 +11,7 @@ set ( TEST_HEADERS
 	../common/test/CachedFileStreamTest.h
 	../common/test/CachedFileStreamMock.h
 	../common/test/ServiceEventTest.h
-	../dlna/test/DiskMockIF.h
+	../common/test/DiskMockIF.h
 	../dlna/test/UPnPMockIF.h
 	../dlna/test/UPnPProviderTestEnviroment.h
 	../dlna/test/XMLLibMockIF.h
@@ -63,9 +63,10 @@ set ( TEST_SOURCE
 #	../common/test/JaroWinklerDistanceTest.cxx
 	../common/test/RandomTest.cxx
 	../common/test/ServiceEventTest.cxx
+	../common/test/DiskLayerTestIF.cxx
+	../common/test/DiskOpsTest.cxx
+	../common/test/DiskMockIF.cxx
 
-	../dlna/test/DiskLayerTestIF.cxx
-	../dlna/test/DiskMockIF.cxx
 	../dlna/test/UPnPDeviceDescriptionTest.cxx
 	../dlna/test/UPnPMockIF.cxx
 	../dlna/test/UPnPProviderTest.cxx

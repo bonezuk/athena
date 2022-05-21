@@ -3,7 +3,7 @@
 #include "gmock/gmock.h"
 
 #include "track/db/inc/TrackFileDependencies.h"
-#include "dlna/test/DiskMockIF.h"
+#include "common/test/DiskMockIF.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 
 using namespace omega;
@@ -14,29 +14,29 @@ using namespace testing;
 
 TEST(TrackFileDependencies,findDependenciesInDirectory)
 {
-	dlna::DiskIF::instance("disk");
+	common::DiskIF::instance("disk");
 
-	QString fileCueNameA = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"cue/album.cue");
-	QString fileCueNameB = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"cue/album.flac");
+	QString fileCueNameA = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"cue/album.cue");
+	QString fileCueNameB = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"cue/album.flac");
 
-	QString fileNoneNameA = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"none/track1.flac");
-	QString fileNoneNameB = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"none/track2.flac");
-	QString fileNoneNameC = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"none/track3.flac");
-	QString fileNoneNameD = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"none/unrelated.cue");
+	QString fileNoneNameA = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"none/track1.flac");
+	QString fileNoneNameB = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"none/track2.flac");
+	QString fileNoneNameC = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"none/track3.flac");
+	QString fileNoneNameD = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"none/unrelated.cue");
 
-	QString filePicNameA = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"pic/cover.jpg");
-	QString filePicNameB = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"pic/track1.flac");
-	QString filePicNameC = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"pic/track2.flac");
-	QString filePicNameD = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"pic/track3.flac");
+	QString filePicNameA = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"pic/cover.jpg");
+	QString filePicNameB = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"pic/track1.flac");
+	QString filePicNameC = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"pic/track2.flac");
+	QString filePicNameD = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"pic/track3.flac");
 
-	QString filePicCueNameA = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"piccue/album.cue");
-	QString filePicCueNameB = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"piccue/album.flac");
-	QString filePicCueNameC = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"piccue/cover.jpg");
+	QString filePicCueNameA = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"piccue/album.cue");
+	QString filePicCueNameB = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"piccue/album.flac");
+	QString filePicCueNameC = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"piccue/cover.jpg");
 	
-	QString fileWavPackNameA = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"wavpack/track1.wv");
-	QString fileWavPackNameB = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"wavpack/track1.wvc");
-	QString fileWavPackNameC = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"wavpack/track2.wv");
-	QString fileWavPackNameD = dlna::DiskIF::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"wavpack/track2.wvc");
+	QString fileWavPackNameA = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"wavpack/track1.wv");
+	QString fileWavPackNameB = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"wavpack/track1.wvc");
+	QString fileWavPackNameC = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"wavpack/track2.wv");
+	QString fileWavPackNameD = common::DiskOps::mergeName(track::model::TrackDBTestEnviroment::instance()->getDBDirectory(),"wavpack/track2.wvc");
 
 	QSet<QString> set;
 	QSet<QString>::iterator ppI;
@@ -118,7 +118,7 @@ TEST(TrackFileDependencies,findDependenciesInDirectory)
 	
 	EXPECT_FALSE(set.find(fileNoneNameD)!=set.end());
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -529,8 +529,8 @@ TEST(TrackFileDependencies,scanAndCacheDirectoryWhenDirectoryAlreadyCached)
 
 TEST(TrackFileDependencies,scanAndCacheDirectoryWhenGivenNameIsNotADirectory)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 	
 	QString dirName = "/Users/Bonez/Music";
 	
@@ -545,21 +545,21 @@ TEST(TrackFileDependencies,scanAndCacheDirectoryWhenGivenNameIsNotADirectory)
 	
 	EXPECT_EQ(0,dirCacheMap.size());
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(TrackFileDependencies,scanAndCacheDirectoryWhenDirectoryCannotBeOpenedToBeScanned)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 	
 	QString dirName = "/Users/Bonez/Music";
 	
 	EXPECT_CALL(diskIF,isDirectory(dirName)).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(diskIF,openDirectory(dirName)).Times(1)
-		.WillOnce(Return(dlna::DiskIF::c_invalidDirectoryHandle));
+		.WillOnce(Return(common::DiskIF::c_invalidDirectoryHandle));
 	
 	QMap<QString,QMap<TrackFileDependencies::FileType,QSet<QString> > > dirCacheMap;
 	QMap<QString,QMap<TrackFileDependencies::FileType,QSet<QString> > >::iterator ppI;
@@ -571,24 +571,24 @@ TEST(TrackFileDependencies,scanAndCacheDirectoryWhenDirectoryCannotBeOpenedToBeS
 	
 	EXPECT_EQ(0,dirCacheMap.size());
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(TrackFileDependencies,scanAndCacheDirectoryWhenEmptyDirectory)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 	
 	QString dirName = "/Users/Bonez/Music";
 	QString emptyName;
 	
 	EXPECT_CALL(diskIF,isDirectory(dirName)).Times(1).WillOnce(Return(true));
-	EXPECT_CALL(diskIF,openDirectory(dirName)).Times(1).WillOnce(Return((dlna::DiskIF::DirHandle)(1)));
-	EXPECT_CALL(diskIF,nextDirectoryEntry((dlna::DiskIF::DirHandle)(1))).Times(1)
+	EXPECT_CALL(diskIF,openDirectory(dirName)).Times(1).WillOnce(Return((common::DiskIF::DirHandle)(1)));
+	EXPECT_CALL(diskIF,nextDirectoryEntry((common::DiskIF::DirHandle)(1))).Times(1)
 		.WillOnce(Return(emptyName));
-	EXPECT_CALL(diskIF,closeDirectory((dlna::DiskIF::DirHandle)(1))).Times(1);
+	EXPECT_CALL(diskIF,closeDirectory((common::DiskIF::DirHandle)(1))).Times(1);
 	
 	QMap<QString,QMap<TrackFileDependencies::FileType,QSet<QString> > > dirCacheMap;
 	QMap<QString,QMap<TrackFileDependencies::FileType,QSet<QString> > >::iterator ppI;
@@ -604,15 +604,15 @@ TEST(TrackFileDependencies,scanAndCacheDirectoryWhenEmptyDirectory)
 	ASSERT_TRUE(ppI!=dirCacheMap.end());
 	EXPECT_EQ(0,ppI.value().size());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(TrackFileDependencies,scanAndCacheDirectoryWithFourFilesThreeFileDependAndOneSubDirectory)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 	
 	QString dirName = "/Users/Bonez/Music";
 	QString fileNameA = "thealbum.cue";
@@ -622,16 +622,16 @@ TEST(TrackFileDependencies,scanAndCacheDirectoryWithFourFilesThreeFileDependAndO
 	QString subDirectoryNameA = "subdir";
 	QString emptyName;
 	
-	QString fullNameA = dlna::DiskIF::mergeName(dirName,fileNameA);
-	QString fullNameB = dlna::DiskIF::mergeName(dirName,fileNameB);
-	QString fullNameC = dlna::DiskIF::mergeName(dirName,fileNameC);
-	QString fullNameD = dlna::DiskIF::mergeName(dirName,fileNameD);
-	QString fullNameE = dlna::DiskIF::mergeName(dirName,subDirectoryNameA);
+	QString fullNameA = common::DiskOps::mergeName(dirName,fileNameA);
+	QString fullNameB = common::DiskOps::mergeName(dirName,fileNameB);
+	QString fullNameC = common::DiskOps::mergeName(dirName,fileNameC);
+	QString fullNameD = common::DiskOps::mergeName(dirName,fileNameD);
+	QString fullNameE = common::DiskOps::mergeName(dirName,subDirectoryNameA);
 	
 	EXPECT_CALL(diskIF,isDirectory(dirName)).Times(1).WillOnce(Return(true));
-	EXPECT_CALL(diskIF,openDirectory(dirName)).Times(1).WillOnce(Return((dlna::DiskIF::DirHandle)(1)));
+	EXPECT_CALL(diskIF,openDirectory(dirName)).Times(1).WillOnce(Return((common::DiskIF::DirHandle)(1)));
 	
-	EXPECT_CALL(diskIF,nextDirectoryEntry((dlna::DiskIF::DirHandle)(1))).Times(6)
+	EXPECT_CALL(diskIF,nextDirectoryEntry((common::DiskIF::DirHandle)(1))).Times(6)
 		.WillOnce(Return(fileNameA))
 		.WillOnce(Return(fileNameB))
 		.WillOnce(Return(fileNameC))
@@ -645,7 +645,7 @@ TEST(TrackFileDependencies,scanAndCacheDirectoryWithFourFilesThreeFileDependAndO
 	EXPECT_CALL(diskIF,isFile(fullNameD)).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(diskIF,isFile(fullNameE)).Times(1).WillOnce(Return(false));
 	
-	EXPECT_CALL(diskIF,closeDirectory((dlna::DiskIF::DirHandle)(1))).Times(1);
+	EXPECT_CALL(diskIF,closeDirectory((common::DiskIF::DirHandle)(1))).Times(1);
 	
 	QMap<QString,QMap<TrackFileDependencies::FileType,QSet<QString> > > dirCacheMap;
 	QMap<QString,QMap<TrackFileDependencies::FileType,QSet<QString> > >::iterator ppI;
@@ -679,7 +679,7 @@ TEST(TrackFileDependencies,scanAndCacheDirectoryWithFourFilesThreeFileDependAndO
 	ppK=ppJ.value().find(fileNameD);
 	ASSERT_TRUE(ppK!=ppJ.value().end());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -773,8 +773,8 @@ TEST(TrackFileDependencies,addGivenFileAlreadyAdded)
 
 TEST(TrackFileDependencies,addGivenFileIsNotAFile)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString fileName = "/Users/Bonez/Music/Album/track.flac";
 
@@ -789,15 +789,15 @@ TEST(TrackFileDependencies,addGivenFileIsNotAFile)
 	
 	EXPECT_TRUE(files.find(fileName)==files.end());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(TrackFileDependencies,addGivenCacheAndScanOfDirectoryFailsWithNoSameNameDependency)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString fileName = "/Users/Bonez/Music/Album/track.mp3";
 	QString dirName = "/Users/Bonez/Music/Album";
@@ -814,15 +814,15 @@ TEST(TrackFileDependencies,addGivenCacheAndScanOfDirectoryFailsWithNoSameNameDep
 	
 	EXPECT_TRUE(files.find(fileName)!=files.end());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(TrackFileDependencies,addGivenCacheAndScanOfDirectoryFailsWithSameNameDependency)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString fileName = "/Users/Bonez/Music/Album/track.wv";
 	QString dirName = "/Users/Bonez/Music/Album";
@@ -843,15 +843,15 @@ TEST(TrackFileDependencies,addGivenCacheAndScanOfDirectoryFailsWithSameNameDepen
 	
 	EXPECT_TRUE(files.find(fileName)!=files.end());
 
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(TrackFileDependencies,addGivenCacheAndScanOfDirectorySucceeds)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 
 	QString fileName = "/Users/Bonez/Music/Album/track.flac";
 	QString dirName = "/Users/Bonez/Music/Album";
@@ -868,7 +868,7 @@ TEST(TrackFileDependencies,addGivenCacheAndScanOfDirectorySucceeds)
 	
 	EXPECT_TRUE(files.find(fileName)!=files.end());
 
-	dlna::DiskIF::release();	
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1247,8 +1247,8 @@ void TrackFileDependenciesCacheDependentFileIfExistsTest::testCacheDependentFile
 
 TEST(TrackFileDependencies,cacheDependentFileIfExistsFileDoesNotExist)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 	
 	QString fileName = "C:\\\\Users\\Bonez\\Music\\Album\\The Name.flac";
 	QString cueFileName = "C:\\\\Users\\Bonez\\Music\\Album\\The Name.cue";
@@ -1259,15 +1259,15 @@ TEST(TrackFileDependencies,cacheDependentFileIfExistsFileDoesNotExist)
 	
 	dependency.testCacheDependentFileIfExists(fileName,"cue");
 	
-	dlna::DiskIF::release();	
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(TrackFileDependencies,cacheDependentFileIfExistsFileWithDOSPathName)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 	
 	QString fileName = "C:\\\\Users\\Bonez\\Music\\Album\\The Name.flac";
 	QString cueFileName = "C:\\\\Users\\Bonez\\Music\\Album\\The Name.cue";
@@ -1294,15 +1294,15 @@ TEST(TrackFileDependencies,cacheDependentFileIfExistsFileWithDOSPathName)
 	ppK = ppJ.value().find("The Name.cue");
 	ASSERT_TRUE(ppK!=ppJ.value().end());
 	
-	dlna::DiskIF::release();	
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(TrackFileDependencies,cacheDependentFileIfExistsFileWithUNIXPathName)
 {
-	dlna::DiskIFSPtr pMockAPI = dlna::DiskIF::instance("mock");
-	dlna::DiskMockIF& diskIF = dynamic_cast<dlna::DiskMockIF&>(*(pMockAPI.data()));
+	common::DiskIFSPtr pMockAPI = common::DiskIF::instance("mock");
+	common::DiskMockIF& diskIF = dynamic_cast<common::DiskMockIF&>(*(pMockAPI.data()));
 	
 	QString fileName = "/Users/Bonez/Music/Album/The Name.flac";
 	QString cueFileName = "/Users/Bonez/Music/Album/The Name.cue";
@@ -1329,7 +1329,7 @@ TEST(TrackFileDependencies,cacheDependentFileIfExistsFileWithUNIXPathName)
 	ppK = ppJ.value().find("The Name.cue");
 	ASSERT_TRUE(ppK!=ppJ.value().end());
 	
-	dlna::DiskIF::release();
+	common::DiskIF::release();
 }
 
 //-------------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 
 #include "common/inc/SBService.h"
 #include "common/inc/CommonFunctions.h"
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "engine/blackomega/inc/MPCodec.h"
 #include "engine/silveromega/inc/SilverCodec.h"
 #include "engine/whiteomega/inc/WhiteCodec.h"
@@ -114,7 +114,7 @@ QString pathToUNIXSocket(const QString& serviceName)
 	QString fileName = serviceName + ".usock";
 	QString userDir = userApplicationDataDirectory();
 	common::Log::g_Log << "UserDataDir - " << userDir << ", socket - " << fileName << common::c_endl;
-	QString path = dlna::DiskIF::mergeName(userApplicationDataDirectory(), fileName);
+	QString path = common::DiskOps::mergeName(userApplicationDataDirectory(), fileName);
 	return path;
 }
 

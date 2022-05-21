@@ -80,6 +80,13 @@ class COMMON_EXPORT DiskOps
 		static common::TimeStamp getModifiedTime(const QString& fileName);
 		static common::TimeStamp getModifiedTime(const QString& fileName,tint& fileSize);
 
+        static QString toNativeSeparators(const QString& iName);
+
+		static QString mergeName(const tchar *dirName,const tchar *fileName);
+		static QString mergeName(const tchar *dirName,const QString& fileName);
+		static QString mergeName(const QString& dirName,const tchar *fileName);
+		static QString mergeName(const QString& dirName,const QString& fileName);
+
 	protected:
 
 		static QMutex m_mutex;

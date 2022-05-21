@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "dlna/inc/DiskLayerIF.h"
+#include "common/inc/DiskLayerIF.h"
 #include "dlna/test/UPnPProviderTestEnviroment.h"
 
-using namespace omega::dlna;
+using namespace omega::common;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------
@@ -42,16 +42,16 @@ TEST(DiskLayerIF,directoryNameNoName)
 TEST(DiskLayerIF,directoryNamePath)
 {
 	DiskLayerIFTest disk;
-    EXPECT_TRUE(disk.testDirectoryName("/usr")==DiskIF::toNativeSeparators("/usr"));
-    EXPECT_TRUE(disk.testDirectoryName("/usr/")==DiskIF::toNativeSeparators("/usr"));
-    EXPECT_TRUE(disk.testDirectoryName("/usr\\")==DiskIF::toNativeSeparators("/usr"));
+	EXPECT_TRUE(disk.testDirectoryName("/usr")==DiskOps::toNativeSeparators("/usr"));
+	EXPECT_TRUE(disk.testDirectoryName("/usr/")==DiskOps::toNativeSeparators("/usr"));
+	EXPECT_TRUE(disk.testDirectoryName("/usr\\")==DiskOps::toNativeSeparators("/usr"));
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(DiskLayerIF,isDirectoryImplementation)
 {
-	test::UPnPProviderTestEnviroment *env = test::UPnPProviderTestEnviroment::instance();
+	omega::dlna::test::UPnPProviderTestEnviroment *env = omega::dlna::test::UPnPProviderTestEnviroment::instance();
 	DiskIFSPtr diskIF = DiskIF::instance("disk");
 	QString fileNameA = env->root(1) + "\\images";
 	EXPECT_TRUE(diskIF->isDirectory(fileNameA));
@@ -71,7 +71,7 @@ TEST(DiskLayerIF,isDirectoryImplementation)
 
 TEST(DiskLayerIF,isFileImplementation)
 {
-	test::UPnPProviderTestEnviroment *env = test::UPnPProviderTestEnviroment::instance();
+	omega::dlna::test::UPnPProviderTestEnviroment *env = omega::dlna::test::UPnPProviderTestEnviroment::instance();
 	DiskIFSPtr diskIF = DiskIF::instance("disk");
 	QString fileNameA = env->root(1) + "\\lifetimeSCPD.xml";
 	EXPECT_TRUE(diskIF->isFile(fileNameA));
@@ -85,7 +85,7 @@ TEST(DiskLayerIF,isFileImplementation)
 
 TEST(DiskLayerIF,openDirectoryWhenIsFileImplementation)
 {
-	test::UPnPProviderTestEnviroment *env = test::UPnPProviderTestEnviroment::instance();
+	omega::dlna::test::UPnPProviderTestEnviroment *env = omega::dlna::test::UPnPProviderTestEnviroment::instance();
 	QString name = env->root(1) + "/simple.html";
 
 	DiskIFSPtr diskIF = DiskIF::instance("disk");
@@ -100,7 +100,7 @@ TEST(DiskLayerIF,openDirectoryWhenIsFileImplementation)
 
 TEST(DiskLayerIF,scanDirectoryImplementationGivenInvalid)
 {
-	test::UPnPProviderTestEnviroment *env = test::UPnPProviderTestEnviroment::instance();
+	omega::dlna::test::UPnPProviderTestEnviroment *env = omega::dlna::test::UPnPProviderTestEnviroment::instance();
 	QString name = env->root(1) + "/not_a_file.html";
 
 	DiskIFSPtr diskIF = DiskIF::instance("disk");
@@ -115,7 +115,7 @@ TEST(DiskLayerIF,scanDirectoryImplementationGivenInvalid)
 
 TEST(DiskLayerIF,scanDirectoryImplementationGivenEmptyDirectory)
 {
-	test::UPnPProviderTestEnviroment *env = test::UPnPProviderTestEnviroment::instance();
+	omega::dlna::test::UPnPProviderTestEnviroment *env = omega::dlna::test::UPnPProviderTestEnviroment::instance();
 	QString rootDir = env->root(0);
 
 	DiskIFSPtr diskIF = DiskIF::instance("disk");
@@ -137,7 +137,7 @@ TEST(DiskLayerIF,scanDirectoryImplementationGivenEmptyDirectory)
 
 TEST(DiskLayerIF,scanDirectoryImplementationGivenDirectory)
 {
-	test::UPnPProviderTestEnviroment *env = test::UPnPProviderTestEnviroment::instance();
+	omega::dlna::test::UPnPProviderTestEnviroment *env = omega::dlna::test::UPnPProviderTestEnviroment::instance();
 	QString rootDir = env->root(1);
 
 	DiskIFSPtr diskIF = DiskIF::instance("disk");
@@ -185,63 +185,6 @@ TEST(DiskLayerIF,scanDirectoryImplementationGivenDirectory)
 	EXPECT_TRUE(dNameSet.isEmpty());
 	
 	DiskIF::release();
-}
-
-//-------------------------------------------------------------------------------------------
-
-TEST(DiskIF,mergeNameNoName)
-{
-	EXPECT_TRUE(DiskIF::mergeName("","")=="");
-	EXPECT_TRUE(DiskIF::mergeName(0,"")=="");
-	EXPECT_TRUE(DiskIF::mergeName("",0)=="");
-	EXPECT_TRUE(DiskIF::mergeName(0,0)=="");
-}
-
-//-------------------------------------------------------------------------------------------
-
-TEST(DiskIF,mergeNameOnlyDir)
-{
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp","")==DiskIF::toNativeSeparators("/usr/temp"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp/",0)==DiskIF::toNativeSeparators("/usr/temp"));
-	EXPECT_TRUE(DiskIF::mergeName("\\usr\\temp","")==DiskIF::toNativeSeparators("/usr/temp"));
-}
-
-//-------------------------------------------------------------------------------------------
-
-TEST(DiskIF,mergeNameOnlyFile)
-{
-	EXPECT_TRUE(DiskIF::mergeName("","simple.html")==DiskIF::toNativeSeparators("simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("","/simple.html")==DiskIF::toNativeSeparators("simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName(0,"\\simple.html")==DiskIF::toNativeSeparators("simple.html"));
-}
-
-//-------------------------------------------------------------------------------------------
-
-TEST(DiskIF,mergNameBothDirAndFile)
-{
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp","simple.html")==DiskIF::toNativeSeparators("/usr/temp/simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp/","simple.html")==DiskIF::toNativeSeparators("/usr/temp/simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp\\","simple.html")==DiskIF::toNativeSeparators("/usr/temp/simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp","/simple.html")==DiskIF::toNativeSeparators("/usr/temp/simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp","\\simple.html")==DiskIF::toNativeSeparators("/usr/temp/simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp///","\\\\simple.html")==DiskIF::toNativeSeparators("/usr/temp/simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp/","/simple.html")==DiskIF::toNativeSeparators("/usr/temp/simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp\\","\\simple.html")==DiskIF::toNativeSeparators("/usr/temp/simple.html"));
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp/../","simple.html")==DiskIF::toNativeSeparators("/usr/temp/../simple.html"));
-}
-
-//-------------------------------------------------------------------------------------------
-
-TEST(DiskIF,mergeNameVaritants)
-{
-	QString dName("/usr/temp");
-	QString fName("simple.html");
-	QString fullName("/usr/temp/simple.html");
-	fullName = DiskIF::toNativeSeparators(fullName);
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp","simple.html")==fullName);
-	EXPECT_TRUE(DiskIF::mergeName("/usr/temp",fName)==fullName);
-	EXPECT_TRUE(DiskIF::mergeName(dName,"simple.html")==fullName);
-	EXPECT_TRUE(DiskIF::mergeName(dName,fName)==fullName);	
 }
 
 //-------------------------------------------------------------------------------------------

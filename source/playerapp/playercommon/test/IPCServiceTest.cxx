@@ -1,4 +1,4 @@
-#include "dlna/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 #include "playerapp/playercommon/test/IPCServiceTest.h"
 #include "track/model/test/TrackDBTestEnviroment.h"
 
@@ -218,7 +218,7 @@ QString IPCService_QtTestApplication::pathToTestProgramB()
 {
 	QString testProgName = "ipcservice_test_prog_b";
 	QFileInfo appFile(m_pathToTestExec);
-	QString progPath = dlna::DiskIF::mergeName(appFile.absolutePath(), testProgName);
+	QString progPath = common::DiskOps::mergeName(appFile.absolutePath(), testProgName);
 	if(!common::DiskOps::exist(progPath))
 	{
 		fprintf(stdout, "Cannot find test exec '%s'\n", progPath.toUtf8().constData());

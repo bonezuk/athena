@@ -3,8 +3,8 @@
 #define __OMEGA_DLNA_DISKIF_H
 //-------------------------------------------------------------------------------------------
 
-#include "dlna/inc/UPnPIF.h"
 #include "common/inc/DiskOps.h"
+#include "common/inc/Factory.h"
 
 #if defined(OMEGA_POSIX)
 #include <stdio.h>
@@ -16,11 +16,11 @@
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-class DLNA_EXPORT DiskIF
+class COMMON_EXPORT DiskIF
 {
 	public:
 	
@@ -43,13 +43,6 @@ class DLNA_EXPORT DiskIF
 		static DirHandle invalidDirectory();
 		static bool isValidDirectory(DirHandle h);
 
-        static QString toNativeSeparators(const QString& iName);
-
-		static QString mergeName(const tchar *dirName,const tchar *fileName);
-		static QString mergeName(const tchar *dirName,const QString& fileName);
-		static QString mergeName(const QString& dirName,const tchar *fileName);
-		static QString mergeName(const QString& dirName,const QString& fileName);
-
 		virtual bool isFile(const QString& name) const = 0;
 		virtual bool isDirectory(const QString& name) const = 0;
 		
@@ -66,10 +59,10 @@ typedef QSharedPointer<DiskIF> DiskIFSPtr;
 
 //-------------------------------------------------------------------------------------------
 
-ABSTRACT_FACTORY_CLASS(DLNA_EXPORT,DiskIFFactory,DiskIF)
+ABSTRACT_FACTORY_CLASS(COMMON_EXPORT,DiskIFFactory,DiskIF)
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
