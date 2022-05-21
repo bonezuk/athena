@@ -6,7 +6,7 @@
 #include "widget/inc/SandBoxBase.h"
 
 //-------------------------------------------------------------------------------------------
-#if defined(OMEGA_WIN32) || defined(OMEGA_LINUX)
+#if defined(OMEGA_WIN32) || defined(OMEGA_LINUX) || defined(OMEGA_IOS) || defined(OMEGA_ANDROID)
 //-------------------------------------------------------------------------------------------
 namespace omega
 {

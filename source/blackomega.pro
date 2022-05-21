@@ -13,7 +13,7 @@ android {
 
 TEMPLATE = app
 
-QT += quick qml xml
+QT += quick qml xml core5compat
 
 TARGET = BlackOmegaIOS
 
@@ -78,8 +78,8 @@ SOURCES += ./common/src/CommonFunctions.cxx
 SOURCES += ./common/src/DLong.cxx
 SOURCES += ./common/src/DebugOutput.cxx
 SOURCES += ./common/src/DictionaryXMLMap.cxx
-HEADERS += ./common/src/DiskIF.cxx
-HEADERS += ./common/src/DiskLayerIF.cxx
+SOURCES += ./common/src/DiskIF.cxx
+SOURCES += ./common/src/DiskLayerIF.cxx
 SOURCES += ./common/src/DiskOps.cxx
 SOURCES += ./common/src/Exception.cxx
 SOURCES += ./common/src/JaroWinklerDistance.cxx
@@ -568,6 +568,104 @@ ios
 	OBJECTIVE_SOURCES += ./audioio/src/AOQueryCoreAudioIOS.mm
 	OBJECTIVE_SOURCES += ./audioio/src/AudioHardwareBufferCoreAudioIOS.mm
 }
+
+# --- track/info ---
+
+HEADERS += ./track/info/inc/AIFFInfo.h
+HEADERS += ./track/info/inc/APEInfo.h
+HEADERS += ./track/info/inc/APETag.h
+HEADERS += ./track/info/inc/AtomInfo.h
+HEADERS += ./track/info/inc/CueInfo.h
+HEADERS += ./track/info/inc/CueParser.h
+HEADERS += ./track/info/inc/DirInfo.h
+HEADERS += ./track/info/inc/EmbeddedID3Info.h
+HEADERS += ./track/info/inc/FLACInfo.h
+HEADERS += ./track/info/inc/FileInfo.h
+HEADERS += ./track/info/inc/ID3Info1.h
+HEADERS += ./track/info/inc/ID3Info2.h
+HEADERS += ./track/info/inc/Info.h
+HEADERS += ./track/info/inc/InfoDLL.h
+HEADERS += ./track/info/inc/MPCChapterTag.h
+HEADERS += ./track/info/inc/VorbisInfo.h
+HEADERS += ./track/info/inc/WavInfo.h
+HEADERS += ./track/info/inc/XMCDInfo.h
+
+SOURCES += ./track/info/src/AIFFInfo.cxx
+SOURCES += ./track/info/src/APEInfo.cxx
+SOURCES += ./track/info/src/APETag.cxx
+SOURCES += ./track/info/src/AtomInfo.cxx
+SOURCES += ./track/info/src/CueInfo.cxx
+SOURCES += ./track/info/src/CueParser.cxx
+SOURCES += ./track/info/src/DirInfo.cxx
+SOURCES += ./track/info/src/EmbeddedID3Info.cxx
+SOURCES += ./track/info/src/FLACInfo.cxx
+SOURCES += ./track/info/src/FileInfo.cxx
+SOURCES += ./track/info/src/ID3Info1.cxx
+SOURCES += ./track/info/src/ID3Info2.cxx
+SOURCES += ./track/info/src/Info.cxx
+SOURCES += ./track/info/src/MPCChapterTag.cxx
+SOURCES += ./track/info/src/VorbisInfo.cxx
+SOURCES += ./track/info/src/WavInfo.cxx
+SOURCES += ./track/info/src/XMCDInfo.cxx
+
+# --- widget ---
+
+HEADERS += ./widget/inc/SandBoxBase.h
+HEADERS += ./widget/inc/SandBoxWindows.h
+HEADERS += ./widget/inc/WidgetDLL.h
+
+SOURCES += ./widget/src/SandBoxBase.cxx
+SOURCES += ./widget/src/SandBoxWindows.cxx
+
+# --- track/db ---
+
+HEADERS += ./track/db/inc/DBInfo.h
+HEADERS += ./track/db/inc/DbDLL.h
+HEADERS += ./track/db/inc/SQLiteDatabase.h
+HEADERS += ./track/db/inc/SQLiteException.h
+HEADERS += ./track/db/inc/SQLiteInsert.h
+HEADERS += ./track/db/inc/SQLiteLog.h
+HEADERS += ./track/db/inc/SQLiteOperation.h
+HEADERS += ./track/db/inc/SQLiteQuery.h
+HEADERS += ./track/db/inc/Schema.h
+HEADERS += ./track/db/inc/TrackDB.h
+HEADERS += ./track/db/inc/TrackDBMountPoints.h
+HEADERS += ./track/db/inc/TrackFileDependencies.h
+HEADERS += ./track/db/inc/sqlite3.h
+
+SOURCES += ./track/db/src/DBInfo.cxx
+SOURCES += ./track/db/src/SQLiteDatabase.cxx
+SOURCES += ./track/db/src/SQLiteException.cxx
+SOURCES += ./track/db/src/SQLiteInsert.cxx
+SOURCES += ./track/db/src/SQLiteLog.cxx
+SOURCES += ./track/db/src/SQLiteOperation.cxx
+SOURCES += ./track/db/src/SQLiteQuery.cxx
+SOURCES += ./track/db/src/Schema.cxx
+SOURCES += ./track/db/src/TrackDB.cxx
+SOURCES += ./track/db/src/TrackDBMountPoints.cxx
+SOURCES += ./track/db/src/TrackFileDependencies.cxx
+SOURCES += ./track/db/src/sqlite3.c
+
+# --- track/model ---
+
+HEADERS += ./track/model/inc/AbstractTrackItem.h
+HEADERS += ./track/model/inc/AbstractTrackModel.h
+HEADERS += ./track/model/inc/AlbumModel.h
+HEADERS += ./track/model/inc/AlbumModelKey.h
+HEADERS += ./track/model/inc/AlbumModelUtilities.h
+HEADERS += ./track/model/inc/AlbumTrackModel.h
+HEADERS += ./track/model/inc/ImageRepositary.h
+HEADERS += ./track/model/inc/TrackModelDLL.h
+HEADERS += ./track/model/inc/TrackModelKey.h
+
+SOURCES += ./track/model/src/AbstractTrackItem.cxx
+SOURCES += ./track/model/src/AbstractTrackModel.cxx
+SOURCES += ./track/model/src/AlbumModel.cxx
+SOURCES += ./track/model/src/AlbumModelKey.cxx
+SOURCES += ./track/model/src/AlbumModelUtilities.cxx
+SOURCES += ./track/model/src/AlbumTrackModel.cxx
+SOURCES += ./track/model/src/ImageRepositary.cxx
+SOURCES += ./track/model/src/TrackModelKey.cxx
 
 # --- playerapp/playerios ---
 

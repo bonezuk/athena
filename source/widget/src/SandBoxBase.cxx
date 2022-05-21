@@ -4,8 +4,10 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QCoreApplication>
+#if !defined(OMEGA_IOS) && !defined(OMEGA_ANDROID)
 #include <QApplication>
 #include <QFileDialog>
+#endif
 #include <QSettings>
 #if QT_VERSION >= 0x050000
 #include <QStandardPaths>
@@ -74,30 +76,35 @@ QString SBServiceBase::getApplicationDataDirectory()
 
 void SBServiceBase::loadDirDialog(QObject *parent,const QString& title,const QString& dirName)
 {
+#if !defined(OMEGA_IOS) && !defined(OMEGA_ANDROID)
 	QWidget *parentWidget = dynamic_cast<QWidget *>(parent);
 	QString dName = QFileDialog::getExistingDirectory(parentWidget,title,dirName);
 	if(!dName.isEmpty())
 	{
 		emit onLoadDirectory(dName);
 	}
+#endif
 }
 
 //-------------------------------------------------------------------------------------------
 
 void SBServiceBase::loadFilesDialog(QObject *parent,const QString& title,const QString& dirName,const QString& filter)
 {
+#if !defined(OMEGA_IOS) && !defined(OMEGA_ANDROID)
 	QWidget *parentWidget = dynamic_cast<QWidget *>(parent);
 	QStringList fileList = QFileDialog::getOpenFileNames(parentWidget,title,dirName,filter);
 	if(!fileList.isEmpty())
 	{
 		emit onLoadFiles(fileList);
 	}
+#endif
 }
 
 //-------------------------------------------------------------------------------------------
 
 void SBServiceBase::saveFileDialog(QObject *parent,const QString& title,const QString& dirName,const QString& filter)	
 {
+#if !defined(OMEGA_IOS) && !defined(OMEGA_ANDROID)
 	QString selFilter;
 	QWidget *parentWidget = dynamic_cast<QWidget *>(parent);
 	QString fileName = QFileDialog::getSaveFileName(parentWidget,title,dirName,filter,&selFilter);
@@ -105,6 +112,7 @@ void SBServiceBase::saveFileDialog(QObject *parent,const QString& title,const QS
 	{
 		emit onSaveFile(fileName,selFilter);
 	}
+#endif
 }
 
 //-------------------------------------------------------------------------------------------
