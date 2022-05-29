@@ -2,11 +2,13 @@ import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Window 2.14
 import QtQuick.Layouts 1.15
-import uk.co.blackomega 1.0
 
 Window {
     id: window
     visible: true
+
+	width: 400
+	height: 600
 	
 	StackLayout {
 		id: mainArea
@@ -28,7 +30,7 @@ Window {
 					anchors.leftMargin: 20
 					anchors.verticalCenter: parent.verticalCenter
 					font.pixelSize: 20
-                    text: model.title + " (" + model.artist + ")"
+	                text: model.track + " (" + model.artist + ")"
 				}
 			}
 		}
@@ -61,7 +63,7 @@ Window {
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
-        implicitHeight: 65
+		implicitHeight: 75
 		spacing: 0
 		
 		property int currentNavIndex: 0
@@ -88,7 +90,7 @@ Window {
 	        Text {
 				text: "Library"
 				color: (navBar.currentNavIndex == parent.navIndex) ? "white" : "#323232"
-                font.pointSize: 14
+	        	font.pointSize: 20
 	        	anchors.horizontalCenter: parent.horizontalCenter
 	        	anchors.top: albumButton.bottom
 	        }
@@ -118,7 +120,7 @@ Window {
 	        Text {
 	        	text: "Settings"
 	        	color: (navBar.currentNavIndex == parent.navIndex) ? "white" : "#323232"
-                font.pointSize: 14
+	        	font.pointSize: 20
 	        	anchors.horizontalCenter: parent.horizontalCenter
 	        	anchors.top: settingsButton.bottom
 	        }
@@ -127,5 +129,59 @@ Window {
 		}
 		
 	}
+
+ListModel {
+	id: playListModel
+	ListElement {	// 0
+		track: "Danger Zone"
+		artist: "Kenny Loggins"
+		album: "Top Gun"
+	}
+	ListElement {	// 1
+		track: "Mighty Wings"
+		artist: "Cheap Trick"
+		album: "Top Gun"
+	}
+	ListElement {	// 2
+		track: "Playing with the Boys"
+		artist: "Kenny Loggins"
+		album: "Top Gun"
+	}
+	ListElement {	// 3
+		track: "Lead Me On"
+		artist: "Teena Marie"
+		album: "Top Gun"
+	}
+	ListElement {	// 4
+		track: "Take My Breath Away"
+		artist: "Berlin"
+		album: "Top Gun"
+	}
+	ListElement {	// 5
+		track: "Hot Summer Nights"
+		artist: "Miami Sound Machine"
+		album: "Top Gun"
+	}
+	ListElement {	// 6
+		track: "Heaven in Your Eyes"
+		artist: "Loverboy"
+		album: "Top Gun"
+	}
+	ListElement {	// 7
+		track: "Through the Fire"
+		artist: "Larry Greene"
+		album: "Top Gun"
+	}
+	ListElement {	// 8
+		track: "Destination Unknown"
+		artist: "Marietta"
+		album: "Top Gun"
+	}
+	ListElement {	// 9
+		track: "Top Gun Anthem"
+		artist: "Harold Faltermeyer, Steve Stevens"
+		album: "Top Gun"
+	}
+}
 	
 }

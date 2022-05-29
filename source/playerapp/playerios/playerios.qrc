@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>Resources/frontpage1.qml</file>
+        <file>Resources/images/album.png</file>
+        <file>Resources/images/album_disable.png</file>
+        <file>Resources/images/gears.png</file>
+        <file>Resources/images/gears_disable.png</file>
     </qresource>
 </RCC>
