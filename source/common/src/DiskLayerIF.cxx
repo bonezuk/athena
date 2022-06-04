@@ -69,7 +69,7 @@ bool DiskLayerIF::isFile(const QString& name) const
 	
 	if(!name.isEmpty())
 	{
-        QString fName = toNativeSeparators(name);
+        QString fName = common::DiskOps::toNativeSeparators(name);
 		LPCWSTR wStr = reinterpret_cast<LPCWSTR>(fName.utf16());
 		struct _stat fileStat;
 		if(::_wstat(wStr,&fileStat)==0)

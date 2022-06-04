@@ -1,8 +1,17 @@
+/*
+#import QtQuick 2.14
+#import QtQuick.Controls 2.14
+#import QtQuick.Window 2.14
+#import QtQuick.Layouts 1.15
+#import uk.co.blackomega 1.0
+*/
+
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Window 2.14
 import QtQuick.Layouts 1.15
 import uk.co.blackomega 1.0
+
 
 Window {
     id: window
@@ -93,7 +102,7 @@ Window {
 	        Text {
 				text: "Library"
 				color: (navBar.currentNavIndex == parent.navIndex) ? "white" : "#323232"
-                font.pointSize: 14
+                font.pixelSize: 14
 	        	anchors.horizontalCenter: parent.horizontalCenter
 	        	anchors.top: albumButton.bottom
 	        }
@@ -123,7 +132,7 @@ Window {
 	        Text {
 	        	text: "Settings"
 	        	color: (navBar.currentNavIndex == parent.navIndex) ? "white" : "#323232"
-                font.pointSize: 14
+                font.pixelSize: 14
 	        	anchors.horizontalCenter: parent.horizontalCenter
 	        	anchors.top: settingsButton.bottom
 	        }

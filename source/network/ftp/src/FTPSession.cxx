@@ -1119,12 +1119,12 @@ bool FTPSession::processPASV(const common::BString& cmd)
 
 	if(m_pstate==2)
 	{
-		tuint32 lIP = Resource::instance().localIP();
+		tuint32 lIP = Resource::instance().localIP(&m_address);
 		struct sockaddr_in ipAddr;
 		common::BString sIP;
 		QString ipStr;
 			
-		Resource::instance().setAddressIP(lIP,&ipAddr);
+		Resource::instance().setAddressIP(::htonl(lIP),&ipAddr);
 		ipStr = Resource::instance().networkIPAddressToString(ipAddr.sin_addr);
 		sIP = ipStr.toLatin1().constData();
 		

@@ -299,10 +299,13 @@ bool Resource::isLocal(const struct sockaddr_in *addr)
 
 tuint32 Resource::localIP()
 {
-	tuint32 lIP = static_cast<tuint32>(::inet_addr("127.0.0.1"));
+	tuint32 lIP = ntohl(static_cast<tuint32>(::inet_addr("127.0.0.1")));
 	QSet<tuint32>::const_iterator ppI;
-
-	buildLocalIP();
+	
+	if(m_localMap.isEmpty())
+	{
+		buildLocalIP();
+	}
 	for(ppI=m_localMap.begin();ppI!=m_localMap.end();ppI++)
 	{
 		tuint32 ip = *ppI;
@@ -313,6 +316,45 @@ tuint32 Resource::localIP()
 		}
 	}
 	return lIP;
+}
+
+//-------------------------------------------------------------------------------------------
+// Find local IP interface address into which an incoming connection is from
+//-------------------------------------------------------------------------------------------
+
+tuint32 Resource::localIP(const struct sockaddr_in *addr)
+{
+	tuint32 cIP, dIP;
+	tuint32 lIP = ntohl(static_cast<tuint32>(::inet_addr("127.0.0.1")));
+	QSet<tuint32>::const_iterator ppI;
+	
+#if defined(OMEGA_WIN32)
+	cIP = addr->sin_addr.S_un.S_addr;
+#elif defined(OMEGA_POSIX)
+	cIP = addr->sin_addr.s_addr;
+#endif
+	cIP = ntohl(cIP);	
+	
+	if(m_localMap.isEmpty())
+	{
+		buildLocalIP();
+	}
+	dIP = lIP;
+	for(ppI=m_localMap.begin();ppI!=m_localMap.end();ppI++)
+	{
+		tuint32 ip = *ppI;
+
+		if(ip!=lIP)
+		{
+			tuint32 cDiff = (cIP > dIP) ? cIP - dIP : dIP - cIP;
+			tuint32 nDiff = (ip > cIP) ? ip - cIP : cIP - ip;
+			if(nDiff < cDiff)
+			{
+				dIP = ip;
+			}
+		}
+	}
+	return dIP;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -657,7 +699,7 @@ tuint32 Resource::random(tint type) const
 	digest.input(reinterpret_cast<const tbyte *>(gmt),sizeof(struct tm));
 	digest.input(reinterpret_cast<const tbyte *>(name),static_cast<tint>(len) * sizeof(tchar));
 	digest.getDigestFinal(rmem,common::c_SHA1HashSize * sizeof(tchar));
-	res = Memory::toInt(rmem);
+	res = NetMemory::toInt(rmem);
 	return res;	
 }
 

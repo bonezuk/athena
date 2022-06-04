@@ -113,6 +113,7 @@ class NETWORK_EXPORT Resource
 
 		tuint32 getIP(const struct sockaddr_in *addr) const;
 		tuint32 localIP();
+		tuint32 localIP(const struct sockaddr_in *addr);
 		QString localIPName();
 		
 		QString ip(const QString& name) const;

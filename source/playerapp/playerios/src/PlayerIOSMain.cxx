@@ -22,7 +22,11 @@ int main(int argc, char **argv)
 	engine.rootContext()->setContextProperty("settings", &settings);
 	
 	QFile page(":/Resources/frontpage1.qml");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	if (page.open(QIODevice::ReadOnly))
+#else
 	if(page.open(QIODeviceBase::ReadOnly))
+#endif
 	{
 		engine.load(":/Resources/frontpage1.qml");
 		app.exec();

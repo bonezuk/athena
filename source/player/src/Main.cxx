@@ -324,7 +324,6 @@ int main(int argc,char **argv)
 			delete cliPipe;
 		}
 
-		omega::dlna::DiskIF::release();
 		omega::dlna::XMLLibIF::release();
 	}
 #endif
