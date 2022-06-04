@@ -8,6 +8,9 @@ Window {
     id: window
     visible: true
 	
+	width: 400
+	height: 600
+
 	StackLayout {
 		id: mainArea
 		currentIndex: navBar.currentNavIndex
@@ -43,11 +46,13 @@ Window {
 			
 				Switch {
 					text: "Enable FTP"
+                    checked: settings.ftpServer
+                    onClicked: settings.ftpServer = !settings.ftpServer
 					Layout.alignment: Qt.AlignCenter
 					Layout.preferredHeight: 75
 				}		
 				Text {
-					text: "FTP server is disabled"
+                    text: settings.ftpStatus
 					Layout.alignment: Qt.AlignCenter
 					Layout.preferredHeight: 75
 				}
