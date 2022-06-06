@@ -1,8 +1,49 @@
 #include "playerapp/playerios/inc/PlayerUISettings.h"
+#include "playerapp/playerios/inc/PlayerIOSTrackDBManager.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
+//-------------------------------------------------------------------------------------------
+// PlayerFileFilter
+//-------------------------------------------------------------------------------------------
+
+PlayerFileFilter::PlayerFileFilter() : network::ftp::FTPFileFilter()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+PlayerFileFilter::~PlayerFileFilter()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+bool PlayerFileFilter::canFileBeUploaded(const QString& fileName)
+{
+	tint i;
+	QString ext;
+	bool res;
+		
+	for(i=fileName.length()-2;i>=0 && ext.isEmpty();--i)
+	{
+		if(fileName.at(i)==QChar('.'))
+		{
+			ext = fileName.mid(i + 1).toLower();
+		}
+	}
+	if(ext=="mp3" || ext=="ogg" || ext=="wav" || ext=="m4a" || ext=="m4b" || ext=="flac" || ext=="aif" || ext=="aiff" || ext=="mpc" || ext=="mpp" || ext=="mp+" || ext=="ape" || ext=="wv")
+	{
+		res = true;
+	}
+	else
+	{
+		res = false;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+// PlayerUISettings
 //-------------------------------------------------------------------------------------------
 
 PlayerUISettings::PlayerUISettings(QObject *parent) : QObject(parent),
@@ -55,34 +96,6 @@ QString PlayerUISettings::getFTPStatus()
 
 //-------------------------------------------------------------------------------------------
 
-QString PlayerUISettings::appDataDirectory() const
-{
-	QString appDir;
-	
-#ifdef OMEGA_IOS
-	appDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-#else
-	appDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-#endif
-	return appDir;
-}
-
-//-------------------------------------------------------------------------------------------
-
-QString PlayerUISettings::musicDirectory() const
-{
-	QString mDir = common::DiskOps::mergeName(appDataDirectory(), "music");
-	if(!common::DiskOps::path(mDir, true))
-	{
-		QString err = QString("Failed to create root music directory '%1'").arg(mDir);
-		printError("musicDirectory", err.toUtf8().constData());
-		mDir = "";
-	}
-	return mDir;
-}
-
-//-------------------------------------------------------------------------------------------
-
 bool PlayerUISettings::startFTPServer()
 {
 	bool res = false;
@@ -100,8 +113,12 @@ bool PlayerUISettings::startFTPServer()
 				m_ftpServer = m_ftpService->getServer(c_ftpPort);
 				if(m_ftpServer != 0)
 				{
-					m_ftpServer->config().setRootPath(musicDirectory());
+					PlayerFileFilter *filter = new PlayerFileFilter();
+					
+					m_ftpServer->config().setRootPath(PlayerIOSUtils::musicDirectory());
 					m_ftpServer->config().setPassivePort(c_ftpPassivePort);
+					m_ftpServer->setFileFilter(filter);
+					QObject::connect(m_ftpServer, SIGNAL(uploaded(const QString&)), PlayerIOSTrackDBManager::instance(), SLOT(addUploadedFile(const QString&)));
 					res = true;
 				}
 				else
@@ -150,6 +167,7 @@ void PlayerUISettings::stopFTPServer()
 		
 		if(m_ftpServer != 0)
 		{
+			QObject::disconnect(m_ftpServer, SIGNAL(uploaded(const QString&)), PlayerIOSTrackDBManager::instance(), SLOT(addUploadedFile(const QString&)));
 			m_ftpService->deleteServer(m_ftpServer);
 			m_ftpServer = 0;
 		}

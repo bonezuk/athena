@@ -17,23 +17,44 @@ namespace ftp
 {
 //-------------------------------------------------------------------------------------------
 
+class FTP_EXPORT FTPFileFilter
+{
+	public:
+		FTPFileFilter();
+		virtual ~FTPFileFilter();
+		
+		virtual bool canFileBeUploaded(const QString& fileName) = 0;
+};
+
+//-------------------------------------------------------------------------------------------
+
 class FTP_EXPORT FTPServer : public TCPServerSocket
 {
 	public:
 		Q_OBJECT
 		
+		friend class FTPTransfer;
+		
 	public:
 		FTPServer(Service *svr,QObject *parent = 0);
 		virtual ~FTPServer();
 		
-		FTPConfiguration& config();
-		const FTPConfiguration& config() const;
+		virtual FTPConfiguration& config();
+		virtual const FTPConfiguration& config() const;
+		
+		virtual bool canFileBeUploaded(const QString& fileName);
+		virtual void setFileFilter(FTPFileFilter *filter);
 		
 	protected:
 		
 		FTPConfiguration m_config;
+		FTPFileFilter *m_filter;
 		
 		virtual TCPConnServerSocket *newIO();
+		virtual void signalUploadComplete(const QString& fileName);
+		
+	signals:
+		void uploaded(const QString& fileName);
 };
 
 //-------------------------------------------------------------------------------------------

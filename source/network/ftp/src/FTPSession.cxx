@@ -1124,7 +1124,7 @@ bool FTPSession::processPASV(const common::BString& cmd)
 		common::BString sIP;
 		QString ipStr;
 			
-		Resource::instance().setAddressIP(::htonl(lIP),&ipAddr);
+		Resource::instance().setAddressIP(htonl(lIP),&ipAddr);
 		ipStr = Resource::instance().networkIPAddressToString(ipAddr.sin_addr);
 		sIP = ipStr.toLatin1().constData();
 		
@@ -1416,33 +1416,40 @@ bool FTPSession::processSTOR(const common::BString& cmd)
 			fileName = changeDirectoryPath(m_path,cmdName,true,false);
 			if(!fileName.isEmpty())
 			{
-				FTPTransfer *trans = setupTransfer();
-				if(trans!=0)
+				if(m_server->canFileBeUploaded(fileName))
 				{
-					if(trans->setUpload(fileName))
+					FTPTransfer *trans = setupTransfer();
+					if(trans!=0)
 					{
-						if(m_transfers.size()<5)
+						if(trans->setUpload(fileName))
 						{
-							resp = "150 Accepted data connection";
-							m_transfers.append(trans);
+							if(m_transfers.size()<5)
+							{
+								resp = "150 Accepted data connection";
+								m_transfers.append(trans);
+							}
+							else
+							{
+								resp = "450 Maximum number of file transactions reached";
+								delete trans;
+							}
 						}
 						else
 						{
-							resp = "450 Maximum number of file transactions reached";
+							resp = "450 Requested file action not taken. Cannot open file ";
+							resp += cmdName.toUtf8().constData();
+							resp += " to read";
 							delete trans;
 						}
 					}
 					else
 					{
-						resp = "450 Requested file action not taken. Cannot open file ";
-						resp += cmdName.toUtf8().constData();
-						resp += " to read";
-						delete trans;
+						res = false;
 					}
 				}
 				else
 				{
-					res = false;
+					resp = "450 Cannot upload unsupported file type.";
 				}
 			}
 			else

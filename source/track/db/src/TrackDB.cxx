@@ -2167,7 +2167,7 @@ int TrackDB::savePlaylistOp(int playlistID, const QString& name, const QVector<Q
 	{
 		cmdI = "INSERT INTO playlist VALUES (?,?,?,?,?)";
 		playI.prepare(cmdI);
-		for(i=0, ppI=pList.constBegin(); ppI != pList.constEnd() && playlistID >= 0; ppI++)
+		for(i=0, ppI=pList.constBegin(); ppI != pList.constEnd() && playlistID >= 0; ppI++, i++)
 		{
 			const QPair<DBInfoSPtr, tint>& item = *ppI;
 			int albumID = item.first->albumID();

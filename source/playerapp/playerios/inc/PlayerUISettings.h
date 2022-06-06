@@ -7,13 +7,21 @@
 #include "network/inc/Controller.h"
 #include "network/ftp/inc/FTPServer.h"
 #include "network/ftp/inc/FTPService.h"
-#include "common/inc/DiskOps.h"
-
-#include <QStandardPaths>
+#include "playerapp/playerios/inc/PlayerIOSUtils.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
+//-------------------------------------------------------------------------------------------
+
+class PlayerFileFilter : public network::ftp::FTPFileFilter
+{
+	public:
+		PlayerFileFilter();
+		virtual ~PlayerFileFilter();
+		virtual bool canFileBeUploaded(const QString& fileName) ;
+};
+
 //-------------------------------------------------------------------------------------------
 
 class PlayerUISettings : public QObject
@@ -40,8 +48,6 @@ class PlayerUISettings : public QObject
 		const tint c_ftpPassivePort = 5505;
 		
 		virtual void printError(const tchar *strR, const tchar *strE) const;
-		virtual QString appDataDirectory() const;
-		virtual QString musicDirectory() const;
 		virtual bool startFTPServer();
 		virtual void stopFTPServer();
 		

@@ -567,6 +567,8 @@ tint FTPTransfer::processUpload(TCPConnectionSocket *com)
 	
 	if(com->state() & Socket::c_socketStateClose)
 	{
+		m_fileIO->close();
+		m_ftpServer->signalUploadComplete(m_fileIO->name());
 		return 0;
 	}
 	else

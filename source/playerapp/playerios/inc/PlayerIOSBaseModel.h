@@ -8,25 +8,19 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
+#include "track/db/inc/DBInfo.h"
+#include "track/db/inc/TrackDB.h"
+
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
 //-------------------------------------------------------------------------------------------
-
-#define NO_SOUNDFILES_IN_MODEL 10
 
 class PlayerIOSBaseModel : public QAbstractListModel
 {
 	Q_OBJECT
 	
 	public:
-		typedef struct s_SoundFileItem
-		{
-			const char *track;
-			const char *artist;
-			const char *album;
-		} SoundFileItem;
-
 		enum TrackRoles
 		{
 			ArtistRole = Qt::UserRole + 1,
@@ -42,9 +36,18 @@ class PlayerIOSBaseModel : public QAbstractListModel
 		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 		virtual QHash<int,QByteArray> roleNames() const;
+	
+	public slots:
+		virtual void appendTrack(const QString& fileName);
 		
-	protected:
-		static SoundFileItem m_soundFileStaticData[NO_SOUNDFILES_IN_MODEL];
+	private:
+		int m_playlistID;
+		mutable QSharedPointer<track::db::DBInfo> m_currentInfo;
+		
+		virtual void printError(const tchar *strR, const tchar *strE) const;
+		virtual int sizeOfPlaylist() const;
+		virtual bool getID(const QModelIndex& index, int& albumID, int& trackID, int& subtrackID) const;
+		virtual QSharedPointer<track::db::DBInfo> getTrack(const QModelIndex& index, int& subtrackID) const;
 };
 
 //-------------------------------------------------------------------------------------------
