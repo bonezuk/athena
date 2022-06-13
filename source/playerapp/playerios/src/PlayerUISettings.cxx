@@ -119,6 +119,7 @@ bool PlayerUISettings::startFTPServer()
 					m_ftpServer->config().setPassivePort(c_ftpPassivePort);
 					m_ftpServer->setFileFilter(filter);
 					QObject::connect(m_ftpServer, SIGNAL(uploaded(const QString&)), PlayerIOSTrackDBManager::instance(), SLOT(addUploadedFile(const QString&)));
+					QObject::connect(m_ftpServer, SIGNAL(remove(const QString&)), PlayerIOSTrackDBManager::instance(), SLOT(onDeleteFile(const QString&)));
 					res = true;
 				}
 				else
@@ -168,6 +169,7 @@ void PlayerUISettings::stopFTPServer()
 		if(m_ftpServer != 0)
 		{
 			QObject::disconnect(m_ftpServer, SIGNAL(uploaded(const QString&)), PlayerIOSTrackDBManager::instance(), SLOT(addUploadedFile(const QString&)));
+			QObject::disconnect(m_ftpServer, SIGNAL(remove(const QString&)), PlayerIOSTrackDBManager::instance(), SLOT(onDeleteFile(const QString&)));
 			m_ftpService->deleteServer(m_ftpServer);
 			m_ftpServer = 0;
 		}

@@ -1,4 +1,5 @@
 #include "common/inc/CommonFunctions.h"
+#include "common/inc/DiskIF.h"
 #include "engine/blackomega/inc/MPCodec.h"
 #include "engine/silveromega/inc/SilverCodec.h"
 #include "engine/whiteomega/inc/WhiteCodec.h"
@@ -60,31 +61,40 @@ int main(int argc, char **argv)
 	setupPlatform();
 	initCodecs();
 	
-	qmlRegisterType<PlayerIOSBaseModel>("uk.co.blackomega", 1, 0, "PlayerIOSBaseModel");
-	qmlRegisterType<PlayerUISettings>("uk.co.blackomega", 1, 0, "PlayerUISettings");
+	common::DiskIFSPtr diskIF = common::DiskIF::instance("disk");
+	if(!diskIF.isNull())
+	{
+		qmlRegisterType<PlayerIOSBaseModel>("uk.co.blackomega", 1, 0, "PlayerIOSBaseModel");
+		qmlRegisterType<PlayerUISettings>("uk.co.blackomega", 1, 0, "PlayerUISettings");
 		
-	PlayerIOSTrackDBManager *trackDBManager = PlayerIOSTrackDBManager::instance();
-	if(trackDBManager != 0)
-	{	
-		QFile page(":/Resources/frontpage1.qml");
+		PlayerIOSTrackDBManager *trackDBManager = PlayerIOSTrackDBManager::instance();
+		if(trackDBManager != 0)
+		{	
+			QFile page(":/Resources/frontpage1.qml");
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-		if (page.open(QIODevice::ReadOnly))
+			if (page.open(QIODevice::ReadOnly))
 #else
-		if(page.open(QIODeviceBase::ReadOnly))
+			if(page.open(QIODeviceBase::ReadOnly))
 #endif
-		{
-			PlayerIOSBaseModel model;
-			engine.rootContext()->setContextProperty("playListModel", &model);
-	
-			PlayerUISettings settings;
-			engine.rootContext()->setContextProperty("settings", &settings);
+			{
+				PlayerIOSBaseModel model;
+				if(model.loadPlaylist())
+				{
+					engine.rootContext()->setContextProperty("playListModel", &model);
 			
-			QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), &model, SLOT(appendTrack(const QString&)));
-
-			engine.load(":/Resources/frontpage1.qml");
-			app.exec();
+					PlayerUISettings settings;
+					engine.rootContext()->setContextProperty("settings", &settings);
+			
+					QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), &model, SLOT(appendTrack(const QString&)));
+					QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), &model, SLOT(deleteTrack(const QString&)));
+		
+					engine.load(":/Resources/frontpage1.qml");
+					app.exec();
+				}
+			}
+			trackDBManager->release();
 		}
-		trackDBManager->release();
+		common::DiskIF::release();
 	}
 	releaseCodecs();
 	return 0;

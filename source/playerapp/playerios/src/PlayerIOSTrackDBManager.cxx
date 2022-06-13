@@ -116,5 +116,15 @@ void PlayerIOSTrackDBManager::addUploadedFile(const QString& fileName)
 }
 
 //-------------------------------------------------------------------------------------------
+
+void PlayerIOSTrackDBManager::onDeleteFile(const QString& fileName)
+{
+	track::db::TrackDB *trackDB = track::db::TrackDB::instance();
+	
+	emit removetrack(fileName);
+	trackDB->erase(fileName);
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace omega
 //-------------------------------------------------------------------------------------------

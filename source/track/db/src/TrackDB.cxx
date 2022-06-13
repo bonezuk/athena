@@ -2023,16 +2023,16 @@ QString TrackDB::playlist(int playlistID)
 
 //-------------------------------------------------------------------------------------------
 
-bool TrackDB::loadPlaylist(int playlistID, QVector<QPair<info::InfoSPtr, tint> >& pList)
+bool TrackDB::loadPlaylist(int playlistID, QVector<PlaylistTuple>& pList)
 {
-	bool res = false;
+	bool res = true;
 	
 	pList.clear();
 	try
 	{
 		int position, albumID, trackID, subtrackID;
-		QVector<PlaylistTriple> trackDBList;
-		QVector<PlaylistTriple>::iterator ppI;
+		QVector<PlaylistTuple> trackDBList;
+		QVector<PlaylistTuple>::iterator ppI;
 		SQLiteQuery playQ(m_db);
 		QString cmdQ;
 		
@@ -2044,24 +2044,38 @@ bool TrackDB::loadPlaylist(int playlistID, QVector<QPair<info::InfoSPtr, tint> >
 		playQ.bind(subtrackID);
 		while(playQ.next())
 		{
-			PlaylistTriple t;
+			PlaylistTuple t;
 			t.albumID = albumID;
 			t.trackID = trackID;
 			t.subtrackID = subtrackID;
-			trackDBList.append(t);
-		}
-		
-		for(ppI=trackDBList.begin();ppI!=trackDBList.end();ppI++)
-		{
-			PlaylistTriple& t = *ppI;
-			info::InfoSPtr info = DBInfo::readInfo(t.albumID, t.trackID);
-			pList.append(QPair<track::info::InfoSPtr,int>(info, t.subtrackID));
+			pList.append(t);
 		}
 	}
 	catch(const SQLiteException& e)
 	{
 		printError("loadPlaylist", e.error().toUtf8().constData());
 		res = false;
+	}
+	return res;	
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool TrackDB::loadPlaylist(int playlistID, QVector<QPair<info::InfoSPtr, tint> >& pList)
+{
+	QVector<PlaylistTuple> trackDBList;
+	bool res = false;
+	
+	pList.clear();
+	res = loadPlaylist(playlistID, trackDBList);
+	if(res)
+	{
+		for(QVector<PlaylistTuple>::iterator ppI=trackDBList.begin();ppI!=trackDBList.end();ppI++)
+		{
+			PlaylistTuple& t = *ppI;
+			info::InfoSPtr info = DBInfo::readInfo(t.albumID, t.trackID);
+			pList.append(QPair<track::info::InfoSPtr,int>(info, t.subtrackID));
+		}	
 	}
 	return res;
 }
@@ -2132,79 +2146,65 @@ void TrackDB::getDBInfoListFromPlaylist(QVector<QPair<info::InfoSPtr, tint> >& p
 
 //-------------------------------------------------------------------------------------------
 
-int TrackDB::savePlaylistOp(int playlistID, const QString& name, const QVector<QPair<DBInfoSPtr, tint> >& pList)
+int TrackDB::savePlaylistOp(int playlistID, const QString& name, const QVector<PlaylistTuple>& pList)
 {
 	int i, maxPlaylistID;
 	QString cmdI, cmdQ, playlistName(name);
 	SQLiteQuery playlistQ(m_db);
 	SQLiteInsert playI(m_db), infoI(m_db);
-	QVector<QPair<DBInfoSPtr, tint> >::const_iterator ppI;
-
-	if(playlistID >= 0)
-	{
-		clearPlaylistOp(playlistID);
-	}
-	else
-	{
-		cmdQ = "SELECT MAX(playlistID) FROM playlistInfo";
-		playlistQ.prepare(cmdQ);
-		playlistQ.bind(maxPlaylistID);
-		if(playlistQ.next())
-		{
-			playlistID = maxPlaylistID;
-		}
-		else
-		{
-			playlistID = 0;
-		}
-	}
-
-	cmdI = "INSERT INTO playlistInfo VALUES (?,?)";
-	infoI.prepare(cmdI);
-	infoI.bind(playlistID);
-	infoI.bind(playlistName);
-	if(infoI.next())
-	{
-		cmdI = "INSERT INTO playlist VALUES (?,?,?,?,?)";
-		playI.prepare(cmdI);
-		for(i=0, ppI=pList.constBegin(); ppI != pList.constEnd() && playlistID >= 0; ppI++, i++)
-		{
-			const QPair<DBInfoSPtr, tint>& item = *ppI;
-			int albumID = item.first->albumID();
-			int trackID = item.first->trackID();
-			int subtrackID = item.second;
-			playI.bind(playlistID);
-			playI.bind(i);
-			playI.bind(albumID);
-			playI.bind(trackID);
-			playI.bind(subtrackID);
-			if(!playI.next())
-			{
-				printError("savePlaylistOp", "Error insert into playlist table");
-				playlistID = -1;
-			}
-		}
-	}
-	else
-	{
-		printError("savePlaylistOp", "Error insert into playlistInfo table");
-		playlistID = -1;
-	}
-	return playlistID;
-}
-
-//-------------------------------------------------------------------------------------------
-
-int TrackDB::replacePlaylist(int playlistID, const QString& name, QVector<QPair<info::InfoSPtr, tint> >& pList)
-{
-	QVector<QPair<DBInfoSPtr, tint> > pDBList;
+	QVector<PlaylistTuple>::const_iterator ppI;
 	
 	try
 	{
 		m_db->exec("SAVEPOINT savePlaylist");
-		
-		getDBInfoListFromPlaylist(pList, pDBList);
-		playlistID = savePlaylistOp(playlistID, name, pDBList);
+	
+		if(playlistID >= 0)
+		{
+			clearPlaylistOp(playlistID);
+		}
+		else
+		{
+			cmdQ = "SELECT MAX(playlistID) FROM playlistInfo";
+			playlistQ.prepare(cmdQ);
+			playlistQ.bind(maxPlaylistID);
+			if(playlistQ.next())
+			{
+				playlistID = maxPlaylistID;
+			}
+			else
+			{
+				playlistID = 0;
+			}
+		}
+
+		cmdI = "INSERT INTO playlistInfo VALUES (?,?)";
+		infoI.prepare(cmdI);
+		infoI.bind(playlistID);
+		infoI.bind(playlistName);
+		if(infoI.next())
+		{
+			cmdI = "INSERT INTO playlist VALUES (?,?,?,?,?)";
+			playI.prepare(cmdI);
+			for(i=0, ppI=pList.constBegin(); ppI != pList.constEnd() && playlistID >= 0; ppI++, i++)
+			{
+				PlaylistTuple item = *ppI;
+				playI.bind(playlistID);
+				playI.bind(i);
+				playI.bind(item.albumID);
+				playI.bind(item.trackID);
+				playI.bind(item.subtrackID);
+				if(!playI.next())
+				{
+					printError("savePlaylistOp", "Error insert into playlist table");
+					playlistID = -1;
+				}
+			}
+		}
+		else
+		{
+			printError("savePlaylistOp", "Error insert into playlistInfo table");
+			playlistID = -1;
+		}
 		
 		if(playlistID >= 0)
 		{
@@ -2226,7 +2226,49 @@ int TrackDB::replacePlaylist(int playlistID, const QString& name, QVector<QPair<
 
 //-------------------------------------------------------------------------------------------
 
+int TrackDB::savePlaylistOp(int playlistID, const QString& name, const QVector<QPair<DBInfoSPtr, tint> >& pList)
+{
+	QVector<QPair<DBInfoSPtr, tint> >::const_iterator ppI;
+	QVector<PlaylistTuple> tupleList;
+	
+	for(ppI = pList.begin(); ppI != pList.end(); ppI++)
+	{
+		PlaylistTuple t;
+		const QPair<DBInfoSPtr, tint>& item = *ppI;
+		t.albumID = item.first->albumID();
+		t.trackID = item.first->trackID();
+		t.subtrackID = item.second;
+		tupleList.append(t);
+	}
+	return savePlaylistOp(playlistID, name, tupleList);
+}
+
+//-------------------------------------------------------------------------------------------
+
+int TrackDB::replacePlaylist(int playlistID, const QString& name, QVector<QPair<info::InfoSPtr, tint> >& pList)
+{
+	QVector<QPair<DBInfoSPtr, tint> > pDBList;
+	getDBInfoListFromPlaylist(pList, pDBList);
+	return savePlaylistOp(playlistID, name, pDBList);
+}
+
+//-------------------------------------------------------------------------------------------
+
+int TrackDB::replacePlaylist(int playlistID, const QString& name, const QVector<PlaylistTuple>& pList)
+{
+	return savePlaylistOp(playlistID, name, pList);
+}
+
+//-------------------------------------------------------------------------------------------
+
 int TrackDB::savePlaylist(const QString& name, QVector<QPair<info::InfoSPtr, tint> >& pList)
+{	
+	return replacePlaylist(-1, name, pList);
+}
+
+//-------------------------------------------------------------------------------------------
+
+int TrackDB::savePlaylist(const QString& name, QVector<PlaylistTuple>& pList)
 {	
 	return replacePlaylist(-1, name, pList);
 }

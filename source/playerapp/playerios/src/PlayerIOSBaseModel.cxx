@@ -8,6 +8,8 @@ namespace omega
 
 PlayerIOSBaseModel::PlayerIOSBaseModel(QObject *parent) : QAbstractListModel(parent),
 	m_playlistID(0),
+	m_playlistName("Default"),
+	m_playlist(),
 	m_currentInfo()
 {}
 
@@ -25,21 +27,17 @@ void PlayerIOSBaseModel::printError(const tchar *strR, const tchar *strE) const
 
 //-------------------------------------------------------------------------------------------
 
+bool PlayerIOSBaseModel::loadPlaylist()
+{
+	m_playlist.clear();
+	return track::db::TrackDB::instance()->loadPlaylist(m_playlistID, m_playlist);
+}
+
+//-------------------------------------------------------------------------------------------
+
 int PlayerIOSBaseModel::sizeOfPlaylist() const
 {
-	int rCount;
-	QString cmd;
-	track::db::SQLiteDatabase *db = track::db::TrackDB::instance()->db();
-	track::db::SQLiteQuery countQ(db);
-		
-	cmd = QString("SELECT COUNT(position) FROM playlist WHERE playListID=%1").arg(m_playlistID);
-	countQ.prepare(cmd);
-	countQ.bind(rCount);
-	if(!countQ.next())
-	{
-		rCount = 0;
-	}
-	return rCount;
+	return m_playlist.size();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -65,22 +63,13 @@ bool PlayerIOSBaseModel::getID(const QModelIndex& index, int& albumID, int& trac
 {
 	bool res = false;
 	
-	if(index.isValid())
+	if(index.isValid() && index.row() >= 0 && index.row() < sizeOfPlaylist())
 	{
-		QString cmd;
-		track::db::SQLiteDatabase *db = track::db::TrackDB::instance()->db();
-		track::db::SQLiteQuery trackQ(db);
-		
-		cmd = QString("SELECT albumID, trackID, subtrackID FROM playlist WHERE playListID=%1 AND position=%2")
-			.arg(m_playlistID).arg(index.row());
-		trackQ.prepare(cmd);
-		trackQ.bind(albumID);
-		trackQ.bind(trackID);
-		trackQ.bind(subtrackID);
-		if(trackQ.next())
-		{
-			res = true;
-		}
+		track::db::PlaylistTuple item = m_playlist.at(index.row());
+		albumID = item.albumID;
+		trackID = item.trackID;
+		subtrackID = item.subtrackID;
+		res = true;
 	}
 	return res;
 }
@@ -178,72 +167,56 @@ void PlayerIOSBaseModel::appendTrack(const QString& fileName)
 		QSharedPointer<track::db::DBInfo> pInfo = track::db::DBInfo::readInfo(fileName).dynamicCast<track::db::DBInfo>();
 		if(!pInfo.isNull())
 		{
-			track::db::SQLiteDatabase *db = track::db::TrackDB::instance()->db();
+			track::db::PlaylistTuple t;
 			int nextPosition = sizeOfPlaylist();
-
-			beginInsertRows(QModelIndex(), nextPosition, nextPosition + pInfo->noChildren());
-			try
-			{
-				QString cmdI;
-				track::db::SQLiteInsert playI(db);
-				int albumID = pInfo->albumID();
-				int trackID = pInfo->trackID();
-				int subtrackID;
-				bool res = true;
-				
-				db->exec("SAVEPOINT savePlaylistPLM");
-				
-				cmdI = "INSERT INTO playlist VALUES (?,?,?,?,?)";
-				playI.prepare(cmdI);
-				if(pInfo->noChildren() > 0)
-				{
-					for(int i = 0; i < pInfo->noChildren() && res; i++)
-					{
-						playI.bind(m_playlistID);
-						playI.bind(nextPosition);
-						playI.bind(albumID);
-						playI.bind(trackID);
-						playI.bind(i);
-						if(!playI.next())
-						{
-							printError("appendTrack", "Error insert into playlist table");
-							res = false;
-						}
-						nextPosition++;
-					}
-				}
-				else
-				{
-					subtrackID = -1;
-					playI.bind(m_playlistID);
-					playI.bind(nextPosition);
-					playI.bind(albumID);
-					playI.bind(trackID);
-					playI.bind(subtrackID);
-					if(!playI.next())
-					{
-						printError("appendTrack", "Error insert into playlist table");
-						res = false;
-					}				
-				}
-				
-				if(res)
-				{
-					db->exec("RELEASE savePlaylistPLM");
-				}
-				else
-				{
-					db->exec("ROLLBACK TO SAVEPOINT savePlaylistPLM");
-				}
-			}
-			catch(const track::db::SQLiteException& e)
-			{
-				printError("appendTrack", e.error().toUtf8().constData());
-				db->exec("ROLLBACK TO SAVEPOINT savePlaylistPLM");
-			}
+			int albumID = pInfo->albumID();
+			int trackID = pInfo->trackID();
 			
+			t.albumID = albumID;
+			t.trackID = trackID;
+			if(!pInfo->noChildren())
+			{
+				beginInsertRows(QModelIndex(), nextPosition, nextPosition);
+				t.subtrackID = -1;
+				m_playlist.append(t);
+			}
+			else
+			{
+				beginInsertRows(QModelIndex(), nextPosition, nextPosition + (pInfo->noChildren() - 1));
+				for(int i = 0; i < pInfo->noChildren(); i++)
+				{
+					t.subtrackID = i;
+					m_playlist.append(t);
+				}
+				
+			}
 			endInsertRows();
+
+			track::db::TrackDB::instance()->replacePlaylist(m_playlistID, m_playlistName, m_playlist);
 		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerIOSBaseModel::deleteTrack(const QString& fileName)
+{
+	tint i, albumID, trackID;
+	
+	if(track::db::TrackDB::instance()->getKeysFromFilename(fileName, albumID, trackID))
+	{
+		for(i = 0; i < m_playlist.size(); i++)
+		{
+			track::db::PlaylistTuple t = m_playlist.at(i);
+			if(t.albumID == albumID && t.trackID == trackID)
+			{
+				beginRemoveRows(QModelIndex(), i, i);
+				m_playlist.removeAt(i);
+				endRemoveRows();
+				i--;
+			}
+		}
+		track::db::TrackDB::instance()->replacePlaylist(m_playlistID, m_playlistName, m_playlist);
 	}
 }
 

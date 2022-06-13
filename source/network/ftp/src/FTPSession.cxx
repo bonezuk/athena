@@ -1,4 +1,6 @@
 #include "network/ftp/inc/FTPSession.h"
+#include "common/inc/DiskIF.h"
+#include "common/inc/DiskOps.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -218,6 +220,12 @@ QString FTPSession::buildLocalPath(const QStringList& pList)
 	{
 		p = "/";
 	}
+#if defined(OMEGA_POSIX)
+	else if(p.length() >= 2 && p.left(2)=="//")
+	{
+		p = p.mid(1);
+	}
+#endif
 	return p;
 }
 
@@ -258,6 +266,10 @@ QString FTPSession::buildPathFromComponents(const QStringList& pList)
 	if(p.isEmpty())
 	{
 		p = "/";
+	}
+	else if(p.length() >= 2 && p.left(2)=="//")
+	{
+		p = p.mid(1);
 	}
 	return p;
 }
@@ -1802,28 +1814,8 @@ bool FTPSession::processDELE(const common::BString& cmd)
 			
 			if(!fileName.isEmpty())
 			{
-				if(fileExist(fileName))
-				{
-					if(common::DiskOps::remove(fileName)==0)
-					{
-						resp = "250 File deleted";
-					}
-					else
-					{
-						resp = "550 Failed delete file";
-					}
-				}
-				else
-				{
-					if(!dirExist(fileName))
-					{
-						resp = "250 File already removed";
-					}
-					else
-					{
-						resp = "550 DELE cannot remove directory";
-					}
-				}
+				processFileDeletion(fileName);
+				resp = "250 File deleted";
 			}
 			else
 			{
@@ -1861,14 +1853,8 @@ bool FTPSession::processRMD(const common::BString& cmd)
 			
 			if(!fileName.isEmpty() && dirExist(fileName))
 			{
-				if(common::DiskOps::deleteDirectory(fileName))
-				{
-					resp = "250 Successfully deleted directory";
-				}
-				else
-				{
-					resp = "550 Error removing directory";
-				}
+				processFileDeletion(fileName);
+				resp = "250 Successfully deleted directory";
 			}
 			else
 			{
@@ -2147,6 +2133,119 @@ bool FTPSession::processUnknown(const common::BString& cmd)
 	common::BString resp;
 	resp = "502 Command not supported";
 	return writeResponse(resp);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPSession::buildFileList(const QString& dirName, QStringList& fileList)
+{
+	common::DiskIFSPtr pDisk = common::DiskIF::instance();
+	
+	if(pDisk->isDirectory(dirName))
+	{
+		common::DiskIF::DirHandle h = pDisk->openDirectory(dirName);
+		if(h != common::DiskIF::invalidDirectory())
+		{
+			QString name;
+			QStringList dirList;
+			
+			while(name = pDisk->nextDirectoryEntry(h), !name.isEmpty())
+			{
+				QString fullName = common::DiskOps::mergeName(dirName, name);
+				if(pDisk->isFile(fullName))
+				{
+					fileList.append(fullName);
+				}
+				else if(pDisk->isDirectory(fullName))
+				{
+					dirList.append(fullName);
+				}
+			}
+			pDisk->closeDirectory(h);
+			
+			for(QStringList::iterator ppI = dirList.begin(); ppI != dirList.end(); ppI++)
+			{
+				buildFileList(*ppI, fileList);
+			}
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPSession::buildDirList(const QString& dirName, QStringList& dirList)
+{
+	common::DiskIFSPtr pDisk = common::DiskIF::instance();
+	
+	if(pDisk->isDirectory(dirName))
+	{
+		common::DiskIF::DirHandle h = pDisk->openDirectory(dirName);
+		if(h != common::DiskIF::invalidDirectory())
+		{
+			QString name;
+			QStringList dList;
+			
+			while(name = pDisk->nextDirectoryEntry(h), !name.isEmpty())
+			{
+				QString fullName = common::DiskOps::mergeName(dirName, name);
+				if(pDisk->isDirectory(fullName))
+				{
+					dList.append(fullName);
+				}
+			}
+			pDisk->closeDirectory(h);
+			
+			for(QStringList::iterator ppI = dirList.begin(); ppI != dirList.end(); ppI++)
+			{
+				buildDirList(*ppI, dirList);
+			}
+		}
+		dirList.append(dirName);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPSession::processDirectoryDeletion(const QString& root)
+{
+	common::DiskIFSPtr pDisk = common::DiskIF::instance();
+	
+	if(pDisk->isDirectory(root))
+	{
+		QStringList fileList, dirList;
+		
+		buildFileList(root, fileList);
+		for(QStringList::iterator ppI = fileList.begin(); ppI != fileList.end(); ppI++)
+		{
+			QString fileName = *ppI;
+			m_server->signalRemoveFile(fileName);
+			common::DiskOps::deleteFile(fileName);			
+		}
+		
+		buildDirList(root, dirList);
+		for(QStringList::iterator ppI = dirList.begin(); ppI != dirList.end(); ppI++)
+		{
+			QString dirName = *ppI;
+			common::DiskOps::remove(dirName);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPSession::processFileDeletion(const QString& fileName)
+{
+	common::DiskIFSPtr pDisk = common::DiskIF::instance();
+	
+	if(pDisk->isDirectory(fileName))
+	{
+		processDirectoryDeletion(fileName);
+	}
+	else if(pDisk->isFile(fileName))
+	{
+		m_server->signalRemoveFile(fileName);
+		common::DiskOps::deleteFile(fileName);
+	}
 }
 
 //-------------------------------------------------------------------------------------------

@@ -24,9 +24,11 @@ class PlayerIOSTrackDBManager : public QObject
 
 	public slots:
 		void addUploadedFile(const QString& fileName);
+		void onDeleteFile(const QString& fileName);
 		
 	signals:
 		void newtrack(const QString& fileName);
+		void removetrack(const QString& fileName);
 
 	private:
 		static PlayerIOSTrackDBManager *m_instance;

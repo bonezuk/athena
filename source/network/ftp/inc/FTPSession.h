@@ -108,6 +108,11 @@ class FTP_EXPORT FTPSession : public TCPConnServerSocket
 		virtual bool processHELP(const common::BString& cmd);
 		virtual bool processNOOP(const common::BString& cmd);
 		virtual bool processUnknown(const common::BString& cmd);
+		
+		virtual void buildFileList(const QString& dirName, QStringList& fileList);
+		virtual void buildDirList(const QString& dirName, QStringList& dirList);
+		virtual void processDirectoryDeletion(const QString& root);
+		virtual void processFileDeletion(const QString& fileName);
 };
 
 //-------------------------------------------------------------------------------------------

@@ -34,6 +34,7 @@ class FTP_EXPORT FTPServer : public TCPServerSocket
 		Q_OBJECT
 		
 		friend class FTPTransfer;
+		friend class FTPSession;
 		
 	public:
 		FTPServer(FTPService *svr,QObject *parent = 0);
@@ -57,9 +58,11 @@ class FTP_EXPORT FTPServer : public TCPServerSocket
 		
 		virtual TCPConnServerSocket *newIO();
 		virtual void signalUploadComplete(const QString& fileName);
+		virtual void signalRemoveFile(const QString& fileName);
 		
 	signals:
 		void uploaded(const QString& fileName);
+		void remove(const QString& fileName);
 };
 
 //-------------------------------------------------------------------------------------------

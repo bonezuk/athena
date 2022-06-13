@@ -96,6 +96,13 @@ void FTPServer::signalUploadComplete(const QString& fileName)
 
 //-------------------------------------------------------------------------------------------
 
+void FTPServer::signalRemoveFile(const QString& fileName)
+{
+	emit remove(fileName);
+}
+
+//-------------------------------------------------------------------------------------------
+
 void FTPServer::close()
 {
 	m_pool.closeAllServers();

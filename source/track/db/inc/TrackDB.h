@@ -25,12 +25,12 @@ typedef QSharedPointer<DBInfo> DBInfoSPtr;
 
 //-------------------------------------------------------------------------------------------
 
-typedef struct s_PlaylistTriple
+typedef struct s_PlaylistTuple
 {
 	tint albumID;
 	tint trackID;
 	tint subtrackID;
-} PlaylistTriple;
+} PlaylistTuple;
 
 //-------------------------------------------------------------------------------------------
 
@@ -74,10 +74,16 @@ class TRACK_DB_EXPORT TrackDB
 		
 		QMap<tint, QString> playlists();
 		QString playlist(int playlistID);
+		bool loadPlaylist(int playlistID, QVector<PlaylistTuple>& pList);
 		bool loadPlaylist(int playlistID, QVector<QPair<info::InfoSPtr, tint> >& pList);
 		int savePlaylist(const QString& name, QVector<QPair<info::InfoSPtr, tint> >& pList);
+		int savePlaylist(const QString& name, QVector<PlaylistTuple>& pList);
 		int replacePlaylist(int playlistID, const QString& name, QVector<QPair<info::InfoSPtr, tint> >& pList);
+		int replacePlaylist(int playlistID, const QString& name, const QVector<PlaylistTuple>& pList);
 		void clearPlaylist(int playlistID);
+
+		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID);
+		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID,tint& dirID,tint& fileID);
 		
 	protected:
 		
@@ -105,8 +111,6 @@ class TRACK_DB_EXPORT TrackDB
 		QPair<tuint64,tuint64> getSHA1Signature(common::Array<tubyte,tubyte> *pArr);
 		
 		bool eraseTrack(tint albumID,tint trackID,tint dirID,tint fileID);
-		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID);
-		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID,tint& dirID,tint& fileID);
 		bool getFilenameComponents(const QString& name,QString& dirName,QString& fileName);
 		
 		bool updateAlbumImage(int albumID);
@@ -114,6 +118,7 @@ class TRACK_DB_EXPORT TrackDB
 		QString loadDirectoryImage(const QString& dirName,const QString& albumName) const;
 		
 		int savePlaylistOp(int playlistID, const QString& name, const QVector<QPair<DBInfoSPtr, tint> >& pList);
+		int savePlaylistOp(int playlistID, const QString& name, const QVector<PlaylistTuple>& pList);
 		void getDBInfoListFromPlaylist(QVector<QPair<info::InfoSPtr, tint> >& pList, QVector<QPair<DBInfoSPtr, tint> >& pDBList);
 		void clearPlaylistOp(int playlistID);
 };

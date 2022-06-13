@@ -33,15 +33,21 @@ class PlayerIOSBaseModel : public QAbstractListModel
 		PlayerIOSBaseModel(QObject *parent = 0);
 		virtual ~PlayerIOSBaseModel();
 		
+		virtual bool loadPlaylist();
+		
 		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 		virtual QHash<int,QByteArray> roleNames() const;
 	
 	public slots:
 		virtual void appendTrack(const QString& fileName);
+		virtual void deleteTrack(const QString& fileName);
 		
 	private:
 		int m_playlistID;
+		QString m_playlistName;
+		QVector<track::db::PlaylistTuple> m_playlist;
+		
 		mutable QSharedPointer<track::db::DBInfo> m_currentInfo;
 		
 		virtual void printError(const tchar *strR, const tchar *strE) const;
