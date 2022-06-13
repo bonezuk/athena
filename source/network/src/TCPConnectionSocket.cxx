@@ -120,19 +120,7 @@ void TCPConnectionSocket::close()
 	
 	if(m_socket!=c_invalidSocket)
 	{
-#if defined(OMEGA_WIN32)
-		::shutdown(m_socket,SD_BOTH);
-		if(::closesocket(m_socket)!=0)
-		{
-			printError("close","Error closing socket");
-		}
-#elif defined(OMEGA_POSIX)
-		::shutdown(m_socket,SHUT_RDWR);
-		if(::close(m_socket)!=0)
-		{
-			printError("close","Error closing socket");
-		}
-#endif
+		closeSocket(m_socket);
 		m_socket = c_invalidSocket;
 	}
 	m_state = 0;

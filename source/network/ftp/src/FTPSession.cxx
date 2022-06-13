@@ -568,10 +568,10 @@ bool FTPSession::process()
 		m_pstate = 0;
 	}
 
-	for(i=0;i<m_transfers.size();i++)
+	for(QList<FTPTransfer *>::iterator ppI = m_transfers.begin(); ppI != m_transfers.end();)
 	{
 		tint tRes;
-		FTPTransfer *transfer = m_transfers[i];
+		FTPTransfer *transfer = *ppI;
 		
 		tRes = transfer->process();
 		if(tRes<=0)
@@ -608,8 +608,12 @@ bool FTPSession::process()
 			{
 				return false;
 			}
-			m_transfers.removeAt(i--);
+			ppI = m_transfers.erase(ppI);
 			delete transfer;			
+		}
+		else
+		{
+			ppI++;
 		}
 	}
 	

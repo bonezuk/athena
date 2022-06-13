@@ -1,3 +1,7 @@
+#include "common/inc/CommonFunctions.h"
+#include "engine/blackomega/inc/MPCodec.h"
+#include "engine/silveromega/inc/SilverCodec.h"
+#include "engine/whiteomega/inc/WhiteCodec.h"
 #include "playerapp/playerios/inc/PlayerUISettings.h"
 #include "playerapp/playerios/inc/PlayerIOSBaseModel.h"
 #include "playerapp/playerios/inc/PlayerIOSTrackDBManager.h"
@@ -6,6 +10,46 @@
 #include <QQmlApplicationEngine>
 #include <QFile>
 
+using namespace omega;
+
+//-------------------------------------------------------------------------------------------
+
+void setupPlatform()
+{
+	common::loadSharedLibrary("blackomega");
+	common::loadSharedLibrary("blueomega");
+	common::loadSharedLibrary("cyanomega");
+	common::loadSharedLibrary("greenomega");
+	common::loadSharedLibrary("redomega");
+	common::loadSharedLibrary("silveromega");
+	common::loadSharedLibrary("violetomega");
+	common::loadSharedLibrary("whiteomega");
+	common::loadSharedLibrary("widget");
+#if defined(OMEGA_WIN32)
+	CoInitialize(NULL);
+#endif
+}
+
+//-------------------------------------------------------------------------------------------
+
+void initCodecs()
+{
+	engine::CodecInitialize::start();
+	engine::blackomega::MPCodecInitialize::start();
+	engine::silveromega::SilverCodecInitialize::start();
+	engine::whiteomega::WhiteCodecInitialize::start();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void releaseCodecs()
+{
+	engine::whiteomega::WhiteCodecInitialize::end();
+	engine::silveromega::SilverCodecInitialize::end();
+	engine::blackomega::MPCodecInitialize::end();
+	engine::CodecInitialize::end();
+}
+
 //-------------------------------------------------------------------------------------------
 
 int main(int argc, char **argv)
@@ -13,10 +57,13 @@ int main(int argc, char **argv)
 	QGuiApplication app(argc, argv);
 	QQmlApplicationEngine engine;
 	
-	qmlRegisterType<omega::PlayerIOSBaseModel>("uk.co.blackomega", 1, 0, "PlayerIOSBaseModel");
-	qmlRegisterType<omega::PlayerUISettings>("uk.co.blackomega", 1, 0, "PlayerUISettings");
+	setupPlatform();
+	initCodecs();
+	
+	qmlRegisterType<PlayerIOSBaseModel>("uk.co.blackomega", 1, 0, "PlayerIOSBaseModel");
+	qmlRegisterType<PlayerUISettings>("uk.co.blackomega", 1, 0, "PlayerUISettings");
 		
-	omega::PlayerIOSTrackDBManager *trackDBManager = omega::PlayerIOSTrackDBManager::instance();
+	PlayerIOSTrackDBManager *trackDBManager = PlayerIOSTrackDBManager::instance();
 	if(trackDBManager != 0)
 	{	
 		QFile page(":/Resources/frontpage1.qml");
@@ -26,10 +73,10 @@ int main(int argc, char **argv)
 		if(page.open(QIODeviceBase::ReadOnly))
 #endif
 		{
-			omega::PlayerIOSBaseModel model;
+			PlayerIOSBaseModel model;
 			engine.rootContext()->setContextProperty("playListModel", &model);
 	
-			omega::PlayerUISettings settings;
+			PlayerUISettings settings;
 			engine.rootContext()->setContextProperty("settings", &settings);
 			
 			QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), &model, SLOT(appendTrack(const QString&)));
@@ -39,6 +86,7 @@ int main(int argc, char **argv)
 		}
 		trackDBManager->release();
 	}
+	releaseCodecs();
 	return 0;
 }
 

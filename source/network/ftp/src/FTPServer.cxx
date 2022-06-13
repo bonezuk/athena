@@ -20,9 +20,10 @@ FTPFileFilter::~FTPFileFilter()
 
 //-------------------------------------------------------------------------------------------
 
-FTPServer::FTPServer(Service *svr,QObject *parent) : TCPServerSocket(svr,parent),
+FTPServer::FTPServer(FTPService *svr, QObject *parent) : TCPServerSocket(reinterpret_cast<Service *>(svr), parent),
 	m_config(),
-	m_filter(0)
+	m_filter(0),
+	m_pool(svr)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -75,6 +76,11 @@ bool FTPServer::canFileBeUploaded(const QString& fileName)
 
 void FTPServer::setFileFilter(FTPFileFilter *filter)
 {
+	if(m_filter != 0)
+	{
+		delete m_filter;
+		m_filter = 0;
+	}
 	m_filter = filter;
 }
 
@@ -86,6 +92,21 @@ void FTPServer::signalUploadComplete(const QString& fileName)
 	{
 		emit uploaded(fileName);
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPServer::close()
+{
+	m_pool.closeAllServers();
+	TCPServerSocket::close();
+}
+
+//-------------------------------------------------------------------------------------------
+
+FTPTransferServerPool& FTPServer::transferServerPool()
+{
+	return m_pool;
 }
 
 //-------------------------------------------------------------------------------------------

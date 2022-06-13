@@ -120,17 +120,7 @@ void TCPServerSocket::close()
 {
 	if(m_socket!=c_invalidSocket)
 	{
-#if defined(OMEGA_WIN32)
-		if(::closesocket(m_socket)!=0)
-		{
-			printError("close","Error closing socket");
-		}
-#elif defined(OMEGA_POSIX)
-		if(::close(m_socket)!=0)
-		{
-			printError("close","Error closing socket");
-		}
-#endif
+		closeSocket(m_socket);
 		m_socket = c_invalidSocket;
 	}
 }
@@ -151,14 +141,38 @@ bool TCPServerSocket::canWrite() const
 
 //-------------------------------------------------------------------------------------------
 
+void TCPServerSocket::acceptAndCloseConnection()
+{
+	socket_type clientSocket;
+	struct sockaddr_in addr;
+	addrlen_type len = sizeof(struct sockaddr_in);
+	
+	clientSocket = ::accept(m_socket, reinterpret_cast<struct sockaddr *>(&addr), &len);
+	if(clientSocket != c_invalidSocket)
+	{
+		closeSocket(clientSocket);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool TCPServerSocket::doRead()
 {
 	TCPConnServerSocket *io = newIO();
 	
-	if(!io->open(m_socket))
+	if(io != 0)
 	{
-		printError("doRead","Error getting new connection");
-		delete io;
+		if(!io->open(m_socket))
+		{
+			printError("doRead","Error getting new connection");
+			delete io;
+		}
+	}
+	else
+	{
+		QString err = QString("Cannot establish connection on port %1 at this time").arg(port());
+		printError("doRead", err.toUtf8().constData());
+		acceptAndCloseConnection();
 	}
 	m_state = 0;
 	return true;

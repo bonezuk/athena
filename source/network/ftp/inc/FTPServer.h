@@ -36,7 +36,7 @@ class FTP_EXPORT FTPServer : public TCPServerSocket
 		friend class FTPTransfer;
 		
 	public:
-		FTPServer(Service *svr,QObject *parent = 0);
+		FTPServer(FTPService *svr,QObject *parent = 0);
 		virtual ~FTPServer();
 		
 		virtual FTPConfiguration& config();
@@ -45,10 +45,15 @@ class FTP_EXPORT FTPServer : public TCPServerSocket
 		virtual bool canFileBeUploaded(const QString& fileName);
 		virtual void setFileFilter(FTPFileFilter *filter);
 		
+		FTPTransferServerPool& transferServerPool();
+		
+		virtual void close();
+		
 	protected:
 		
 		FTPConfiguration m_config;
 		FTPFileFilter *m_filter;
+		FTPTransferServerPool m_pool;
 		
 		virtual TCPConnServerSocket *newIO();
 		virtual void signalUploadComplete(const QString& fileName);

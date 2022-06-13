@@ -52,6 +52,8 @@ class NETWORK_EXPORT Socket : public QObject
 	
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;
+		
+		virtual void closeSocket(socket_type s);
 };
 
 //-------------------------------------------------------------------------------------------

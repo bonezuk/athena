@@ -62,6 +62,28 @@ void Socket::setForWrite()
 }
 
 //-------------------------------------------------------------------------------------------
+
+void Socket::closeSocket(socket_type s)
+{
+	if(s != c_invalidSocket)
+	{
+#if defined(OMEGA_WIN32)
+		::shutdown(m_socket,SD_BOTH);
+		if(::closesocket(m_socket)!=0)
+		{
+			printError("closeSocket","Error closing socket");
+		}
+#elif defined(OMEGA_POSIX)
+		::shutdown(m_socket,SHUT_RDWR);
+		if(::close(m_socket)!=0)
+		{
+			printError("closeSocket","Error closing socket");
+		}
+#endif	
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace network
 } // namespace omega
 //-------------------------------------------------------------------------------------------

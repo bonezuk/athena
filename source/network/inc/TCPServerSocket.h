@@ -46,6 +46,7 @@ class NETWORK_EXPORT TCPServerSocket : public Socket
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;
 		
 		virtual TCPConnServerSocket *newIO();
+		virtual void acceptAndCloseConnection();
 };
 
 //-------------------------------------------------------------------------------------------

@@ -175,6 +175,8 @@ FTPServer *FTPService::onGetServer(tint port)
 	
 	if(svr==0)
 	{
+		fprintf(stdout, "Start FTP server on port %d\n", port);
+
 		svr = new FTPServer(this,this);
 		if(svr->open(port))
 		{
@@ -200,6 +202,8 @@ void FTPService::onDeleteServer(FTPServer *svr)
 	{
 		QSet<TCPServerSocket *>::iterator ppI;
 		
+		fprintf(stdout, "Stop FTP server\n");
+
 		svr->close();
 		ppI = m_serverSet.find(reinterpret_cast<TCPServerSocket *>(svr));
 		if(ppI!=m_serverSet.end())

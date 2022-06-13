@@ -1,11 +1,13 @@
 #include "network/ftp/inc/FTPTransfer.h"
 #include "network/ftp/inc/FTPServer.h"
 #include "network/ftp/inc/FTPSession.h"
+#include "network/ftp/inc/FTPService.h"
 
 #if defined(OMEGA_POSIX)
 #include <stdio.h>
 #include <dirent.h>
 #endif
+#include <inttypes.h>
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -18,8 +20,8 @@ namespace ftp
 // FTPTransferServer
 //-------------------------------------------------------------------------------------------
 
-FTPTransferServer::FTPTransferServer(FTPTransfer *ftpTransfer,QObject *parent) : TCPServerSocket(reinterpret_cast<Service *>(ftpTransfer->service()),parent),
-	m_ftpTransfer(ftpTransfer)
+FTPTransferServer::FTPTransferServer(FTPService *service) : TCPServerSocket(reinterpret_cast<Service *>(service), reinterpret_cast<QObject *>(service)),
+	m_ftpTransfer(0)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -50,8 +52,34 @@ void FTPTransferServer::printError(const tchar *strR,const tchar *strE,tint eNo)
 
 TCPConnServerSocket *FTPTransferServer::newIO()
 {
-	FTPTransferConnection *io = new FTPTransferConnection(m_ftpTransfer,this);
+	FTPTransferConnection *io;
+	
+	if(m_ftpTransfer != 0)
+	{
+		io = new FTPTransferConnection(m_ftpTransfer,this);
+		io->lock();
+	}
+	else
+	{
+		QString err = QString("No associated FTP transfer identified with port %1").arg(port());
+		printError("newIO", err.toUtf8().constData());
+		io = 0;
+	}
 	return reinterpret_cast<TCPConnServerSocket *>(io);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPTransferServer::setTransfer(FTPTransfer *transfer)
+{
+	m_ftpTransfer = transfer;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPTransferServer::releaseTransfer()
+{
+	m_ftpTransfer = 0;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -101,6 +129,121 @@ bool FTPTransferConnection::open(socket_type serverS)
 		}
 	}
 	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+// FTPTransferServerPool
+//-------------------------------------------------------------------------------------------
+
+FTPTransferServerPool::FTPTransferServerPool(FTPService *service) : m_service(service),
+	m_serverPool(),
+	m_usedServers()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+FTPTransferServerPool::~FTPTransferServerPool()
+{
+	FTPTransferServerPool::closeAllServers();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPTransferServerPool::printError(const tchar *strR, const tchar *strE) const
+{
+	common::Log::g_Log << "FTPTransferConnection::" << strR << " - " << strE << common::c_endl;
+}
+
+//-------------------------------------------------------------------------------------------
+
+FTPTransferServer *FTPTransferServerPool::getServer(FTPTransfer *ftpTransfer, int port)
+{
+	FTPTransferServer *server;
+	QMap<int, FTPTransferServer *>::iterator ppI;
+	
+	ppI = m_serverPool.find(port);
+	if(ppI != m_serverPool.end())
+	{
+		server = ppI.value();
+		m_serverPool.erase(ppI);
+		m_usedServers.insert(port, server);
+	}
+	else
+	{
+		ppI = m_usedServers.find(port);
+		if(ppI != m_usedServers.end())
+		{
+			server = 0;
+		}
+		else
+		{
+			server = new FTPTransferServer(m_service);
+			if(server->open(port))
+			{
+				m_usedServers.insert(port, server);
+			}
+			else
+			{
+				QString err = QString("Failed to create FTP passive server on port %1").arg(port);
+				printError("getServer", err.toUtf8().constData());
+				server->close();
+				delete server;
+				server = 0;
+			}
+		}
+	}
+	if(server != 0)
+	{
+		server->setTransfer(ftpTransfer);
+	}
+	return server;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPTransferServerPool::releaseServer(FTPTransferServer *server)
+{
+	QMap<int, FTPTransferServer *>::iterator ppI;
+	
+	if(server != 0)
+	{
+		server->releaseTransfer();
+		ppI = m_usedServers.find(server->port());
+		if(ppI != m_usedServers.end())
+		{
+			m_usedServers.erase(ppI);
+			m_serverPool.insert(server->port(), server);
+		}
+		else
+		{
+			printError("releaseServer", "Give FTP transfer server is not used");
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPTransferServerPool::closeServerMap(QMap<int, FTPTransferServer *>& serverMap)
+{
+	for(QMap<int, FTPTransferServer *>::iterator ppI = serverMap.begin(); ppI != serverMap.end(); ppI++)
+	{
+		FTPTransferServer *server = ppI.value();
+		server->close();
+		delete server;
+	}
+	serverMap.clear();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FTPTransferServerPool::closeAllServers()
+{
+	if(!m_usedServers.isEmpty())
+	{
+		printError("closeAllServers", "Some FTP transfer servers in use");
+		closeServerMap(m_usedServers);
+	}
+	closeServerMap(m_serverPool);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -210,20 +353,17 @@ bool FTPTransfer::setPassive(tint& port)
 		return true;
 	}
 	
-	m_serverSocket = new FTPTransferServer(this,this);
-	while(port<portMax)
+	while(port < portMax && m_serverSocket == 0)
 	{
-		if(m_serverSocket->open(port))
+		m_serverSocket = m_ftpServer->transferServerPool().getServer(this, port);
+		if(m_serverSocket == 0)
 		{
-			break;
+			port++;
 		}
-		port++;
 	}
-	if(port>=portMax)
+	if(m_serverSocket == 0)
 	{
 		printError("setPassive","Failed to create passive data connection");
-		delete m_serverSocket;
-		m_serverSocket = 0;
 		return false;
 	}
 	return true;
@@ -405,8 +545,7 @@ void FTPTransfer::close()
 	}
 	if(m_serverSocket!=0)
 	{
-		m_serverSocket->close();
-		delete m_serverSocket;
+		m_ftpServer->transferServerPool().releaseServer(m_serverSocket);
 		m_serverSocket = 0;
 	}
 	if(m_clientConnection!=0)

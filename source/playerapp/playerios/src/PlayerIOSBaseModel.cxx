@@ -97,13 +97,13 @@ QSharedPointer<track::db::DBInfo> PlayerIOSBaseModel::getTrack(const QModelIndex
 		
 		if(getID(index, albumID, trackID, subtrackID))
 		{
-			if(!m_currentInfo.isNull() && m_currentInfo->albumID() == albumID || m_currentInfo->trackID() == trackID)
+			if(!m_currentInfo.isNull() && m_currentInfo->albumID() == albumID && m_currentInfo->trackID() == trackID)
 			{
 				pInfo = m_currentInfo;
 			}
 			else
 			{
-				QSharedPointer<track::info::Info> info = track::db::DBInfo::readInfo(trackID, albumID);
+				QSharedPointer<track::info::Info> info = track::db::DBInfo::readInfo(albumID, trackID);
 				m_currentInfo = info.dynamicCast<track::db::DBInfo>();
 				pInfo = m_currentInfo;
 			}

@@ -39,8 +39,11 @@ class FTP_EXPORT FTPTransferServer : public TCPServerSocket
 		Q_OBJECT
 	
 	public:
-		FTPTransferServer(FTPTransfer *ftpTransfer,QObject *parent = 0);
+		FTPTransferServer(FTPService *service);
 		virtual ~FTPTransferServer();
+		
+		virtual void setTransfer(FTPTransfer *transfer);
+		virtual void releaseTransfer();
 		
 	protected:
 	
@@ -71,6 +74,28 @@ class FTP_EXPORT FTPTransferConnection : public TCPConnServerSocket
 	
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printError(const tchar *strR,const tchar *strE,tint eNo) const;
+};
+
+//-------------------------------------------------------------------------------------------
+
+class FTP_EXPORT FTPTransferServerPool
+{
+	public:
+		FTPTransferServerPool(FTPService *service);
+		virtual ~FTPTransferServerPool();
+		
+		virtual FTPTransferServer *getServer(FTPTransfer *ftpTransfer, int port);
+		virtual void releaseServer(FTPTransferServer *server);
+		
+		virtual void closeAllServers();
+		
+	private:
+		FTPService *m_service;
+		QMap<int, FTPTransferServer *> m_serverPool;
+		QMap<int, FTPTransferServer *> m_usedServers;
+		
+		virtual void printError(const tchar *strR, const tchar *strE) const;
+		virtual void closeServerMap(QMap<int, FTPTransferServer *>& serverMap);
 };
 
 //-------------------------------------------------------------------------------------------
