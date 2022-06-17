@@ -10,8 +10,55 @@ namespace omega
 namespace audioio
 {
 //-------------------------------------------------------------------------------------------
+// AOQueryCoreAudioIOS::IOSDevice
+//-------------------------------------------------------------------------------------------
 
-AOQueryCoreAudioIOS::AOQueryCoreAudioIOS() : AOQueryDevice()
+AOQueryCoreAudioIOS::IOSDevice::IOSDevice() : AOQueryDevice::Device(AOQueryDevice::Device::e_deviceIOS),
+	m_formats()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+AOQueryCoreAudioIOS::IOSDevice::IOSDevice(const AOQueryDevice::Device& rhs) : AOQueryDevice::Device(AOQueryDevice::Device::e_deviceIOS),
+	m_formats()
+{
+	AOQueryCoreAudioIOS::IOSDevice::copy(rhs);
+}
+
+//-------------------------------------------------------------------------------------------
+
+AOQueryCoreAudioIOS::IOSDevice::~IOSDevice()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+const FormatsSupported& AOQueryCoreAudioIOS::IOSDevice::formats() const
+{
+	return m_formats;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOQueryCoreAudioIOS::IOSDevice::addSupportedFormat(const FormatDescription& desc)
+{
+	m_formats.add(desc);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOQueryCoreAudioIOS::IOSDevice::copy(const AOQueryDevice::Device& rhs)
+{
+	const IOSDevice& dev = dynamic_cast<const IOSDevice &>(rhs);
+	AOQueryDevice::Device::copy(rhs);
+	m_formats = dev.m_formats;
+}
+
+//-------------------------------------------------------------------------------------------
+// AOQueryCoreAudioIOS
+//-------------------------------------------------------------------------------------------
+
+AOQueryCoreAudioIOS::AOQueryCoreAudioIOS() : AOQueryDevice(),
+	m_bytesPerSample(0)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -21,23 +68,266 @@ AOQueryCoreAudioIOS::~AOQueryCoreAudioIOS()
 
 //-------------------------------------------------------------------------------------------
 
+void AOQueryCoreAudioIOS::printError(const tchar *strR, const tchar *strE) const
+{
+	common::Log::g_Log << "AOQueryCoreAudioIOS::" << strR << " - " << strE << common::c_endl;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOQueryCoreAudioIOS::printError(const tchar *strR, const tchar *strE, OSStatus err) const
+{
+	NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:err userInfo:nil];
+	QString desc = QString::fromUtf8(error.localizedDescription.UTF8String);
+	QString reason = QString::fromUtf8(error.localizedFailureReason.UTF8String);
+	QString recovery = QString::fromUtf8(error.localizedRecoverySuggestion.UTF8String);
+	QString eStr;
+	eStr  = strE;
+	eStr += common::c_endl;
+	eStr += "\tDescription - " + desc;
+	eStr += common::c_endl;
+	eStr += "\tReason - " + reason;
+	eStr += common::c_endl;
+	eStr += "\tSuggestion - " + recovery + common::c_endl;
+	common::Log::g_Log << "AOQueryCoreAudio::" << strR << " - " << eStr.toUtf8().constData();
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool AOQueryCoreAudioIOS::queryNames()
 {
-	return false;
+	return buildDeviceMap();
 }
 
 //-------------------------------------------------------------------------------------------
 
 bool AOQueryCoreAudioIOS::queryDevice(int idx)
 {
-	return false;
+	bool res = false;
+	
+	if(!idx && buildDeviceMap())
+	{
+		res = true;
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------
 
 int AOQueryCoreAudioIOS::defaultDeviceIndex()
 {
-	return -1;
+	return 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOQueryCoreAudioIOS::buildDeviceMap()
+{
+	static const int channelCount[4] = {2, 4, 6, 8};	
+	bool res = false;
+	
+	if(m_devices.isEmpty())
+	{
+		tint maxNoChannels = 0;
+		QSet<int> freqs = FormatDescription::setOfFrequencies();
+		IOSDevice *dev = new IOSDevice();
+		
+		dev->id() = "Default Output";
+		dev->name() = "Default Output";
+		
+		for(int bitFormat = static_cast<int>(e_audioOutputFloat); bitFormat < static_cast<int>(e_audioOutputUnknown); bitFormat++)
+		{
+			int noBits;
+			FormatDescription::DataType type = (bitFormat == e_audioOutputFloat) ? FormatDescription::e_DataFloatSingle : FormatDescription::e_DataSignedInteger;
+			
+			switch(static_cast<AOIOSAudioFormats>(bitFormat))
+			{
+				case e_audioOutputInt16:
+					noBits = 16;
+					break;
+				case e_audioOutputInt24:
+					noBits = 24;
+					break;
+				case e_audioOutputInt32:
+				case e_audioOutputFloat:
+				case e_audioOutputUnknown:
+					noBits = 32;
+					break;
+			}
+			
+			for(int noChsIndex = 0; noChsIndex < 4; noChsIndex++)
+			{
+				for(QSet<int>::iterator ppI = freqs.begin(); ppI != freqs.end(); ppI++)
+				{
+					int rate = *ppI;
+					
+					if(queryDeviceCapability(static_cast<AOIOSAudioFormats>(bitFormat), channelCount[noChsIndex], rate))
+					{
+						FormatDescription desc(type, noBits, channelCount[noChsIndex], rate);
+						dev->addSupportedFormat(desc);
+						
+						if(channelCount[noChsIndex] > maxNoChannels)
+						{
+							maxNoChannels = channelCount[noChsIndex];
+						}
+						if(dev->isFrequencySupported(rate))
+						{
+							dev->addFrequency(rate);
+						}
+					}
+				}
+			}
+		}
+		
+		dev->setNoChannels(maxNoChannels);
+		dev->setHasExclusive(false);
+		dev->setInitialized();
+		m_devices.append(dynamic_cast<AOQueryDevice::Device *>(dev));
+		res = (!dev->frequencies().isEmpty()) ? true : false;
+	}
+	else
+	{
+		res = true;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOQueryCoreAudioIOS::getDescription(AOIOSAudioFormats bitFormat, int noChannels, int freq, AudioStreamBasicDescription *fmt)
+{
+	tint bytesPerSample;
+
+	::memset(fmt, 0, sizeof(AudioStreamBasicDescription));
+	switch(bitFormat)
+	{
+		case e_audioOutputFloat:
+			fmt->mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
+			bytesPerSample = 4;
+			break;
+		case e_audioOutputInt16:
+			fmt->mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+			bytesPerSample = 2;
+			break;
+		case e_audioOutputInt24:
+			fmt->mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+			bytesPerSample = 3;
+			break;
+		case e_audioOutputInt32:
+			fmt->mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+			bytesPerSample = 4;
+			break;
+		case e_audioOutputUnknown:
+		default:
+			printError("getDescription", "Undefined bit format");
+			return false;
+	}
+			
+	fmt->mSampleRate = static_cast<Float64>(freq);
+	fmt->mFormatID = kAudioFormatLinearPCM;
+	fmt->mFramesPerPacket = 1;
+	fmt->mBitsPerChannel = bytesPerSample * 8;
+	fmt->mBytesPerPacket = bytesPerSample * noChannels;
+	fmt->mBytesPerFrame = bytesPerSample * noChannels;
+	fmt->mChannelsPerFrame = noChannels;
+	
+	m_bytesPerSample = bytesPerSample;
+	
+	return true;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOQueryCoreAudioIOS::queryDeviceCapability(AOIOSAudioFormats bitFormat, int noChannels, int freq)
+{
+	AudioComponent comp;
+	AudioComponentDescription ioUnitDescription;
+	AudioComponentInstance audioOutputUnit;
+	OSStatus err;
+	bool res = false;
+	
+	::memset(&ioUnitDescription, 0, sizeof(AudioComponentDescription));
+	ioUnitDescription.componentType = kAudioUnitType_Output;
+	ioUnitDescription.componentSubType = kAudioUnitSubType_RemoteIO;
+	ioUnitDescription.componentManufacturer = kAudioUnitManufacturer_Apple;
+	
+	comp = AudioComponentFindNext(0,&ioUnitDescription);
+	if(comp != nil)
+	{
+		err = AudioComponentInstanceNew(comp, &audioOutputUnit);
+		if(err == noErr)
+		{
+			UInt32 enableIO = 1;
+			
+			err = AudioUnitSetProperty(audioOutputUnit,kAudioOutputUnitProperty_EnableIO,kAudioUnitScope_Output,0,&enableIO,sizeof(enableIO));
+			if(err == noErr)
+			{
+				AudioStreamBasicDescription streamFormat;
+				
+				if(getDescription(bitFormat, noChannels, freq, &streamFormat))
+				{
+					err = AudioUnitSetProperty(audioOutputUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
+					if(err == noErr)
+					{
+						AURenderCallbackStruct renderCallback;
+					
+						::memset(&renderCallback,0,sizeof(AURenderCallbackStruct));
+						renderCallback.inputProc = iosOmegaAudioCallbackIOProcQuery;
+						renderCallback.inputProcRefCon = (void *)(this);
+							
+						err = AudioUnitSetProperty(audioOutputUnit,kAudioUnitProperty_SetRenderCallback,kAudioUnitScope_Input,0,&renderCallback,sizeof(renderCallback));
+						if(err == noErr)
+						{
+							err = AudioUnitInitialize(audioOutputUnit);
+							if(err == noErr)
+							{
+								Float64 sampleRate = 0.0;
+								UInt32 theSize = sizeof(sampleRate);
+								
+								err = AudioUnitGetProperty(audioOutputUnit,kAudioUnitProperty_SampleRate,kAudioUnitScope_Output,0,&sampleRate,&theSize);
+								if(err == noErr)
+								{
+									if(freq==static_cast<int>(sampleRate))
+									{
+										res = true;
+									}
+								}
+							}
+							AudioUnitUninitialize(audioOutputUnit);
+						}
+					}
+				}
+			}
+			AudioComponentInstanceDispose(audioOutputUnit);
+		}
+		else
+		{
+			printError("buildDeviceMap", "Failed to create instance for audio output.", err);
+		}
+	}
+	else
+	{
+		printError("buildDeviceMap", "Failed to get default audio output component");
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+OSStatus AOQueryCoreAudioIOS::iosOmegaAudioCallbackIOProcQuery(void *inRegCon, \
+                                  AudioUnitRenderActionFlags *ioActionFlags, \
+		                          const AudioTimeStamp *inTimeStamp, \
+		                          UInt32 inBusNumber, \
+		                          UInt32 inNumberFrames, \
+		                          AudioBufferList *ioData)
+{
+	AOQueryCoreAudioIOS *query = reinterpret_cast<AOQueryCoreAudioIOS *>(inRegCon);
+	for(tint i = 0; i < static_cast<int>(ioData->mNumberBuffers); i++)
+	{
+		tint noChs = static_cast<int>(ioData->mBuffers[i].mNumberChannels);
+		::memset(ioData->mBuffers[i].mData, 0 ,inNumberFrames * noChs * query->m_bytesPerSample);
+	}
+	return noErr;
 }
 
 //-------------------------------------------------------------------------------------------

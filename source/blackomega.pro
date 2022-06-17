@@ -670,8 +670,14 @@ SOURCES += ./track/model/src/TrackModelKey.cxx
 # --- playerapp/playerios ---
 
 HEADERS += ./playerapp/playerios/inc/PlayerIOSBaseModel.h
+HEADERS += ./playerapp/playerios/inc/PlayerIOSTrackDBManager.h
+HEADERS += ./playerapp/playerios/inc/PlayerIOSUtils.h
+HEADERS += ./playerapp/playerios/inc/PlayerUISettings.h
 
 SOURCES += ./playerapp/playerios/src/PlayerIOSBaseModel.cxx
 SOURCES += ./playerapp/playerios/src/PlayerIOSMain.cxx
+SOURCES += ./playerapp/playerios/src/PlayerIOSTrackDBManager.cxx
+SOURCES += ./playerapp/playerios/src/PlayerIOSUtils.cxx
+SOURCES += ./playerapp/playerios/src/PlayerUISettings.cxx
 
 RESOURCES = ./playerapp/playerios/playerios.qrc

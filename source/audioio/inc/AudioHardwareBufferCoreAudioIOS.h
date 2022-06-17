@@ -18,7 +18,7 @@ namespace audioio
 class AUDIOIO_EXPORT AudioHardwareBufferCoreAudioIOS : public AbstractAudioHardwareBuffer
 {
 	public:
-		AudioHardwareBufferCoreAudioIOS();
+		AudioHardwareBufferCoreAudioIOS(AudioBufferList *ioData,UInt32 inNumberFrames,tint sSize);
 		virtual ~AudioHardwareBufferCoreAudioIOS();
 		
 		virtual tbyte *buffer(tint bufferIdx);
@@ -32,6 +32,9 @@ class AUDIOIO_EXPORT AudioHardwareBufferCoreAudioIOS : public AbstractAudioHardw
 		virtual tint numberOfBuffers();
 		
 	protected:
+		AudioBufferList *m_ioData;
+		UInt32 m_inNumberFrames;
+		tint m_sampleSize;
 };
 
 //-------------------------------------------------------------------------------------------

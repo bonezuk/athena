@@ -74,6 +74,7 @@ class AUDIOIO_EXPORT AOQueryDevice::Device
 			e_deviceWasAPI,
 			e_deviceCoreAudio,
 			e_deviceALSA,
+			e_deviceIOS,
 			e_deviceUnknown = 0
 		} Type;
 		
