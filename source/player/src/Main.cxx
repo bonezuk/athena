@@ -238,29 +238,6 @@ int main(int argc,char **argv)
 		QString trackDBFilename = userApplicationDataDirectory() + "track.db";
 #endif
 		omega::track::db::TrackDB *trackDB = omega::track::db::TrackDB::instance(trackDBFilename);
-		if(trackDB!=0)
-		{
-			if(trackDB->dbVersion()<4)
-			{
-				delete trackDB;	
-				omega::common::DiskOps::remove(trackDBFilename);
-				trackDB = omega::track::db::TrackDB::instance(trackDBFilename);
-			}
-			else if(trackDB->dbVersion()==4)
-			{
-				delete trackDB;	
-				
-				if(omega::track::db::Schema::upgradeVersion4To5(trackDBFilename))
-				{
-					trackDB = omega::track::db::TrackDB::instance(trackDBFilename);
-				}
-				else
-				{
-					omega::common::DiskOps::remove(trackDBFilename);
-					trackDB = omega::track::db::TrackDB::instance(trackDBFilename);					
-				}
-			}
-		}
 
 		omega::common::ProductVersionInfo::instance(":/build/Resources/buildInfo.xml");
 

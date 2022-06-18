@@ -6,6 +6,7 @@
 #include "engine/inc/Codec.h"
 #include "engine/inc/File.h"
 #include "track/db/inc/DBInfo.h"
+#include "common/inc/Random.h"
 
 #include <QDir>
 
@@ -90,11 +91,81 @@ common::TimeStamp TrackDB::getModifiedTime(const QString& fileName,tint& fileSiz
 
 //-------------------------------------------------------------------------------------------
 
+bool TrackDB::upgradeDBAsRequired(const QString& dbName)
+{
+	bool res = true;
+
+	if(common::DiskOps::exist(dbName))
+	{
+		SQLiteDatabase currentDb;
+		
+		if(currentDb.open(dbName))
+		{
+			int currentVersion = dbVersion(&currentDb);
+			
+			if(currentVersion < 6)
+			{
+				// No upgrade path so existing functionality removes it
+				// to be recreated
+				QString err = QString("DB below version 6. Removing retired DB file '%1'").arg(dbName);
+				printError("upgradeDBAsRequired", err.toUtf8().constData());
+				res = false;
+			}
+			else if(currentVersion < TRACKDB_VERSION)
+			{
+				Schema schema;
+				
+				currentDb.close();
+				if(!schema.doUpgrade(dbName))
+				{
+					QString err = QString("Failed to upgrade '%1'").arg(dbName);
+					printError("upgradeDBAsRequired", err.toUtf8().constData());
+					res = false;
+				}
+			
+				if(!res)
+				{
+					QString err = QString("Failed to upgrade DB from version %1 to %2. Removing corrupt DB file '%3'")
+						.arg(currentVersion - 1).arg(currentVersion).arg(dbName);
+					printError("upgradeDBAsRequired", err.toUtf8().constData());
+					res = false;
+				}
+			}
+		}
+		else
+		{
+			QString err = QString("Failed to open expected track database '%1'. Removing corrupt DB file").arg(dbName);
+			printError("upgradeDBAsRequired", err.toUtf8().constData());
+			res = false;
+		}
+	}
+	if(!res)
+	{
+		omega::common::DiskOps::remove(dbName);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TrackDB::rebuildMusicDatabase(const QString& dbName)
+{
+	// TODO - Rescan music directories listed in the old mount points table
+	// Also implement backup of mount points in XML settings file (or whatever).
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool TrackDB::open(const QString& dbName)
 {
 	bool res = false;
 	
 	close();
+	
+	if(!upgradeDBAsRequired(dbName))
+	{
+		rebuildMusicDatabase(dbName);
+	}
 	
 	m_db = new SQLiteDatabase;
 	if(m_db->open(dbName))
@@ -1441,17 +1512,24 @@ QString TrackDB::dbStringInv(const QString& dStr)
 
 //-------------------------------------------------------------------------------------------
 
-int TrackDB::dbVersion()
+int TrackDB::dbVersion(SQLiteDatabase *db)
 {
 	QString cmd;
 	int cVersionNo = 1;
-	SQLiteQuery projectQ(m_db);
+	SQLiteQuery projectQ(db);
 		
 	cmd = "SELECT dbVersion FROM databaseInfo";
 	projectQ.prepare(cmd);
 	projectQ.bind(cVersionNo);
 	projectQ.next();
 	return cVersionNo;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int TrackDB::dbVersion()
+{
+	return dbVersion(m_db);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -2031,6 +2109,7 @@ bool TrackDB::loadPlaylist(int playlistID, QVector<PlaylistTuple>& pList)
 	try
 	{
 		int position, albumID, trackID, subtrackID;
+		tuint64 itemID;
 		QVector<PlaylistTuple> trackDBList;
 		QVector<PlaylistTuple>::iterator ppI;
 		SQLiteQuery playQ(m_db);
@@ -2042,12 +2121,14 @@ bool TrackDB::loadPlaylist(int playlistID, QVector<PlaylistTuple>& pList)
 		playQ.bind(albumID);
 		playQ.bind(trackID);
 		playQ.bind(subtrackID);
+		playQ.bind(itemID);
 		while(playQ.next())
 		{
 			PlaylistTuple t;
 			t.albumID = albumID;
 			t.trackID = trackID;
 			t.subtrackID = subtrackID;
+			t.itemID = itemID;
 			pList.append(t);
 		}
 	}
@@ -2183,16 +2264,22 @@ int TrackDB::savePlaylistOp(int playlistID, const QString& name, const QVector<P
 		infoI.bind(playlistName);
 		if(infoI.next())
 		{
-			cmdI = "INSERT INTO playlist VALUES (?,?,?,?,?)";
+			cmdI = "INSERT INTO playlist VALUES (?,?,?,?,?,?)";
 			playI.prepare(cmdI);
 			for(i=0, ppI=pList.constBegin(); ppI != pList.constEnd() && playlistID >= 0; ppI++, i++)
 			{
 				PlaylistTuple item = *ppI;
+				
+				if(item.itemID == 0)
+				{
+					item.itemID = newPlaylistItemID();
+				}
 				playI.bind(playlistID);
 				playI.bind(i);
 				playI.bind(item.albumID);
 				playI.bind(item.trackID);
 				playI.bind(item.subtrackID);
+				playI.bind(item.itemID);
 				if(!playI.next())
 				{
 					printError("savePlaylistOp", "Error insert into playlist table");
@@ -2238,6 +2325,7 @@ int TrackDB::savePlaylistOp(int playlistID, const QString& name, const QVector<Q
 		t.albumID = item.first->albumID();
 		t.trackID = item.first->trackID();
 		t.subtrackID = item.second;
+		t.itemID = 0;
 		tupleList.append(t);
 	}
 	return savePlaylistOp(playlistID, name, tupleList);
@@ -2271,6 +2359,38 @@ int TrackDB::savePlaylist(const QString& name, QVector<QPair<info::InfoSPtr, tin
 int TrackDB::savePlaylist(const QString& name, QVector<PlaylistTuple>& pList)
 {	
 	return replacePlaylist(-1, name, pList);
+}
+
+//-------------------------------------------------------------------------------------------
+
+tuint64 TrackDB::newPlaylistItemID()
+{
+	return newPlaylistItemID(m_db);
+}
+
+//-------------------------------------------------------------------------------------------
+
+tuint64 TrackDB::newPlaylistItemID(SQLiteDatabase *db)
+{
+	tuint64 a, itemID;
+	QString cmd;
+	
+	while(true)
+	{
+		itemID = common::Random::instance()->randomUInt64();
+		if(itemID)
+		{
+			SQLiteQuery idQ(db);
+			cmd = QString("SELECT itemID FROM playlist WHERE itemID=%1").arg(itemID);
+			idQ.prepare(cmd);
+			idQ.bind(a);
+			if(!idQ.next())
+			{
+				break;
+			}
+		}
+	}
+	return itemID;
 }
 
 //-------------------------------------------------------------------------------------------

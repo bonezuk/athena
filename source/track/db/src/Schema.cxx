@@ -117,6 +117,32 @@ void Schema::createMountPoints()
 
 //-------------------------------------------------------------------------------------------
 
+void Schema::copyMountPoints(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int mountID;
+	QString mountName;
+	QString cmd;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	cmd = "SELECT mountID, mountName FROM mountpoints";
+	srcQ.prepare(cmd);
+	srcQ.bind(mountID);
+	srcQ.bind(mountName);
+	
+	cmd = "INSERT INTO mountpoints (mountID, mountName) VALUES (?,?)";
+	destI.prepare(cmd);
+	destI.bind(mountID);
+	destI.bind(mountName);
+	
+	while(srcQ.next())
+	{
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Schema::createAlbum()
 {
 	if(!isTableDefined("album"))
@@ -135,6 +161,39 @@ void Schema::createAlbum()
 		m_db->exec(cmd);
 		cmd = "CREATE INDEX albumLookupIndex ON album (albumName COLLATE NOCASE, year, directoryID);";
 		m_db->exec(cmd);
+	}
+}
+
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyAlbum(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int albumID, year, directoryID, groupID;
+	QString albumName;
+	QString cmd;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	cmd = "SELECT albumID, albumName, year, directoryID, groupID FROM album";
+	srcQ.prepare(cmd);
+	srcQ.bind(albumID);
+	srcQ.bind(albumName);
+	srcQ.bind(year);
+	srcQ.bind(directoryID);
+	srcQ.bind(groupID);
+	
+	cmd = "INSERT album INTO mountpoints (albumID, albumName, year, directoryID, groupID) VALUES (?,?,?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(albumID);
+	destI.bind(albumName);
+	destI.bind(year);
+	destI.bind(directoryID);
+	destI.bind(groupID);
+
+	while(srcQ.next())
+	{
+		destI.next();
 	}
 }
 
@@ -181,6 +240,59 @@ void Schema::createTrack()
 
 //-------------------------------------------------------------------------------------------
 
+void Schema::copyTrack(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int albumID, trackID, fileID, discNo, trackNo, genreID;
+	QString trackName, artist, originalArtist, composer, comment, copyright, encoder;
+	tuint64 timeLength;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "albumID, trackID, fileID, trackName, artist, discNo, trackNo, originalArtist, composer, genreID, comment, copyright, encoder, timeLength";
+	
+	cmd  = "SELECT " + items + " FROM track";
+	srcQ.prepare(cmd);
+	srcQ.bind(albumID);
+	srcQ.bind(trackID);
+	srcQ.bind(fileID);
+	srcQ.bind(trackName);
+	srcQ.bind(artist);
+	srcQ.bind(discNo);
+	srcQ.bind(trackNo);
+	srcQ.bind(originalArtist);
+	srcQ.bind(composer);
+	srcQ.bind(genreID);
+	srcQ.bind(comment);
+	srcQ.bind(copyright);
+	srcQ.bind(encoder);
+	srcQ.bind(timeLength);
+	
+	cmd = "INSERT INTO track (" + items + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(albumID);
+	destI.bind(trackID);
+	destI.bind(fileID);
+	destI.bind(trackName);
+	destI.bind(artist);
+	destI.bind(discNo);
+	destI.bind(trackNo);
+	destI.bind(originalArtist);
+	destI.bind(composer);
+	destI.bind(genreID);
+	destI.bind(comment);
+	destI.bind(copyright);
+	destI.bind(encoder);
+	destI.bind(timeLength);
+	
+	while(srcQ.next())
+	{
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Schema::createSubtrack()
 {
 	if(!isTableDefined("subtrack"))
@@ -204,6 +316,44 @@ void Schema::createSubtrack()
 
 //-------------------------------------------------------------------------------------------
 
+void Schema::copySubtrack(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int albumID, trackID, subtrackID;
+	QString subtrackName;
+	tuint64 timeStart, timeLength;
+
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "albumID, trackID, subtrackID, subtrackName, timeStart, timeLength";
+
+	cmd = "SELECT "	+ items + " FROM subtrack";
+	srcQ.prepare(cmd);
+	srcQ.bind(albumID);
+	srcQ.bind(trackID);
+	srcQ.bind(subtrackID);
+	srcQ.bind(subtrackName);
+	srcQ.bind(timeStart);
+	srcQ.bind(timeLength);
+	
+	cmd = "INSERT INTO subtrack (" + items + ") VALUE (?,?,?,?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(albumID);
+	destI.bind(trackID);
+	destI.bind(subtrackID);
+	destI.bind(subtrackName);
+	destI.bind(timeStart);
+	destI.bind(timeLength);
+		
+	while(srcQ.next())
+	{
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Schema::createGenre()
 {
 	if(!isTableDefined("genre"))
@@ -218,6 +368,33 @@ void Schema::createGenre()
 		m_db->exec(cmd);
 		cmd = "CREATE INDEX genreNameIndex ON genre (genreName COLLATE NOCASE);";
 		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyGenre(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int genreID;
+	QString genreName;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "genreID, genreName";
+	cmd = "SELECT " + items + " FROM genre";
+	srcQ.prepare(cmd);
+	srcQ.bind(genreID);
+	srcQ.bind(genreName);
+	
+	cmd = "INSERT INTO genre (" + items + ") VALUES (?,?)";
+	destI.prepare(cmd);
+	destI.bind(genreID);
+	destI.bind(genreName);
+	
+	while(srcQ.next())
+	{
+		destI.next();
 	}
 }
 
@@ -245,6 +422,42 @@ void Schema::createImage()
 
 //-------------------------------------------------------------------------------------------
 
+void Schema::copyImage(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int imageID, type, format;
+	tint64 sha1SignatureH, sha1SignatureL;
+	QByteArray data;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "imageID, type, format, sha1SignatureH, sha1SignatureL, data";
+	cmd = "SELECT " + items + " FROM image";
+	srcQ.prepare(cmd);
+	srcQ.bind(imageID);
+	srcQ.bind(type);
+	srcQ.bind(format);
+	srcQ.bind(sha1SignatureH);
+	srcQ.bind(sha1SignatureL);
+	srcQ.bind(data);
+
+	cmd = "INSERT INTO image (" + items + ") VALUES (?,?,?,?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(imageID);
+	destI.bind(type);
+	destI.bind(format);
+	destI.bind(sha1SignatureH);
+	destI.bind(sha1SignatureL);
+	destI.bind(data);
+	
+	while(srcQ.next())
+	{
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Schema::createImageAlbumMap()
 {
 	if(!isTableDefined("imagealbummap"))
@@ -260,6 +473,40 @@ void Schema::createImageAlbumMap()
 		cmd += "  PRIMARY KEY(albumID)";
 		cmd += ");";
 		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyImageAlbumMap(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int albumID, imageID;
+	QString fileName;
+	tuint64 dirModifiedTime, fileModifiedTime;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "albumID, imageID, fileName, dirModifiedTime, fileModifiedTime";
+	cmd = "SELECT " + items + " FROM imagealbummap";
+	srcQ.prepare(cmd);
+	srcQ.bind(albumID);
+	srcQ.bind(imageID);
+	srcQ.bind(fileName);
+	srcQ.bind(dirModifiedTime);
+	srcQ.bind(fileModifiedTime);
+	
+	cmd = "INSERT INTO imagealbummap (" + items + ") VALUES (?,?,?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(albumID);
+	destI.bind(imageID);
+	destI.bind(fileName);
+	destI.bind(dirModifiedTime);
+	destI.bind(fileModifiedTime);
+	
+	while(srcQ.next())
+	{
+		destI.next();
 	}
 }
 
@@ -285,6 +532,34 @@ void Schema::createImageMap()
 
 //-------------------------------------------------------------------------------------------
 
+void Schema::copyImageMap(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int albumID, trackID, imageID;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "albumID, trackID, imageID";
+	cmd = "SELECT " + items + " FROM imagemap";
+	srcQ.prepare(cmd);
+	srcQ.bind(albumID);
+	srcQ.bind(trackID);
+	srcQ.bind(imageID);
+	
+	cmd = "INSERT INTO imagemap (" + items + ") VALUES (?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(albumID);
+	destI.bind(trackID);
+	destI.bind(imageID);
+	
+	while(srcQ.next())
+	{
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Schema::createDirectory()
 {
 	if(!isTableDefined("directory"))
@@ -298,6 +573,33 @@ void Schema::createDirectory()
 		m_db->exec(cmd);
 		cmd = "CREATE INDEX directoryNameIndex ON directory (directoryName)";
 		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyDirectory(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int directoryID;
+	QString directoryName;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "directoryID, directoryName";
+	cmd = "SELECT " + items + " FROM directory";
+	srcQ.prepare(cmd);
+	srcQ.bind(directoryID);
+	srcQ.bind(directoryName);
+	
+	cmd = "INSERT INTO imagemap (" + items + ") VALUES (?,?)";
+	destI.prepare(cmd);
+	destI.bind(directoryID);
+	destI.bind(directoryName);
+	
+	while(srcQ.next())
+	{
+		destI.next();
 	}
 }
 
@@ -327,6 +629,45 @@ void Schema::createFile()
 
 //-------------------------------------------------------------------------------------------
 
+void Schema::copyFile(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int directoryID, fileID, codecType, infoType, fileSize;
+	QString fileName;
+	tuint64 updateTime;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "directoryID, fileID, codecType, infoType, fileName, updateTime, fileSize";
+	items = "directoryID, directoryName";
+	cmd = "SELECT " + items + " FROM file";
+	srcQ.prepare(cmd);
+	srcQ.bind(directoryID);
+	srcQ.bind(fileID);
+	srcQ.bind(codecType);
+	srcQ.bind(infoType);
+	srcQ.bind(fileName);
+	srcQ.bind(updateTime);
+	srcQ.bind(fileSize);
+	
+	cmd = "INSERT INTO file (" + items + ") VALUES (?,?,?,?,?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(directoryID);
+	destI.bind(fileID);
+	destI.bind(codecType);
+	destI.bind(infoType);
+	destI.bind(fileName);
+	destI.bind(updateTime);
+	destI.bind(fileSize);
+
+	while(srcQ.next())
+	{
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Schema::createPlayList()
 {
 	if(!isTableDefined("playlist"))
@@ -339,9 +680,66 @@ void Schema::createPlayList()
 		cmd += "  albumID INTEGER NOT NULL,";
 		cmd += "  trackID INTEGER NOT NULL,";
 		cmd += "  subtrackID INTEGER NOT NULL,";
+		cmd += "  itemID INTEGER NOT NULL UNIQUE,";
 		cmd += "  PRIMARY KEY(playListID,position)";
 		cmd += ");";
 		m_db->exec(cmd);
+		cmd = "CREATE INDEX playlistItemIndex ON playlist (itemID)";
+		m_db->exec(cmd);		
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyPlayList(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int srcDBVersion, destDBVersion;
+	int playlistID, position, albumID, trackID, subtrackID;
+	tuint64 itemID;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	srcDBVersion = TrackDB::dbVersion(srcDB);
+	destDBVersion = TrackDB::dbVersion(destDB);
+	
+	items = "playListID, position, albumID, trackID, subtrackID";
+	if(srcDBVersion > 6)
+	{
+		items += ", itemID";
+	}
+	cmd = "SELECT " + items + " FROM playlist";
+	srcQ.prepare(cmd);
+	srcQ.bind(playlistID);
+	srcQ.bind(position);
+	srcQ.bind(albumID);
+	srcQ.bind(trackID);
+	srcQ.bind(subtrackID);
+	if(srcDBVersion > 6)
+	{
+		srcQ.bind(itemID);
+	}
+
+	cmd = "INSERT INTO playlist (" + items;
+	cmd += (destDBVersion > 6) ? ") VALUES (?,?,?,?,?,?)" : ") VALUES (?,?,?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(playlistID);
+	destI.bind(position);
+	destI.bind(albumID);
+	destI.bind(trackID);
+	destI.bind(subtrackID);
+	if(destDBVersion > 6)
+	{
+		destI.bind(itemID);
+	}
+	
+	while(srcQ.next())
+	{
+		if(destDBVersion > 6 && srcDBVersion <= 6)
+		{
+			itemID = TrackDB::newPlaylistItemID(destDB);
+		}
+		destI.next();
 	}
 }
 
@@ -359,6 +757,33 @@ void Schema::createPlayListInfo()
 		cmd += "  PRIMARY KEY(playListID)";
 		cmd += ");";
 		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyPlayListInfo(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int playListID;
+	QString name;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "playListID, name";
+	cmd = "SELECT " + items + " FROM playlistInfo";
+	srcQ.prepare(cmd);
+	srcQ.bind(playListID);
+	srcQ.bind(name);
+	
+	cmd = "INSERT INTO playlistInfo (" + items + ") VALUES (?,?)";
+	destI.prepare(cmd);
+	destI.bind(playListID);
+	destI.bind(name);
+	
+	while(srcQ.next())
+	{
+		destI.next();
 	}
 }
 
@@ -399,6 +824,41 @@ void Schema::createSandBoxURL()
 
 //-------------------------------------------------------------------------------------------
 
+void Schema::copySandBoxURL(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int access;
+	QString url, docUrl;
+	tuint64 accessTime;
+	QByteArray bookmark;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "url, docUrl, access, accessTime, bookmark";
+	cmd = "SELECT " + items + " FROM sandBoxURL";
+	srcQ.prepare(cmd);
+	srcQ.bind(url);
+	srcQ.bind(docUrl);
+	srcQ.bind(access);
+	srcQ.bind(accessTime);
+	srcQ.bind(bookmark);
+	
+	cmd = "INSERT INTO sandBoxURL (" + items + ") VALUES (?,?,?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(url);
+	destI.bind(docUrl);
+	destI.bind(access);
+	destI.bind(accessTime);
+	destI.bind(bookmark);
+		
+	while(srcQ.next())
+	{
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Schema::createFileHash()
 {
 	if(!isTableDefined("fileHash"))
@@ -414,6 +874,35 @@ void Schema::createFileHash()
 		m_db->exec(cmd);
 		cmd = "CREATE INDEX fileHashIDIndex ON fileHash (hashID);";
 		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyFileHash(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int directoryID, fileID;
+	tuint64 hashID;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "directoryID, fileID, hashID";
+	cmd = "SELECT " + items + " FROM fileHash";
+	srcQ.prepare(cmd);
+	srcQ.bind(directoryID);
+	srcQ.bind(fileID);
+	srcQ.bind(hashID);
+	
+	cmd = "INSERT INTO fileHash (" + items + ") VALUES (?,?,?)";
+	destI.prepare(cmd);
+	destI.bind(directoryID);
+	destI.bind(fileID);
+	destI.bind(hashID);
+		
+	while(srcQ.next())
+	{
+		destI.next();
 	}
 }
 
@@ -443,21 +932,9 @@ bool Schema::writeDatabaseVersion(int versionNo)
 			}
 			else
 			{
-				if(cVersionNo==1 && versionNo>=2)
-				{
-					res = upgradeVersion1To2();
-					cVersionNo = 2;
-				}
-				if(cVersionNo>=2 && versionNo>=2)
-				{
-					res = true;
-				}
-				else
-				{
-					QString errMsg;
-					errMsg = "Current project database is version " + QString::number(cVersionNo) + " while version " + QString::number(versionNo) + " was expected.";
-					printError("writeProjectVersion",errMsg.toLatin1().constData());
-				}
+				QString errMsg;
+				errMsg = "Current project database is version " + QString::number(cVersionNo) + " while version " + QString::number(versionNo) + " was expected.";
+				printError("writeProjectVersion",errMsg.toLatin1().constData());
 			}
 		}
 		else
@@ -489,76 +966,6 @@ bool Schema::writeDatabaseVersion(int versionNo)
 
 //-------------------------------------------------------------------------------------------
 
-bool Schema::upgradeVersion1To2()
-{
-	bool res = false;
-	
-	try
-	{
-		tint albumID;
-		QString cmd,cmdQ,albumName;
-		QMap<QString,QVector<tint> > albumNameMap;
-		QMap<QString,QVector<tint> >::iterator ppI;
-		SQLiteQuery albumQ(m_db);
-		
-		m_db->exec("SAVEPOINT upgradeVersion1To2");
-		
-		cmd = "ALTER TABLE album ADD COLUMN groupID INTEGER NOT NULL DEFAULT -1";
-		m_db->exec(cmd);
-		cmd = "UPDATE databaseInfo SET dbVersion=2";
-		m_db->exec(cmd);
-		
-		cmdQ = "SELECT albumID, albumName FROM album";
-		albumQ.prepare(cmdQ);
-		albumQ.bind(albumID);
-		albumQ.bind(albumName);
-		while(albumQ.next())
-		{
-			albumName = albumName.trimmed();
-			ppI = albumNameMap.find(albumName);
-			if(ppI!=albumNameMap.end())
-			{
-				QVector<tint>& cSet = ppI.value();
-				cSet.append(albumID);
-			}
-			else
-			{
-				QVector<tint> nSet;
-				nSet.append(albumID);
-				albumNameMap.insert(albumName,nSet);
-			}
-		}
-		
-		for(ppI=albumNameMap.begin();ppI!=albumNameMap.end();ppI++)
-		{
-			if(ppI.value().size()>=2)
-			{
-				TrackDB::instance()->groupAlbums(ppI.value());
-			}
-		}
-		
-		res = true;
-		
-		if(res)
-		{
-			m_db->exec("RELEASE upgradeVersion1To2");
-		}
-		else
-		{
-			m_db->exec("ROLLBACK TO SAVEPOINT upgradeVersion1To2");			
-		}
-	}
-	catch(const SQLiteException& e)
-	{
-		m_db->exec("ROLLBACK TO SAVEPOINT upgradeVersion1To2");
-		printError("upgradeVersion1To2",e.error().toLatin1().constData());
-		res = false;
-	}
-	return res;
-}
-
-//-------------------------------------------------------------------------------------------
-
 QString Schema::tempUpgradeDBFileName(const QString& orgTrackDBFileName)
 {
 	int i;
@@ -576,155 +983,63 @@ QString Schema::tempUpgradeDBFileName(const QString& orgTrackDBFileName)
 
 //-------------------------------------------------------------------------------------------
 
-bool Schema::upgradeVersion4To5CopySandbox(SQLiteDatabase *orgDB,SQLiteDatabase *newDB)
-{
-	bool res = true;
-
-	try
-	{
-		QString cmdQ;
-		SQLiteQuery sandboxQ(orgDB);
-		
-		newDB->exec("SAVEPOINT upgradeVersion4To5CopySandbox");
-
-		QString url,docUrl;
-		tint access, accessTime;
-		QByteArray bookmark;
-
-		cmdQ = "SELECT url, docUrl, access, accessTime, bookmark FROM sandBoxURL";
-		sandboxQ.prepare(cmdQ);
-		sandboxQ.bind(url);
-		sandboxQ.bind(docUrl);
-		sandboxQ.bind(access);
-		sandboxQ.bind(accessTime);
-		sandboxQ.bind(bookmark);
-		
-		while(sandboxQ.next() && res)
-		{
-			QString cmdI;
-			SQLiteInsert sandboxI(newDB);
-			
-			cmdI = "INSERT INTO sandBoxURL (url, docUrl, access, accessTime, bookmark) VALUES (?,?,?,?,?)";
-			sandboxI.prepare(cmdI);
-			sandboxI.bind(url);
-			sandboxI.bind(docUrl);
-			sandboxI.bind(access);
-			sandboxI.bind(accessTime);
-			sandboxI.bind(bookmark);
-			if(!sandboxI.next())
-			{
-				res = false;
-			}
-		}
-		
-		if(res)
-		{
-			newDB->exec("RELEASE upgradeVersion4To5CopySandbox");
-		}
-		else
-		{
-			newDB->exec("ROLLBACK TO SAVEPOINT upgradeVersion4To5CopySandbox");
-		}
-	}
-	catch(const SQLiteException&)
-	{
-		newDB->exec("ROLLBACK TO SAVEPOINT upgradeVersion4To5CopySandbox");
-		res = false;
-	}
-	return res;
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool Schema::upgradeVersion4To5(const QString& orgTrackDBFileName)
+bool Schema::doUpgrade(const QString& orgTrackDBFileName)
 {
 	bool res = false;
-
+	
 	QString newTrackDBFileName = tempUpgradeDBFileName(orgTrackDBFileName);
 	if(!newTrackDBFileName.isEmpty())
 	{
-		SQLiteDatabase orgTrackDB;
+		try
+		{	
+			SQLiteDatabase srcDB, destDB;
 		
-		if(orgTrackDB.open(orgTrackDBFileName))
-		{
-			SQLiteDatabase newTrackDB;
-		
-			if(newTrackDB.open(newTrackDBFileName))
+			if(srcDB.open(orgTrackDBFileName))
 			{
-				Schema dbSchema;
-				
-				if(dbSchema.createDB(&newTrackDB))
+				if(destDB.open(newTrackDBFileName))
 				{
-					res = upgradeVersion4To5CopySandbox(&orgTrackDB,&newTrackDB);
+					if(createDB(&destDB))
+					{
+						copyAlbum(&srcDB, &destDB);
+						copyTrack(&srcDB, &destDB);
+						copySubtrack(&srcDB, &destDB);
+						copyGenre(&srcDB, &destDB);
+						copyImage(&srcDB, &destDB);
+						copyImageMap(&srcDB, &destDB);
+						copyImageAlbumMap(&srcDB, &destDB);
+						copyDirectory(&srcDB, &destDB);
+						copyFile(&srcDB, &destDB);
+						copyPlayList(&srcDB, &destDB);
+						copyPlayListInfo(&srcDB, &destDB);
+						copySandBoxURL(&srcDB, &destDB);
+						copyFileHash(&srcDB, &destDB);
+						copyMountPoints(&srcDB, &destDB);
+						res = true;
+					}
+					else
+					{
+						QString err = QString("Failed to create database schema for '%1'").arg(newTrackDBFileName);
+						printError("doUpgrade", err.toUtf8().constData());
+					}
 				}
-				newTrackDB.close();
-			}
-			orgTrackDB.close();
-		}
-		
-		if(res)
-		{
-			common::DiskOps::remove(orgTrackDBFileName);
-			QFile nDBFile(newTrackDBFileName);
-			if(!nDBFile.rename(orgTrackDBFileName))
-			{
-				res = false;
-			}
-		}
-		else
-		{
-			common::DiskOps::remove(newTrackDBFileName);
-		}
-	}
-	return res;
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool Schema::upgradeVerion5To6Operation(SQLiteDatabase *orgDB,SQLiteDatabase *newDB)
-{
-	bool res = true;
-
-	try
-	{
-		newDB->exec("SAVEPOINT upgradeVersion5To6");
-		createMountPointsOps(newDB);
-		newDB->exec("RELEASE upgradeVersion5To6");
-	}
-	catch(const SQLiteException&)
-	{
-		newDB->exec("ROLLBACK TO SAVEPOINT upgradeVersion5To6");
-		res = false;
-	}
-	return res;
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool Schema::upgradeVersion5To6(const QString& orgTrackDBFileName)
-{
-	bool res = false;
-
-	QString newTrackDBFileName = tempUpgradeDBFileName(orgTrackDBFileName);
-	if(!newTrackDBFileName.isEmpty())
-	{
-		SQLiteDatabase orgTrackDB;
-		
-		if(orgTrackDB.open(orgTrackDBFileName))
-		{
-			SQLiteDatabase newTrackDB;
-		
-			if(newTrackDB.open(newTrackDBFileName))
-			{
-				Schema dbSchema;
-				
-				if(dbSchema.createDB(&newTrackDB))
+				else
 				{
-					res = upgradeVersion4To5CopySandbox(&orgTrackDB,&newTrackDB);
+					QString err = QString("Failed to create upgrade database '%1'").arg(newTrackDBFileName);
+					printError("doUpgrade", err.toUtf8().constData());
 				}
-				newTrackDB.close();
 			}
-			orgTrackDB.close();
+			else
+			{
+				QString err = QString("Failed to open old database '%1'").arg(orgTrackDBFileName);
+				printError("doUpgrade", err.toUtf8().constData());
+			}
+		}
+		catch(const SQLiteException& e)
+		{
+			QString err = QString("Failed to upgrade database '%1' to '%2'. Database exception - %3")
+				.arg(orgTrackDBFileName).arg(newTrackDBFileName).arg(e.error());
+			printError("doUpgrade", err.toUtf8().constData());
+			res = false;
 		}
 		
 		if(res)

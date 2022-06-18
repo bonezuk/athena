@@ -30,6 +30,7 @@ typedef struct s_PlaylistTuple
 	tint albumID;
 	tint trackID;
 	tint subtrackID;
+	tuint64 itemID;
 } PlaylistTuple;
 
 //-------------------------------------------------------------------------------------------
@@ -69,6 +70,7 @@ class TRACK_DB_EXPORT TrackDB
 		int idOfInserted();
 		
 		int dbVersion();
+		static int dbVersion(SQLiteDatabase *db);
 		
 		QSharedPointer<TrackDBMountPoints>& mountPoints();
 		
@@ -81,6 +83,9 @@ class TRACK_DB_EXPORT TrackDB
 		int replacePlaylist(int playlistID, const QString& name, QVector<QPair<info::InfoSPtr, tint> >& pList);
 		int replacePlaylist(int playlistID, const QString& name, const QVector<PlaylistTuple>& pList);
 		void clearPlaylist(int playlistID);
+		
+		tuint64 newPlaylistItemID();
+		static tuint64 newPlaylistItemID(SQLiteDatabase *db);
 
 		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID);
 		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID,tint& dirID,tint& fileID);
@@ -98,6 +103,8 @@ class TRACK_DB_EXPORT TrackDB
 
 		bool open(const QString& dbName);
 		void close();
+		bool upgradeDBAsRequired(const QString& dbName);
+		void rebuildMusicDatabase(const QString& dbName);
 		
 		tint addAlbum(info::Info *data,tint& dirID);
 		tint addTrack(info::Info *data,tint dirID,tint albumID);

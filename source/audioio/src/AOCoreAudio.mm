@@ -653,10 +653,10 @@ OSStatus AOCoreAudio::callbackLatencyProc(AudioDeviceID id, \
 	}
 	m_outputLatencyCalcFlag = true;
 
-	for(tint i = 0; i < static_cast<int>(ioData->mNumberBuffers); i++)
+	for(tint i = 0; i < static_cast<int>(outOutputData->mNumberBuffers); i++)
 	{
-		tint noChs = static_cast<int>(ioData->mBuffers[i].mNumberChannels);
-		::memset(ioData->mBuffers[i].mData, 0 ,inNumberFrames * noChs * sizeof(tfloat32));
+		tint noChs = static_cast<int>(outOutputData->mBuffers[i].mNumberChannels);
+		::memset(outOutputData->mBuffers[i].mData, 0 , m_outputLatencyBufferSize * noChs * sizeof(tfloat32));
 	}
 	return kAudioHardwareNoError;
 }

@@ -667,6 +667,15 @@ SOURCES += ./track/model/src/AlbumTrackModel.cxx
 SOURCES += ./track/model/src/ImageRepositary.cxx
 SOURCES += ./track/model/src/TrackModelKey.cxx
 
+# --- playerapp/playercommon ---
+
+HEADERS += ./playerapp/playercommon/inc/OmegaAudioInterface.h
+HEADERS += ./playerapp/playercommon/inc/PlayerCommonDLL.h
+HEADERS += ./playerapp/playercommon/inc/PlaybackStateController.h
+
+SOURCES += ./playerapp/playercommon/src/OmegaAudioInterface.cxx
+SOURCES += ./playerapp/playercommon/src/PlaybackStateController.cxx
+
 # --- playerapp/playerios ---
 
 HEADERS += ./playerapp/playerios/inc/PlayerIOSBaseModel.h

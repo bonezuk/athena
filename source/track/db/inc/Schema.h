@@ -16,20 +16,21 @@ namespace db
 {
 //-------------------------------------------------------------------------------------------
 
-#define TRACKDB_VERSION 6
+#define TRACKDB_VERSION 7
 
 //-------------------------------------------------------------------------------------------
 
 class TRACK_DB_EXPORT Schema
 {
 	public:
+		typedef bool (*SchemaUpgradeFunc)(SQLiteDatabase *orgDB, SQLiteDatabase *newDB);
+
+	public:
 		Schema();
 		virtual ~Schema();
 		
 		virtual bool createDB(SQLiteDatabase *db);
-		
-		static bool upgradeVersion4To5(const QString& orgTrackDBFileName);
-		static bool upgradeVersion5To6(const QString& orgTrackDBFileName);
+		virtual bool doUpgrade(const QString& orgTrackDBFileName);
 		
 	protected:
 	
@@ -40,32 +41,54 @@ class TRACK_DB_EXPORT Schema
 		static bool isTableDefinedOps(SQLiteDatabase *db, const QString& tableName);
 		virtual bool isTableDefined(const QString& tableName);
 		
-		virtual void createAlbum();
-		virtual void createTrack();
-		virtual void createSubtrack();
-		virtual void createGenre();
-		virtual void createImage();
-		virtual void createImageMap();
-		virtual void createImageAlbumMap();
-		virtual void createDirectory();
-		virtual void createFile();
-		virtual void createPlayList();
-		virtual void createPlayListInfo();
 		virtual void createDatabaseInfo();
+		
+		virtual void createAlbum();
+		virtual void copyAlbum(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createTrack();
+		virtual void copyTrack(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createSubtrack();
+		virtual void copySubtrack(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createGenre();
+		virtual void copyGenre(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createImage();
+		virtual void copyImage(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createImageMap();
+		virtual void copyImageMap(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createImageAlbumMap();
+		virtual void copyImageAlbumMap(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createDirectory();
+		virtual void copyDirectory(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createFile();
+		virtual void copyFile(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createPlayList();
+		virtual void copyPlayList(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
+		virtual void createPlayListInfo();
+		virtual void copyPlayListInfo(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
 		virtual void createSandBoxURL();
+		virtual void copySandBoxURL(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
 		virtual void createFileHash();
+		virtual void copyFileHash(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
 		
 		virtual void createMountPoints();
 		static void createMountPointsOps(SQLiteDatabase *db);
+		virtual void copyMountPoints(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
 		
 		virtual bool writeDatabaseVersion(int versionNo);
 		
-		virtual bool upgradeVersion1To2();
-		
-		static QString tempUpgradeDBFileName(const QString& orgTrackDBFileName);
-		static bool upgradeVersion4To5CopySandbox(SQLiteDatabase *orgDB,SQLiteDatabase *newDB);
-		
-		static bool upgradeVerion5To6Operation(SQLiteDatabase *orgDB,SQLiteDatabase *newDB);
+		virtual QString tempUpgradeDBFileName(const QString& orgTrackDBFileName);
 };
 
 //-------------------------------------------------------------------------------------------
