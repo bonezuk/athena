@@ -121,22 +121,23 @@ void Schema::copyMountPoints(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 {
 	int mountID;
 	QString mountName;
-	QString cmd;
+	QString cmd, items;
 	SQLiteQuery srcQ(srcDB);
 	SQLiteInsert destI(destDB);
 	
-	cmd = "SELECT mountID, mountName FROM mountpoints";
+	items = "mountID, mountName";
+	cmd = "SELECT " + items + " FROM mountpoints";
 	srcQ.prepare(cmd);
 	srcQ.bind(mountID);
 	srcQ.bind(mountName);
 	
-	cmd = "INSERT INTO mountpoints (mountID, mountName) VALUES (?,?)";
+	cmd = "INSERT INTO mountpoints (" + items + ") VALUES (?,?)";
 	destI.prepare(cmd);
-	destI.bind(mountID);
-	destI.bind(mountName);
 	
 	while(srcQ.next())
 	{
+		destI.bind(mountID);
+		destI.bind(mountName);
 		destI.next();
 	}
 }
@@ -171,11 +172,12 @@ void Schema::copyAlbum(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 {
 	int albumID, year, directoryID, groupID;
 	QString albumName;
-	QString cmd;
+	QString cmd, items;
 	SQLiteQuery srcQ(srcDB);
 	SQLiteInsert destI(destDB);
 	
-	cmd = "SELECT albumID, albumName, year, directoryID, groupID FROM album";
+	items = "albumID, albumName, year, directoryID, groupID";
+	cmd = "SELECT " + items + " FROM album";
 	srcQ.prepare(cmd);
 	srcQ.bind(albumID);
 	srcQ.bind(albumName);
@@ -183,16 +185,16 @@ void Schema::copyAlbum(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	srcQ.bind(directoryID);
 	srcQ.bind(groupID);
 	
-	cmd = "INSERT album INTO mountpoints (albumID, albumName, year, directoryID, groupID) VALUES (?,?,?,?,?)";
+	cmd = "INSERT INTO album (" + items + ") VALUES (?,?,?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(albumID);
-	destI.bind(albumName);
-	destI.bind(year);
-	destI.bind(directoryID);
-	destI.bind(groupID);
 
 	while(srcQ.next())
 	{
+		destI.bind(albumID);
+		destI.bind(albumName);
+		destI.bind(year);
+		destI.bind(directoryID);
+		destI.bind(groupID);
 		destI.next();
 	}
 }
@@ -270,23 +272,23 @@ void Schema::copyTrack(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	
 	cmd = "INSERT INTO track (" + items + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(albumID);
-	destI.bind(trackID);
-	destI.bind(fileID);
-	destI.bind(trackName);
-	destI.bind(artist);
-	destI.bind(discNo);
-	destI.bind(trackNo);
-	destI.bind(originalArtist);
-	destI.bind(composer);
-	destI.bind(genreID);
-	destI.bind(comment);
-	destI.bind(copyright);
-	destI.bind(encoder);
-	destI.bind(timeLength);
 	
 	while(srcQ.next())
 	{
+		destI.bind(albumID);
+		destI.bind(trackID);
+		destI.bind(fileID);
+		destI.bind(trackName);
+		destI.bind(artist);
+		destI.bind(discNo);
+		destI.bind(trackNo);
+		destI.bind(originalArtist);
+		destI.bind(composer);
+		destI.bind(genreID);
+		destI.bind(comment);
+		destI.bind(copyright);
+		destI.bind(encoder);
+		destI.bind(timeLength);
 		destI.next();
 	}
 }
@@ -337,17 +339,17 @@ void Schema::copySubtrack(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	srcQ.bind(timeStart);
 	srcQ.bind(timeLength);
 	
-	cmd = "INSERT INTO subtrack (" + items + ") VALUE (?,?,?,?,?,?)";
+	cmd = "INSERT INTO subtrack (" + items + ") VALUES (?,?,?,?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(albumID);
-	destI.bind(trackID);
-	destI.bind(subtrackID);
-	destI.bind(subtrackName);
-	destI.bind(timeStart);
-	destI.bind(timeLength);
 		
 	while(srcQ.next())
 	{
+		destI.bind(albumID);
+		destI.bind(trackID);
+		destI.bind(subtrackID);
+		destI.bind(subtrackName);
+		destI.bind(timeStart);
+		destI.bind(timeLength);
 		destI.next();
 	}
 }
@@ -389,11 +391,11 @@ void Schema::copyGenre(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	
 	cmd = "INSERT INTO genre (" + items + ") VALUES (?,?)";
 	destI.prepare(cmd);
-	destI.bind(genreID);
-	destI.bind(genreName);
 	
 	while(srcQ.next())
 	{
+		destI.bind(genreID);
+		destI.bind(genreName);
 		destI.next();
 	}
 }
@@ -443,15 +445,15 @@ void Schema::copyImage(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 
 	cmd = "INSERT INTO image (" + items + ") VALUES (?,?,?,?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(imageID);
-	destI.bind(type);
-	destI.bind(format);
-	destI.bind(sha1SignatureH);
-	destI.bind(sha1SignatureL);
-	destI.bind(data);
 	
 	while(srcQ.next())
 	{
+		destI.bind(imageID);
+		destI.bind(type);
+		destI.bind(format);
+		destI.bind(sha1SignatureH);
+		destI.bind(sha1SignatureL);
+		destI.bind(data);
 		destI.next();
 	}
 }
@@ -498,14 +500,14 @@ void Schema::copyImageAlbumMap(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	
 	cmd = "INSERT INTO imagealbummap (" + items + ") VALUES (?,?,?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(albumID);
-	destI.bind(imageID);
-	destI.bind(fileName);
-	destI.bind(dirModifiedTime);
-	destI.bind(fileModifiedTime);
 	
 	while(srcQ.next())
 	{
+		destI.bind(albumID);
+		destI.bind(imageID);
+		destI.bind(fileName);
+		destI.bind(dirModifiedTime);
+		destI.bind(fileModifiedTime);
 		destI.next();
 	}
 }
@@ -548,12 +550,12 @@ void Schema::copyImageMap(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	
 	cmd = "INSERT INTO imagemap (" + items + ") VALUES (?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(albumID);
-	destI.bind(trackID);
-	destI.bind(imageID);
 	
 	while(srcQ.next())
 	{
+		destI.bind(albumID);
+		destI.bind(trackID);
+		destI.bind(imageID);
 		destI.next();
 	}
 }
@@ -592,13 +594,13 @@ void Schema::copyDirectory(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	srcQ.bind(directoryID);
 	srcQ.bind(directoryName);
 	
-	cmd = "INSERT INTO imagemap (" + items + ") VALUES (?,?)";
+	cmd = "INSERT INTO directory (" + items + ") VALUES (?,?)";
 	destI.prepare(cmd);
-	destI.bind(directoryID);
-	destI.bind(directoryName);
 	
 	while(srcQ.next())
 	{
+		destI.bind(directoryID);
+		destI.bind(directoryName);
 		destI.next();
 	}
 }
@@ -639,7 +641,6 @@ void Schema::copyFile(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	SQLiteInsert destI(destDB);
 	
 	items = "directoryID, fileID, codecType, infoType, fileName, updateTime, fileSize";
-	items = "directoryID, directoryName";
 	cmd = "SELECT " + items + " FROM file";
 	srcQ.prepare(cmd);
 	srcQ.bind(directoryID);
@@ -652,16 +653,16 @@ void Schema::copyFile(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	
 	cmd = "INSERT INTO file (" + items + ") VALUES (?,?,?,?,?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(directoryID);
-	destI.bind(fileID);
-	destI.bind(codecType);
-	destI.bind(infoType);
-	destI.bind(fileName);
-	destI.bind(updateTime);
-	destI.bind(fileSize);
 
 	while(srcQ.next())
 	{
+		destI.bind(directoryID);
+		destI.bind(fileID);
+		destI.bind(codecType);
+		destI.bind(infoType);
+		destI.bind(fileName);
+		destI.bind(updateTime);
+		destI.bind(fileSize);
 		destI.next();
 	}
 }
@@ -720,24 +721,28 @@ void Schema::copyPlayList(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 		srcQ.bind(itemID);
 	}
 
+	if(destDBVersion > 6)
+	{
+		items += ", itemID";
+	}
 	cmd = "INSERT INTO playlist (" + items;
 	cmd += (destDBVersion > 6) ? ") VALUES (?,?,?,?,?,?)" : ") VALUES (?,?,?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(playlistID);
-	destI.bind(position);
-	destI.bind(albumID);
-	destI.bind(trackID);
-	destI.bind(subtrackID);
-	if(destDBVersion > 6)
-	{
-		destI.bind(itemID);
-	}
 	
 	while(srcQ.next())
 	{
+		destI.bind(playlistID);
+		destI.bind(position);
+		destI.bind(albumID);
+		destI.bind(trackID);
+		destI.bind(subtrackID);
 		if(destDBVersion > 6 && srcDBVersion <= 6)
 		{
 			itemID = TrackDB::newPlaylistItemID(destDB);
+		}
+		if(destDBVersion > 6)
+		{
+			destI.bind(itemID);
 		}
 		destI.next();
 	}
@@ -778,11 +783,11 @@ void Schema::copyPlayListInfo(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	
 	cmd = "INSERT INTO playlistInfo (" + items + ") VALUES (?,?)";
 	destI.prepare(cmd);
-	destI.bind(playListID);
-	destI.bind(name);
 	
 	while(srcQ.next())
 	{
+		destI.bind(playListID);
+		destI.bind(name);
 		destI.next();
 	}
 }
@@ -845,14 +850,14 @@ void Schema::copySandBoxURL(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	
 	cmd = "INSERT INTO sandBoxURL (" + items + ") VALUES (?,?,?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(url);
-	destI.bind(docUrl);
-	destI.bind(access);
-	destI.bind(accessTime);
-	destI.bind(bookmark);
 		
 	while(srcQ.next())
 	{
+		destI.bind(url);
+		destI.bind(docUrl);
+		destI.bind(access);
+		destI.bind(accessTime);
+		destI.bind(bookmark);
 		destI.next();
 	}
 }
@@ -896,12 +901,12 @@ void Schema::copyFileHash(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	
 	cmd = "INSERT INTO fileHash (" + items + ") VALUES (?,?,?)";
 	destI.prepare(cmd);
-	destI.bind(directoryID);
-	destI.bind(fileID);
-	destI.bind(hashID);
 		
 	while(srcQ.next())
 	{
+		destI.bind(directoryID);
+		destI.bind(fileID);
+		destI.bind(hashID);
 		destI.next();
 	}
 }
@@ -990,6 +995,11 @@ bool Schema::doUpgrade(const QString& orgTrackDBFileName)
 	QString newTrackDBFileName = tempUpgradeDBFileName(orgTrackDBFileName);
 	if(!newTrackDBFileName.isEmpty())
 	{
+		if(common::DiskOps::exist(newTrackDBFileName))
+		{
+			common::DiskOps::remove(newTrackDBFileName);
+		}
+	
 		try
 		{	
 			SQLiteDatabase srcDB, destDB;
