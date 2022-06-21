@@ -18,7 +18,7 @@ class PlayListWebModelPLM : public PlayListWebModel
 		PlayListWebModelPLM(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
 		virtual ~PlayListWebModelPLM();
 		
-		virtual void initialise();
+		virtual bool initialise();
 };
 
 //-------------------------------------------------------------------------------------------

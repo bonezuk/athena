@@ -4,8 +4,9 @@
 #include "engine/silveromega/inc/SilverCodec.h"
 #include "engine/whiteomega/inc/WhiteCodec.h"
 #include "playerapp/playerios/inc/PlayerUISettings.h"
-#include "playerapp/playerios/inc/PlayerIOSBaseModel.h"
+#include "playerapp/playerios/inc/PlayListIOSModel.h"
 #include "playerapp/playerios/inc/PlayerIOSTrackDBManager.h"
+#include "playerapp/playerios/inc/PlayerAudioIOInterface.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -64,33 +65,43 @@ int main(int argc, char **argv)
 	common::DiskIFSPtr diskIF = common::DiskIF::instance("disk");
 	if(!diskIF.isNull())
 	{
-		qmlRegisterType<PlayerIOSBaseModel>("uk.co.blackomega", 1, 0, "PlayerIOSBaseModel");
+		qmlRegisterType<PlayListIOSModel>("uk.co.blackomega", 1, 0, "PlayListIOSModel");
 		qmlRegisterType<PlayerUISettings>("uk.co.blackomega", 1, 0, "PlayerUISettings");
 		
 		PlayerIOSTrackDBManager *trackDBManager = PlayerIOSTrackDBManager::instance();
 		if(trackDBManager != 0)
-		{	
-			QFile page(":/Resources/frontpage1.qml");
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-			if (page.open(QIODevice::ReadOnly))
-#else
-			if(page.open(QIODeviceBase::ReadOnly))
-#endif
+		{
+			QSharedPointer<OmegaPlaylistInterface> plInterface(new OmegaPlaylistInterface());
+			QSharedPointer<PlayerAudioIOInterface> pAudioIO(new PlayerAudioIOInterface(plInterface));
+			if(pAudioIO->init())
 			{
-				PlayerIOSBaseModel model;
-				if(model.loadPlaylist())
+				QSharedPointer<OmegaAudioInterface> pAudioInterface = pAudioIO.dynamicCast<OmegaAudioInterface>();
+				QSharedPointer<PlayListIOSModel> pModel(new PlayListIOSModel(pAudioInterface));
+				if(pModel->initialise())
 				{
-					engine.rootContext()->setContextProperty("playListModel", &model);
+					QSharedPointer<PlayListModel> pLModel = pModel.dynamicCast<PlayListModel>();
+					plInterface->init(pLModel);
+
+					QFile page(":/Resources/frontpage1.qml");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+					if (page.open(QIODevice::ReadOnly))
+#else
+					if(page.open(QIODeviceBase::ReadOnly))
+#endif
+					{
+						engine.rootContext()->setContextProperty("playListModel", pModel.data());
 			
-					PlayerUISettings settings;
-					engine.rootContext()->setContextProperty("settings", &settings);
+						PlayerUISettings settings;
+						engine.rootContext()->setContextProperty("settings", &settings);
 			
-					QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), &model, SLOT(appendTrack(const QString&)));
-					QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), &model, SLOT(deleteTrack(const QString&)));
+						QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pModel.data(), SLOT(appendTrack(const QString&)));
+						QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pModel.data(), SLOT(deleteTrack(const QString&)));
 		
-					engine.load(":/Resources/frontpage1.qml");
-					app.exec();
+						engine.load(":/Resources/frontpage1.qml");
+						app.exec();
+					}
 				}
+				pAudioIO->quitDaemon();
 			}
 			trackDBManager->release();
 		}

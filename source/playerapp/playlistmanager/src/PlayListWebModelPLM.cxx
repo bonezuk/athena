@@ -21,11 +21,12 @@ PlayListWebModelPLM::~PlayListWebModelPLM()
 
 //-------------------------------------------------------------------------------------------
 
-void PlayListWebModelPLM::initialise()
+bool PlayListWebModelPLM::initialise()
 {
 	QSharedPointer<PlaybackWebStateCtrlPLM> plState(new PlaybackWebStateCtrlPLM(m_pAudioInterface, this));
 	m_pPlaybackState = plState.dynamicCast<PlaybackStateController>();
 	plState->init();
+	return true;
 }
 
 //-------------------------------------------------------------------------------------------

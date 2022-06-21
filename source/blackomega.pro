@@ -670,23 +670,32 @@ SOURCES += ./track/model/src/TrackModelKey.cxx
 # --- playerapp/playercommon ---
 
 HEADERS += ./playerapp/playercommon/inc/OmegaAudioInterface.h
+HEADERS += ./playerapp/playercommon/inc/OmegaPlaylistInterface.h
 HEADERS += ./playerapp/playercommon/inc/PlayerCommonDLL.h
 HEADERS += ./playerapp/playercommon/inc/PlaybackStateController.h
+HEADERS += ./playerapp/playercommon/inc/OmegaPlaylistInterface.h
+HEADERS += ./playerapp/playercommon/inc/PlaybackStateController.h
+HEADERS += ./playerapp/playercommon/inc/PlayListModel.h
 
 SOURCES += ./playerapp/playercommon/src/OmegaAudioInterface.cxx
 SOURCES += ./playerapp/playercommon/src/PlaybackStateController.cxx
+SOURCES += ./playerapp/playercommon/src/OmegaPlaylistInterface.cxx
+SOURCES += ./playerapp/playercommon/src/PlaybackStateController.cxx
+SOURCES += ./playerapp/playercommon/src/PlayListModel.cxx
 
 # --- playerapp/playerios ---
 
-HEADERS += ./playerapp/playerios/inc/PlayerIOSBaseModel.h
+HEADERS += ./playerapp/playerios/inc/PlayerAudioIOInterface.h
 HEADERS += ./playerapp/playerios/inc/PlayerIOSTrackDBManager.h
 HEADERS += ./playerapp/playerios/inc/PlayerIOSUtils.h
 HEADERS += ./playerapp/playerios/inc/PlayerUISettings.h
+HEADERS += ./playerapp/playerios/inc/PlayListIOSModel.h
 
-SOURCES += ./playerapp/playerios/src/PlayerIOSBaseModel.cxx
+SOURCES += ./playerapp/playerios/src/PlayerAudioIOInterface.cxx
 SOURCES += ./playerapp/playerios/src/PlayerIOSMain.cxx
 SOURCES += ./playerapp/playerios/src/PlayerIOSTrackDBManager.cxx
 SOURCES += ./playerapp/playerios/src/PlayerIOSUtils.cxx
 SOURCES += ./playerapp/playerios/src/PlayerUISettings.cxx
+SOURCES += ./playerapp/playerios/src/PlayListIOSModel.cxx
 
 RESOURCES = ./playerapp/playerios/playerios.qrc

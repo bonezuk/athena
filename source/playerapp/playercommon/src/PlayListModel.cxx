@@ -10,7 +10,17 @@ PlayListModel::PlayListModel(QObject *parent) : QAbstractListModel(parent),
 	m_playList(),
 	m_idToIndexMap(),
 	m_pAudioInterface(),
-	m_pPlaybackState(0)
+	m_pPlaybackState()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+PlayListModel::PlayListModel(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : QAbstractListModel(parent),
+	m_items(),
+	m_playList(),
+	m_idToIndexMap(),
+	m_pAudioInterface(pAudioInterface),
+	m_pPlaybackState()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -39,8 +49,10 @@ void PlayListModel::printError(const char *strR, const char *strE) const
 
 //-------------------------------------------------------------------------------------------
 
-void PlayListModel::initialise()
-{}
+bool PlayListModel::initialise()
+{
+	return true;
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -58,7 +70,7 @@ tuint64 PlayListModel::generateNewId() const
 	
 	do
 	{
-		r = common::Random::instance()->randomUInt64();
+		r = track::db::TrackDB::instance()->newPlaylistItemID();
 		ppI = m_idToIndexMap.find(r);
 		if(ppI != m_idToIndexMap.constEnd())
 		{
@@ -195,6 +207,13 @@ int PlayListModel::rowCount(const QModelIndex& parent) const
 	{
 		return 0;
 	}
+	return sizeOfPlaylist();
+}
+
+//-------------------------------------------------------------------------------------------
+
+int PlayListModel::sizeOfPlaylist() const
+{
 	return m_playList.size();
 }
 
