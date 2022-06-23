@@ -2115,7 +2115,7 @@ bool TrackDB::loadPlaylist(int playlistID, QVector<PlaylistTuple>& pList)
 		SQLiteQuery playQ(m_db);
 		QString cmdQ;
 		
-		cmdQ = "SELECT position, albumID, trackID, subtrackID FROM playlist WHERE playlistID=" + QString::number(playlistID) + " ORDER BY position";
+		cmdQ = "SELECT position, albumID, trackID, subtrackID, itemID FROM playlist WHERE playlistID=" + QString::number(playlistID) + " ORDER BY position";
 		playQ.prepare(cmdQ);
 		playQ.bind(position);
 		playQ.bind(albumID);

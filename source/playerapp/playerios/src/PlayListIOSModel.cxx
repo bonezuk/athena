@@ -126,7 +126,7 @@ void PlayListIOSModel::savePlaylistToDB()
 				printError("savePlaylistToDB", err.toUtf8().constData());
 			}
 		}
-		if(!pDB->replacePlaylist(m_playlistID, m_playlistName, list))
+		if(pDB->replacePlaylist(m_playlistID, m_playlistName, list) != m_playlistID)
 		{
 			printError("savePlaylistToDB", "Error saving playlist to database");
 		}
