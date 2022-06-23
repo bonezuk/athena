@@ -1,17 +1,10 @@
-/*
-#import QtQuick 2.14
-#import QtQuick.Controls 2.14
-#import QtQuick.Window 2.14
-#import QtQuick.Layouts 1.15
-#import uk.co.blackomega 1.0
-*/
-
 import QtQuick 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Window 2.14
 import QtQuick.Layouts 1.15
 import uk.co.blackomega 1.0
 
+import "components" as Component
 
 Window {
     id: window
@@ -43,6 +36,52 @@ Window {
                     text: model.title + " (" + model.artist + ")"
 				}
 			}
+		}
+
+		Rectangle {
+			anchors.fill: parent.fill
+			
+			Component.DigitDisplay {
+				id: digitDisplay
+				
+				anchors.horizontalCenter: parent.horizontalCenter				
+				anchors.top: parent.top
+				anchors.topMargin: 10
+				width: (parent.width >= 300) ? 300 :  parent.width
+				implicitHeight: 50
+			}
+
+            Component.PlayButton {
+	            id: playButton
+	            
+            	anchors.horizontalCenter: parent.horizontalCenter
+				anchors.top: digitDisplay.bottom
+				anchors.topMargin: 10
+				implicitWidth: 100
+				implicitHeight: 100
+            }
+            
+            ColumnLayout {
+	            anchors.horizontalCenter: parent.horizontalCenter
+				anchors.top: playButton.bottom
+				anchors.topMargin: 10
+				
+        	    Text {
+        	    	text: "Track Name"
+        	    	font.pixelSize: 20
+        	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+	            }
+        	    Text {
+        	    	text: "Album Name"
+        	    	font.pixelSize: 20
+        	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+	            }
+        	    Text {
+        	    	text: "Artist"
+        	    	font.pixelSize: 20
+        	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+	            }
+            }
 		}
 		
 		Rectangle {
@@ -79,65 +118,38 @@ Window {
 		spacing: 0
 		
 		property int currentNavIndex: 0
-		
-		Button {
-			background: Rectangle {
-				color: 'black'
-			}
-			Layout.fillWidth: true
-    	    Layout.preferredWidth: parent.width / 2.0
-	        Layout.minimumHeight: parent.height
-	        
-	        readonly property int navIndex: 0
-	        
-	        Image {
-	        	id: albumButton
-		        source: (navBar.currentNavIndex == parent.navIndex) ? "images/album.png" : "images/album_disable.png"
-		        width: ((parent.width < parent.height) ? parent.width : parent.height) / 2.0
-		        height: ((parent.width < parent.height) ? parent.width : parent.height) / 2.0
-	        	anchors.horizontalCenter: parent.horizontalCenter
-	        	anchors.verticalCenter: parent.verticalCenter
-	        	anchors.verticalCenterOffset: -10.0
-	        }
-	        Text {
-				text: "Library"
-				color: (navBar.currentNavIndex == parent.navIndex) ? "white" : "#323232"
-                font.pixelSize: 14
-	        	anchors.horizontalCenter: parent.horizontalCenter
-	        	anchors.top: albumButton.bottom
-	        }
-	        
-	        onClicked: parent.currentNavIndex = navIndex
-		}
-		
-		Button {
-			background: Rectangle {
-				color: 'black'
-			}		
-			Layout.fillWidth: true
-    	    Layout.preferredWidth: parent.width / 2.0
-	        Layout.minimumHeight: parent.height
-	        
-	        readonly property int navIndex: 1
 
-	        Image {
-	        	id: settingsButton
-		        source: (navBar.currentNavIndex == parent.navIndex) ? "images/gears.png" : "images/gears_disable.png"
-		        width: ((parent.width < parent.height) ? parent.width : parent.height) / 2.0
-		        height: ((parent.width < parent.height) ? parent.width : parent.height) / 2.0
-	        	anchors.horizontalCenter: parent.horizontalCenter
-	        	anchors.verticalCenter: parent.verticalCenter
-	        	anchors.verticalCenterOffset: -10.0
-	        }
-	        Text {
-	        	text: "Settings"
-	        	color: (navBar.currentNavIndex == parent.navIndex) ? "white" : "#323232"
-                font.pixelSize: 14
-	        	anchors.horizontalCenter: parent.horizontalCenter
-	        	anchors.top: settingsButton.bottom
-	        }
-	        
-	        onClicked: parent.currentNavIndex = navIndex
+		Component.NavButton {
+			navIndex: 0
+			sourceEnabled: "images/album.png"
+			sourceDisabled: "images/album_disable.png"
+			label: "Library"
+
+			Layout.fillWidth: true
+			Layout.preferredWidth: parent.width / 3.0
+			Layout.minimumHeight: parent.height
+		}
+
+		Component.NavButton {
+			navIndex: 1
+			sourceEnabled: "images/play_icon_toolbar_256x256_1.png"
+			sourceDisabled: "images/play_icon_toolbar_disable_256x256_1.png"
+			label: "Playback"
+
+			Layout.fillWidth: true
+			Layout.preferredWidth: parent.width / 3.0
+			Layout.minimumHeight: parent.height
+		}
+
+		Component.NavButton {
+			navIndex: 2
+			sourceEnabled: "images/gears.png"
+			sourceDisabled: "images/gears_disable.png"
+			label: "Settings"
+
+			Layout.fillWidth: true
+			Layout.preferredWidth: parent.width / 3.0
+			Layout.minimumHeight: parent.height
 		}
 		
 	}
