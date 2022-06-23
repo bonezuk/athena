@@ -67,6 +67,7 @@ int main(int argc, char **argv)
 	{
 		qmlRegisterType<PlayListIOSModel>("uk.co.blackomega", 1, 0, "PlayListIOSModel");
 		qmlRegisterType<PlayerUISettings>("uk.co.blackomega", 1, 0, "PlayerUISettings");
+		qmlRegisterType<PlaybackStateController>("uk.co.blackomega", 1, 0, "PlaybackStateController");
 		
 		PlayerIOSTrackDBManager *trackDBManager = PlayerIOSTrackDBManager::instance();
 		if(trackDBManager != 0)
@@ -84,12 +85,13 @@ int main(int argc, char **argv)
 
 					QFile page(":/Resources/frontpage1.qml");
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-					if (page.open(QIODevice::ReadOnly))
+					if(page.open(QIODevice::ReadOnly))
 #else
 					if(page.open(QIODeviceBase::ReadOnly))
 #endif
 					{
 						engine.rootContext()->setContextProperty("playListModel", pModel.data());
+						engine.rootContext()->setContextProperty("playbackStateController", pModel->playbackState().data());
 			
 						PlayerUISettings settings;
 						engine.rootContext()->setContextProperty("settings", &settings);

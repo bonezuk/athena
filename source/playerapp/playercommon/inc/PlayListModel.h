@@ -40,6 +40,11 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		};
 		Q_ENUM(TrackRoles)
 		
+		Q_PROPERTY(qint32 sizeOfModel READ getSizeOfModel NOTIFY onSizeOfModel)
+
+	signals:
+		void onSizeOfModel();
+		
 	public:
 		PlayListModel(QObject *parent = 0);
 		PlayListModel(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent = 0);
@@ -54,6 +59,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		
 		Q_INVOKABLE void onPlayPausePressed();
 		Q_INVOKABLE void playItemAtIndex(int index);
+		Q_INVOKABLE QVariant dataAtIndex(int row, const QString& roleName);
 		
 		virtual QSharedPointer<PlaybackStateController>& playbackState();
 		virtual void playNextItem(bool isNext);
@@ -61,6 +67,8 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		virtual qint32 indexFromId(tuint64 id) const;
 		virtual track::db::DBInfoSPtr itemFromId(tuint64 id) const;
 		virtual tint childIndexFromId(tuint64 id) const;
+		
+		virtual qint32 getSizeOfModel() const;
 
 	protected:
 		QMap<tuint64, QPair<track::db::DBInfoSPtr,tint> > m_items;
@@ -77,6 +85,9 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		virtual QString titleOfItem(const QPair<track::db::DBInfoSPtr,tint>& item) const;
 		virtual void playItemAtIndexWithNext(int index, bool isNext);
 		virtual int sizeOfPlaylist() const;
+		
+		virtual void endInsertRows();
+		virtual void endRemoveRows();
 };
 
 //-------------------------------------------------------------------------------------------

@@ -3,16 +3,26 @@ function urlRelPath(path)
 	return "../" + path;
 }
 
-function playButtonImageSource(isPressed, isHovering)
+function playButtonImageSource(isEnabled, isPause, isPressed, isHovering)
 {
-	if(isPressed)
+	let imageName = "images/pc_";
+	imageName += (!isPause || !isEnabled) ? "play" : "pause";
+	imageName += "_";
+	if(!isEnabled)
 	{
-		return urlRelPath("images/pc_play_press.png");
+		imageName += "disabled";
+	}
+	else if(isPressed)
+	{
+		imageName += "press";
 	}
 	else
 	{
-		return (isHovering) ? urlRelPath("images/pc_play_hover.png") : urlRelPath("images/pc_play_normal.png")
+		imageName += (isHovering) ? "hover" : "normal";
 	}
+	imageName += ".png";
+	console.log(isEnabled + " " + isPause + " " +  isPressed + " " +  isHovering  + " " + imageName);
+	return urlRelPath(imageName);
 }
 
 //-------------------------------------------------------------------------------------------

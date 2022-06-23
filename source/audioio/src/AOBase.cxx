@@ -2860,8 +2860,10 @@ void AOBase::processComplete()
 		emit onStart(m_nextName);
 		m_startNextTrackFlag = false;
 	}
-	
+
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
 	common::Log::g_Log.print("AOBase::onTime - %.8f\n", static_cast<tfloat64>(current));
+#endif
 	emit onTime(static_cast<quint64>(current));
 	
 	while(item!=m_callbackAudioItem && item->state()==AudioItem::e_stateDone)

@@ -116,6 +116,67 @@ QString PlayListModel::titleOfItem(const QPair<track::db::DBInfoSPtr,tint>& item
 
 //-------------------------------------------------------------------------------------------
 
+QVariant PlayListModel::dataAtIndex(int row, const QString& roleName)
+{
+	QModelIndex idx = index(row, 0);
+	
+	if(roleName == "artist")
+	{
+		return data(idx, ArtistRole);
+	}
+	else if(roleName == "id")
+	{
+		return data(idx, IdRole);
+	}
+	else if(roleName == "title")
+	{
+		return data(idx, TitleRole);
+	}
+	else if(roleName == "album")
+	{
+		return data(idx, AlbumRole);
+	}
+	else if(roleName == "year")
+	{
+		return data(idx, YearRole);
+	}
+	else if(roleName == "comment")
+	{
+		return data(idx, CommentRole);
+	}
+	else if(roleName == "genre")
+	{
+		return data(idx, GenreRole);
+	}
+	else if(roleName == "track")
+	{
+		return data(idx, TrackRole);
+	}
+	else if(roleName == "disc")
+	{
+		return data(idx, DiscRole);
+	}
+	else if(roleName == "composer")
+	{
+		return data(idx, ComposerRole);
+	}
+	else if(roleName == "originalArtist")
+	{
+		return data(idx, OriginalArtistRole);
+	}
+	else if(roleName == "copyright")
+	{
+		return data(idx, CopyrightRole);
+	}
+	else if(roleName == "encoder")
+	{
+		return data(idx, EncoderRole);
+	}
+	return QVariant();
+}
+
+//-------------------------------------------------------------------------------------------
+
 QVariant PlayListModel::data(const QModelIndex& index, int role) const
 {
 	if(index.isValid() && index.row() >= 0 && index.row() < m_playList.size())
@@ -365,6 +426,29 @@ void PlayListModel::playNextItem(bool isNext)
 			m_pPlaybackState->onAudioStop();
 		}
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+qint32 PlayListModel::getSizeOfModel() const
+{
+	return static_cast<qint32>(m_playList.size());
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::endInsertRows()
+{
+	QAbstractListModel::endInsertRows();
+	emit onSizeOfModel();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::endRemoveRows()
+{
+	QAbstractListModel::endRemoveRows();
+	emit onSizeOfModel();
 }
 
 //-------------------------------------------------------------------------------------------

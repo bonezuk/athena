@@ -6,11 +6,15 @@ import "components.js" as Comp
 Rectangle {
 	property bool hovering: false
 	property bool pressed: false
+	property bool enabled: false
+	property bool playing: false
+	
+	signal clicked
 	
 	Image {
 		anchors.fill: parent;
 		fillMode: Image.PreserveAspectFit
-		source: Comp.playButtonImageSource(parent.pressed, parent.hovering)
+		source: Comp.playButtonImageSource((parent.enabled > 0) ? true : false, parent.playing, parent.pressed, parent.hovering)
 	}
 	
 	MouseArea {
@@ -20,6 +24,9 @@ Rectangle {
 		onEntered: parent.hovering = true
 		onExited: parent.hovering = false
 		onPressed: parent.pressed = true
-		onReleased: parent.pressed = false
+		onReleased: { 
+			parent.pressed = false;
+			parent.clicked();
+		}
 	}
 }

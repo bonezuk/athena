@@ -23,9 +23,11 @@ Window {
 		anchors.bottom: navBar.top
 
 		ListView {
+			id: listview
 			model: playListModel
 		
 	        delegate: Rectangle {
+		        color: (index === playbackStateController.index) ? "green" : "white"
 				width: parent.width
 				height: 30
 				Text {
@@ -35,6 +37,13 @@ Window {
 					font.pixelSize: 20
                     text: model.title + " (" + model.artist + ")"
 				}
+                MouseArea {
+                    anchors.fill: parent
+                    onDoubleClicked: {
+                        console.log(index + " " + title);
+                        playListModel.playItemAtIndex(index);
+                    }
+                }
 			}
 		}
 
@@ -43,22 +52,27 @@ Window {
 			
 			Component.DigitDisplay {
 				id: digitDisplay
+				timeInSeconds: playbackStateController.timeInSeconds
 				
 				anchors.horizontalCenter: parent.horizontalCenter				
 				anchors.top: parent.top
 				anchors.topMargin: 10
-				width: (parent.width >= 300) ? 300 :  parent.width
+				width: (parent.width >= 300) ? 300 : parent.width
 				implicitHeight: 50
 			}
 
             Component.PlayButton {
 	            id: playButton
+	            enabled: (playListModel.sizeOfModel > 0) ? true : false
+	            playing: (playbackStateController.state) ? true : false
 	            
             	anchors.horizontalCenter: parent.horizontalCenter
 				anchors.top: digitDisplay.bottom
 				anchors.topMargin: 10
 				implicitWidth: 100
 				implicitHeight: 100
+				
+				onClicked: playListModel.onPlayPausePressed();
             }
             
             ColumnLayout {
@@ -67,17 +81,17 @@ Window {
 				anchors.topMargin: 10
 				
         	    Text {
-        	    	text: "Track Name"
+        	    	text: playListModel.dataAtIndex(playbackStateController.index, "title")
         	    	font.pixelSize: 20
         	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 	            }
         	    Text {
-        	    	text: "Album Name"
+        	    	text: playListModel.dataAtIndex(playbackStateController.index, "album")
         	    	font.pixelSize: 20
         	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 	            }
         	    Text {
-        	    	text: "Artist"
+        	    	text: playListModel.dataAtIndex(playbackStateController.index, "artist")
         	    	font.pixelSize: 20
         	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 	            }
