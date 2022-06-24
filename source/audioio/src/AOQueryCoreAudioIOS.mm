@@ -170,7 +170,7 @@ bool AOQueryCoreAudioIOS::buildDeviceMap()
 						{
 							maxNoChannels = channelCount[noChsIndex];
 						}
-						if(dev->isFrequencySupported(rate))
+						if(!dev->isFrequencySupported(rate))
 						{
 							dev->addFrequency(rate);
 						}

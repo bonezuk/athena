@@ -16,10 +16,10 @@ namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-#if defined(OMEGA_WIN32) || defined(OMEGA_LINUX)
-#define SBFACTORYKEY "win"
-#else
+#if defined(OMEGA_MACOSX)
 #define SBFACTORYKEY "mac"
+#else
+#define SBFACTORYKEY "win"
 #endif
 
 //-------------------------------------------------------------------------------------------

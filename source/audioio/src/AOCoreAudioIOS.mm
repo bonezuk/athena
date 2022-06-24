@@ -164,6 +164,8 @@ bool AOCoreAudioIOS::openAudio()
 						err = AudioUnitSetProperty(m_audioOutputUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, 0, &enableIO, sizeof(enableIO));
 						if(err == noErr)
 						{
+							initCyclicBuffer();
+						
 							err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
 							if(err == noErr)
 							{

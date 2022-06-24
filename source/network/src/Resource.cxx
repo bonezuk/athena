@@ -578,13 +578,125 @@ bool Resource::isMulticastIP(tuint32 ipAddr) const
 }
 
 //-------------------------------------------------------------------------------------------
+#if defined(OMEGA_POSIX)
+//-------------------------------------------------------------------------------------------
 
-void Resource::buildLocalIP()
+void Resource::buildLocalIPFromInterfaces()
+{
+	tuint32 ip;
+	int res;
+	struct ifaddrs *interfaces = 0, *iface;
+	QSet<tuint32>::iterator ppI;
+	
+	res = getifaddrs(&interfaces);
+	if(!res)
+	{
+		iface = interfaces;
+		while(iface != 0)
+		{
+			struct sockaddr_in *addr = (struct sockaddr_in *)(iface->ifa_addr);
+			
+			if(addr->sin_family==AF_INET)
+			{
+				ip = addr->sin_addr.s_addr;
+				ip = ntohl(ip);
+				ppI = m_localMap.find(ip);
+				if(ppI == m_localMap.end())
+				{
+					m_localMap.insert(ip);
+				}
+			}
+			iface = iface->ifa_next;
+		}
+	}
+	if(interfaces != 0)
+	{
+		freeifaddrs(interfaces);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+#elif defined(OMEGA_WIN32)
+//-------------------------------------------------------------------------------------------
+
+void Resource::buildLocalIPFromInterfaces()
+{
+	int iter;
+	ULONG flags = GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_DNS_SERVER;
+	PIP_ADAPTER_ADDRESSES pAddresses = NULL, pCurr = NULL;
+	ULONG outBufLen = 15000; // Allocate a 15 KB buffer to start with.
+	DWORD dwRetVal = 0;
+	
+	iter = 0;
+	do
+	{
+		pAddresses = (IP_ADAPTER_ADDRESSES *)malloc(outBufLen);
+		if(pAddresses != 0)
+		{
+			dwRetVal = GetAdaptersAddresses(AF_INET, flags, NULL, pAddresses, &outBufLen);
+			if(dwRetVal == ERROR_BUFFER_OVERFLOW)
+			{
+				free(pAddresses);
+				pAddresses = NULL;
+			}
+			else
+			{
+				break;
+			}
+		}
+		else
+		{
+			break;
+		}
+		iter++;
+	} while(dwRetVal == ERROR_BUFFER_OVERFLOW && iter < 3);
+	
+	if(pAddresses != 0)
+	{
+		if(dwRetVal == NO_ERROR)
+		{
+			pCurr = pAddresses;
+			while(pCurr != NULL)
+			{
+				PIP_ADAPTER_UNICAST_ADDRESS_LH pUnicast = pCurr->FirstUnicastAddress;
+				while(pUnicast != NULL)
+				{
+					SOCKADDR *addr = pUnicast->Address.lpSockaddr;
+					if(addr != NULL)
+					{
+						if(addr->sa_family == AF_INET)
+						{
+							QSet<tuint32>::iterator ppI;
+							struct sockaddr_in *saddr = reinterpret_cast<struct sockaddr_in *>(addr);
+							tuint32 ip = saddr->sin_addr.S_un.S_addr;
+							ip = ntohl(ip);
+							ppI = m_localMap.find(ip);
+							if(ppI != m_localMap.end())
+							{
+								m_localMap.insert(ip);
+							}
+						}
+					}
+					pUnicast = pUnicast->Next;
+				}
+				pCurr = pCurr->Next;
+			}
+		}
+		free(pAddresses);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+#endif
+//-------------------------------------------------------------------------------------------
+
+void Resource::buildLocalIPFromHostname()
 {
 	int i;
 	tuint32 ip;
 	hostent *h;
 	char tmp[256];
+	QSet<tuint32>::iterator ppI;
 	
 	m_localMap.clear();
 	
@@ -609,11 +721,31 @@ void Resource::buildLocalIP()
 			ip = addr->s_addr;
 #endif
 			ip = ntohl(ip);
-			m_localMap.insert(ip);
+			if(ppI == m_localMap.end())
+			{
+				m_localMap.insert(ip);
+			}
 		}
+	}
+}
 
-		ip = 0x7F000001;
-		m_localMap.insert(ip);
+//-------------------------------------------------------------------------------------------
+
+void Resource::buildLocalIP()
+{
+	const tuint32 c_localIP = 0x7F000001; // 127.0.0.1
+	QSet<tuint32>::iterator ppI;
+	
+	m_localMap.clear();
+	buildLocalIPFromInterfaces();
+	if(m_localMap.isEmpty())
+	{
+		buildLocalIPFromHostname();
+	}
+	ppI = m_localMap.find(c_localIP);
+	if(ppI == m_localMap.end())
+	{
+		m_localMap.insert(c_localIP);
 	}
 }
 

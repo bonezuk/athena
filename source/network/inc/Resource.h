@@ -48,6 +48,7 @@ const socket_type c_invalidSocket = INVALID_SOCKET;
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pwd.h>
+#include <ifaddrs.h>
 
 namespace omega
 {
@@ -147,7 +148,9 @@ class NETWORK_EXPORT Resource
 		void printError(const tchar *strR,const tchar *strE) const;
 		
 		void getIPList(struct hostent *host,QStringList& nameList) const;
-		
+
+		void buildLocalIPFromInterfaces();
+		void buildLocalIPFromHostname();
 		void buildLocalIP();
 };
 

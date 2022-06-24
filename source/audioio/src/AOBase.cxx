@@ -7,6 +7,11 @@
 #include "audioio/inc/AOQueryCoreAudio.h"
 #elif defined(OMEGA_LINUX)
 #include "audioio/inc/AOQueryALSA.h"
+#elif defined(OMEGA_IOS)
+#include "audioio/inc/AOCoreAudioIOS.h"
+#include "audioio/inc/AOQueryCoreAudioIOS.h"
+#elif defined(OMEGA_ANDROID)
+
 #endif
 
 #include "common/inc/SBService.h"
@@ -750,6 +755,10 @@ bool AOBase::startAudioService()
 			m_deviceInfo = new AOQueryCoreAudio;
 #elif defined(OMEGA_LINUX)
             m_deviceInfo = new AOQueryALSA;
+#elif defined(OMEGA_IOS)
+			m_deviceInfo = new AOQueryCoreAudioIOS;
+#elif defined(OMEGA_ANDROID)
+#error AOQuery for Android must be defined
 #endif
 
 			m_deviceInfoMutex.lock();
