@@ -15,7 +15,7 @@ AlbumModel::AlbumModel() : AbstractTrackModel(),
 
 //-------------------------------------------------------------------------------------------
 
-AlbumModel::AlbumModel(const AbstractTrackModelSPtr& parentItem,const TrackModelKey& filterKey) : AbstractTrackModel(parentItem,filterKey),
+AlbumModel::AlbumModel(const TrackModelKey& filterKey) : AbstractTrackModel(filterKey),
 	m_albums()
 {}
 
@@ -33,6 +33,34 @@ TrackModelType AlbumModel::type() const
 
 //-------------------------------------------------------------------------------------------
 
+QVariant AlbumModel::dataAtIndex(int idx, int columnIndex) const
+{
+	QVariant dataItem;
+	
+	if(idx>=0 && idx < m_albums.size() && columnIndex>=0 && columnIndex<2)
+	{
+		const QPair<AlbumModelKey,QString>& item = m_albums.at(aIndex);
+		if(columnIndex==0)
+		{
+			dataItem.setValue(item.first.variant());
+		}
+		else
+		{
+			dataItem.setValue(item.second);
+		}
+	}
+	return dataItem;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QVariant AlbumModel::data(int rowIndex, int columnIndex) const
+{
+	return dataAtIndex(rowIndex, columnIndex);
+}
+
+//-------------------------------------------------------------------------------------------
+
 QVariant AlbumModel::data(int sectionIndex,int rowIndex,int columnIndex) const
 {
 	QVariant dataItem;
@@ -42,18 +70,7 @@ QVariant AlbumModel::data(int sectionIndex,int rowIndex,int columnIndex) const
 		if(rowIndex>=0 && rowIndex<numberRowsInSection(sectionIndex))
 		{
 			int aIndex = rowIndex + m_index.at(sectionIndex);
-			if(columnIndex>=0 && columnIndex<2)
-			{
-				const QPair<AlbumModelKey,QString>& item = m_albums.at(aIndex);
-				if(columnIndex==0)
-				{
-                    dataItem.setValue(item.first.variant());
-				}
-				else
-				{
-					dataItem.setValue(item.second);
-				}
-			}
+			dataItem = dataAtIndex(aIndex, columnIndex);
 		}
 	}
 	return dataItem;
@@ -94,22 +111,6 @@ int AlbumModel::numberRowsInSection(int secIdx) const
 bool AlbumModel::build()
 {
 	return populate();
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool AlbumModel::onAddToDatabase(int albumID,int trackID)
-{
-	// TODO
-	return false;
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool AlbumModel::onRemoveFromDatabase(int albumID,int trackID)
-{
-	// TODO
-	return false;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -393,7 +394,7 @@ QueryRecord AlbumModel::createRecordAlbum(const AlbumModelKey& key,const QString
 	QueryRecord r;
 	r.push_back(key.isGroup());
 	r.push_back(key.id());
-    r.push_back(name);
+    r.push_back(db::TrackDB::dbStringInv(name));
 	return r;
 }
 
@@ -466,6 +467,150 @@ bool AlbumModel::runAlbumQuery(const QString& cmdQ,QueryResult& results) const
 		res = false;
 	}
 	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+tint AlbumModel::findSectionIndex(const QString& albumName)
+{
+	tint sectionIdx;
+	QString name;
+	QChar firstChar;
+	QVector<QChar> alphabet;
+	QMap<QChar,int> indexMap;
+	QMap<QChar,int>::iterator ppI;
+
+	alphabet = getIndexAlphabet();
+	buildIndexMap(alphabet, indexMap);
+	name = albumName.trimmed();
+	firstChar = getFirstCharacter(name, indexMap, alphabet);
+	ppI = indexMap.find(firstChar);
+	if(ppI != indexMap.end())
+	{
+		sectionIdx = ppI.value();
+	}
+	else
+	{
+		sectionIdx = alphabet.size() - 1;
+	}
+	if(sectionIdx < 0)
+	{
+		sectionIdx = 0;
+	}
+	else if(sectionIdx > m_index.size())
+	{
+		sectionIdx = m_index.size() - 1;
+	}
+	return sectionIdx;
+}
+
+//-------------------------------------------------------------------------------------------
+
+tint AlbumModel::numberOfTracks(const AlbumModelKey& key) const
+{
+	tint count = 0;
+	TrackModelKey filter = filterKey();
+	filter.album() = key;
+	AlbumTrackModel trackModel(key);
+	if(trackModel.build())
+	{
+		count = trackModel.size();
+	}
+	return count;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QVector<tint> AlbumModel::indexForDBItem(QSharedPointer<db::DBItem>& dbItem, bool isAdd)
+{
+	QVector<tint> idxList;
+
+	if(!dbItem.isNull())
+	{
+		tint idx, noTracks;
+		AlbumModelKey key = AlbumModelKey::keyForDBItem(dbItem);
+		
+		noTracks = numberOfTracks(key);
+		if(isAdd)
+		{
+			if(noTracks == 0)
+			{
+				QString name = dbItem->album().trimmed();
+				tint sectionIdx = findSectionIndex(name);
+				tint startIdx, endIdx;
+				
+				startIdx = m_index.at(sectionIdx);
+				endIdx = ((sectionIdx + 1) < m_index.size()) ? m_index.at(sectionIdx + 1) : m_albums.size();
+				for(idx = startIdx; idx < endIdx; idx++)
+				{
+					const QList<QPair<AlbumModelKey,QString> >& item = m_albums.at(idx);
+					if(name.toLower() < item.second.toLower())
+					{
+						break;
+					}
+				}
+				idxList.append(idx);
+			}
+		}
+		else
+		{
+			if(noTracks <= 1)
+			{
+				for(idx = 0; idx < m_albums.size(); idx++)
+				{
+					const QList<QPair<AlbumModelKey,QString> >& item = m_albums.size();
+					if(key == item.first)
+					{
+						idxList.append(idx);
+					}
+				}
+			}
+		}
+	}
+	return idxList;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AlbumModel::addDBItem(tint idx, QSharedPointer<db::DBItem>& dbItem)
+{
+	if(!dbItem.isNull())
+	{
+		AlbumModelKey key = AlbumModelKey::keyForDBItem(dbItem);
+		tint noTracks = numberOfTracks(key);
+		if(noTracks == 0)
+		{
+			QString name = dbItem->album().trimmed();
+			tint sectionIdx = findSectionIndex(name) + 1;
+			while(sectionIdx < m_index.size())
+			{
+				m_index[sectionIdx] += 1;
+				sectionIdx++;
+			}
+			m_albums.insert(idx, QPair<AlbumModelKey,QString>(key, dbItem->album()));
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AlbumModel::removeRow(tint idx)
+{
+	if(idx >= 0 && idx < m_albums.size())
+	{
+		tint secIdx, startIdx, endIdx;
+		
+		for(secIdx = 0; secIdx < m_index.size(); secIdx++)
+		{
+			startIdx = m_index.at(secIdx);
+			endIdx = ((secIdx + 1) < static_cast<int>(m_index.size())) ? m_index.at(secIdx+1) : m_albums.size();
+			if((idx >= startIdx && idx < endIdx) || idx >= endIdx)
+			{
+				m_index[secIdx] -= 1;
+			}
+		}
+		m_index.removeAt(idx);
+	}
 }
 
 //-------------------------------------------------------------------------------------------

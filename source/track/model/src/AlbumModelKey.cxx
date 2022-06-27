@@ -134,6 +134,45 @@ bool operator != (const AlbumModelKey& a,const AlbumModelKey& b)
 }
 
 //-------------------------------------------------------------------------------------------
+
+tint AlbumModelKey::groupIDFromDBItem(QSharedPointer<db::DBitem>& pDBItem)
+{
+	tint groupID;
+	QString cmd = QString("SELECT groupID FROM album WHERE albumID=%1").arg(pDBItem->albumID());
+	db::SQLiteQuery query(db::TrackDB::instance()->db());	
+	query.prepare(cmd);
+	query.bind(groupID);
+	if(!query.next())
+	{
+		groupID = -1;
+	}
+	return groupID;
+}
+
+//-------------------------------------------------------------------------------------------
+
+AlbumModelKey AlbumModelKey::keyForDBItem(QSharedPointer<db::DBitem>& pDBItem)
+{
+	AlbumModelKey key;
+	
+	if(!pDBItem.isNull())
+	{
+		tint groupID = groupIDFromDBItem(pDBItem);
+		if(groupID >= 0)
+		{
+			AlbumModelKey k(std::pair<bool,int>(true, groupID));
+			key = k;
+		}
+		else
+		{
+			AlbumModelKey k(std::pair<bool,int>(false, pDBItem->albumID()));
+			key = k;
+		}
+	}
+	return key;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace model
 } // namespace track
 } // namespace omega

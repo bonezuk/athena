@@ -8,19 +8,170 @@ namespace track
 namespace model
 {
 //-------------------------------------------------------------------------------------------
+// AlbumTrackModel::Record
+//-------------------------------------------------------------------------------------------
+
+AlbumTrackModel::Record::Record() : m_groupID(-1),
+	m_albumID(-1),
+	m_trackID(-1),
+	m_subtrackID(-1),
+	m_discNo(-1),
+	m_trackNo(-1),
+	m_albumName(),
+	m_trackName(),
+	m_fileName()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+AlbumTrackModel::Record::Record(const Record& rhs) : m_groupID(-1),
+	m_albumID(-1),
+	m_trackID(-1),
+	m_subtrackID(-1),
+	m_discNo(-1),
+	m_trackNo(-1),
+	m_albumName(),
+	m_trackName(),
+	m_fileName()
+{
+	copy(rhs);
+}
+
+//-------------------------------------------------------------------------------------------
+
+const AlbumTrackModel::Record& AlbumTrackModel::Record::operator = (const Record& rhs)
+{
+	if(this != &rhs)
+	{
+		copy(rhs);
+	}
+	return *this;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AlbumTrackModel::Record::copy(const Record& rhs)
+{
+	m_groupID = rhs.m_groupID;
+	m_albumID = rhs.m_albumID;
+	m_trackID = rhs.m_trackID;
+	m_subtrackID = rhs.m_subtrackID;
+	m_discNo = rhs.m_discNo;
+	m_trackNo = rhs.m_trackNo;
+	m_albumName = rhs.m_albumName;
+	m_trackName = rhs.m_trackName;
+	m_fileName = rhs.m_fileName;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AlbumTrackModel::Record::isGroup() const
+{
+	return (m_groupID >= 0) ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const tint& AlbumTrackModel::Record::groupID() const
+{
+	return m_groupID;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const tint& AlbumTrackModel::Record::albumID() const
+{
+	return m_albumID;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const tint& AlbumTrackModel::Record::trackID() const
+{
+	return m_trackID;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const tint& AlbumTrackModel::Record::subtrackID() const
+{
+	return m_subtrackID;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const tint& AlbumTrackModel::Record::discNo() const
+{
+	return m_discNo;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const tint& AlbumTrackModel::Record::trackNo() const
+{
+	return m_trackNo;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const QString& AlbumTrackModel::Record::albumName() const
+{
+	return m_albumName;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const QString& AlbumTrackModel::Record::trackName() const
+{
+	return m_trackName;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const QString& AlbumTrackModel::Record::fileName() const
+{
+	return m_fileName;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AlbumTrackModel::Record::set(tint vGroupID, tint vAlbumID, tint vTrackID, tint vSubtrackID, 
+		         tint vDiscNo, tint vTrackNo, const QString& vAlbumName, const QString& vTrackName, const QString& vFileName)
+{
+	m_groupID = vGroupID;
+	m_albumID = vAlbumID;
+	m_trackID = vTrackID;
+	m_subtrackID = vSubtrackID;
+	m_discNo = vDiscNo;
+	m_trackNo = vTrackNo;
+	m_albumName = vAlbumName;
+	m_trackName = vTrackName;
+	m_fileName = vFileName;
+}
+
+//-------------------------------------------------------------------------------------------
+// AlbumTrackModel
+//-------------------------------------------------------------------------------------------
 
 AlbumTrackModel::AlbumTrackModel() : AbstractTrackModel()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-AlbumTrackModel::AlbumTrackModel(const AbstractTrackModelSPtr& parentItem,const TrackModelKey& filterKey) : AbstractTrackModel(parentItem,filterKey)
+AlbumTrackModel::AlbumTrackModel(const TrackModelKey& filterKey) : AbstractTrackModel(filterKey)
 {}
 
 //-------------------------------------------------------------------------------------------
 
 AlbumTrackModel::~AlbumTrackModel()
 {}
+
+//-------------------------------------------------------------------------------------------
+
+void AlbumTrackModel::printError(const tchar *strR, const tchar *strE) const
+{
+	common::Log::g_Log << "AlbumTrackModel::" << strR << " - " << strE << common::c_endl;
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -31,18 +182,72 @@ TrackModelType AlbumTrackModel::type() const
 
 //-------------------------------------------------------------------------------------------
 
+QVariant data(int rowIndex, int columnIndex) const
+{
+	QVariant v;
+	
+	if(!sectionIndex && rowIndex >= 0 && rowIndex < m_tracks.size())
+	{
+		const Record& r = m_tracks.at(rowIndex);
+		ColumnType clType = static_cast<ColumnType>(columnIndex);
+		
+		switch(clType)
+		{
+			case e_isGroup:
+				v = QVariant(r.isGroup());
+				break;
+			case e_groupID:
+				v = QVariant(r.groupID());
+				break;
+			case e_albumID:
+				v = QVariant(r.albumID());
+				break;
+			case e_trackID:
+				v = QVariant(r.trackID());
+				break;
+			case e_subtrackID:
+				v = QVariant(r.subtrackID());
+				break;
+			case e_discNo:
+				v = QVariant(r.discNo());
+				break;
+			case e_trackNo:
+				v = QVariant(r.trackNo());
+				break;
+			case e_albumName:
+				v = QVariant(r.albumName());
+				break;
+			case e_trackName:
+				v = QVariant(r.trackName());
+				break;
+			case e_fileName:
+				v = QVariant(r.fileName());
+				break;
+			default:
+				break;
+		}
+	}
+	return v;
+}
+
+//-------------------------------------------------------------------------------------------
+
 QVariant AlbumTrackModel::data(int sectionIndex,int rowIndex,int columnIndex) const
 {
-	// TODO
-	return QVariant();
+	QVariant v;
+	
+	if(!sectionIndex)
+	{
+		v = data(rowIndex, columnIndex);
+	}
+	return v;
 }
 
 //-------------------------------------------------------------------------------------------
 
 int AlbumTrackModel::size() const
 {
-	//TODO
-	return 0;
+	return m_tracks.size();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -56,86 +261,232 @@ int AlbumTrackModel::numberSections() const
 
 int AlbumTrackModel::numberRowsInSection(int secIdx) const
 {
-	//TODO
-	return 0;
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool AlbumTrackModel::onAddToDatabase(int albumID,int trackID)
-{
-	//TODO
-	return false;
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool AlbumTrackModel::onRemoveFromDatabase(int albumID,int trackID)
-{
-	//TODO
-	return false;
+	return (!secIdx) ? m_tracks.size() : 0;
 }
 
 //-------------------------------------------------------------------------------------------
 
 bool AlbumTrackModel::populate()
 {
-	return false;
+	bool res = false;
+	
+	try
+	{
+		tint flag, gaID, groupID, albumID, trackID, subtrackID,
+		tint discNo, trackNo;
+		QString albumName, trackName, directoryName, fileName;
+		QString cmdQ = getQuery();
+		db::SQLiteQuerySPtr trackQ = getDBQuery();
+		
+		m_tracks.clear();
+		
+		trackQ->prepare(cmdQ);
+		trackQ->bind(flag);
+		trackQ->bind(gaID);
+		trackQ->bind(groupID);
+		trackQ->bind(albumID);
+		trackQ->bind(trackID);
+		trackQ->bind(subtrackID);
+		trackQ->bind(discNo);
+		trackQ->bind(trackNo);
+		trackQ->bind(albumName);
+		trackQ->bind(trackName);
+		trackQ->bind(directoryName);
+		trackQ->bind(fileName);
+		
+		while(trackQ->next())
+		{
+			QString fName;
+			albumName = db::TrackDB::dbStringInv(albumName);
+			trackName = db::TrackDB::dbStringInv(trackName);
+			directoryName = db::TrackDB::dbStringInv(directoryName);
+			fileName = db::TrackDB::dbStringInv(fileName);
+			fName = common::DiskOps::mergeName(directoryName, fileName);
+			fName = QDir::toNativeSeparators(fName);
+			if(common::DiskOps::exist(fName))
+			{
+				Record r;
+				r.set(groupID, albumID, trackID, subtrackID, discNo, trackNo, albumName, trackName, fName);
+				m_tracks.append(r);
+			}
+			else
+			{
+				QString err = QString("Expected file '%1' referenced in database not found").arg(fName);
+				printError("populate", err.toUtf8().constData());
+			}
+		}
+		res = true;
+	}
+	catch(const db::SQLiteException& e)
+	{
+		QString err = QString("SQL exception in populating model. %1").arg(e.error());
+		printError("populate", err.toUtf8().constData());
+		res = false;
+	}
+	return res;
 }
 
-	// SELECT CASE WHEN a.groupid>=0 THEN 1 ELSE 0 END AS flag,
-	//        CASE WHEN a.groupid>=0 THEN a.groupid ELSE a.albumid END AS id,
-	//        a.albumname
-	//   FROM album AS a INNER JOIN track AS b ON a.albumID=b.albumID
-	//   WHERE a.albumID=2 AND
-	//         b.genreID=3 AND
-	//         (b.artist LIKE 'Steve Jablonsky' OR
-	//          b.originalArtist LIKE 'Steve Jablonsky' OR
-	//          b.composer LIKE 'Steve Jablonsky')
-	//   GROUP BY id
-	//   ORDER BY a.albumname
-
-	// SELECT CASE WHEN a.groupid>=0 THEN 1 ELSE 0 END AS flag,
-	//        CASE WHEN a.groupid>=0 THEN a.groupid ELSE a.albumid END AS id,
-	//        a.albumname
-	//   FROM album AS a INNER JOIN track AS b ON a.albumID=b.albumID
-	//   WHERE a.groupID=20 AND
-	//         b.genreID=1 AND
-	//         (b.artist LIKE 'John Williams' OR
-	//          b.originalArtist LIKE 'John Williams' OR
-	//          b.composer LIKE 'John Williams')
-	//   GROUP BY id
-	//   ORDER BY a.albumname
-
-// Handling of files containing same song data.
-// An album is identified by its key.
-// name = item->album() + ":" + item->year() + ":" + item->directoryGroup() + ":" + item->getName("%Z%N%T",contentFlag,true);
-// Two files are said to have an equivalent track IF
-// 1. They both have the same album key (as defined above).
-// 2. The track names are reasonably identical.
-// 3. They are both numbered with the same track position.
-//
-// Suggested implementation.
-// Add a new extension to the file table that contains a link to another directory/file table
-// entry of the duplicate file.
-// The model will support this new extension suh that it first points to the first file.
-// The file can then be queried to give additional files of the same track information.
-
-// Should the track model use the existing DBItem instance?
-
-/*
-SELECT CASE WHEN a.groupid>=0 THEN 1 ELSE 0 END AS flag
-       CASE WHEN a.groupid>=0 THEN a.groupid ELSE a.albumid END AS albumid,
-       b.trackid,
-       a.directoryid,
-       b.fileid,
-*/     
 
 //-------------------------------------------------------------------------------------------
 
 const AlbumModelKey& AlbumTrackModel::getAlbumID() const
 {
 	return m_filterKey.album();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AlbumTrackModel::applyAnd(QString& cmd, bool isAnd) const
+{
+	if(isAnd)
+	{
+		cmd += "AND ";
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString AlbumTrackModel::getQuery() const
+{
+	bool isAnd = false;
+	QString cmd;
+
+	cmd  = "SELECT CASE WHEN a.groupid>=0 THEN 1 ELSE 0 END AS flag, ";
+	cmd += "CASE WHEN a.groupid>=0 THEN a.groupid ELSE a.albumid END AS id, ";
+	cmd += "a.groupID, a.albumID, b.trackID, ";
+	cmd += "CASE WHEN e.subtrackID IS NULL THEN -1 ELSE e.subtrackID END AS subtrackID, ";
+	cmd += "b.discNo, b.trackNo, a.albumName, ";
+	cmd += "CASE WHEN e.subtrackID IS NULL THEN b.trackName ELSE e.subtrackName END AS trackName, ";
+	cmd += "c.directoryName, d.fileName ";
+	cmd += "FROM album AS a INNER JOIN track AS b ON a.albumID=b.albumID ";
+	cmd += "INNER JOIN directory AS c ON a.directoryID=c.directoryID ";
+	cmd += "INNER JOIN file AS d ON a.directoryID=d.directoryID AND b.fileID=d.fileID ";
+	cmd += "LEFT JOIN subtrack AS e ON a.albumID=e.albumID AND b.trackID=e.trackID ";
+	
+	if(!m_filterKey.isEmpty())
+	{
+		cmd += "WHERE ";
+		
+        if(!m_filterKey.album().isAll())
+		{
+			cmd += (m_filterKey.album().isGroup()) ? "a.groupID" : "a.albumID";
+			cmd += "=" + QString::number(m_filterKey.album().id()) + " ";
+			isAnd = true;
+		}
+		if(m_filterKey.isTrack())
+		{
+			applyAnd(cmd, isAnd);
+			cmd += "b.trackID=" + QString::number(m_filterKey.track()) + " ";
+			isAnd = true;
+		}
+		if(m_filterKey.isSubtrack())
+		{
+			applyAnd(cmd, isAnd);
+			cmd += "e.subtrackID=" + QString::number(m_filterKey.subtrack()) + " ";
+			isAnd = true;
+		}
+		if(m_filterKey.isGenre())
+		{
+			applyAnd(cmd, isAnd);
+			cmd += "b.genreID=" + QString::number(m_filterKey.genre()) + " ";
+			isAnd = true;
+		}
+		if(m_filterKey.isArtist())
+		{
+			QString dbArtist = db::TrackDB::dbString(m_filterKey.artist());
+			applyAnd(cmd, isAnd);
+			cmd += "(b.artist LIKE \'" + db::TrackDB::dbString(dbArtist) + "\' OR ";
+			cmd += "b.originalArtist LIKE \'" + db::TrackDB::dbString(dbArtist) + "\' OR ";
+			cmd += "b.composer LIKE \'" + db::TrackDB::dbString(dbArtist) + "\') ";
+		}
+	}
+	cmd += "ORDER BY flag, id, b.discNo, b.trackNo, e.subtrackID";
+	return cmd;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QVector<QPair<tint, tint> > AlbumTrackModel::indexForDBItem(QSharedPointer<db::DBItem>& dbItem, bool isAdd)
+{
+	QVector<QPair<tint, tint> > idxList;
+	
+	if(!dbItem.isNull())
+	{
+		if(isAdd)
+		{
+			tint idx, flag, gaID, groupID, albumID, trackID, subtrackID,
+			tint discNo, trackNo;
+			QString albumName, trackName, directoryName, fileName;
+			QString cmdQ = getQuery();
+			db::SQLiteQuerySPtr trackQ = getDBQuery();
+		
+			trackQ->prepare(cmdQ);
+			trackQ->bind(flag);
+			trackQ->bind(gaID);
+			trackQ->bind(groupID);
+			trackQ->bind(albumID);
+			trackQ->bind(trackID);
+			trackQ->bind(subtrackID);
+			trackQ->bind(discNo);
+			trackQ->bind(trackNo);
+			trackQ->bind(albumName);
+			trackQ->bind(trackName);
+			trackQ->bind(directoryName);
+			trackQ->bind(fileName);
+			
+			idx = 0;
+			while(trackQ->next())
+			{
+				if(albumID == dbItem->albumID() && trackID == dbItem->trackID())
+				{
+					idxList.append(QPair<tint, tint>(idx, subtrackID));
+				}
+				idx++;
+			}
+		}
+		else
+		{
+			for(tint idx = 0; idx < m_tracks.size(); idx++)
+			{
+				const Record& r = m_tracks.at(idx);
+				if(r.albumID() == dbItem->albumID() && r.trackID() == dbItem->trackID())
+				{
+					idxList.append(idx);
+				}
+			}
+		}
+	}
+	return idxList;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AlbumTrackModel::addDBItem(tint idx, tint subtrackID, QSharedPointer<db::DBItem>& dbItem)
+{
+	tint groupID;
+	Record r;
+
+	groupID = AlbumModelKey::groupIDFromDBItem(dbItem);
+	r.set(groupID, dbItem->albumID(), dbItem->trackID(), subtrackID, dbItem->disc().toInt(), dbItem->track().toInt(),
+		dbItem->album(), dbItem->title(), db->getFilename());
+	if(idx >= 0 && idx < m_tracks.size())
+	{
+		m_tracks.insert(idx, r);
+	}
+	else
+	{
+		m_tracks.append(r);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AlbumTrackModel::removeRow(tint idx)
+{
+	if(idx >= 0 && idx < m_tracks.size())
+	{
+		m_tracks.removeAt(idx);
+	}
 }
 
 //-------------------------------------------------------------------------------------------

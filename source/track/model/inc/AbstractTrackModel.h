@@ -3,7 +3,11 @@
 #define __OMEGA_TRACK_MODEL_ABSTRACTTRACKMODEL_H
 //-------------------------------------------------------------------------------------------
 
-#include "track/model/inc/AbstractTrackItem.h"
+#include <QVector>
+#include <QVariant>
+
+#include "track/db/inc/TrackDB.h"
+#include "track/model/inc/TrackModelKey.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -27,38 +31,42 @@ typedef enum
 } TrackModelType;
 
 //-------------------------------------------------------------------------------------------
-// Model follows a parent / child relationship. e.g.
-//   Album List Model -> Album Tracks -> Track Item
-//   Songs -> Track Item
-// For this reason the model inherits AbstractTrackItem
-//-------------------------------------------------------------------------------------------
 
-class TRACK_MODEL_EXPORT AbstractTrackModel : public AbstractTrackItem
+class TRACK_MODEL_EXPORT AbstractTrackModel
 {
 	public:
 		AbstractTrackModel();
-		AbstractTrackModel(const AbstractTrackModelSPtr& parentItem,const TrackModelKey& filterKey);
+		AbstractTrackModel(const TrackModelKey& filterKey);
 		virtual ~AbstractTrackModel();
 		
 		const TrackModelKey& filterKey() const;
 		
+		virtual bool build() = 0;
+		
 		virtual TrackModelType type() const = 0;
 		
+		virtual QVariant data(int rowIndex, int columnIndex) const = 0;
         virtual QVariant data(int sectionIndex,int rowIndex,int columnIndex) const = 0;
 		
 		virtual int size() const = 0;
 		virtual int numberSections() const = 0;
 		virtual int numberRowsInSection(int secIdx) const = 0;
 
-		virtual bool onAddToDatabase(int albumID,int trackID) = 0;
-		virtual bool onRemoveFromDatabase(int albumID,int trackID) = 0;
-		
 	protected:
 		
 		TrackModelKey m_filterKey;
 		
-		virtual bool populate() = 0;
+		virtual db::SQLiteQuerySPtr AbstractTrackModel::getDBQuery() const;
 };
+
+//-------------------------------------------------------------------------------------------
+
+typedef QSharedPointer<AbstractTrackModel> AbstractTrackModelSPtr;
+
+//-------------------------------------------------------------------------------------------
+
+typedef QVector<QVariant> QueryRecord;
+typedef QVector<QueryRecord> QueryResult;
 
 //-------------------------------------------------------------------------------------------
 } // namespace model

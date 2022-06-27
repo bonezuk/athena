@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "track/model/inc/TrackModelDLL.h"
+#include "track/db/inc/DBItem.h"
 
 #include <QString>
 #include <QVariant>
@@ -28,6 +29,8 @@ class TRACK_MODEL_EXPORT AlbumModelKey
 		const AlbumModelKey& operator = (const QVariant& v);
 		const AlbumModelKey& operator = (const AlbumModelKey& key);
 		
+		bool isNull() const;
+		
 		bool isGroup() const;
 		bool isAlbum() const;
 		bool isAll() const;
@@ -38,6 +41,9 @@ class TRACK_MODEL_EXPORT AlbumModelKey
 		void setAsAlbum();
 		
 		QVariant variant() const;
+		
+		static tint groupIDFromDBItem(QSharedPointer<db::DBitem>& pDBItem);
+		static AlbumModelKey keyForDBItem(QSharedPointer<db::DBitem>& pDBItem);
 		
 		friend TRACK_MODEL_EXPORT bool operator == (const AlbumModelKey& a,const AlbumModelKey& b);
 		friend TRACK_MODEL_EXPORT bool operator != (const AlbumModelKey& a,const AlbumModelKey& b);
@@ -71,6 +77,13 @@ inline bool AlbumModelKey::isAlbum() const
 inline bool AlbumModelKey::isAll() const
 {
 	return (m_id==-1) ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+inline bool AlbumModelKey::isNull() const
+{
+	return (m_id==-1 && !m_group) ? true : false;
 }
 
 //-------------------------------------------------------------------------------------------

@@ -2060,6 +2060,7 @@ QMap<tint, QString> TrackDB::playlists()
 		playlistQ.bind(name);
 		while(playlistQ.next())
 		{
+			name = dbStringInv(name);
 			plMap.insert(id, name);
 		}
 	}
@@ -2086,7 +2087,11 @@ QString TrackDB::playlist(int playlistID)
 		cmdQ = "SELECT name FROM playlistInfo WHERE playListID=" + QString::number(playlistID);
 		playlistQ.prepare(cmdQ);
 		playlistQ.bind(name);
-		if(!playlistQ.next())
+		if(playlistQ.next())
+		{
+			name = dbStringInv(name);
+		}
+		else
 		{
 			name = QString();
 		}
@@ -2230,7 +2235,7 @@ void TrackDB::getDBInfoListFromPlaylist(QVector<QPair<info::InfoSPtr, tint> >& p
 int TrackDB::savePlaylistOp(int playlistID, const QString& name, const QVector<PlaylistTuple>& pList)
 {
 	int i, maxPlaylistID;
-	QString cmdI, cmdQ, playlistName(name);
+	QString cmdI, cmdQ, playlistName;
 	SQLiteQuery playlistQ(m_db);
 	SQLiteInsert playI(m_db), infoI(m_db);
 	QVector<PlaylistTuple>::const_iterator ppI;
@@ -2259,6 +2264,7 @@ int TrackDB::savePlaylistOp(int playlistID, const QString& name, const QVector<P
 		}
 
 		cmdI = "INSERT INTO playlistInfo VALUES (?,?)";
+		playlistName = dbString(name);
 		infoI.prepare(cmdI);
 		infoI.bind(playlistID);
 		infoI.bind(playlistName);

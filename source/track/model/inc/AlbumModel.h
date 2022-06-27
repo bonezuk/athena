@@ -30,11 +30,12 @@ class TRACK_MODEL_EXPORT AlbumModel : public AbstractTrackModel
 {
 	public:
 		AlbumModel();
-		AlbumModel(const AbstractTrackModelSPtr& parentItem,const TrackModelKey& filterKey);
+		AlbumModel(const TrackModelKey& filterKey);
 		virtual ~AlbumModel();
 
 		virtual TrackModelType type() const;
 		
+		virtual QVariant data(int rowIndex, int columnIndex) const;
         virtual QVariant data(int sectionIndex,int rowIndex,int columnIndex) const;
 		
 		virtual int size() const;
@@ -43,9 +44,10 @@ class TRACK_MODEL_EXPORT AlbumModel : public AbstractTrackModel
 
 		virtual bool build();
 
-		virtual bool onAddToDatabase(int albumID,int trackID);
-		virtual bool onRemoveFromDatabase(int albumID,int trackID);
-		
+		virtual QVector<tint> indexForDBItem(QSharedPointer<db::DBItem>& dbItem, bool isAdd);
+		virtual void addDBItem(tint idx, QSharedPointer<db::DBItem>& dbItem);
+		virtual void removeRow(tint idx);
+
 	protected:
 	
 		QList<QPair<AlbumModelKey,QString> > m_albums;
@@ -73,6 +75,10 @@ class TRACK_MODEL_EXPORT AlbumModel : public AbstractTrackModel
         virtual void buildModelFromSortedIndex(const QueryResult& results,const QVector<QChar>& alphabet,const QMap<QChar,QMultiMap<QString,int> >& sectionMap);
 
 		static bool compareIdenticalAlbumNameLessThan(const QueryRecord& a,const QueryRecord& b);
+		
+		virtual QVariant dataAtIndex(int idx, int columnIndex) const;
+		virtual tint findSectionIndex(const QString& albumName);
+		virtual tint numberOfTracks(const AlbumModelKey& key) const;
 };
 
 //-------------------------------------------------------------------------------------------
