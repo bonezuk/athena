@@ -4,7 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "track/model/inc/TrackModelDLL.h"
-#include "track/db/inc/DBItem.h"
+#include "track/db/inc/DBInfo.h"
 
 #include <QString>
 #include <QVariant>
@@ -42,8 +42,8 @@ class TRACK_MODEL_EXPORT AlbumModelKey
 		
 		QVariant variant() const;
 		
-		static tint groupIDFromDBItem(QSharedPointer<db::DBitem>& pDBItem);
-		static AlbumModelKey keyForDBItem(QSharedPointer<db::DBitem>& pDBItem);
+		static tint groupIDFromDBInfo(QSharedPointer<db::DBInfo>& pDBInfo);
+		static AlbumModelKey keyForDBInfo(QSharedPointer<db::DBInfo>& pDBInfo);
 		
 		friend TRACK_MODEL_EXPORT bool operator == (const AlbumModelKey& a,const AlbumModelKey& b);
 		friend TRACK_MODEL_EXPORT bool operator != (const AlbumModelKey& a,const AlbumModelKey& b);

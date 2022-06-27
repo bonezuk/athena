@@ -56,7 +56,7 @@ class TRACK_MODEL_EXPORT AbstractTrackModel
 		
 		TrackModelKey m_filterKey;
 		
-		virtual db::SQLiteQuerySPtr AbstractTrackModel::getDBQuery() const;
+		virtual db::SQLiteQuerySPtr getDBQuery() const;
 };
 
 //-------------------------------------------------------------------------------------------

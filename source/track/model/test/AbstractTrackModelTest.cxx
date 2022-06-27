@@ -14,7 +14,7 @@ AbstractTrackModelTest::AbstractTrackModelTest() : AbstractTrackModel()
 
 //-------------------------------------------------------------------------------------------
 
-AbstractTrackModelTest::AbstractTrackModelTest(const AbstractTrackModelSPtr& parentItem,const TrackModelKey& filterKey) : AbstractTrackModel(parentItem,filterKey)
+AbstractTrackModelTest::AbstractTrackModelTest(const TrackModelKey& filterKey) : AbstractTrackModel(filterKey)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -22,6 +22,13 @@ AbstractTrackModelTest::AbstractTrackModelTest(const AbstractTrackModelSPtr& par
 TrackModelType AbstractTrackModelTest::type() const
 {
 	return e_modelUnknown;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QVariant AbstractTrackModelTest::data(int rowIndex,int columnIndex) const
+{
+	return QVariant();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -75,11 +82,16 @@ bool AbstractTrackModelTest::populate()
 
 //-------------------------------------------------------------------------------------------
 
+bool AbstractTrackModelTest::build()
+{
+	return populate();
+}
+
+//-------------------------------------------------------------------------------------------
+
 TEST(AbstractTrackModel,constructorDefault)
 {
 	AbstractTrackModelTest m;
-	EXPECT_FALSE(m.hasParent());
-    EXPECT_TRUE(m.parent().data()==0);
 	EXPECT_TRUE(m.filterKey().isEmpty());
 }
 
@@ -91,15 +103,10 @@ TEST(AbstractTrackModel,constructorParentAndFilterKey)
 	key.album() = AlbumModelKey(std::pair<bool,int>(false,1));
 	key.artist() = "Artist";
 	
-	AbstractTrackModelSPtr mParent(new AbstractTrackModelTest);
-	AbstractTrackModelTest m(mParent,key);
-	
-	EXPECT_TRUE(m.hasParent());
-    EXPECT_TRUE(m.parent().data()==mParent.data());
+	AbstractTrackModelTest m(key);
 	
 	EXPECT_TRUE(m.filterKey().album()==AlbumModelKey(std::pair<bool,int>(false,1)));
 	EXPECT_TRUE(m.filterKey().artist()=="Artist");
-	
 }
 
 //-------------------------------------------------------------------------------------------

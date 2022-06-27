@@ -9,13 +9,12 @@ namespace model
 {
 //-------------------------------------------------------------------------------------------
 
-AbstractTrackModel::AbstractTrackModel() : AbstractTrackItem()
+AbstractTrackModel::AbstractTrackModel() : m_filterKey()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-AbstractTrackModel::AbstractTrackModel(const TrackModelKey& filterKey) : AbstractTrackItem(parentItem),
-	m_filterKey(filterKey)
+AbstractTrackModel::AbstractTrackModel(const TrackModelKey& filterKey) : m_filterKey(filterKey)
 {}
 
 //-------------------------------------------------------------------------------------------

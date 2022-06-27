@@ -121,16 +121,7 @@ set ( TEST_SOURCE
 	../track/info/test/WavInfoTest.cxx
 	../track/info/test/XMCDInfoTest.cxx
 	
-	../track/model/test/AbstractTrackItemTest.cxx
-	../track/model/test/AbstractTrackModelTest.cxx
-	../track/model/test/AlbumModelTest.cxx
-	../track/model/test/AlbumModelKeyTest.cxx
-	../track/model/test/AlbumModelUtilitiesTest.cxx
-	../track/model/test/AlbumTrackModelTest.cxx
-	../track/model/test/ImageRepositaryMock.cxx
-	../track/model/test/ImageRepositaryTest.cxx
 	../track/model/test/TrackDBTestEnviroment.cxx
-	../track/model/test/TrackModelKeyTest.cxx
 	QUnitTestTimer.cxx
 	TestMain.cxx
 )
@@ -165,7 +156,6 @@ if (OMEGA_MACOSX)
 		../audioio/test/AOCoreAudioTest.cxx
 		../audioio/test/AOQueryCoreAudioTest.cxx
 		../audioio/test/CoreAudioMockIF.cxx
-		../track/db/test/SandboxBookmarkServiceTest.mm
 	)
 endif (OMEGA_MACOSX)
 

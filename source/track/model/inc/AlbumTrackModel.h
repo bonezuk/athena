@@ -46,14 +46,12 @@ class TRACK_MODEL_EXPORT AlbumTrackModel : public AbstractTrackModel
 		virtual int size() const;
 		virtual int numberSections() const;
 		virtual int numberRowsInSection(int secIdx) const;
-
-		virtual QVector<tint> indexForDBItem(QSharedPointer<db::DBItem>& dbItem, bool isAdd);
-		virtual void addDBItem(tint idx, QSharedPointer<db::DBItem>& dbItem);
-		virtual void removeRow(tint idx);
 		
-		QVector<QPair<tint, tint> > indexForDBItem(QSharedPointer<db::DBItem>& dbItem, bool isAdd);
-		void addDBItem(tint idx, tint subtrackID, QSharedPointer<db::DBItem>& dbItem);
-		void removeRow(tint idx);
+		virtual bool build();
+
+		virtual QVector<QPair<tint, tint> > indexForDBInfo(QSharedPointer<db::DBInfo>& dbItem, bool isAdd);
+		virtual void addDBInfo(tint idx, tint subtrackID, QSharedPointer<db::DBInfo>& dbItem);
+		virtual void removeRow(tint idx);
 		
 	protected:
 	
@@ -62,13 +60,13 @@ class TRACK_MODEL_EXPORT AlbumTrackModel : public AbstractTrackModel
 		virtual void printError(const tchar *strR, const tchar *strE) const;
 		virtual bool populate();
 		virtual const AlbumModelKey& getAlbumID() const;
-		virtual void applyAnd(QString& cmd, bool isAnd) const
+		virtual void applyAnd(QString& cmd, bool isAnd) const;
 		virtual QString getQuery() const;
 };
 
 //-------------------------------------------------------------------------------------------
 
-class TRACK_MODEL_EXPORT Record
+class TRACK_MODEL_EXPORT AlbumTrackModel::Record
 {
 	public:
 		Record();

@@ -24,7 +24,7 @@ AlbumTrackModelTest::AlbumTrackModelTest() : AlbumTrackModel()
 
 //-------------------------------------------------------------------------------------------
 
-AlbumTrackModelTest::AlbumTrackModelTest(const TrackModelKey& filterKey) : AlbumTrackModel(AbstractTrackModelSPtr(),filterKey)
+AlbumTrackModelTest::AlbumTrackModelTest(const TrackModelKey& filterKey) : AlbumTrackModel(filterKey)
 {}
 
 //-------------------------------------------------------------------------------------------

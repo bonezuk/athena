@@ -135,10 +135,10 @@ bool operator != (const AlbumModelKey& a,const AlbumModelKey& b)
 
 //-------------------------------------------------------------------------------------------
 
-tint AlbumModelKey::groupIDFromDBItem(QSharedPointer<db::DBitem>& pDBItem)
+tint AlbumModelKey::groupIDFromDBInfo(QSharedPointer<db::DBInfo>& pDBInfo)
 {
 	tint groupID;
-	QString cmd = QString("SELECT groupID FROM album WHERE albumID=%1").arg(pDBItem->albumID());
+	QString cmd = QString("SELECT groupID FROM album WHERE albumID=%1").arg(pDBInfo->albumID());
 	db::SQLiteQuery query(db::TrackDB::instance()->db());	
 	query.prepare(cmd);
 	query.bind(groupID);
@@ -151,13 +151,13 @@ tint AlbumModelKey::groupIDFromDBItem(QSharedPointer<db::DBitem>& pDBItem)
 
 //-------------------------------------------------------------------------------------------
 
-AlbumModelKey AlbumModelKey::keyForDBItem(QSharedPointer<db::DBitem>& pDBItem)
+AlbumModelKey AlbumModelKey::keyForDBInfo(QSharedPointer<db::DBInfo>& pDBInfo)
 {
 	AlbumModelKey key;
 	
-	if(!pDBItem.isNull())
+	if(!pDBInfo.isNull())
 	{
-		tint groupID = groupIDFromDBItem(pDBItem);
+		tint groupID = groupIDFromDBInfo(pDBInfo);
 		if(groupID >= 0)
 		{
 			AlbumModelKey k(std::pair<bool,int>(true, groupID));
@@ -165,7 +165,7 @@ AlbumModelKey AlbumModelKey::keyForDBItem(QSharedPointer<db::DBitem>& pDBItem)
 		}
 		else
 		{
-			AlbumModelKey k(std::pair<bool,int>(false, pDBItem->albumID()));
+			AlbumModelKey k(std::pair<bool,int>(false, pDBInfo->albumID()));
 			key = k;
 		}
 	}

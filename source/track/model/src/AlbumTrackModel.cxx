@@ -1,4 +1,5 @@
 #include "track/model/inc/AlbumTrackModel.h"
+#include "common/inc/DiskOps.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -182,11 +183,11 @@ TrackModelType AlbumTrackModel::type() const
 
 //-------------------------------------------------------------------------------------------
 
-QVariant data(int rowIndex, int columnIndex) const
+QVariant AlbumTrackModel::data(int rowIndex, int columnIndex) const
 {
 	QVariant v;
 	
-	if(!sectionIndex && rowIndex >= 0 && rowIndex < m_tracks.size())
+	if(rowIndex >= 0 && rowIndex < m_tracks.size())
 	{
 		const Record& r = m_tracks.at(rowIndex);
 		ColumnType clType = static_cast<ColumnType>(columnIndex);
@@ -266,13 +267,20 @@ int AlbumTrackModel::numberRowsInSection(int secIdx) const
 
 //-------------------------------------------------------------------------------------------
 
+bool AlbumTrackModel::build()
+{
+	return populate();
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool AlbumTrackModel::populate()
 {
 	bool res = false;
 	
 	try
 	{
-		tint flag, gaID, groupID, albumID, trackID, subtrackID,
+		tint flag, gaID, groupID, albumID, trackID, subtrackID;
 		tint discNo, trackNo;
 		QString albumName, trackName, directoryName, fileName;
 		QString cmdQ = getQuery();
@@ -406,7 +414,7 @@ QString AlbumTrackModel::getQuery() const
 
 //-------------------------------------------------------------------------------------------
 
-QVector<QPair<tint, tint> > AlbumTrackModel::indexForDBItem(QSharedPointer<db::DBItem>& dbItem, bool isAdd)
+QVector<QPair<tint, tint> > AlbumTrackModel::indexForDBInfo(QSharedPointer<db::DBInfo>& dbItem, bool isAdd)
 {
 	QVector<QPair<tint, tint> > idxList;
 	
@@ -414,7 +422,7 @@ QVector<QPair<tint, tint> > AlbumTrackModel::indexForDBItem(QSharedPointer<db::D
 	{
 		if(isAdd)
 		{
-			tint idx, flag, gaID, groupID, albumID, trackID, subtrackID,
+			tint idx, flag, gaID, groupID, albumID, trackID, subtrackID;
 			tint discNo, trackNo;
 			QString albumName, trackName, directoryName, fileName;
 			QString cmdQ = getQuery();
@@ -451,7 +459,7 @@ QVector<QPair<tint, tint> > AlbumTrackModel::indexForDBItem(QSharedPointer<db::D
 				const Record& r = m_tracks.at(idx);
 				if(r.albumID() == dbItem->albumID() && r.trackID() == dbItem->trackID())
 				{
-					idxList.append(idx);
+					idxList.append(QPair<tint, tint>(idx, r.subtrackID()));
 				}
 			}
 		}
@@ -461,14 +469,14 @@ QVector<QPair<tint, tint> > AlbumTrackModel::indexForDBItem(QSharedPointer<db::D
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumTrackModel::addDBItem(tint idx, tint subtrackID, QSharedPointer<db::DBItem>& dbItem)
+void AlbumTrackModel::addDBInfo(tint idx, tint subtrackID, QSharedPointer<db::DBInfo>& dbItem)
 {
 	tint groupID;
 	Record r;
 
-	groupID = AlbumModelKey::groupIDFromDBItem(dbItem);
+	groupID = AlbumModelKey::groupIDFromDBInfo(dbItem);
 	r.set(groupID, dbItem->albumID(), dbItem->trackID(), subtrackID, dbItem->disc().toInt(), dbItem->track().toInt(),
-		dbItem->album(), dbItem->title(), db->getFilename());
+		dbItem->album(), dbItem->title(), dbItem->getFilename());
 	if(idx >= 0 && idx < m_tracks.size())
 	{
 		m_tracks.insert(idx, r);

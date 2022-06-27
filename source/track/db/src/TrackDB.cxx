@@ -107,9 +107,8 @@ bool TrackDB::upgradeDBAsRequired(const QString& dbName)
 			{
 				// No upgrade path so existing functionality removes it
 				// to be recreated
-				QString err = QString("DB below version 6. Removing retired DB file '%1'").arg(dbName);
+				QString err = QString("DB below version 6. No upgrade path for DB file '%1'").arg(dbName);
 				printError("upgradeDBAsRequired", err.toUtf8().constData());
-				res = false;
 			}
 			else if(currentVersion < TRACKDB_VERSION)
 			{

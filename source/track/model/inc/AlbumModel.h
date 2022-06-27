@@ -44,8 +44,8 @@ class TRACK_MODEL_EXPORT AlbumModel : public AbstractTrackModel
 
 		virtual bool build();
 
-		virtual QVector<tint> indexForDBItem(QSharedPointer<db::DBItem>& dbItem, bool isAdd);
-		virtual void addDBItem(tint idx, QSharedPointer<db::DBItem>& dbItem);
+		virtual QVector<tint> indexForDBInfo(QSharedPointer<db::DBInfo>& dbItem, bool isAdd);
+		virtual void addDBInfo(tint idx, QSharedPointer<db::DBInfo>& dbItem);
 		virtual void removeRow(tint idx);
 
 	protected:

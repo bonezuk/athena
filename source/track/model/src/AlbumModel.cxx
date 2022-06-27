@@ -1,4 +1,5 @@
 #include "track/model/inc/AlbumModel.h"
+#include "track/model/inc/AlbumTrackModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -39,7 +40,7 @@ QVariant AlbumModel::dataAtIndex(int idx, int columnIndex) const
 	
 	if(idx>=0 && idx < m_albums.size() && columnIndex>=0 && columnIndex<2)
 	{
-		const QPair<AlbumModelKey,QString>& item = m_albums.at(aIndex);
+		const QPair<AlbumModelKey,QString>& item = m_albums.at(idx);
 		if(columnIndex==0)
 		{
 			dataItem.setValue(item.first.variant());
@@ -511,7 +512,7 @@ tint AlbumModel::numberOfTracks(const AlbumModelKey& key) const
 	tint count = 0;
 	TrackModelKey filter = filterKey();
 	filter.album() = key;
-	AlbumTrackModel trackModel(key);
+	AlbumTrackModel trackModel(filter);
 	if(trackModel.build())
 	{
 		count = trackModel.size();
@@ -521,14 +522,14 @@ tint AlbumModel::numberOfTracks(const AlbumModelKey& key) const
 
 //-------------------------------------------------------------------------------------------
 
-QVector<tint> AlbumModel::indexForDBItem(QSharedPointer<db::DBItem>& dbItem, bool isAdd)
+QVector<tint> AlbumModel::indexForDBInfo(QSharedPointer<db::DBInfo>& dbItem, bool isAdd)
 {
 	QVector<tint> idxList;
 
 	if(!dbItem.isNull())
 	{
 		tint idx, noTracks;
-		AlbumModelKey key = AlbumModelKey::keyForDBItem(dbItem);
+		AlbumModelKey key = AlbumModelKey::keyForDBInfo(dbItem);
 		
 		noTracks = numberOfTracks(key);
 		if(isAdd)
@@ -543,7 +544,7 @@ QVector<tint> AlbumModel::indexForDBItem(QSharedPointer<db::DBItem>& dbItem, boo
 				endIdx = ((sectionIdx + 1) < m_index.size()) ? m_index.at(sectionIdx + 1) : m_albums.size();
 				for(idx = startIdx; idx < endIdx; idx++)
 				{
-					const QList<QPair<AlbumModelKey,QString> >& item = m_albums.at(idx);
+					const QPair<AlbumModelKey,QString>& item = m_albums.at(idx);
 					if(name.toLower() < item.second.toLower())
 					{
 						break;
@@ -558,7 +559,7 @@ QVector<tint> AlbumModel::indexForDBItem(QSharedPointer<db::DBItem>& dbItem, boo
 			{
 				for(idx = 0; idx < m_albums.size(); idx++)
 				{
-					const QList<QPair<AlbumModelKey,QString> >& item = m_albums.size();
+					const QPair<AlbumModelKey,QString>& item = m_albums.at(idx);
 					if(key == item.first)
 					{
 						idxList.append(idx);
@@ -572,11 +573,11 @@ QVector<tint> AlbumModel::indexForDBItem(QSharedPointer<db::DBItem>& dbItem, boo
 
 //-------------------------------------------------------------------------------------------
 
-void AlbumModel::addDBItem(tint idx, QSharedPointer<db::DBItem>& dbItem)
+void AlbumModel::addDBInfo(tint idx, QSharedPointer<db::DBInfo>& dbItem)
 {
 	if(!dbItem.isNull())
 	{
-		AlbumModelKey key = AlbumModelKey::keyForDBItem(dbItem);
+		AlbumModelKey key = AlbumModelKey::keyForDBInfo(dbItem);
 		tint noTracks = numberOfTracks(key);
 		if(noTracks == 0)
 		{
