@@ -20,20 +20,60 @@ Window {
 		anchors.right: parent.right
 		anchors.top: parent.top
 		anchors.bottom: navBar.top
-
-		ListView {
-			model: playListModel
 		
-	        delegate: Rectangle {
-				width: parent.width
-				height: 30
-				Text {
-					anchors.left: parent.left
-					anchors.leftMargin: 20
-					anchors.verticalCenter: parent.verticalCenter
-					font.pixelSize: 20
-	                text: model.track + " (" + model.artist + ")"
+		StackLayout {
+			id: libraryMain
+			currentIndex: 0
+			
+			AlbumView {
+				model: playListModel
+				onClicked: {
+					console.log(currentIndex);
+					parent.currentIndex = 1;
 				}
+			}
+
+			Page {
+				header: Rectangle {
+					width: parent.width
+					height: 40
+					
+					gradient: Gradient {
+						GradientStop {
+							position: 0
+							color: "#ffffff"
+						}
+						GradientStop {
+							position: 1
+							color: "#e0e0e0"
+						}
+					}
+					
+					Image {
+						source: "images/back.png"
+						fillMode: Image.PreserveAspectFit
+						height: 30
+						anchors.verticalCenter: parent.verticalCenter
+						anchors.left: parent.left
+						anchors.leftMargin: 10
+
+						TapHandler {
+							onTapped: {
+								console.log("back");
+								libraryMain.currentIndex = 0;
+							}
+						}
+					}
+				}
+
+				AlbumTrackView {
+					anchors.fill: parent
+					model: playListModel
+					onClicked: {
+						console.log("track " + currentIndex);
+					}
+				}
+
 			}
 		}
 		
@@ -43,7 +83,7 @@ Window {
 			DigitDisplay {
 				id: digitDisplay
 				
-				anchors.horizontalCenter: parent.horizontalCenter				
+				anchors.horizontalCenter: parent.horizontalCenter
 				anchors.top: parent.top
 				anchors.topMargin: 10
 				width: (parent.width >= 300) ? 300 :  parent.width
@@ -123,7 +163,7 @@ Window {
 			label: "Library"
 
 			Layout.fillWidth: true
-			Layout.preferredWidth: parent.width / 3.0
+			Layout.preferredWidth: parent.width / 4.0
 			Layout.minimumHeight: parent.height
 		}
 
@@ -134,7 +174,7 @@ Window {
 			label: "Playback"
 
 			Layout.fillWidth: true
-			Layout.preferredWidth: parent.width / 3.0
+			Layout.preferredWidth: parent.width / 4.0
 			Layout.minimumHeight: parent.height
 		}
 
@@ -145,64 +185,14 @@ Window {
 			label: "Settings"
 
 			Layout.fillWidth: true
-			Layout.preferredWidth: parent.width / 3.0
+			Layout.preferredWidth: parent.width / 4.0
 			Layout.minimumHeight: parent.height
 		}
 		
 	}
 
-ListModel {
-	id: playListModel
-	ListElement {	// 0
-		track: "Danger Zone"
-		artist: "Kenny Loggins"
-		album: "Top Gun"
+	PlayListModel {
+		id: playListModel
 	}
-	ListElement {	// 1
-		track: "Mighty Wings"
-		artist: "Cheap Trick"
-		album: "Top Gun"
-	}
-	ListElement {	// 2
-		track: "Playing with the Boys"
-		artist: "Kenny Loggins"
-		album: "Top Gun"
-	}
-	ListElement {	// 3
-		track: "Lead Me On"
-		artist: "Teena Marie"
-		album: "Top Gun"
-	}
-	ListElement {	// 4
-		track: "Take My Breath Away"
-		artist: "Berlin"
-		album: "Top Gun"
-	}
-	ListElement {	// 5
-		track: "Hot Summer Nights"
-		artist: "Miami Sound Machine"
-		album: "Top Gun"
-	}
-	ListElement {	// 6
-		track: "Heaven in Your Eyes"
-		artist: "Loverboy"
-		album: "Top Gun"
-	}
-	ListElement {	// 7
-		track: "Through the Fire"
-		artist: "Larry Greene"
-		album: "Top Gun"
-	}
-	ListElement {	// 8
-		track: "Destination Unknown"
-		artist: "Marietta"
-		album: "Top Gun"
-	}
-	ListElement {	// 9
-		track: "Top Gun Anthem"
-		artist: "Harold Faltermeyer, Steve Stevens"
-		album: "Top Gun"
-	}
-}
 	
 }
