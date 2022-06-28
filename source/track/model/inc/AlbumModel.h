@@ -79,6 +79,10 @@ class TRACK_MODEL_EXPORT AlbumModel : public AbstractTrackModel
 		virtual QVariant dataAtIndex(int idx, int columnIndex) const;
 		virtual tint findSectionIndex(const QString& albumName);
 		virtual tint numberOfTracks(const AlbumModelKey& key) const;
+		
+		virtual int queryAlbumYear(const AlbumModelKey& key) const;
+		virtual QString queryAlbumArtist(const AlbumModelKey& key) const;
+
 };
 
 //-------------------------------------------------------------------------------------------

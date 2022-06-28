@@ -1,5 +1,6 @@
 #include "track/model/inc/AlbumModel.h"
 #include "track/model/inc/AlbumTrackModel.h"
+#include "track/model/inc/AlbumModelUtilities.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -34,20 +35,72 @@ TrackModelType AlbumModel::type() const
 
 //-------------------------------------------------------------------------------------------
 
+int AlbumModel::queryAlbumYear(const AlbumModelKey& key) const
+{
+	int year;
+	QString cmd;
+	db::SQLiteQuerySPtr query = getDBQuery();
+	
+	cmd = "SELECT year FROM album WHERE ";
+	if(key.isAlbum())
+	{
+		cmd += QString("albumID=%1").arg(key.id());
+	}
+	else
+	{
+		cmd += QString("groupID=%1").arg(key.id());
+	}
+	query->prepare(cmd);
+	query->bind(year);
+	if(!query->next())
+	{
+		year = 0;
+	}
+	return year;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString AlbumModel::queryAlbumArtist(const AlbumModelKey& key) const
+{
+	QString artist;
+	AlbumModelUtilities utils(key);
+	
+	if(utils.isVariousArtists())
+	{
+		artist = "Various Artists";
+	}
+	else
+	{
+		artist = utils.artist();
+	}
+	return artist;
+}
+
+//-------------------------------------------------------------------------------------------
+
 QVariant AlbumModel::dataAtIndex(int idx, int columnIndex) const
 {
 	QVariant dataItem;
 	
-	if(idx>=0 && idx < m_albums.size() && columnIndex>=0 && columnIndex<2)
+	if(idx>=0 && idx < m_albums.size() && columnIndex>=0 && columnIndex<4)
 	{
 		const QPair<AlbumModelKey,QString>& item = m_albums.at(idx);
 		if(columnIndex==0)
 		{
 			dataItem.setValue(item.first.variant());
 		}
-		else
+		else if(columnIndex == 1)
 		{
 			dataItem.setValue(item.second);
+		}
+		else if(columnIndex == 2)
+		{
+			dataItem = queryAlbumArtist(item.first);
+		}
+		else if(columnIndex == 3)
+		{
+			dataItem = queryAlbumYear(item.first);
 		}
 	}
 	return dataItem;
@@ -534,7 +587,7 @@ QVector<tint> AlbumModel::indexForDBInfo(QSharedPointer<db::DBInfo>& dbItem, boo
 		noTracks = numberOfTracks(key);
 		if(isAdd)
 		{
-			if(noTracks == 0)
+			if(noTracks <= 1)
 			{
 				QString name = dbItem->album().trimmed();
 				tint sectionIdx = findSectionIndex(name);

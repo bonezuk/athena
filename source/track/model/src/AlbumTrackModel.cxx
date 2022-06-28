@@ -20,7 +20,11 @@ AlbumTrackModel::Record::Record() : m_groupID(-1),
 	m_trackNo(-1),
 	m_albumName(),
 	m_trackName(),
-	m_fileName()
+	m_fileName(),
+	m_length(),
+	m_artist(),
+	m_originalArtist(),
+	m_composer()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -33,7 +37,11 @@ AlbumTrackModel::Record::Record(const Record& rhs) : m_groupID(-1),
 	m_trackNo(-1),
 	m_albumName(),
 	m_trackName(),
-	m_fileName()
+	m_fileName(),
+	m_length(),
+	m_artist(),
+	m_originalArtist(),
+	m_composer()
 {
 	copy(rhs);
 }
@@ -62,6 +70,10 @@ void AlbumTrackModel::Record::copy(const Record& rhs)
 	m_albumName = rhs.m_albumName;
 	m_trackName = rhs.m_trackName;
 	m_fileName = rhs.m_fileName;
+	m_length = rhs.m_length;
+	m_artist = rhs.m_artist;
+	m_originalArtist = rhs.m_originalArtist;
+	m_composer = rhs.m_composer;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -136,8 +148,37 @@ const QString& AlbumTrackModel::Record::fileName() const
 
 //-------------------------------------------------------------------------------------------
 
+const common::TimeStamp& AlbumTrackModel::Record::length() const
+{
+	return m_length;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const QString& AlbumTrackModel::Record::artist() const
+{
+	return m_artist;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const QString& AlbumTrackModel::Record::originalArtist() const
+{
+	return m_originalArtist;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const QString& AlbumTrackModel::Record::composer() const
+{
+	return m_composer;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void AlbumTrackModel::Record::set(tint vGroupID, tint vAlbumID, tint vTrackID, tint vSubtrackID, 
-		         tint vDiscNo, tint vTrackNo, const QString& vAlbumName, const QString& vTrackName, const QString& vFileName)
+				 tint vDiscNo, tint vTrackNo, const QString& vAlbumName, const QString& vTrackName, const QString& vFileName,
+		         const QString& vArtist, const QString& vOrgArtist, const QString& vComposer, common::TimeStamp& vLength)
 {
 	m_groupID = vGroupID;
 	m_albumID = vAlbumID;
@@ -148,6 +189,10 @@ void AlbumTrackModel::Record::set(tint vGroupID, tint vAlbumID, tint vTrackID, t
 	m_albumName = vAlbumName;
 	m_trackName = vTrackName;
 	m_fileName = vFileName;
+	m_length = vLength;
+	m_artist = vArtist;
+	m_originalArtist = vOrgArtist;
+	m_composer = vComposer;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -224,6 +269,18 @@ QVariant AlbumTrackModel::data(int rowIndex, int columnIndex) const
 			case e_fileName:
 				v = QVariant(r.fileName());
 				break;
+			case e_length:
+				v = QVariant(static_cast<tuint64>(r.length()));
+				break;
+			case e_artist:
+				v = QVariant(r.artist());
+				break;
+			case e_originalArtist:
+				v = QVariant(r.originalArtist());
+				break;
+			case e_composer:
+				v = QVariant(r.composer());
+				break;
 			default:
 				break;
 		}
@@ -282,8 +339,11 @@ bool AlbumTrackModel::populate()
 	{
 		tint flag, gaID, groupID, albumID, trackID, subtrackID;
 		tint discNo, trackNo;
+		tuint64 tLen;
+		common::TimeStamp tLength;
 		QString albumName, trackName, directoryName, fileName;
-		QString cmdQ = getQuery();
+		QString artist, originalArtist, composer;
+		QString cmdQ = getQuery(false);
 		db::SQLiteQuerySPtr trackQ = getDBQuery();
 		
 		m_tracks.clear();
@@ -301,6 +361,10 @@ bool AlbumTrackModel::populate()
 		trackQ->bind(trackName);
 		trackQ->bind(directoryName);
 		trackQ->bind(fileName);
+		trackQ->bind(tLen);
+		trackQ->bind(artist);
+		trackQ->bind(originalArtist);
+		trackQ->bind(composer);
 		
 		while(trackQ->next())
 		{
@@ -308,13 +372,18 @@ bool AlbumTrackModel::populate()
 			albumName = db::TrackDB::dbStringInv(albumName);
 			trackName = db::TrackDB::dbStringInv(trackName);
 			directoryName = db::TrackDB::dbStringInv(directoryName);
+			artist = db::TrackDB::dbStringInv(artist);
+			originalArtist = db::TrackDB::dbStringInv(originalArtist);
+			composer = db::TrackDB::dbStringInv(composer);
 			fileName = db::TrackDB::dbStringInv(fileName);
 			fName = common::DiskOps::mergeName(directoryName, fileName);
 			fName = QDir::toNativeSeparators(fName);
+			tLength = tLen;
 			if(common::DiskOps::exist(fName))
 			{
 				Record r;
-				r.set(groupID, albumID, trackID, subtrackID, discNo, trackNo, albumName, trackName, fName);
+				r.set(groupID, albumID, trackID, subtrackID, discNo, trackNo, albumName, trackName, fName, 
+					artist, originalArtist, composer, tLength);
 				m_tracks.append(r);
 			}
 			else
@@ -354,18 +423,26 @@ void AlbumTrackModel::applyAnd(QString& cmd, bool isAnd) const
 
 //-------------------------------------------------------------------------------------------
 
-QString AlbumTrackModel::getQuery() const
+QString AlbumTrackModel::getQuery(bool isIDOnly) const
 {
 	bool isAnd = false;
 	QString cmd;
 
-	cmd  = "SELECT CASE WHEN a.groupid>=0 THEN 1 ELSE 0 END AS flag, ";
-	cmd += "CASE WHEN a.groupid>=0 THEN a.groupid ELSE a.albumid END AS id, ";
+	cmd  = "SELECT ";
+	if(!isIDOnly)
+	{
+		cmd += "CASE WHEN a.groupid>=0 THEN 1 ELSE 0 END AS flag, ";
+		cmd += "CASE WHEN a.groupid>=0 THEN a.groupid ELSE a.albumid END AS id, ";
+	}
 	cmd += "a.groupID, a.albumID, b.trackID, ";
-	cmd += "CASE WHEN e.subtrackID IS NULL THEN -1 ELSE e.subtrackID END AS subtrackID, ";
-	cmd += "b.discNo, b.trackNo, a.albumName, ";
-	cmd += "CASE WHEN e.subtrackID IS NULL THEN b.trackName ELSE e.subtrackName END AS trackName, ";
-	cmd += "c.directoryName, d.fileName ";
+	cmd += "CASE WHEN e.subtrackID IS NULL THEN -1 ELSE e.subtrackID END AS subtrackID ";
+	if(!isIDOnly)
+	{
+		cmd += ", b.discNo, b.trackNo, a.albumName, ";
+		cmd += "CASE WHEN e.subtrackID IS NULL THEN b.trackName ELSE e.subtrackName END AS trackName, ";
+		cmd += "c.directoryName, d.fileName, ";
+		cmd += "b.timeLength, b.artist, b.originalArtist, b.composer ";
+	}
 	cmd += "FROM album AS a INNER JOIN track AS b ON a.albumID=b.albumID ";
 	cmd += "INNER JOIN directory AS c ON a.directoryID=c.directoryID ";
 	cmd += "INNER JOIN file AS d ON a.directoryID=d.directoryID AND b.fileID=d.fileID ";
@@ -422,26 +499,16 @@ QVector<QPair<tint, tint> > AlbumTrackModel::indexForDBInfo(QSharedPointer<db::D
 	{
 		if(isAdd)
 		{
-			tint idx, flag, gaID, groupID, albumID, trackID, subtrackID;
-			tint discNo, trackNo;
-			QString albumName, trackName, directoryName, fileName;
-			QString cmdQ = getQuery();
+			tint idx, groupID, albumID, trackID, subtrackID;
+			QString cmdQ = getQuery(true);
 			db::SQLiteQuerySPtr trackQ = getDBQuery();
 		
 			trackQ->prepare(cmdQ);
-			trackQ->bind(flag);
-			trackQ->bind(gaID);
 			trackQ->bind(groupID);
 			trackQ->bind(albumID);
 			trackQ->bind(trackID);
 			trackQ->bind(subtrackID);
-			trackQ->bind(discNo);
-			trackQ->bind(trackNo);
-			trackQ->bind(albumName);
-			trackQ->bind(trackName);
-			trackQ->bind(directoryName);
-			trackQ->bind(fileName);
-			
+						
 			idx = 0;
 			while(trackQ->next())
 			{
@@ -476,7 +543,7 @@ void AlbumTrackModel::addDBInfo(tint idx, tint subtrackID, QSharedPointer<db::DB
 
 	groupID = AlbumModelKey::groupIDFromDBInfo(dbItem);
 	r.set(groupID, dbItem->albumID(), dbItem->trackID(), subtrackID, dbItem->disc().toInt(), dbItem->track().toInt(),
-		dbItem->album(), dbItem->title(), dbItem->getFilename());
+		dbItem->album(), dbItem->title(), dbItem->getFilename(), dbItem->artist(), dbItem->originalArtist(), dbItem->composer(), dbItem->length());
 	if(idx >= 0 && idx < m_tracks.size())
 	{
 		m_tracks.insert(idx, r);

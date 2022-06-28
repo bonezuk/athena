@@ -46,6 +46,62 @@ Window {
                 }
 			}
 		}
+		
+		StackLayout {
+			id: libraryMain
+			currentIndex: 0
+			
+			AlbumView {
+				model: albumModel
+				onClicked: {
+					console.log(currentIndex);
+					parent.currentIndex = 1;
+				}
+			}
+
+			Page {
+				header: Rectangle {
+					width: parent.width
+					height: 40
+					
+					gradient: Gradient {
+						GradientStop {
+							position: 0
+							color: "#ffffff"
+						}
+						GradientStop {
+							position: 1
+							color: "#e0e0e0"
+						}
+					}
+					
+					Image {
+						source: "images/back.png"
+						fillMode: Image.PreserveAspectFit
+						height: 30
+						anchors.verticalCenter: parent.verticalCenter
+						anchors.left: parent.left
+						anchors.leftMargin: 10
+
+						TapHandler {
+							onTapped: {
+								console.log("back");
+								libraryMain.currentIndex = 0;
+							}
+						}
+					}
+				}
+
+				AlbumTrackView {
+					anchors.fill: parent
+					model: albumTrackModel
+					onClicked: {
+						console.log("track " + currentIndex);
+					}
+				}
+
+			}
+		}
 
 		Rectangle {
 			anchors.fill: parent.fill
@@ -140,29 +196,40 @@ Window {
 			label: "Library"
 
 			Layout.fillWidth: true
-			Layout.preferredWidth: parent.width / 3.0
+			Layout.preferredWidth: parent.width / 4.0
 			Layout.minimumHeight: parent.height
 		}
 
 		Component.NavButton {
 			navIndex: 1
-			sourceEnabled: "images/play_icon_toolbar_256x256_1.png"
-			sourceDisabled: "images/play_icon_toolbar_disable_256x256_1.png"
-			label: "Playback"
+			sourceEnabled: "images/album.png"
+			sourceDisabled: "images/album_disable.png"
+			label: "Album"
 
 			Layout.fillWidth: true
-			Layout.preferredWidth: parent.width / 3.0
+			Layout.preferredWidth: parent.width / 4.0
 			Layout.minimumHeight: parent.height
 		}
 
 		Component.NavButton {
 			navIndex: 2
+			sourceEnabled: "images/play_icon_toolbar_256x256_1.png"
+			sourceDisabled: "images/play_icon_toolbar_disable_256x256_1.png"
+			label: "Playback"
+
+			Layout.fillWidth: true
+			Layout.preferredWidth: parent.width / 4.0
+			Layout.minimumHeight: parent.height
+		}
+
+		Component.NavButton {
+			navIndex: 3
 			sourceEnabled: "images/gears.png"
 			sourceDisabled: "images/gears_disable.png"
 			label: "Settings"
 
 			Layout.fillWidth: true
-			Layout.preferredWidth: parent.width / 3.0
+			Layout.preferredWidth: parent.width / 4.0
 			Layout.minimumHeight: parent.height
 		}
 		

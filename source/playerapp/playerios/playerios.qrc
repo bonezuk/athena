@@ -5,6 +5,8 @@
 		<file>Resources/components/DigitDisplay.qml</file>
 		<file>Resources/components/NavButton.qml</file>
 		<file>Resources/components/PlayButton.qml</file>
+		<file>Resources/components/AlbumView.qml</file>
+		<file>Resources/components/AlbumTrackView.qml</file>
         <file>Resources/images/album.png</file>
         <file>Resources/images/album_disable.png</file>
         <file>Resources/images/gears.png</file>
@@ -22,6 +24,7 @@
         <file>Resources/images/digit_8.png</file>
         <file>Resources/images/digit_9.png</file>
         <file>Resources/images/digit_colon.png</file>
+        <file>Resources/images/note.png</file>
         <file>Resources/images/play_controls1.png</file>
         <file>Resources/images/pc_back_disabled.png</file>
         <file>Resources/images/pc_back_hover.png</file>

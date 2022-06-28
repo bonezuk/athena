@@ -31,6 +31,10 @@ class TRACK_MODEL_EXPORT AlbumTrackModel : public AbstractTrackModel
 			e_albumName = 7,
 			e_trackName = 8,
 			e_fileName = 9,
+			e_length = 10,
+			e_artist = 11,
+			e_originalArtist = 12,
+			e_composer = 13
 		} ColumnType;
 
 	public:
@@ -61,7 +65,7 @@ class TRACK_MODEL_EXPORT AlbumTrackModel : public AbstractTrackModel
 		virtual bool populate();
 		virtual const AlbumModelKey& getAlbumID() const;
 		virtual void applyAnd(QString& cmd, bool isAnd) const;
-		virtual QString getQuery() const;
+		virtual QString getQuery(bool isIDOnly) const;
 };
 
 //-------------------------------------------------------------------------------------------
@@ -84,9 +88,14 @@ class TRACK_MODEL_EXPORT AlbumTrackModel::Record
 		const QString& albumName() const;
 		const QString& trackName() const;
 		const QString& fileName() const;
+		const common::TimeStamp& length() const;
+		const QString& artist() const;
+		const QString& originalArtist() const;
+		const QString& composer() const;
 		
 		void set(tint vGroupID, tint vAlbumID, tint vTrackID, tint vSubtrackID, 
-		         tint vDiscNo, tint vTrackNo, const QString& albumName, const QString& trackName, const QString& fileName);
+		         tint vDiscNo, tint vTrackNo, const QString& albumName, const QString& trackName, const QString& fileName,
+		         const QString& vArtist, const QString& vOrgArtist, const QString& vComposer, common::TimeStamp& vLength);
 	
 	private:
 		tint m_groupID;
@@ -98,6 +107,10 @@ class TRACK_MODEL_EXPORT AlbumTrackModel::Record
 		QString m_albumName;
 		QString m_trackName;
 		QString m_fileName;
+		common::TimeStamp m_length;
+		QString m_artist;
+		QString m_originalArtist;
+		QString m_composer;
 		
 		void copy(const Record& rhs);
 };
