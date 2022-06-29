@@ -19,10 +19,11 @@ class TRACK_DB_EXPORT DBInfo : public info::Info
 {
 	public:
 		DBInfo(const QString& fileName);
+		DBInfo(const QString& fileName, bool isUpdate);
 		virtual ~DBInfo();
 		
         static QSharedPointer<info::Info> readInfo(int albumID,int trackID);
-        static QSharedPointer<info::Info> readInfo(const QString& fileName);
+        static QSharedPointer<info::Info> readInfo(const QString& fileName, bool isUpdate = true);
 		
 		tint albumID() const;
 		tint trackID() const;
@@ -44,6 +45,7 @@ class TRACK_DB_EXPORT DBInfo : public info::Info
 		
 		tint m_albumID;
 		tint m_trackID;
+		bool m_isUpdate;
 		bool m_updateFlag;
 		QString m_directoryGroup;
 		

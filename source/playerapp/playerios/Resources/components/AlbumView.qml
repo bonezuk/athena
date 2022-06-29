@@ -52,7 +52,7 @@ ListView {
 				
 				ColumnLayout {
 					Text {
-						text: model.track
+						text: model.album
 						font.pixelSize: 18
 						horizontalAlignment: Text.AlignLeft
 						verticalAlignment: Text.AlignVCenter

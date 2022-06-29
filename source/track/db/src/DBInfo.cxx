@@ -16,6 +16,26 @@ namespace db
 DBInfo::DBInfo(const QString& fileName) : info::Info(),
 	m_albumID(-1),
 	m_trackID(-1),
+	m_isUpdate(true),
+	m_updateFlag(false),
+	m_chapters(),
+	m_imageFlag(false),
+	m_imageMap()
+{
+	m_fileName = QDir::toNativeSeparators(fileName);
+	if(!loadRecord())
+	{
+		m_albumID = -1;
+		m_trackID = -1;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+DBInfo::DBInfo(const QString& fileName, bool isUpdate) : info::Info(),
+	m_albumID(-1),
+	m_trackID(-1),
+	m_isUpdate(isUpdate),
 	m_updateFlag(false),
 	m_chapters(),
 	m_imageFlag(false),
@@ -95,7 +115,7 @@ QSharedPointer<info::Info> DBInfo::readInfo(int albumID,int trackID)
 
 //-------------------------------------------------------------------------------------------
 
-QSharedPointer<info::Info> DBInfo::readInfo(const QString& fileName)
+QSharedPointer<info::Info> DBInfo::readInfo(const QString& fileName, bool isUpdate)
 {
 	bool flag = true,updateFlag = false;
     QSharedPointer<info::Info> trackInfo;
@@ -122,7 +142,7 @@ QSharedPointer<info::Info> DBInfo::readInfo(const QString& fileName)
 
 	if(trackDB!=0)
 	{
-        QSharedPointer<DBInfo> dbItem(new DBInfo(fileName));
+        QSharedPointer<DBInfo> dbItem(new DBInfo(fileName, isUpdate));
 
 		if(dbItem->isValid())
 		{
@@ -301,7 +321,7 @@ bool DBInfo::loadRecord()
 		
 		if(trackDB->getKeysFromFilename(m_fileName,m_albumID,m_trackID,dirID,fileID))
 		{
-			if(!trackDB->isUpdateRequired(dirID,fileID))
+			if(!m_isUpdate || !trackDB->isUpdateRequired(dirID,fileID))
 			{
 				tint infoType,year,trackNo,discNo,groupID;
 				tuint64 timeLength = 0;
@@ -548,7 +568,7 @@ tuint64 DBInfo::loadOrGenerateHashID(tint dirID, tint fileID)
 		cmd += "WHERE a.directoryID=" + QString::number(dirID) + " AND a.fileID=" + QString::number(fileID);
 		hashQ.prepare(cmd);
 		hashQ.bind(hashID);
-		if(!hashQ.next())
+		if(!hashQ.next() && m_isUpdate)
 		{
 			hashID = generateHashID(dirID, fileID);
 		}

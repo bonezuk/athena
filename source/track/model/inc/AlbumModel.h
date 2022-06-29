@@ -82,6 +82,8 @@ class TRACK_MODEL_EXPORT AlbumModel : public AbstractTrackModel
 		
 		virtual int queryAlbumYear(const AlbumModelKey& key) const;
 		virtual QString queryAlbumArtist(const AlbumModelKey& key) const;
+		
+		virtual bool isAlbumListed(const AlbumModelKey& key) const;
 
 };
 

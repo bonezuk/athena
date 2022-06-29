@@ -429,16 +429,14 @@ QString AlbumTrackModel::getQuery(bool isIDOnly) const
 	QString cmd;
 
 	cmd  = "SELECT ";
-	if(!isIDOnly)
-	{
-		cmd += "CASE WHEN a.groupid>=0 THEN 1 ELSE 0 END AS flag, ";
-		cmd += "CASE WHEN a.groupid>=0 THEN a.groupid ELSE a.albumid END AS id, ";
-	}
+	cmd += "CASE WHEN a.groupid>=0 THEN 1 ELSE 0 END AS flag, ";
+	cmd += "CASE WHEN a.groupid>=0 THEN a.groupid ELSE a.albumid END AS id, ";
 	cmd += "a.groupID, a.albumID, b.trackID, ";
 	cmd += "CASE WHEN e.subtrackID IS NULL THEN -1 ELSE e.subtrackID END AS subtrackID ";
+	cmd += ", b.discNo, b.trackNo ";
 	if(!isIDOnly)
 	{
-		cmd += ", b.discNo, b.trackNo, a.albumName, ";
+		cmd += ",a.albumName, ";
 		cmd += "CASE WHEN e.subtrackID IS NULL THEN b.trackName ELSE e.subtrackName END AS trackName, ";
 		cmd += "c.directoryName, d.fileName, ";
 		cmd += "b.timeLength, b.artist, b.originalArtist, b.composer ";
@@ -499,24 +497,37 @@ QVector<QPair<tint, tint> > AlbumTrackModel::indexForDBInfo(QSharedPointer<db::D
 	{
 		if(isAdd)
 		{
-			tint idx, groupID, albumID, trackID, subtrackID;
-			QString cmdQ = getQuery(true);
-			db::SQLiteQuerySPtr trackQ = getDBQuery();
-		
-			trackQ->prepare(cmdQ);
-			trackQ->bind(groupID);
-			trackQ->bind(albumID);
-			trackQ->bind(trackID);
-			trackQ->bind(subtrackID);
-						
-			idx = 0;
-			while(trackQ->next())
+			try
 			{
-				if(albumID == dbItem->albumID() && trackID == dbItem->trackID())
+				tint idx, flag, keyID, groupID, albumID, trackID, subtrackID;
+				tint discNo, trackNo;
+				QString cmdQ = getQuery(true);
+				db::SQLiteQuerySPtr trackQ = getDBQuery();
+	
+				trackQ->prepare(cmdQ);
+				trackQ->bind(flag);
+				trackQ->bind(keyID);
+				trackQ->bind(groupID);
+				trackQ->bind(albumID);
+				trackQ->bind(trackID);
+				trackQ->bind(subtrackID);
+				trackQ->bind(discNo);
+				trackQ->bind(trackNo);
+							
+				idx = 0;
+				while(trackQ->next())
 				{
-					idxList.append(QPair<tint, tint>(idx, subtrackID));
+					if(albumID == dbItem->albumID() && trackID == dbItem->trackID())
+					{
+						idxList.append(QPair<tint, tint>(idx, subtrackID));
+					}
+					idx++;
 				}
-				idx++;
+			}
+			catch(const db::SQLiteException& e)
+			{
+				QString err = QString("Exception on SQL. %1").arg(e.error());
+				printError("indexForDBInfo", err.toUtf8().constData());
 			}
 		}
 		else

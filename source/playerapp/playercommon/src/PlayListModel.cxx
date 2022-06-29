@@ -257,7 +257,7 @@ QVariant PlayListModel::data(const QModelIndex& index, int role) const
 			}
 		}
 	}
-	return QVariant();
+	return QVariant(QString(""));
 }
 
 //-------------------------------------------------------------------------------------------

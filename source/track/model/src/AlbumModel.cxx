@@ -575,6 +575,23 @@ tint AlbumModel::numberOfTracks(const AlbumModelKey& key) const
 
 //-------------------------------------------------------------------------------------------
 
+bool AlbumModel::isAlbumListed(const AlbumModelKey& key) const
+{
+	bool res = false;
+	
+	for(tint idx = 0; idx < m_albums.size() && !res; idx++)
+	{
+		const QPair<AlbumModelKey,QString>& item = m_albums.at(idx);
+		if(key == item.first)
+		{
+			res = true;
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
 QVector<tint> AlbumModel::indexForDBInfo(QSharedPointer<db::DBInfo>& dbItem, bool isAdd)
 {
 	QVector<tint> idxList;
@@ -584,17 +601,16 @@ QVector<tint> AlbumModel::indexForDBInfo(QSharedPointer<db::DBInfo>& dbItem, boo
 		tint idx, noTracks;
 		AlbumModelKey key = AlbumModelKey::keyForDBInfo(dbItem);
 		
-		noTracks = numberOfTracks(key);
 		if(isAdd)
 		{
-			if(noTracks <= 1)
+			if(!isAlbumListed(key))
 			{
 				QString name = dbItem->album().trimmed();
 				tint sectionIdx = findSectionIndex(name);
 				tint startIdx, endIdx;
 				
 				startIdx = m_index.at(sectionIdx);
-				endIdx = ((sectionIdx + 1) < m_index.size()) ? m_index.at(sectionIdx + 1) : m_albums.size();
+				endIdx = ((startIdx + 1) < m_index.size()) ? m_index.at(sectionIdx + 1) : m_albums.size();
 				for(idx = startIdx; idx < endIdx; idx++)
 				{
 					const QPair<AlbumModelKey,QString>& item = m_albums.at(idx);
@@ -608,6 +624,7 @@ QVector<tint> AlbumModel::indexForDBInfo(QSharedPointer<db::DBInfo>& dbItem, boo
 		}
 		else
 		{
+			noTracks = numberOfTracks(key);
 			if(noTracks <= 1)
 			{
 				for(idx = 0; idx < m_albums.size(); idx++)
@@ -631,18 +648,14 @@ void AlbumModel::addDBInfo(tint idx, QSharedPointer<db::DBInfo>& dbItem)
 	if(!dbItem.isNull())
 	{
 		AlbumModelKey key = AlbumModelKey::keyForDBInfo(dbItem);
-		tint noTracks = numberOfTracks(key);
-		if(noTracks == 0)
+		QString name = dbItem->album().trimmed();
+		tint sectionIdx = findSectionIndex(name) + 1;
+		while(sectionIdx < m_index.size())
 		{
-			QString name = dbItem->album().trimmed();
-			tint sectionIdx = findSectionIndex(name) + 1;
-			while(sectionIdx < m_index.size())
-			{
-				m_index[sectionIdx] += 1;
-				sectionIdx++;
-			}
-			m_albums.insert(idx, QPair<AlbumModelKey,QString>(key, dbItem->album()));
+			m_index[sectionIdx] += 1;
+			sectionIdx++;
 		}
+		m_albums.insert(idx, QPair<AlbumModelKey,QString>(key, dbItem->album()));
 	}
 }
 
@@ -657,13 +670,12 @@ void AlbumModel::removeRow(tint idx)
 		for(secIdx = 0; secIdx < m_index.size(); secIdx++)
 		{
 			startIdx = m_index.at(secIdx);
-			endIdx = ((secIdx + 1) < static_cast<int>(m_index.size())) ? m_index.at(secIdx+1) : m_albums.size();
-			if((idx >= startIdx && idx < endIdx) || idx >= endIdx)
+			if(startIdx > idx)
 			{
 				m_index[secIdx] -= 1;
 			}
 		}
-		m_index.removeAt(idx);
+		m_albums.removeAt(idx);
 	}
 }
 

@@ -33,6 +33,11 @@ class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QAbstractListModel
 		};
 		Q_ENUM(AlbumTrackRoles)
 		
+		Q_PROPERTY(qint32 sizeOfModel READ getSizeOfModel NOTIFY onSizeOfModel)
+
+	signals:
+		void onSizeOfModel();
+
 	public:
 		QAlbumTrackListModel(QObject *parent = 0);
 		virtual ~QAlbumTrackListModel();
@@ -42,13 +47,18 @@ class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QAbstractListModel
 		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 		virtual QHash<int,QByteArray> roleNames() const;
+		
+		virtual qint32 getSizeOfModel() const;
 
 	public slots:
 		virtual void appendTrack(const QString& fileName);
 		virtual void deleteTrack(const QString& fileName);
 		
-	private:
+	protected:
 		QSharedPointer<track::model::AlbumTrackModel> m_pTracks;
+		
+		virtual void endInsertRows();
+		virtual void endRemoveRows();
 };
 
 //-------------------------------------------------------------------------------------------

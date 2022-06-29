@@ -70,7 +70,9 @@ int main(int argc, char **argv)
 		qmlRegisterType<PlayListIOSModel>("uk.co.blackomega", 1, 0, "PlayListIOSModel");
 		qmlRegisterType<PlayerUISettings>("uk.co.blackomega", 1, 0, "PlayerUISettings");
 		qmlRegisterType<PlaybackStateController>("uk.co.blackomega", 1, 0, "PlaybackStateController");
-		
+		qmlRegisterType<QAlbumListModel>("uk.co.blackomega", 1, 0, "QAlbumListModel");
+		qmlRegisterType<QAlbumTrackListModel>("uk.co.blackomega", 1, 0, "QAlbumTrackListModel");
+
 		PlayerIOSTrackDBManager *trackDBManager = PlayerIOSTrackDBManager::instance();
 		if(trackDBManager != 0)
 		{

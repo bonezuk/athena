@@ -51,10 +51,13 @@ Window {
 			id: libraryMain
 			currentIndex: 0
 			
-			AlbumView {
+			Component.AlbumView {
 				model: albumModel
 				onClicked: {
 					console.log(currentIndex);
+					// Use the selected index to load the tracks belonging to the album
+					albumModel.showAlbumTracks(currentIndex);
+					// Set the stack view to show the track album page.
 					parent.currentIndex = 1;
 				}
 			}
@@ -92,9 +95,18 @@ Window {
 					}
 				}
 
-				AlbumTrackView {
+				Component.AlbumTrackView {
 					anchors.fill: parent
 					model: albumTrackModel
+					
+					property int noItems: {
+						var numberOfItems = albumTrackModel.sizeOfModel;
+						if(numberOfItems == 0)
+						{
+							libraryMain.currentIndex = 0;
+						}
+					}
+					
 					onClicked: {
 						console.log("track " + currentIndex);
 					}

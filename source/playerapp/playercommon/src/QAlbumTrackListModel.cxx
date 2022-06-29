@@ -24,6 +24,7 @@ void QAlbumTrackListModel::load(const track::model::TrackModelKey& key)
 		beginResetModel();
 		m_pTracks = pTracks;
 		endResetModel();
+		emit onSizeOfModel();
 	}
 }
 
@@ -83,6 +84,13 @@ QVariant QAlbumTrackListModel::data(const QModelIndex& index, int role) const
 
 //-------------------------------------------------------------------------------------------
 
+qint32 QAlbumTrackListModel::getSizeOfModel() const
+{
+	return (!m_pTracks.isNull()) ? m_pTracks->size() : 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
 QHash<int,QByteArray> QAlbumTrackListModel::roleNames() const
 {
 	QHash<int,QByteArray> h;
@@ -95,6 +103,22 @@ QHash<int,QByteArray> QAlbumTrackListModel::roleNames() const
 	h[OriginalArtistRole] = "originalArtist";
 	h[ComposerRole] = "composer";
 	return h;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void QAlbumTrackListModel::endInsertRows()
+{
+	QAbstractListModel::endInsertRows();
+	emit onSizeOfModel();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void QAlbumTrackListModel::endRemoveRows()
+{
+	QAbstractListModel::endRemoveRows();
+	emit onSizeOfModel();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -122,9 +146,9 @@ void QAlbumTrackListModel::appendTrack(const QString& fileName)
 
 void QAlbumTrackListModel::deleteTrack(const QString& fileName)
 {
-	if(!m_pTracks.isNull() && common::DiskOps::exist(fileName))
+	if(!m_pTracks.isNull())
 	{
-		QSharedPointer<track::db::DBInfo> pInfo = track::db::DBInfo::readInfo(fileName).dynamicCast<track::db::DBInfo>();
+		QSharedPointer<track::db::DBInfo> pInfo = track::db::DBInfo::readInfo(fileName, false).dynamicCast<track::db::DBInfo>();
 		if(!pInfo.isNull())
 		{
 			QVector<QPair<tint, tint> > indexes = m_pTracks->indexForDBInfo(pInfo, false);
@@ -134,6 +158,10 @@ void QAlbumTrackListModel::deleteTrack(const QString& fileName)
 				beginRemoveRows(QModelIndex(), idx.first, idx.first);
 				m_pTracks->removeRow(idx.first);
 				endRemoveRows();
+			}
+			if(m_pTracks->size() == 0)
+			{
+				m_pTracks.clear();
 			}
 		}
 	}

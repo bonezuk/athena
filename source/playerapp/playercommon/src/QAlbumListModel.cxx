@@ -77,6 +77,7 @@ bool QAlbumListModel::initialise()
 	
 	if(pAlbums->build())
 	{
+		m_pAlbums = pAlbums;
 		res = true;
 	}
 	return res;
@@ -109,7 +110,7 @@ void QAlbumListModel::appendTrack(const QString& fileName)
 {
 	if(!m_pAlbums.isNull() && common::DiskOps::exist(fileName))
 	{
-		QSharedPointer<track::db::DBInfo> pInfo = track::db::DBInfo::readInfo(fileName).dynamicCast<track::db::DBInfo>();
+		QSharedPointer<track::db::DBInfo> pInfo = track::db::DBInfo::readInfo(fileName, false).dynamicCast<track::db::DBInfo>();
 		if(!pInfo.isNull())
 		{
 			QVector<tint> indexes = m_pAlbums->indexForDBInfo(pInfo, true);
@@ -128,9 +129,9 @@ void QAlbumListModel::appendTrack(const QString& fileName)
 
 void QAlbumListModel::deleteTrack(const QString& fileName)
 {
-	if(!m_pAlbums.isNull() && common::DiskOps::exist(fileName))
+	if(!m_pAlbums.isNull())
 	{
-		QSharedPointer<track::db::DBInfo> pInfo = track::db::DBInfo::readInfo(fileName).dynamicCast<track::db::DBInfo>();
+		QSharedPointer<track::db::DBInfo> pInfo = track::db::DBInfo::readInfo(fileName, false).dynamicCast<track::db::DBInfo>();
 		if(!pInfo.isNull())
 		{
 			QVector<tint> indexes = m_pAlbums->indexForDBInfo(pInfo, false);
