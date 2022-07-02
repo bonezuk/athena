@@ -80,47 +80,102 @@ Window {
 		Rectangle {
 			anchors.fill: parent.fill
 			
-			DigitDisplay {
-				id: digitDisplay
+			Rectangle {
+				id: playControlsContainer
 				
-				anchors.horizontalCenter: parent.horizontalCenter
 				anchors.top: parent.top
-				anchors.topMargin: 10
-				width: (parent.width >= 300) ? 300 :  parent.width
-				implicitHeight: 50
+				anchors.left: parent.left
+				anchors.right: parent.right
+				implicitHeight: 75
+				
+				gradient: Gradient {
+					GradientStop { position: 0.0; color: "#c6e4f7"}
+					GradientStop { position: 1.0; color: "#477996"}
+				}
+				
+        	    PlayButton {
+		            id: playButton
+	            	
+	            	anchors.left: parent.left
+	            	anchors.verticalCenter: parent.verticalCenter
+	            	anchors.leftMargin: 3
+	            	implicitWidth: implicitHeight
+	            	implicitHeight: parent.height - 7
+	            }
+	            
+	            Slider {
+	            	id: seekSlider
+	            	
+	            	from: 0.0
+	            	to: 1.0
+	            	value: 0.0
+	            	
+	            	anchors.left: playButton.right
+	            	anchors.right: parent.right
+	            	anchors.top: parent.top
+	            }
+	            
+	            Image {
+	            	id: playingAlbumImage
+					source: "images/note.png"
+					fillMode: Image.PreserveAspectFit
+					
+					anchors.left: playButton.right
+					anchors.top: seekSlider.bottom
+					anchors.bottom: parent.bottom
+            		anchors.leftMargin: 7
+            		anchors.bottomMargin: 7
+	            }
+
+            	ColumnLayout {
+            		id: playingTrackInfo
+            		
+            		anchors.top: seekSlider.bottom
+            		anchors.left: playingAlbumImage.right
+            		anchors.right: digitDisplay.left
+            		anchors.bottom: parent.bottom
+            		anchors.leftMargin: 7
+            		anchors.bottomMargin: 7
+
+	        	    Text {
+    	    	    	text: "Track Name"
+        		    	font.pixelSize: 12
+        		    	Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+		            }
+    	    	    Text {
+        		    	text: "Album Name"
+        		    	font.pixelSize: 12
+        	    		Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+		            }
+    	        }
+	            
+
+				DigitDisplay {
+					id: digitDisplay
+					
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.right: parent.right
+					anchors.top: seekSlider.bottom
+					anchors.rightMargin: 5
+					implicitHeight: 30
+					implicitWidth: 100
+				}
 			}
 
-            PlayButton {
-	            id: playButton
-	            
-            	anchors.horizontalCenter: parent.horizontalCenter
-				anchors.top: digitDisplay.bottom
-				anchors.topMargin: 10
-				implicitWidth: 100
-				implicitHeight: 100
-            }
-            
-            ColumnLayout {
-	            anchors.horizontalCenter: parent.horizontalCenter
-				anchors.top: playButton.bottom
-				anchors.topMargin: 10
+			PlayListView {
+				model: playListModel
 				
-        	    Text {
-        	    	text: "Track Name"
-        	    	font.pixelSize: 20
-        	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-	            }
-        	    Text {
-        	    	text: "Album Name"
-        	    	font.pixelSize: 20
-        	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-	            }
-        	    Text {
-        	    	text: "Artist"
-        	    	font.pixelSize: 20
-        	    	Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-	            }
-            }
+				clip: true
+				anchors.top: playControlsContainer.bottom
+				anchors.left: parent.left
+				anchors.right: parent.right
+				anchors.bottom: parent.bottom
+				
+				onClicked: {
+					console.log(currentIndex);
+				}
+			}
+
 		}
 		
 		Rectangle {

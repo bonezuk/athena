@@ -11,6 +11,8 @@ Rectangle {
 	
 	signal clicked
 	
+	color: "transparent"
+	
 	Image {
 		anchors.fill: parent;
 		fillMode: Image.PreserveAspectFit
