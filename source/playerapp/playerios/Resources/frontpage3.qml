@@ -11,7 +11,7 @@ Window {
 
 	width: 400
 	height: 600
-	
+		
 	StackLayout {
 		id: mainArea
 		currentIndex: navBar.currentNavIndex
@@ -34,44 +34,20 @@ Window {
 			}
 
 			Page {
-				header: Rectangle {
-					width: parent.width
-					height: 40
-					
-					gradient: Gradient {
-						GradientStop {
-							position: 0
-							color: "#ffffff"
-						}
-						GradientStop {
-							position: 1
-							color: "#e0e0e0"
-						}
-					}
-					
-					Image {
-						source: "images/back.png"
-						fillMode: Image.PreserveAspectFit
-						height: 30
-						anchors.verticalCenter: parent.verticalCenter
-						anchors.left: parent.left
-						anchors.leftMargin: 10
-
-						TapHandler {
-							onTapped: {
-								console.log("back");
-								libraryMain.currentIndex = 0;
-							}
-						}
-					}
-				}
-
 				AlbumTrackView {
 					anchors.fill: parent
 					model: playListModel
 					onClicked: {
 						console.log("track " + currentIndex);
+						notifyInfo.text = "Added track '" + currentTrack + "' to playlist."
+						notifyInfo.visible = true;
 					}
+					
+					PLNotifyInfo {
+						id: notifyInfo
+						text: ""
+					}
+
 				}
 
 			}
@@ -103,17 +79,34 @@ Window {
 	            	implicitHeight: parent.height - 7
 	            }
 	            
-	            Slider {
-	            	id: seekSlider
-	            	
-	            	from: 0.0
-	            	to: 1.0
-	            	value: 0.0
-	            	
-	            	anchors.left: playButton.right
-	            	anchors.right: parent.right
-	            	anchors.top: parent.top
-	            }
+	            
+				PlaybackSlider {
+					id: seekSlider
+					
+					anchors.left: playButton.right
+					anchors.leftMargin: 5
+					anchors.right: parent.right
+					anchors.rightMargin: 5
+					anchors.top: parent.top
+					anchors.topMargin: 5
+
+					onSeek: (v) => {
+						console.log("seek -> " + v);
+					}
+			
+					onDisplay: (v) => {
+						console.log("dis -> " + v);
+					}
+			
+					Timer {
+						interval: 100
+						running: true
+						repeat: true
+						onTriggered: {
+							parent.updateValue(parent.liveValue + 0.5);
+						}
+					}
+				}
 	            
 	            Image {
 	            	id: playingAlbumImage
@@ -153,12 +146,13 @@ Window {
 				DigitDisplay {
 					id: digitDisplay
 					
-					anchors.verticalCenter: parent.verticalCenter
 					anchors.right: parent.right
-					anchors.top: seekSlider.bottom
 					anchors.rightMargin: 5
-					implicitHeight: 30
-					implicitWidth: 100
+					anchors.top: seekSlider.bottom
+					anchors.topMargin: 5
+					
+					width: 110
+					height: 25
 				}
 			}
 

@@ -19,6 +19,8 @@ set(CODEC_LIBRARIES
 	mpcdec
 )
 
+add_definitions(-DQT_QML_DEBUG)
+
 add_executable(OmegaPlayerIOS ${PLAYERIOS_HEADER} ${PLAYERIOS_SOURCE} ${PLAYERIOS_RESOURCES})
 
 if (OMEGA_WIN32)

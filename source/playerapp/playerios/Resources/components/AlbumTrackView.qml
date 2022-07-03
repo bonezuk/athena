@@ -9,6 +9,9 @@ ListView {
 	id: albumTrackView
 
 	property int currentIndex: 0
+	property string currentTrack: ""
+	property string currentAlbumName: ""
+	property string currentArtistName: ""
 	
 	signal clicked
 
@@ -56,14 +59,14 @@ ListView {
 					anchors.left: parent.left
 					
 					Text {
-						text: "Top Gun"
+						text: albumTrackView.currentAlbumName
 						font.pixelSize: 18
 						Layout.leftMargin: 10
 						horizontalAlignment: Text.AlignLeft
 						verticalAlignment: Text.AlignVCenter
 					}
 					Text {
-						text: "Various Artists"
+						text: albumTrackView.currentArtistName
 						font.pixelSize: 16
 						Layout.leftMargin: 10
 						horizontalAlignment: Text.AlignLeft
@@ -97,6 +100,7 @@ ListView {
 			
 			onTapped: {
 				albumTrackView.currentIndex = index;
+				albumTrackView.currentTrack = model.track;
 				albumTrackView.clicked();
 			}
 		}
@@ -155,7 +159,7 @@ ListView {
 				Layout.preferredWidth: 70
 				Layout.minimumHeight: parent.height
 				Text {
-					text: "5:49"
+					text: Comp.getDisplayTime(model.length)
 					font.pixelSize: 16
 					anchors.right: parent.right
 					anchors.rightMargin: 10

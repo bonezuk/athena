@@ -22,6 +22,8 @@ class OmegaAudioBusInterface : public OmegaAudioInterface, public IPCInterfaceBa
 		virtual void playFileWithTime(const QString& fileName, const common::TimeStamp& start,const common::TimeStamp& length, bool isNext);
 		virtual void play();
 		virtual void pause();
+		virtual void stop();
+		virtual void seek(const common::TimeStamp& t);
 		
 	private:
 		virtual void printError(const char *strR, const char *strE) const;

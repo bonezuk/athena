@@ -26,9 +26,11 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 {
 	public:
 		Q_OBJECT
-		Q_PROPERTY(quint32 timeInSeconds READ getTimeInSeconds NOTIFY onTimeChanged)
+		Q_PROPERTY(quint32 timeInSeconds READ getTimeInSeconds NOTIFY onTimeInSecondsChanged)
+		Q_PROPERTY(qreal time READ getPlaybackTime NOTIFY onTimeChanged)
 		Q_PROPERTY(qint32 index READ getIndex NOTIFY onIndexChanged)
 		Q_PROPERTY(qint32 state READ getState NOTIFY onStateChanged)
+		Q_PROPERTY(bool isPlayback READ getIsPlayback NOTIFY onIsPlaybackChanged)
 
 	public:
 		enum PlayState
@@ -50,6 +52,8 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 		virtual const common::TimeStamp& getTime() const;
 		
 		virtual void setTime(quint64 tS);
+		virtual qreal getPlaybackTime() const;
+		virtual bool getIsPlayback() const;
 		virtual void setNextItem(tuint64 itemId);
 		
 		virtual void onAudioStart(const QString& fileName);
@@ -58,11 +62,15 @@ class PLAYERCOMMON_EXPORT PlaybackStateController : public QObject
 		virtual void onAudioStop();
 
 		virtual void resumeOrPausePlayback();
-
+		
+		Q_INVOKABLE void onSeek(qreal seekTime);
+		
 	signals:
+		void onTimeInSecondsChanged();
 		void onTimeChanged();
 		void onIndexChanged();
 		void onStateChanged();
+		void onIsPlaybackChanged();
 		
 	protected:
 		QSharedPointer<OmegaAudioInterface> m_pAudioInterface;

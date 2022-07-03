@@ -36,7 +36,8 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 			ComposerRole,
 			OriginalArtistRole,
 			CopyrightRole,
-			EncoderRole
+			EncoderRole,
+			LengthRole
 		};
 		Q_ENUM(TrackRoles)
 		
@@ -60,6 +61,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		Q_INVOKABLE void onPlayPausePressed();
 		Q_INVOKABLE void playItemAtIndex(int index);
 		Q_INVOKABLE QVariant dataAtIndex(int row, const QString& roleName);
+		Q_INVOKABLE void remove(int index);
 		
 		virtual QSharedPointer<PlaybackStateController>& playbackState();
 		virtual void playNextItem(bool isNext);
@@ -85,6 +87,8 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		virtual QString titleOfItem(const QPair<track::db::DBInfoSPtr,tint>& item) const;
 		virtual void playItemAtIndexWithNext(int index, bool isNext);
 		virtual int sizeOfPlaylist() const;
+		
+		virtual void removeAtIndex(int index);
 		
 		virtual void endInsertRows();
 		virtual void endRemoveRows();

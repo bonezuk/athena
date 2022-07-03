@@ -13,6 +13,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QFile>
+#include <QQmlDebuggingEnabler>
 
 using namespace omega;
 
@@ -59,6 +60,7 @@ void releaseCodecs()
 int main(int argc, char **argv)
 {
 	QGuiApplication app(argc, argv);
+	QQmlDebuggingEnabler enabler;
 	QQmlApplicationEngine engine;
 	
 	setupPlatform();
@@ -105,7 +107,6 @@ int main(int argc, char **argv)
 							PlayerUISettings settings;
 							engine.rootContext()->setContextProperty("settings", &settings);
 			
-							QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pModel.data(), SLOT(appendTrack(const QString&)));
 							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pModel.data(), SLOT(deleteTrack(const QString&)));
 
 							QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel.data(), SLOT(appendTrack(const QString&)));
@@ -113,7 +114,9 @@ int main(int argc, char **argv)
 
 							QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel->trackModel(), SLOT(appendTrack(const QString&)));
 							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pAlbumModel->trackModel(), SLOT(deleteTrack(const QString&)));
-		
+							
+							QObject::connect(pAlbumModel->trackModel(), SIGNAL(appendToPlaylist(const QString&)), pModel.data(), SLOT(appendTrack(const QString&)));
+							
 							engine.load(":/Resources/frontpage1.qml");
 							app.exec();
 						}

@@ -172,6 +172,10 @@ QVariant PlayListModel::dataAtIndex(int row, const QString& roleName)
 	{
 		return data(idx, EncoderRole);
 	}
+	else if(roleName == "length")
+	{
+		return data(idx, LengthRole);
+	}
 	return QVariant();
 }
 
@@ -250,6 +254,10 @@ QVariant PlayListModel::data(const QModelIndex& index, int role) const
 				{
 					return QVariant(pInfo->encoder());
 				}
+				else if(role == LengthRole)
+				{
+					return QVariant(static_cast<tfloat64>(pInfo->length()));
+				}
 			}
 			else
 			{
@@ -296,6 +304,7 @@ QHash<int,QByteArray> PlayListModel::roleNames() const
 	h[OriginalArtistRole] = "originalArtist";
 	h[CopyrightRole] = "copyright";
 	h[EncoderRole] = "encoder";
+	h[LengthRole] = "length";
 	return h;
 }
 
@@ -425,6 +434,62 @@ void PlayListModel::playNextItem(bool isNext)
 		{
 			m_pPlaybackState->onAudioStop();
 		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::remove(int index)
+{
+	removeAtIndex(index);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::removeAtIndex(int index)
+{
+	if(index >= 0 && index < m_playList.size())
+	{
+		tuint64 idxId = m_playList.at(index);
+	
+		if(idxId == m_pPlaybackState->getCurrentId())
+		{
+			int nextIndex = index + 1;
+			if(nextIndex < m_playList.size())
+			{
+				playItemAtIndexWithNext(nextIndex, false);
+			}
+			else
+			{
+				m_pAudioInterface->stop();
+			}
+		}
+	
+		beginRemoveRows(QModelIndex(), index, index);
+		
+		QMap<tuint64, QPair<track::db::DBInfoSPtr,tint> >::iterator ppJ = m_items.find(idxId);
+		if(ppJ != m_items.end())
+		{
+			m_items.erase(ppJ);
+		}
+		QMap<tuint64, tint>::iterator ppK = m_idToIndexMap.find(idxId);
+		if(ppK != m_idToIndexMap.end())
+		{
+			m_idToIndexMap.erase(ppK);
+		}
+		m_playList.removeAt(index);
+
+		while(index < m_playList.size())
+		{
+			ppK = m_idToIndexMap.find(m_playList.at(index));
+			if(ppK != m_idToIndexMap.end())
+			{
+				ppK.value() -= 1;
+			}
+			index++;
+		}
+		
+		endRemoveRows();
 	}
 }
 

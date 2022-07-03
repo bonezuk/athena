@@ -130,6 +130,20 @@ void OmegaAudioIOInterface::pause()
 
 //-------------------------------------------------------------------------------------------
 
+void OmegaAudioIOInterface::seek(const common::TimeStamp& t)
+{
+	m_audio->seek(t);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void OmegaAudioIOInterface::stop()
+{
+	m_audio->stop();
+}
+
+//-------------------------------------------------------------------------------------------
+
 void OmegaAudioIOInterface::onAudioStart(const QString& name)
 {
 	common::Log::g_Log << "onAudioStart - " << name << common::c_endl;

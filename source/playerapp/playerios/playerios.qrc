@@ -7,6 +7,9 @@
 		<file>Resources/components/PlayButton.qml</file>
 		<file>Resources/components/AlbumView.qml</file>
 		<file>Resources/components/AlbumTrackView.qml</file>
+        <file>Resources/components/PlayListView.qml</file>
+        <file>Resources/components/PLNotifyInfo.qml</file>
+        <file>Resources/components/PlaybackSlider.qml</file>
         <file>Resources/images/album.png</file>
         <file>Resources/images/album_disable.png</file>
         <file>Resources/images/gears.png</file>
@@ -42,5 +45,8 @@
         <file>Resources/images/pc_play_hover.png</file>
         <file>Resources/images/pc_play_normal.png</file>
         <file>Resources/images/pc_play_press.png</file>
+        <file>Resources/images/slide_button_push.png</file>
+        <file>Resources/images/slide_button_select.png</file>
+        <file>Resources/images/slide_button.png</file>
     </qresource>
 </RCC>

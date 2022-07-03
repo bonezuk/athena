@@ -9,14 +9,17 @@ ListView {
 	id: playListView
 	
 	property int currentIndex: 0
+	property var playbackState
 	
 	signal clicked()
-	
+		
 	delegate: SwipeDelegate {
 		id: playListItem
 		
-		width: parent.width
-		height: 50
+		property bool isDeleted: false
+		
+		implicitWidth: parent.width
+		implicitHeight: 50
 
         swipe.right: Label {
             id: deleteLabel
@@ -27,37 +30,48 @@ ListView {
             height: parent.height
             anchors.right: parent.right
 			
-			SwipeDelegate.onClicked: playListView.model.remove(index)
+			SwipeDelegate.onClicked: {
+				isDeleted = true;
+				playListView.model.remove(index);
+			}
 			
             background: Rectangle {
                 color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
             }
         }
 
-        ListView.onRemove: SequentialAnimation {
+    	SequentialAnimation {
+    		id: animOnDelete
+    		
             PropertyAction {
-                target: swipeDelegate
+                target: playListItem
                 property: "ListView.delayRemove"
                 value: true
             }
             NumberAnimation {
-                target: swipeDelegate
+                target: playListItem
                 property: "height"
                 to: 0
                 easing.type: Easing.InOutQuad
             }
             PropertyAction {
-                target: swipeDelegate
+                target: playListItem
                 property: "ListView.delayRemove"
                 value: false
             }
         }
+        
+        //ListView.onRemove: animOnDelete.start()
 
 		TapHandler {
 			id: tapHandler
-			onTapped: {
-				playListView.currentIndex = index;
-				playListView.clicked();
+			onDoubleTapped: {
+				console.log("dd = " + index);
+				if(!isDeleted)
+				{				
+					playListView.currentIndex = index;
+					playListView.clicked();
+				}
 			}	
 		}
 		        
@@ -67,11 +81,29 @@ ListView {
 			gradient: Gradient {
 				GradientStop {
 					position: 0
-					color: tapHandler.pressed ? "#e0e0e0" : "#fff"
+					color: {
+						if(index === playbackState.index)
+						{
+							tapHandler.pressed ? "#e0e0e0" : "#d8ffed"
+						}
+						else
+						{
+							tapHandler.pressed ? "#e0e0e0" : "#fff"
+						}
+					}
 				}
 				GradientStop {
 					position: 1
-					color: tapHandler.pressed ? "#e0e0e0" : "#f5f5f5"
+					color: {
+						if(index === playbackState.index)
+						{
+							tapHandler.pressed ? "#e0e0e0" : "#82ffca"
+						}
+						else
+						{
+							tapHandler.pressed ? "#e0e0e0" : "#f5f5f5"
+						}
+					}
 				}
 			}
 
@@ -100,7 +132,7 @@ ListView {
 				
 					ColumnLayout {
 						Text {
-							text: model.track
+							text: model.title
 							font.pixelSize: 18
 							horizontalAlignment: Text.AlignLeft
 							verticalAlignment: Text.AlignVCenter
@@ -121,7 +153,7 @@ ListView {
 					Layout.minimumHeight: parent.height
 				
 					Text {
-						text: "98:12"
+						text: Comp.getDisplayTime(model.length)
 						font.pixelSize: 18
 						anchors.right: parent.right
 						anchors.rightMargin: 10

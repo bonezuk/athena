@@ -161,6 +161,14 @@ bool PlayListIOSModel::initialise()
 
 //-------------------------------------------------------------------------------------------
 
+void PlayListIOSModel::removeAtIndex(int index)
+{
+	PlayListModel::removeAtIndex(index);
+	savePlaylistToDB();
+}
+
+//-------------------------------------------------------------------------------------------
+
 void PlayListIOSModel::appendTrack(const QString& fileName)
 {
 	if(common::DiskOps::exist(fileName))

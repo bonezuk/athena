@@ -49,6 +49,11 @@ class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QAbstractListModel
 		virtual QHash<int,QByteArray> roleNames() const;
 		
 		virtual qint32 getSizeOfModel() const;
+		
+		Q_INVOKABLE void appendTrackToPlaylist(int index);
+		
+	signals:
+		void appendToPlaylist(const QString& fileName);
 
 	public slots:
 		virtual void appendTrack(const QString& fileName);

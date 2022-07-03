@@ -9,6 +9,8 @@ ListView {
 	id: albumView
 	
 	property int currentIndex: 0
+	property string currentAlbumName: ""
+	property string currentArtistName: ""
 	
 	signal clicked()
 	
@@ -71,6 +73,8 @@ ListView {
 			id: tapHandler
 			onTapped: {
 				albumView.currentIndex = index;
+				currentAlbumName = model.album;
+				currentArtistName = model.artist;
 				albumView.clicked();
 			}	
 		}

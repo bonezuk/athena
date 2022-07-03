@@ -88,3 +88,64 @@ function getPlayTimeDigitImageName(digitType, timeInSeconds)
 }
 
 //-------------------------------------------------------------------------------------------
+
+function getDisplayTime(timeStamp)
+{
+	let dstime = "";
+
+	let hour = parseInt(timeStamp / 3600);
+	timeStamp -= hour * 3600;
+	let mins = parseInt(timeStamp / 60);
+	timeStamp -= mins * 60;
+	let secs = parseInt(timeStamp);
+	
+	
+	if(hour > 0)
+	{
+		dstime += hour.toString() + ":";
+	}
+	
+	if(mins > 0)
+	{
+		if(mins > 10)
+		{
+			let uMin = parseInt(mins / 10);
+			dstime += uMin.toString();
+			let lMin = parseInt(mins % 10);
+			dstime += lMin.toString();
+		}
+		else
+		{
+			if(hour > 0)
+			{
+				dstime += "0";
+			}
+			dstime += mins.toString();
+		}
+		dstime += ":";
+	}
+	else if(hour > 0)
+	{
+		dstime += "00:";
+	}
+	else
+	{
+		dstime += "0:";
+	}
+	
+	if(secs > 10)
+	{
+		let uSec = parseInt(secs / 10);
+		dstime += uSec.toString();
+		let lSec = parseInt(secs % 10);
+		dstime += lSec.toString();
+	}
+	else
+	{
+		dstime += "0" + secs.toString();
+	}
+	return dstime;
+}
+
+//-------------------------------------------------------------------------------------------
+

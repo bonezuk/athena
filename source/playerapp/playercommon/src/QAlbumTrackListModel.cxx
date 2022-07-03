@@ -168,5 +168,19 @@ void QAlbumTrackListModel::deleteTrack(const QString& fileName)
 }
 
 //-------------------------------------------------------------------------------------------
+
+void QAlbumTrackListModel::appendTrackToPlaylist(int index)
+{
+	if(!m_pTracks.isNull())
+	{
+		QString fileName = m_pTracks->data(index, track::model::AlbumTrackModel::e_fileName).toString();
+		if(!fileName.isEmpty() && common::DiskOps::exist(fileName))
+		{
+			emit appendToPlaylist(fileName);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -270,7 +270,7 @@ QVariant AlbumTrackModel::data(int rowIndex, int columnIndex) const
 				v = QVariant(r.fileName());
 				break;
 			case e_length:
-				v = QVariant(static_cast<tuint64>(r.length()));
+				v = QVariant(static_cast<tfloat64>(r.length()));
 				break;
 			case e_artist:
 				v = QVariant(r.artist());

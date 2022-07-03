@@ -134,6 +134,20 @@ void PlayerAudioIOInterface::pause()
 
 //-------------------------------------------------------------------------------------------
 
+void PlayerAudioIOInterface::stop()
+{
+	m_audio->stop();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerAudioIOInterface::seek(const common::TimeStamp& t)
+{
+	m_audio->seek(t);
+}
+
+//-------------------------------------------------------------------------------------------
+
 void PlayerAudioIOInterface::onAudioStart(const QString& name)
 {
 	m_pPLInterface->onAudioStart(name);

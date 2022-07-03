@@ -32,6 +32,8 @@ class OmegaAudioIOInterface : public OmegaAudioInterface
 		virtual void playFileWithTime(const QString& fileName, const common::TimeStamp& start,const common::TimeStamp& length, bool isNext);
 		virtual void play();
 		virtual void pause();
+		virtual void stop();
+		virtual void seek(const common::TimeStamp& t);
 
 		virtual bool init();
 		virtual void quitDaemon();

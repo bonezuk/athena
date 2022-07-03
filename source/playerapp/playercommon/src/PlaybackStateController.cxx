@@ -54,8 +54,17 @@ void PlaybackStateController::setTime(quint64 tS)
 	m_playbackTime = tS;
 	if(lS != m_playbackTime.secondsTotal())
 	{
-		emit onTimeChanged();
+		emit onTimeInSecondsChanged();
 	}
+	emit onTimeChanged();
+}
+
+//-------------------------------------------------------------------------------------------
+
+qreal PlaybackStateController::getPlaybackTime() const
+{
+	tfloat64 t = static_cast<tfloat64>(m_playbackTime);
+	return static_cast<qreal>(t);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -101,6 +110,13 @@ tuint64 PlaybackStateController::getCurrentId() const
 
 //-------------------------------------------------------------------------------------------
 
+bool PlaybackStateController::getIsPlayback() const
+{
+	return (m_currentId != 0) ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
+
 QString PlaybackStateController::fileNameFromId(tuint64 id) const
 {
 	QString fileName;
@@ -121,6 +137,7 @@ QString PlaybackStateController::fileNameFromId(tuint64 id) const
 void PlaybackStateController::onAudioStart(const QString& fileName)
 {
 	int i;
+	tuint64 oldId = m_currentId;
 	bool emitFlag = false;
 
 	if(!fileName.isEmpty())
@@ -163,6 +180,10 @@ void PlaybackStateController::onAudioStart(const QString& fileName)
 			m_pbState = Play;
 			emit onStateChanged();
 		}
+		if(oldId == 0 && m_currentId != 0)
+		{
+			emit onIsPlaybackChanged();
+		}
 		emit onIndexChanged();
 	}
 }
@@ -173,9 +194,11 @@ void PlaybackStateController::onAudioStop()
 {
 	m_currentId = 0;
 	m_nextIdList.clear();
+	emit onIsPlaybackChanged();
 
 	m_playbackTime = 0;
 	emit onTimeChanged();
+	emit onTimeInSecondsChanged();
 
 	if(m_pbState == Play)
 	{
@@ -199,6 +222,17 @@ void PlaybackStateController::resumeOrPausePlayback()
 		{
 			m_pAudioInterface->play();
 		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlaybackStateController::onSeek(qreal seekTime)
+{
+	if(m_pAudioInterface != 0)
+	{
+		common::TimeStamp tS = seekTime;
+		m_pAudioInterface->seek(tS);
 	}
 }
 

@@ -36,6 +36,7 @@ class PlayListIOSModel : public PlayListModel
 		virtual void appendPlaylistTuple(const track::db::PlaylistTuple& t);
 		virtual bool loadPlaylistFromDB();
 		virtual void savePlaylistToDB();
+		virtual void removeAtIndex(int index);
 };
 
 //-------------------------------------------------------------------------------------------
