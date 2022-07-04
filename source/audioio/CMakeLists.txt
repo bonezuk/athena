@@ -57,6 +57,7 @@ elseif (OMEGA_MACOSX)
 		inc/AbstractAudioHardwareBuffer.h
 		inc/AOBase.h
 		inc/AOCoreAudio.h
+		inc/AOCoreAudioMacOS.h
 		inc/AudioInfo.h
 		inc/AudioIODLL.h
 		inc/AOQueryDevice.h
@@ -75,6 +76,7 @@ elseif (OMEGA_MACOSX)
 		src/AbstractAudioHardwareBuffer.cxx
 		src/AOBase.cxx
 		src/AOCoreAudio.mm
+		src/AOCoreAudioMacOS.mm
 		src/AudioHardwareBufferCoreAudio.cxx
 		src/AudioInfo.cxx
 		src/AOQueryDevice.cxx

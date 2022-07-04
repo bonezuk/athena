@@ -68,6 +68,8 @@ bool PlayerIOSTrackDBManager::open()
 	track::db::TrackDB *trackDB;
 	bool res = false;
 	
+	//common::DiskOps::remove(trackDBPath());
+
 	trackDB = track::db::TrackDB::instance(trackDBPath());
 	if(trackDB != 0)
 	{

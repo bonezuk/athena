@@ -138,6 +138,10 @@ void QAlbumTrackListModel::appendTrack(const QString& fileName)
 				m_pTracks->addDBInfo(idx.first, idx.second, pInfo);
 				endInsertRows();
 			}
+			if(!indexes.isEmpty())
+			{
+				submit();
+			}
 		}
 	}
 }
@@ -162,6 +166,10 @@ void QAlbumTrackListModel::deleteTrack(const QString& fileName)
 			if(m_pTracks->size() == 0)
 			{
 				m_pTracks.clear();
+			}
+			if(!indexes.isEmpty())
+			{
+				submit();
 			}
 		}
 	}

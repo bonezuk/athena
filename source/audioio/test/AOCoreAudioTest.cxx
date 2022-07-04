@@ -3,7 +3,7 @@
 
 #include <CoreAudio/CoreAudioTypes.h>
 
-#include "audioio/inc/AOCoreAudio.h"
+#include "audioio/inc/AOCoreAudioMacOS.h"
 #include "engine/test/RDataMock.h"
 #include "audioio/test/AudioHardwareBufferTester.h"
 #include "audioio/test/CoreAudioMockIF.h"
@@ -16,7 +16,7 @@ using namespace testing;
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioCreateIOTimeStamp : public AOCoreAudio
+class AOCoreAudioCreateIOTimeStamp : public AOCoreAudioMacOS
 {
 	public:
 		IOTimeStamp testCreateIOTimeStamp(const AudioTimeStamp *sysTime) const;
@@ -31,7 +31,7 @@ IOTimeStamp AOCoreAudioCreateIOTimeStamp::testCreateIOTimeStamp(const AudioTimeS
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,createIOTimeStamp)
+TEST(AOCoreAudioMacOS,createIOTimeStamp)
 {
     common::TimeStamp tStamp = common::TimeStamp::reference();
 	
@@ -48,7 +48,7 @@ TEST(AOCoreAudio,createIOTimeStamp)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioWriteToAudioOutputBufferFromPartData : public AOCoreAudio
+class AOCoreAudioWriteToAudioOutputBufferFromPartData : public AOCoreAudioMacOS
 {
 	public:
 		void testWriteToAudioOutputBufferFromPartData(AbstractAudioHardwareBuffer *pBuffer,const engine::RData *data,
@@ -102,7 +102,7 @@ void testWriteToAudioOutputBufferFromPartData(const sample_t *inputData,
 
 //-------------------------------------------------------------------------------------------                                              
                                               
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEnd1Channel)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEnd1Channel)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -169,7 +169,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOutputStartToEnd1Channel)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOutputStartToEnd1Channel)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 5;
@@ -226,7 +226,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOut
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputStartToEnd1Channel)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputStartToEnd1Channel)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 5;
@@ -283,7 +283,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputSt
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutputStartToEnd1Channel)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutputStartToEnd1Channel)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 3;
@@ -336,7 +336,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutpu
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWith2ChannelsLeftToLeft)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWith2ChannelsLeftToLeft)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -403,7 +403,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWith2ChannelsLeftToRight)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWith2ChannelsLeftToRight)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -470,7 +470,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWith2ChannelsRightToLeft)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWith2ChannelsRightToLeft)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -537,7 +537,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWith2ChannelsRightToRight)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWith2ChannelsRightToRight)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -604,7 +604,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToMiddle2ChannelLeftToLeft)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToMiddle2ChannelLeftToLeft)
 {
 	static const tint c_inputSize = 5;
 	static const tint c_outputSize = 10;
@@ -661,7 +661,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOutputStartToMiddle2ChannelLeftToRight)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOutputStartToMiddle2ChannelLeftToRight)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -728,7 +728,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOut
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputStartToMiddle2ChannelRightToLeft)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputStartToMiddle2ChannelRightToLeft)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -795,7 +795,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputSt
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutputStartToMiddle2ChannelRightToRight)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutputStartToMiddle2ChannelRightToRight)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -863,7 +863,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutpu
 //-------------------------------------------------------------------------------------------
 
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWithInput3ChannelsOutput4ChannelsMap1To2)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWithInput3ChannelsOutput4ChannelsMap1To2)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -930,7 +930,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputInMiddle)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputInMiddle)
 {
 	static const tint c_inputSize = 5;
 	static const tint c_outputSize = 10;
@@ -987,7 +987,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOutputInMiddle)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOutputInMiddle)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -1054,7 +1054,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOut
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputInMiddle)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputInMiddle)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -1121,7 +1121,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputIn
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutputInMiddle)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutputInMiddle)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -1188,7 +1188,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutpu
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWithInput8ChannelsOutput2ChannelsMap7To1)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputStartToEndWithInput8ChannelsOutput2ChannelsMap7To1)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -1255,7 +1255,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputMiddleToEnd)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutputMiddleToEnd)
 {
 	static const tint c_inputSize = 3;
 	static const tint c_outputSize = 10;
@@ -1308,7 +1308,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToEndToOutput
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOutputMiddleToEnd)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOutputMiddleToEnd)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -1375,7 +1375,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputStartToMiddleToOut
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputMiddleToEnd)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputMiddleToEnd)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -1442,7 +1442,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputInMiddleToOutputMi
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutputMiddleToEnd)
+TEST(AOCoreAudioMacOS,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutputMiddleToEnd)
 {
 	static const tint c_inputSize = 10;
 	static const tint c_outputSize = 10;
@@ -1509,7 +1509,7 @@ TEST(AOCoreAudio,writeToAudioOutputBufferFromPartDataFromInputMiddleToEndToOutpu
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioSetupPropertyRunLoopTest : public AOCoreAudio
+class AOCoreAudioSetupPropertyRunLoopTest : public AOCoreAudioMacOS
 {
 	public:
 		AOCoreAudioSetupPropertyRunLoopTest(CFRunLoopRef expectRunLoop,AudioObjectPropertyAddress property,OSStatus err);
@@ -1524,7 +1524,7 @@ class AOCoreAudioSetupPropertyRunLoopTest : public AOCoreAudio
 
 //-------------------------------------------------------------------------------------------
 
-AOCoreAudioSetupPropertyRunLoopTest::AOCoreAudioSetupPropertyRunLoopTest(CFRunLoopRef expectRunLoop,AudioObjectPropertyAddress property,OSStatus err) : AOCoreAudio()
+AOCoreAudioSetupPropertyRunLoopTest::AOCoreAudioSetupPropertyRunLoopTest(CFRunLoopRef expectRunLoop,AudioObjectPropertyAddress property,OSStatus err) : AOCoreAudioMacOS()
 {
 	m_err = err;
 	m_expectRunLoop = expectRunLoop;
@@ -1550,7 +1550,7 @@ bool AOCoreAudioSetupPropertyRunLoopTest::testSetupPropertyRunLoop()
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setupPropertyRunLoopAndSetSuccessfully)
+TEST(AOCoreAudioMacOS,setupPropertyRunLoopAndSetSuccessfully)
 {
 	CFRunLoopRef expectRunLoop = 0;
 
@@ -1574,7 +1574,7 @@ TEST(AOCoreAudio,setupPropertyRunLoopAndSetSuccessfully)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setupPropertyRunLoopAndFailsToSet)
+TEST(AOCoreAudioMacOS,setupPropertyRunLoopAndFailsToSet)
 {
 	OSStatus err = kAudioHardwareNotRunningError;
 	CFRunLoopRef expectRunLoop = 0;
@@ -1600,7 +1600,7 @@ TEST(AOCoreAudio,setupPropertyRunLoopAndFailsToSet)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioUseExclusiveModeIfAvailableTest : public AOCoreAudio
+class AOCoreAudioUseExclusiveModeIfAvailableTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD3(printErrorOS,void(const tchar *strR,const tchar *strE,OSStatus err));
@@ -1624,7 +1624,7 @@ ACTION_P(SetProcessIDForArguement,value) { *static_cast<pid_t*>(arg5) = value; }
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,useExclusiveModeIfAvailableWhenDeviceCannotSupportExecutiveMode)
+TEST(AOCoreAudioMacOS,useExclusiveModeIfAvailableWhenDeviceCannotSupportExecutiveMode)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1642,7 +1642,7 @@ TEST(AOCoreAudio,useExclusiveModeIfAvailableWhenDeviceCannotSupportExecutiveMode
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,useExclusiveModeIfAvailableWhenErrorQueryingIfHogModeCanBeSet)
+TEST(AOCoreAudioMacOS,useExclusiveModeIfAvailableWhenErrorQueryingIfHogModeCanBeSet)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1663,7 +1663,7 @@ TEST(AOCoreAudio,useExclusiveModeIfAvailableWhenErrorQueryingIfHogModeCanBeSet)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,useExclusiveModeIfAvailableWhenHogModeCannotBeSet)
+TEST(AOCoreAudioMacOS,useExclusiveModeIfAvailableWhenHogModeCannotBeSet)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1683,7 +1683,7 @@ TEST(AOCoreAudio,useExclusiveModeIfAvailableWhenHogModeCannotBeSet)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,useExclusiveModeIfAvailableErrorFindingProcessWithHogMode)
+TEST(AOCoreAudioMacOS,useExclusiveModeIfAvailableErrorFindingProcessWithHogMode)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1706,7 +1706,7 @@ TEST(AOCoreAudio,useExclusiveModeIfAvailableErrorFindingProcessWithHogMode)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,useExclusiveModeIfAvailableGivenAvailableAndSuccessInGettingHogMode)
+TEST(AOCoreAudioMacOS,useExclusiveModeIfAvailableGivenAvailableAndSuccessInGettingHogMode)
 {
 	pid_t eProcessID = -1;
 	pid_t cProcessID = 4;
@@ -1734,7 +1734,7 @@ TEST(AOCoreAudio,useExclusiveModeIfAvailableGivenAvailableAndSuccessInGettingHog
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,useExclusiveModeIfAvailableGivenAvailableAndFailInGettingHogMode)
+TEST(AOCoreAudioMacOS,useExclusiveModeIfAvailableGivenAvailableAndFailInGettingHogMode)
 {
 	pid_t eProcessID = -1;
 	pid_t cProcessID = 4;
@@ -1763,7 +1763,7 @@ TEST(AOCoreAudio,useExclusiveModeIfAvailableGivenAvailableAndFailInGettingHogMod
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,useExclusiveModeIfAvailableGivenExclusiveAccessAlreadyHeldByCallingProcess)
+TEST(AOCoreAudioMacOS,useExclusiveModeIfAvailableGivenExclusiveAccessAlreadyHeldByCallingProcess)
 {
 	pid_t eProcessID = 4;
 	pid_t cProcessID = 4;
@@ -1789,7 +1789,7 @@ TEST(AOCoreAudio,useExclusiveModeIfAvailableGivenExclusiveAccessAlreadyHeldByCal
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,useExclusiveModeIfAvailableGivenExclusiveAccessAlreadyHeldButNotByCallingProcess)
+TEST(AOCoreAudioMacOS,useExclusiveModeIfAvailableGivenExclusiveAccessAlreadyHeldButNotByCallingProcess)
 {
 	pid_t eProcessID = 2;
 	pid_t cProcessID = 4;
@@ -1815,7 +1815,7 @@ TEST(AOCoreAudio,useExclusiveModeIfAvailableGivenExclusiveAccessAlreadyHeldButNo
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioDisableMixingIfPossible : public AOCoreAudio
+class AOCoreAudioDisableMixingIfPossible : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD3(printErrorOS,void(const tchar *strR,const tchar *strE,OSStatus err));
@@ -1840,7 +1840,7 @@ ACTION_P(SetMixingEnabledForArgument,value) { *static_cast<UInt32 *>(arg5) = val
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,disableMixingIfPossibleWhenDeviceHasNotGotMixingProperty)
+TEST(AOCoreAudioMacOS,disableMixingIfPossibleWhenDeviceHasNotGotMixingProperty)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1858,7 +1858,7 @@ TEST(AOCoreAudio,disableMixingIfPossibleWhenDeviceHasNotGotMixingProperty)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,disableMixingIfPossibleFailToGetPropertyWriteable)
+TEST(AOCoreAudioMacOS,disableMixingIfPossibleFailToGetPropertyWriteable)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1879,7 +1879,7 @@ TEST(AOCoreAudio,disableMixingIfPossibleFailToGetPropertyWriteable)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,disableMixingIfPossibleMixingPropertyNotWriteable)
+TEST(AOCoreAudioMacOS,disableMixingIfPossibleMixingPropertyNotWriteable)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1899,7 +1899,7 @@ TEST(AOCoreAudio,disableMixingIfPossibleMixingPropertyNotWriteable)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,disableMixingIfPossibleFailToGetPropertySize)
+TEST(AOCoreAudioMacOS,disableMixingIfPossibleFailToGetPropertySize)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1922,7 +1922,7 @@ TEST(AOCoreAudio,disableMixingIfPossibleFailToGetPropertySize)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,disableMixingIfPossibleFailToGetIfEnabled)
+TEST(AOCoreAudioMacOS,disableMixingIfPossibleFailToGetIfEnabled)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1947,7 +1947,7 @@ TEST(AOCoreAudio,disableMixingIfPossibleFailToGetIfEnabled)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,disableMixingIfPossibleMixingAlreadyDisabled)
+TEST(AOCoreAudioMacOS,disableMixingIfPossibleMixingAlreadyDisabled)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1971,7 +1971,7 @@ TEST(AOCoreAudio,disableMixingIfPossibleMixingAlreadyDisabled)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,disableMixingIfPossibleMixingEnabledAndFailureDisabling)
+TEST(AOCoreAudioMacOS,disableMixingIfPossibleMixingEnabledAndFailureDisabling)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -1998,7 +1998,7 @@ TEST(AOCoreAudio,disableMixingIfPossibleMixingEnabledAndFailureDisabling)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,disableMixingIfPossibleMixingEnabledAndSuccessDisabling)
+TEST(AOCoreAudioMacOS,disableMixingIfPossibleMixingEnabledAndSuccessDisabling)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2024,7 +2024,7 @@ TEST(AOCoreAudio,disableMixingIfPossibleMixingEnabledAndSuccessDisabling)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioReEnableMixingTest : public AOCoreAudio
+class AOCoreAudioReEnableMixingTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD3(printErrorOS,void(const tchar *strR,const tchar *strE,OSStatus err));
@@ -2040,7 +2040,7 @@ void AOCoreAudioReEnableMixingTest::testReEnableMixing(AudioDeviceID devID)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,reEnableMixingDeviceDoesNotMixing)
+TEST(AOCoreAudioMacOS,reEnableMixingDeviceDoesNotMixing)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2058,7 +2058,7 @@ TEST(AOCoreAudio,reEnableMixingDeviceDoesNotMixing)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,reEnableMixingFailToQueryIfPropertyCanBeSet)
+TEST(AOCoreAudioMacOS,reEnableMixingFailToQueryIfPropertyCanBeSet)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2079,7 +2079,7 @@ TEST(AOCoreAudio,reEnableMixingFailToQueryIfPropertyCanBeSet)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,reEnableMixingPropertyCannotBeWrittenTo)
+TEST(AOCoreAudioMacOS,reEnableMixingPropertyCannotBeWrittenTo)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2099,7 +2099,7 @@ TEST(AOCoreAudio,reEnableMixingPropertyCannotBeWrittenTo)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,reEnableMixingFailToQuerySizeOfMixingProperty)
+TEST(AOCoreAudioMacOS,reEnableMixingFailToQuerySizeOfMixingProperty)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2122,7 +2122,7 @@ TEST(AOCoreAudio,reEnableMixingFailToQuerySizeOfMixingProperty)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,reEnableMixingSuccessRenablingMixing)
+TEST(AOCoreAudioMacOS,reEnableMixingSuccessRenablingMixing)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2146,7 +2146,7 @@ TEST(AOCoreAudio,reEnableMixingSuccessRenablingMixing)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,reEnableMixingFailsToRenableMixing)
+TEST(AOCoreAudioMacOS,reEnableMixingFailsToRenableMixing)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2171,7 +2171,7 @@ TEST(AOCoreAudio,reEnableMixingFailsToRenableMixing)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioGetAudioStreamsForDeviceTest : public AOCoreAudio
+class AOCoreAudioGetAudioStreamsForDeviceTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD2(printError,void(const tchar *strR,const tchar *strE));
@@ -2198,7 +2198,7 @@ ACTION_P3(Set3StreamIDsForArgument,valueA,valueB,valueC) {
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamsForDeviceFailToGetNumberOfStreams)
+TEST(AOCoreAudioMacOS,getAudioStreamsForDeviceFailToGetNumberOfStreams)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2220,7 +2220,7 @@ TEST(AOCoreAudio,getAudioStreamsForDeviceFailToGetNumberOfStreams)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamsForDeviceNoStreams)
+TEST(AOCoreAudioMacOS,getAudioStreamsForDeviceNoStreams)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2242,7 +2242,7 @@ TEST(AOCoreAudio,getAudioStreamsForDeviceNoStreams)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamsForDeviceFailToGetStreamIDs)
+TEST(AOCoreAudioMacOS,getAudioStreamsForDeviceFailToGetStreamIDs)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -2266,7 +2266,7 @@ TEST(AOCoreAudio,getAudioStreamsForDeviceFailToGetStreamIDs)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamsForDeviceSuccessWith1Stream)
+TEST(AOCoreAudioMacOS,getAudioStreamsForDeviceSuccessWith1Stream)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	AudioStreamID streamA = static_cast<AudioStreamID>(400);
@@ -2291,7 +2291,7 @@ TEST(AOCoreAudio,getAudioStreamsForDeviceSuccessWith1Stream)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamsForDeviceSuccessWith3Streams)
+TEST(AOCoreAudioMacOS,getAudioStreamsForDeviceSuccessWith3Streams)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	AudioStreamID streamA = static_cast<AudioStreamID>(400);
@@ -2320,7 +2320,7 @@ TEST(AOCoreAudio,getAudioStreamsForDeviceSuccessWith3Streams)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioGetAudioStreamDescriptionsTest : public AOCoreAudio
+class AOCoreAudioGetAudioStreamDescriptionsTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD2(printError,void(const tchar *strR,const tchar *strE));
@@ -2347,7 +2347,7 @@ ACTION_P3(Set3AudioDescriptionsForArgument,valueA,valueB,valueC) {
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamDescriptionsFailedToGetNumberOfFormats)
+TEST(AOCoreAudioMacOS,getAudioStreamDescriptionsFailedToGetNumberOfFormats)
 {
 	AudioStreamID streamID = static_cast<AudioStreamID>(400);
 	
@@ -2369,7 +2369,7 @@ TEST(AOCoreAudio,getAudioStreamDescriptionsFailedToGetNumberOfFormats)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamDescriptionsNoFormatsForStream)
+TEST(AOCoreAudioMacOS,getAudioStreamDescriptionsNoFormatsForStream)
 {
 	AudioStreamID streamID = static_cast<AudioStreamID>(400);
 	
@@ -2391,7 +2391,7 @@ TEST(AOCoreAudio,getAudioStreamDescriptionsNoFormatsForStream)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamDescriptionsFailedToGetFormats)
+TEST(AOCoreAudioMacOS,getAudioStreamDescriptionsFailedToGetFormats)
 {
 	AudioStreamID streamID = static_cast<AudioStreamID>(400);
 	
@@ -2415,7 +2415,7 @@ TEST(AOCoreAudio,getAudioStreamDescriptionsFailedToGetFormats)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamDescriptionsFor1StreamFormat)
+TEST(AOCoreAudioMacOS,getAudioStreamDescriptionsFor1StreamFormat)
 {
 	AudioStreamID streamID = static_cast<AudioStreamID>(400);
 	
@@ -2452,7 +2452,7 @@ TEST(AOCoreAudio,getAudioStreamDescriptionsFor1StreamFormat)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getAudioStreamDescriptionsFor3StreamFormats)
+TEST(AOCoreAudioMacOS,getAudioStreamDescriptionsFor3StreamFormats)
 {
 	AudioStreamID streamID = static_cast<AudioStreamID>(400);
 	
@@ -2517,7 +2517,7 @@ TEST(AOCoreAudio,getAudioStreamDescriptionsFor3StreamFormats)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioIsFormatDataTypeCorrispondingTest : public AOCoreAudio
+class AOCoreAudioIsFormatDataTypeCorrispondingTest : public AOCoreAudioMacOS
 {
 	public:
 		bool testIsFormatDataTypeCorrisponding(const AudioStreamBasicDescription& format,const FormatDescription& desc);
@@ -2532,7 +2532,7 @@ bool AOCoreAudioIsFormatDataTypeCorrispondingTest::testIsFormatDataTypeCorrispon
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingWhenNotLinearPCM)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingWhenNotLinearPCM)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2546,7 +2546,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingWhenNotLinearPCM)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatFloatAndDescFloat)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatFloatAndDescFloat)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2563,7 +2563,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatFloatAndDescFloat)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatFloatAndDescSignedInteger)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatFloatAndDescSignedInteger)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2580,7 +2580,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatFloatAndDescSignedInteg
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatFloatAndDescUnsignedInteger)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatFloatAndDescUnsignedInteger)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2597,7 +2597,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatFloatAndDescUnsignedInt
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescFloat)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescFloat)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2614,7 +2614,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescFlo
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescSignedInteger)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescSignedInteger)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2631,7 +2631,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescSig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescUnsignedInteger)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescUnsignedInteger)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2648,7 +2648,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatSignedIntegerAndDescUns
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescFloat)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescFloat)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2665,7 +2665,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescF
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescSignedInteger)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescSignedInteger)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2682,7 +2682,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescS
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescUnsignedInteger)
+TEST(AOCoreAudioMacOS,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescUnsignedInteger)
 {
 	FormatDescription desc;
 	AudioStreamBasicDescription format;
@@ -2699,7 +2699,7 @@ TEST(AOCoreAudio,isFormatDataTypeCorrispondingGivenFormatUnsignedIntegerAndDescU
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioFindFrequenciesFromRangeTest : public AOCoreAudio
+class AOCoreAudioFindFrequenciesFromRangeTest : public AOCoreAudioMacOS
 {
 	public:
 		AOCoreAudioFindFrequenciesFromRangeTest(int devIdx);
@@ -2709,7 +2709,7 @@ class AOCoreAudioFindFrequenciesFromRangeTest : public AOCoreAudio
 
 //-------------------------------------------------------------------------------------------
 
-AOCoreAudioFindFrequenciesFromRangeTest::AOCoreAudioFindFrequenciesFromRangeTest(int devIdx) : AOCoreAudio()
+AOCoreAudioFindFrequenciesFromRangeTest::AOCoreAudioFindFrequenciesFromRangeTest(int devIdx) : AOCoreAudioMacOS()
 {
 	m_deviceIdx = devIdx;
 }
@@ -2723,7 +2723,7 @@ QVector<int> AOCoreAudioFindFrequenciesFromRangeTest::testFindFrequenciesFromRan
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndCurrentDeviceNotInScope)
+TEST(AOCoreAudioMacOS,findFrequenciesFromRangeUseRangeAndCurrentDeviceNotInScope)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -2751,7 +2751,7 @@ TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndCurrentDeviceNotInScope)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndNoFrequenciesDefined)
+TEST(AOCoreAudioMacOS,findFrequenciesFromRangeUseRangeAndNoFrequenciesDefined)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -2785,7 +2785,7 @@ TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndNoFrequenciesDefined)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndNoneOfTheSupportedFrequenciesAreInRange)
+TEST(AOCoreAudioMacOS,findFrequenciesFromRangeUseRangeAndNoneOfTheSupportedFrequenciesAreInRange)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -2820,7 +2820,7 @@ TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndNoneOfTheSupportedFrequencie
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndOneSupportedFrequenciesAreInRange)
+TEST(AOCoreAudioMacOS,findFrequenciesFromRangeUseRangeAndOneSupportedFrequenciesAreInRange)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -2856,7 +2856,7 @@ TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndOneSupportedFrequenciesAreIn
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndTwoSupportedFrequenciesAreInRange)
+TEST(AOCoreAudioMacOS,findFrequenciesFromRangeUseRangeAndTwoSupportedFrequenciesAreInRange)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -2893,7 +2893,7 @@ TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndTwoSupportedFrequenciesAreIn
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndAllFrequenciesAreInRange)
+TEST(AOCoreAudioMacOS,findFrequenciesFromRangeUseRangeAndAllFrequenciesAreInRange)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -2933,7 +2933,7 @@ TEST(AOCoreAudio,findFrequenciesFromRangeUseRangeAndAllFrequenciesAreInRange)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findFrequenciesFromRangeNotUsingRange)
+TEST(AOCoreAudioMacOS,findFrequenciesFromRangeNotUsingRange)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -2958,7 +2958,7 @@ TEST(AOCoreAudio,findFrequenciesFromRangeNotUsingRange)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioFormatDescriptionsFromRangedTest : public AOCoreAudio
+class AOCoreAudioFormatDescriptionsFromRangedTest : public AOCoreAudioMacOS
 {
 	public:
 		AOCoreAudioFormatDescriptionsFromRangedTest(int devIdx);
@@ -2968,7 +2968,7 @@ class AOCoreAudioFormatDescriptionsFromRangedTest : public AOCoreAudio
 
 //-------------------------------------------------------------------------------------------
 
-AOCoreAudioFormatDescriptionsFromRangedTest::AOCoreAudioFormatDescriptionsFromRangedTest(int devIdx) : AOCoreAudio()
+AOCoreAudioFormatDescriptionsFromRangedTest::AOCoreAudioFormatDescriptionsFromRangedTest(int devIdx) : AOCoreAudioMacOS()
 {
 	m_deviceIdx = devIdx;
 }
@@ -2982,7 +2982,7 @@ QVector<FormatDescription> AOCoreAudioFormatDescriptionsFromRangedTest::testForm
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatDescriptionsFromRangedNoFrequencies)
+TEST(AOCoreAudioMacOS,formatDescriptionsFromRangedNoFrequencies)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -3017,7 +3017,7 @@ TEST(AOCoreAudio,formatDescriptionsFromRangedNoFrequencies)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatDescriptionsFromRangedWhenFormatIsNotPCM)
+TEST(AOCoreAudioMacOS,formatDescriptionsFromRangedWhenFormatIsNotPCM)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -3052,7 +3052,7 @@ TEST(AOCoreAudio,formatDescriptionsFromRangedWhenFormatIsNotPCM)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatDescriptionsFromRangedForFloatPCM)
+TEST(AOCoreAudioMacOS,formatDescriptionsFromRangedForFloatPCM)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -3099,7 +3099,7 @@ TEST(AOCoreAudio,formatDescriptionsFromRangedForFloatPCM)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatDescriptionsFromRangedForIntegerPCM)
+TEST(AOCoreAudioMacOS,formatDescriptionsFromRangedForIntegerPCM)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -3146,7 +3146,7 @@ TEST(AOCoreAudio,formatDescriptionsFromRangedForIntegerPCM)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatDescriptionsFromRangedForUnsignedIntegerPCM)
+TEST(AOCoreAudioMacOS,formatDescriptionsFromRangedForUnsignedIntegerPCM)
 {
 	AudioStreamRangedDescription range;
 	range.mFormat.mSampleRate = 48000.0;
@@ -3178,7 +3178,7 @@ TEST(AOCoreAudio,formatDescriptionsFromRangedForUnsignedIntegerPCM)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioAreDescriptionsEquivalentTest : public AOCoreAudio
+class AOCoreAudioAreDescriptionsEquivalentTest : public AOCoreAudioMacOS
 {
 	public:
 		bool testAreDescriptionsEquivalent(const AudioStreamBasicDescription& format,const FormatDescription& desc);
@@ -3193,7 +3193,7 @@ bool AOCoreAudioAreDescriptionsEquivalentTest::testAreDescriptionsEquivalent(con
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,areDescriptionsEquivalentWhenNotPCMFormat)
+TEST(AOCoreAudioMacOS,areDescriptionsEquivalentWhenNotPCMFormat)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3214,7 +3214,7 @@ TEST(AOCoreAudio,areDescriptionsEquivalentWhenNotPCMFormat)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,areDescriptionsEquivalentWhenDataTypesAreDifferent)
+TEST(AOCoreAudioMacOS,areDescriptionsEquivalentWhenDataTypesAreDifferent)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3235,7 +3235,7 @@ TEST(AOCoreAudio,areDescriptionsEquivalentWhenDataTypesAreDifferent)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,areDescriptionsEquivalentWhenBitsPerSampleAreDifferent)
+TEST(AOCoreAudioMacOS,areDescriptionsEquivalentWhenBitsPerSampleAreDifferent)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3256,7 +3256,7 @@ TEST(AOCoreAudio,areDescriptionsEquivalentWhenBitsPerSampleAreDifferent)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,areDescriptionsEquivalentWhenChannelsAreDifferent)
+TEST(AOCoreAudioMacOS,areDescriptionsEquivalentWhenChannelsAreDifferent)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3277,7 +3277,7 @@ TEST(AOCoreAudio,areDescriptionsEquivalentWhenChannelsAreDifferent)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,areDescriptionsEquivalentWhenFrequenciesAreDifferent)
+TEST(AOCoreAudioMacOS,areDescriptionsEquivalentWhenFrequenciesAreDifferent)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3298,7 +3298,7 @@ TEST(AOCoreAudio,areDescriptionsEquivalentWhenFrequenciesAreDifferent)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,areDescriptionsEquivalentWhenBothAreEquivalent)
+TEST(AOCoreAudioMacOS,areDescriptionsEquivalentWhenBothAreEquivalent)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3338,7 +3338,7 @@ AudioStreamRangedDescription buildTestAudioStreamRangedDescription(UInt32 id,UIn
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioGetSupportedFormatsForStreamsTest : public AOCoreAudio
+class AOCoreAudioGetSupportedFormatsForStreamsTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_METHOD1(getAudioStreamDescriptions,QVector<AudioStreamRangedDescription>(AudioStreamID streamID));
@@ -3354,7 +3354,7 @@ FormatsSupported AOCoreAudioGetSupportedFormatsForStreamsTest::testGetSupportedF
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getSupportedFormatsForStreamsMultipleStreams)
+TEST(AOCoreAudioMacOS,getSupportedFormatsForStreamsMultipleStreams)
 {
 	AudioStreamRangedDescription rangeA = buildTestAudioStreamRangedDescription(kAudioFormatLinearPCM,kAudioFormatFlagIsSignedInteger,24,8,48000);
 	AudioStreamRangedDescription rangeB = buildTestAudioStreamRangedDescription(kAudioFormatLinearPCM,kAudioFormatFlagIsSignedInteger,16,2,44100);
@@ -3414,7 +3414,7 @@ TEST(AOCoreAudio,getSupportedFormatsForStreamsMultipleStreams)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioFindClosestStreamTest : public AOCoreAudio
+class AOCoreAudioFindClosestStreamTest : public AOCoreAudioMacOS
 {
 	public:
 		QPair<AudioStreamID,AudioStreamBasicDescription *> testFindClosestStream(const FormatDescription& sourceDesc,const QVector<AudioStreamID>& streamIDs);
@@ -3445,7 +3445,7 @@ ACTION_P6(Set6AudioDescriptionsForArgument,valueA,valueB,valueC,valueD,valueE,va
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findClosestStreamWhenNoStreamsAvailable)
+TEST(AOCoreAudioMacOS,findClosestStreamWhenNoStreamsAvailable)
 {
 	AudioStreamRangedDescription rangeH = buildTestAudioStreamRangedDescription(kAudioFormatLinearPCM,kAudioFormatFlagIsSignedInteger,16,2,32000);
 	AudioStreamRangedDescription rangeI = buildTestAudioStreamRangedDescription(kAudioFormatLinearPCM,kAudioFormatFlagIsSignedInteger,16,2,22050);
@@ -3477,7 +3477,7 @@ TEST(AOCoreAudio,findClosestStreamWhenNoStreamsAvailable)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,findClosestStreamFromStreams)
+TEST(AOCoreAudioMacOS,findClosestStreamFromStreams)
 {
 	AudioStreamRangedDescription rangeA = buildTestAudioStreamRangedDescription(kAudioFormatLinearPCM,kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsNonMixable,24,8,48000);
 	AudioStreamRangedDescription rangeB = buildTestAudioStreamRangedDescription(kAudioFormatLinearPCM,kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsNonMixable,16,2,44100);
@@ -3523,7 +3523,7 @@ TEST(AOCoreAudio,findClosestStreamFromStreams)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioSampleConverterFromDescriptionTest : public AOCoreAudio
+class AOCoreAudioSampleConverterFromDescriptionTest : public AOCoreAudioMacOS
 {
 	public:
 		QSharedPointer<SampleConverter> testSampleConverterFromDescription(const AudioStreamBasicDescription& format);
@@ -3538,7 +3538,7 @@ QSharedPointer<SampleConverter> AOCoreAudioSampleConverterFromDescriptionTest::t
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,sampleConverterFromDescriptionWithFloatAndLittleEndian)
+TEST(AOCoreAudioMacOS,sampleConverterFromDescriptionWithFloatAndLittleEndian)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3564,7 +3564,7 @@ TEST(AOCoreAudio,sampleConverterFromDescriptionWithFloatAndLittleEndian)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,sampleConverterFromDescriptionWithFloatAndBigEndian)
+TEST(AOCoreAudioMacOS,sampleConverterFromDescriptionWithFloatAndBigEndian)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3590,7 +3590,7 @@ TEST(AOCoreAudio,sampleConverterFromDescriptionWithFloatAndBigEndian)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,sampleConverterFromDescriptionWithSignedIntegerLittleEndianAndAlignLow)
+TEST(AOCoreAudioMacOS,sampleConverterFromDescriptionWithSignedIntegerLittleEndianAndAlignLow)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3617,7 +3617,7 @@ TEST(AOCoreAudio,sampleConverterFromDescriptionWithSignedIntegerLittleEndianAndA
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,sampleConverterFromDescriptionWithUnsignedIntegerBigEndianAndAlignHigh)
+TEST(AOCoreAudioMacOS,sampleConverterFromDescriptionWithUnsignedIntegerBigEndianAndAlignHigh)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3644,7 +3644,7 @@ TEST(AOCoreAudio,sampleConverterFromDescriptionWithUnsignedIntegerBigEndianAndAl
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioFormatFromStreamDescription : public AOCoreAudio
+class AOCoreAudioFormatFromStreamDescription : public AOCoreAudioMacOS
 {
 	public:
 		bool testFormatFromStreamDescription(const AudioStreamBasicDescription& format,FormatDescription& desc);
@@ -3659,7 +3659,7 @@ bool AOCoreAudioFormatFromStreamDescription::testFormatFromStreamDescription(con
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatFromStreamDescriptionNonLinearPCM)
+TEST(AOCoreAudioMacOS,formatFromStreamDescriptionNonLinearPCM)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 48000.0;
@@ -3680,7 +3680,7 @@ TEST(AOCoreAudio,formatFromStreamDescriptionNonLinearPCM)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatFromStreamDescriptionWithSingleFloat)
+TEST(AOCoreAudioMacOS,formatFromStreamDescriptionWithSingleFloat)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 48000.0;
@@ -3706,7 +3706,7 @@ TEST(AOCoreAudio,formatFromStreamDescriptionWithSingleFloat)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatFromStreamDescriptionWithSignedInteger)
+TEST(AOCoreAudioMacOS,formatFromStreamDescriptionWithSignedInteger)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3732,7 +3732,7 @@ TEST(AOCoreAudio,formatFromStreamDescriptionWithSignedInteger)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,formatFromStreamDescriptionWithUnsignedInteger)
+TEST(AOCoreAudioMacOS,formatFromStreamDescriptionWithUnsignedInteger)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 192000.0;
@@ -3758,7 +3758,7 @@ TEST(AOCoreAudio,formatFromStreamDescriptionWithUnsignedInteger)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioSetAudioStreamTest : public AOCoreAudio
+class AOCoreAudioSetAudioStreamTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD2(printError,void(const tchar *strR,const tchar *strE));
@@ -3833,7 +3833,7 @@ ACTION_P(SetAudioStreamBasicDescriptionForArguement,value) { *static_cast<AudioS
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamFailToGetDescription)
+TEST(AOCoreAudioMacOS,setAudioStreamFailToGetDescription)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3856,7 +3856,7 @@ TEST(AOCoreAudio,setAudioStreamFailToGetDescription)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamFailToAddPropertyListener)
+TEST(AOCoreAudioMacOS,setAudioStreamFailToAddPropertyListener)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3887,7 +3887,7 @@ TEST(AOCoreAudio,setAudioStreamFailToAddPropertyListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamFailToSetPropertyAndRemoveListener)
+TEST(AOCoreAudioMacOS,setAudioStreamFailToSetPropertyAndRemoveListener)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3923,7 +3923,7 @@ TEST(AOCoreAudio,setAudioStreamFailToSetPropertyAndRemoveListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamFailToGetPropertyInLoopWithoutListener)
+TEST(AOCoreAudioMacOS,setAudioStreamFailToGetPropertyInLoopWithoutListener)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -3972,7 +3972,7 @@ TEST(AOCoreAudio,setAudioStreamFailToGetPropertyInLoopWithoutListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamFailToGetPropertyInLoopWithListener)
+TEST(AOCoreAudioMacOS,setAudioStreamFailToGetPropertyInLoopWithListener)
 {
 	QMutex runMutex;
 
@@ -4030,7 +4030,7 @@ TEST(AOCoreAudio,setAudioStreamFailToGetPropertyInLoopWithListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamFailToDetectStreamChangeInLoopWithoutListener)
+TEST(AOCoreAudioMacOS,setAudioStreamFailToDetectStreamChangeInLoopWithoutListener)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -4078,7 +4078,7 @@ TEST(AOCoreAudio,setAudioStreamFailToDetectStreamChangeInLoopWithoutListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamFailToDetectStreamChangeInLoopWithListener)
+TEST(AOCoreAudioMacOS,setAudioStreamFailToDetectStreamChangeInLoopWithListener)
 {
 	QMutex runMutex;
 
@@ -4135,7 +4135,7 @@ TEST(AOCoreAudio,setAudioStreamFailToDetectStreamChangeInLoopWithListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamSuccessOnFirstTryWithoutListener)
+TEST(AOCoreAudioMacOS,setAudioStreamSuccessOnFirstTryWithoutListener)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -4183,7 +4183,7 @@ TEST(AOCoreAudio,setAudioStreamSuccessOnFirstTryWithoutListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamSuccessOnFirstTryWithListener)
+TEST(AOCoreAudioMacOS,setAudioStreamSuccessOnFirstTryWithListener)
 {
 	QMutex runMutex;
 
@@ -4240,7 +4240,7 @@ TEST(AOCoreAudio,setAudioStreamSuccessOnFirstTryWithListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamSuccessAfter5TriesWithoutListener)
+TEST(AOCoreAudioMacOS,setAudioStreamSuccessAfter5TriesWithoutListener)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -4293,7 +4293,7 @@ TEST(AOCoreAudio,setAudioStreamSuccessAfter5TriesWithoutListener)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setAudioStreamSuccessAfter5TriesWithListener)
+TEST(AOCoreAudioMacOS,setAudioStreamSuccessAfter5TriesWithListener)
 {
 	QMutex runMutex;
 
@@ -4355,7 +4355,7 @@ TEST(AOCoreAudio,setAudioStreamSuccessAfter5TriesWithListener)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioSaveAudioDescriptionForStreamTest : public AOCoreAudio
+class AOCoreAudioSaveAudioDescriptionForStreamTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD3(printErrorOS,void(const tchar *strR,const tchar *strE,OSStatus err));
@@ -4371,7 +4371,7 @@ AudioStreamBasicDescription *AOCoreAudioSaveAudioDescriptionForStreamTest::testS
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,saveAudioDescriptionForStreamFailToGetStream)
+TEST(AOCoreAudioMacOS,saveAudioDescriptionForStreamFailToGetStream)
 {
 	AudioStreamID streamID = static_cast<AudioStreamID>(400);
 
@@ -4393,7 +4393,7 @@ TEST(AOCoreAudio,saveAudioDescriptionForStreamFailToGetStream)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,saveAudioDescriptionForStreamSuccess)
+TEST(AOCoreAudioMacOS,saveAudioDescriptionForStreamSuccess)
 {
 	AudioStreamBasicDescription format;
 	format.mSampleRate = 44100.0;
@@ -4426,7 +4426,7 @@ TEST(AOCoreAudio,saveAudioDescriptionForStreamSuccess)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioSetSampleRateIfPossibleTest : public AOCoreAudio
+class AOCoreAudioSetSampleRateIfPossibleTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD3(printErrorOS,void(const tchar *strR,const tchar *strE,OSStatus err));
@@ -4447,7 +4447,7 @@ ACTION_P(SetSampleRateForArguement,value) { *static_cast<Float64*>(arg5) = value
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setSampleRateIfPossibleAndDeviceHasNoRateProperty)
+TEST(AOCoreAudioMacOS,setSampleRateIfPossibleAndDeviceHasNoRateProperty)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4465,7 +4465,7 @@ TEST(AOCoreAudio,setSampleRateIfPossibleAndDeviceHasNoRateProperty)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setSampleRateIfPossibleAndFailToDetermineIsSettable)
+TEST(AOCoreAudioMacOS,setSampleRateIfPossibleAndFailToDetermineIsSettable)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4486,7 +4486,7 @@ TEST(AOCoreAudio,setSampleRateIfPossibleAndFailToDetermineIsSettable)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setSampleRateIfPossibleAndRateCannotBeSet)
+TEST(AOCoreAudioMacOS,setSampleRateIfPossibleAndRateCannotBeSet)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4506,7 +4506,7 @@ TEST(AOCoreAudio,setSampleRateIfPossibleAndRateCannotBeSet)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setSampleRateIfPossibleAndFailToGetCurrentSampleRate)
+TEST(AOCoreAudioMacOS,setSampleRateIfPossibleAndFailToGetCurrentSampleRate)
 {
 	Float64 expectedOldRate = 44100.0;
 
@@ -4531,7 +4531,7 @@ TEST(AOCoreAudio,setSampleRateIfPossibleAndFailToGetCurrentSampleRate)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setSampleRateIfPossibleAndFailToSetNewSampleRate)
+TEST(AOCoreAudioMacOS,setSampleRateIfPossibleAndFailToSetNewSampleRate)
 {
 	Float64 expectedOldRate = 44100.0;
 
@@ -4558,7 +4558,7 @@ TEST(AOCoreAudio,setSampleRateIfPossibleAndFailToSetNewSampleRate)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setSampleRateIfPossibleAndSuccessInSettingNewSampleRate)
+TEST(AOCoreAudioMacOS,setSampleRateIfPossibleAndSuccessInSettingNewSampleRate)
 {
 	Float64 expectedOldRate = 44100.0;
 
@@ -4584,7 +4584,7 @@ TEST(AOCoreAudio,setSampleRateIfPossibleAndSuccessInSettingNewSampleRate)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,setSampleRateIfPossibleAndDACAndRequiredAreTheSameThenNoFrequencyIsReturned)
+TEST(AOCoreAudioMacOS,setSampleRateIfPossibleAndDACAndRequiredAreTheSameThenNoFrequencyIsReturned)
 {
 	Float64 expectedOldRate = 44100.0;
 
@@ -4608,7 +4608,7 @@ TEST(AOCoreAudio,setSampleRateIfPossibleAndDACAndRequiredAreTheSameThenNoFrequen
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioSetAndResetDACFrequencyTest : public AOCoreAudio
+class AOCoreAudioSetAndResetDACFrequencyTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD0(getFrequency,tint());
@@ -4630,19 +4630,19 @@ tint AOCoreAudioSetAndResetDACFrequencyTest::getOriginalSampleRate()
 
 void AOCoreAudioSetAndResetDACFrequencyTest::setSampleRateWhileOpeningCoreDevice(AudioDeviceID devID)
 {
-	AOCoreAudio::setSampleRateWhileOpeningCoreDevice(devID);
+	AOCoreAudioMacOS::setSampleRateWhileOpeningCoreDevice(devID);
 }
 
 //-------------------------------------------------------------------------------------------
 
 void AOCoreAudioSetAndResetDACFrequencyTest::resetSampleRateToOriginalWhenClosing(AudioDeviceID devID)
 {
-	AOCoreAudio::resetSampleRateToOriginalWhenClosing(devID);
+	AOCoreAudioMacOS::resetSampleRateToOriginalWhenClosing(devID);
 }
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,audioIsClosedAndDACFrequencyHasNotBeenSetupToBeReset)
+TEST(AOCoreAudioMacOS,audioIsClosedAndDACFrequencyHasNotBeenSetupToBeReset)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4655,7 +4655,7 @@ TEST(AOCoreAudio,audioIsClosedAndDACFrequencyHasNotBeenSetupToBeReset)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingTheSameFrequncySetAndThenClosed)
+TEST(AOCoreAudioMacOS,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingTheSameFrequncySetAndThenClosed)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4674,7 +4674,7 @@ TEST(AOCoreAudio,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingTheSameFrequncyS
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnciesSetAndThenClosedButFailedToSetDACFrequencyOnOpening)
+TEST(AOCoreAudioMacOS,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnciesSetAndThenClosedButFailedToSetDACFrequencyOnOpening)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4693,7 +4693,7 @@ TEST(AOCoreAudio,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnc
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnciesSetAndThenClosedAndSucceededToSetDACFrequencyOnOpeningButFailsToResetOnClosing)
+TEST(AOCoreAudioMacOS,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnciesSetAndThenClosedAndSucceededToSetDACFrequencyOnOpeningButFailsToResetOnClosing)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4713,7 +4713,7 @@ TEST(AOCoreAudio,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnc
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnciesSetAndThenClosedAndSucceededToSetDACFrequencyOnOpeningAndClosing)
+TEST(AOCoreAudioMacOS,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnciesSetAndThenClosedAndSucceededToSetDACFrequencyOnOpeningAndClosing)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4733,7 +4733,7 @@ TEST(AOCoreAudio,audioIsOpenedViaAudioUnitsWithAudioAndDACHavingDifferentFrequnc
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,audioOpenAndDACFrequencyIsChangedThenReOpenedAtAnotherFrequencyBeforeClosingSuccessfully)
+TEST(AOCoreAudioMacOS,audioOpenAndDACFrequencyIsChangedThenReOpenedAtAnotherFrequencyBeforeClosingSuccessfully)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4757,7 +4757,7 @@ TEST(AOCoreAudio,audioOpenAndDACFrequencyIsChangedThenReOpenedAtAnotherFrequency
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,audioOpenAndDACFrequencyIsChangedThenReOpenedAtOriginalFrequencyBeforeClosing)
+TEST(AOCoreAudioMacOS,audioOpenAndDACFrequencyIsChangedThenReOpenedAtOriginalFrequencyBeforeClosing)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4780,7 +4780,7 @@ TEST(AOCoreAudio,audioOpenAndDACFrequencyIsChangedThenReOpenedAtOriginalFrequenc
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,audioOpenAndDACFrequencyIsChangedThenReOpenedAtOriginalFrequencyButFailsBeforeClosingSuccessfully)
+TEST(AOCoreAudioMacOS,audioOpenAndDACFrequencyIsChangedThenReOpenedAtOriginalFrequencyButFailsBeforeClosingSuccessfully)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4803,7 +4803,7 @@ TEST(AOCoreAudio,audioOpenAndDACFrequencyIsChangedThenReOpenedAtOriginalFrequenc
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioReleaseExclusiveModeTest : public AOCoreAudio
+class AOCoreAudioReleaseExclusiveModeTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD0(getCurrentProcessID,pid_t());
@@ -4814,12 +4814,12 @@ class AOCoreAudioReleaseExclusiveModeTest : public AOCoreAudio
 
 void AOCoreAudioReleaseExclusiveModeTest::releaseExclusiveMode(AudioDeviceID devID)
 {
-	AOCoreAudio::releaseExclusiveMode(devID);
+	AOCoreAudioMacOS::releaseExclusiveMode(devID);
 }
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,releaseExclusiveModeWhenHogNotAvailable)
+TEST(AOCoreAudioMacOS,releaseExclusiveModeWhenHogNotAvailable)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4837,7 +4837,7 @@ TEST(AOCoreAudio,releaseExclusiveModeWhenHogNotAvailable)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,releaseExclusiveModeErrorGettingAIfCanBeSet)
+TEST(AOCoreAudioMacOS,releaseExclusiveModeErrorGettingAIfCanBeSet)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4857,7 +4857,7 @@ TEST(AOCoreAudio,releaseExclusiveModeErrorGettingAIfCanBeSet)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,releaseExclusiveModeHogModeCannotBeSet)
+TEST(AOCoreAudioMacOS,releaseExclusiveModeHogModeCannotBeSet)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4877,7 +4877,7 @@ TEST(AOCoreAudio,releaseExclusiveModeHogModeCannotBeSet)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,releaseExclusiveModeFailedToGetProperty)
+TEST(AOCoreAudioMacOS,releaseExclusiveModeFailedToGetProperty)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4901,7 +4901,7 @@ TEST(AOCoreAudio,releaseExclusiveModeFailedToGetProperty)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,releaseExclusiveModeWhenProcessDoesNotHaveExclusiveAccess)
+TEST(AOCoreAudioMacOS,releaseExclusiveModeWhenProcessDoesNotHaveExclusiveAccess)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4927,7 +4927,7 @@ TEST(AOCoreAudio,releaseExclusiveModeWhenProcessDoesNotHaveExclusiveAccess)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,releaseExclusiveModeExclusiveModeIsReleased)
+TEST(AOCoreAudioMacOS,releaseExclusiveModeExclusiveModeIsReleased)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 
@@ -4955,7 +4955,7 @@ TEST(AOCoreAudio,releaseExclusiveModeExclusiveModeIsReleased)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioCopyDeviceInformationTest : public AOCoreAudio
+class AOCoreAudioCopyDeviceInformationTest : public AOCoreAudioMacOS
 {
 	public:
 		virtual QSharedPointer<AOQueryDevice::Device> copyDeviceInformation(const AOQueryDevice::Device& iDevice);
@@ -4965,12 +4965,12 @@ class AOCoreAudioCopyDeviceInformationTest : public AOCoreAudio
 
 QSharedPointer<AOQueryDevice::Device> AOCoreAudioCopyDeviceInformationTest::copyDeviceInformation(const AOQueryDevice::Device& iDevice)
 {
-	return AOCoreAudio::copyDeviceInformation(iDevice);
+	return AOCoreAudioMacOS::copyDeviceInformation(iDevice);
 }
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,copyDeviceInformation)
+TEST(AOCoreAudioMacOS,copyDeviceInformation)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -5011,7 +5011,7 @@ TEST(AOCoreAudio,copyDeviceInformation)
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioIsConvertionAlignedHigh : public AOCoreAudio
+class AOCoreAudioIsConvertionAlignedHigh : public AOCoreAudioMacOS
 {
 	public:
 		virtual bool isConvertionAlignedHigh(const AudioStreamBasicDescription& format) const;
@@ -5021,12 +5021,12 @@ class AOCoreAudioIsConvertionAlignedHigh : public AOCoreAudio
 
 bool AOCoreAudioIsConvertionAlignedHigh::isConvertionAlignedHigh(const AudioStreamBasicDescription& format) const
 {
-	return AOCoreAudio::isConvertionAlignedHigh(format);
+	return AOCoreAudioMacOS::isConvertionAlignedHigh(format);
 }
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInLittleEndian24BitsAndHighFlagNotSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor16BitSampleInLittleEndian24BitsAndHighFlagNotSet)
 {
 	const tint c_bitsPerSample = 16;
 	const tint c_noChannels = 2;
@@ -5051,7 +5051,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInLittleEndian24BitsAndHig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInLittleEndian24BitsAndHighFlagIsSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor16BitSampleInLittleEndian24BitsAndHighFlagIsSet)
 {
 	const tint c_bitsPerSample = 16;
 	const tint c_noChannels = 2;
@@ -5076,7 +5076,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInLittleEndian24BitsAndHig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInBigEndian24BitsAndHighFlagNotSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor16BitSampleInBigEndian24BitsAndHighFlagNotSet)
 {
 	const tint c_bitsPerSample = 16;
 	const tint c_noChannels = 2;
@@ -5101,7 +5101,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInBigEndian24BitsAndHighFl
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInBigEndian24BitsAndHighFlagIsSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor16BitSampleInBigEndian24BitsAndHighFlagIsSet)
 {
 	const tint c_bitsPerSample = 16;
 	const tint c_noChannels = 2;
@@ -5126,7 +5126,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInBigEndian24BitsAndHighFl
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInLittleEndian32BitsAndHighFlagNotSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor16BitSampleInLittleEndian32BitsAndHighFlagNotSet)
 {
 	const tint c_bitsPerSample = 16;
 	const tint c_noChannels = 2;
@@ -5151,7 +5151,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInLittleEndian32BitsAndHig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInLittleEndian32BitsAndHighFlagIsSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor16BitSampleInLittleEndian32BitsAndHighFlagIsSet)
 {
 	const tint c_bitsPerSample = 16;
 	const tint c_noChannels = 2;
@@ -5176,7 +5176,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInLittleEndian32BitsAndHig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInBigEndian32BitsAndHighFlagNotSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor16BitSampleInBigEndian32BitsAndHighFlagNotSet)
 {
 	const tint c_bitsPerSample = 16;
 	const tint c_noChannels = 8;
@@ -5201,7 +5201,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInBigEndian32BitsAndHighFl
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInBigEndian32BitsAndHighFlagIsSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor16BitSampleInBigEndian32BitsAndHighFlagIsSet)
 {
 	const tint c_bitsPerSample = 16;
 	const tint c_noChannels = 4;
@@ -5226,7 +5226,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor16BitSampleInBigEndian32BitsAndHighFl
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor24BitSampleInLittleEndian32BitsAndHighFlagNotSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor24BitSampleInLittleEndian32BitsAndHighFlagNotSet)
 {
 	const tint c_bitsPerSample = 24;
 	const tint c_noChannels = 4;
@@ -5251,7 +5251,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor24BitSampleInLittleEndian32BitsAndHig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor24BitSampleInLittleEndian32BitsAndHighFlagIsSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor24BitSampleInLittleEndian32BitsAndHighFlagIsSet)
 {
 	const tint c_bitsPerSample = 24;
 	const tint c_noChannels = 4;
@@ -5276,7 +5276,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor24BitSampleInLittleEndian32BitsAndHig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor24BitSampleInBigEndian32BitsAndHighFlagNotSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor24BitSampleInBigEndian32BitsAndHighFlagNotSet)
 {
 	const tint c_bitsPerSample = 24;
 	const tint c_noChannels = 2;
@@ -5301,7 +5301,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor24BitSampleInBigEndian32BitsAndHighFl
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor24BitSampleInBigEndian32BitsAndHighFlagIsSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor24BitSampleInBigEndian32BitsAndHighFlagIsSet)
 {
 	const tint c_bitsPerSample = 24;
 	const tint c_noChannels = 2;
@@ -5326,7 +5326,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor24BitSampleInBigEndian32BitsAndHighFl
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor32BitSampleInLittleEndian32BitsAndHighFlagNotSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor32BitSampleInLittleEndian32BitsAndHighFlagNotSet)
 {
 	const tint c_bitsPerSample = 32;
 	const tint c_noChannels = 2;
@@ -5351,7 +5351,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor32BitSampleInLittleEndian32BitsAndHig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor32BitSampleInLittleEndian32BitsAndHighFlagIsSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor32BitSampleInLittleEndian32BitsAndHighFlagIsSet)
 {
 	const tint c_bitsPerSample = 32;
 	const tint c_noChannels = 4;
@@ -5376,7 +5376,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor32BitSampleInLittleEndian32BitsAndHig
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor32BitSampleInBigEndian32BitsAndHighFlagNotSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor32BitSampleInBigEndian32BitsAndHighFlagNotSet)
 {
 	const tint c_bitsPerSample = 32;
 	const tint c_noChannels = 2;
@@ -5401,7 +5401,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor32BitSampleInBigEndian32BitsAndHighFl
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isConvertionAlignedHighFor32BitSampleInBigEndian32BitsAndHighFlagIsSet)
+TEST(AOCoreAudioMacOS,isConvertionAlignedHighFor32BitSampleInBigEndian32BitsAndHighFlagIsSet)
 {
 	const tint c_bitsPerSample = 32;
 	const tint c_noChannels = 2;
@@ -5426,7 +5426,7 @@ TEST(AOCoreAudio,isConvertionAlignedHighFor32BitSampleInBigEndian32BitsAndHighFl
 
 //-------------------------------------------------------------------------------------------
 
-class AOCoreAudioIsDeviceAliveTest : public AOCoreAudio
+class AOCoreAudioIsDeviceAliveTest : public AOCoreAudioMacOS
 {
 	public:
 		MOCK_CONST_METHOD1(printToLog,void(const tchar *msg));
@@ -5448,7 +5448,7 @@ ACTION_P(SetIsDeviceAlive,value) { *static_cast<bool*>(arg5) = value; }
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isDeviceAliveGivenNoOSErrorAndDeviceIsAlive)
+TEST(AOCoreAudioMacOS,isDeviceAliveGivenNoOSErrorAndDeviceIsAlive)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -5472,7 +5472,7 @@ TEST(AOCoreAudio,isDeviceAliveGivenNoOSErrorAndDeviceIsAlive)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isDeviceAliveGivenNoOSErrorAndDeviceIsNotAlive)
+TEST(AOCoreAudioMacOS,isDeviceAliveGivenNoOSErrorAndDeviceIsNotAlive)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	
@@ -5497,7 +5497,7 @@ TEST(AOCoreAudio,isDeviceAliveGivenNoOSErrorAndDeviceIsNotAlive)
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,isDeviceAliveGivenOSErrorButDeviceIsAliveFlagIsSetToTrue)
+TEST(AOCoreAudioMacOS,isDeviceAliveGivenOSErrorButDeviceIsAliveFlagIsSetToTrue)
 {
 	AudioDeviceID devID = static_cast<AudioDeviceID>(300);
 	

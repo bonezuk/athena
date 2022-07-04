@@ -19,7 +19,7 @@ ListView {
 		property bool isDeleted: false
 		
 		implicitWidth: parent.width
-		implicitHeight: 50
+		implicitHeight: 60
 
         swipe.right: Label {
             id: deleteLabel

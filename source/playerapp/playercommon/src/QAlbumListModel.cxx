@@ -121,6 +121,7 @@ void QAlbumListModel::appendTrack(const QString& fileName)
 				m_pAlbums->addDBInfo(indexes.at(i), pInfo);
 				endInsertRows();
 			}
+			submit();
 		}
 	}
 }
@@ -142,6 +143,7 @@ void QAlbumListModel::deleteTrack(const QString& fileName)
 				m_pAlbums->removeRow(idx);
 				endRemoveRows();
 			}
+			submit()
 		}
 	}
 }

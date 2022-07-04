@@ -17,7 +17,7 @@ CONCRETE_FACTORY_CLASS_IMPL(AOFactory,AOBase, \
 
 //-------------------------------------------------------------------------------------------
 
-AOCoreAudioIOS::AOCoreAudioIOS(QObject *parent) : AOBase(parent),
+AOCoreAudioIOS::AOCoreAudioIOS(QObject *parent) : AOCoreAudio(parent),
 	m_audioOutputUnit(0),
 	m_pSampleConverter(),
 	m_flagInit(false),
@@ -164,43 +164,51 @@ bool AOCoreAudioIOS::openAudio()
 						err = AudioUnitSetProperty(m_audioOutputUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, 0, &enableIO, sizeof(enableIO));
 						if(err == noErr)
 						{
-							initCyclicBuffer();
-						
-							err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
-							if(err == noErr)
+							if(getDeviceFrequency() > 0)
 							{
-								AURenderCallbackStruct renderCallback;
-
-								::memset(&renderCallback,0,sizeof(AURenderCallbackStruct));
-								renderCallback.inputProc = iosAudioRender;
-								renderCallback.inputProcRefCon = (void *)(this);
-								
-								err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Global, 0, &renderCallback, sizeof(renderCallback));
+								initCyclicBuffer();
+							
+								err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
 								if(err == noErr)
 								{
-									err = AudioUnitInitialize(m_audioOutputUnit);
+									AURenderCallbackStruct renderCallback;
+
+									::memset(&renderCallback,0,sizeof(AURenderCallbackStruct));
+									renderCallback.inputProc = iosAudioRender;
+									renderCallback.inputProcRefCon = (void *)(this);
+								
+									err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Global, 0, &renderCallback, sizeof(renderCallback));
 									if(err == noErr)
 									{
-										m_pSampleConverter = sampleConverterFromDescription(streamFormat);
-										m_noChannels = closestDescription.channels();
-										m_flagInit = true;
-										res = true;
+										err = AudioUnitInitialize(m_audioOutputUnit);
+										if(err == noErr)
+										{
+											m_pSampleConverter = sampleConverterFromDescription(streamFormat);
+											m_noChannels = closestDescription.channels();
+											m_flagInit = true;
+											res = true;
+										}
+										else
+										{
+											printError("openAudio", "Failed to initialise audio output device", err);
+											AudioUnitUninitialize(m_audioOutputUnit);
+										}
 									}
 									else
 									{
-										printError("openAudio", "Failed to initialise audio output device", err);
-										AudioUnitUninitialize(m_audioOutputUnit);
+										printError("openAudio", "Error setting audio render callback", err);
 									}
 								}
 								else
 								{
-									printError("openAudio", "Error setting audio render callback", err);
+									printError("openAudio", "Error setting audio output format", err);
 								}
 							}
 							else
 							{
-								printError("openAudio", "Error setting audio output format", err);
+								printError("openAudio","Failed to find supported audio frequency");
 							}
+
 						}
 						else
 						{

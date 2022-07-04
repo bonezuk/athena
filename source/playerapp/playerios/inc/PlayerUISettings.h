@@ -39,6 +39,8 @@ class PlayerUISettings : public QObject
 		virtual void enableFTPServer(bool enable);
 		virtual QString getFTPStatus();
 		
+		Q_INVOKABLE void onRebuildDatabase();
+		
 	private:
 		network::ftp::FTPService *m_ftpService;
 		network::ftp::FTPServer *m_ftpServer;

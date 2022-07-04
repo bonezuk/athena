@@ -562,8 +562,10 @@ SOURCES += ./audioio/src/SampleConverter.cxx
 ios
 {
 	HEADERS += ./audioio/inc/AOCoreAudioIOS.h
+	HEADERS += ./audioio/inc/AOQueryCoreAudio.h
 	HEADERS += ./audioio/inc/AOQueryCoreAudioIOS.h
 	HEADERS += ./audioio/inc/AudioHardwareBufferCoreAudioIOS.h
+	OBJECTIVE_SOURCES += ./audioio/src/AOCoreAudio.mm
 	OBJECTIVE_SOURCES += ./audioio/src/AOCoreAudioIOS.mm
 	OBJECTIVE_SOURCES += ./audioio/src/AOQueryCoreAudioIOS.mm
 	OBJECTIVE_SOURCES += ./audioio/src/AudioHardwareBufferCoreAudioIOS.mm
@@ -648,7 +650,6 @@ SOURCES += ./track/db/src/sqlite3.c
 
 # --- track/model ---
 
-HEADERS += ./track/model/inc/AbstractTrackItem.h
 HEADERS += ./track/model/inc/AbstractTrackModel.h
 HEADERS += ./track/model/inc/AlbumModel.h
 HEADERS += ./track/model/inc/AlbumModelKey.h
@@ -658,7 +659,6 @@ HEADERS += ./track/model/inc/ImageRepositary.h
 HEADERS += ./track/model/inc/TrackModelDLL.h
 HEADERS += ./track/model/inc/TrackModelKey.h
 
-SOURCES += ./track/model/src/AbstractTrackItem.cxx
 SOURCES += ./track/model/src/AbstractTrackModel.cxx
 SOURCES += ./track/model/src/AlbumModel.cxx
 SOURCES += ./track/model/src/AlbumModelKey.cxx
@@ -676,12 +676,16 @@ HEADERS += ./playerapp/playercommon/inc/PlaybackStateController.h
 HEADERS += ./playerapp/playercommon/inc/OmegaPlaylistInterface.h
 HEADERS += ./playerapp/playercommon/inc/PlaybackStateController.h
 HEADERS += ./playerapp/playercommon/inc/PlayListModel.h
+HEADERS += ./playerapp/playercommon/inc/QAlbumListModel.h
+HEADERS += ./playerapp/playercommon/inc/QAlbumTrackListModel.h
 
 SOURCES += ./playerapp/playercommon/src/OmegaAudioInterface.cxx
 SOURCES += ./playerapp/playercommon/src/PlaybackStateController.cxx
 SOURCES += ./playerapp/playercommon/src/OmegaPlaylistInterface.cxx
 SOURCES += ./playerapp/playercommon/src/PlaybackStateController.cxx
 SOURCES += ./playerapp/playercommon/src/PlayListModel.cxx
+SOURCES += ./playerapp/playercommon/src/QAlbumListModel.cxx
+SOURCES += ./playerapp/playercommon/src/QAlbumTrackListModel.cxx
 
 # --- playerapp/playerios ---
 

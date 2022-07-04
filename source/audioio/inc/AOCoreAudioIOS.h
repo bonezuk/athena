@@ -5,7 +5,7 @@
 #define __OMEGA_AUDIOIO_AOCOREAUDIOIOS_H
 //-------------------------------------------------------------------------------------------
 
-#include "audioio/inc/AOBase.h"
+#include "audioio/inc/AOCoreAudio.h"
 #include "audioio/inc/AOQueryCoreAudioIOS.h"
 #include "audioio/inc/AudioHardwareBufferCoreAudioIOS.h"
 #include "audioio/inc/SampleConverter.h"
@@ -20,7 +20,7 @@ namespace audioio
 {
 //-------------------------------------------------------------------------------------------
 
-class AUDIOIO_EXPORT AOCoreAudioIOS : public AOBase
+class AUDIOIO_EXPORT AOCoreAudioIOS : public AOCoreAudio
 {
 	public:
 		Q_OBJECT

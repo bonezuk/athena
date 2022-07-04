@@ -250,9 +250,69 @@ Window {
 				}
 			}
 		}
+		
+		Rectangle {
+			anchors.fill: parent
+			
+			ColumnLayout {
+				anchors.fill: parent
+				anchors.left: parent.left
+				anchors.right: parent.right				
+				
+				Item {
+					Switch {
+						text: "Enable FTP"
+						anchors.centerIn: parent
+	                    checked: settings.ftpServer
+    	                onClicked: settings.ftpServer = !settings.ftpServer
+					}
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					Layout.fillWidth: true
+					Layout.preferredHeight: 50
+				}
+				Item {
+					Text {
+						text: settings.ftpStatus
+						anchors.centerIn: parent
+					}
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					Layout.fillWidth: true
+					Layout.preferredHeight: 50
+				}
+				Item {
+					Button {
+						text: "Rebuild Database"
+						anchors.leftMargin: 20
+						anchors.rightMargin: 20
+						anchors.fill: parent
+						onClicked: { 
+							lockAppDialog.text = "<b>Rebuilding database from music directory.\nPlease Wait!</b>"
+							lockAppDialog.visible = true;
+							settings.onRebuildDatabase();
+							lockAppDialog.visible = false;
+						}
+					}
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					Layout.fillWidth: true
+					Layout.preferredHeight: 50
+				}
+		        Item {
+        		    // spacer item
+		            Layout.fillWidth: true
+        		    Layout.fillHeight: true
+            		Rectangle { anchors.fill: parent; color: "#ffaaaa" } // to visualize the spacer
+		        }
+			}
+		}
 
 	}
-	
+
+	MutexDialog {
+		id: lockAppDialog
+		visible: false
+		text: "<b>Rebuilding database from music directory.\nPlease Wait!</b>"
+	}
+
 	RowLayout {
 		id: navBar
 		anchors.left: parent.left

@@ -4,6 +4,7 @@ import QtQuick.Window 2.14
 import QtQuick.Layouts 1.15
 
 import "components"
+import "components/components.js" as Comp
 
 Window {
     id: window
@@ -28,7 +29,6 @@ Window {
 			AlbumView {
 				model: playListModel
 				onClicked: {
-					console.log(currentIndex);
 					parent.currentIndex = 1;
 				}
 			}
@@ -38,7 +38,6 @@ Window {
 					anchors.fill: parent
 					model: playListModel
 					onClicked: {
-						console.log("track " + currentIndex);
 						notifyInfo.text = "Added track '" + currentTrack + "' to playlist."
 						notifyInfo.visible = true;
 					}
@@ -54,7 +53,7 @@ Window {
 		}
 		
 		Rectangle {
-			anchors.fill: parent.fill
+			anchors.fill: parent
 			
 			Rectangle {
 				id: playControlsContainer
@@ -91,11 +90,11 @@ Window {
 					anchors.topMargin: 5
 
 					onSeek: (v) => {
-						console.log("seek -> " + v);
+						// console.log("seek -> " + v);
 					}
 			
 					onDisplay: (v) => {
-						console.log("dis -> " + v);
+						// console.log("dis -> " + v);
 					}
 			
 					Timer {
@@ -173,26 +172,63 @@ Window {
 		}
 		
 		Rectangle {
-			anchors.fill: parent.fill
+			anchors.fill: parent
 			
 			ColumnLayout {
-				anchors.fill: parent.fill
+				anchors.fill: parent
 				anchors.left: parent.left
 				anchors.right: parent.right				
-			
-				Switch {
-					text: "Enable FTP"
-					Layout.alignment: Qt.AlignCenter
-					Layout.preferredHeight: 75
-				}		
-				Text {
-					text: "FTP server is disabled"
-					Layout.alignment: Qt.AlignCenter
-					Layout.preferredHeight: 75
+				
+				Item {
+					Switch {
+						text: "Enable FTP"
+						anchors.centerIn: parent
+					}
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					Layout.fillWidth: true
+					Layout.preferredHeight: 50
 				}
+				Item {
+					Text {
+						text: "FTP server is disabled"
+						anchors.centerIn: parent
+					}
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					Layout.fillWidth: true
+					Layout.preferredHeight: 50
+				}
+				Item {
+					Button {
+						text: "Rebuild Database"
+						anchors.leftMargin: 20
+						anchors.rightMargin: 20
+						anchors.fill: parent
+						onClicked: { 
+							lockAppDialog.text = "<b>Rebuilding database from music directory.\nPlease Wait!</b>"
+							lockAppDialog.visible = true;
+							//settings.onRebuildDatabase();
+							//lockAppDialog.visible = false;
+						}
+					}
+					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+					Layout.fillWidth: true
+					Layout.preferredHeight: 50
+				}
+		        Item {
+        		    // spacer item
+		            Layout.fillWidth: true
+        		    Layout.fillHeight: true
+            		Rectangle { anchors.fill: parent; color: "#ffaaaa" } // to visualize the spacer
+		        }
 			}
 		}
 
+	}
+	
+	MutexDialog {
+		id: lockAppDialog
+		visible: false
+		text: ""
 	}
 	
 	RowLayout {

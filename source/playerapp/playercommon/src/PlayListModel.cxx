@@ -490,6 +490,7 @@ void PlayListModel::removeAtIndex(int index)
 		}
 		
 		endRemoveRows();
+		submit();
 	}
 }
 

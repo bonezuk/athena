@@ -48,5 +48,17 @@
         <file>Resources/images/slide_button_push.png</file>
         <file>Resources/images/slide_button_select.png</file>
         <file>Resources/images/slide_button.png</file>
+        <file>Resources/images/progress/alphaWait01@2x.png</file>
+        <file>Resources/images/progress/alphaWait02@2x.png</file>
+        <file>Resources/images/progress/alphaWait03@2x.png</file>
+        <file>Resources/images/progress/alphaWait04@2x.png</file>
+        <file>Resources/images/progress/alphaWait05@2x.png</file>
+        <file>Resources/images/progress/alphaWait06@2x.png</file>
+        <file>Resources/images/progress/alphaWait07@2x.png</file>
+        <file>Resources/images/progress/alphaWait08@2x.png</file>
+        <file>Resources/images/progress/alphaWait09@2x.png</file>
+        <file>Resources/images/progress/alphaWait10@2x.png</file>
+        <file>Resources/images/progress/alphaWait11@2x.png</file>
+        <file>Resources/images/progress/alphaWait12@2x.png</file>
     </qresource>
 </RCC>

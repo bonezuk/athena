@@ -12,7 +12,7 @@
 #include <QMutex>
 #include <QWaitCondition>
 
-#include "audioio/inc/AOCoreAudio.h"
+#include "audioio/inc/AOCoreAudioMacOS.h"
 #include "audioio/inc/AOQueryCoreAudio.h"
 #include "audioio/inc/FormatDescription.h"
 #include "audioio/inc/FormatDescriptionUtils.h"
