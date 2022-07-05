@@ -3,21 +3,17 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYLISTMODEL_H
 //-------------------------------------------------------------------------------------------
 
-#include <QAbstractListModel>
-#include <QModelIndex>
-#include <QQmlEngine>
-#include <QQmlContext>
-
 #include "common/inc/Random.h"
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
+#include "playerapp/playercommon/inc/QOmegaListModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
+class PLAYERCOMMON_EXPORT PlayListModel : public QOmegaListModel
 {
 	Q_OBJECT
 
@@ -73,6 +69,8 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		virtual qint32 getSizeOfModel() const;
 
 	protected:
+		int m_playlistID;
+		QString m_playlistName;
 		QMap<tuint64, QPair<track::db::DBInfoSPtr,tint> > m_items;
 		QVector<tuint64> m_playList;
 		QMap<tuint64, tint> m_idToIndexMap;
@@ -92,6 +90,11 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QAbstractListModel
 		
 		virtual void endInsertRows();
 		virtual void endRemoveRows();
+
+		virtual bool loadPlaylistFromDB();
+		virtual void savePlaylistToDB();
+		
+		virtual void resetAndReload(bool isReload);
 };
 
 //-------------------------------------------------------------------------------------------

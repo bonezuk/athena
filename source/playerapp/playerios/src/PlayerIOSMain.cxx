@@ -105,6 +105,11 @@ int main(int argc, char **argv)
 							engine.rootContext()->setContextProperty("playbackStateController", pModel->playbackState().data());
 			
 							PlayerUISettings settings;
+							
+							setting.registerModel(pModel.dynamicCast<QOmegaListModel>());
+							setting.registerModel(pAlbumModel.dynamicCast<QOmegaListModel>());
+							setting.registerModel(pAlbumModel->trackModel().dynamicCast<QOmegaListModel>());
+							
 							engine.rootContext()->setContextProperty("settings", &settings);
 			
 							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pModel.data(), SLOT(deleteTrack(const QString&)));
@@ -112,8 +117,8 @@ int main(int argc, char **argv)
 							QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel.data(), SLOT(appendTrack(const QString&)));
 							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pAlbumModel.data(), SLOT(deleteTrack(const QString&)));
 
-							QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel->trackModel(), SLOT(appendTrack(const QString&)));
-							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pAlbumModel->trackModel(), SLOT(deleteTrack(const QString&)));
+							QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel->trackModel().data(), SLOT(appendTrack(const QString&)));
+							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pAlbumModel->trackModel().data(), SLOT(deleteTrack(const QString&)));
 							
 							QObject::connect(pAlbumModel->trackModel(), SIGNAL(appendToPlaylist(const QString&)), pModel.data(), SLOT(appendTrack(const QString&)));
 							

@@ -2399,6 +2399,18 @@ tuint64 TrackDB::newPlaylistItemID(SQLiteDatabase *db)
 }
 
 //-------------------------------------------------------------------------------------------
+
+bool TrackDB::isPlaylist(int playlistID)
+{
+	int plID;
+	SQLiteQuery playlistQ(m_db);
+	QString cmdQ = QString("SELECT playListID, name FROM playlistInfo WHERE playListID=").arg(playlistID);
+	playlistQ.prepare(cmdQ);
+	playlistQ.bind(plID);
+	return (playlistQ.next()) ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
 } // namespace omega

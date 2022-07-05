@@ -8,6 +8,7 @@
 #include "network/ftp/inc/FTPServer.h"
 #include "network/ftp/inc/FTPService.h"
 #include "playerapp/playerios/inc/PlayerIOSUtils.h"
+#include "playerapp/playercommon/inc/QOmegaListModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -31,6 +32,9 @@ class PlayerUISettings : public QObject
 		Q_PROPERTY(bool ftpServer READ isFTPEnabled WRITE enableFTPServer NOTIFY ftpServerChanged)
 		Q_PROPERTY(QString ftpStatus READ getFTPStatus NOTIFY ftpStatusChanged)
 		
+		const tint c_ftpPort = 5500;
+		const tint c_ftpPassivePort = 5505;
+		
 	public:
 		PlayerUISettings(QObject *parent = 0);
 		virtual ~PlayerUISettings();
@@ -40,14 +44,14 @@ class PlayerUISettings : public QObject
 		virtual QString getFTPStatus();
 		
 		Q_INVOKABLE void onRebuildDatabase();
+		virtual void registerModel(QSharedPointer<QOmegaListModel> pModel);
 		
 	private:
 		network::ftp::FTPService *m_ftpService;
 		network::ftp::FTPServer *m_ftpServer;
 		QString m_ftpStatusMsg;
-		
-		const tint c_ftpPort = 5500;
-		const tint c_ftpPassivePort = 5505;
+				
+		QList<QSharedPointer<QOmegaListModel> > m_models;
 		
 		virtual void printError(const tchar *strR, const tchar *strE) const;
 		virtual bool startFTPServer();

@@ -5,7 +5,9 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-PlayListModel::PlayListModel(QObject *parent) : QAbstractListModel(parent),
+PlayListModel::PlayListModel(QObject *parent) : QOmegaListModel(parent),
+	m_playlistID(0),
+	m_playlistName("Default"),
 	m_items(),
 	m_playList(),
 	m_idToIndexMap(),
@@ -15,7 +17,9 @@ PlayListModel::PlayListModel(QObject *parent) : QAbstractListModel(parent),
 
 //-------------------------------------------------------------------------------------------
 
-PlayListModel::PlayListModel(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : QAbstractListModel(parent),
+PlayListModel::PlayListModel(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : QOmegaListModel(parent),
+	m_playlistID(0),
+	m_playlistName("Default"),
 	m_items(),
 	m_playList(),
 	m_idToIndexMap(),
@@ -25,7 +29,9 @@ PlayListModel::PlayListModel(QSharedPointer<OmegaAudioInterface>& pAudioInterfac
 
 //-------------------------------------------------------------------------------------------
 
-PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : QAbstractListModel(parent),
+PlayListModel::PlayListModel(QVector<QPair<track::db::DBInfoSPtr,tint> >& playList, QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : QOmegaListModel(parent),
+	m_playlistID(0),
+	m_playlistName("Default"),
 	m_items(),
 	m_playList(),
 	m_idToIndexMap(),
@@ -514,6 +520,120 @@ void PlayListModel::endInsertRows()
 void PlayListModel::endRemoveRows()
 {
 	QAbstractListModel::endRemoveRows();
+	emit onSizeOfModel();
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool PlayListModel::loadPlaylistFromDB()
+{
+	bool res = false;
+	track::db::TrackDB *pDB = track::db::TrackDB::instance();
+	
+	m_items.clear();
+	m_playList.clear();
+	m_idToIndexMap.clear();
+	
+	if(pDB != 0)
+	{
+		if(pDB->isPlaylist(m_playlistID))
+		{
+			QVector<track::db::PlaylistTuple> idPList;
+		
+			if(pDB->loadPlaylist(m_playlistID, idPList))
+			{
+				QVector<QPair<track::db::DBInfoSPtr,tint> > pList;
+			
+				for(QVector<track::db::PlaylistTuple>::iterator ppI = idPList.begin(); ppI != idPList.end(); ppI++)
+				{
+					track::db::PlaylistTuple t = *ppI;
+					appendPlaylistTuple(t);
+				}
+				m_playlistName = pDB->playlist(m_playlistID);
+				res = true;
+			}
+			else
+			{
+				printError("loadPlaylistFromDB", "Failed to load playlist from database");
+			}
+		}
+		else
+		{
+			res = true;
+		}
+	}
+	else
+	{
+		printError("loadPlaylistFromDB", "Track database has not been instantiated");
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::savePlaylistToDB()
+{
+	track::db::TrackDB *pDB = track::db::TrackDB::instance();
+	
+	if(pDB != 0)
+	{
+		QVector<track::db::PlaylistTuple> list;
+
+		for(QVector<tuint64>::iterator ppI = m_playList.begin(); ppI != m_playList.end(); ppI++)
+		{
+			QMap<tuint64, QPair<track::db::DBInfoSPtr,tint> >::iterator ppJ;
+			track::db::PlaylistTuple t;
+		
+			t.itemID = *ppI;
+			ppJ = m_items.find(t.itemID);
+			if(ppJ != m_items.end())
+			{
+				track::db::DBInfoSPtr pDBInfo = ppJ.value().first;
+				if(!pDBInfo.isNull())
+				{
+					t.albumID = pDBInfo->albumID();
+					t.trackID = pDBInfo->trackID();
+					t.subtrackID = ppJ.value().second;
+					list.append(t);
+				}
+				else
+				{
+					printError("savePlaylistToDB", "Expected DB item is null pointer");
+				}
+			}
+			else
+			{
+				QString err = QString("Expected item ID %1 not found in items map").arg(t.itemID);
+				printError("savePlaylistToDB", err.toUtf8().constData());
+			}
+		}
+		if(pDB->replacePlaylist(m_playlistID, m_playlistName, list) != m_playlistID)
+		{
+			printError("savePlaylistToDB", "Error saving playlist to database");
+		}
+	}
+	else
+	{
+		printError("savePlaylistToDB", "Track database has not been instantiated");
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::resetAndReload(bool isReload)
+{
+	beginResetModel();
+	
+	m_pAudioInterface->stop();
+	m_items.clear();
+	m_idToIndexMap.clear();
+	m_playList.clear();
+	if(isReload)
+	{
+		loadPlaylistFromDB();
+	}
+
+	endResetModel();
 	emit onSizeOfModel();
 }
 

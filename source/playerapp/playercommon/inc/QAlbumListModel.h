@@ -3,11 +3,6 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_QALBUMLISTMODEL_H
 //-------------------------------------------------------------------------------------------
 
-#include <QAbstractListModel>
-#include <QModelIndex>
-#include <QQmlEngine>
-#include <QQmlContext>
-
 #include "track/model/inc/AlbumModel.h"
 #include "playerapp/playercommon/inc/QAlbumTrackListModel.h"
 
@@ -16,7 +11,7 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-class PLAYERCOMMON_EXPORT QAlbumListModel : public QAbstractListModel
+class PLAYERCOMMON_EXPORT QAlbumListModel : public QOmegaListModel
 {
 	Q_OBJECT
 	public:
@@ -33,7 +28,7 @@ class PLAYERCOMMON_EXPORT QAlbumListModel : public QAbstractListModel
 		virtual ~QAlbumListModel();
 		
 		virtual bool initialise();
-		virtual QAlbumTrackListModel *trackModel();
+		virtual QSharedPointer<QAlbumTrackListModel> trackModel();
 		
 		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -45,9 +40,11 @@ class PLAYERCOMMON_EXPORT QAlbumListModel : public QAbstractListModel
 		virtual void appendTrack(const QString& fileName);
 		virtual void deleteTrack(const QString& fileName);
 
-	private:
+	protected:
 		QSharedPointer<track::model::AlbumModel> m_pAlbums;
-		QAlbumTrackListModel *m_pTrackModel;
+		QSharedPointer<QAlbumTrackListModel> m_pTrackModel;
+		
+		virtual void resetAndReload(bool isReload);
 };
 
 //-------------------------------------------------------------------------------------------

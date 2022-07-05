@@ -3,21 +3,16 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_QALBUMTRACKLISTMODEL_H
 //-------------------------------------------------------------------------------------------
 
-#include <QAbstractListModel>
-#include <QModelIndex>
-#include <QQmlEngine>
-#include <QQmlContext>
-
 #include "common/inc/DiskOps.h"
 #include "track/model/inc/AlbumTrackModel.h"
-#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+#include "playerapp/playercommon/inc/QOmegaListModel.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QAbstractListModel
+class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QOmegaListModel
 {
 	Q_OBJECT
 	public:
@@ -35,9 +30,6 @@ class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QAbstractListModel
 		
 		Q_PROPERTY(qint32 sizeOfModel READ getSizeOfModel NOTIFY onSizeOfModel)
 
-	signals:
-		void onSizeOfModel();
-
 	public:
 		QAlbumTrackListModel(QObject *parent = 0);
 		virtual ~QAlbumTrackListModel();
@@ -54,6 +46,7 @@ class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QAbstractListModel
 		
 	signals:
 		void appendToPlaylist(const QString& fileName);
+		void onSizeOfModel();
 
 	public slots:
 		virtual void appendTrack(const QString& fileName);
@@ -64,6 +57,8 @@ class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QAbstractListModel
 		
 		virtual void endInsertRows();
 		virtual void endRemoveRows();
+		
+		virtual void resetAndReload(bool isReload);
 };
 
 //-------------------------------------------------------------------------------------------

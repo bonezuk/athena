@@ -49,13 +49,16 @@ bool PlayerFileFilter::canFileBeUploaded(const QString& fileName)
 PlayerUISettings::PlayerUISettings(QObject *parent) : QObject(parent),
 	m_ftpService(0),
 	m_ftpServer(0),
-	m_ftpStatusMsg("FTP server is disabled")
+	m_ftpStatusMsg("FTP server is disabled"),
+	m_models()
 {}
 
 //-------------------------------------------------------------------------------------------
 
 PlayerUISettings::~PlayerUISettings()
-{}
+{
+	m_models.clear();
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -182,9 +185,32 @@ void PlayerUISettings::stopFTPServer()
 
 //-------------------------------------------------------------------------------------------
 
+void PlayerUISettings::registerModel(QSharedPointer<QOmegaListModel> pModel)
+{
+	if(!pModel.isNull())
+	{
+		m_models.append(pModel);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void PlayerUISettings::onRebuildDatabase()
 {
+	QSharedPointer<QOmegaListModel>::iterator ppI;
 	
+	for(ppI = m_models.begin(); ppI != m_models.end(); ppI++)
+	{
+		QSharedPointer<QOmegaListModel> pModel = *ppI;
+		pModel->clear();
+	}
+
+
+	for(ppI = m_models.begin(); ppI != m_models.end(); ppI++)
+	{
+		QSharedPointer<QOmegaListModel> pModel = *ppI;
+		pModel->reload();
+	}
 }
 
 //-------------------------------------------------------------------------------------------

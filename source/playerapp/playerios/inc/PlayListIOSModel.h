@@ -28,14 +28,9 @@ class PlayListIOSModel : public PlayListModel
 		virtual void appendTrack(const QString& fileName);
 		virtual void deleteTrack(const QString& fileName);
 
-	protected:
-		int m_playlistID;
-		QString m_playlistName;
-		
+	protected:		
 		virtual void printError(const tchar *strE, const tchar *strR) const;
 		virtual void appendPlaylistTuple(const track::db::PlaylistTuple& t);
-		virtual bool loadPlaylistFromDB();
-		virtual void savePlaylistToDB();
 		virtual void removeAtIndex(int index);
 };
 

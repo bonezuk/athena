@@ -5,18 +5,18 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-QAlbumListModel::QAlbumListModel(QObject *parent) : QAbstractListModel(parent),
+QAlbumListModel::QAlbumListModel(QObject *parent) : QOmegaListModel(parent),
 	m_pAlbums()
 {
-	m_pTrackModel = new QAlbumTrackListModel(this);
+	QSharedPointer<QAlbumTrackListModel> pTrackModel(new QAlbumTrackListModel());
+	m_pTrackModel = pTrackModel;
 }
 
 //-------------------------------------------------------------------------------------------
 
 QAlbumListModel::~QAlbumListModel()
 {
-	delete m_pTrackModel;
-	m_pTrackModel = 0;
+	m_pTrackModel.clear();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ bool QAlbumListModel::initialise()
 
 //-------------------------------------------------------------------------------------------
 
-QAlbumTrackListModel *QAlbumListModel::trackModel()
+QSharedPointer<QAlbumTrackListModel> QAlbumListModel::trackModel()
 {
 	return m_pTrackModel;
 }
@@ -143,9 +143,28 @@ void QAlbumListModel::deleteTrack(const QString& fileName)
 				m_pAlbums->removeRow(idx);
 				endRemoveRows();
 			}
-			submit()
+			submit();
 		}
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void QAlbumListModel::resetAndReload(bool isReload)
+{
+	beginResetModel();
+	{
+		m_pAlbums.clear();	
+		if(isReload)
+		{
+			QSharedPointer<track::model::AlbumModel> pAlbums(new track::model::AlbumModel());
+			if(pAlbums->build())
+			{
+				m_pAlbums = pAlbums;
+			}		
+		}
+	}
+	endResetModel();
 }
 
 //-------------------------------------------------------------------------------------------

@@ -75,6 +75,7 @@ class TRACK_DB_EXPORT TrackDB
 		QSharedPointer<TrackDBMountPoints>& mountPoints();
 		
 		QMap<tint, QString> playlists();
+		bool isPlaylist(int playlistID);
 		QString playlist(int playlistID);
 		bool loadPlaylist(int playlistID, QVector<PlaylistTuple>& pList);
 		bool loadPlaylist(int playlistID, QVector<QPair<info::InfoSPtr, tint> >& pList);

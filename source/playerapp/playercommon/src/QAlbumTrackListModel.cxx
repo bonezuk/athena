@@ -5,7 +5,7 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-QAlbumTrackListModel::QAlbumTrackListModel(QObject *parent) : QAbstractListModel(parent),
+QAlbumTrackListModel::QAlbumTrackListModel(QObject *parent) : QOmegaListModel(parent),
 	m_pTracks()
 {}
 
@@ -187,6 +187,16 @@ void QAlbumTrackListModel::appendTrackToPlaylist(int index)
 			emit appendToPlaylist(fileName);
 		}
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void QAlbumTrackListModel::resetAndReload(bool isReload)
+{
+	beginResetModel();
+	m_pTracks.clear();
+	endResetModel();
+	emit onSizeOfModel();	
 }
 
 //-------------------------------------------------------------------------------------------
