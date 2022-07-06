@@ -91,6 +91,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QOmegaListModel
 		virtual void endInsertRows();
 		virtual void endRemoveRows();
 
+		virtual void appendPlaylistTuple(const track::db::PlaylistTuple& t);
 		virtual bool loadPlaylistFromDB();
 		virtual void savePlaylistToDB();
 		

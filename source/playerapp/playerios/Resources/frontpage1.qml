@@ -235,30 +235,7 @@ Window {
 				anchors.fill: parent.fill
 				anchors.left: parent.left
 				anchors.right: parent.right				
-			
-				Switch {
-					text: "Enable FTP"
-                    checked: settings.ftpServer
-                    onClicked: settings.ftpServer = !settings.ftpServer
-					Layout.alignment: Qt.AlignCenter
-					Layout.preferredHeight: 75
-				}		
-				Text {
-                    text: settings.ftpStatus
-					Layout.alignment: Qt.AlignCenter
-					Layout.preferredHeight: 75
-				}
-			}
-		}
-		
-		Rectangle {
-			anchors.fill: parent
-			
-			ColumnLayout {
-				anchors.fill: parent
-				anchors.left: parent.left
-				anchors.right: parent.right				
-				
+
 				Item {
 					Switch {
 						text: "Enable FTP"
@@ -300,17 +277,17 @@ Window {
         		    // spacer item
 		            Layout.fillWidth: true
         		    Layout.fillHeight: true
-            		Rectangle { anchors.fill: parent; color: "#ffaaaa" } // to visualize the spacer
+            		//Rectangle { anchors.fill: parent; color: "#ffaaaa" }
 		        }
 			}
 		}
 
 	}
 
-	MutexDialog {
+	Component.MutexDialog {
 		id: lockAppDialog
 		visible: false
-		text: "<b>Rebuilding database from music directory.\nPlease Wait!</b>"
+		text: ""
 	}
 
 	RowLayout {

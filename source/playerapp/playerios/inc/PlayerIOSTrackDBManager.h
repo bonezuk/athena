@@ -21,7 +21,9 @@ class PlayerIOSTrackDBManager : public QObject
 		
 		static PlayerIOSTrackDBManager *instance(QObject *parent = 0);
 		void release();
-
+		
+		virtual void rebuildDatabase();
+		
 	public slots:
 		void addUploadedFile(const QString& fileName);
 		void onDeleteFile(const QString& fileName);
@@ -38,6 +40,9 @@ class PlayerIOSTrackDBManager : public QObject
 		virtual QString trackDBPath() const;
 		virtual bool open();
 		virtual void close();
+		
+		virtual void renameDBFile(const QString& fileDBName);
+		virtual void buildDBForDirectory(const QString& dirName);
 };
 
 //-------------------------------------------------------------------------------------------

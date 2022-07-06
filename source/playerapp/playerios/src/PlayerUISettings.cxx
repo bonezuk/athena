@@ -197,7 +197,7 @@ void PlayerUISettings::registerModel(QSharedPointer<QOmegaListModel> pModel)
 
 void PlayerUISettings::onRebuildDatabase()
 {
-	QSharedPointer<QOmegaListModel>::iterator ppI;
+	QList<QSharedPointer<QOmegaListModel> >::iterator ppI;
 	
 	for(ppI = m_models.begin(); ppI != m_models.end(); ppI++)
 	{
@@ -205,6 +205,7 @@ void PlayerUISettings::onRebuildDatabase()
 		pModel->clear();
 	}
 
+	PlayerIOSTrackDBManager::instance()->rebuildDatabase();
 
 	for(ppI = m_models.begin(); ppI != m_models.end(); ppI++)
 	{

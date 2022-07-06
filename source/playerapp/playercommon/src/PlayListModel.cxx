@@ -525,6 +525,35 @@ void PlayListModel::endRemoveRows()
 
 //-------------------------------------------------------------------------------------------
 
+void PlayListModel::appendPlaylistTuple(const track::db::PlaylistTuple& t)
+{
+	track::db::TrackDB *pDB = track::db::TrackDB::instance();
+	
+	if(pDB != 0)
+	{
+		QSharedPointer<track::info::Info> pInfoItem = track::db::DBInfo::readInfo(t.albumID, t.trackID);
+		track::db::DBInfoSPtr pDBItem = pInfoItem.dynamicCast<track::db::DBInfo>();
+		if(!pDBItem.isNull())
+		{
+			m_items.insert(t.itemID, QPair<track::db::DBInfoSPtr,tint>(pDBItem, t.subtrackID));
+			m_idToIndexMap.insert(t.itemID, m_playList.size());
+			m_playList.append(t.itemID);
+		}
+		else
+		{
+			QString err = QString("Failed to load albumID=%1, trackID=%2").arg(t.albumID, t.trackID);
+			printError("loadPlaylistFromDB", err.toUtf8().constData());
+		}	
+	}
+	else
+	{
+		printError("appendPlaylistTuple", "Track database has not been instantiated");
+	}
+}
+
+
+//-------------------------------------------------------------------------------------------
+
 bool PlayListModel::loadPlaylistFromDB()
 {
 	bool res = false;

@@ -5,9 +5,7 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-PlayListIOSModel::PlayListIOSModel(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : PlayListModel(pAudioInterface, parent),
-	m_playlistID(0),
-	m_playlistName("Default")
+PlayListIOSModel::PlayListIOSModel(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : PlayListModel(pAudioInterface, parent)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -20,34 +18,6 @@ PlayListIOSModel::~PlayListIOSModel()
 void PlayListIOSModel::printError(const char *strR, const char *strE) const
 {
 	common::Log::g_Log << "PlayListIOSModel::" << strR << " - " << strE << common::c_endl;
-}
-
-//-------------------------------------------------------------------------------------------
-
-void PlayListIOSModel::appendPlaylistTuple(const track::db::PlaylistTuple& t)
-{
-	track::db::TrackDB *pDB = track::db::TrackDB::instance();
-	
-	if(pDB != 0)
-	{
-		QSharedPointer<track::info::Info> pInfoItem = track::db::DBInfo::readInfo(t.albumID, t.trackID);
-		track::db::DBInfoSPtr pDBItem = pInfoItem.dynamicCast<track::db::DBInfo>();
-		if(!pDBItem.isNull())
-		{
-			m_items.insert(t.itemID, QPair<track::db::DBInfoSPtr,tint>(pDBItem, t.subtrackID));
-			m_idToIndexMap.insert(t.itemID, m_playList.size());
-			m_playList.append(t.itemID);
-		}
-		else
-		{
-			QString err = QString("Failed to load albumID=%1, trackID=%2").arg(t.albumID, t.trackID);
-			printError("loadPlaylistFromDB", err.toUtf8().constData());
-		}	
-	}
-	else
-	{
-		printError("appendPlaylistTuple", "Track database has not been instantiated");
-	}
 }
 
 //-------------------------------------------------------------------------------------------

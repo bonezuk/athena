@@ -2404,7 +2404,7 @@ bool TrackDB::isPlaylist(int playlistID)
 {
 	int plID;
 	SQLiteQuery playlistQ(m_db);
-	QString cmdQ = QString("SELECT playListID, name FROM playlistInfo WHERE playListID=").arg(playlistID);
+	QString cmdQ = QString("SELECT playListID, name FROM playlistInfo WHERE playListID=%1").arg(playlistID);
 	playlistQ.prepare(cmdQ);
 	playlistQ.bind(plID);
 	return (playlistQ.next()) ? true : false;

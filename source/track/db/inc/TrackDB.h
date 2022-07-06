@@ -48,6 +48,9 @@ class TRACK_DB_EXPORT TrackDB
 		
 		static common::TimeStamp getModifiedTime(const QString& fileName);
 		static common::TimeStamp getModifiedTime(const QString& fileName,tint& fileSize);
+
+		bool open(const QString& dbName);
+		void close();
 			
 		bool add(info::Info *data);
 		bool addInfo(info::Info *data);
@@ -102,8 +105,6 @@ class TRACK_DB_EXPORT TrackDB
 		
 		void printError(const tchar *strR,const tchar *strE) const;
 
-		bool open(const QString& dbName);
-		void close();
 		bool upgradeDBAsRequired(const QString& dbName);
 		void rebuildMusicDatabase(const QString& dbName);
 		

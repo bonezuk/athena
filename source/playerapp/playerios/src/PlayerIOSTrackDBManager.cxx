@@ -1,4 +1,5 @@
 #include "playerapp/playerios/inc/PlayerIOSTrackDBManager.h"
+#include "common/inc/DiskIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -125,6 +126,118 @@ void PlayerIOSTrackDBManager::onDeleteFile(const QString& fileName)
 	
 	emit removetrack(fileName);
 	trackDB->erase(fileName);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerIOSTrackDBManager::renameDBFile(const QString& fileDBName)
+{
+	QFile dbFile(fileDBName);
+	if(dbFile.exists())
+	{
+		tint i, noRetry;
+	
+		for(i = 0, noRetry = 0; noRetry < 5; i++)
+		{
+			common::BString nExt = common::BString::Int(i + 1, (i < 3) ? 3 : i);
+			QString rFilename = fileDBName + ".";
+			rFilename += static_cast<const char *>(nExt);
+			if(!common::DiskOps::exist(rFilename))
+			{
+				if(dbFile.rename(rFilename))
+				{
+					break;
+				}
+				else
+				{
+					QString err = QString("Failed to rename '%1' to '%2'. ").arg(fileDBName).arg(rFilename);
+					noRetry++;
+					err += (noRetry < 5) ? "Retrying." : "Removing DB file.";
+					printError("renameDBFile", err.toUtf8().constData());
+					
+				}
+			}
+		}
+		if(noRetry >= 5)
+		{
+			// if failed to rename then remove
+			common::DiskOps::deleteFile(fileDBName);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerIOSTrackDBManager::rebuildDatabase()
+{
+	QString fileDBName = trackDBPath();
+	track::db::TrackDB *trackDB = track::db::TrackDB::instance();
+	
+	// Close existing database
+	trackDB->close();
+	// Rename the old database file for diagnostics.
+	renameDBFile(fileDBName);
+	// Open the database will cause a new blank database to be created.
+	if(trackDB->open(fileDBName))
+	{
+		buildDBForDirectory(PlayerIOSUtils::musicDirectory());
+	}
+	else
+	{
+		QString err = QString("FATAL ERROR. Failed to created new track database at '%1'").arg(fileDBName);
+		printError("rebuildDatabase", err.toUtf8().constData());
+		exit(-1);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerIOSTrackDBManager::buildDBForDirectory(const QString& dirName)
+{
+	QSharedPointer<common::DiskIF> pDisk = common::DiskIF::instance();
+	
+	if(pDisk->isDirectory(dirName))
+	{
+		common::DiskIF::DirHandle h = pDisk->openDirectory(dirName);
+		if(h != common::DiskIF::invalidDirectory())
+		{
+			QString name;
+			QStringList fileList, dirList;
+			QStringList::iterator ppI;
+			
+			while(name = pDisk->nextDirectoryEntry(h), !name.isEmpty())
+			{
+				QString fullName = common::DiskOps::mergeName(dirName, name);
+				if(pDisk->isFile(fullName))
+				{
+					fileList.append(fullName);
+				}
+				else if(pDisk->isDirectory(fullName))
+				{
+					dirList.append(fullName);
+				}
+			}
+			pDisk->closeDirectory(h);
+			
+			for(ppI = dirList.begin(); ppI != dirList.end(); ppI++)
+			{
+				buildDBForDirectory(*ppI);
+			}
+			for(ppI = fileList.begin(); ppI != fileList.end(); ppI++)
+			{
+				name = *ppI;
+				if(track::info::Info::isSupported(name))
+				{
+					QSharedPointer<track::info::Info> dbInfo = track::db::DBInfo::readInfo(name);
+					if(dbInfo.isNull())
+					{
+						QString err = QString("Failed to read expected info from '%1'").arg(name);
+						printError("buildDBForDirectory", err.toUtf8().constData());
+					}
+				}
+			}
+		}
+	}
 }
 
 //-------------------------------------------------------------------------------------------

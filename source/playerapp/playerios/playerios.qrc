@@ -10,6 +10,7 @@
         <file>Resources/components/PlayListView.qml</file>
         <file>Resources/components/PLNotifyInfo.qml</file>
         <file>Resources/components/PlaybackSlider.qml</file>
+        <file>Resources/components/MutexDialog.qml</file>
         <file>Resources/images/album.png</file>
         <file>Resources/images/album_disable.png</file>
         <file>Resources/images/gears.png</file>

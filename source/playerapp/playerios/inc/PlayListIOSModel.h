@@ -30,7 +30,6 @@ class PlayListIOSModel : public PlayListModel
 
 	protected:		
 		virtual void printError(const tchar *strE, const tchar *strR) const;
-		virtual void appendPlaylistTuple(const track::db::PlaylistTuple& t);
 		virtual void removeAtIndex(int index);
 };
 
