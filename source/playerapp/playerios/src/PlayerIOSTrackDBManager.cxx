@@ -58,7 +58,9 @@ void PlayerIOSTrackDBManager::printError(const tchar *strR, const tchar *strE) c
 
 QString PlayerIOSTrackDBManager::trackDBPath() const
 {
-	QString path = common::DiskOps::mergeName(PlayerIOSUtils::appDataDirectory(), "track.db");
+	QString path = common::DiskOps::mergeName(PlayerIOSUtils::appDataDirectory(), "db");
+	common::DiskOps::path(path, true);
+	path = common::DiskOps::mergeName(path, "track.db");
 	return path;
 }
 

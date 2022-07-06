@@ -337,7 +337,7 @@ bool AlbumTrackModel::populate()
 	
 	try
 	{
-		tint flag, gaID, groupID, albumID, trackID, subtrackID;
+		tint flag, gaID, groupID, albumID, trackID, subtrackID, dirID;
 		tint discNo, trackNo;
 		tuint64 tLen;
 		common::TimeStamp tLength;
@@ -359,7 +359,7 @@ bool AlbumTrackModel::populate()
 		trackQ->bind(trackNo);
 		trackQ->bind(albumName);
 		trackQ->bind(trackName);
-		trackQ->bind(directoryName);
+		trackQ->bind(dirID);
 		trackQ->bind(fileName);
 		trackQ->bind(tLen);
 		trackQ->bind(artist);
@@ -371,7 +371,7 @@ bool AlbumTrackModel::populate()
 			QString fName;
 			albumName = db::TrackDB::dbStringInv(albumName);
 			trackName = db::TrackDB::dbStringInv(trackName);
-			directoryName = db::TrackDB::dbStringInv(directoryName);
+			directoryName = db::TrackDB::instance()->getDirectoryName(dirID);
 			artist = db::TrackDB::dbStringInv(artist);
 			originalArtist = db::TrackDB::dbStringInv(originalArtist);
 			composer = db::TrackDB::dbStringInv(composer);
@@ -438,7 +438,7 @@ QString AlbumTrackModel::getQuery(bool isIDOnly) const
 	{
 		cmd += ",a.albumName, ";
 		cmd += "CASE WHEN e.subtrackID IS NULL THEN b.trackName ELSE e.subtrackName END AS trackName, ";
-		cmd += "c.directoryName, d.fileName, ";
+		cmd += "c.directoryID, d.fileName, ";
 		cmd += "b.timeLength, b.artist, b.originalArtist, b.composer ";
 	}
 	cmd += "FROM album AS a INNER JOIN track AS b ON a.albumID=b.albumID ";

@@ -94,6 +94,8 @@ class TRACK_DB_EXPORT TrackDB
 		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID);
 		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID,tint& dirID,tint& fileID);
 		
+		QString getDirectoryName(int dirID);
+		
 	protected:
 		
 		static TrackDB *m_instance;
@@ -130,6 +132,10 @@ class TRACK_DB_EXPORT TrackDB
 		int savePlaylistOp(int playlistID, const QString& name, const QVector<PlaylistTuple>& pList);
 		void getDBInfoListFromPlaylist(QVector<QPair<info::InfoSPtr, tint> >& pList, QVector<QPair<DBInfoSPtr, tint> >& pDBList);
 		void clearPlaylistOp(int playlistID);
+		
+		int getMountDirectoryID(const QString& dName, QString& mName);
+		QString getMountDirectoryName(const QString& dName);
+		bool addMountDirectory(int dirID, const QString& dName);
 };
 
 //-------------------------------------------------------------------------------------------

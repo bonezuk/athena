@@ -86,6 +86,9 @@ class TRACK_DB_EXPORT Schema
 		static void createMountPointsOps(SQLiteDatabase *db);
 		virtual void copyMountPoints(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
 		
+		virtual void createDirectoryMount();
+		virtual void copyDirectoryMount(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+		
 		virtual bool writeDatabaseVersion(int versionNo);
 		
 		virtual QString tempUpgradeDBFileName(const QString& orgTrackDBFileName);

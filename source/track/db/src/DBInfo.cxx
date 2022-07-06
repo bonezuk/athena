@@ -81,11 +81,13 @@ QSharedPointer<info::Info> DBInfo::readInfo(int albumID,int trackID)
 	{
 		QString cmdQ,dirName,fileName;
 		SQLiteQuery trackQ(db);
-	
-		cmdQ  = "SELECT c.directoryName, d.fileName";
+
+		cmdQ  = "SELECT CASE WHEN f.mountID IS NULL THEN c.directoryName ELSE (f.mountName || c.directoryName) END directoryName, d.fileName";
 		cmdQ += "  FROM album AS a INNER JOIN track AS b ON a.albumID=b.albumID";
 		cmdQ += "    INNER JOIN directory AS c ON a.directoryID=c.directoryID";
 		cmdQ += "    INNER JOIN file AS d ON (c.directoryID=d.directoryID AND b.fileID=d.fileID)";
+		cmdQ += "    LEFT JOIN dirmount AS e ON c.directoryID=e.dirID";
+		cmdQ += "    LEFT JOIN mountpoints AS f ON e.mountID=f.mountID";
 		cmdQ += "  WHERE a.albumID=" + QString::number(albumID) + " AND b.trackID=" + QString::number(trackID);
 
 		trackQ.prepare(cmdQ);
@@ -475,17 +477,18 @@ bool DBInfo::loadImages() const
 
 QString DBInfo::directoryGroup() const
 {
+	tint dirID;
 	QString cmdQ,dGroup;
 	SQLiteQuery dgQ(TrackDB::instance()->m_db);
 
-	cmdQ  = "SELECT b.directoryName";
+	cmdQ  = "SELECT b.directoryID";
 	cmdQ += "  FROM album AS a INNER JOIN directory AS b ON a.groupID=b.directoryID";
 	cmdQ += "  WHERE a.albumID=" + QString::number(m_albumID) + " AND a.groupID>=0";
 	dgQ.prepare(cmdQ);
-	dgQ.bind(dGroup);
+	dgQ.bind(dirID);
 	if(dgQ.next())
 	{
-		dGroup = TrackDB::dbStringInv(dGroup);
+		dGroup = TrackDB::instance()->getDirectoryName(dirID);
 		return dGroup;
 	}
 	else

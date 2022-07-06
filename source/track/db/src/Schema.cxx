@@ -76,6 +76,7 @@ bool Schema::createDB(SQLiteDatabase *db)
 				createSandBoxURL();
 				createMountPoints();
 				createFileHash();
+				createDirectoryMount();
 			}
 		}
 		catch(const SQLiteException& e)
@@ -138,6 +139,49 @@ void Schema::copyMountPoints(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 	{
 		destI.bind(mountID);
 		destI.bind(mountName);
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::createDirectoryMount()
+{
+	if(!isTableDefined("dirmount"))
+	{
+		QString cmd;
+		
+		cmd  = "CREATE TABLE dirmount (";
+		cmd += "  mountID INTEGER NOT NULL,";
+		cmd += "  dirID INTEGER PRIMARY KEY";
+		cmd += ");";
+		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyDirectoryMount(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int mountID, dirID;
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "mountID, dirID";
+
+	cmd = "SELECT "	+ items + " FROM dirmount";
+	srcQ.prepare(cmd);
+	srcQ.bind(mountID);
+	srcQ.bind(dirID);
+	
+	cmd = "INSERT INTO dirmount (" + items + ") VALUES (?,?)";
+	destI.prepare(cmd);
+		
+	while(srcQ.next())
+	{
+		destI.bind(mountID);
+		destI.bind(dirID);
 		destI.next();
 	}
 }
@@ -1024,6 +1068,7 @@ bool Schema::doUpgrade(const QString& orgTrackDBFileName)
 						copySandBoxURL(&srcDB, &destDB);
 						copyFileHash(&srcDB, &destDB);
 						copyMountPoints(&srcDB, &destDB);
+						copyDirectoryMount(&srcDB, &destDB);
 						res = true;
 					}
 					else

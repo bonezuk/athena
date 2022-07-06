@@ -61,22 +61,21 @@ ListView {
             }
         }
         
-        //ListView.onRemove: animOnDelete.start()
-
-		TapHandler {
-			id: tapHandler
-			onDoubleTapped: {
-				console.log("dd = " + index);
-				if(!isDeleted)
-				{				
-					playListView.currentIndex = index;
-					playListView.clicked();
-				}
-			}	
+        ListView.onRemove: animOnDelete.start()
+       
+       	onClicked: {
+			console.log("dd = " + index);
+			if(!isDeleted)
+			{				
+				playListView.currentIndex = index;
+				playListView.clicked();
+			}
 		}
-		        
+       
         background: Rectangle {
         	id: playListInformation
+        	
+        	color: "white"
         	
 			gradient: Gradient {
 				GradientStop {
@@ -84,11 +83,11 @@ ListView {
 					color: {
 						if(index === playbackState.index)
 						{
-							tapHandler.pressed ? "#e0e0e0" : "#d8ffed"
+							SwipeDelegate.pressed ? "#e0e0e0" : "#d8ffed"
 						}
 						else
 						{
-							tapHandler.pressed ? "#e0e0e0" : "#fff"
+							SwipeDelegate.pressed ? "#e0e0e0" : "#fff"
 						}
 					}
 				}
@@ -97,11 +96,11 @@ ListView {
 					color: {
 						if(index === playbackState.index)
 						{
-							tapHandler.pressed ? "#e0e0e0" : "#82ffca"
+							SwipeDelegate.pressed ? "#e0e0e0" : "#82ffca"
 						}
 						else
 						{
-							tapHandler.pressed ? "#e0e0e0" : "#f5f5f5"
+							SwipeDelegate.pressed ? "#e0e0e0" : "#f5f5f5"
 						}
 					}
 				}

@@ -58,7 +58,7 @@ Window {
 					Image {
 						source: "images/back.png"
 						fillMode: Image.PreserveAspectFit
-						height: 30
+						height: 60
 						anchors.verticalCenter: parent.verticalCenter
 						anchors.left: parent.left
 						anchors.leftMargin: 10

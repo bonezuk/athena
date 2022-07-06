@@ -34,6 +34,38 @@ Window {
 			}
 
 			Page {
+				header: Rectangle {
+					width: parent.width
+					height: 40
+					
+					gradient: Gradient {
+						GradientStop {
+							position: 0
+							color: "#ffffff"
+						}
+						GradientStop {
+							position: 1
+							color: "#e0e0e0"
+						}
+					}
+					
+					Image {
+						source: "images/back.png"
+						fillMode: Image.PreserveAspectFit
+						height: 60
+						anchors.verticalCenter: parent.verticalCenter
+						anchors.left: parent.left
+						anchors.leftMargin: 10
+
+						TapHandler {
+							onTapped: {
+								console.log("back");
+								libraryMain.currentIndex = 0;
+							}
+						}
+					}
+				}
+				
 				AlbumTrackView {
 					anchors.fill: parent
 					model: playListModel

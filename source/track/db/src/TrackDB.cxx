@@ -295,6 +295,39 @@ bool TrackDB::addInfo(info::Info *data)
 
 //-------------------------------------------------------------------------------------------
 
+QString TrackDB::getDirectoryName(int dirID)
+{
+	QString cmdQ, dirName;
+	SQLiteQuery dirQ(m_db);
+	
+	cmdQ = QString("SELECT c.mountName || a.directoryName FROM directory AS a INNER JOIN dirmount AS b ON a.directoryID=b.dirID INNER JOIN mountpoints AS c ON b.mountID=c.mountID WHERE a.directoryID=%1")
+		.arg(dirID);
+	dirQ.prepare(cmdQ);
+	dirQ.bind(dirName);
+	if(!dirQ.next())
+	{
+		SQLiteQuery dirOnlyQ(m_db);
+		cmdQ = QString("SELECT directoryName FROM directory WHERE directoryID=%1").arg(dirID);
+		dirQ.prepare(cmdQ);
+		dirQ.bind(dirName);
+		if(!dirQ.next())
+		{
+			dirName = "";
+		}
+		else
+		{
+			dirName = dbStringInv(dirName);
+		}
+	}
+	else
+	{
+		dirName = dbStringInv(dirName);
+	}
+	return dirName;
+}
+
+//-------------------------------------------------------------------------------------------
+
 tint TrackDB::addAlbum(info::Info *data,tint& dirID)
 {
 	tint year,albumID = -1,groupID = -1;
@@ -340,22 +373,20 @@ tint TrackDB::addAlbum(info::Info *data,tint& dirID)
 
 				albumIDList.append(albumID);
 
-				cmdQ = "SELECT directoryName FROM directory WHERE directoryID=" + QString::number(dirID);
-				oDirQ.prepare(cmdQ);
-				oDirQ.bind(oDir);
-				if(oDirQ.next())
+				oDir = getDirectoryName(dirID);
+				if(!oDir.isEmpty())
 				{
-					oDir = dbStringInv(oDir);
-
-					cmdQ  = "SELECT a.albumID, b.directoryName";
+					int albumDirID;
+					
+					cmdQ  = "SELECT a.albumID, b.directoryID";
 					cmdQ += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
 					cmdQ += "  WHERE a.albumName=\'" + albumName + "\'";
 					groupQ.prepare(cmdQ);
 					groupQ.bind(gID);
-					groupQ.bind(aDir);
+					groupQ.bind(albumDirID);
 					while(groupQ.next())
 					{
-						aDir = dbStringInv(aDir);
+						aDir = getDirectoryName(albumDirID);
 						if(gID!=albumID)
 						{
 							QString cDir;
@@ -552,6 +583,85 @@ tint TrackDB::addDirectory(info::Info *data)
 
 //-------------------------------------------------------------------------------------------
 
+int TrackDB::getMountDirectoryID(const QString& dName, QString& mName)
+{
+	int mountID;
+	SQLiteQuery mountQ(m_db);
+	QString mountName, cmdQ;
+	
+	cmdQ = "SELECT mountID, mountName FROM mountpoints";
+	mountQ.prepare(cmdQ);
+	mountQ.bind(mountID);
+	mountQ.bind(mountName);
+	while(mountQ.next())
+	{
+		if(mountName.at(mountName.size()-1)!=QChar('/') && mountName.at(mountName.size()-1)!=QChar('\\'))
+		{
+			mountName += "/";
+		}
+		mountName = QDir::toNativeSeparators(mountName);
+	
+		if(dName.length() >= mountName.length())
+		{
+			QString n = dName.left(mountName.length());
+			if(n == mountName)
+			{
+				mName = mountName;
+				return mountID;
+			}
+		}
+	}
+	return -1;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString TrackDB::getMountDirectoryName(const QString& dName)
+{
+	int mountID;
+	QString mountName, mDirName;
+	
+	mountID = getMountDirectoryID(dName, mountName);
+	if(mountID >= 0)
+	{
+		mDirName = dName.mid(mountName.length());
+	}
+	return mDirName;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool TrackDB::addMountDirectory(int dirID, const QString& dName)
+{
+	int mountID;
+	QString mountName;
+	bool res = false;
+	
+	mountID = getMountDirectoryID(dName, mountName);
+	if(mountID >= 0)
+	{
+		QString cmdI;
+		SQLiteInsert mDirI(m_db);
+		
+		cmdI = "INSERT INTO dirmount (mountID, dirID) VALUES (?,?)";
+		mDirI.prepare(cmdI);
+		mDirI.bind(mountID);
+		mDirI.bind(dirID);
+		if(mDirI.next())
+		{
+			res = true;
+		}
+		else
+		{
+			QString err = QString("Failed to directory mount record mountID=%1, dirID=%2").arg(mountID).arg(dirID);
+			printError("addMountDirectory", err.toUtf8().constData());
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
 tint TrackDB::addDirectory(const QString& dName)
 {
 	tint dirID = -1;
@@ -559,7 +669,7 @@ tint TrackDB::addDirectory(const QString& dName)
 	
 	if(!dirName.isEmpty())
 	{
-		QString cmdQ,cmdI;
+		QString cmdQ, cmdI, mDirName, orgName;
 		SQLiteQuery dirQ(m_db);
 		
 		if(dirName.at(dirName.size()-1)!=QChar('/') && dirName.at(dirName.size()-1)!=QChar('\\'))
@@ -567,6 +677,14 @@ tint TrackDB::addDirectory(const QString& dName)
 			dirName += "/";
 		}
 		dirName = QDir::toNativeSeparators(dirName);
+		
+		orgName = dirName;
+		mDirName = getMountDirectoryName(dirName);
+		if(!mDirName.isEmpty())
+		{
+			dirName = mDirName;
+		}
+		
 		dirName = dbString(dirName);
 		
 		cmdQ = "SELECT directoryID FROM directory WHERE directoryName=\'" + dirName + "\';";
@@ -581,7 +699,18 @@ tint TrackDB::addDirectory(const QString& dName)
 			if(dirI.next())
 			{
 				dirID = idOfInserted();
-				if(dirID<0)
+				if(dirID >= 0)
+				{
+					if(!mDirName.isEmpty())
+					{
+						if(!addMountDirectory(dirID, orgName))
+						{
+							printError("addDirectory","Error in inserting mount point relationship");
+							dirID = -1;						
+						}
+					}
+				}
+				else
 				{
 					printError("addDirectory","Error getting ID of inserted directory information");
 					dirID = -1;
@@ -1030,6 +1159,8 @@ bool TrackDB::eraseTrack(tint albumID,tint trackID,tint dirID,tint fileID)
 		{
 			cmd = "DELETE FROM directory WHERE directoryID=" + dirIDStr + ";";
 			m_db->exec(cmd);
+			cmd = "DELETE FROM dirmount WHERE dirID=" + dirIDStr + ";";
+			m_db->exec(cmd);
 		}
 		
 		// delete file
@@ -1066,16 +1197,34 @@ bool TrackDB::getKeysFromFilename(const QString& fullFileName,tint& albumID,tint
 	
 	if(getFilenameComponents(fullFileName,dirName,fileName))
 	{
-		QString cmd;
+		int mountID;
+		QString cmd, mountName;
 		SQLiteQuery idQ(m_db);
 		
 		dirName = QDir::toNativeSeparators(dirName);
 		fileName = QDir::toNativeSeparators(fileName);
-		cmd  = "SELECT a.albumID, d.trackID, a.directoryID, c.fileID";
-		cmd += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
-		cmd += "    INNER JOIN file AS c ON b.directoryID=c.directoryID";
-		cmd += "    INNER JOIN track AS d ON a.albumID=d.albumID AND c.fileID=d.fileID";
+		
+		mountID = getMountDirectoryID(dirName, mountName);
+		if(mountID >= 0)
+		{
+			dirName = dirName.mid(mountName.length());
+		
+			cmd  = "SELECT a.albumID, d.trackID, a.directoryID, c.fileID";
+			cmd += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
+			cmd += "    INNER JOIN file AS c ON b.directoryID=c.directoryID";
+			cmd += "    INNER JOIN track AS d ON a.albumID=d.albumID AND c.fileID=d.fileID";
+			cmd += "	INNER JOIN dirmount AS e ON b.directoryID=e.dirID";
+			cmd += "	INNER JOIN mountpoints AS f ON e.mountID=f.mountID";
+		}
+		else
+		{
+			cmd  = "SELECT a.albumID, d.trackID, a.directoryID, c.fileID";
+			cmd += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
+			cmd += "    INNER JOIN file AS c ON b.directoryID=c.directoryID";
+			cmd += "    INNER JOIN track AS d ON a.albumID=d.albumID AND c.fileID=d.fileID";		
+		}
 		cmd += "  WHERE b.directoryName=\'" + dbString(dirName) + "\' AND c.fileName=\'" + dbString(fileName) + "\';";
+
 		idQ.prepare(cmd);
 		idQ.bind(albumID);
 		idQ.bind(trackID);
@@ -1116,11 +1265,10 @@ bool TrackDB::isUpdateRequired(tint dirID,tint fileID)
 	SQLiteQuery fileQ(m_db);
 	bool res = false;
 	
-	cmd  = "SELECT a.directoryName, b.fileName, b.updateTime, b.fileSize";
+	cmd  = "SELECT b.fileName, b.updateTime, b.fileSize";
 	cmd += "    FROM directory AS a INNER JOIN file AS b ON a.directoryID=b.directoryID";
 	cmd += "    WHERE a.directoryID=" + QString::number(dirID) + " AND b.fileID=" + QString::number(fileID) + ";";
 	fileQ.prepare(cmd);
-	fileQ.bind(dirName);
 	fileQ.bind(fileName);
 	fileQ.bind(mTV);
 	fileQ.bind(fileSize);
@@ -1129,7 +1277,7 @@ bool TrackDB::isUpdateRequired(tint dirID,tint fileID)
 		tint actualFileSize = -1;
 		common::TimeStamp actualMT;
 		
-		dirName = dbStringInv(dirName);
+		dirName = getDirectoryName(dirID);
 		fileName = dbStringInv(fileName);
 
 		mT = mTV;
@@ -1214,16 +1362,17 @@ tint TrackDB::groupAlbums(const QVector<tint>& albumIDList)
 	
 	for(ppI=albumIDList.begin();ppI!=albumIDList.end();ppI++)
 	{
+		int dirIDMount;
 		QString dirName;
 		SQLiteQuery dirQ(m_db);
 		
-		cmdQ  = "SELECT b.directoryName FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
+		cmdQ  = "SELECT b.directoryID FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
 		cmdQ += "  WHERE a.albumID=" + QString::number(*ppI);
 		dirQ.prepare(cmdQ);
-		dirQ.bind(dirName);
+		dirQ.bind(dirIDMount);
 		if(dirQ.next())
 		{
-			dirName = dbStringInv(dirName);
+			dirName = getDirectoryName(dirIDMount);
 			QDir cDir(dirName);
 			dirList.append(cDir.absolutePath());
 			albumDirMap.insert(*ppI,dirName);
@@ -1272,7 +1421,8 @@ tint TrackDB::groupAlbums(const QVector<tint>& albumIDList)
 		tint discNo,trackNo;
 		QString dName,fName;
 		SQLiteQuery dtQ(m_db);
-
+		
+		// as the subsequent search is based on directory name and path is not actual used
 		cmdQ  = "SELECT b.discNo,b.trackNo,c.directoryName,d.fileName";
 		cmdQ += "  FROM album AS a INNER JOIN track AS b ON a.albumID=b.albumID";
 		cmdQ += "    INNER JOIN directory AS c ON a.directoryID=c.directoryID";
@@ -1390,15 +1540,31 @@ bool TrackDB::getTrackKey(const QString& fileName,QPair<tint,tint>& pairID)
 		}
 		if(!dName.isEmpty() && !fName.isEmpty())
 		{
-			tint aID,tID;
-			QString cmdQ;
+			tint aID, tID, mountID;
+			QString cmdQ, mountName;
 			SQLiteQuery atQ(m_db);
 
-			cmdQ  = "SELECT c.albumID, d.trackID";
-			cmdQ += "  FROM directory AS a INNER JOIN file AS b ON a.directoryID=b.directoryID";
-			cmdQ += "    INNER JOIN album AS c ON a.directoryID=c.directoryID";
-			cmdQ += "    INNER JOIN track AS d ON (c.albumID=d.albumID AND b.fileID=d.fileID)";
-			cmdQ += "  WHERE a.directoryName='" + dbString(dName) + "' AND b.fileName='" + dbString(fName) + "'";
+			mountID = getMountDirectoryID(dName, mountName);
+			if(mountID >= 0)
+			{
+				dName = dName.mid(mountName.length());
+		
+				cmdQ  = "SELECT a.albumID, d.trackID,";
+				cmdQ += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
+				cmdQ += "    INNER JOIN file AS c ON b.directoryID=c.directoryID";
+				cmdQ += "    INNER JOIN track AS d ON a.albumID=d.albumID AND c.fileID=d.fileID";
+				cmdQ += "	INNER JOIN dirmount AS e ON b.directoryID=e.dirID";
+				cmdQ += "	INNER JOIN mountpoints AS f ON e.mountID=f.mountID";
+			}
+			else
+			{
+				cmdQ  = "SELECT a.albumID, d.trackID,";
+				cmdQ += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
+				cmdQ += "    INNER JOIN file AS c ON b.directoryID=c.directoryID";
+				cmdQ += "    INNER JOIN track AS d ON a.albumID=d.albumID AND c.fileID=d.fileID";
+			}
+			cmdQ += "  WHERE b.directoryName=\'" + dbString(dName) + "\' AND c.fileName=\'" + dbString(fName) + "\';";
+			
 			atQ.prepare(cmdQ);
 			atQ.bind(aID);
 			atQ.bind(tID);
@@ -1556,8 +1722,12 @@ bool TrackDB::updateAlbumImage(int albumID)
 		if(curFileName.isEmpty())
 		{
 			SQLiteQuery aDirQ(m_db);
-			
-			cmdQ = "SELECT b.directoryName FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID WHERE a.albumID=" + QString::number(albumID);
+
+			cmdQ  = "SELECT CASE WHEN d.mountID IS NULL THEN b.directoryName ELSE (d.mountName || b.directoryName) END directoryName";
+			cmdQ += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
+			cmdQ += "    LEFT JOIN dirmount AS c ON b.directoryID=c.dirID";
+			cmdQ += "    LEFT JOIN mountpoints AS d ON c.mountID=d.mountID";
+			cmdQ += "  WHERE a.albumID=" + QString::number(albumID);
 			aDirQ.prepare(cmdQ);
 			aDirQ.bind(dName);
 			if(aDirQ.next())
@@ -1603,8 +1773,13 @@ bool TrackDB::updateAlbumImage(int albumID)
 			SQLiteQuery albumNameQ(m_db);
 			
 			m_db->exec("SAVEPOINT updateAlbumImage");
-		
-			cmdQ = "SELECT a.albumName,b.directoryName FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID WHERE albumID=" + QString::number(albumID);
+
+			cmdQ  = "SELECT a.albumName, CASE WHEN d.mountID IS NULL THEN b.directoryName ELSE (d.mountName || b.directoryName) END directoryName";
+			cmdQ += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
+			cmdQ += "    LEFT JOIN dirmount AS c ON b.directoryID=c.dirID";
+			cmdQ += "    LEFT JOIN mountpoints AS d ON c.mountID=d.mountID";
+			cmdQ += "  WHERE a.albumID=" + QString::number(albumID);
+
 			albumNameQ.prepare(cmdQ);
 			albumNameQ.bind(albumName);
 			albumNameQ.bind(dirName);
