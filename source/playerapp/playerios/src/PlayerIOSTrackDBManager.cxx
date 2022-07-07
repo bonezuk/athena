@@ -200,6 +200,7 @@ void PlayerIOSTrackDBManager::rebuildDatabase()
 {
 	QString fileDBName = trackDBPath();
 	track::db::TrackDB *trackDB = track::db::TrackDB::instance();
+	bool res = false;
 	
 	// Close existing database
 	trackDB->close();
@@ -208,9 +209,13 @@ void PlayerIOSTrackDBManager::rebuildDatabase()
 	// Open the database will cause a new blank database to be created.
 	if(trackDB->open(fileDBName))
 	{
-		buildDBForDirectory(PlayerIOSUtils::musicDirectory());
+		if(defineMountpoint())
+		{
+			buildDBForDirectory(PlayerIOSUtils::musicDirectory());
+			res = true;
+		}
 	}
-	else
+	if(!res)
 	{
 		QString err = QString("FATAL ERROR. Failed to created new track database at '%1'").arg(fileDBName);
 		printError("rebuildDatabase", err.toUtf8().constData());

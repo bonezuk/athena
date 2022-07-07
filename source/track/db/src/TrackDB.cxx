@@ -587,7 +587,7 @@ QString TrackDB::formatDirectoryPath(const QString& path) const
 {
 	QString p = path;
 	
-	if(p.at(p.length() - 1) != QChar('/') || p.at(p.length() - 1) != QChar('\\'))
+	if(p.at(p.length() - 1) != QChar('/') && p.at(p.length() - 1) != QChar('\\'))
 	{
 		p += "/";
 	}
@@ -1550,11 +1550,10 @@ bool TrackDB::getTrackKey(const QString& fileName,QPair<tint,tint>& pairID)
 			SQLiteQuery atQ(m_db);
 
 			mountID = getMountDirectoryID(dName, mountName);
+			cmdQ  = "SELECT a.albumID, d.trackID";
 			if(mountID >= 0)
 			{
 				dName = dName.mid(mountName.length());
-		
-				cmdQ  = "SELECT a.albumID, d.trackID,";
 				cmdQ += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
 				cmdQ += "    INNER JOIN file AS c ON b.directoryID=c.directoryID";
 				cmdQ += "    INNER JOIN track AS d ON a.albumID=d.albumID AND c.fileID=d.fileID";
@@ -1563,7 +1562,6 @@ bool TrackDB::getTrackKey(const QString& fileName,QPair<tint,tint>& pairID)
 			}
 			else
 			{
-				cmdQ  = "SELECT a.albumID, d.trackID,";
 				cmdQ += "  FROM album AS a INNER JOIN directory AS b ON a.directoryID=b.directoryID";
 				cmdQ += "    INNER JOIN file AS c ON b.directoryID=c.directoryID";
 				cmdQ += "    INNER JOIN track AS d ON a.albumID=d.albumID AND c.fileID=d.fileID";
