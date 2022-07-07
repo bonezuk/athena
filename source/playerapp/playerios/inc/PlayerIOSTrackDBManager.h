@@ -43,6 +43,7 @@ class PlayerIOSTrackDBManager : public QObject
 		
 		virtual void renameDBFile(const QString& fileDBName);
 		virtual void buildDBForDirectory(const QString& dirName);
+		virtual bool defineMountpoint();
 };
 
 //-------------------------------------------------------------------------------------------

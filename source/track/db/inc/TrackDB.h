@@ -95,6 +95,7 @@ class TRACK_DB_EXPORT TrackDB
 		bool getKeysFromFilename(const QString& fullFileName,tint& albumID,tint& trackID,tint& dirID,tint& fileID);
 		
 		QString getDirectoryName(int dirID);
+		QString formatDirectoryPath(const QString& path) const;
 		
 	protected:
 		

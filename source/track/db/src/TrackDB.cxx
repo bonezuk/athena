@@ -583,6 +583,19 @@ tint TrackDB::addDirectory(info::Info *data)
 
 //-------------------------------------------------------------------------------------------
 
+QString TrackDB::formatDirectoryPath(const QString& path) const
+{
+	QString p = path;
+	
+	if(p.at(p.length() - 1) != QChar('/') || p.at(p.length() - 1) != QChar('\\'))
+	{
+		p += "/";
+	}
+	return QDir::toNativeSeparators(p);
+}
+
+//-------------------------------------------------------------------------------------------
+
 int TrackDB::getMountDirectoryID(const QString& dName, QString& mName)
 {
 	int mountID;
@@ -595,12 +608,8 @@ int TrackDB::getMountDirectoryID(const QString& dName, QString& mName)
 	mountQ.bind(mountName);
 	while(mountQ.next())
 	{
-		if(mountName.at(mountName.size()-1)!=QChar('/') && mountName.at(mountName.size()-1)!=QChar('\\'))
-		{
-			mountName += "/";
-		}
-		mountName = QDir::toNativeSeparators(mountName);
-	
+		mountName = formatDirectoryPath(mountName);
+		
 		if(dName.length() >= mountName.length())
 		{
 			QString n = dName.left(mountName.length());
@@ -672,11 +681,7 @@ tint TrackDB::addDirectory(const QString& dName)
 		QString cmdQ, cmdI, mDirName, orgName;
 		SQLiteQuery dirQ(m_db);
 		
-		if(dirName.at(dirName.size()-1)!=QChar('/') && dirName.at(dirName.size()-1)!=QChar('\\'))
-		{
-			dirName += "/";
-		}
-		dirName = QDir::toNativeSeparators(dirName);
+		dirName = formatDirectoryPath(dirName);
 		
 		orgName = dirName;
 		mDirName = getMountDirectoryName(dirName);
@@ -2049,12 +2054,7 @@ QString TrackDB::loadDirectoryImage(const QString& dirName,const QString& albumN
 		LPCWSTR wStr;
 		struct _stat fileStat;
 		
-		dName = dirName;
-		if(dName.at(dName.length()-1)==QChar('/') || dName.at(dName.length()-1)==QChar('\\'))
-		{
-			dName = dName.mid(0,dName.length()-1);
-		}
-		dName = QDir::toNativeSeparators(dName);
+		dName = formatDirectoryPath(dirName);
 		
 		wStr = reinterpret_cast<LPCWSTR>(dName.utf16());
 		if(::_wstat(wStr,&fileStat)==0)
@@ -2130,12 +2130,8 @@ QString TrackDB::loadDirectoryImage(const QString& dirName,const QString& albumN
 	{
 		struct stat fileStat;
 		
-		dName = dirName;
-		if(dName.at(dName.length()-1)==QChar('/') || dName.at(dName.length()-1)==QChar('\\'))
-		{
-			dName = dName.mid(0,dName.length()-1);
-		}
-		dName = QDir::toNativeSeparators(dName);
+		dName = formatDirectoryPath(dirName);
+
 		if(::stat(dName.toUtf8().constData(),&fileStat)==0)
 		{
 			if(S_IFDIR & fileStat.st_mode)

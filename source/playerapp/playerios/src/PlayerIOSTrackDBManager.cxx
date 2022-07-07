@@ -76,7 +76,14 @@ bool PlayerIOSTrackDBManager::open()
 	trackDB = track::db::TrackDB::instance(trackDBPath());
 	if(trackDB != 0)
 	{
-		res = true;
+		if(defineMountpoint())
+		{
+			res = true;
+		}
+		else
+		{
+			printError("open", "Failed to define document mount point");
+		}
 	}
 	else
 	{
@@ -94,6 +101,25 @@ void PlayerIOSTrackDBManager::close()
 	{
 		delete trackDB;
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool PlayerIOSTrackDBManager::defineMountpoint()
+{
+	bool res = false;
+	QString docPath = PlayerIOSUtils::appDataDirectory();
+	
+	if(track::db::TrackDB::instance()->mountPoints()->updateAppMountPath(docPath))
+	{
+		res = true;
+	}
+	else
+	{
+		QString err = QString("Failed to define mount point at '%1'").arg(docPath);
+		printError("defineMountpoint", err.toUtf8().constData());
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------
