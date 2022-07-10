@@ -67,6 +67,13 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QOmegaListModel
 		virtual tint childIndexFromId(tuint64 id) const;
 		
 		virtual qint32 getSizeOfModel() const;
+		
+		virtual void onPlay();
+		virtual void onPause();
+		virtual void onStop();
+		
+		virtual void onPlayPrevious();
+		virtual void onPlayNext();
 
 	protected:
 		int m_playlistID;

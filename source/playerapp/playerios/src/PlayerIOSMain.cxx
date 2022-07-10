@@ -10,6 +10,10 @@
 #include "playerapp/playercommon/inc/QAlbumListModel.h"
 #include "playerapp/playercommon/inc/QAlbumTrackListModel.h"
 
+#if defined(OMEGA_IOS)
+#include "playerapp/playerios/inc/PlayerIOSAudioSession.h"
+#endif
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QFile>
@@ -91,39 +95,48 @@ int main(int argc, char **argv)
 					
 					QSharedPointer<QAlbumListModel> pAlbumModel(new QAlbumListModel());
 					if(pAlbumModel->initialise())
-					{					
-						QFile page(":/Resources/frontpage1.qml");
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-						if(page.open(QIODevice::ReadOnly))
-#else
-						if(page.open(QIODeviceBase::ReadOnly))
+					{
+#if defined(OMEGA_IOS)
+						QSharedPointer<PlayerIOSAudioSession> pSession = PlayerIOSAudioSession::startSession(pLModel);
+						if(!pSession.isNull())
 #endif
 						{
-							engine.rootContext()->setContextProperty("playListModel", pModel.data());
-							engine.rootContext()->setContextProperty("albumModel", pAlbumModel.data());
-							engine.rootContext()->setContextProperty("albumTrackModel", pAlbumModel->trackModel().data());
-							engine.rootContext()->setContextProperty("playbackStateController", pModel->playbackState().data());
+							QFile page(":/Resources/frontpage1.qml");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+							if(page.open(QIODevice::ReadOnly))
+#else	
+							if(page.open(QIODeviceBase::ReadOnly))
+#endif
+							{
+								engine.rootContext()->setContextProperty("playListModel", pModel.data());
+								engine.rootContext()->setContextProperty("albumModel", pAlbumModel.data());
+								engine.rootContext()->setContextProperty("albumTrackModel", pAlbumModel->trackModel().data());
+								engine.rootContext()->setContextProperty("playbackStateController", pModel->playbackState().data());
+				
+								PlayerUISettings settings;
+							
+								settings.registerModel(pModel.dynamicCast<QOmegaListModel>());
+								settings.registerModel(pAlbumModel.dynamicCast<QOmegaListModel>());
+								settings.registerModel(pAlbumModel->trackModel().dynamicCast<QOmegaListModel>());
+							
+								engine.rootContext()->setContextProperty("settings", &settings);
 			
-							PlayerUISettings settings;
-							
-							settings.registerModel(pModel.dynamicCast<QOmegaListModel>());
-							settings.registerModel(pAlbumModel.dynamicCast<QOmegaListModel>());
-							settings.registerModel(pAlbumModel->trackModel().dynamicCast<QOmegaListModel>());
-							
-							engine.rootContext()->setContextProperty("settings", &settings);
-			
-							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pModel.data(), SLOT(deleteTrack(const QString&)));
+								QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pModel.data(), SLOT(deleteTrack(const QString&)));
 
-							QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel.data(), SLOT(appendTrack(const QString&)));
-							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pAlbumModel.data(), SLOT(deleteTrack(const QString&)));
+								QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel.data(), SLOT(appendTrack(const QString&)));
+								QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pAlbumModel.data(), SLOT(deleteTrack(const QString&)));
 
-							QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel->trackModel().data(), SLOT(appendTrack(const QString&)));
-							QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pAlbumModel->trackModel().data(), SLOT(deleteTrack(const QString&)));
-							
-							QObject::connect(pAlbumModel->trackModel().data(), SIGNAL(appendToPlaylist(const QString&)), pModel.data(), SLOT(appendTrack(const QString&)));
-							
-							engine.load(":/Resources/frontpage1.qml");
-							app.exec();
+								QObject::connect(trackDBManager, SIGNAL(newtrack(const QString&)), pAlbumModel->trackModel().data(), SLOT(appendTrack(const QString&)));
+								QObject::connect(trackDBManager, SIGNAL(removetrack(const QString&)), pAlbumModel->trackModel().data(), SLOT(deleteTrack(const QString&)));
+									
+								QObject::connect(pAlbumModel->trackModel().data(), SIGNAL(appendToPlaylist(const QString&)), pModel.data(), SLOT(appendTrack(const QString&)));
+								
+								engine.load(":/Resources/frontpage1.qml");
+								app.exec();
+							}
+#if defined(OMEGA_IOS)
+							pSession->endSession();
+#endif
 						}
 					}
 				}

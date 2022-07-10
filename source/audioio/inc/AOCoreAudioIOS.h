@@ -50,6 +50,8 @@ class AUDIOIO_EXPORT AOCoreAudioIOS : public AOCoreAudio
 
 		virtual void processMessages();
 		
+		virtual bool setPlaybackFrequency();
+		
 		virtual void writeToAudioOutputBufferFromPartData(AbstractAudioHardwareBuffer *pBuffer,
                                                           const engine::RData *data,
                                                           tint partNumber,

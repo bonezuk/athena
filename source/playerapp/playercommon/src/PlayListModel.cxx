@@ -405,7 +405,7 @@ void PlayListModel::onPlayPausePressed()
 	int playIndex;
 	
 	playIndex = m_pPlaybackState->getIndex();
-	if (playIndex >= 0 && playIndex < m_playList.size())
+	if(playIndex >= 0 && playIndex < m_playList.size())
 	{
 		m_pPlaybackState->resumeOrPausePlayback();
 	}
@@ -441,6 +441,67 @@ void PlayListModel::playNextItem(bool isNext)
 			m_pPlaybackState->onAudioStop();
 		}
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::onPlayPrevious()
+{
+	int prevIndex;
+	
+	prevIndex = m_pPlaybackState->getIndex() - 1;
+	if(prevIndex < 0)
+	{
+		m_pAudioInterface->stop();
+	}
+	else
+	{
+		playItemAtIndexWithNext(prevIndex, false);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::onPlayNext()
+{
+	int nextIndex;
+	
+	nextIndex = m_pPlaybackState->getIndex() + 1;
+	if(nextIndex >= 0 && nextIndex < m_playList.size())
+	{
+		playItemAtIndexWithNext(nextIndex, false);
+	}
+	else
+	{
+		m_pAudioInterface->stop();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::onPlay()
+{
+	if(m_pPlaybackState->getState() == PlaybackStateController::Pause)
+	{
+		m_pAudioInterface->play();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::onPause()
+{
+	if(m_pPlaybackState->getState() == PlaybackStateController::Play)
+	{
+		m_pAudioInterface->pause();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayListModel::onStop()
+{
+	m_pAudioInterface->stop();
 }
 
 //-------------------------------------------------------------------------------------------

@@ -3,6 +3,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOCoreAudioIOS.h"
+#include "audioio/inc/AOCoreAudioSessionIOS.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -119,6 +120,37 @@ bool AOCoreAudioIOS::getStreamDescription(const FormatDescription& desc, AudioSt
 
 //-------------------------------------------------------------------------------------------
 
+bool AOCoreAudioIOS::setPlaybackFrequency()
+{
+	bool res = false;
+	QSharedPointer<AOCoreAudioSessionIOS> pSession = AOCoreAudioSessionIOS::audioInstance();
+	
+	if(!pSession.isNull())
+	{
+		int playbackFrequency = pSession->startPlaybackWithFrequency(m_frequency);
+		if(playbackFrequency > 0)
+		{
+			if(playbackFrequency != m_frequency)
+			{
+				initResampler(m_frequency, playbackFrequency);
+				m_frequency = playbackFrequency;
+			}
+			res = true;
+		}
+		else
+		{
+			printError("setPlaybackFrequency", "Failed to get actual playback frequency");
+		}
+	}
+	else
+	{
+		printError("setPlaybackFrequency", "Failed to get audio session");
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool AOCoreAudioIOS::openAudio()
 {
 	OSStatus err;
@@ -164,7 +196,7 @@ bool AOCoreAudioIOS::openAudio()
 						err = AudioUnitSetProperty(m_audioOutputUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, 0, &enableIO, sizeof(enableIO));
 						if(err == noErr)
 						{
-							if(getDeviceFrequency() > 0)
+							if(setPlaybackFrequency())
 							{
 								initCyclicBuffer();
 							

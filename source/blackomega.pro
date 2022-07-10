@@ -564,10 +564,12 @@ ios
 	HEADERS += ./audioio/inc/AOCoreAudioIOS.h
 	HEADERS += ./audioio/inc/AOQueryCoreAudio.h
 	HEADERS += ./audioio/inc/AOQueryCoreAudioIOS.h
+	HEADERS += ./audioio/inc/AOCoreAudioSessionIOS.h
 	HEADERS += ./audioio/inc/AudioHardwareBufferCoreAudioIOS.h
 	OBJECTIVE_SOURCES += ./audioio/src/AOCoreAudio.mm
 	OBJECTIVE_SOURCES += ./audioio/src/AOCoreAudioIOS.mm
 	OBJECTIVE_SOURCES += ./audioio/src/AOQueryCoreAudioIOS.mm
+	OBJECTIVE_SOURCES += ./audioio/src/AOCoreAudioSessionIOS.mm
 	OBJECTIVE_SOURCES += ./audioio/src/AudioHardwareBufferCoreAudioIOS.mm
 }
 
@@ -704,4 +706,17 @@ SOURCES += ./playerapp/playerios/src/PlayerIOSUtils.cxx
 SOURCES += ./playerapp/playerios/src/PlayerUISettings.cxx
 SOURCES += ./playerapp/playerios/src/PlayListIOSModel.cxx
 
+ios
+{
+	HEADERS += ./playerapp/playerios/inc/PlayerIOSAudioSession.h
+	OBJECTIVE_SOURCES += ./playerapp/playerios/src/PlayerIOSAudioSession.mm
+}
+
 RESOURCES = ./playerapp/playerios/playerios.qrc
+
+ios
+{
+	LIBS += -framework MediaPlayer
+	LIBS += -framework AVFoundation
+	QMAKE_INFO_PLIST = ./playerapp/playerios/Info.plist
+}
