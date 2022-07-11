@@ -7,6 +7,8 @@
 #include "track/db/inc/TrackDB.h"
 #include "track/db/inc/DBInfo.h"
 
+#include <QTimer>
+
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
@@ -28,12 +30,16 @@ class PlayerIOSTrackDBManager : public QObject
 		void addUploadedFile(const QString& fileName);
 		void onDeleteFile(const QString& fileName);
 		
+	protected slots:
+		void onFlushLog();
+		
 	signals:
 		void newtrack(const QString& fileName);
 		void removetrack(const QString& fileName);
 
 	private:
 		static PlayerIOSTrackDBManager *m_instance;
+		QTimer *m_logFlushTimer;
 	
 		PlayerIOSTrackDBManager(QObject *parent = 0);
 		virtual void printError(const tchar *strR, const tchar *strE) const;

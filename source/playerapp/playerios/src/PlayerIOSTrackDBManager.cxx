@@ -11,7 +11,13 @@ PlayerIOSTrackDBManager *PlayerIOSTrackDBManager::m_instance = 0;
 //-------------------------------------------------------------------------------------------
 
 PlayerIOSTrackDBManager::PlayerIOSTrackDBManager(QObject *parent) : QObject(parent)
-{}
+{
+	m_logFlushTimer = new QTimer(this);
+	m_logFlushTimer->setInterval(200);
+	m_logFlushTimer->setSingleShot(false);
+	QObject::connect(m_logFlushTimer, SIGNAL(timeout()), this, SLOT(onFlushLog()));
+	m_logFlushTimer->start();
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -101,6 +107,13 @@ void PlayerIOSTrackDBManager::close()
 	{
 		delete trackDB;
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerIOSTrackDBManager::onFlushLog()
+{
+	fflush(stdout);
 }
 
 //-------------------------------------------------------------------------------------------

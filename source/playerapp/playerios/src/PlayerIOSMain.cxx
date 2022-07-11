@@ -61,6 +61,30 @@ void releaseCodecs()
 
 //-------------------------------------------------------------------------------------------
 
+void setupLogging()
+{
+	common::TimeStamp n = common::TimeStamp::now();
+	// blackomegaios_log_YY-MM-DD_hh-mm-ss.txt
+	
+	common::BString year = common::BString::Int(n.year(), 2);
+	common::BString month = common::BString::Int(n.month(), 2);
+	common::BString day = common::BString::Int(n.day(), 2);
+	
+	common::BString hour = common::BString::Int(n.hour(), 2);
+	common::BString minute = common::BString::Int(n.minute(), 2);
+	common::BString seconds = common::BString::Int(n.second(), 2);
+	
+	QString name = QString("blackomegaios_log_%1-%2-%3_%4-%5-%6.txt")
+		.arg(static_cast<const char *>(year)).arg(static_cast<const char *>(month)).arg(static_cast<const char *>(day))
+		.arg(static_cast<const char *>(hour)).arg(static_cast<const char *>(minute)).arg(static_cast<const char *>(seconds));
+	
+	QString logFile = common::DiskOps::mergeName(PlayerIOSUtils::logDirectory(), name);
+	
+	freopen(logFile.toUtf8().constData(), "a+", stdout);
+}
+
+//-------------------------------------------------------------------------------------------
+
 int main(int argc, char **argv)
 {
 	QGuiApplication app(argc, argv);
@@ -68,7 +92,10 @@ int main(int argc, char **argv)
 	QQmlApplicationEngine engine;
 	
 	setupPlatform();
+	setupLogging();
 	initCodecs();
+	
+	common::Log::g_Log << "Starting Black Omega iOS version" << common::c_endl;
 	
 	common::DiskIFSPtr diskIF = common::DiskIF::instance("disk");
 	if(!diskIF.isNull())
@@ -131,6 +158,8 @@ int main(int argc, char **argv)
 									
 								QObject::connect(pAlbumModel->trackModel().data(), SIGNAL(appendToPlaylist(const QString&)), pModel.data(), SLOT(appendTrack(const QString&)));
 								
+								common::Log::g_Log << "Running Black Omega..." << common::c_endl;
+								
 								engine.load(":/Resources/frontpage1.qml");
 								app.exec();
 							}
@@ -147,6 +176,11 @@ int main(int argc, char **argv)
 		common::DiskIF::release();
 	}
 	releaseCodecs();
+	
+	common::Log::g_Log << "Black Omega iOS complete" << common::c_endl;
+	
+	fflush(stdout);
+	
 	return 0;
 }
 

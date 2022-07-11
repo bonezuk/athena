@@ -45,5 +45,19 @@ QString PlayerIOSUtils::musicDirectory()
 }
 
 //-------------------------------------------------------------------------------------------
+
+QString PlayerIOSUtils::logDirectory()
+{
+	QString mDir = common::DiskOps::mergeName(appDataDirectory(), "log");
+	if(!common::DiskOps::path(mDir, true))
+	{
+		QString err = QString("Failed to create root log directory '%1'").arg(mDir);
+		printError("logDirectory", err.toUtf8().constData());
+		mDir = "";
+	}
+	return mDir;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace omega
 //-------------------------------------------------------------------------------------------

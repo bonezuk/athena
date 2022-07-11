@@ -118,7 +118,9 @@ bool PlayerUISettings::startFTPServer()
 				{
 					PlayerFileFilter *filter = new PlayerFileFilter();
 					
-					m_ftpServer->config().setRootPath(PlayerIOSUtils::musicDirectory());
+					m_ftpServer->config().setRootPath(PlayerIOSUtils::appDataDirectory());
+					// m_ftpServer->config().setRootPath(PlayerIOSUtils::musicDirectory());
+					
 					m_ftpServer->config().setPassivePort(c_ftpPassivePort);
 					m_ftpServer->setFileFilter(filter);
 					QObject::connect(m_ftpServer, SIGNAL(uploaded(const QString&)), PlayerIOSTrackDBManager::instance(), SLOT(addUploadedFile(const QString&)));
