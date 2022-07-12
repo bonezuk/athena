@@ -59,6 +59,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QOmegaListModel
 		Q_INVOKABLE QVariant dataAtIndex(int row, const QString& roleName);
 		Q_INVOKABLE void remove(int index);
 		
+		virtual QSharedPointer<OmegaAudioInterface>& audioInterface();
 		virtual QSharedPointer<PlaybackStateController>& playbackState();
 		virtual void playNextItem(bool isNext);
 		

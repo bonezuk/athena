@@ -125,6 +125,17 @@ void AOQueryDevice::Device::copy(const Device& rhs)
 
 //-------------------------------------------------------------------------------------------
 
+void AOQueryDevice::Device::clear()
+{
+	m_initFlag = false;
+	m_id = "";
+	m_name = "";
+	m_frequencySet.clear();
+	m_channels.clear();
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool AOQueryDevice::Device::isInitialized() const
 {
 	return m_initFlag;

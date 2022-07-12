@@ -68,12 +68,14 @@ engine::AData *AOCoreAudioIOS::allocateData(tint len,tint inChannel,tint outChan
 
 bool AOCoreAudioIOS::getStreamDescription(const FormatDescription& desc, AudioStreamBasicDescription *fmt)
 {
+	QString bitFormatName;
 	tint bytesPerSample = 0;
 	
 	::memset(fmt, 0, sizeof(AudioStreamBasicDescription));
 	
 	if(desc.typeOfData() == FormatDescription::e_DataFloatSingle)
 	{
+		bitFormatName = "kAudioFormatFlagsNativeFloatPacked";
 		fmt->mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
 		bytesPerSample = 4;
 	}
@@ -81,16 +83,19 @@ bool AOCoreAudioIOS::getStreamDescription(const FormatDescription& desc, AudioSt
 	{
 		if(desc.bits() == 16)
 		{
+			bitFormatName = "kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked";
 			fmt->mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
 			bytesPerSample = 2;
 		}
 		else if(desc.bits() == 24)
 		{
+			bitFormatName = "kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked";
 			fmt->mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
 			bytesPerSample = 3;
 		}
 		else if(desc.bits() == 32)
 		{
+			bitFormatName = "kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked";
 			fmt->mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
 			bytesPerSample = 4;
 		}
@@ -107,6 +112,11 @@ bool AOCoreAudioIOS::getStreamDescription(const FormatDescription& desc, AudioSt
 		return false;
 	}
 	
+	common::Log::g_Log.print("mFormatFlags = %s\n", bitFormatName.toUtf8().constData());
+	common::Log::g_Log.print("mSampleRate=%d\n", desc.frequency());
+	common::Log::g_Log.print("mBitsPerChannel=%d\n", bytesPerSample * 8);
+	common::Log::g_Log.print("mChannelsPerFrame=%d\n", desc.channels());
+	
 	fmt->mSampleRate = static_cast<Float64>(desc.frequency());
 	fmt->mFormatID = kAudioFormatLinearPCM;
 	fmt->mFramesPerPacket = 1;
@@ -120,33 +130,77 @@ bool AOCoreAudioIOS::getStreamDescription(const FormatDescription& desc, AudioSt
 
 //-------------------------------------------------------------------------------------------
 
-bool AOCoreAudioIOS::setPlaybackFrequency()
+void AOCoreAudioIOS::addToPriorityMap(QMap<int, QList<int> >& rMap, int priority, int rate)
 {
-	bool res = false;
-	QSharedPointer<AOCoreAudioSessionIOS> pSession = AOCoreAudioSessionIOS::audioInstance();
-	
-	if(!pSession.isNull())
+	QMap<int, QList<int> >::iterator ppI = rMap.find(priority);
+	if(ppI != rMap.end())
 	{
-		int playbackFrequency = pSession->startPlaybackWithFrequency(m_frequency);
-		if(playbackFrequency > 0)
-		{
-			if(playbackFrequency != m_frequency)
-			{
-				initResampler(m_frequency, playbackFrequency);
-				m_frequency = playbackFrequency;
-			}
-			res = true;
-		}
-		else
-		{
-			printError("setPlaybackFrequency", "Failed to get actual playback frequency");
-		}
+		QList<int>& pList = ppI.value();
+		pList.append(rate);
 	}
 	else
 	{
-		printError("setPlaybackFrequency", "Failed to get audio session");
+		QList<int> pList;
+		pList.append(rate);
+		rMap.insert(priority, pList);
 	}
-	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOCoreAudioIOS::setPlaybackFrequency(QSharedPointer<AOQueryCoreAudioIOS::IOSDevice> pDevice)
+{
+	QMap<int, QList<int> > ratePriority;
+	QMap<int, QList<int> >::iterator ppI;
+	QSet<int> freqs = pDevice->frequencies();
+	
+	int codecFrequency = m_frequency;
+	int outputRate = -1;
+	
+	for(QSet<int>::iterator ppK = freqs.begin(); ppK != freqs.end(); ppK++)
+	{
+		int freq = *ppJ;
+		
+		if(codecFrequency == freq)
+		{
+			addToPriorityMap(ratePriority, 1, freq);
+		}
+		else if((codecFrequency * 2) == freq || (codecFrequency * 4) == freq)
+		{
+			addToPriorityMap(ratePriority, 2, freq);
+		}
+		else if(codecFrequency < freq)
+		{
+			addToPriorityMap(ratePriority, 3, freq);
+		}
+		else
+		{
+			addToPriorityMap(ratePriority, 4, freq);
+		}		
+	}
+	
+	for(ppI = ratePriority.begin(); ppI != ratePriority.end() && outputRate < 0; ppI++)
+	{
+		QList<int>& rList = ppI.value();
+		for(QList<int>::iterator ppJ = rList.begin(); ppJ != rList.end() && outputRate < 0; ppJ++)
+		{
+			int rate = *ppJ;
+			if(AOQueryCoreAudioIOS::setFrequency((void *)aSession, rate))
+			{
+				outputRate = rate;
+			}
+		}
+	}
+	if(outputRate < 0)
+	{
+		outputRate = AOQueryCoreAudioIOS::currentFrequency();
+	}
+	
+	if(outputRate != m_frequency)
+	{
+		initResampler(m_frequency, outputRate);
+		m_frequency = outputRate;	
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -159,6 +213,8 @@ bool AOCoreAudioIOS::openAudio()
 	QSharedPointer<AOQueryCoreAudioIOS::IOSDevice> pDevice;
 	bool res = false;
 
+	m_deviceInfoMutex.lock();
+
 	closeAudio();
 	m_frequency = m_codec->frequency();
 	
@@ -167,15 +223,19 @@ bool AOCoreAudioIOS::openAudio()
 		printError("openAudio", "Failed to get time information from system");
 		return false;
 	}
+	
+	common::Log::g_Log << "openAudio start" << common::c_endl;
 
 	pDevice = getCurrentCoreAudioIOSDevice();
 	if(!pDevice.isNull())
 	{
+		setPlaybackFrequency(pDevice);
+	
 		::memset(&ioUnitDescription, 0, sizeof(AudioComponentDescription));
 		ioUnitDescription.componentType = kAudioUnitType_Output;
 		ioUnitDescription.componentSubType = kAudioUnitSubType_RemoteIO;
 		ioUnitDescription.componentManufacturer = kAudioUnitManufacturer_Apple;
-	
+
 		comp = AudioComponentFindNext(0, &ioUnitDescription);
 		if(comp != nil)
 		{
@@ -186,61 +246,54 @@ bool AOCoreAudioIOS::openAudio()
 			{
 				AudioStreamBasicDescription streamFormat;
 				
+				closestDescription.setFrequency(m_frequency);
 				if(getStreamDescription(closestDescription, &streamFormat))
 				{
 					err = AudioComponentInstanceNew(comp, &m_audioOutputUnit);
 					if(err == noErr)
 					{
 						UInt32 enableIO = 1;
-					
+				
 						err = AudioUnitSetProperty(m_audioOutputUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, 0, &enableIO, sizeof(enableIO));
 						if(err == noErr)
 						{
-							if(setPlaybackFrequency())
+							initCyclicBuffer();
+					
+							err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
+							if(err == noErr)
 							{
-								initCyclicBuffer();
-							
-								err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &streamFormat, sizeof(AudioStreamBasicDescription));
+								AURenderCallbackStruct renderCallback;
+
+								::memset(&renderCallback,0,sizeof(AURenderCallbackStruct));
+								renderCallback.inputProc = iosAudioRender;
+								renderCallback.inputProcRefCon = (void *)(this);
+						
+								err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Global, 0, &renderCallback, sizeof(renderCallback));
 								if(err == noErr)
 								{
-									AURenderCallbackStruct renderCallback;
-
-									::memset(&renderCallback,0,sizeof(AURenderCallbackStruct));
-									renderCallback.inputProc = iosAudioRender;
-									renderCallback.inputProcRefCon = (void *)(this);
-								
-									err = AudioUnitSetProperty(m_audioOutputUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Global, 0, &renderCallback, sizeof(renderCallback));
+									err = AudioUnitInitialize(m_audioOutputUnit);
 									if(err == noErr)
 									{
-										err = AudioUnitInitialize(m_audioOutputUnit);
-										if(err == noErr)
-										{
-											m_pSampleConverter = sampleConverterFromDescription(streamFormat);
-											m_noChannels = closestDescription.channels();
-											m_flagInit = true;
-											res = true;
-										}
-										else
-										{
-											printError("openAudio", "Failed to initialise audio output device", err);
-											AudioUnitUninitialize(m_audioOutputUnit);
-										}
+										m_pSampleConverter = sampleConverterFromDescription(streamFormat);
+										m_noChannels = closestDescription.channels();
+										m_flagInit = true;
+										res = true;
 									}
 									else
 									{
-										printError("openAudio", "Error setting audio render callback", err);
+										printError("openAudio", "Failed to initialise audio output device", err);
+										AudioUnitUninitialize(m_audioOutputUnit);
 									}
 								}
 								else
 								{
-									printError("openAudio", "Error setting audio output format", err);
+									printError("openAudio", "Error setting audio render callback", err);
 								}
 							}
 							else
 							{
-								printError("openAudio","Failed to find supported audio frequency");
+								printError("openAudio", "Error setting audio output format", err);
 							}
-
 						}
 						else
 						{
@@ -271,6 +324,11 @@ bool AOCoreAudioIOS::openAudio()
 	{
 		printError("openAudio", "Failed to get audio device");
 	}
+
+	common::Log::g_Log << "openAudio end" << common::c_endl;
+	
+	m_deviceInfoMutex.unlock();
+	
 	return res;
 }
 
@@ -531,6 +589,38 @@ IOTimeStamp AOCoreAudioIOS::createIOTimeStamp(const AudioTimeStamp *sysTime) con
     tuint64 upTime = static_cast<tuint64>(mach_absolute_time() * hTime2nsFactor);
 	tS.nano64(upTime);
 	return IOTimeStamp(true, tS);
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOCoreAudioIOS::isUpdateRequired()
+{
+	bool res = false;
+	
+	QSharedPointer<AOQueryCoreAudioIOS::IOSDevice> pDevice = getCurrentCoreAudioIOSDevice();
+	if(!pDevice.isNull())
+	{
+		res = (pDevice->id() != AOQueryCoreAudioIOS::idCurrentRoute()) ? true : false;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOCoreAudioIOS::updateCurrentDevice()
+{
+	if(isUpdateRequired())
+	{
+		m_deviceInfoMutex.lock();
+	
+		AOQueryCoreAudioIOS *deviceInfo = dynamic_cast<AOQueryCoreAudioIOS *>(m_deviceInfo);
+		if(deviceInfo != 0)
+		{
+			deviceInfo->rebuild();
+		}
+	
+		m_deviceInfoMutex.unlock();
+	}
 }
 
 //-------------------------------------------------------------------------------------------

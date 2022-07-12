@@ -29,6 +29,9 @@ class AUDIOIO_EXPORT AOCoreAudioIOS : public AOCoreAudio
 		AOCoreAudioIOS(QObject *parent = 0);
 		virtual ~AOCoreAudioIOS();
 		
+		virtual bool isUpdateRequired();
+		virtual void updateCurrentDevice();
+		
 	protected:
 	
 		AudioComponentInstance m_audioOutputUnit;
@@ -51,6 +54,8 @@ class AUDIOIO_EXPORT AOCoreAudioIOS : public AOCoreAudio
 		virtual void processMessages();
 		
 		virtual bool setPlaybackFrequency();
+		virtual void addToPriorityMap(QMap<int, QList<int> >& rMap, int priority, int rate);
+		virtual void setPlaybackFrequency(QSharedPointer<AOQueryCoreAudioIOS::IOSDevice> pDevice);
 		
 		virtual void writeToAudioOutputBufferFromPartData(AbstractAudioHardwareBuffer *pBuffer,
                                                           const engine::RData *data,

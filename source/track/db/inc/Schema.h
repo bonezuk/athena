@@ -88,7 +88,17 @@ class TRACK_DB_EXPORT Schema
 		
 		virtual void createDirectoryMount();
 		virtual void copyDirectoryMount(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
-		
+
+		virtual void createAudioDevice();
+		virtual void copyAudioDevice(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+
+		virtual void createAudioFrequency();
+		virtual void copyAudioFrequency(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+
+		virtual void createAudioChannel();
+		virtual void copyAudioChannel(SQLiteDatabase *srcDB, SQLiteDatabase *destDB);
+
+
 		virtual bool writeDatabaseVersion(int versionNo);
 		
 		virtual QString tempUpgradeDBFileName(const QString& orgTrackDBFileName);

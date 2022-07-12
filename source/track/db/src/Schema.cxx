@@ -77,6 +77,9 @@ bool Schema::createDB(SQLiteDatabase *db)
 				createMountPoints();
 				createFileHash();
 				createDirectoryMount();
+				createAudioDevice();
+				createAudioFrequency();
+				createAudioChannel();
 			}
 		}
 		catch(const SQLiteException& e)
@@ -956,6 +959,176 @@ void Schema::copyFileHash(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
 }
 
 //-------------------------------------------------------------------------------------------
+/*		
+CREATE TABLE audiodevice (
+	// Used as unique reference key for records in audiofrequency and audiochannel tables
+	referenceID INTEGER PRIMARY KEY AUTOINCREMENT,
+	// The device ID name as given by AOQueryDevice
+	deviceID TEXT NOT NULL UNIQUE,
+	// Human readable device name as given by AOQueryDevice
+	deviceName TEXT NOT NULL	
+);
+
+CREATE TABLE audiofrequency (
+	// Points to device record in audiodevice table
+	referenceID INTEGER NOT NULL,
+	// The frequency supported by the referenced device
+	frequency INTEGER NOT NULL,
+);
+
+CREATE TABLE audiochannel {
+	// Points to device record in audiodevice table
+	referenceID INTEGER NOT NULL,
+	// Index of channel
+	index INTEGER NOT NULL,
+	// Name of channel
+	name TEXT NOT NULL,
+	PRIMARY KEY(referenceID, index)
+};
+*/
+//-------------------------------------------------------------------------------------------
+
+void Schema::createAudioDevice()
+{
+	if(!isTableDefined("audiodevice"))
+	{
+		QString cmd;
+	
+		cmd  = "CREATE TABLE audiodevice (";
+		cmd += "  referenceID INTEGER PRIMARY KEY AUTOINCREMENT,";
+		cmd += "  deviceID TEXT NOT NULL UNIQUE,";
+		cmd += "  deviceName TEXT NOT NULL";
+		cmd += ");";
+		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyAudioDevice(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int referenceID;
+	QString deviceID, deviceName;
+
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "referenceID, deviceID, deviceName";
+
+	cmd = "SELECT "	+ items + " FROM audiodevice";
+	srcQ.prepare(cmd);
+	srcQ.bind(referenceID);
+	srcQ.bind(deviceID);
+	srcQ.bind(deviceName);
+	
+	cmd = "INSERT INTO audiodevice (" + items + ") VALUES (?,?,?)";
+	destI.prepare(cmd);
+		
+	while(srcQ.next())
+	{
+		destI.bind(referenceID);
+		destI.bind(deviceID);
+		destI.bind(deviceName);
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::createAudioFrequency()
+{
+	if(!isTableDefined("audiofrequency"))
+	{
+		QString cmd;
+		
+		cmd  = "CREATE TABLE audiofrequency (";
+		cmd += "  referenceID INTEGER NOT NULL,";
+		cmd += "  frequency INTEGER NOT NULL,";
+		cmd += "  PRIMARY KEY(referenceID, frequency)";
+		cmd += ");";
+		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyAudioFrequency(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int referenceID, frequency;
+
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "referenceID, frequency";
+
+	cmd = "SELECT "	+ items + " FROM audiofrequency";
+	srcQ.prepare(cmd);
+	srcQ.bind(referenceID);
+	srcQ.bind(frequency);
+	
+	cmd = "INSERT INTO audiofrequency (" + items + ") VALUES (?,?)";
+	destI.prepare(cmd);
+		
+	while(srcQ.next())
+	{
+		destI.bind(referenceID);
+		destI.bind(frequency);
+		destI.next();
+	}	
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::createAudioChannel()
+{
+	if(!isTableDefined("audiochannel"))
+	{
+		QString cmd;
+		
+		cmd  = "CREATE TABLE audiochannel (";
+		cmd += "  referenceID INTEGER NOT NULL,";
+		cmd += "  channelIndex INTEGER NOT NULL,";
+		cmd += "  name TEXT NOT NULL,";
+		cmd += "  PRIMARY KEY(referenceID, channelIndex)";
+		cmd += ");";
+		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void Schema::copyAudioChannel(SQLiteDatabase *srcDB, SQLiteDatabase *destDB)
+{
+	int referenceID, index;
+	QString name;
+
+	QString cmd, items;
+	SQLiteQuery srcQ(srcDB);
+	SQLiteInsert destI(destDB);
+	
+	items = "referenceID, channelIndex, name";
+
+	cmd = "SELECT "	+ items + " FROM audiochannel";
+	srcQ.prepare(cmd);
+	srcQ.bind(referenceID);
+	srcQ.bind(index);
+	srcQ.bind(name);
+	
+	cmd = "INSERT INTO audiochannel (" + items + ") VALUES (?,?,?)";
+	destI.prepare(cmd);
+		
+	while(srcQ.next())
+	{
+		destI.bind(referenceID);
+		destI.bind(index);
+		destI.bind(name);
+		destI.next();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 
 bool Schema::writeDatabaseVersion(int versionNo)
 {
@@ -1069,6 +1242,9 @@ bool Schema::doUpgrade(const QString& orgTrackDBFileName)
 						copyFileHash(&srcDB, &destDB);
 						copyMountPoints(&srcDB, &destDB);
 						copyDirectoryMount(&srcDB, &destDB);
+						copyAudioDevice(&srcDB, &destDB);
+						copyAudioFrequency(&srcDB, &destDB);
+						copyAudioChannel(&srcDB, &destDB);
 						res = true;
 					}
 					else

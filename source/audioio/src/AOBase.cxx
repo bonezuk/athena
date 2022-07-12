@@ -5050,9 +5050,9 @@ void AOBase::setCrossfade(const common::TimeStamp& t)
 
 bool AOBase::initResampler(int iFreq,int oFreq)
 {
-#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
-	common::Log::g_Log.print("AOBase::initResampler - %d, %d\n", iFreq, oFreq);
-#endif
+//#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::initResampler - input=%d, output=%d\n", iFreq, oFreq);
+//#endif
 
 	closeResampler();
 	

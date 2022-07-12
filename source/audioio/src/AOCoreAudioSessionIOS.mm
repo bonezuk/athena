@@ -19,7 +19,9 @@ QSharedPointer<AOCoreAudioSessionIOS> AOCoreAudioSessionIOS::m_instance;
 //-------------------------------------------------------------------------------------------
 
 AOCoreAudioSessionIOS::AOCoreAudioSessionIOS(QObject *parent) : QObject(parent)
-{}
+{
+	AOCoreAudioSessionIOS::init();
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -123,116 +125,115 @@ void AOCoreAudioSessionIOS::close()
 
 //-------------------------------------------------------------------------------------------
 
-void AOCoreAudioSessionIOS::addToPriorityMap(QMap<int, QList<int> >& rMap, int priority, int rate)
+QString getPortTypeName(AVAudioSessionPort portType)
 {
-	QMap<int, QList<int> >::iterator ppI = rMap.find(priority);
-	if(ppI != rMap.end())
+	QString name;
+	if([portType isEqualToString:AVAudioSessionPortBuiltInMic])
 	{
-		QList<int>& pList = ppI.value();
-		pList.append(rate);
+		name = "AVAudioSessionPortBuiltInMic = An input from a device’s built-in microphone.";
 	}
-	else
+	else if([portType isEqualToString:AVAudioSessionPortHeadsetMic])
 	{
-		QList<int> pList;
-		pList.append(rate);
-		rMap.insert(priority, pList);
+		name = "AVAudioSessionPortHeadsetMic = An input from a wired headset’s built-in microphone.";
 	}
+	else if([portType isEqualToString:AVAudioSessionPortLineIn])
+	{
+		name = "AVAudioSessionPortLineIn = A line-level input from the dock connector.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortAirPlay])
+	{
+		name = "AVAudioSessionPortAirPlay = An output to an AirPlay device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortBluetoothA2DP])
+	{
+		name = "AVAudioSessionPortBluetoothA2DP = An output to a Bluetooth A2DP device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortBluetoothLE])
+	{
+		name = "AVAudioSessionPortBluetoothLE = An output to a Bluetooth Low Energy (LE) device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortBuiltInReceiver])
+	{
+		name = "AVAudioSessionPortBuiltInReceiver = An output to the speaker you hold to your ear when you’re on a phone call.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortBuiltInSpeaker])
+	{
+		name = "AVAudioSessionPortBuiltInSpeaker = An output to the device’s built-in speaker.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortHDMI])
+	{
+		name = "AVAudioSessionPortHDMI = An output to a High-Definition Multimedia Interface (HDMI) device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortHeadphones])
+	{
+		name = "AVAudioSessionPortHeadphones = An output to wired headphones.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortLineOut])
+	{
+		name = "AVAudioSessionPortLineOut = A line-level output to the dock connector.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortAVB])
+	{
+		name = "AVAudioSessionPortAVB = An I/O connection to an Audio Video Bridging (AVB) device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortBluetoothHFP])
+	{
+		name = "AVAudioSessionPortBluetoothHFP = An I/O connection to a Bluetooth Hands-Free Profile device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortDisplayPort])
+	{
+		name = "AVAudioSessionPortDisplayPort = An I/O connection to a DisplayPort device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortCarAudio])
+	{
+		name = "AVAudioSessionPortCarAudio = An I/O connection through Car Audio.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortFireWire])
+	{
+		name = "AVAudioSessionPortFireWire = An I/O connection to a FireWire device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortPCI])
+	{
+		name = "AVAudioSessionPortPCI = An I/O connection to a Peripheral Component Interconnect (PCI) device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortThunderbolt])
+	{
+		name = "AVAudioSessionPortThunderbolt = An I/O connection to a Thunderbolt device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortUSBAudio])
+	{
+		name = "AVAudioSessionPortUSBAudio = An I/O connection to a Universal Serial Bus (USB) device.";
+	}
+	else if([portType isEqualToString:AVAudioSessionPortVirtual])
+	{
+		name = "AVAudioSessionPortVirtual = An I/O connection that doesn’t correspond to physical audio hardware.";
+	}
+	return name;
 }
 
 //-------------------------------------------------------------------------------------------
 
-bool AOCoreAudioSessionIOS::setFrequency(void *pSess, int frequency)
+void AOCoreAudioSessionIOS::logOutput()
 {
-	BOOL res;
-	AVAudioSession *aSession = (AVAudioSession *)pSess;
-	NSError *audioSessionError = nil;
-	double freqD = static_cast<double>(frequency);
-	int currentFrequency = static_cast<int>(aSession.sampleRate);
-	
-	if(currentFrequency == frequency)
-	{
-		return true;
-	}
-	
-	res = [aSession setActive:NO error:&audioSessionError];
-	if(res == YES)
-	{
-		res = [aSession setPreferredSampleRate:freqD error:&audioSessionError];
-		if(res == YES)
-		{
-			res = [aSession setActive:YES error:&audioSessionError];
-			if(res == YES)
-			{
-				res = YES;
-//				currentFrequency = static_cast<int>(aSession.sampleRate);
-//				res = (currentFrequency == frequency) ? YES : NO;
-			}
-		}
-	}
-	return (res == YES) ? true : false;
-}
-
-//-------------------------------------------------------------------------------------------
-
-int AOCoreAudioSessionIOS::startPlaybackWithFrequency(int codecFrequency)
-{
-	static const int rates[18] = {
-		768000, 705600, 384000, 352800,
-		192000, 176400, 96000,
-		 88200,  64000, 48000,
-		 44100,  32000, 24000,
-		 22050,  16000, 12000,
-		 11025,   8000
-	};
-
-	int outputRate = -1;
 	AVAudioSession *aSession = [AVAudioSession sharedInstance];
-	
-	if(aSession != nil)
+	AVAudioSessionRouteDescription *currentRoute = aSession.currentRoute;
+	NSArray<AVAudioSessionPortDescription *> *outputs = currentRoute.outputs;
+	common::Log::g_Log.print("Get audio description of current route\n");
+	for(NSUInteger i = 0; i < outputs.count; i++)
 	{
-		NSError *audioSessionError = nil;
-		QMap<int, QList<int> > ratePriority;
-		QMap<int, QList<int> >::iterator ppI;
+		AVAudioSessionPortDescription *port = [outputs objectAtIndex:i];
+		QString name = QString::fromUtf8(port.portName.UTF8String);
+		common::Log::g_Log.print("Output idx=%d, name=%s\n", i, name.toUtf8().constData());
+		common::Log::g_Log.print("%s\n", getPortTypeName(port.portType).toUtf8().constData());
 		
-		for(int idx = 0; idx < 18; idx++)
+		NSArray<AVAudioSessionChannelDescription *> *channels = port.channels;
+		for(NSUInteger chs = 0; chs < channels.count; chs++)
 		{
-			if(codecFrequency == rates[idx])
-			{
-				addToPriorityMap(ratePriority, 1, rates[idx]);
-			}
-			else if((codecFrequency * 2) == rates[idx] || (codecFrequency * 4) == rates[idx])
-			{
-				addToPriorityMap(ratePriority, 2, rates[idx]);
-			}
-			else if(codecFrequency < rates[idx])
-			{
-				addToPriorityMap(ratePriority, 3, rates[idx]);
-			}
-			else
-			{
-				addToPriorityMap(ratePriority, 4, rates[idx]);
-			}
+			AVAudioSessionChannelDescription *chDesc = [channels objectAtIndex:chs];
+			common::Log::g_Log.print("Channel idx=%d, number=%d\n", chs, chDesc.channelNumber);
+			common::Log::g_Log.print("ch name=%s\n", chDesc.channelName.UTF8String);
 		}
-		
-		for(ppI = ratePriority.begin(); ppI != ratePriority.end() && outputRate < 0; ppI++)
-		{
-			QList<int>& rList = ppI.value();
-			for(QList<int>::iterator ppJ = rList.begin(); ppJ != rList.end() && outputRate < 0; ppJ++)
-			{
-				int rate = *ppJ;
-				if(setFrequency((void *)aSession, rate))
-				{
-					outputRate = rate;
-				}
-			}
-		}
-		outputRate = static_cast<int>(aSession.sampleRate);
 	}
-	else
-	{
-		printError("startPlaybackWithFrequency", "Failed to get audio session for app");
-	}
-	return outputRate;
 }
 
 //-------------------------------------------------------------------------------------------

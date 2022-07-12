@@ -23,7 +23,10 @@ class AUDIOIO_EXPORT AOCoreAudioSessionIOS : public QObject
 		
 		static QSharedPointer<AOCoreAudioSessionIOS> audioInstance();
 		
-		int startPlaybackWithFrequency(int codecFrequency);
+		virtual void logOutput();
+		
+		virtual bool loadDevice(AOQueryDevice::Device& dev) = 0;
+		virtual bool saveDevice(AOQueryDevice::Device& dev) = 0;
 		
 	protected:
 		static QSharedPointer<AOCoreAudioSessionIOS> m_instance;
@@ -35,9 +38,6 @@ class AUDIOIO_EXPORT AOCoreAudioSessionIOS : public QObject
 		
 		virtual bool init();
 		virtual void close();
-		
-		virtual void addToPriorityMap(QMap<int, QList<int> >& rMap, int priority, int rate);
-		virtual bool setFrequency(void *pSess, int frequency);
 };
 
 //-------------------------------------------------------------------------------------------

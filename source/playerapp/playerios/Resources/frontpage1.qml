@@ -290,6 +290,12 @@ Window {
 		text: ""
 	}
 
+	Component.MutexDialog {
+		id: audioUpdateDialog
+		visible: audioInterface.isUpdateRunning
+		text: "Scanning new audio hardware. Please Wait!"
+	}
+
 	RowLayout {
 		id: navBar
 		anchors.left: parent.left

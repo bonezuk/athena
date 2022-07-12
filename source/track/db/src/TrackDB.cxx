@@ -2580,6 +2580,189 @@ bool TrackDB::isPlaylist(int playlistID)
 }
 
 //-------------------------------------------------------------------------------------------
+
+int TrackDB::refIDOfAudioDevice(const QString& deviceID)
+{
+	int refID = -1;
+	SQLiteQuery devQ(m_db);
+	QString cmdQ = QString("SELECT referenceID FROM audiodevice WHERE deviceID='%1'").arg(dbString(deviceID));
+	devQ.prepare(cmdQ);
+	devQ.bind(refID);
+	if(!devQ.next())
+	{
+		refID = -1;
+	}
+	return refID;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void TrackDB::removeAudioDevice(const audioio::AOQueryDevice::Device& dev)
+{
+	int refID = refIDOfAudioDevice(dev.id());
+	if(refID >= 0)
+	{
+		QString cmd;
+		
+		cmd = QString("DELETE FROM audiodevice WHERE referenceID=%1").arg(refID);
+		m_db->exec(cmd);
+		cmd = QString("DELETE FROM audiofrequency WHERE referenceID=%1").arg(refID);
+		m_db->exec(cmd);
+		cmd = QString("DELETE FROM audiochannel WHERE referenceID=%1").arg(refID);
+		m_db->exec(cmd);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool TrackDB::insertAudioDevice(const audioio::AOQueryDevice::Device& dev)
+{
+	QString cmdI;
+	bool res = true;
+	
+	QString deviceID = dbString(dev.id());
+	QString deviceName = dbString(dev.name());
+	SQLiteInsert devI(m_db);
+	cmdI = "INSERT INTO audiodevice (deviceID, deviceName) VALUES (?,?)";
+	devI.prepare(cmdI);
+	devI.bind(deviceID);
+	devI.bind(deviceName);
+	if(devI.next())
+	{
+		int refID = idOfInserted();
+		const QSet<int>& freqs = dev.frequencies();
+		for(QSet<int>::const_iterator ppI = freqs.begin(); ppI != freqs.end() && !res; ppI++)
+		{	
+			int freq = *ppI;
+			SQLiteInsert freqI(m_db);
+			cmdI = "INSERT INTO audiofrequency (referenceID, frequency) VALUES (?,?)";
+			freqI.prepare(cmdI);
+			freqI.bind(refID);
+			freqI.bind(freq);
+			if(!freqI.next())
+			{
+				printError("insertAudioDevice", "Failed to insert audio device frequency record");
+				res = false;
+			}
+		}
+		
+		for(int chIndex = 0; chIndex < dev.noChannels() && !res; chIndex++)
+		{
+			QString chName = dbString(dev.channel(chIndex).name());
+			SQLiteInsert chI(m_db);
+			cmdI = "INSERT INTO audiochannel (referenceID, channelIndex, name) VALUES (?,?,?)";
+			chI.prepare(cmdI);
+			chI.bind(refID);
+			chI.bind(chIndex);
+			chI.bind(chName);
+			if(!chI.next())
+			{
+				printError("insertAudioDevice", "Failed to insert audio device channel record");
+				res = false;
+			}
+		}
+	}
+	else
+	{
+		printError("insertAudioDevice", "Failed to insert audio device record");
+		res = false;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool TrackDB::saveAudioDevice(const audioio::AOQueryDevice::Device& dev)
+{
+	int refID;
+	bool res = false;
+	
+	try
+	{
+		m_db->exec("SAVEPOINT saveAudioDevice");
+		
+		removeAudioDevice(dev);
+		res = insertAudioDevice(dev);
+		
+		if(res)
+		{
+			m_db->exec("RELEASE saveAudioDevice");
+		}
+		else
+		{
+			m_db->exec("ROLLBACK TO SAVEPOINT saveAudioDevice");
+		}
+	}
+	catch(const SQLiteException& e)
+	{
+		printError("saveAudioDevice", e.error().toUtf8().constData());
+		m_db->exec("ROLLBACK TO SAVEPOINT saveAudioDevice");
+		res = false;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool TrackDB::restoreAudioDevice(const QString& deviceID, audioio::AOQueryDevice::Device& dev)
+{
+	bool res = false;
+	int refID = refIDOfAudioDevice(deviceID);
+	if(refID >= 0)
+	{
+		dev.clear();
+		
+		QString deviceID, deviceName, cmdQ;
+		SQLiteQuery devQ(m_db);
+		cmdQ = QString("SELECT deviceID, deviceName FROM audiodevice WHERE referenceID=%1").arg(refID);
+		devQ.prepare(cmdQ);
+		devQ.bind(deviceID);
+		devQ.bind(deviceName);
+		if(devQ.next())
+		{
+			dev.id() = dbStringInv(deviceID);
+			dev.name() = dbStringInv(deviceName);
+			
+			int freq;
+			SQLiteQuery freqQ(m_db);
+			cmdQ = QString("SELECT frequency FROM audiofrequency WHERE referenceID=%1").arg(refID);
+			freqQ.prepare(cmdQ);
+			freqQ.bind(freq);
+			while(freqQ.next())
+			{
+				dev.addFrequency(freq);
+			}
+			
+			int chIndex;
+			QStringList chNames;
+			QString chName;
+			SQLiteQuery chQ(m_db);
+			cmdQ = QString("SELECT channelIndex, name FROM audiochannel WHERE referenceID=%1 ORDER BY channelIndex").arg(refID);
+			chQ.prepare(cmdQ);
+			chQ.bind(chIndex);
+			chQ.bind(chName);
+			while(chQ.next())
+			{
+				chName = dbStringInv(chName);
+				chNames.append(chName);
+			}
+			dev.setNoChannels(chNames.size());
+			for(chIndex = 0; chIndex < dev.noChannels(); chIndex++)
+			{
+				dev.channel(chIndex).name() = chNames.at(chIndex);
+			}
+			
+			res = true;
+		}
+		else
+		{
+			printError("restoreAudioDevice", "Failed to find expected audio device record");
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace db
 } // namespace track
 } // namespace omega

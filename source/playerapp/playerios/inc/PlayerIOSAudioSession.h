@@ -23,12 +23,13 @@ class PlayerIOSAudioSession : public audioio::AOCoreAudioSessionIOS
 		
 		static QSharedPointer<PlayerIOSAudioSession> playerInstance();
 		
-		static QSharedPointer<PlayerIOSAudioSession> startSession(QSharedPointer<PlayListModel>& pPLModel, QObject *parent = 0);
+		static QSharedPointer<PlayerIOSAudioSession> startSession(QObject *parent = 0);
+		virtual bool setModelAndInit(QSharedPointer<PlayListModel>& pPLModel) = 0;
 		virtual void endSession();
 	
 	protected:
 		PlayerIOSAudioSession(QObject *parent);
-
+	
 	protected slots:
 		void onPlayStateChanged();
 		void updateNowPlay();	

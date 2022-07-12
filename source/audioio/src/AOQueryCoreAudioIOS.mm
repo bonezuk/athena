@@ -3,6 +3,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "audioio/inc/AOQueryCoreAudioIOS.h"
+#include "audioio/inc/AOCoreAudioSessionIOS.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -121,69 +122,266 @@ int AOQueryCoreAudioIOS::defaultDeviceIndex()
 
 //-------------------------------------------------------------------------------------------
 
-bool AOQueryCoreAudioIOS::buildDeviceMap()
+QString AOQueryCoreAudioIOS::bitFormatName(int bitFormat) const
 {
-	static const int channelCount[4] = {2, 4, 6, 8};	
+	QString n;
+	switch(static_cast<AOIOSAudioFormats>(bitFormat))
+	{
+		case e_audioOutputInt16:
+			n = "Int16";
+			break;
+		case e_audioOutputInt24:
+			n = "Int24";
+			break;
+		case e_audioOutputInt32:
+			n = "Int32";
+			break;
+		case e_audioOutputFloat:
+			n = "Float32";
+			break;
+		case e_audioOutputUnknown:
+		default:
+			n = "Unknown";
+			break;
+	}
+	return n;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int AOQueryCoreAudioIOS::currentFrequency()
+{
+	AVAudioSession *aSession = [AVAudioSession sharedInstance];
+	return static_cast<int>(aSession.sampleRate);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOQueryCoreAudioIOS::queryFrequencies(IOSDevice *dev)
+{
+	int originalFrequency = currentFrequency();
+	QSet<int> freqs = FormatDescription::setOfFrequencies();
+	for(QSet<int>::iterator ppI = freqs.begin(); ppI != freqs.end(); ppI++)
+	{
+		int freq = *ppI;
+		if(setFrequency(freq))
+		{
+			common::Log::g_Log.print("device '%s' does support %dHz\n", dev->name().toUtf8().constData(), freq);
+			dev->addFrequency(freq);
+		}
+		else
+		{
+			common::Log::g_Log.print("device '%s' does NOT support %dHz\n", dev->name().toUtf8().constData(), freq);
+		}
+	}
+	setFrequency(originalFrequency);
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOQueryCoreAudioIOS::setFrequency(int frequency)
+{
+	BOOL res;
+	AVAudioSession *aSession = [AVAudioSession sharedInstance];
+	NSError *audioSessionError = nil;
+	double freqD = static_cast<double>(frequency);
+	int currentFrequency = static_cast<int>(aSession.sampleRate);
+	
+	if(currentFrequency == frequency)
+	{
+		return true;
+	}
+	
+	res = [aSession setActive:NO error:&audioSessionError];
+	if(res == YES)
+	{
+		res = [aSession setPreferredSampleRate:freqD error:&audioSessionError];
+		if(res == YES)
+		{
+			res = [aSession setActive:YES error:&audioSessionError];
+			if(res == YES)
+			{
+				int newFrequency = static_cast<int>(aSession.sampleRate);
+				const int c_timeoutMilliSeconds = 500;
+				
+				for(int i = 0; i < c_timeoutMilliSeconds && newFrequency == currentFrequency; i += 20)
+				{
+					QCoreApplication::processEvents(QEventLoop::AllEvents);
+					QThread::msleep(20);
+					newFrequency = static_cast<int>(aSession.sampleRate);
+				}
+				
+				if(newFrequency == frequency)
+				{
+					res = YES;
+				}
+				else
+				{
+					res = NO;
+				}
+			}
+		}
+	}
+	return (res == YES) ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString AOQueryCoreAudioIOS::idCurrentRoute()
+{
+	QString currentId;
+	AVAudioSession *aSession = [AVAudioSession sharedInstance];
+	if(aSession != nil)
+	{
+		AVAudioSessionRouteDescription *currentRoute = aSession.currentRoute;
+		if(currentRoute != nil)
+		{
+			NSArray<AVAudioSessionPortDescription *> *outputs = currentRoute.outputs;
+			if(outputs != nil && outputs.count > 0)
+			{
+				AVAudioSessionPortDescription *port = [outputs objectAtIndex:i];
+				if(port != nil)
+				{
+					QString type = QString::fromUtf8(port.portType.UTF8String);
+					QString name = QString::fromUtf8(port.portName.UTF8String);
+					currentId = name + ":" + type;
+				}
+			}
+		}
+	}
+	return currentId;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOQueryCoreAudioIOS::queryCurrentRoute(IOSDevice *dev)
+{
 	bool res = false;
 	
-	if(m_devices.isEmpty())
+	if(dev != 0)
 	{
-		tint maxNoChannels = 0;
-		QSet<int> freqs = FormatDescription::setOfFrequencies();
-		IOSDevice *dev = new IOSDevice();
-		
-		dev->id() = "Default Output";
-		dev->name() = "Default Output";
-		
-		for(int bitFormat = static_cast<int>(e_audioOutputFloat); bitFormat < static_cast<int>(e_audioOutputUnknown); bitFormat++)
+		QString currentId = idCurrentRoute();
+		if(!currentId.isEmpty())
 		{
-			int noBits;
-			FormatDescription::DataType type = (bitFormat == e_audioOutputFloat) ? FormatDescription::e_DataFloatSingle : FormatDescription::e_DataSignedInteger;
-			
-			switch(static_cast<AOIOSAudioFormats>(bitFormat))
+			AVAudioSession *aSession = [AVAudioSession sharedInstance];
+			if(aSession != nil)
 			{
-				case e_audioOutputInt16:
-					noBits = 16;
-					break;
-				case e_audioOutputInt24:
-					noBits = 24;
-					break;
-				case e_audioOutputInt32:
-				case e_audioOutputFloat:
-				case e_audioOutputUnknown:
-					noBits = 32;
-					break;
-			}
-			
-			for(int noChsIndex = 0; noChsIndex < 4; noChsIndex++)
-			{
-				for(QSet<int>::iterator ppI = freqs.begin(); ppI != freqs.end(); ppI++)
+				AVAudioSessionRouteDescription *currentRoute = aSession.currentRoute;
+				if(currentRoute != nil)
 				{
-					int rate = *ppI;
-					
-					if(queryDeviceCapability(static_cast<AOIOSAudioFormats>(bitFormat), channelCount[noChsIndex], rate))
+					NSArray<AVAudioSessionPortDescription *> *outputs = currentRoute.outputs;
+					if(outputs != nil && outputs.count > 0)
 					{
-						FormatDescription desc(type, noBits, channelCount[noChsIndex], rate);
-						dev->addSupportedFormat(desc);
-						
-						if(channelCount[noChsIndex] > maxNoChannels)
+						AVAudioSessionPortDescription *port = [outputs objectAtIndex:i];
+						if(port != nil)
 						{
-							maxNoChannels = channelCount[noChsIndex];
-						}
-						if(!dev->isFrequencySupported(rate))
-						{
-							dev->addFrequency(rate);
+							dev->id() = currentId;
+							dev->name() = QString::fromUtf8(port.portName.UTF8String);
+							
+							int noChannels = port.channels.count;
+							dev->setNoChannels(noChannels);
+							for(int chIndex = 0; chIndex < noChannels; chIndex++)
+							{
+								AVAudioSessionChannelDescription *chDesc = [channels objectAtIndex:chIndex];
+								dev->channel(chIndex).name() = chDesc.channelName.UTF8String;
+							}
+							
+							res = true;
 						}
 					}
 				}
 			}
 		}
+		else
+		{
+			printError("queryCurrentRoute", "No id for current audio route");
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOQueryCoreAudioIOS::buildDeviceMap()
+{
+	bool res = false;
+	
+	if(m_devices.isEmpty())
+	{
+		IOSDevice *dev = new IOSDevice();
 		
-		dev->setNoChannels(maxNoChannels);
-		dev->setHasExclusive(false);
-		dev->setInitialized();
-		m_devices.append(dynamic_cast<AOQueryDevice::Device *>(dev));
-		res = (!dev->frequencies().isEmpty()) ? true : false;
+		if(queryCurrentRoute(dev))
+		{
+			QSharedPointer<AOCoreAudioSessionIOS> pSession = AOCoreAudioSessionIOS::audioInstance();
+			if(!pSession.isNull())
+			{
+				if(!pSession->loadDevice(*dev))
+				{
+					queryFrequencies(dev);
+					if(pSession->saveDevice(*dev))
+					{
+						res = true;
+					}
+					else
+					{
+						printError("buildDeviceMap", "Failed to save audio device information");
+					}
+				}
+				else
+				{
+					res = true;
+				}
+			}
+			else
+			{
+				printError("buildDeviceMap", "No audio session instance defined")
+			}
+		}
+		else
+		{
+			printError("buildDeviceMap", "Error querying current audio device");
+		}
+		
+		if(res)
+		{
+			int rate = currentFrequency();
+			
+			for(int bitFormat = static_cast<int>(e_audioOutputFloat); bitFormat < static_cast<int>(e_audioOutputUnknown); bitFormat++)
+			{
+				int noBits;
+				FormatDescription::DataType type = (bitFormat == e_audioOutputFloat) ? FormatDescription::e_DataFloatSingle : FormatDescription::e_DataSignedInteger;
+			
+				switch(static_cast<AOIOSAudioFormats>(bitFormat))
+				{
+					case e_audioOutputInt16:
+						noBits = 16;
+						break;
+					case e_audioOutputInt24:
+						noBits = 24;
+						break;
+					case e_audioOutputInt32:
+					case e_audioOutputFloat:
+					case e_audioOutputUnknown:
+						noBits = 32;
+						break;
+				}
+			
+				if(queryDeviceCapability(static_cast<AOIOSAudioFormats>(bitFormat), dev->noChannels(), rate))
+				{
+					QSet<int> freqs = dev->frequencies();
+					for(QSet<int>::iterator ppI = freqs.begin(); ppI != freqs.end(); ppI++)
+					{
+						FormatDescription desc(type, noBits, dev->noChannels(), *ppI);
+						dev->addSupportedFormat(desc);
+					}
+				}
+			}
+			
+			dev->setHasExclusive(false);
+			dev->setInitialized();
+			m_devices.append(dynamic_cast<AOQueryDevice::Device *>(dev));
+			res = (!dev->frequencies().isEmpty()) ? true : false;
+		}
 	}
 	else
 	{
@@ -328,6 +526,14 @@ OSStatus AOQueryCoreAudioIOS::iosOmegaAudioCallbackIOProcQuery(void *inRegCon, \
 		::memset(ioData->mBuffers[i].mData, 0 ,inNumberFrames * noChs * query->m_bytesPerSample);
 	}
 	return noErr;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOQueryCoreAudioIOS::rebuild()
+{
+	m_devices.clear();
+	buildDeviceMap();
 }
 
 //-------------------------------------------------------------------------------------------

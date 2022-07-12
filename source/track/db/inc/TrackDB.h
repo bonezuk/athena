@@ -8,6 +8,8 @@
 #include "track/db/inc/SQLiteInsert.h"
 #include "track/db/inc/TrackDBMountPoints.h"
 
+#include "audioio/inc/AOQueryDevice.h"
+
 #include <QSharedPointer>
 
 //-------------------------------------------------------------------------------------------
@@ -97,6 +99,9 @@ class TRACK_DB_EXPORT TrackDB
 		QString getDirectoryName(int dirID);
 		QString formatDirectoryPath(const QString& path) const;
 		
+		bool saveAudioDevice(const audioio::AOQueryDevice::Device& dev);
+		bool restoreAudioDevice(const QString& deviceID, audioio::AOQueryDevice::Device& dev);
+		
 	protected:
 		
 		static TrackDB *m_instance;
@@ -137,6 +142,10 @@ class TRACK_DB_EXPORT TrackDB
 		int getMountDirectoryID(const QString& dName, QString& mName);
 		QString getMountDirectoryName(const QString& dName);
 		bool addMountDirectory(int dirID, const QString& dName);
+		
+		int refIDOfAudioDevice(const QString& deviceID);
+		void removeAudioDevice(const audioio::AOQueryDevice::Device& dev);
+		bool insertAudioDevice(const audioio::AOQueryDevice::Device& dev);
 };
 
 //-------------------------------------------------------------------------------------------

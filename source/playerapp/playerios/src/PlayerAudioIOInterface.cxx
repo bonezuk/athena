@@ -3,6 +3,9 @@
 #include "audioio/inc/WasAPIIF.h"
 #endif
 #include "playerapp/playerios/inc/PlayerAudioIOInterface.h"
+#if defined(OMEGA_IOS)
+#include "audioio/inc/AOCoreAudioIOS.h"
+#endif
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -11,7 +14,8 @@ namespace omega
 
 PlayerAudioIOInterface::PlayerAudioIOInterface(QSharedPointer<OmegaPlaylistInterface>& pPLInterface, QObject *parent) : OmegaAudioInterface(parent),
 	m_audio(),
-	m_pPLInterface(pPLInterface)
+	m_pPLInterface(pPLInterface),
+	m_isUpdateRunning(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -207,6 +211,35 @@ void PlayerAudioIOInterface::onAudioNoNext()
 void PlayerAudioIOInterface::onAudioCrossfade()
 {
 	m_pPLInterface->onAudioCrossfade();
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool PlayerAudioIOInterface::getIsUpdateRunning() const
+{
+	return m_isUpdateRunning;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerAudioIOInterface::update()
+{
+#if defined(OMEGA_IOS)
+	QSharedPointer<audioio::AOCoreAudioIOS> pAudioIOS = m_audio.dynamicCast<>(pAudioIOS);
+	if(!pAudioIOS.isNull())
+	{
+		if(pAudioIOS->isUpdateRequired())
+		{
+			m_isUpdateRunning = true;
+			emit onUpdateRunning();
+			
+			pAudioIOS->updateCurrentDevice();
+			
+			m_isUpdateRunning = false;
+			emit onUpdateRunning();
+		}
+	}
+#endif
 }
 
 //-------------------------------------------------------------------------------------------

@@ -69,6 +69,13 @@ QSharedPointer<PlaybackStateController>& PlayListModel::playbackState()
 
 //-------------------------------------------------------------------------------------------
 
+QSharedPointer<OmegaAudioInterface>& PlayListModel::audioInterface()
+{
+	return m_pAudioInterface;
+}
+
+//-------------------------------------------------------------------------------------------
+
 tuint64 PlayListModel::generateNewId() const
 {
 	tuint64 r;

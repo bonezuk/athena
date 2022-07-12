@@ -100,14 +100,24 @@ int main(int argc, char **argv)
 	common::DiskIFSPtr diskIF = common::DiskIF::instance("disk");
 	if(!diskIF.isNull())
 	{
+#if defined(OMEGA_IOS)
+		QSharedPointer<PlayerIOSAudioSession> pSession = PlayerIOSAudioSession::startSession();
+		if(pSession.isNull())
+		{
+			common::Log::g_Log << "Failed to start audio session" << common::c_endl;
+			return -1;
+		}
+#endif
+
 		qmlRegisterType<PlayListIOSModel>("uk.co.blackomega", 1, 0, "PlayListIOSModel");
 		qmlRegisterType<PlayerUISettings>("uk.co.blackomega", 1, 0, "PlayerUISettings");
 		qmlRegisterType<PlaybackStateController>("uk.co.blackomega", 1, 0, "PlaybackStateController");
 		qmlRegisterType<QAlbumListModel>("uk.co.blackomega", 1, 0, "QAlbumListModel");
 		qmlRegisterType<QAlbumTrackListModel>("uk.co.blackomega", 1, 0, "QAlbumTrackListModel");
+		qmlRegisterType<QAlbumTrackListModel>("uk.co.blackomega", 1, 0, "PlayerAudioIOInterface");
 
 		PlayerIOSTrackDBManager *trackDBManager = PlayerIOSTrackDBManager::instance();
-		if(trackDBManager != 0)
+		if(trackDBManager != 0 && !pSession.isNull())
 		{
 			QSharedPointer<OmegaPlaylistInterface> plInterface(new OmegaPlaylistInterface());
 			QSharedPointer<PlayerAudioIOInterface> pAudioIO(new PlayerAudioIOInterface(plInterface));
@@ -124,10 +134,12 @@ int main(int argc, char **argv)
 					if(pAlbumModel->initialise())
 					{
 #if defined(OMEGA_IOS)
-						QSharedPointer<PlayerIOSAudioSession> pSession = PlayerIOSAudioSession::startSession(pLModel);
-						if(!pSession.isNull())
-#endif
+						if(pSession->setModelAndInit(pLModel))
 						{
+							pSession->logOutput();
+#else
+						{
+#endif
 							QFile page(":/Resources/frontpage1.qml");
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 							if(page.open(QIODevice::ReadOnly))
@@ -139,6 +151,7 @@ int main(int argc, char **argv)
 								engine.rootContext()->setContextProperty("albumModel", pAlbumModel.data());
 								engine.rootContext()->setContextProperty("albumTrackModel", pAlbumModel->trackModel().data());
 								engine.rootContext()->setContextProperty("playbackStateController", pModel->playbackState().data());
+								engine.rootContext()->setContextProperty("audioInterface", pAudioIO.data());
 				
 								PlayerUISettings settings;
 							

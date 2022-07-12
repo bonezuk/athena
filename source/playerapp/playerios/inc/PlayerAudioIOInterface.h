@@ -24,6 +24,9 @@ class PlayerAudioIOInterface : public OmegaAudioInterface
 	Q_OBJECT
 	
 	public:
+		Q_PROPERTY(bool isUpdateRunning READ getIsUpdateRunning NOTIFY onUpdateRunning)
+	
+	public:
 		PlayerAudioIOInterface(QSharedPointer<OmegaPlaylistInterface>& pPLInterface, QObject *parent = 0);
 		virtual ~PlayerAudioIOInterface();
 		
@@ -36,11 +39,18 @@ class PlayerAudioIOInterface : public OmegaAudioInterface
 
 		virtual bool init();
 		virtual void quitDaemon();
+		
+		virtual void update();
+		virtual bool getIsUpdateRunning() const;
+		
+	signals:
+		void onUpdateRunning();
 	
 	private:
 	
 		QSharedPointer<audioio::AOBase> m_audio;
 		QSharedPointer<OmegaPlaylistInterface> m_pPLInterface;
+		bool m_isUpdateRunning;
 		
 		virtual void printError(const char *strR, const char *strE) const;
 		

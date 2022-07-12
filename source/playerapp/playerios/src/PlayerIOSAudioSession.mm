@@ -44,8 +44,10 @@ class PlayerIOSAudioSessionImpl : public PlayerIOSAudioSession
 	public:
 		friend class PlayerIOSAudioSession;
 	public:
-		PlayerIOSAudioSessionImpl(QSharedPointer<PlayListModel>& pPLModel, QObject *parent = 0);
+		PlayerIOSAudioSessionImpl(QObject *parent = 0);
 		virtual ~PlayerIOSAudioSessionImpl();
+		
+		void setModelAndInit(QSharedPointer<PlayListModel>& pPLModel);
 	
 		virtual void audioInteruption(NSNotification *notification);
 		virtual void audioRouteChange(NSNotification *notification);
@@ -61,7 +63,10 @@ class PlayerIOSAudioSessionImpl : public PlayerIOSAudioSession
 
 		virtual void onPlayStateChangedImpl();
 		virtual void updateNowPlayImpl();
-
+		
+		virtual bool loadDevice(audioio::AOQueryDevice::Device& dev);
+		virtual bool saveDevice(audioio::AOQueryDevice::Device& dev);
+		
 	protected:
 	
 		QSharedPointer<PlayListModel> m_pPLModel;
@@ -238,7 +243,7 @@ QSharedPointer<PlayerIOSAudioSession> PlayerIOSAudioSession::playerInstance()
 
 //-------------------------------------------------------------------------------------------
 
-QSharedPointer<PlayerIOSAudioSession> PlayerIOSAudioSession::startSession(QSharedPointer<PlayListModel>& pPLModel, QObject *parent)
+QSharedPointer<PlayerIOSAudioSession> PlayerIOSAudioSession::startSession(QObject *parent)
 {
 	QSharedPointer<PlayerIOSAudioSession> pSession = playerInstance();
 
@@ -248,10 +253,7 @@ QSharedPointer<PlayerIOSAudioSession> PlayerIOSAudioSession::startSession(QShare
 	}
 	
 	QSharedPointer<PlayerIOSAudioSessionImpl> pSessionImpl(new PlayerIOSAudioSessionImpl(pPLModel, parent));
-	if(pSessionImpl->init())
-	{
-		m_instance = pSessionImpl.dynamicCast<audioio::AOCoreAudioSessionIOS>();
-	}
+	m_instance = pSessionImpl.dynamicCast<audioio::AOCoreAudioSessionIOS>();
 	return playerInstance();
 }
 
@@ -290,7 +292,7 @@ void PlayerIOSAudioSession::updateNowPlay()
 //-------------------------------------------------------------------------------------------
 
 PlayerIOSAudioSessionImpl::PlayerIOSAudioSessionImpl(QSharedPointer<PlayListModel>& pPLModel, QObject *parent) : PlayerIOSAudioSession(parent),
-	m_pPLModel(pPLModel),
+	m_pPLModel(),
 	m_iosInterface(nil),
 	m_wasAlreadyPaused(false)
 {}
@@ -305,6 +307,14 @@ PlayerIOSAudioSessionImpl::~PlayerIOSAudioSessionImpl()
 void PlayerIOSAudioSessionImpl::printError(const char *strR, const char *strE) const
 {
 	common::Log::g_Log << "PlayerIOSAudioSessionImpl::" << strR << " - " << strE << common::c_endl;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool PlayerIOSAudioSessionImpl::setModelAndInit(QSharedPointer<PlayListModel>& pPLModel)
+{
+	m_pPLModel = pPLModel;
+	return init();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -461,7 +471,7 @@ void PlayerIOSAudioSessionImpl::audioRouteChange(NSNotification *notification)
    			reasonStr = "The route changed when the device woke up from sleep.";
    			break;
    		case AVAudioSessionRouteChangeReasonNoSuitableRouteForCategory:
-   			reasonStr = "The route changed because no suitable route is no available for the specified category.";
+   			reasonStr = "The route changed because no suitable route is available for the specified category.";
    			break;
    		case AVAudioSessionRouteChangeReasonUnknown:
    		default:
@@ -469,10 +479,20 @@ void PlayerIOSAudioSessionImpl::audioRouteChange(NSNotification *notification)
    			break;
 	}
 	printError("audioRouteChange", reasonStr.toUtf8().constData());
+	logOutput();
 	
-	if(m_pPLModel->playbackState()->getState() == PlaybackStateController::Play && reasonCode!=AVAudioSessionRouteChangeReasonCategoryChange)
+	if(reasonCode!=AVAudioSessionRouteChangeReasonCategoryChange)
 	{
-		m_pPLModel->onPause();
+		if(m_pPLModel->playbackState()->getState() == PlaybackStateController::Play)
+		{
+			m_pPLModel->onPause();
+		}
+		
+		QSharedPointer<> pAudioInterface = m_pPLModel->audioInterface().dynamicCast<PlayerAudioIOInterface>();
+		if(!pAudioInterface.isNull())
+		{
+			pAudioInterface->update();
+		}
 	}
 }
 
@@ -618,6 +638,42 @@ void PlayerIOSAudioSessionImpl::updateNowPlayImpl()
 		
 		[[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:songInfo];
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool PlayerIOSAudioSessionImpl::loadDevice(audioio::AOQueryDevice::Device& dev)
+{
+	bool res = false;
+	track::db::TrackDB *trackDB = track::db::TrackDB::instance();
+	
+	if(trackDB != 0)
+	{
+		res = trackDB->restoreAudioDevice(dev.id(), dev);
+	}
+	else
+	{
+		printError("loadDevice", "Track database not setup");
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool PlayerIOSAudioSessionImpl::saveDevice(audioio::AOQueryDevice::Device& dev)
+{
+	bool res = false;
+	track::db::TrackDB *trackDB = track::db::TrackDB::instance();
+	
+	if(trackDB != 0)
+	{
+		res = trackDB->saveAudioDevice(dev);
+	}
+	else
+	{
+		printError("saveDevice", "Track database not setup");
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------

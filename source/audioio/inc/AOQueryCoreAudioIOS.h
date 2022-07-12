@@ -46,6 +46,12 @@ class AUDIOIO_EXPORT AOQueryCoreAudioIOS : public AOQueryDevice
 		
 		virtual int defaultDeviceIndex();
 		
+		static int currentFrequency();
+		static bool setFrequency(int frequency);
+		static QString idCurrentRoute();
+		
+		virtual void rebuild();
+		
 	protected:
 		
 		int m_bytesPerSample;
@@ -59,10 +65,15 @@ class AUDIOIO_EXPORT AOQueryCoreAudioIOS : public AOQueryDevice
 		                          UInt32 inBusNumber, \
 		                          UInt32 inNumberFrames, \
 		                          AudioBufferList *ioData);
-
+		
+		virtual QString bitFormatName(int bitFormat) const;
+		
 		virtual bool buildDeviceMap();
 		virtual bool getDescription(AOIOSAudioFormats bitFormat, int noChannels, int freq, AudioStreamBasicDescription *fmt);
 		virtual bool queryDeviceCapability(AOIOSAudioFormats bitFormat, int noChannels, int freq);
+		
+		virtual void queryFrequencies(IOSDevice *dev);
+		virtual bool queryCurrentRoute(IOSDevice *dev);
 };
 
 //-------------------------------------------------------------------------------------------
