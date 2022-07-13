@@ -5,6 +5,9 @@
 #include "audioio/inc/AOQueryCoreAudioIOS.h"
 #include "audioio/inc/AOCoreAudioSessionIOS.h"
 
+#import <Foundation/Foundation.h>
+#import <AVFAudio/AVAudioSession.h>
+
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
@@ -239,7 +242,7 @@ QString AOQueryCoreAudioIOS::idCurrentRoute()
 			NSArray<AVAudioSessionPortDescription *> *outputs = currentRoute.outputs;
 			if(outputs != nil && outputs.count > 0)
 			{
-				AVAudioSessionPortDescription *port = [outputs objectAtIndex:i];
+				AVAudioSessionPortDescription *port = [outputs objectAtIndex:0];
 				if(port != nil)
 				{
 					QString type = QString::fromUtf8(port.portType.UTF8String);
@@ -272,7 +275,7 @@ bool AOQueryCoreAudioIOS::queryCurrentRoute(IOSDevice *dev)
 					NSArray<AVAudioSessionPortDescription *> *outputs = currentRoute.outputs;
 					if(outputs != nil && outputs.count > 0)
 					{
-						AVAudioSessionPortDescription *port = [outputs objectAtIndex:i];
+						AVAudioSessionPortDescription *port = [outputs objectAtIndex:0];
 						if(port != nil)
 						{
 							dev->id() = currentId;
@@ -282,7 +285,7 @@ bool AOQueryCoreAudioIOS::queryCurrentRoute(IOSDevice *dev)
 							dev->setNoChannels(noChannels);
 							for(int chIndex = 0; chIndex < noChannels; chIndex++)
 							{
-								AVAudioSessionChannelDescription *chDesc = [channels objectAtIndex:chIndex];
+								AVAudioSessionChannelDescription *chDesc = [port.channels objectAtIndex:chIndex];
 								dev->channel(chIndex).name() = chDesc.channelName.UTF8String;
 							}
 							
@@ -334,7 +337,7 @@ bool AOQueryCoreAudioIOS::buildDeviceMap()
 			}
 			else
 			{
-				printError("buildDeviceMap", "No audio session instance defined")
+				printError("buildDeviceMap", "No audio session instance defined");
 			}
 		}
 		else

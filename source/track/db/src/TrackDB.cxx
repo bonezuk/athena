@@ -2631,7 +2631,7 @@ bool TrackDB::insertAudioDevice(const audioio::AOQueryDevice::Device& dev)
 	{
 		int refID = idOfInserted();
 		const QSet<int>& freqs = dev.frequencies();
-		for(QSet<int>::const_iterator ppI = freqs.begin(); ppI != freqs.end() && !res; ppI++)
+		for(QSet<int>::const_iterator ppI = freqs.begin(); ppI != freqs.end() && res; ppI++)
 		{	
 			int freq = *ppI;
 			SQLiteInsert freqI(m_db);
@@ -2646,7 +2646,7 @@ bool TrackDB::insertAudioDevice(const audioio::AOQueryDevice::Device& dev)
 			}
 		}
 		
-		for(int chIndex = 0; chIndex < dev.noChannels() && !res; chIndex++)
+		for(int chIndex = 0; chIndex < dev.noChannels() && res; chIndex++)
 		{
 			QString chName = dbString(dev.channel(chIndex).name());
 			SQLiteInsert chI(m_db);

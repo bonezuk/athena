@@ -53,7 +53,6 @@ class AUDIOIO_EXPORT AOCoreAudioIOS : public AOCoreAudio
 
 		virtual void processMessages();
 		
-		virtual bool setPlaybackFrequency();
 		virtual void addToPriorityMap(QMap<int, QList<int> >& rMap, int priority, int rate);
 		virtual void setPlaybackFrequency(QSharedPointer<AOQueryCoreAudioIOS::IOSDevice> pDevice);
 		

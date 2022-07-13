@@ -225,7 +225,7 @@ bool PlayerAudioIOInterface::getIsUpdateRunning() const
 void PlayerAudioIOInterface::update()
 {
 #if defined(OMEGA_IOS)
-	QSharedPointer<audioio::AOCoreAudioIOS> pAudioIOS = m_audio.dynamicCast<>(pAudioIOS);
+	QSharedPointer<audioio::AOCoreAudioIOS> pAudioIOS = m_audio.dynamicCast<audioio::AOCoreAudioIOS>();
 	if(!pAudioIOS.isNull())
 	{
 		if(pAudioIOS->isUpdateRequired())

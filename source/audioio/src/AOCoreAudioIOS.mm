@@ -159,7 +159,7 @@ void AOCoreAudioIOS::setPlaybackFrequency(QSharedPointer<AOQueryCoreAudioIOS::IO
 	
 	for(QSet<int>::iterator ppK = freqs.begin(); ppK != freqs.end(); ppK++)
 	{
-		int freq = *ppJ;
+		int freq = *ppK;
 		
 		if(codecFrequency == freq)
 		{
@@ -185,7 +185,7 @@ void AOCoreAudioIOS::setPlaybackFrequency(QSharedPointer<AOQueryCoreAudioIOS::IO
 		for(QList<int>::iterator ppJ = rList.begin(); ppJ != rList.end() && outputRate < 0; ppJ++)
 		{
 			int rate = *ppJ;
-			if(AOQueryCoreAudioIOS::setFrequency((void *)aSession, rate))
+			if(AOQueryCoreAudioIOS::setFrequency(rate))
 			{
 				outputRate = rate;
 			}

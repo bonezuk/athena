@@ -3,6 +3,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "playerapp/playerios/inc/PlayerIOSAudioSession.h"
+#include "playerapp/playerios/inc/PlayerAudioIOInterface.h"
 
 #import <Foundation/Foundation.h>
 #import <AVFAudio/AVAudioSession.h>
@@ -47,7 +48,7 @@ class PlayerIOSAudioSessionImpl : public PlayerIOSAudioSession
 		PlayerIOSAudioSessionImpl(QObject *parent = 0);
 		virtual ~PlayerIOSAudioSessionImpl();
 		
-		void setModelAndInit(QSharedPointer<PlayListModel>& pPLModel);
+		virtual bool setModelAndInit(QSharedPointer<PlayListModel>& pPLModel);
 	
 		virtual void audioInteruption(NSNotification *notification);
 		virtual void audioRouteChange(NSNotification *notification);
@@ -252,7 +253,7 @@ QSharedPointer<PlayerIOSAudioSession> PlayerIOSAudioSession::startSession(QObjec
 		pSession->endSession();
 	}
 	
-	QSharedPointer<PlayerIOSAudioSessionImpl> pSessionImpl(new PlayerIOSAudioSessionImpl(pPLModel, parent));
+	QSharedPointer<PlayerIOSAudioSessionImpl> pSessionImpl(new PlayerIOSAudioSessionImpl(parent));
 	m_instance = pSessionImpl.dynamicCast<audioio::AOCoreAudioSessionIOS>();
 	return playerInstance();
 }
@@ -291,7 +292,7 @@ void PlayerIOSAudioSession::updateNowPlay()
 // PlayerIOSAudioSessionImpl
 //-------------------------------------------------------------------------------------------
 
-PlayerIOSAudioSessionImpl::PlayerIOSAudioSessionImpl(QSharedPointer<PlayListModel>& pPLModel, QObject *parent) : PlayerIOSAudioSession(parent),
+PlayerIOSAudioSessionImpl::PlayerIOSAudioSessionImpl(QObject *parent) : PlayerIOSAudioSession(parent),
 	m_pPLModel(),
 	m_iosInterface(nil),
 	m_wasAlreadyPaused(false)
@@ -488,7 +489,7 @@ void PlayerIOSAudioSessionImpl::audioRouteChange(NSNotification *notification)
 			m_pPLModel->onPause();
 		}
 		
-		QSharedPointer<> pAudioInterface = m_pPLModel->audioInterface().dynamicCast<PlayerAudioIOInterface>();
+		QSharedPointer<PlayerAudioIOInterface> pAudioInterface = m_pPLModel->audioInterface().dynamicCast<PlayerAudioIOInterface>();
 		if(!pAudioInterface.isNull())
 		{
 			pAudioInterface->update();
