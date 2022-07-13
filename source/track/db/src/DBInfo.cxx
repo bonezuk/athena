@@ -415,6 +415,39 @@ bool DBInfo::loadRecord()
 
 //-------------------------------------------------------------------------------------------
 
+int DBInfo::getImageID() const
+{
+	TrackDB *trackDB = TrackDB::instance();
+	tint imageID,iType,iFormat;
+	QString cmd;
+	SQLiteQuery imageQ(trackDB->m_db);
+		
+	cmd  = "SELECT a.imageID, b.type, b.format";
+	cmd += "    FROM imagemap AS a INNER JOIN image AS b ON a.imageID=b.imageID";
+	cmd += "    WHERE a.albumID=" + QString::number(m_albumID) + " AND a.trackID=" + QString::number(m_trackID) + ";";
+	imageQ.prepare(cmd);
+	imageQ.bind(imageID);
+	imageQ.bind(iType);
+	imageQ.bind(iFormat);
+	if(!imageQ.next())
+	{
+		SQLiteQuery aImageQ(trackDB->m_db);
+	
+		cmd  = "SELECT b.imageID";
+		cmd += "  FROM imagealbummap AS a INNER JOIN image AS b ON a.imageID=b.imageID";
+		cmd += "  WHERE a.albumID=" + QString::number(m_albumID);
+		aImageQ.prepare(cmd);
+		aImageQ.bind(imageID);
+		if(!aImageQ.next())
+		{
+			imageID = -1;
+		}
+	}
+	return imageID;
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool DBInfo::loadImages() const
 {
 	TrackDB *trackDB = TrackDB::instance();

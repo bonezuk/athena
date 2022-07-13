@@ -38,6 +38,7 @@ class TRACK_DB_EXPORT DBInfo : public info::Info
 		virtual bool isImage() const;
 		virtual info::ImageInfoArray *getImageData(ImageFormat& format) const;
 		virtual info::ImageInfoArray *getImageData(info::IDTagImageType type,info::Info::ImageFormat& format) const;
+		virtual int getImageID() const;
 		
 		virtual QString directoryGroup() const;
 		

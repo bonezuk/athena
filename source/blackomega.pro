@@ -681,6 +681,7 @@ HEADERS += ./playerapp/playercommon/inc/PlayListModel.h
 HEADERS += ./playerapp/playercommon/inc/QAlbumListModel.h
 HEADERS += ./playerapp/playercommon/inc/QAlbumTrackListModel.h
 HEADERS += ./playerapp/playercommon/inc/QOmegaListModel.h
+HEADERS += ./playerapp/playercommon/inc/QAlbumImageProvider.h
 
 SOURCES += ./playerapp/playercommon/src/OmegaAudioInterface.cxx
 SOURCES += ./playerapp/playercommon/src/PlaybackStateController.cxx
@@ -690,6 +691,7 @@ SOURCES += ./playerapp/playercommon/src/PlayListModel.cxx
 SOURCES += ./playerapp/playercommon/src/QAlbumListModel.cxx
 SOURCES += ./playerapp/playercommon/src/QAlbumTrackListModel.cxx
 SOURCES += ./playerapp/playercommon/src/QOmegaListModel.cxx
+SOURCES += ./playerapp/playercommon/src/QAlbumImageProvider.cxx
 
 # --- playerapp/playerios ---
 

@@ -52,6 +52,10 @@ QVariant QAlbumListModel::data(const QModelIndex& index, int role) const
 			{
 				v = m_pAlbums->data(index.row(), 3);
 			}
+			else if(role == ImageRole)
+			{
+				v = m_pAlbums->data(index.row(), 4);
+			}
 		}
 	}
 	return v;
@@ -65,6 +69,7 @@ QHash<int,QByteArray> QAlbumListModel::roleNames() const
 	h[ArtistRole] = "artist";
 	h[AlbumRole] = "album";
 	h[YearRole] = "year";
+	h[ImageRole] = "image";
 	return h;
 }
 

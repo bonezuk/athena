@@ -61,5 +61,10 @@
         <file>Resources/images/progress/alphaWait10@2x.png</file>
         <file>Resources/images/progress/alphaWait11@2x.png</file>
         <file>Resources/images/progress/alphaWait12@2x.png</file>
+        <file>Resources/images/add_album_pressed.png</file>
+        <file>Resources/images/add_album.png</file>
+        <file>Resources/images/clean_all_disabled.png</file>
+        <file>Resources/images/clean_all_pressed.png</file>
+        <file>Resources/images/clean_all.png</file>
     </qresource>
 </RCC>

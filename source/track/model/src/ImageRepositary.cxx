@@ -64,7 +64,8 @@ CONCRETE_FACTORY_CLASS_IMPL(ImageRepositaryFactory,ImageRepositary, \
 
 ImageRepositaryImpl::ImageRepositaryImpl() : ImageRepositary(),
 	m_imageMap(),
-	m_referenceMap()
+	m_referenceMap(),
+	m_sizeMap()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -229,8 +230,50 @@ QImage *ImageRepositaryImpl::processImage(QImage *iImage) const
 
 //-------------------------------------------------------------------------------------------
 
+int ImageRepositaryImpl::originalWidth(int imageID)
+{
+	int w = 128;
+	QMap<int, QSize>::iterator ppI = m_sizeMap.find(imageID);
+	if(ppI != m_sizeMap.end())
+	{
+		w = ppI.value().width();
+	}
+	return w;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int ImageRepositaryImpl::originalHeight(int imageID)
+{
+	int h = 128;
+	QMap<int, QSize>::iterator ppI = m_sizeMap.find(imageID);
+	if(ppI != m_sizeMap.end())
+	{
+		h = ppI.value().width();
+	}
+	return h;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void ImageRepositaryImpl::addOriginalSize(int imageID, int orgWidth, int orgHeight) const
+{
+	QMap<int, QSize>::iterator ppI = m_sizeMap.find(imageID);
+	if(ppI != m_sizeMap.end())
+	{
+		ppI.value() = QSize(orgWidth, orgHeight);
+	}
+	else
+	{
+		m_sizeMap.insert(imageID, QSize(orgWidth, orgHeight));
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 QImage *ImageRepositaryImpl::loadImage(int imageID,int iWidth,int iHeight) const
 {
+	int orgWidth, orgHeight;
 	QImage *img;
 	QString cmdQ;
 	track::info::Info::ImageFormat iFormat;
@@ -238,7 +281,8 @@ QImage *ImageRepositaryImpl::loadImage(int imageID,int iWidth,int iHeight) const
 	
 	cmdQ = getImageQuery(imageID);
 	iArray = loadDataFromDatabase(cmdQ,iFormat);
-	img = loadImageFromArray(iArray,iWidth,iHeight,iFormat);
+	img = loadImageFromArray(iArray,iWidth,iHeight,iFormat, orgWidth, orgHeight);
+	addOriginalSize(imageID, orgWidth, orgHeight);
 	delete iArray;
 	return img;
 }
@@ -251,10 +295,12 @@ QImage *ImageRepositaryImpl::loadImageFromFile(const QString& iFilename,int iWid
 	QFile iFile(iFilename);
 	if(iFile.open(QIODevice::ReadOnly))
 	{
+		int orgWidth, orgHeight;
 		QByteArray iMem = iFile.readAll();
 		track::info::ImageInfoArray *iArray = new track::info::ImageInfoArray;
 		iArray->AppendRaw(iMem.constData(),iMem.size());
-		img = loadImageFromArray(iArray,iWidth,iHeight,track::info::Info::e_imageUnknown);
+		img = loadImageFromArray(iArray,iWidth,iHeight,track::info::Info::e_imageUnknown, orgWidth, orgHeight);
+		addOriginalSize(-1, orgWidth, orgHeight);
 		delete iArray;
 	}
 	return img;
@@ -262,7 +308,7 @@ QImage *ImageRepositaryImpl::loadImageFromFile(const QString& iFilename,int iWid
 
 //-------------------------------------------------------------------------------------------
 
-QImage *ImageRepositaryImpl::loadImageFromArray(track::info::ImageInfoArray *iArray,int iWidth,int iHeight,track::info::Info::ImageFormat iFormat) const
+QImage *ImageRepositaryImpl::loadImageFromArray(track::info::ImageInfoArray *iArray,int iWidth,int iHeight,track::info::Info::ImageFormat iFormat, int& orgWidth, int& orgHeight) const
 {
 	QImage *img = 0;
 
@@ -271,6 +317,9 @@ QImage *ImageRepositaryImpl::loadImageFromArray(track::info::ImageInfoArray *iAr
 		QImage *orgImage = loadFromData(iArray,iFormat);
 		if(orgImage!=0)
 		{
+			orgWidth = orgImage->width();
+			orgHeight = orgImage->height();
+		
 			QImage *sImage = scaleImage(orgImage,iWidth,iHeight);
 			if(sImage!=0)
 			{
@@ -333,7 +382,7 @@ QImage *ImageRepositaryImpl::getImage(int imageID,int iWidth,int iHeight)
 QImage *ImageRepositaryImpl::getReference(int iWidth,int iHeight)
 {
 	QImage *img;
-	QString referenceName(":/player/Resources/note.png");
+	QString referenceName(":/Resources/images/note.png");
 	QPair<int,int> sizeIndex(iWidth,iHeight);
 	QMap<QPair<int,int>,QImage *>::iterator ppI;
 

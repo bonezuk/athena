@@ -12,6 +12,7 @@ ListView {
 	property string currentTrack: ""
 	property string currentAlbumName: ""
 	property string currentArtistName: ""
+	property int currentImageID: -1
 	
 	signal clicked
 
@@ -38,7 +39,7 @@ ListView {
 
 		
 			Image {
-				source: Comp.urlRelPath("images/note.png")
+				source: "image://db/" + currentImageID
 				fillMode: Image.PreserveAspectFit
 				Layout.fillWidth: true
 				Layout.leftMargin: parent.spacing

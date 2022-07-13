@@ -189,6 +189,10 @@ QVariant PlayListModel::dataAtIndex(int row, const QString& roleName)
 	{
 		return data(idx, LengthRole);
 	}
+	else if(roleName == "image")
+	{
+		return data(idx, ImageRole);
+	}
 	return QVariant();
 }
 
@@ -271,6 +275,10 @@ QVariant PlayListModel::data(const QModelIndex& index, int role) const
 				{
 					return QVariant(static_cast<tfloat64>(pInfo->length()));
 				}
+				else if(role == ImageRole)
+				{
+					return QVariant(getImageIDAtIndex(index.row()));
+				}
 			}
 			else
 			{
@@ -318,6 +326,7 @@ QHash<int,QByteArray> PlayListModel::roleNames() const
 	h[CopyrightRole] = "copyright";
 	h[EncoderRole] = "encoder";
 	h[LengthRole] = "length";
+	h[ImageRole] = "image";
 	return h;
 }
 
@@ -570,6 +579,16 @@ void PlayListModel::removeAtIndex(int index)
 
 //-------------------------------------------------------------------------------------------
 
+void PlayListModel::clearAllPlaylist()
+{
+	while(m_playList.size() > 0)
+	{
+		removeAtIndex(0);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 qint32 PlayListModel::getSizeOfModel() const
 {
 	return static_cast<qint32>(m_playList.size());
@@ -732,6 +751,24 @@ void PlayListModel::resetAndReload(bool isReload)
 
 	endResetModel();
 	emit onSizeOfModel();
+}
+
+//-------------------------------------------------------------------------------------------
+
+int PlayListModel::getImageIDAtIndex(int idx) const
+{
+	int imageID = -1;
+	if(idx >= 0 && idx < m_playList.size())
+	{
+		tuint64 id = m_playList.at(idx);
+		QMap<tuint64, QPair<track::db::DBInfoSPtr,tint> >::const_iterator ppI = m_items.find(id);
+		if(ppI != m_items.constEnd())
+		{
+			track::db::DBInfoSPtr pInfo = ppI.value().first;
+			imageID = pInfo->getImageID();
+		}
+	}
+	return imageID;
 }
 
 //-------------------------------------------------------------------------------------------

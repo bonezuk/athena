@@ -191,6 +191,23 @@ void QAlbumTrackListModel::appendTrackToPlaylist(int index)
 
 //-------------------------------------------------------------------------------------------
 
+void QAlbumTrackListModel::appendAlbumToPlaylist()
+{
+	if(!m_pTracks.isNull())
+	{
+		for(int idx = 0; idx < m_pTracks->size(); idx++)
+		{
+			QString fileName = m_pTracks->data(idx, track::model::AlbumTrackModel::e_fileName).toString();
+			if(!fileName.isEmpty() && common::DiskOps::exist(fileName))
+			{
+				emit appendToPlaylist(fileName);
+			}		
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void QAlbumTrackListModel::resetAndReload(bool isReload)
 {
 	beginResetModel();

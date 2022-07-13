@@ -43,6 +43,7 @@ class PLAYERCOMMON_EXPORT QAlbumTrackListModel : public QOmegaListModel
 		virtual qint32 getSizeOfModel() const;
 		
 		Q_INVOKABLE void appendTrackToPlaylist(int index);
+		Q_INVOKABLE void appendAlbumToPlaylist();
 		
 	signals:
 		void appendToPlaylist(const QString& fileName);

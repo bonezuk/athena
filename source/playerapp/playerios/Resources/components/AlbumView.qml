@@ -11,6 +11,7 @@ ListView {
 	property int currentIndex: 0
 	property string currentAlbumName: ""
 	property string currentArtistName: ""
+	property int currentImageID: -1
 	
 	signal clicked()
 	
@@ -40,7 +41,7 @@ ListView {
 				Layout.minimumHeight: parent.height - 2
 				
 				Image {
-					source: Comp.urlRelPath("images/note.png")
+					source: "image://db/" + model.image
 					fillMode: Image.PreserveAspectFit
 					anchors.fill: parent
 				}
@@ -75,6 +76,7 @@ ListView {
 				albumView.currentIndex = index;
 				currentAlbumName = model.album;
 				currentArtistName = model.artist;
+				currentImageID = model.image;
 				albumView.clicked();
 			}	
 		}

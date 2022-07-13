@@ -29,6 +29,9 @@ class TRACK_MODEL_EXPORT ImageRepositary
         static QSharedPointer<ImageRepositary> instance();
 		static void release();
 		
+		virtual int originalWidth(int imageID) = 0;
+		virtual int originalHeight(int imageID) = 0;
+		
 		virtual QImage *getImage(int imageID,int iWidth,int iHeight) = 0;
 		virtual QImage *getReference(int iWidth,int iHeight) = 0;
 		
@@ -51,6 +54,9 @@ class TRACK_MODEL_EXPORT ImageRepositaryImpl : public ImageRepositary
 		ImageRepositaryImpl();
 		virtual ~ImageRepositaryImpl();
 
+		virtual int originalWidth(int imageID);
+		virtual int originalHeight(int imageID);
+
 		virtual QImage *getImage(int imageID,int iWidth,int iHeight);
 		virtual QImage *getReference(int iWidth,int iHeight);
 	
@@ -58,6 +64,7 @@ class TRACK_MODEL_EXPORT ImageRepositaryImpl : public ImageRepositary
 	
 		QMap<int,QMap<QPair<int,int>,QImage *> > m_imageMap;
 		QMap<QPair<int,int>,QImage *> m_referenceMap;
+		mutable QMap<int, QSize> m_sizeMap;
 	
 		virtual QString formatToString(track::info::Info::ImageFormat iFormat) const;
 		virtual QString getImageQuery(int imageID) const;
@@ -67,10 +74,12 @@ class TRACK_MODEL_EXPORT ImageRepositaryImpl : public ImageRepositary
 		// Can be used in overloaded methods to apply post process image steps.
 		virtual QImage *processImage(QImage *iImage) const;
 		
+		virtual void addOriginalSize(int imageID, int orgWidth, int orgHeight) const;
+		
 		virtual db::SQLiteQuerySPtr getDBQuery() const;
 		virtual track::info::ImageInfoArray *loadDataFromDatabase(const QString& cmdQ,track::info::Info::ImageFormat& iFormat) const;
 
-		virtual QImage *loadImageFromArray(track::info::ImageInfoArray *iArray,int iWidth,int iHeight,track::info::Info::ImageFormat iFormat) const;
+		virtual QImage *loadImageFromArray(track::info::ImageInfoArray *iArray,int iWidth,int iHeight,track::info::Info::ImageFormat iFormat, int& orgWidth, int& orgHeight) const;
 
 		virtual QImage *loadImage(int imageID,int iWidth,int iHeight) const;
 		virtual QImage *loadImageFromFile(const QString& iFilename,int iWidth,int iHeight) const;

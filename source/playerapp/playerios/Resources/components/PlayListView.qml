@@ -64,12 +64,28 @@ ListView {
         ListView.onRemove: animOnDelete.start()
        
        	onClicked: {
-			console.log("dd = " + index);
 			if(!isDeleted)
-			{				
-				playListView.currentIndex = index;
-				playListView.clicked();
+			{
+				if(playListDClkTimer.running === true)
+				{
+					console.log("dd = " + index);
+					playListView.currentIndex = index;
+					playListView.clicked();
+					playListDClkTimer.running = false;		
+				}
+				else
+				{
+					playListDClkTimer.running = true;
+				}
 			}
+			
+		}
+
+		Timer {
+			id: playListDClkTimer
+			interval: 500
+			running: false
+			repeat: false
 		}
        
         background: Rectangle {
@@ -116,7 +132,7 @@ ListView {
 					Layout.minimumHeight: parent.height - 2
 
 					Image {
-						source: Comp.urlRelPath("images/note.png")
+						source: "image://db/" + model.image
 						fillMode: Image.PreserveAspectFit
 						anchors.fill: parent
 					}

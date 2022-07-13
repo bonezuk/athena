@@ -35,6 +35,54 @@ TrackModelType AlbumModel::type() const
 
 //-------------------------------------------------------------------------------------------
 
+int AlbumModel::queryImageID(const AlbumModelKey& key) const
+{
+	int imageID = -1;
+	QString cmd;
+	db::SQLiteQuerySPtr query = getDBQuery();
+	
+	cmd  = "SELECT b.imageID";
+	cmd += "  FROM album AS a INNER JOIN imagemap AS b ON a.albumID=b.albumID";
+	cmd += "    INNER JOIN image AS c ON b.imageID=c.imageID";
+	cmd += "  WHERE a.";
+	if(key.isAlbum())
+	{
+		cmd += QString("albumID=%1").arg(key.id());
+	}
+	else
+	{
+		cmd += QString("groupID=%1").arg(key.id());
+	}
+	query->prepare(cmd);
+	query->bind(imageID);
+	if(!query->next())
+	{
+		db::SQLiteQuerySPtr aquery = getDBQuery();
+		
+		cmd  = "SELECT b.imageID";
+		cmd += "  FROM album AS a INNER JOIN imagealbummap AS b ON a.albumID=b.albumID";
+		cmd += "    INNER JOIN image AS c ON b.imageID=c.imageID";
+		cmd += "  WHERE a.";
+		if(key.isAlbum())
+		{
+			cmd += QString("albumID=%1").arg(key.id());
+		}
+		else
+		{
+			cmd += QString("groupID=%1").arg(key.id());
+		}
+		aquery->prepare(cmd);
+		aquery->bind(imageID);
+		if(!aquery->next())
+		{
+			imageID = -1;
+		}
+	}
+	return imageID;
+}
+
+//-------------------------------------------------------------------------------------------
+
 int AlbumModel::queryAlbumYear(const AlbumModelKey& key) const
 {
 	int year;
@@ -83,7 +131,7 @@ QVariant AlbumModel::dataAtIndex(int idx, int columnIndex) const
 {
 	QVariant dataItem;
 	
-	if(idx>=0 && idx < m_albums.size() && columnIndex>=0 && columnIndex<4)
+	if(idx>=0 && idx < m_albums.size() && columnIndex>=0 && columnIndex<5)
 	{
 		const QPair<AlbumModelKey,QString>& item = m_albums.at(idx);
 		if(columnIndex==0)
@@ -101,6 +149,10 @@ QVariant AlbumModel::dataAtIndex(int idx, int columnIndex) const
 		else if(columnIndex == 3)
 		{
 			dataItem = queryAlbumYear(item.first);
+		}
+		else if(columnIndex == 4)
+		{
+			dataItem = queryImageID(item.first);
 		}
 	}
 	return dataItem;

@@ -20,6 +20,7 @@ class PLAYERCOMMON_EXPORT QAlbumListModel : public QOmegaListModel
 			ArtistRole = Qt::UserRole + 1,
 			AlbumRole,
 			YearRole,
+			ImageRole
 		};
 		Q_ENUM(AlbumListRoles)
 		

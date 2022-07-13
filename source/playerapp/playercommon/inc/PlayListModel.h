@@ -7,6 +7,7 @@
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 #include "playerapp/playercommon/inc/QOmegaListModel.h"
+#include "track/model/inc/ImageRepositary.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -33,7 +34,8 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QOmegaListModel
 			OriginalArtistRole,
 			CopyrightRole,
 			EncoderRole,
-			LengthRole
+			LengthRole,
+			ImageRole
 		};
 		Q_ENUM(TrackRoles)
 		
@@ -58,6 +60,7 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QOmegaListModel
 		Q_INVOKABLE void playItemAtIndex(int index);
 		Q_INVOKABLE QVariant dataAtIndex(int row, const QString& roleName);
 		Q_INVOKABLE void remove(int index);
+		Q_INVOKABLE void clearAllPlaylist();
 		
 		virtual QSharedPointer<OmegaAudioInterface>& audioInterface();
 		virtual QSharedPointer<PlaybackStateController>& playbackState();
@@ -104,6 +107,8 @@ class PLAYERCOMMON_EXPORT PlayListModel : public QOmegaListModel
 		virtual void savePlaylistToDB();
 		
 		virtual void resetAndReload(bool isReload);
+		
+		virtual int getImageIDAtIndex(int idx) const;
 };
 
 //-------------------------------------------------------------------------------------------

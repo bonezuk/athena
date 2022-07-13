@@ -9,6 +9,7 @@
 #include "playerapp/playerios/inc/PlayerAudioIOInterface.h"
 #include "playerapp/playercommon/inc/QAlbumListModel.h"
 #include "playerapp/playercommon/inc/QAlbumTrackListModel.h"
+#include "playerapp/playercommon/inc/QAlbumImageProvider.h"
 
 #if defined(OMEGA_IOS)
 #include "playerapp/playerios/inc/PlayerIOSAudioSession.h"
@@ -98,7 +99,10 @@ int main(int argc, char **argv)
 	common::Log::g_Log << "Starting Black Omega iOS version" << common::c_endl;
 	
 	common::DiskIFSPtr diskIF = common::DiskIF::instance("disk");
-	if(!diskIF.isNull())
+	
+	QSharedPointer<track::model::ImageRepositary> pImageRepo = track::model::ImageRepositary::instance("image");
+	
+	if(!diskIF.isNull() && !pImageRepo.isNull())
 	{
 #if defined(OMEGA_IOS)
 		QSharedPointer<PlayerIOSAudioSession> pSession = PlayerIOSAudioSession::startSession();
@@ -117,7 +121,7 @@ int main(int argc, char **argv)
 		qmlRegisterType<QAlbumTrackListModel>("uk.co.blackomega", 1, 0, "PlayerAudioIOInterface");
 
 		PlayerIOSTrackDBManager *trackDBManager = PlayerIOSTrackDBManager::instance();
-		if(trackDBManager != 0 && !pSession.isNull())
+		if(trackDBManager != 0)
 		{
 			QSharedPointer<OmegaPlaylistInterface> plInterface(new OmegaPlaylistInterface());
 			QSharedPointer<PlayerAudioIOInterface> pAudioIO(new PlayerAudioIOInterface(plInterface));
@@ -152,6 +156,8 @@ int main(int argc, char **argv)
 								engine.rootContext()->setContextProperty("albumTrackModel", pAlbumModel->trackModel().data());
 								engine.rootContext()->setContextProperty("playbackStateController", pModel->playbackState().data());
 								engine.rootContext()->setContextProperty("audioInterface", pAudioIO.data());
+								
+								engine.addImageProvider(QLatin1String("db"), new QAlbumImageProvider);
 				
 								PlayerUISettings settings;
 							

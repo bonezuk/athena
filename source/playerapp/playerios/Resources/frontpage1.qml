@@ -34,6 +34,7 @@ Window {
 					albumModel.showAlbumTracks(currentIndex);
 					albumTrackView.currentAlbumName = currentAlbumName;
 					albumTrackView.currentArtistName = currentArtistName;
+					albumTrackView.currentImageID = currentImageID;
 					// Set the stack view to show the track album page.
 					parent.currentIndex = 1;
 				}
@@ -58,18 +59,48 @@ Window {
 					Image {
 						source: "images/back.png"
 						fillMode: Image.PreserveAspectFit
-						height: 60
 						anchors.verticalCenter: parent.verticalCenter
 						anchors.left: parent.left
 						anchors.leftMargin: 10
+						anchors.top: parent.top
+						anchors.topMargin: 5
+						anchors.bottom: parent.bottom
+						anchors.bottomMargin: 5
 
-						TapHandler {
-							onTapped: {
+						MouseArea {
+							anchors.fill: parent
+							
+							onClicked: {
 								console.log("back");
 								libraryMain.currentIndex = 0;
 							}
 						}
 					}
+					
+					Image {
+						source: addAlbumMouse.pressed ? "images/add_album_pressed.png" : "images/add_album.png"
+						fillMode: Image.PreserveAspectFit
+						anchors.verticalCenter: parent.verticalCenter
+						anchors.right: parent.right
+						anchors.rightMargin: 10
+						anchors.top: parent.top
+						anchors.topMargin: 10
+						anchors.bottom: parent.bottom
+						anchors.bottomMargin: 10
+
+						MouseArea {
+							id: addAlbumMouse
+							anchors.fill: parent
+							
+							onClicked: {
+								console.log("add album");
+								albumTrackModel.appendAlbumToPlaylist();
+								notifyInfo.text = "Added album '" + albumTrackView.currentAlbumName + "' to playlist."
+								notifyInfo.visible = true;
+							}
+						}
+					}		
+					
 				}
 
 				Component.AlbumTrackView {
@@ -159,7 +190,12 @@ Window {
 	            
 	            Image {
 	            	id: playingAlbumImage
-					source: "images/note.png"
+					source: {
+						let v = "image://db/" + playListModel.dataAtIndex(playbackStateController.index, "image");
+						console.log(v);
+						return v;
+					}
+					
 					fillMode: Image.PreserveAspectFit
 					visible: playbackStateController.isPlayback
 					
@@ -212,6 +248,7 @@ Window {
 			}
 			
 			Component.PlayListView {
+				id: playListView
 				model: playListModel
 				playbackState: playbackStateController
 				
@@ -219,11 +256,39 @@ Window {
 				anchors.top: playControlsContainer.bottom
 				anchors.left: parent.left
 				anchors.right: parent.right
-				anchors.bottom: parent.bottom
+				anchors.bottom: playlistControlTab.top
 				
 				onClicked: {
 					console.log(currentIndex);
 					playListModel.playItemAtIndex(currentIndex);
+				}
+			}
+			
+			Rectangle {
+				id: playlistControlTab
+				anchors.left: parent.left
+				anchors.right: parent.right
+				anchors.bottom: parent.bottom
+				implicitHeight: 40
+				color: "#2E4053"
+				
+				RowLayout {
+					anchors.fill: parent
+					
+					Image {
+						fillMode: Image.PreserveAspectFit
+						source: cleanAllMouse.pressed ? "images/clean_all_pressed.png" : "images/clean_all.png";
+						Layout.preferredHeight: (80 * parent.height) / 100
+						
+						MouseArea {
+							id: cleanAllMouse
+							anchors.fill: parent
+							onDoubleClicked: {
+								console.log("clean all");
+								playListModel.clearAllPlaylist();
+							}
+						}
+					}
 				}
 			}
 		}
