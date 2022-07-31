@@ -10,6 +10,8 @@
 #endif
 
 #include "playerapp/playercommon/inc/EmbeddedEnv.h"
+#include "playerapp/playercommon/inc/PlayerTrackDBManager.h"
+#include "playerapp/playercommon/inc/CLIProgress.h"
 #include "playerapp/playerapp/inc/PlayerAppMain.h"
 #include "playerapp/playerapp/inc/PlaybackWebStateCtrlPLA.h"
 
@@ -145,7 +147,7 @@ int main(int argc, char **argv)
 	track::db::TrackDB *trackDB = track::db::TrackDB::instance(trackDBFilename);
 	if(trackDB != 0)
 	{
-		QSharedPointer<PlayerAppMain> app(new PlayerAppMain (rootWWW, argc, argv));
+		QSharedPointer<PlayerAppMain> app(new PlayerAppMain(rootWWW, argc, argv));
 		QString mountPoint;
 		QVector<QPair<track::db::DBInfoSPtr,tint> > playListDB;
 		
@@ -159,6 +161,20 @@ int main(int argc, char **argv)
 			else
 			{
 				common::Log::g_Log << "Failed to define mount point at '" << mountPoint << "'" << common::c_endl;
+			}
+		}
+		else if(rebuildDatabaseFromArguments(args))
+		{
+			PlayerTrackDBManager trackDBManager;
+			QStringList mountPoints = trackDB->mountPoints()->mountPoints();
+			if(!mountPoints.isEmpty())
+			{
+				CLIProgress dbProgress;
+				res = (trackDBManager.buildDatabaseFromMountpoints(trackDBFilename, mountPoints, &dbProgress)) ? 0 : -1;
+			}
+			else
+			{
+				common::Log::g_Log << "No mount points available to build database from." << common::c_endl;
 			}
 		}
 		else if(loadPlaylistFromDBOrArguments(args, playListDB))

@@ -58,6 +58,23 @@ QString playlistFromArguments(const QStringList& args)
 
 //-------------------------------------------------------------------------------------------
 
+bool rebuildDatabaseFromArguments(const QStringList& args)
+{
+	int idx;
+	bool rebuild = false;
+	
+	for(idx = 0; idx < args.size() && !rebuild; idx++)
+	{
+		if(args.at(idx) == "--rebuild")
+		{
+			rebuild = true;
+		}
+	}
+	return rebuild;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void playlistToDBList(QVector<track::info::InfoSPtr>& playList, QVector<QPair<track::db::DBInfoSPtr,tint> >& playListDB)
 {
 	for(QVector<track::info::InfoSPtr>::iterator ppI = playList.begin(); ppI != playList.end(); ppI++)
