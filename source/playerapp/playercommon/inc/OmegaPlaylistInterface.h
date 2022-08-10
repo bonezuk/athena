@@ -3,6 +3,8 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAPLAYLISTINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+
 #include <QtGlobal>
 #include <QSharedPointer>
 

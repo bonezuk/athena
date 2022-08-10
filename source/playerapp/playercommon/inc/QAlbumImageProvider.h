@@ -3,6 +3,7 @@
 #define __PLAYERAPP_PLAYERCOMMON_QALBUMIMAGEPROVIDER_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "track/model/inc/ImageRepositary.h"
 
 #include <QQuickImageProvider>
@@ -12,7 +13,7 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-class QAlbumImageProvider : public QQuickImageProvider
+class PLAYERCOMMON_EXPORT QAlbumImageProvider : public QQuickImageProvider
 {
 	public:
 		QAlbumImageProvider();

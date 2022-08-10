@@ -3,6 +3,7 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYLISTMODEL_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "common/inc/Random.h"
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"

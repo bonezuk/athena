@@ -3,6 +3,7 @@
 #define __PLAYERAPP_PLAYERCOMMON_OMEGAWEBSERVICE_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "playerapp/playercommon/inc/HTTPFileTransfer.h"
 #include "playerapp/playercommon/inc/OmegaPLWebInterface.h"
 #include "playerapp/playercommon/inc/WebEventRegisterInterface.h"
@@ -12,7 +13,7 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-class OmegaWebService : public QObject
+class PLAYERCOMMON_EXPORT OmegaWebService : public QObject
 {
 	Q_OBJECT
 	public:

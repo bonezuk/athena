@@ -3,6 +3,8 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYBACKSTATE_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+
 #include <QtGlobal>
 #include <QObject>
 #include <QQmlEngine>

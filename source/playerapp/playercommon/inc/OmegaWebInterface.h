@@ -3,6 +3,7 @@
 #define __PLAYERAPP_PLAYERCOMMON_OMEGAWEBINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "playerapp/playercommon/inc/OmegaAudioInterface.h"
 
 #include <QJsonDocument>

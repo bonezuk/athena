@@ -3,6 +3,8 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAPIBUSSERVICENAMES_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QVariant>

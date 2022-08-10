@@ -3,6 +3,7 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYERCOMMONDLL_H
 //-------------------------------------------------------------------------------------------
 
+#include "network/inc/Resource.h"
 #include "common/inc/CommonTypes.h"
 #include <QThread>
 

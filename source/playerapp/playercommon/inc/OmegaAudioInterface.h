@@ -3,12 +3,13 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_OMEGAAUDIOINTERFACE_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+
 #include <QString>
 #include <QObject>
 
 #include "common/inc/CommonTypes.h"
 #include "common/inc/TimeStamp.h"
-#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega

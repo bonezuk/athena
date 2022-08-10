@@ -3,6 +3,7 @@
 #define __PLAYERAPP_PLAYERCOMMON_PLAYBACKWEBSTATECONTROLLER_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "playerapp/playercommon/inc/PlaybackStateController.h"
 #include "playerapp/playercommon/inc/WebEventInterface.h"
 
@@ -11,7 +12,7 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-class PlaybackWebStateController : public PlaybackStateController
+class PLAYERCOMMON_EXPORT PlaybackWebStateController : public PlaybackStateController
 {
 	Q_OBJECT
 	public:

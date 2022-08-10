@@ -142,7 +142,7 @@ Codec *Codec::get(const QString& name)
 		ext += ":" + pro;
 		c = CodecFactory::createUnmanaged(ext);
 	}
-	else if(ext=="wav" || ext=="mp3" || ext=="ogg" || ext=="m4a" || ext=="m4b" || ext=="flac" || ext=="caf" || ext=="aif" || ext=="aiff" || ext=="mpc" || ext=="mp+" || ext=="mpp" || ext=="ape" || ext=="wv" || ext=="tone")
+	else if(ext=="wav" || ext=="mp3" || ext=="ogg" || ext=="m4a" || ext=="m4b" || ext=="flac" || ext=="caf" || ext=="aif" || ext=="aiff" || ext=="mpc" || ext=="mp+" || ext=="mpp" || ext=="wv" || ext=="tone")
 	{
 		if(ext=="m4b")
 		{

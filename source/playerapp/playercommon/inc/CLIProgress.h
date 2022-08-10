@@ -3,8 +3,8 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_CLIPROGRESS_H
 //-------------------------------------------------------------------------------------------
 
-#include "common/inc/AbstractProgressInterface.h"
 #include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+#include "common/inc/AbstractProgressInterface.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega

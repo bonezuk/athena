@@ -3,9 +3,9 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_EMBEDDEDENV_H
 //-------------------------------------------------------------------------------------------
 
-#include <QString>
-
 #include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+
+#include <QString>
 
 //-------------------------------------------------------------------------------------------
 namespace omega

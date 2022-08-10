@@ -3,6 +3,7 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_PLAYLISTLOADFUNCTIONS_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "track/db/inc/TrackDB.h"
 #include "track/db/inc/DBInfo.h"
 #include "track/db/inc/PlaylistAbstractIO.h"

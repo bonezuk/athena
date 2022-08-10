@@ -3,6 +3,7 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_QALBUMTRACKLISTMODEL_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "common/inc/DiskOps.h"
 #include "track/model/inc/AlbumTrackModel.h"
 #include "playerapp/playercommon/inc/QOmegaListModel.h"

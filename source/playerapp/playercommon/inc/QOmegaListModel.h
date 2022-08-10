@@ -3,12 +3,12 @@
 #define __OMEGA_PLAYERAPP_PLAYERCOMMON_QOMEGALISTMODEL_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
+
 #include <QAbstractListModel>
 #include <QModelIndex>
 #include <QQmlEngine>
 #include <QQmlContext>
-
-#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega

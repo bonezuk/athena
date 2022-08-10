@@ -569,7 +569,6 @@ FTPTransfer *FTPSession::setupTransfer()
 
 bool FTPSession::process()
 {
-	tint i;
 	bool res = true;
 	
 	if(m_pstate==4)

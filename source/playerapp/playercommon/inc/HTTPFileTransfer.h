@@ -3,13 +3,13 @@
 #define __PLAYERAPP_PLAYERCOMMON_HTTPFILETRANSFER_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "network/inc/Resource.h"
 #include "network/inc/Controller.h"
 #include "network/http/inc/HTTPService.h"
 #include "network/http/inc/HTTPServer.h"
 #include "network/http/inc/HTTPConnection.h"
 #include "network/http/inc/HTTPUtilities.h"
-#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega

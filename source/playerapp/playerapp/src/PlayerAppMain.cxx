@@ -138,6 +138,7 @@ int main(int argc, char **argv)
 	
 	setupEnviroment(argv[0]);
 	initCodecs();
+	common::DiskIFSPtr diskIF = common::DiskIF::instance("disk");
 
 #if defined(OMEGA_WIN32)
 	omega::audioio::WasAPIIF::instance("wasapi");

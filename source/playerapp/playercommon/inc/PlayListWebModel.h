@@ -3,6 +3,7 @@
 #define __PLAYERAPP_PLAYERCOMMON_PLAYLISTWEBMODEL_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "playerapp/playercommon/inc/PlayListModel.h"
 #include "playerapp/playercommon/inc/OmegaWebInterface.h"
 #include "common/inc/CommonFunctions.h"
@@ -13,7 +14,7 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
-class PlayListWebModel : public PlayListModel, public OmegaWebInterface
+class PLAYERCOMMON_EXPORT PlayListWebModel : public PlayListModel, public OmegaWebInterface
 {
 	Q_OBJECT
 	public:

@@ -3,6 +3,7 @@
 #define __PLAYERAPP_PLAYERCOMMON_PLAYERTRACKDBMANAGER_H
 //-------------------------------------------------------------------------------------------
 
+#include "playerapp/playercommon/inc/PlayerCommonDLL.h"
 #include "common/inc/DiskIF.h"
 #include "common/inc/AbstractProgressInterface.h"
 #include "track/db/inc/TrackDB.h"
