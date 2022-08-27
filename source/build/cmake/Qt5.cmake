@@ -32,6 +32,7 @@ find_package(Qt5Test)
 find_package(Qt5Qml)
 find_package(Qt5Quick)
 find_package(Qt5DBus)
+find_package(Qt5Network)
 
 if (${TIGER_LINUX_DISTRO})
 	set(QT_HOME "${ATHENA_UTILS}/usr")
@@ -46,6 +47,7 @@ include_directories(AFTER "${QT_HOME}/include/QtTest" )
 include_directories(AFTER "${QT_HOME}/include/QtQml" )
 include_directories(AFTER "${QT_HOME}/include/QtQuick" )
 include_directories(AFTER "${QT_HOME}/include/QtDBus" )
+include_directories(AFTER "${QT_HOME}/include/QtNetwork" )
 
 if (OMEGA_WIN32)
 

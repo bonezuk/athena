@@ -57,7 +57,7 @@ set ( TEST_SOURCE
 	../common/test/CommonDirectoriesForFilesTest.cxx
 	../common/test/DictionaryXMLMapTest.cxx
 	../common/test/ProductVersionInfoTest.cxx
-#	../common/test/JaroWinklerDistanceTest.cxx
+	../common/test/JaroWinklerDistanceTest.cxx
 	../common/test/RandomTest.cxx
 	../common/test/ServiceEventTest.cxx
 	../common/test/DiskLayerTestIF.cxx
@@ -122,6 +122,7 @@ set ( TEST_SOURCE
 	../track/info/test/XMCDInfoTest.cxx
 	
 	../track/model/test/TrackDBTestEnviroment.cxx
+	../track/model/test/JaroDBTest.cxx
 	QUnitTestTimer.cxx
 	TestMain.cxx
 )
