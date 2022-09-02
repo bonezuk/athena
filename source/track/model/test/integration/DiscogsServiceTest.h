@@ -13,6 +13,7 @@
 #include <QTcpSocket>
 #include <QTimer>
 #include <QRandomGenerator>
+#include <QJsonDocument>
 
 #include <time.h>
 
@@ -33,16 +34,18 @@ class DiscogsServiceTest : public QCoreApplication
 		void onRequestToken();
 		void onAccessToken();
 		void onIdentity();
+		void onReleaseBSG();
 		
 	private:
 		void printError(const char *strR, const char *strE) const;
 		void addUserAgent(network::http::Unit& req);
 		QString generateNOnceToken();
 		QString generateTimeStamp();
+		bool readResponse(QSslSocket *socket, network::http::Unit& response);
 		void requestHeaderForOAuthToken(network::http::Unit& req);
+		void resourceHeaderForOAuth(network::http::Unit& req, const QString& url, const QString& token, const QString& tokenSecret);
 		bool processOAuthResponseToken(QSslSocket *socket, QPair<QString,QString>& oAuthToken);
 		void accessHeaderForOAuthToken(network::http::Unit& req, const QString& token, const QString& tokenSecret, const QString& verifier);
-		void resourceHeaderForOAuth(network::http::Unit& req, const QString& token, const QString& tokenSecret);
 };
 
 //-------------------------------------------------------------------------------------------
