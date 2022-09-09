@@ -123,6 +123,8 @@ set ( TEST_SOURCE
 	
 	../track/model/test/TrackDBTestEnviroment.cxx
 	../track/model/test/JaroDBTest.cxx
+	../track/model/test/FileNameParserTest.cxx
+	
 	QUnitTestTimer.cxx
 	TestMain.cxx
 )
