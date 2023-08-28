@@ -49,6 +49,7 @@ include_directories(AFTER "${QT_HOME}/include/QtTest" )
 include_directories(AFTER "${QT_HOME}/include/QtQml" )
 include_directories(AFTER "${QT_HOME}/include/QtQuick" )
 include_directories(AFTER "${QT_HOME}/include/QtDBus" )
+include_directories(AFTER "${QT_HOME}/include/QtNetwork" )
 
 if (OMEGA_WIN32)
 
