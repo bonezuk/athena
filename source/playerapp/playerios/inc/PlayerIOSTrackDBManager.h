@@ -3,6 +3,7 @@
 #define __OMEGA_PLAYERAPP_PLAYERIOS_PLAYERIOSTRACKDBMANAGER_H
 //-------------------------------------------------------------------------------------------
 
+#include "network/inc/Resource.h"
 #include "playerapp/playerios/inc/PlayerIOSUtils.h"
 #include "track/db/inc/TrackDB.h"
 #include "track/db/inc/DBInfo.h"

@@ -559,6 +559,8 @@ ASIOError ASIODriver::ASIOInit(ASIODriverInfo *info)
 		else
 		{
 			m_driver->getErrorMessage(info->errorMessage);
+			// Set driver to NULL on error message as unhandled exception that cannot be caught thrown by foo's DSD ASIO plugin when Release called.
+			m_driver = 0;
 		}
 	}
 	return ASE_NotPresent;

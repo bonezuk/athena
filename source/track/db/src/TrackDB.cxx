@@ -2284,7 +2284,6 @@ bool TrackDB::loadPlaylist(int playlistID, QVector<PlaylistTuple>& pList)
 		int position, albumID, trackID, subtrackID;
 		tuint64 itemID;
 		QVector<PlaylistTuple> trackDBList;
-		QVector<PlaylistTuple>::iterator ppI;
 		SQLiteQuery playQ(m_db);
 		QString cmdQ;
 		
@@ -2674,7 +2673,6 @@ bool TrackDB::insertAudioDevice(const audioio::AOQueryDevice::Device& dev)
 
 bool TrackDB::saveAudioDevice(const audioio::AOQueryDevice::Device& dev)
 {
-	int refID;
 	bool res = false;
 	
 	try

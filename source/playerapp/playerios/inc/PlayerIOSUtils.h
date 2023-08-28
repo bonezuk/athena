@@ -3,6 +3,7 @@
 #define __OMEGA_PLAYERAPP_PLAYERIOS_PLAYERIOSUTILS_H
 //-------------------------------------------------------------------------------------------
 
+#include "network/inc/Resource.h"
 #include "common/inc/DiskOps.h"
 #include <QStandardPaths>
 

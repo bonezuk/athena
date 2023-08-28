@@ -113,10 +113,18 @@ void QPLItemAlbum::paint(tint yTop,QPainter *painter)
 	painter->drawText(albumTRect,Qt::AlignLeft | Qt::TextSingleLine,albumStr,&albumTRect);
 
 	QString timeStr = getTime();
+
+#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
+	QRectF timeTRect((boundingRect.width() - lFontMetric.width(timeStr)) - 4.0,
+		(boundingRect.height() / 2.0) + 1.0 + yTop,
+		lFontMetric.width(timeStr),
+		lFontMetric.height());
+#else
     QRectF timeTRect((boundingRect.width() - lFontMetric.horizontalAdvance(timeStr)) - 4.0,
 	                 (boundingRect.height() / 2.0) + 1.0 + yTop,
                      lFontMetric.horizontalAdvance(timeStr),
 	                 lFontMetric.height());
+#endif
 	
 	painter->setFont(lFont);
 	if(!isDisabled())

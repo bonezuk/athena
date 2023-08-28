@@ -343,6 +343,53 @@ QImage *QPLItemBase::getImage(tint w,tint h,bool greyFlag)
 
 //-------------------------------------------------------------------------------------------
 
+#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
+
+QString QPLItemBase::displayString(const QString& org,qreal width,QFontMetricsF& fm)
+{
+	QString dis;
+
+	if(fm.width(org)>width && org.length()>3)
+	{
+		tint min,max,mid;
+		QString midS;
+
+		min = 1;
+		max = org.length() - 3;
+		do
+		{
+			mid = (min + max) / 2;
+			midS = org.mid(0,mid) + "...";
+			if(fm.width(midS) > width)
+			{
+				max = mid - 1;
+			}
+			else
+			{
+				midS = org.mid(0,mid+1) + "...";
+				if(fm.width(midS) > width)
+				{
+					min = max;
+				}
+				else
+				{
+					min = mid + 1;
+				}
+			}
+		} while(min<max);
+
+		dis = org.mid(0,min) + "...";
+	}
+	else
+	{
+		dis = org;
+	}
+	return dis;
+}
+
+
+#else
+
 QString QPLItemBase::displayString(const QString& org,qreal width,QFontMetricsF& fm)
 {
 	QString dis;
@@ -384,6 +431,8 @@ QString QPLItemBase::displayString(const QString& org,qreal width,QFontMetricsF&
 	}
 	return dis;
 }
+
+#endif
 
 //-------------------------------------------------------------------------------------------
 

@@ -3,14 +3,27 @@
 #define __OMEGA_COMMON_SERVICEEVENT_H
 //-------------------------------------------------------------------------------------------
 
+#include "common/inc/BString.h"
+
 #include <QEvent>
+#include <QtGlobal>
+#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
+
+#include <QMutex>
+
+class COMMON_EXPORT QRecursiveMutex : public QMutex
+{
+	public:
+		QRecursiveMutex();
+};
+
+#else
 #include <QRecursiveMutex>
+#endif
 #include <QWaitCondition>
 #include <QThread>
 #include <QMap>
 #include <QSharedPointer>
-
-#include "common/inc/BString.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega

@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/DiskIF.h"
+#include "common/inc/ServiceEvent.h"
 
 #include <QtCore/QPair>
 #include <QtCore/QMap>
