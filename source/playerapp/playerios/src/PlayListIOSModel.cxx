@@ -5,6 +5,11 @@ namespace omega
 {
 //-------------------------------------------------------------------------------------------
 
+PlayListIOSModel::PlayListIOSModel(QObject *parent) : PlayListModel(parent)
+{}
+
+//-------------------------------------------------------------------------------------------
+
 PlayListIOSModel::PlayListIOSModel(QSharedPointer<OmegaAudioInterface>& pAudioInterface, QObject *parent) : PlayListModel(pAudioInterface, parent)
 {}
 

@@ -187,7 +187,11 @@ void QPlaylistWidget::initPainterPens()
 	m_blackDisablePen.setColor(QColor(128,128,128));
 	m_grayDisablePen.setColor(QColor(192,192,192));
 
+#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
+	m_timeColumnWidth = m_darkFontMetric->width("0:00:00") + 5.0;
+#else
 	m_timeColumnWidth = m_darkFontMetric->horizontalAdvance("0:00:00") + 5.0;
+#endif
 	m_trackColumnWidth = (((m_darkFontMetric->height() * 2.0) + 4.0) * 1.112);
 }
 
@@ -3190,7 +3194,11 @@ void QPlaylistWidget::setFont(const QFont& f,tint size)
 	m_lightFont->setWeight(QFont::Light);
 	m_lightFontMetric = new QFontMetricsF(*m_lightFont);
 	m_mediumFontMetric = new QFontMetricsF(*m_mediumFont);
+#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
+	m_timeColumnWidth = m_darkFontMetric->width("0:00:00") + 5.0;
+#else
 	m_timeColumnWidth = m_darkFontMetric->horizontalAdvance("0:00:00") + 5.0;
+#endif
 	m_trackColumnWidth = (((m_darkFontMetric->height() * 2.0) + 4.0) * 1.112);
 	buildViewList();
 	

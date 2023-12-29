@@ -5,6 +5,8 @@ build_ver_win64/*
 build_cmake_win64_release/*
 build_msvc16_win64/*
 build-blackomega*/*
+build_vc12debug_cmake/*
+build_vc12debug_cmake2/*
 cmake_build_unixmake/*
 cmake_build_version/*
 cmake_build_ninja/*

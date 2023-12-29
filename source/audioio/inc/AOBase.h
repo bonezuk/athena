@@ -6,7 +6,6 @@
 // Qt
 #include <QObject>
 #include <QThread>
-#include <QRecursiveMutex>
 #include <QEvent>
 #include <QWaitCondition>
 #include <QSettings>
@@ -18,6 +17,7 @@
 // Omega
 #include "common/inc/TimeStamp.h"
 #include "common/inc/Factory.h"
+#include "common/inc/ServiceEvent.h"
 #include "engine/inc/RData.h"
 #include "engine/inc/Codec.h"
 #include "engine/inc/Resample.h"

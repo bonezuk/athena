@@ -95,7 +95,7 @@ bool PlayerTrackDBManager::buildDatabaseFromMountpoints(const QString& trackDBPa
 	for(QStringList::const_iterator ppI = mountPoints.begin(); ppI != mountPoints.end(); ppI++)
 	{
 		const QString& mountPoint = *ppI;
-		if(pDisk->isDirectory(mountPoint))
+		if(!pDisk->isDirectory(mountPoint))
 		{
 			QString err = QString("Expected mount point directory '%1' does not exist").arg(mountPoint);
 			printError("buildDatabaseFromMountpoints", err.toUtf8().constData());

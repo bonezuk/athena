@@ -1,5 +1,12 @@
 #include "common/inc/ServiceEvent.h"
 
+#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
+
+QRecursiveMutex::QRecursiveMutex() : QMutex(QMutex::Recursive)
+{}
+
+#endif
+
 //-------------------------------------------------------------------------------------------
 namespace omega
 {

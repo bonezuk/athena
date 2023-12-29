@@ -6,10 +6,10 @@
 #include "network/inc/Resource.h"
 
 #include <QDesktopServices>
-#include <QRecursiveMutex>
 #include <QMenu>
 
 #include "common/inc/ProcessThread.h"
+#include "common/inc/ServiceEvent.h"
 #include "common/inc/DiskOps.h"
 #include "track/info/inc/PListXMLParser.h"
 #include "player/inc/QPlaylistWidget.h"

@@ -921,7 +921,7 @@ void Schema::createFileHash()
 		cmd += "	directoryID INTEGER NOT NULL,";
 		cmd += "	fileID INTEGER NOT NULL,";
 		cmd += "	hashID INTEGER NOT NULL,";
-		cmd += "	PRIMARY KEY(directoryID, hashID)";
+		cmd += "	PRIMARY KEY(directoryID, fileID)";
 		cmd += ");";
 		m_db->exec(cmd);
 		cmd = "CREATE INDEX fileHashIDIndex ON fileHash (hashID);";

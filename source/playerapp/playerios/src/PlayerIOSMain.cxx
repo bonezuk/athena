@@ -1,3 +1,4 @@
+#include "network/inc/Resource.h"
 #include "common/inc/CommonFunctions.h"
 #include "common/inc/DiskIF.h"
 #include "engine/blackomega/inc/MPCodec.h"

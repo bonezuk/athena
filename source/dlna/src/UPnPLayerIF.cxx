@@ -25,13 +25,11 @@ UPnPLayerIF::~UPnPLayerIF()
 
 int UPnPLayerIF::UpnpInit(const tchar *hostIP,tuint16 port)
 {
-//#if defined(OMEGA_MSVC16)
+#if defined(OMEGA_MSVC16)
 	return ::UpnpInit2(hostIP,port);
-/*
 #else
 	return ::UpnpInit(hostIP, port);
 #endif
-*/
 }
 
 //-------------------------------------------------------------------------------------------
