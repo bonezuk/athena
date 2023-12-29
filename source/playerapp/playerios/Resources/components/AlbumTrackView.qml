@@ -8,7 +8,6 @@ import "components.js" as Comp
 ListView {
 	id: albumTrackView
 
-	property int currentIndex: 0
 	property string currentTrack: ""
 	property string currentAlbumName: ""
 	property string currentArtistName: ""
@@ -100,7 +99,7 @@ ListView {
 			id: trackTapHandler
 			
 			onTapped: {
-				albumTrackView.currentIndex = index;
+                albumTrackView.currentIndex = index;
 				albumTrackView.currentTrack = model.track;
 				albumTrackView.clicked();
 			}

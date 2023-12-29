@@ -487,7 +487,6 @@ QString AlbumModel::getQuery(const AlbumModelKey& albumID) const
 		}
 	}
 	
-	cmdQ += "GROUP BY id ";
 	cmdQ += "ORDER BY a.albumname";
 
 	return cmdQ;
@@ -551,9 +550,10 @@ bool AlbumModel::runAlbumQuery(const QString& cmdQ,QueryResult& results) const
 	
 	try
 	{
-		bool isGroup;
+		bool isGroup, isPush;
 		int albumID;
 		QString albumName;
+		QSet<int> pGroups;
 		db::SQLiteQuerySPtr query = getDBQuery();
 		
 		query->prepare(cmdQ);
@@ -564,7 +564,23 @@ bool AlbumModel::runAlbumQuery(const QString& cmdQ,QueryResult& results) const
 		while(query->next())
 		{
 			AlbumModelKey key(std::pair<bool,int>(isGroup,albumID));
-			results.push_back( createRecordAlbum(key,albumName) );
+			
+			isPush = true;
+			if(isGroup)
+			{
+				if(pGroups.find(albumID) == pGroups.end())
+				{
+					pGroups.insert(albumID);
+				}
+				else
+				{
+					isPush = false;
+				}
+			}
+			if(isPush)
+			{
+				results.push_back( createRecordAlbum(key,albumName) );
+			}
 		}
 		res = true;
 	}

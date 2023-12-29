@@ -204,11 +204,18 @@ void convert(const char *inName, const char *outName, int width, int height)
 
 TEST(YUV2PNG, run)
 {
-	const QString baseDir = "/Users/bonez/Development/ActiveSilicon/AP30/firmware_tests/phil_4/1080p30_offset_1";
+	const QString baseDir = "/Users/bonez/Development/ActiveSilicon/AP30/firmware_tests/jp_2/pics";
 	const char *fileNames[] = {
-		"phil_fcc_async_rec2_1.yuv",
-		"phil_fcc_async_rec_1.yuv",
-		"phil_fcc_sync_1.yuv",
+//		"cap_1080p30_gefen_0.raw",
+//		"cap_1080p30_gefen_1.raw",
+//		"cap_mp1010_1080p30_0.raw",
+//		"cap_mp1010_1080p30_1.raw",
+//		"cap_720p60_0.raw",
+//		"cap_720p60_1.raw",
+//		"cap_ntsc_0.raw",
+//		"cap_ntsc_1.raw",
+		"cap_pal_0.raw",
+		"cap_pal_1.raw",
 		NULL};
 	
 	for(int i = 0; fileNames[i] != NULL; i++)
@@ -216,7 +223,7 @@ TEST(YUV2PNG, run)
 		QString inName = baseDir + "/";
 		inName += fileNames[i];
 		QString outName = inName.left(inName.size() - 3) + "png";
-		convert(inName.toUtf8().constData(), outName.toUtf8().constData(), 1920, 1080);
+		convert(inName.toUtf8().constData(), outName.toUtf8().constData(), 720, 576);
 	}
 }
 

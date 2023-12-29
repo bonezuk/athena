@@ -8,7 +8,6 @@ import "components.js" as Comp
 ListView {
 	id: playListView
 	
-	property int currentIndex: 0
 	property var playbackState
 	
 	signal clicked()
@@ -69,7 +68,7 @@ ListView {
 				if(playListDClkTimer.running === true)
 				{
 					console.log("dd = " + index);
-					playListView.currentIndex = index;
+                    playListView.currentIndex = index;
 					playListView.clicked();
 					playListDClkTimer.running = false;		
 				}

@@ -8,7 +8,6 @@ import "components.js" as Comp
 ListView {
 	id: albumView
 	
-	property int currentIndex: 0
 	property string currentAlbumName: ""
 	property string currentArtistName: ""
 	property int currentImageID: -1
@@ -73,7 +72,7 @@ ListView {
 		TapHandler {
 			id: tapHandler
 			onTapped: {
-				albumView.currentIndex = index;
+                albumView.currentIndex = index;
 				currentAlbumName = model.album;
 				currentArtistName = model.artist;
 				currentImageID = model.image;

@@ -18,7 +18,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QFile>
-#include <QQmlDebuggingEnabler>
 
 using namespace omega;
 
@@ -89,7 +88,6 @@ void setupLogging()
 int main(int argc, char **argv)
 {
 	QGuiApplication app(argc, argv);
-	QQmlDebuggingEnabler enabler;
 	QQmlApplicationEngine engine;
 	
 	setupPlatform();
