@@ -94,7 +94,7 @@ class AUDIOIO_EXPORT AOQueryDevice::Device
 		virtual void clear();
 		
 		virtual QString& id();
-		virtual const QString& id() const;
+		virtual const QString& idConst() const;
 		
 		virtual QString& name();
 		virtual const QString& name() const;

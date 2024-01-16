@@ -22,7 +22,7 @@ QString getOSErrorString(tint errCode)
 	
 	if(::FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,0,static_cast<DWORD>(errCode),0,reinterpret_cast<LPWSTR>(wMem),1024,0)!=0)
 	{
-		err = QString::fromUtf16(wMem);
+		err = QString::fromUtf16(reinterpret_cast<const char16_t *>(wMem));
 	}
 	delete [] wMem;
 	

@@ -733,7 +733,7 @@ void AlbumModel::removeRow(tint idx)
 {
 	if(idx >= 0 && idx < m_albums.size())
 	{
-		tint secIdx, startIdx, endIdx;
+		tint secIdx, startIdx;
 		
 		for(secIdx = 0; secIdx < m_index.size(); secIdx++)
 		{

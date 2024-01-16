@@ -3,11 +3,7 @@ add_definitions(-DOMEGA_PLAYERCOMMON_DLL)
 file(GLOB PLAYERCOMMON_HEADER inc/*.h)
 file(GLOB PLAYERCOMMON_SOURCE src/*.cxx)
 
-if (TIGER_QT6_FLAG)
-	qt_add_resources(PLAYERCOMMON_RESOURCES playercommon.qrc)
-else (TIGER_QT6_FLAG)
-	qt5_add_resources(PLAYERCOMMON_RESOURCES playercommon.qrc)
-endif (TIGER_QT6_FLAG)
+qt_add_resources(PLAYERCOMMON_RESOURCES playercommon.qrc)
 
 add_library(playercommon SHARED ${PLAYERCOMMON_HEADER} ${PLAYERCOMMON_SOURCE} ${PLAYERCOMMON_RESOURCES})
 

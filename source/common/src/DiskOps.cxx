@@ -428,7 +428,7 @@ bool DiskOps::deleteDirectory(const QString& dirName)
 	{
 		do
 		{
-			QString cName(QString::fromUtf16(reinterpret_cast<const tuint16 *>(fData.cFileName)));
+			QString cName(QString::fromUtf16(reinterpret_cast<const char16_t *>(fData.cFileName)));
 			
 			if(dotCheck(cName))
 			{
@@ -834,7 +834,7 @@ bool DiskOps::copyDir(const QString& source,const QString& dest)
 		
 		do
 		{
-			QString cName(QString::fromUtf16(reinterpret_cast<const tuint16 *>(fData.cFileName)));
+			QString cName(QString::fromUtf16(reinterpret_cast<const char16_t *>(fData.cFileName)));
 			
 			if(dotCheck(cName))
 			{

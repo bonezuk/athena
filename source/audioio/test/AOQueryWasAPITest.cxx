@@ -80,7 +80,7 @@ TEST(AOQueryWasAPI,queryNamesGivenOneValidDevice)
 	ASSERT_TRUE(query.queryNames());
 	
 	ASSERT_EQ(1,query.noDevices());
-	EXPECT_TRUE(query.device(0).id()==deviceNameA);
+	EXPECT_TRUE(query.device(0).idConst()==deviceNameA);
 	EXPECT_TRUE(query.device(0).name()==friendlyNameA);
 
 	WasAPIIF::release();
@@ -131,11 +131,11 @@ TEST(AOQueryWasAPI,queryNamesGivenThreeValidDevices)
 	ASSERT_TRUE(query.queryNames());
 	
 	ASSERT_EQ(3,query.noDevices());
-	EXPECT_TRUE(query.device(0).id()==deviceNameA);
+	EXPECT_TRUE(query.device(0).idConst()==deviceNameA);
 	EXPECT_TRUE(query.device(0).name()==friendlyNameA);
-	EXPECT_TRUE(query.device(1).id()==deviceNameB);
+	EXPECT_TRUE(query.device(1).idConst()==deviceNameB);
 	EXPECT_TRUE(query.device(1).name()==friendlyNameB);
-	EXPECT_TRUE(query.device(2).id()==deviceNameC);
+	EXPECT_TRUE(query.device(2).idConst()==deviceNameC);
 	EXPECT_TRUE(query.device(2).name()==friendlyNameC);
 
 	WasAPIIF::release();

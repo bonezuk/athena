@@ -167,7 +167,7 @@ class AUDIOIO_EXPORT AOWin32 : public AOBase
 		
 		virtual bool activateWasAPIAudioDevice(WAVEFORMATEX *pFormat);
 		virtual QSharedPointer<SampleConverter> createWASSampleConverter(WAVEFORMATEX *pFormat);
-		virtual IOTimeStamp AOWin32::createIOTimeStampWasAPI() const;
+		virtual IOTimeStamp createIOTimeStampWasAPI() const;
 
 		static DWORD WINAPI writeWASAudioThread(LPVOID arg);
 		virtual void writeWASAudioThreadImpl();

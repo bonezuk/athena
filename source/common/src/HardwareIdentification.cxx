@@ -120,7 +120,7 @@ bool HardwareIdentification::getWDIInfomation(QVector<QPair<HardwareType,QString
 								hres = pCls->Get(L"SerialNumber",0,&vtProp,0,0);
 								if(hres==S_OK)
 								{
-									QString hID = QString::fromUtf16((const ushort *)vtProp.bstrVal).trimmed();
+									QString hID = QString::fromUtf16(reinterpret_cast<const char16_t*>(vtProp.bstrVal)).trimmed();
 									if(!hID.isEmpty())
 									{
 										QPair<HardwareType,QString> hP(e_Motherboard,hID);
@@ -159,7 +159,7 @@ bool HardwareIdentification::getWDIInfomation(QVector<QPair<HardwareType,QString
 								hres = pCls->Get(L"SerialNumber",0,&vtProp,0,0);
 								if(hres==S_OK)
 								{
-									QString hID = QString::fromUtf16((const ushort *)vtProp.bstrVal).trimmed();
+									QString hID = QString::fromUtf16(reinterpret_cast<const char16_t*>(vtProp.bstrVal)).trimmed();
 									if(!hID.isEmpty())
 									{
 										QPair<HardwareType,QString> hP(e_HardDisk,hID);

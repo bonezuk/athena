@@ -196,7 +196,7 @@ QString DiskLayerIF::nextDirectoryEntry(DirHandle h) const
 			if(d.second.cFileName!=0)
 			{
 				WIN32_FIND_DATAW fData;			
-				QString cName(QString::fromUtf16(reinterpret_cast<const tuint16 *>(d.second.cFileName)));
+				QString cName(QString::fromUtf16(reinterpret_cast<const char16_t *>(d.second.cFileName)));
 
 				::memset(&fData,0,sizeof(WIN32_FIND_DATAW));
 				if(::FindNextFileW(h,&fData))

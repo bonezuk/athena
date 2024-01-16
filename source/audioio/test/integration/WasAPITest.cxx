@@ -73,9 +73,9 @@ TEST(Was,blankFormats)
 	
 	for(int i=0;i<audioQuery.noDevices();i++)
 	{
-		QString key = "Formats_" + audioQuery.device(i).id() + "_E";
+		QString key = "Formats_" + audioQuery.device(i).idConst() + "_E";
 		settings.remove(key);
-		key = "Formats_" + audioQuery.device(i).id() + "_M";
+		key = "Formats_" + audioQuery.device(i).idConst() + "_M";
 		settings.remove(key);
 	}
 	
@@ -227,7 +227,7 @@ void deviceTopologyParts(IPartsList *pParts)
 				hr = pPart->GetName(&pPartName);
 				if(hr==S_OK && pPartName!=0)
 				{
-					QString n = QString::fromUtf16((const tushort *)pPartName);
+					QString n = QString::fromUtf16((const char16_t *)pPartName);
 					common::Log::g_Log.print("Part Name - %s\n",n.toUtf8().constData());
 					common::Log::g_Log.print("Part Type - %s\n",deviceTopologyPartSubType(pPart).toUtf8().constData());
 					CoTaskMemFree(pPartName);
@@ -282,7 +282,7 @@ TEST(WasAPI,deviceTopologyA)
 		IMMDevice *pDevice = 0;
 		QString devID;
 		
-		devID = audioQuery.device(i).id();
+		devID = audioQuery.device(i).idConst();
 		common::Log::g_Log.print("Querying Device Topology - %s\n",devID.toUtf8().constData());
 		common::Log::g_Log.print("Name - %s\n",audioQuery.device(i).name().toUtf8().constData());
 		
@@ -553,7 +553,7 @@ TEST(WasAPI,deviceTopologyB)
 		IMMDevice *pDevice = 0;
 		QString devID;
 		
-		devID = audioQuery.device(i).id();
+		devID = audioQuery.device(i).idConst();
 		common::Log::g_Log.print("Querying Device Topology - %s\n",devID.toUtf8().constData());
 		common::Log::g_Log.print("Name - %s\n",audioQuery.device(i).name().toUtf8().constData());
 		
@@ -625,7 +625,7 @@ TEST(WasAPI,deviceDefaultMixedFormat)
 		IMMDevice *pDevice = 0;
 		QString devID;
 		
-		devID = audioQuery.device(i).id();
+		devID = audioQuery.device(i).idConst();
 		common::Log::g_Log.print("Querying Default Format - %s\n",devID.toUtf8().constData());
 		common::Log::g_Log.print("Name - %s\n",audioQuery.device(i).name().toUtf8().constData());
 		

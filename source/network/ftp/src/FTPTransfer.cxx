@@ -810,7 +810,7 @@ tint FTPTransfer::processDirectory(TCPConnectionSocket *com)
 				{
 					QString cName,entry;
 				
-					cName = QString::fromUtf16(reinterpret_cast<const tuint16 *>(fData.cFileName));
+					cName = QString::fromUtf16(reinterpret_cast<const char16_t *>(fData.cFileName));
 					if(cName!="." && cName!="..")
 					{
 						tmp = fullPath + "\\" + cName;

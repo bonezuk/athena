@@ -2073,7 +2073,7 @@ QString TrackDB::loadDirectoryImage(const QString& dirName,const QString& albumN
 				{
 					do
 					{
-						QString cName(QString::fromUtf16(reinterpret_cast<const tuint16 *>(fData.cFileName)));
+						QString cName(QString::fromUtf16(reinterpret_cast<const char16_t *>(fData.cFileName)));
 						
 						if(cName!="." && cName!="..")
 						{
@@ -2598,7 +2598,7 @@ int TrackDB::refIDOfAudioDevice(const QString& deviceID)
 
 void TrackDB::removeAudioDevice(const audioio::AOQueryDevice::Device& dev)
 {
-	int refID = refIDOfAudioDevice(dev.id());
+	int refID = refIDOfAudioDevice(dev.idConst());
 	if(refID >= 0)
 	{
 		QString cmd;
@@ -2619,7 +2619,7 @@ bool TrackDB::insertAudioDevice(const audioio::AOQueryDevice::Device& dev)
 	QString cmdI;
 	bool res = true;
 	
-	QString deviceID = dbString(dev.id());
+	QString deviceID = dbString(dev.idConst());
 	QString deviceName = dbString(dev.name());
 	SQLiteInsert devI(m_db);
 	cmdI = "INSERT INTO audiodevice (deviceID, deviceName) VALUES (?,?)";
