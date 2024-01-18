@@ -85,7 +85,7 @@ AboutDialog::AboutDialog(QDialog *dialog,Qt::WindowFlags f) : BuildVersionDialog
 	if(app!=0)
 	{
 #if QT_VERSION >= 0x050000
-		if(app->devicePixelRatio() >= 2)
+		if(app->devicePixelRatio() >= 1.25)
 		{
 			QPixmap pixLogo(":/logo/Resources/omegaLogo48x48@2x.png");
             ui.m_logoImageLabel->setPixmap(pixLogo);

@@ -113,7 +113,7 @@ void QPlaylistWidget::initPainterPens()
 	bool retinaFlag = false;
 
 #if QT_VERSION >= 0x050000
-	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
+	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 1.25)
 	{
 		retinaFlag = true;
 	}
@@ -469,7 +469,7 @@ void QPlaylistWidget::paintEvent(QPaintEvent *e)
 	bool retinaFlag = false;
 	
 #if QT_VERSION >= 0x050000
-	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
+	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 1.25)
 	{
 		retinaFlag = true;
 	}
@@ -545,9 +545,7 @@ void QPlaylistWidget::paintEvent(QPaintEvent *e)
 void QPlaylistWidget::paintRetinaImage(QPainter *painter,QPoint pos,QImage *pImage)
 {
 	QPixmap pixMap = QPixmap::fromImage(*pImage);
-#if QT_VERSION >= 0x050000
     pixMap.setDevicePixelRatio(2.0);
-#endif
 	painter->drawPixmap(pos,pixMap);
 }
 

@@ -82,8 +82,8 @@ void QPlayControls::loadResources()
 	tint i;
 	bool retinaFlag = false;
 
-#if QT_VERSION >= 0x050000
-	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
+	qreal dpr = QPlayerApplication::playerInstance()->devicePixelRatio();
+	if(dpr >= 1.25)
 	{
 		fprintf(stdout,"Use Retina\n");
 		retinaFlag = true;
@@ -92,7 +92,6 @@ void QPlayControls::loadResources()
 	{
 		fprintf(stdout,"No Retina\n");
 	}
-#endif
 
 	freeResources();
 	
@@ -710,7 +709,7 @@ void QPlayControls::paintEvent(QPaintEvent *e)
 	bool retinaFlag = false;
 	
 #if QT_VERSION >= 0x050000
-	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
+	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 1.25)
 	{
 		retinaFlag = true;
 	}
@@ -1699,7 +1698,7 @@ void QPlayControls::getTrackImage()
 	}
 
 #if QT_VERSION >= 0x050000
-	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
+	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 1.25)
 	{
 		wPic *= 2;
 		hPic *= 2;
@@ -1945,7 +1944,7 @@ QRect QPlayControls::positionRepeatButton()
 	tint iWid = imgC->width();
 
 #if QT_VERSION >= 0x050000
-	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
+	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 1.25)
 	{
 		iWid /= 2;
 	}
@@ -1965,7 +1964,7 @@ QRect QPlayControls::positionShuffleButton()
 	tint iWid = imgC->width();
 
 #if QT_VERSION >= 0x050000
-	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
+	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 1.25)
 	{
 		iWid /= 2;
 	}

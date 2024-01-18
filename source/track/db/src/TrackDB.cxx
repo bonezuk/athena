@@ -300,7 +300,7 @@ QString TrackDB::getDirectoryName(int dirID)
 	QString cmdQ, dirName;
 	SQLiteQuery dirQ(m_db);
 	
-	cmdQ = QString("SELECT c.mountName || a.directoryName FROM directory AS a INNER JOIN dirmount AS b ON a.directoryID=b.dirID INNER JOIN mountpoints AS c ON b.mountID=c.mountID WHERE a.directoryID=%1")
+	cmdQ = QString("SELECT c.mountName, a.directoryName FROM directory AS a INNER JOIN dirmount AS b ON a.directoryID=b.dirID INNER JOIN mountpoints AS c ON b.mountID=c.mountID WHERE a.directoryID=%1")
 		.arg(dirID);
 	dirQ.prepare(cmdQ);
 	dirQ.bind(dirName);
@@ -308,9 +308,9 @@ QString TrackDB::getDirectoryName(int dirID)
 	{
 		SQLiteQuery dirOnlyQ(m_db);
 		cmdQ = QString("SELECT directoryName FROM directory WHERE directoryID=%1").arg(dirID);
-		dirQ.prepare(cmdQ);
-		dirQ.bind(dirName);
-		if(!dirQ.next())
+		dirOnlyQ.prepare(cmdQ);
+		dirOnlyQ.bind(dirName);
+		if(!dirOnlyQ.next())
 		{
 			dirName = "";
 		}

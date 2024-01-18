@@ -748,12 +748,10 @@ bool QPLItemBase::isRetina() const
 {
 	bool retinaFlag = false;
 
-#if QT_VERSION >= 0x050000
-	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 2)
+	if(QPlayerApplication::playerInstance()->devicePixelRatio() >= 1.25)
 	{
 		retinaFlag = true;
 	}
-#endif
 	return retinaFlag;
 }
 
