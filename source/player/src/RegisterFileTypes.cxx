@@ -243,7 +243,7 @@ QString RegisterFileType::getRegisteredProgID(FileType type)
 			if(res==ERROR_SUCCESS)
 			{
 				data[amount>>1] = 0;
-				tProgID = QString::fromUtf16(data);
+				tProgID = QString::fromUtf16(reinterpret_cast<const char16_t *>(data));
 			}
 			delete [] data;
 		}
@@ -277,7 +277,7 @@ QString RegisterFileType::getBackupProgID(FileType type)
 			if(res==ERROR_SUCCESS)
 			{
 				data[amount>>1] = 0;
-				tProgID = QString::fromUtf16(data);
+				tProgID = QString::fromUtf16(reinterpret_cast<const char16_t*>(data));
 			}
 			delete [] data;
 		}

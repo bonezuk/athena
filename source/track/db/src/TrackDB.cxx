@@ -300,7 +300,7 @@ QString TrackDB::getDirectoryName(int dirID)
 	QString cmdQ, dirName;
 	SQLiteQuery dirQ(m_db);
 	
-	cmdQ = QString("SELECT c.mountName || a.directoryName FROM directory AS a INNER JOIN dirmount AS b ON a.directoryID=b.dirID INNER JOIN mountpoints AS c ON b.mountID=c.mountID WHERE a.directoryID=%1")
+	cmdQ = QString("SELECT c.mountName, a.directoryName FROM directory AS a INNER JOIN dirmount AS b ON a.directoryID=b.dirID INNER JOIN mountpoints AS c ON b.mountID=c.mountID WHERE a.directoryID=%1")
 		.arg(dirID);
 	dirQ.prepare(cmdQ);
 	dirQ.bind(dirName);
@@ -308,9 +308,9 @@ QString TrackDB::getDirectoryName(int dirID)
 	{
 		SQLiteQuery dirOnlyQ(m_db);
 		cmdQ = QString("SELECT directoryName FROM directory WHERE directoryID=%1").arg(dirID);
-		dirQ.prepare(cmdQ);
-		dirQ.bind(dirName);
-		if(!dirQ.next())
+		dirOnlyQ.prepare(cmdQ);
+		dirOnlyQ.bind(dirName);
+		if(!dirOnlyQ.next())
 		{
 			dirName = "";
 		}
@@ -2073,7 +2073,7 @@ QString TrackDB::loadDirectoryImage(const QString& dirName,const QString& albumN
 				{
 					do
 					{
-						QString cName(QString::fromUtf16(reinterpret_cast<const tuint16 *>(fData.cFileName)));
+						QString cName(QString::fromUtf16(reinterpret_cast<const char16_t *>(fData.cFileName)));
 						
 						if(cName!="." && cName!="..")
 						{
@@ -2598,7 +2598,7 @@ int TrackDB::refIDOfAudioDevice(const QString& deviceID)
 
 void TrackDB::removeAudioDevice(const audioio::AOQueryDevice::Device& dev)
 {
-	int refID = refIDOfAudioDevice(dev.id());
+	int refID = refIDOfAudioDevice(dev.idConst());
 	if(refID >= 0)
 	{
 		QString cmd;
@@ -2619,7 +2619,7 @@ bool TrackDB::insertAudioDevice(const audioio::AOQueryDevice::Device& dev)
 	QString cmdI;
 	bool res = true;
 	
-	QString deviceID = dbString(dev.id());
+	QString deviceID = dbString(dev.idConst());
 	QString deviceName = dbString(dev.name());
 	SQLiteInsert devI(m_db);
 	cmdI = "INSERT INTO audiodevice (deviceID, deviceName) VALUES (?,?)";

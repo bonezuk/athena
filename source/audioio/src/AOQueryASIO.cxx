@@ -42,7 +42,7 @@ bool AOQueryASIO::queryNames()
 								
 				if(driver->ASIOInit(&dInfo)==ASE_OK)
 				{
-					dev->id() = asioService.driverInfo(i).id();
+					dev->id() = QString::number(asioService.driverInfo(i).id());
 					dev->name() = dInfo.name;
 					m_devices.append(dev);
 					res = true;

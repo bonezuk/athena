@@ -164,7 +164,7 @@ QString& AOQueryDevice::Device::id()
 
 //-------------------------------------------------------------------------------------------
 
-const QString& AOQueryDevice::Device::id() const
+const QString& AOQueryDevice::Device::idConst() const
 {
 	return m_id;
 }

@@ -785,7 +785,7 @@ bool AOBase::startAudioService()
 					{
 						for(i=0;i<m_deviceInfo->noDevices() && !found;i++)
 						{
-							if(defaultDeviceID==m_deviceInfo->device(i).id())
+							if(defaultDeviceID==m_deviceInfo->device(i).idConst())
 							{
 								m_defaultDeviceIndex = i;
 								found = true;
@@ -3673,7 +3673,7 @@ void AOBase::setDeviceID(tint idIndex)
 	{
 		QSettings settings;
 		settings.beginGroup("audio");
-		settings.setValue(QString::fromLatin1("defaultDeviceID"),QVariant(m_deviceInfo->device(idIndex).id()));
+		settings.setValue(QString::fromLatin1("defaultDeviceID"),QVariant(m_deviceInfo->device(idIndex).idConst()));
 		settings.endGroup();
 		m_deviceIdx = idIndex;
 		resetPlayback();

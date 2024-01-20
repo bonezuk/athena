@@ -1192,11 +1192,7 @@ TEST(ITunesLocation,validateDirectorySetGivenValidDBFileOnMultipleScanAndUpdate)
 	
 	QStringList dbFileList = location.testValidateDirectorySet(dirSet);
 	
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbFileSet = QSet<QString>::fromList(dbFileList);
-#else
 	QSet<QString> dbFileSet = QSet<QString>(dbFileList.begin(), dbFileList.end());
-#endif
 	EXPECT_TRUE(dbFileSet.size()==2);
 	EXPECT_TRUE(dbFileSet.find(fileNameA)!=dbFileSet.end());
 	EXPECT_TRUE(dbFileSet.find(fileNameB)!=dbFileSet.end());
@@ -1243,11 +1239,7 @@ TEST(ITunesLocation,validateFileSetGivenOneValidFile)
 	
 	QStringList dbFileList = location.testValidateFileSet(fileSet);
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbFileSet = QSet<QString>::fromList(dbFileList);
-#else
 	QSet<QString> dbFileSet = QSet<QString>(dbFileList.begin(), dbFileList.end());
-#endif
 	EXPECT_TRUE(dbFileSet.size()==1);
 	EXPECT_TRUE(dbFileSet.find(fileNameC)!=dbFileSet.end());
 }
@@ -1272,11 +1264,7 @@ TEST(ITunesLocation,validateFileSetGivenTwoValidFiles)
 	
 	QStringList dbFileList = location.testValidateFileSet(fileSet);
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbFileSet = QSet<QString>::fromList(dbFileList);
-#else
 	QSet<QString> dbFileSet = QSet<QString>(dbFileList.begin(), dbFileList.end());
-#endif
 	EXPECT_TRUE(dbFileSet.size()==2);
 	EXPECT_TRUE(dbFileSet.find(fileNameA)!=dbFileSet.end());
 	EXPECT_TRUE(dbFileSet.find(fileNameC)!=dbFileSet.end());
@@ -1365,11 +1353,7 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenDirectoryWithDBFile)
 	
 	QStringList dbList = location.testGetDefaultITuneDBs();
 	
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==1);
 	EXPECT_TRUE(dbSet.find(fileNameA)!=dbSet.end());
 	
@@ -1407,11 +1391,7 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenTwoDirectoriesWithDBFile)
 	
 	QStringList dbList = location.testGetDefaultITuneDBs();
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==2);
 	EXPECT_TRUE(dbSet.find(fileNameA)!=dbSet.end());
 	EXPECT_TRUE(dbSet.find(fileNameB)!=dbSet.end());
@@ -1446,11 +1426,7 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenNoneDBFile)
 	
 	QStringList dbList = location.testGetDefaultITuneDBs();
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==0);
 		
 	location.testClearLocations();
@@ -1480,11 +1456,7 @@ TEST(ITunesLocation,getDefaultITuneDBsGivenDBFile)
 	
 	QStringList dbList = location.testGetDefaultITuneDBs();
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==1);
 	EXPECT_TRUE(dbSet.find(fileNameA)!=dbSet.end());
 	EXPECT_TRUE(location.testGetFileLocation(1)==fileNameA);
@@ -1521,11 +1493,7 @@ TEST(ITunesLocation,getITunesConfigFileNamesGivenDefaultHasNoOutputDatabase)
 	
 	QStringList dbList = location.getITunesConfigFileNames();
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==0);
 }
 
@@ -1550,11 +1518,7 @@ TEST(ITunesLocation,getITunesConfigFileNamesGivenDefaultHasDatabase)
 	
 	QStringList dbList = location.getITunesConfigFileNames();
 	
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==2);
 	EXPECT_TRUE(dbSet.find(fileNameA)!=dbSet.end());
 	EXPECT_TRUE(dbSet.find(fileNameB)!=dbSet.end());
@@ -1580,11 +1544,7 @@ TEST(ITunesLocation,getITunesConfigFileNamesGivenFileSetHasADatabase)
 	
 	QStringList dbList = location.getITunesConfigFileNames();
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==1);
 	EXPECT_TRUE(dbSet.find(fileNameC)!=dbSet.end());
 }
@@ -1611,11 +1571,7 @@ TEST(ITunesLocation,getITunesConfigFileNamesGivenFileSetHasMultipleDatabases)
 	
 	QStringList dbList = location.getITunesConfigFileNames();
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==2);
 	EXPECT_TRUE(dbSet.find(fileNameC)!=dbSet.end());
 	EXPECT_TRUE(dbSet.find(fileNameD)!=dbSet.end());
@@ -1642,11 +1598,7 @@ TEST(ITunesLocation,getITunesConfigFileNamesGivenDirectorySetHasADatabase)
 	
 	QStringList dbList = location.getITunesConfigFileNames();
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==1);
 	EXPECT_TRUE(dbSet.find(fileNameA)!=dbSet.end());
 }
@@ -1675,11 +1627,7 @@ TEST(ITunesLocation,getITunesConfigFileNamesGivenDirectorySetHasMultipleDatabase
 	
 	QStringList dbList = location.getITunesConfigFileNames();
 	
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==2);
 	EXPECT_TRUE(dbSet.find(fileNameA)!=dbSet.end());
 	EXPECT_TRUE(dbSet.find(fileNameB)!=dbSet.end());
@@ -1714,11 +1662,7 @@ TEST(ITunesLocation,getITunesConfigFileNamesGivenFileAndDirectorySetHasMultipleD
 	
 	QStringList dbList = location.getITunesConfigFileNames();
 
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	QSet<QString> dbSet = QSet<QString>::fromList(dbList);
-#else
 	QSet<QString> dbSet = QSet<QString>(dbList.begin(), dbList.end());
-#endif
 	EXPECT_TRUE(dbSet.size()==4);
 	EXPECT_TRUE(dbSet.find(fileNameA)!=dbSet.end());
 	EXPECT_TRUE(dbSet.find(fileNameB)!=dbSet.end());

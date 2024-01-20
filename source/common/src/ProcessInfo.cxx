@@ -89,7 +89,7 @@ bool ProcessInfo::getProcessNames(QStringList& nameList)
 			
 			do
 			{
-				QString pName(QString::fromUtf16(reinterpret_cast<const ushort *>(pe.szExeFile)));
+				QString pName(QString::fromUtf16(reinterpret_cast<const char16_t *>(pe.szExeFile)));
 				
 				if(!pName.isEmpty())
 				{

@@ -113,7 +113,7 @@ int CALLBACK WinMain(HINSTANCE ,HINSTANCE ,LPSTR ,int)
 		for(tint i=0;i<argc;i++)
 		{
 			char *cmdArg;
-			QString s = QString::fromUtf16(reinterpret_cast<unsigned short *>(szArgList[i]));
+			QString s = QString::fromUtf16(reinterpret_cast<const char16_t *>(szArgList[i]));
 			QByteArray oArg = s.toUtf8();
 			argv[i] = cmdArg = new char[oArg.size() + 1];
 			memcpy(cmdArg,oArg.data(),oArg.size());

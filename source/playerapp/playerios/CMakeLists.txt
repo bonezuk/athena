@@ -1,11 +1,7 @@
 file(GLOB PLAYERIOS_HEADER inc/*.h)
 file(GLOB PLAYERIOS_SOURCE src/*.cxx)
 
-if (TIGER_QT6_FLAG)
-	qt_add_resources(PLAYERIOS_RESOURCES playerios.qrc)
-else (TIGER_QT6_FLAG)
-	qt5_add_resources(PLAYERIOS_RESOURCES playerios.qrc)
-endif (TIGER_QT6_FLAG)
+qt_add_resources(PLAYERIOS_RESOURCES playerios.qrc)
 
 set(CODEC_LIBRARIES
 	blackomega 

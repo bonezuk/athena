@@ -175,11 +175,7 @@ if (OMEGA_LINUX)
 	)
 endif (OMEGA_LINUX)
 
-if (TIGER_QT6_FLAG)
-	qt_add_resources(TEST_UI_RESOURCES test.qrc)
-else (TIGER_QT6_FLAG)
-	qt5_add_resources(TEST_UI_RESOURCES test.qrc)
-endif (TIGER_QT6_FLAG)
+qt_add_resources(TEST_UI_RESOURCES test.qrc)
 
 if (OMEGA_WIN32)
 	add_executable(OmegaUnitTests ${TEST_HEADERS} ${TEST_SOURCE} ${TEST_UI_RESOURCES} ${TEST_WIN_HEADERS} ${TEST_WIN_SOURCE})

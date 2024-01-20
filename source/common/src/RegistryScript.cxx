@@ -152,7 +152,7 @@ bool RegistryScript::processKey(xmlNode *cNode,HKEY parentKey)
 							if(res==ERROR_SUCCESS)
 							{
 								data[amount>>1] = 0;
-								if(valueS==QString::fromUtf16(data))
+								if(valueS==QString::fromUtf16(reinterpret_cast<const char16_t*>(data)))
 								{
 									writeFlag = false;
 								}
@@ -279,7 +279,7 @@ bool RegistryScript::processString(xmlNode *node,HKEY key)
 					if(res==ERROR_SUCCESS)
 					{
 						data[amount>>1] = 0;
-						if(valueS==QString::fromUtf16(data))
+						if(valueS==QString::fromUtf16(reinterpret_cast<const char16_t*>(data)))
 						{
 							writeFlag = false;
 						}
@@ -305,7 +305,7 @@ bool RegistryScript::processString(xmlNode *node,HKEY key)
 					}
 				}
 				
-				res = ::RegSetValueExW(key,reinterpret_cast<LPCWSTR>(idS.utf16()),0,REG_SZ,reinterpret_cast<CONST BYTE *>(valueS.utf16()),valueS.length() * sizeof(tuint16));
+				res = ::RegSetValueExW(key,reinterpret_cast<LPCWSTR>(idS.utf16()),0,REG_SZ,reinterpret_cast<CONST BYTE *>(valueS.utf16()),static_cast<DWORD>(valueS.length() * sizeof(tuint16)));
 				if(res!=ERROR_SUCCESS)
 				{
 					printError("processString","Error setting registry value");

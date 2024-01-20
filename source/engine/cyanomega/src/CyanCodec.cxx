@@ -68,7 +68,7 @@ void CyanCodec::close()
 bool CyanCodec::decodeNextPacket(int& outLen)
 {
 	bool res = m_pDecoder->read(m_outputArray);
-	outLen = m_outputArray.size() / (m_pDecoder->noChannels() * sizeof(tfloat32));
+	outLen = static_cast<int>(m_outputArray.size() / (m_pDecoder->noChannels() * sizeof(tfloat32)));
 	return res;
 }
 

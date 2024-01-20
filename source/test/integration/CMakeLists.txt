@@ -14,7 +14,6 @@ set ( INTEGRATION_SOURCE
 	../../engine/cyanomega/test/integration/CyanPlayback.cxx
 	../../track/model/test/integration/DiscogsServiceTest.cxx
 	TestIntegrationMain.cxx
-	Yuv2PngMain.cxx
 )
 
 if (OMEGA_MACOSX)

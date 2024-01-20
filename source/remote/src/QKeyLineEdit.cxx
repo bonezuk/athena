@@ -100,12 +100,7 @@ void QKeyLineEdit::paintEvent(QPaintEvent *e)
 
 	int tIYPos = static_cast<int>(::floor(tYPos));
 	int iIYPos = static_cast<int>(::floor(iYPos));
-
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-	int xPos = offset + fontMetrics.width(QChar(' '));
-#else
 	int xPos = offset + fontMetrics.horizontalAdvance(QChar(' '));
-#endif
 
 	QRect rIcon(xPos,iIYPos,(icon!=0) ? icon->width() : 0, (icon!=0) ? icon->height() : 0);
 	QRect rText(rIcon.right()+4,tIYPos,lSize.width() - rIcon.right() + 4,s.height());
@@ -1941,21 +1936,17 @@ void QKeyLineEditDelegate::paint(QPainter *painter,const QStyleOptionViewItem& o
     if(!keys.isEmpty() && !(index.row()==m_editRow && index.column()==m_editColumn))
 	{
 		QList<KeyCode>::const_iterator ppI;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-		qreal backCHue,backCSat,backCVal;
-#else
 		float backCHue,backCSat,backCVal;
-#endif
 
 		option.palette.color(QPalette::Base).getHsvF(&backCHue,&backCSat,&backCVal);
-		backCVal += (backCVal < 0.5) ? 0.06 : -0.06;
+		backCVal += (backCVal < 0.5f) ? 0.06f : -0.06f;
 		if(backCVal > 1.0)
 		{
-			backCVal = 0.94;
+			backCVal = 0.94f;
 		}
-		else if(backCVal < 0.0)
+		else if(backCVal < 0.0f)
 		{
-			backCVal = 0.06;
+			backCVal = 0.06f;
 		}
 		QColor backC = QColor::fromHsvF(backCHue,backCSat,backCVal);
 
@@ -1986,11 +1977,7 @@ void QKeyLineEditDelegate::paint(QPainter *painter,const QStyleOptionViewItem& o
 			int iIYPos = static_cast<int>(::floor(iYPos));
 
 			QRect rIcon(tXPos+3,iIYPos,icon->width(),icon->height());
-#if QT_VERION < QT_VERSION_CHECK(5, 14, 0)
-			QRect rText(rIcon.right()+4,tIYPos,option.fontMetrics.width(kText),option.fontMetrics.height());
-#else
 			QRect rText(rIcon.right()+4,tIYPos,option.fontMetrics.horizontalAdvance(kText),option.fontMetrics.height());
-#endif
 
 			QPoint ptBack(tXPos,((iIYPos < tIYPos) ? iIYPos : tIYPos));
 			QSize sBack((rText.right() + 4) - ptBack.x(),((rIcon.height() > rText.height()) ? rIcon.height() : rText.height()));

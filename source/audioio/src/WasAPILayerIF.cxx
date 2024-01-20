@@ -108,7 +108,7 @@ QStringList WasAPILayerIF::enumerateDeviceIds()
 					hr = pDeviceIF->GetId(&pDeviceName);
 					if(hr==S_OK && pDeviceName!=0)
 					{
-						QString name = QString::fromUtf16(reinterpret_cast<const ushort *>(pDeviceName));
+						QString name = QString::fromUtf16(reinterpret_cast<const char16_t *>(pDeviceName));
 						deviceList.append(name);
 						CoTaskMemFree(pDeviceName);
 					}
@@ -635,7 +635,7 @@ QString WasAPIDeviceLayer::id()
 	
 	if(m_pDevice->GetId(&pName)==S_OK && pName!=0)
 	{
-		id = QString::fromUtf16(reinterpret_cast<const ushort *>(pName));
+		id = QString::fromUtf16(reinterpret_cast<const char16_t *>(pName));
 	}
 	if(pName!=0)
 	{
@@ -663,7 +663,7 @@ QString WasAPIDeviceLayer::name()
 		hr = pPropertyStore->GetValue(PKEY_Device_FriendlyName,&varName);
 		if(hr==S_OK)
 		{
-			deviceName = QString::fromUtf16(reinterpret_cast<const ushort *>(varName.pwszVal));
+			deviceName = QString::fromUtf16(reinterpret_cast<const char16_t *>(varName.pwszVal));
 		}
 		PropVariantClear(&varName);
 	}
