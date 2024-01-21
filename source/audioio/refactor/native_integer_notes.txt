@@ -13,10 +13,11 @@ data buffer.
 
 The codec can supports the following native integer PCM formats.
 - 16-bit interleaved channels (2-bytes per sample)
-- 24-bit interleaved channels (3-bytes per sample)
+- 24-bit interleaved channels (4-bytes per sample)
 - 32-bit interleaved channels (4-bytes per sample)
 The integer value is stored in the native endian format of the target machine (which
-is most likely small endian).
+is most likely small endian). The reason for using 4-bytes per sample on 24-bit sample
+is that it is stored in machine's endian format as tint32.
 
 --- Native DSD playback support ---
 

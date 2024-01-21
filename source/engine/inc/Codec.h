@@ -100,6 +100,9 @@ class ENGINE_EXPORT Codec : public QObject
 
 		virtual tint noOutputChannels() const;
 		virtual void setNoOutputChannels(tint noChs);
+		
+		virtual CodecDataType dataTypesSupported() const;
+		virtual bool setDataTypeFormat(CodecDataType type);
 
 	protected:
 	

@@ -17,7 +17,8 @@ RData::Part::Part() : m_offset(0),
 	m_nextFlag(false),
 	m_startNext(),
 	m_endNext(),
-	m_refStartTime()
+	m_refStartTime(),
+	m_dataType(e_SampleFloat)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -31,6 +32,7 @@ RData::Part::Part(const Part& rhs) : m_offset(0),
 	m_startNext(),
 	m_endNext(),
 	m_refStartTime()
+	m_dataType(e_SampleFloat)
 {
 	copy(rhs);
 }
@@ -53,6 +55,7 @@ void RData::Part::copy(const Part& rhs)
 	m_startNext = rhs.m_startNext;
 	m_endNext = rhs.m_endNext;
 	m_refStartTime = rhs.m_refStartTime;
+	m_dataType = rhs.m_dataType;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -221,6 +224,21 @@ bool RData::Part::isEqual(const Part& rhs) const
 	}
 	return res;
 }
+
+//-------------------------------------------------------------------------------------------
+
+CodecDataType RData::Part::getDataType() const
+{
+	return m_dataType;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void RData::Part::setDataType(CodecDataType dType)
+{
+	m_dataType = dType;
+}
+
 
 //-------------------------------------------------------------------------------------------
 // RData
