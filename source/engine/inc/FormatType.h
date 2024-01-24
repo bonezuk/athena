@@ -385,6 +385,24 @@ ENGINE_EXPORT tfloat32 toSampleFromBits(tint32 x,tint N);
 ENGINE_EXPORT tfloat64 toSample64FromBits(tint32 x,tint N);
 
 //-------------------------------------------------------------------------------------------
+
+ENGINE_EXPORT void write16BitsLittleEndianFromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void write16BitsLittleEndianFromSampleInt24(tint32 v, tchar *mem);
+ENGINE_EXPORT void write16BitsLittleEndianFromSampleInt32(tint32 v, tchar *mem);
+
+ENGINE_EXPORT void write16BitsBigEndianFromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void write16BitsBigEndianFromSampleInt24(tint32 v, tchar *mem);
+ENGINE_EXPORT void write16BitsBigEndianFromSampleInt32(tint32 v, tchar *mem);
+
+ENGINE_EXPORT void write24BitsLittleEndianFromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void write24BitsLittleEndianFromSampleInt24(tint32 v,tchar *mem);
+ENGINE_EXPORT void write24BitsLittleEndianFromSampleInt32(tint32 v,tchar *mem);
+
+ENGINE_EXPORT void write24BitsBigEndianFromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void write24BitsBigEndianFromSampleInt24(tint32 v,tchar *mem);
+ENGINE_EXPORT void write24BitsBigEndianFromSampleInt32(tint32 v,tchar *mem);
+
+//-------------------------------------------------------------------------------------------
 } // namespace engine
 } // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -3211,6 +3211,131 @@ tfloat64 readSample64BigEndian(const tubyte *mem,int noBits)
 }
 
 //-------------------------------------------------------------------------------------------
+
+void write16BitsLittleEndianFromSampleInt16(tint16 v, tchar *mem)
+{
+	mem[0] = static_cast<tchar>(v & 0x00ff);
+	mem[1] = static_cast<tchar>((v >> 8) & 0x00ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write16BitsLittleEndianFromSampleInt24(tint32 v, tchar *mem)
+{
+	if((v & 0x00000080) && v < 8388607)
+	{
+		v++;
+	}
+	mem[0] = static_cast<tchar>((v >> 8) & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write16BitsLittleEndianFromSampleInt32(tint32 v, tchar *mem)
+{
+	if((v & 0x00008000) && v < 2147483647)
+	{
+		v++;
+	}
+	mem[0] = static_cast<tchar>((v >> 8) & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write16BitsBigEndianFromSampleInt16(tint16 v, tchar *mem)
+{
+	mem[1] = static_cast<tchar>(v & 0x00ff);
+	mem[0] = static_cast<tchar>((v >> 8) & 0x00ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write16BitsBigEndianFromSampleInt24(tint32 v, tchar *mem)
+{
+	if((v & 0x00000080) && v < 8388607)
+	{
+		v++;
+	}
+	mem[1] = static_cast<tchar>((v >> 8) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write16BitsBigEndianFromSampleInt32(tint32 v, tchar *mem)
+{
+	if((v & 0x00008000) && v < 2147483647)
+	{
+		v++;
+	}
+	mem[1] = static_cast<tchar>((v >> 8) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write24BitsLittleEndianFromSampleInt16(tint16 v,tchar *mem)
+{
+	mem[0] = 0x00;
+	mem[1] = static_cast<tchar>(v & 0x00ff);
+	mem[2] = static_cast<tchar>((v >> 8) & 0x00ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write24BitsLittleEndianFromSampleInt24(tint32 v,tchar *mem)
+{
+	mem[0] = static_cast<tchar>(v & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >>  8) & 0x000000ff);
+	mem[2] = static_cast<tchar>((v >> 16) & 0x000000ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write24BitsLittleEndianFromSampleInt32(tint32 v,tchar *mem)
+{
+	if((v & 0x00800000) && v < 2147483647)
+	{
+		v++;
+	}
+	mem[0] = static_cast<tchar>(v & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >>  8) & 0x000000ff);
+	mem[2] = static_cast<tchar>((v >> 16) & 0x000000ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write24BitsBigEndianFromSampleInt16(tint16 v,tchar *mem)
+{
+	mem[2] = 0x00;
+	mem[1] = static_cast<tchar>(v & 0x00ff);
+	mem[0] = static_cast<tchar>((v >> 8) & 0x00ff);
+}
+//-------------------------------------------------------------------------------------------
+
+void write24BitsBigEndianFromSampleInt24(tint32 v,tchar *mem)
+{
+	mem[2] = static_cast<tchar>(v & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >>  8) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void write24BitsBigEndianFromSampleInt32(tint32 v,tchar *mem)
+{
+	if((v & 0x00800000) && v < 2147483647)
+	{
+		v++;
+	}
+	mem[2] = static_cast<tchar>(v & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >>  8) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace engine
 } // namespace omega
 //-------------------------------------------------------------------------------------------

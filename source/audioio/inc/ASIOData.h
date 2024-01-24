@@ -50,10 +50,10 @@ class AUDIOIO_EXPORT ASIOData : public engine::RData
 	
 		sample_t volumeAndClip(sample_t x);
 		
-		tint copyToBufferInt16LSB(const sample_t *src,tint len,tint oOffset,tint chIndex);
-		tint copyToBufferInt16MSB(const sample_t *src,tint len,tint oOffset,tint chIndex);
-		tint copyToBufferInt24LSB(const sample_t *src,tint len,tint oOffset,tint chIndex);
-		tint copyToBufferInt24MSB(const sample_t *src,tint len,tint oOffset,tint chIndex);
+		tint copyToBufferInt16LSB(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
+		tint copyToBufferInt16MSB(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
+		tint copyToBufferInt24LSB(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
+		tint copyToBufferInt24MSB(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
 		tint copyToBufferInt32LSB(const sample_t *src,tint len,tint oOffset,tint chIndex);
 		tint copyToBufferInt32MSB(const sample_t *src,tint len,tint oOffset,tint chIndex);
 		tint copyToBufferFloat32LSB(const sample_t *src,tint len,tint oOffset,tint chIndex);
