@@ -418,6 +418,14 @@ ENGINE_EXPORT void writeInt32MSB16FromSampleInt16(tint16 v,tchar *mem);
 ENGINE_EXPORT void writeInt32MSB16FromSampleInt24(tint32 v,tchar *mem);
 ENGINE_EXPORT void writeInt32MSB16FromSampleInt32(tint32 v,tchar *mem);
 
+ENGINE_EXPORT void writeInt32LSB18FromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void writeInt32LSB18FromSampleInt24(tint32 v,tchar *mem);
+ENGINE_EXPORT void writeInt32LSB18FromSampleInt32(tint32 v,tchar *mem);
+
+ENGINE_EXPORT void writeInt32MSB18FromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void writeInt32MSB18FromSampleInt24(tint32 v,tchar *mem);
+ENGINE_EXPORT void writeInt32MSB18FromSampleInt32(tint32 v,tchar *mem);
+
 //-------------------------------------------------------------------------------------------
 } // namespace engine
 } // namespace omega

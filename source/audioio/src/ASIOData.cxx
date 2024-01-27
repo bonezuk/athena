@@ -811,34 +811,108 @@ tint ASIOData::copyToBufferInt32MSB16(const sample_t *src,tint len,tint oOffset,
 
 //-------------------------------------------------------------------------------------------
 
-tint ASIOData::copyToBufferInt32LSB18(const sample_t *src,tint len,tint oOffset,tint chIndex)
+tint ASIOData::copyToBufferInt32LSB18(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type)
 {
 	tint i,j;
 	tint32 *out = reinterpret_cast<tint32 *>(m_asioDataArray[chIndex]);
 	
-	for(i=0,j=oOffset;i<len;i++,j++,src+=m_noOutChannels)
+	if(type == e_SampleFloat)
 	{
-		sample_t x = volumeAndClip(*src);
-		tint32 y = engine::sampleToInteger(x,18);
-		engine::writeNative32BitsAsLittleEndian(reinterpret_cast<const tbyte *>(&y),reinterpret_cast<tbyte *>(&out[j]),1);
+		for(i=0,j=oOffset;i<len;i++,j++,src+=m_noOutChannels)
+		{
+			sample_t x = volumeAndClip(*src);
+			tint32 y = engine::sampleToInteger(x,18);
+			engine::writeNative32BitsAsLittleEndian(reinterpret_cast<const tbyte *>(&y),reinterpret_cast<tbyte *>(&out[j]),1);
+		}
+		return j - oOffset;
 	}
-	return j - oOffset;
+	else if(type == e_SampleInt16)
+	{
+		const tint16 *in = reinterpret_cast<const tint16 *>(src);
+		
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
+		{
+			tint16 x = *in;
+			engine::writeInt32LSB18FromSampleInt16(x,reinterpret_cast<tbyte *>(&out[j]));
+		}
+		return j - oOffset;
+	}
+	else if(type == e_SampleInt24)
+	{
+		const tint32 *in = reinterpret_cast<const tint32 *>(src);
+		
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
+		{
+			tint32 x = *in;
+			engine::writeInt32LSB18FromSampleInt24(x,reinterpret_cast<tbyte *>(&out[j]));
+		}
+		return j - oOffset;
+	}
+	else if(type == e_SampleInt32)
+	{
+		const tint32 *in = reinterpret_cast<const tint32 *>(src);
+		
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
+		{
+			tint32 x = *in;
+			engine::writeInt32LSB18FromSampleInt32(x,reinterpret_cast<tbyte *>(&out[j]));
+		}
+		return j - oOffset;
+	}
+	return -1;
 }
 
 //-------------------------------------------------------------------------------------------
 
-tint ASIOData::copyToBufferInt32MSB18(const sample_t *src,tint len,tint oOffset,tint chIndex)
+tint ASIOData::copyToBufferInt32MSB18(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type)
 {
 	tint i,j;
 	tint32 *out = reinterpret_cast<tint32 *>(m_asioDataArray[chIndex]);
 	
-	for(i=0,j=oOffset;i<len;i++,j++,src+=m_noOutChannels)
+	if(type == e_SampleFloat)
 	{
-		sample_t x = volumeAndClip(*src);
-		tint32 y = engine::sampleToInteger(x,18);
-		engine::writeNative32BitsAsBigEndian(reinterpret_cast<const tbyte *>(&y),reinterpret_cast<tbyte *>(&out[j]),1);
+		for(i=0,j=oOffset;i<len;i++,j++,src+=m_noOutChannels)
+		{
+			sample_t x = volumeAndClip(*src);
+			tint32 y = engine::sampleToInteger(x,18);
+			engine::writeNative32BitsAsBigEndian(reinterpret_cast<const tbyte *>(&y),reinterpret_cast<tbyte *>(&out[j]),1);
+		}
+		return j - oOffset;
 	}
-	return j - oOffset;
+	else if(type == e_SampleInt16)
+	{
+		const tint16 *in = reinterpret_cast<const tint16 *>(src);
+		
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
+		{
+			tint16 x = *in;
+			engine::writeInt32MSB18FromSampleInt16(x,reinterpret_cast<tbyte *>(&out[j]));
+		}
+		return j - oOffset;
+	}
+	else if(type == e_SampleInt24)
+	{
+		const tint32 *in = reinterpret_cast<const tint32 *>(src);
+		
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
+		{
+			tint32 x = *in;
+			engine::writeInt32MSB18FromSampleInt24(x,reinterpret_cast<tbyte *>(&out[j]));
+		}
+		return j - oOffset;
+	}
+	else if(type == e_SampleInt32)
+	{
+		const tint32 *in = reinterpret_cast<const tint32 *>(src);
+		
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
+		{
+			tint32 x = *in;
+			engine::writeInt32MSB18FromSampleInt32(x,reinterpret_cast<tbyte *>(&out[j]));
+		}
+		return j - oOffset;
+	}
+	return -1;
 }
 
 //-------------------------------------------------------------------------------------------
