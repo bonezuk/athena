@@ -402,6 +402,22 @@ ENGINE_EXPORT void write24BitsBigEndianFromSampleInt16(tint16 v,tchar *mem);
 ENGINE_EXPORT void write24BitsBigEndianFromSampleInt24(tint32 v,tchar *mem);
 ENGINE_EXPORT void write24BitsBigEndianFromSampleInt32(tint32 v,tchar *mem);
 
+ENGINE_EXPORT void write32BitsLittleEndianFromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void write32BitsLittleEndianFromSampleInt24(tint32 v,tchar *mem);
+ENGINE_EXPORT void write32BitsLittleEndianFromSampleInt32(tint32 v,tchar *mem);
+
+ENGINE_EXPORT void write32BitsBigEndianFromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void write32BitsBigEndianFromSampleInt24(tint32 v,tchar *mem);
+ENGINE_EXPORT void write23BitsBigEndianFromSampleInt32(tint32 v,tchar *mem);
+
+ENGINE_EXPORT void writeInt32LSB16FromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void writeInt32LSB16FromSampleInt24(tint32 v,tchar *mem);
+ENGINE_EXPORT void writeInt32LSB16FromSampleInt32(tint32 v,tchar *mem);
+
+ENGINE_EXPORT void writeInt32MSB16FromSampleInt16(tint16 v,tchar *mem);
+ENGINE_EXPORT void writeInt32MSB16FromSampleInt24(tint32 v,tchar *mem);
+ENGINE_EXPORT void writeInt32MSB16FromSampleInt32(tint32 v,tchar *mem);
+
 //-------------------------------------------------------------------------------------------
 } // namespace engine
 } // namespace omega
