@@ -44,7 +44,7 @@ class AUDIOIO_EXPORT ASIOData : public engine::RData
 		virtual void asioAllocate();
 		virtual const void *asioDataI(tint chIdx,tint pIdx) const;
 		
-		virtual tint copyToBuffer(const sample_t *src,tint len,tint oOffset,tint chIndex);
+		virtual tint copyToBuffer(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
 		
 	private:
 	
@@ -64,10 +64,10 @@ class AUDIOIO_EXPORT ASIOData : public engine::RData
 		tint copyToBufferInt32MSB16(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
 		tint copyToBufferInt32LSB18(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
 		tint copyToBufferInt32MSB18(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
-		tint copyToBufferInt32LSB20(const sample_t *src,tint len,tint oOffset,tint chIndex);
-		tint copyToBufferInt32MSB20(const sample_t *src,tint len,tint oOffset,tint chIndex);
-		tint copyToBufferInt32LSB24(const sample_t *src,tint len,tint oOffset,tint chIndex);
-		tint copyToBufferInt32MSB24(const sample_t *src,tint len,tint oOffset,tint chIndex);
+		tint copyToBufferInt32LSB20(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
+		tint copyToBufferInt32MSB20(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
+		tint copyToBufferInt32LSB24(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
+		tint copyToBufferInt32MSB24(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
 };
 
 //-------------------------------------------------------------------------------------------

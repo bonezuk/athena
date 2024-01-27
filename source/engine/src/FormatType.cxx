@@ -3398,7 +3398,8 @@ void write23BitsBigEndianFromSampleInt32(tint32 v,tchar *mem)
 //-------------------------------------------------------------------------------------------
 
 void writeInt32LSB16FromSampleInt16(tint16 v,tchar *mem)
-{c	mem[0] = static_cast<tchar>(v & 0x00ff);
+{
+	mem[0] = static_cast<tchar>(v & 0x00ff);
 	mem[1] = static_cast<tchar>((v >> 8) & 0x00ff);
 	if(v < 0)
 	{
@@ -3634,6 +3635,240 @@ void writeInt32MSB18FromSampleInt32(tint32 v,tchar *mem)
 	if(v < 0)
 	{
 		mem[1] |= 0xfc;
+		mem[0] = 0xff;
+	}
+	else
+	{
+		mem[0] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32LSB20FromSampleInt16(tint16 v,tchar *mem)
+{
+	mem[0] = static_cast<tchar>((v << 4)  & 0x00f0);
+	mem[1] = static_cast<tchar>((v >> 4)  & 0x00ff);
+	mem[2] = static_cast<tchar>((v >> 12) & 0x000f);
+	if(v < 0)
+	{
+		mem[2] |= 0xf0;
+		mem[3] = 0xff;
+	}
+	else
+	{
+		mem[3] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32LSB20FromSampleInt24(tint32 v,tchar *mem)
+{
+	if((v & 0x00000008) && v < 8388607)
+	{
+		v++;
+	}
+	mem[0] = static_cast<tchar>((v >>  4) & 0x000000ff);
+ 	mem[1] = static_cast<tchar>((v >> 12) & 0x000000ff);
+ 	mem[2] = static_cast<tchar>((v >> 20) & 0x0000000f);
+	if(v < 0)
+	{
+		mem[2] |= 0xf0;
+		mem[3] = 0xff;
+	}
+	else
+	{
+		mem[3] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32LSB20FromSampleInt32(tint32 v,tchar *mem)
+{
+	if((v & 0x00000800) && v < 2147483647)
+	{
+		v++;
+	}
+	mem[0] = static_cast<tchar>((v >> 12) & 0x000000ff);
+ 	mem[1] = static_cast<tchar>((v >> 20) & 0x000000ff);
+ 	mem[2] = static_cast<tchar>((v >> 28) & 0x0000000f);
+	if(v < 0)
+	{
+		mem[2] |= 0xf0;
+		mem[3] = 0xff;
+	}
+	else
+	{
+		mem[3] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32MSB20FromSampleInt16(tint16 v,tchar *mem)
+{
+	mem[3] = static_cast<tchar>((v << 4)  & 0x00f0);
+	mem[2] = static_cast<tchar>((v >> 4)  & 0x00ff);
+	mem[1] = static_cast<tchar>((v >> 12) & 0x000f);
+	if(v < 0)
+	{
+		mem[1] |= 0xf0;
+		mem[0] = 0xff;
+	}
+	else
+	{
+		mem[0] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32MSB20FromSampleInt24(tint32 v,tchar *mem)
+{
+	if((v & 0x00000008) && v < 8388607)
+	{
+		v++;
+	}
+	mem[3] = static_cast<tchar>((v >>  4) & 0x000000ff);
+ 	mem[2] = static_cast<tchar>((v >> 12) & 0x000000ff);
+ 	mem[1] = static_cast<tchar>((v >> 20) & 0x0000000f);
+	if(v < 0)
+	{
+		mem[1] |= 0xf0;
+		mem[0] = 0xff;
+	}
+	else
+	{
+		mem[0] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32MSB20FromSampleInt32(tint32 v,tchar *mem)
+{
+	if((v & 0x00000800) && v < 2147483647)
+	{
+		v++;
+	}
+	mem[3] = static_cast<tchar>((v >> 12) & 0x000000ff);
+ 	mem[2] = static_cast<tchar>((v >> 20) & 0x000000ff);
+ 	mem[1] = static_cast<tchar>((v >> 28) & 0x0000000f);
+	if(v < 0)
+	{
+		mem[1] |= 0xf0;
+		mem[0] = 0xff;
+	}
+	else
+	{
+		mem[0] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32LSB24FromSampleInt16(tint16 v,tchar *mem)
+{
+	mem[0] = 0x00;
+	mem[1] = static_cast<tchar>((v) & 0x00ff);
+	mem[2] = static_cast<tchar>((v >> 8) & 0x00ff);
+	if(v < 0)
+	{
+		mem[3] = 0xff;
+	}
+	else
+	{
+		mem[3] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32LSB24FromSampleInt24(tint32 v,tchar *mem)
+{
+	mem[0] = static_cast<tchar>((v      ) & 0x000000ff);
+ 	mem[1] = static_cast<tchar>((v >>  8) & 0x000000ff);
+ 	mem[2] = static_cast<tchar>((v >> 16) & 0x0000000f);
+	if(v < 0)
+	{
+		mem[3] = 0xff;
+	}
+	else
+	{
+		mem[3] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32LSB24FromSampleInt32(tint32 v,tchar *mem)
+{
+	if((v & 0x00000080) && v < 2147483647)
+	{
+		v++;
+	}
+	mem[0] = static_cast<tchar>((v >>  8) & 0x000000ff);
+ 	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
+ 	mem[2] = static_cast<tchar>((v >> 24) & 0x0000000f);
+	if(v < 0)
+	{
+		mem[3] = 0xff;
+	}
+	else
+	{
+		mem[3] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32MSB24FromSampleInt16(tint16 v,tchar *mem)
+{
+	mem[3] = 0x00;
+	mem[2] = static_cast<tchar>((v) & 0x00ff);
+	mem[1] = static_cast<tchar>((v >> 8) & 0x00ff);
+	if(v < 0)
+	{
+		mem[0] = 0xff;
+	}
+	else
+	{
+		mem[0] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32MSB24FromSampleInt24(tint32 v,tchar *mem)
+{
+	mem[3] = static_cast<tchar>((v      ) & 0x000000ff);
+ 	mem[2] = static_cast<tchar>((v >>  8) & 0x000000ff);
+ 	mem[1] = static_cast<tchar>((v >> 16) & 0x0000000f);
+	if(v < 0)
+	{
+		mem[0] = 0xff;
+	}
+	else
+	{
+		mem[0] = 0x00;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void writeInt32MSB24FromSampleInt32(tint32 v,tchar *mem);
+{
+	if((v & 0x00000080) && v < 2147483647)
+	{
+		v++;
+	}
+	mem[3] = static_cast<tchar>((v >>  8) & 0x000000ff);
+ 	mem[2] = static_cast<tchar>((v >> 16) & 0x000000ff);
+ 	mem[1] = static_cast<tchar>((v >> 24) & 0x0000000f);
+	if(v < 0)
+	{
 		mem[0] = 0xff;
 	}
 	else
