@@ -19,21 +19,13 @@ namespace engine
    the executing CPU.
 */
 
-typedef enum
-{
-	// Defined by a sample_t equating to a 32-bit or 64-bit floating point number with dynamic range (-1.0, 1.0)
-	e_SampleFloat = 0x01,
-	// 16-bit integer, 2-bytes per sample.
-	e_SampleInt16 = 0x02,
-	// 24-bit integer, 3-bytes per sample.
-	e_SampleInt24 = 0x04,
-	// 32-bit integer, 4-bytes per sample.
-	e_SampleInt32 = 0x08,
-	// DSD 8-bits per packet, 8 samples per packet, bit order LSB
-	e_SampleDSD8LSB = 0x10,
-	// DSD 8-bits per packet, 8 samples per packet, bit order MSB
-	e_SampleDSD8MSB = 0x20
-} CodecDataType;
+typedef int CodecDataType;
+const CodecDataType e_SampleFloat = 0x01;
+const CodecDataType e_SampleInt16 = 0x02;
+const CodecDataType e_SampleInt24 = 0x04;
+const CodecDataType e_SampleInt32 = 0x08;
+const CodecDataType e_SampleDSD8LSB = 0x10;
+const CodecDataType e_SampleDSD8MSB = 0x20;
 
 //-------------------------------------------------------------------------------------------
 

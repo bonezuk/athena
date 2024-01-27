@@ -408,7 +408,7 @@ ENGINE_EXPORT void write32BitsLittleEndianFromSampleInt32(tint32 v,tchar *mem);
 
 ENGINE_EXPORT void write32BitsBigEndianFromSampleInt16(tint16 v,tchar *mem);
 ENGINE_EXPORT void write32BitsBigEndianFromSampleInt24(tint32 v,tchar *mem);
-ENGINE_EXPORT void write23BitsBigEndianFromSampleInt32(tint32 v,tchar *mem);
+ENGINE_EXPORT void write32BitsBigEndianFromSampleInt32(tint32 v,tchar *mem);
 
 ENGINE_EXPORT void writeInt32LSB16FromSampleInt16(tint16 v,tchar *mem);
 ENGINE_EXPORT void writeInt32LSB16FromSampleInt24(tint32 v,tchar *mem);

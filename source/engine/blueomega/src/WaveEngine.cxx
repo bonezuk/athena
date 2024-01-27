@@ -555,7 +555,7 @@ void WaveEngine::blankChannelsInt16Bit(sample_t *dst,tint noSamples)
 	wChs = m_info.audioChannels();
 	for(i=0;i<oChs;i++)
 	{
-        tint16_t *d = reinterpret_cast<tint16_t *>(dst);
+        tint16 *d = reinterpret_cast<tint16 *>(dst);
 	
 		cIdx = -1;
 		for(j=0;j<wChs && cIdx<0;j++)
@@ -621,7 +621,7 @@ void WaveEngine::blankChannelsInt32Bit(sample_t *dst,tint noSamples)
 	wChs = m_info.audioChannels();
 	for(i=0;i<oChs;i++)
 	{
-        tint32_t *d = reinterpret_cast<tint32_t *>(dst);
+        tint32 *d = reinterpret_cast<tint32 *>(dst);
 	
 		cIdx = -1;
 		for(j=0;j<wChs && cIdx<0;j++)

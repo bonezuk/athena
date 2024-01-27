@@ -8700,7 +8700,7 @@ TEST(FormatType,doubleFromExtendedPower10Values)
 
 TEST(FormatType, write16BitsLittleEndianFromSampleInt16)
 {
-	const tint16 c_int16Samples[12] = {
+	const tuint16 c_int16Samples[12] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000,
 		0x7fff, 0x8000
@@ -8726,14 +8726,14 @@ TEST(FormatType, write16BitsLittleEndianFromSampleInt16)
 	
 	for(i = 0; i < 12; i++)
 	{
-		engine::write16BitsLittleEndianFromSampleInt16(c_int16Samples[i], &mem[i * 2]);
+		write16BitsLittleEndianFromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 2]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 24));
 }
 
 TEST(FormatType, write16BitsLittleEndianFromSampleInt24)
 {
-	const tint32 c_int24Samples[15] = {
+	const tuint32 c_int24Samples[15] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -8762,14 +8762,14 @@ TEST(FormatType, write16BitsLittleEndianFromSampleInt24)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::write16BitsLittleEndianFromSampleInt24(c_int24Samples[i], &mem[i * 2]);
+		write16BitsLittleEndianFromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 2]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 30));
 }
 
 TEST(FormatType, write16BitsLittleEndianFromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00008000, 0x00007fff, 0x00000000, 0xffff8000, 0xffff7fff
@@ -8798,7 +8798,7 @@ TEST(FormatType, write16BitsLittleEndianFromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::write16BitsLittleEndianFromSampleInt32(c_int32Samples[i], &mem[i * 2]);
+		write16BitsLittleEndianFromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 2]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 30));
 }
@@ -8807,7 +8807,7 @@ TEST(FormatType, write16BitsLittleEndianFromSampleInt32)
 
 TEST(FormatType, write16BitsBigEndianFromSampleInt16)
 {
-	const tint16 c_int16Samples[12] = {
+	const tuint16 c_int16Samples[12] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000,
 		0x7fff, 0x8000
@@ -8833,14 +8833,14 @@ TEST(FormatType, write16BitsBigEndianFromSampleInt16)
 	
 	for(i = 0; i < 12; i++)
 	{
-		engine::write16BitsBigEndianFromSampleInt16(c_int16Samples[i], &mem[i * 2]);
+		write16BitsBigEndianFromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 2]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 24));
 }
 
 TEST(FormatType, write16BitsBigEndianFromSampleInt24)
 {
-	const tint32 c_int24Samples[15] = {
+	const tuint32 c_int24Samples[15] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -8869,14 +8869,14 @@ TEST(FormatType, write16BitsBigEndianFromSampleInt24)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::write16BitsBigEndianFromSampleInt24(c_int24Samples[i], &mem[i * 2]);
+		write16BitsBigEndianFromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 2]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 30));
 }
 
 TEST(FormatType, write16BitsBigEndianFromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00008000, 0x00007fff, 0x00000000, 0xffff8000, 0xffff7fff
@@ -8905,7 +8905,7 @@ TEST(FormatType, write16BitsBigEndianFromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::write16BitsBigEndianFromSampleInt32(c_int32Samples[i], &mem[i * 2]);
+		write16BitsBigEndianFromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 2]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 30));
 }
@@ -8914,7 +8914,7 @@ TEST(FormatType, write16BitsBigEndianFromSampleInt32)
 
 TEST(FormatType, write24BitsLittleEndianFromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -8937,14 +8937,14 @@ TEST(FormatType, write24BitsLittleEndianFromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write24BitsLittleEndianFromSampleInt16(c_int16Samples[i], &mem[i * 3]);
+		write24BitsLittleEndianFromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 3]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 30));
 }
 
 TEST(FormatType, write24BitsLittleEndianFromSampleInt24)
 {
-	const tint32 c_int24Samples[10] = {
+	const tuint32 c_int24Samples[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -8967,14 +8967,14 @@ TEST(FormatType, write24BitsLittleEndianFromSampleInt24)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write24BitsLittleEndianFromSampleInt24(c_int24Samples[i], &mem[i * 3]);
+		write24BitsLittleEndianFromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 3]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 30));
 }
 
 TEST(FormatType, write24BitsLittleEndianFromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -9003,7 +9003,7 @@ TEST(FormatType, write24BitsLittleEndianFromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::write24BitsLittleEndianFromSampleInt32(c_int32Samples[i], &mem[i * 3]);
+		write24BitsLittleEndianFromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 3]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 45));
 }
@@ -9012,7 +9012,7 @@ TEST(FormatType, write24BitsLittleEndianFromSampleInt32)
 
 TEST(FormatType, write24BitsBigEndianFromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9035,14 +9035,14 @@ TEST(FormatType, write24BitsBigEndianFromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write24BitsBigEndianFromSampleInt16(c_int16Samples[i], &mem[i * 3]);
+		write24BitsBigEndianFromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 3]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 30));
 }
 
 TEST(FormatType, write24BitsBigEndianFromSampleInt24)
 {
-	const tint32 c_int24Samples[10] = {
+	const tuint32 c_int24Samples[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -9065,14 +9065,14 @@ TEST(FormatType, write24BitsBigEndianFromSampleInt24)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write24BitsBigEndianFromSampleInt24(c_int24Samples[i], &mem[i * 3]);
+		write24BitsBigEndianFromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 3]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 30));
 }
 
 TEST(FormatType, write24BitsBigEndianFromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -9101,7 +9101,7 @@ TEST(FormatType, write24BitsBigEndianFromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::write24BitsBigEndianFromSampleInt32(c_int32Samples[i], &mem[i * 3]);
+		write24BitsBigEndianFromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 3]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 45));
 }
@@ -9110,7 +9110,7 @@ TEST(FormatType, write24BitsBigEndianFromSampleInt32)
 
 TEST(FormatType, write32BitsLittleEndianFromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9133,14 +9133,14 @@ TEST(FormatType, write32BitsLittleEndianFromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write32BitsLittleEndianFromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		write32BitsLittleEndianFromSampleInt16(static_cast<tint32>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, write32BitsLittleEndianFromSampleInt24)
 {
-	const tint32 c_int24Samples[10] = {
+	const tuint32 c_int24Samples[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -9163,14 +9163,14 @@ TEST(FormatType, write32BitsLittleEndianFromSampleInt24)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write32BitsLittleEndianFromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		write32BitsLittleEndianFromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, write32BitsLittleEndianFromSampleInt32)
 {
-	const tint32 c_int32Samples[10] = {
+	const tuint32 c_int32Samples[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 	};
@@ -9193,7 +9193,7 @@ TEST(FormatType, write32BitsLittleEndianFromSampleInt32)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write32BitsLittleEndianFromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		write32BitsLittleEndianFromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
@@ -9202,7 +9202,7 @@ TEST(FormatType, write32BitsLittleEndianFromSampleInt32)
 
 TEST(FormatType, write32BitsBigEndianFromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9225,14 +9225,14 @@ TEST(FormatType, write32BitsBigEndianFromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write32BitsBigEndianFromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		write32BitsBigEndianFromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, write32BitsBigEndianFromSampleInt24)
 {
-	const tint32 c_int24Samples[10] = {
+	const tuint32 c_int24Samples[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -9255,14 +9255,14 @@ TEST(FormatType, write32BitsBigEndianFromSampleInt24)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write32BitsBigEndianFromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		write32BitsBigEndianFromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, write32BitsBigEndianFromSampleInt32)
 {
-	const tint32 c_int32Samples[10] = {
+	const tuint32 c_int32Samples[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -9285,7 +9285,7 @@ TEST(FormatType, write32BitsBigEndianFromSampleInt32)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::write32BitsBigEndianFromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		write32BitsBigEndianFromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
@@ -9294,7 +9294,7 @@ TEST(FormatType, write32BitsBigEndianFromSampleInt32)
 
 TEST(FormatType, writeInt32LSB16FromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9317,14 +9317,14 @@ TEST(FormatType, writeInt32LSB16FromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32LSB16FromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		writeInt32LSB16FromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32LSB16FromSampleInt24)
 {
-	const tint32 c_int24Samples[15] = {
+	const tuint32 c_int24Samples[15] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -9353,14 +9353,14 @@ TEST(FormatType, writeInt32LSB16FromSampleInt24)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32LSB16FromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		writeInt32LSB16FromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
 
 TEST(FormatType, writeInt32LSB16FromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -9389,7 +9389,7 @@ TEST(FormatType, writeInt32LSB16FromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32LSB16FromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		writeInt32LSB16FromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
@@ -9398,7 +9398,7 @@ TEST(FormatType, writeInt32LSB16FromSampleInt32)
 
 TEST(FormatType, writeInt32MSB16FromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9421,14 +9421,14 @@ TEST(FormatType, writeInt32MSB16FromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32MSB16FromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		writeInt32MSB16FromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32MSB16FromSampleInt24)
 {
-	const tint32 c_int24Samples[15] = {
+	const tuint32 c_int24Samples[15] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -9457,14 +9457,14 @@ TEST(FormatType, writeInt32MSB16FromSampleInt24)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32MSB16FromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		writeInt32MSB16FromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
 
 TEST(FormatType, writeInt32MSB16FromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -9493,7 +9493,7 @@ TEST(FormatType, writeInt32MSB16FromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32MSB16FromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		writeInt32MSB16FromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
@@ -9502,7 +9502,7 @@ TEST(FormatType, writeInt32MSB16FromSampleInt32)
 
 TEST(FormatType, writeInt32LSB18FromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9525,14 +9525,14 @@ TEST(FormatType, writeInt32LSB18FromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32LSB18FromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		writeInt32LSB18FromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32LSB18FromSampleInt24)
 {
-	const tint32 c_int24Samples[15] = {
+	const tuint32 c_int24Samples[15] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000020, 0x0000001f, 0x00000000, 0xffffffe0, 0xffffffdf
@@ -9561,14 +9561,14 @@ TEST(FormatType, writeInt32LSB18FromSampleInt24)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32LSB18FromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		writeInt32LSB18FromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
 
 TEST(FormatType, writeInt32LSB18FromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000020, 0x0000001f, 0x00000000, 0xffffffe0, 0xffffffdf
@@ -9597,7 +9597,7 @@ TEST(FormatType, writeInt32LSB18FromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32LSB18FromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		writeInt32LSB18FromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
@@ -9606,7 +9606,7 @@ TEST(FormatType, writeInt32LSB18FromSampleInt32)
 
 TEST(FormatType, writeInt32MSB18FromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9629,14 +9629,14 @@ TEST(FormatType, writeInt32MSB18FromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32MSB18FromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		writeInt32MSB18FromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32MSB18FromSampleInt24)
 {
-	const tint32 c_int24Samples[15] = {
+	const tuint32 c_int24Samples[15] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000020, 0x0000001f, 0x00000000, 0xffffffe0, 0xffffffdf
@@ -9665,14 +9665,14 @@ TEST(FormatType, writeInt32MSB18FromSampleInt24)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32MSB18FromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		writeInt32MSB18FromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
 
-TEST(FormatType, writeInt32LSB18FromSampleInt32)
+TEST(FormatType, writeInt32MSB18FromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000020, 0x0000001f, 0x00000000, 0xffffffe0, 0xffffffdf
@@ -9701,7 +9701,7 @@ TEST(FormatType, writeInt32LSB18FromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32MSB18FromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		writeInt32MSB18FromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
@@ -9710,7 +9710,7 @@ TEST(FormatType, writeInt32LSB18FromSampleInt32)
 
 TEST(FormatType, writeInt32LSB20FromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9733,14 +9733,14 @@ TEST(FormatType, writeInt32LSB20FromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32LSB20FromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		writeInt32LSB20FromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32LSB20FromSampleInt24)
 {
-	const tint32 c_int24Samples[15] = {
+	const tuint32 c_int24Samples[15] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000008, 0x00000007, 0x00000000, 0xfffffff8, 0xfffffff7
@@ -9769,14 +9769,14 @@ TEST(FormatType, writeInt32LSB20FromSampleInt24)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32LSB20FromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		writeInt32LSB20FromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
 
 TEST(FormatType, writeInt32LSB20FromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000800, 0x00000700, 0x00000000, 0xfffff800, 0xfffff7ff
@@ -9805,7 +9805,7 @@ TEST(FormatType, writeInt32LSB20FromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32LSB20FromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		writeInt32LSB20FromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
@@ -9814,7 +9814,7 @@ TEST(FormatType, writeInt32LSB20FromSampleInt32)
 
 TEST(FormatType, writeInt32MSB20FromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9837,14 +9837,14 @@ TEST(FormatType, writeInt32MSB20FromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32MSB20FromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		writeInt32MSB20FromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32MSB20FromSampleInt24)
 {
-	const tint32 c_int24Samples[15] = {
+	const tuint32 c_int24Samples[15] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000008, 0x00000007, 0x00000000, 0xfffffff8, 0xfffffff7
@@ -9873,14 +9873,14 @@ TEST(FormatType, writeInt32MSB20FromSampleInt24)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32MSB20FromSampleInt16(c_int24Samples[i], &mem[i * 4]);
+		writeInt32MSB20FromSampleInt16(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
 
 TEST(FormatType, writeInt32MSB20FromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000800, 0x000007ff, 0x00000000, 0xfffff800, 0xfffff7ff
@@ -9909,7 +9909,7 @@ TEST(FormatType, writeInt32MSB20FromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32MSB20FromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		writeInt32MSB20FromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
@@ -9918,7 +9918,7 @@ TEST(FormatType, writeInt32MSB20FromSampleInt32)
 
 TEST(FormatType, writeInt32LSB24FromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -9941,14 +9941,14 @@ TEST(FormatType, writeInt32LSB24FromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32LSB24FromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		writeInt32LSB24FromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32LSB24FromSampleInt24)
 {
-	const tint32 c_int24Samples[10] = {
+	const tuint32 c_int24Samples[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -9971,14 +9971,14 @@ TEST(FormatType, writeInt32LSB24FromSampleInt24)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32LSB20FromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		writeInt32LSB20FromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32LSB24FromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -10007,7 +10007,7 @@ TEST(FormatType, writeInt32LSB24FromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32LSB24FromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		writeInt32LSB24FromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
@@ -10016,7 +10016,7 @@ TEST(FormatType, writeInt32LSB24FromSampleInt32)
 
 TEST(FormatType, writeInt32MSB24FromSampleInt16)
 {
-	const tint16 c_int16Samples[10] = {
+	const tuint16 c_int16Samples[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -10039,14 +10039,14 @@ TEST(FormatType, writeInt32MSB24FromSampleInt16)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32MSB24FromSampleInt16(c_int16Samples[i], &mem[i * 4]);
+		writeInt32MSB24FromSampleInt16(static_cast<tint16>(c_int16Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32MSB24FromSampleInt24)
 {
-	const tint32 c_int24Samples[10] = {
+	const tuint32 c_int24Samples[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -10069,14 +10069,14 @@ TEST(FormatType, writeInt32MSB24FromSampleInt24)
 	
 	for(i = 0; i < 10; i++)
 	{
-		engine::writeInt32MSB24FromSampleInt24(c_int24Samples[i], &mem[i * 4]);
+		writeInt32MSB24FromSampleInt24(static_cast<tint32>(c_int24Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 40));
 }
 
 TEST(FormatType, writeInt32MSB24FromSampleInt32)
 {
-	const tint32 c_int32Samples[15] = {
+	const tuint32 c_int32Samples[15] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80, 0xffffff7f
@@ -10091,8 +10091,8 @@ TEST(FormatType, writeInt32MSB24FromSampleInt32)
 		0xff, 0xe6, 0x66, 0x66,
 		0xff, 0xcc, 0xcc, 0xcd,
 		0xff, 0xb3, 0x33, 0x33,
-		0xff, 0x99, 0x99, 0x9a
-		0xff, 0x80, 0x00, 0x00
+		0xff, 0x99, 0x99, 0x9a,
+		0xff, 0x80, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x01,
 		0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00,
@@ -10105,7 +10105,7 @@ TEST(FormatType, writeInt32MSB24FromSampleInt32)
 	
 	for(i = 0; i < 15; i++)
 	{
-		engine::writeInt32MSB24FromSampleInt32(c_int32Samples[i], &mem[i * 4]);
+		writeInt32MSB24FromSampleInt32(static_cast<tint32>(c_int32Samples[i]), &mem[i * 4]);
 	}
 	EXPECT_EQ(0, memcmp(mem, c_expectIntegerSamples, 60));
 }
