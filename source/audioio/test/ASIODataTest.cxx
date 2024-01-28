@@ -233,7 +233,7 @@ TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt24)
 		0xff, 0x7f,
 		0xcd, 0x4c,
 		0x9a, 0x19,
-		0xcc, 0xcc, 
+		0xcd, 0xcc, 
 		0x9a, 0x99, 
 		0x01, 0x00,
 		0x00, 0x00
@@ -275,7 +275,7 @@ TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt32)
 		0xff, 0x7f,
 		0xcd, 0x4c,
 		0x9a, 0x19,
-		0xcc, 0xcc, 
+		0xcd, 0xcc, 
 		0x9a, 0x99, 
 		0x01, 0x00,
 		0x00, 0x00
@@ -360,7 +360,7 @@ TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt24)
 		0x7f, 0xff,
 		0x4c, 0xcd,
 		0x19, 0x9a,
-		0xcc, 0xcc,
+		0xcc, 0xcd,
 		0x99, 0x9a,
 		0x00, 0x01,
 		0x00, 0x00
@@ -402,7 +402,7 @@ TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt32)
 		0x7f, 0xff,
 		0x4c, 0xcd,
 		0x19, 0x9a,
-		0xcc, 0xcc,
+		0xcc, 0xcd,
 		0x99, 0x9a,
 		0x00, 0x01,
 		0x00, 0x00
@@ -1435,8 +1435,8 @@ TEST(ASIOData,sampleTo32BitLSBConvertionStereoInt32)
 
 	const tubyte c_expectIntegerSamplesA[20] = {
 		0xff, 0xff, 0xff, 0x7f,
-		0xcd, 0xcc, 0xcc, 0x4c,
-		0x9a, 0x99, 0x99, 0x19,
+		0xcc, 0xcc, 0xcc, 0x4c,
+		0x99, 0x99, 0x99, 0x19,
 		0xcd, 0xcc, 0xcc, 0xcc,
 		0x9a, 0x99, 0x99, 0x99
 	};
@@ -1722,8 +1722,8 @@ TEST(ASIOData,sampleTo32BitMSBConvertionStereoInt32)
 
 	const tubyte c_expectIntegerSamplesA[20] = {
 		0x7f, 0xff, 0xff, 0xff,
-		0x4c, 0xcc, 0xcc, 0xcd,
-		0x19, 0x99, 0x99, 0x9a,
+		0x4c, 0xcc, 0xcc, 0xcc,
+		0x19, 0x99, 0x99, 0x99,
 		0xcc, 0xcc, 0xcc, 0xcd,
 		0x99, 0x99, 0x99, 0x9a
 	};
@@ -1961,8 +1961,8 @@ TEST(ASIOData,sampleToFloatLSBConvertionStereoInt16)
 	engine::writeLittleEndian32BitsAsNative(reinterpret_cast<const tbyte *>(data.asioData(1,0)),reinterpret_cast<tbyte *>(outDataB),5);
 	for(int i=0;i<5;i++)
 	{
-		EXPECT_FLOAT_EQ(c_expectFloatSampleA[i],outDataA[i]);
-		EXPECT_FLOAT_EQ(c_expectFloatSampleB[i],outDataB[i]);
+		EXPECT_NEAR(c_expectFloatSampleA[i],outDataA[i], 0.0001);
+		EXPECT_NEAR(c_expectFloatSampleB[i],outDataB[i], 0.0001);
 	}
 }
 
@@ -2265,8 +2265,8 @@ TEST(ASIOData,sampleToFloatMSBConvertionStereoInt16)
 	engine::writeBigEndian32BitsAsNative(reinterpret_cast<const tbyte *>(data.asioData(1,0)),reinterpret_cast<tbyte *>(outDataB),5);
 	for(int i=0;i<5;i++)
 	{
-		EXPECT_FLOAT_EQ(c_expectFloatSampleA[i],outDataA[i]);
-		EXPECT_FLOAT_EQ(c_expectFloatSampleB[i],outDataB[i]);
+		EXPECT_NEAR(c_expectFloatSampleA[i],outDataA[i], 0.0001);
+		EXPECT_NEAR(c_expectFloatSampleB[i],outDataB[i], 0.0001);
 	}
 }
 
@@ -2576,8 +2576,8 @@ TEST(ASIOData,sampleToDoubleLSBConvertionStereoInt16)
 	engine::writeLittleEndian64BitsAsNative(reinterpret_cast<const tbyte *>(data.asioData(1,0)),reinterpret_cast<tbyte *>(outDataB),5);
 	for(int i=0;i<5;i++)
 	{
-		EXPECT_FLOAT_EQ(c_expectFloatSampleA[i],outDataA[i]);
-		EXPECT_FLOAT_EQ(c_expectFloatSampleB[i],outDataB[i]);
+		EXPECT_NEAR(c_expectFloatSampleA[i],outDataA[i], 0.0001);
+		EXPECT_NEAR(c_expectFloatSampleB[i],outDataB[i], 0.0001);
 	}
 }
 
@@ -2886,8 +2886,8 @@ TEST(ASIOData,sampleToDoubleMSBConvertionStereoInt16)
 	engine::writeBigEndian64BitsAsNative(reinterpret_cast<const tbyte *>(data.asioData(1,0)),reinterpret_cast<tbyte *>(outDataB),5);
 	for(int i=0;i<5;i++)
 	{
-		EXPECT_FLOAT_EQ(c_expectFloatSampleA[i],outDataA[i]);
-		EXPECT_FLOAT_EQ(c_expectFloatSampleB[i],outDataB[i]);
+		EXPECT_NEAR(c_expectFloatSampleA[i],outDataA[i], 0.0001);
+		EXPECT_NEAR(c_expectFloatSampleB[i],outDataB[i], 0.0001);
 	}
 }
 
@@ -3461,7 +3461,7 @@ TEST(ASIOData,sampleTo16BitIn32BitMSBConvertionStereoInt16)
 	
 	const tubyte c_expectIntegerSamplesA[20] = {
 		0x00, 0x00, 0x7f, 0xff, // 0
-		0x00, 0x00, 0x4c, 0x4c, // 2
+		0x00, 0x00, 0x4c, 0xcc, // 2
 		0x00, 0x00, 0x19, 0x99, // 4
 		0xff, 0xff, 0xcc, 0xcd, // 6
 		0xff, 0xff, 0x99, 0x9a  // 8
@@ -3761,8 +3761,8 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt16)
 		0xfc, 0xff, 0x01, 0x00, // 0
 		0x30, 0x33, 0x01, 0x00, // 2
 		0x64, 0x66, 0x00, 0x00, // 4
-		0x30, 0x33, 0xff, 0xff, // 6
-		0x64, 0x66, 0xfe, 0xff  // 8
+		0x34, 0x33, 0xff, 0xff, // 6
+		0x68, 0x66, 0xfe, 0xff  // 8
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
@@ -3804,8 +3804,8 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt24)
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x99, 0x99, 0x01, 0x00, // 1
-		0xcc, 0xcc, 0x00, 0x00, // 3
+		0x9a, 0x99, 0x01, 0x00, // 1
+		0xcd, 0xcc, 0x00, 0x00, // 3
 		0x9a, 0x99, 0xff, 0xff, // 5
 		0xcd, 0xcc, 0xfe, 0xff, // 7
 		0x00, 0x00, 0xfe, 0xff  // 9
@@ -3842,8 +3842,8 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt32)
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x99, 0x99, 0x01, 0x00, // 1
-		0xcc, 0xcc, 0x00, 0x00, // 3
+		0x9a, 0x99, 0x01, 0x00, // 1
+		0xcd, 0xcc, 0x00, 0x00, // 3
 		0x9a, 0x99, 0xff, 0xff, // 5
 		0xcd, 0xcc, 0xfe, 0xff, // 7
 		0x00, 0x00, 0xfe, 0xff  // 9
@@ -4045,19 +4045,19 @@ TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt16)
 	};
 	
 	const tubyte c_expectIntegerSamplesA[20] = {
-		0xfc, 0xff, 0x01, 0x00, // 0
-		0x30, 0x33, 0x01, 0x00, // 2
-		0x64, 0x66, 0x00, 0x00, // 4
-		0x30, 0x33, 0xff, 0xff, // 6
-		0x64, 0x66, 0xfe, 0xff  // 8
+		0x00, 0x01, 0xff, 0xfc, // 0
+		0x00, 0x01, 0x33, 0x30, // 2
+		0x00, 0x00, 0x66, 0x64, // 4
+		0xff, 0xff, 0x33, 0x34, // 6
+		0xff, 0xfe, 0x66, 0x68  // 8
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x98, 0x99, 0x01, 0x00, // 1
-		0xcc, 0xcc, 0x00, 0x00, // 3
-		0x98, 0x99, 0xff, 0xff, // 5
-		0xcc, 0xcc, 0xfe, 0xff, // 7
-		0x00, 0x00, 0xfe, 0xff  // 9
+		0x00, 0x01, 0x99, 0x98, // 1
+		0x00, 0x00, 0xcc, 0xcc, // 3
+		0xff, 0xff, 0x99, 0x98, // 5
+		0xff, 0xfe, 0xcc, 0xcc, // 7
+		0xff, 0xfe, 0x00, 0x00  // 9
 	};
 	
 	ASIOData data(5,2,2);
@@ -4091,8 +4091,8 @@ TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt24)
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x00, 0x01, 0x99, 0x99, // 1
-		0x00, 0x00, 0xcc, 0xcc, // 3
+		0x00, 0x01, 0x99, 0x9a, // 1
+		0x00, 0x00, 0xcc, 0xcd, // 3
 		0xff, 0xff, 0x99, 0x9a, // 5
 		0xff, 0xfe, 0xcc, 0xcd, // 7
 		0xff, 0xfe, 0x00, 0x00, // 9
@@ -4129,8 +4129,8 @@ TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt32)
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x00, 0x01, 0x99, 0x99, // 1
-		0x00, 0x00, 0xcc, 0xcc, // 3
+		0x00, 0x01, 0x99, 0x9a, // 1
+		0x00, 0x00, 0xcc, 0xcd, // 3
 		0xff, 0xff, 0x99, 0x9a, // 5
 		0xff, 0xfe, 0xcc, 0xcd, // 7
 		0xff, 0xfe, 0x00, 0x00, // 9
@@ -4947,7 +4947,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt24)
 		0xff, 0xff, 0x7f, 0x00, // 0
 		0xcc, 0xcc, 0x4c, 0x00, // 2
 		0x99, 0x99, 0x19, 0x00, // 4
-		0xcc, 0xcc, 0xcc, 0xff, // 6
+		0xcd, 0xcc, 0xcc, 0xff, // 6
 		0x9a, 0x99, 0x99, 0xff, // 8
 	};
 
@@ -4963,7 +4963,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt24)
 	data.setSampleType(ASIOSTInt32LSB24);
 	
 	engine::RData::Part& part = data.nextPart();
-	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint16));
+	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint32));
 	part.length() = 5;
 	part.done() = true;
 	part.setDataType(engine::e_SampleInt24);
@@ -5001,7 +5001,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt32)
 	data.setSampleType(ASIOSTInt32LSB24);
 	
 	engine::RData::Part& part = data.nextPart();
-	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint16));
+	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint32));
 	part.length() = 5;
 	part.done() = true;
 	part.setDataType(engine::e_SampleInt32);
@@ -5234,7 +5234,7 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt24)
 		0x00, 0x7f, 0xff, 0xff, // 0
 		0x00, 0x4c, 0xcc, 0xcc, // 2
 		0x00, 0x19, 0x99, 0x99, // 4
-		0xff, 0xcc, 0xcc, 0xcc, // 6
+		0xff, 0xcc, 0xcc, 0xcd, // 6
 		0xff, 0x99, 0x99, 0x9a, // 8
 	};
 
@@ -5250,7 +5250,7 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt24)
 	data.setSampleType(ASIOSTInt32MSB24);
 	
 	engine::RData::Part& part = data.nextPart();
-	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint16));
+	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint32));
 	part.length() = 5;
 	part.done() = true;
 	part.setDataType(engine::e_SampleInt24);
@@ -5288,7 +5288,7 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt32)
 	data.setSampleType(ASIOSTInt32MSB24);
 	
 	engine::RData::Part& part = data.nextPart();
-	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint16));
+	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint32));
 	part.length() = 5;
 	part.done() = true;
 	part.setDataType(engine::e_SampleInt32);

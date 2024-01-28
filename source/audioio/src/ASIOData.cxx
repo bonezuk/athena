@@ -174,7 +174,21 @@ void ASIOData::convert()
 			pLen = part(i).length();
 			for(j=0;j<m_noOutChannels;++j)
 			{
-				amount = copyToBuffer(&in[j],pLen,amountS.at(j),j,part(i).getDataType());
+				if(part(i).getDataType() == engine::e_SampleInt16)
+				{
+					tint16 *inInt16 = reinterpret_cast<tint16 *>(in);
+					amount = copyToBuffer(reinterpret_cast<sample_t *>(&inInt16[j]),pLen,amountS.at(j),j,part(i).getDataType());
+				}
+				else if(part(i).getDataType() == engine::e_SampleInt24 || part(i).getDataType() == engine::e_SampleInt32)
+				{
+					tint32 *inInt32 = reinterpret_cast<tint32 *>(in);
+					amount = copyToBuffer(reinterpret_cast<sample_t *>(&inInt32[j]),pLen,amountS.at(j),j,part(i).getDataType());
+				}
+				else
+				{
+					amount = copyToBuffer(&in[j],pLen,amountS.at(j),j,part(i).getDataType());
+				}
+
 				Q_ASSERT(pLen == amount);
 				amountS[j] += amount;
 			}
@@ -255,7 +269,7 @@ tint ASIOData::copyToBufferInt16MSB(const sample_t *src,tint len,tint oOffset,ti
 	{
 		const tint16 *in = reinterpret_cast<const tint16 *>(src);
 		
-		for(i=0,j=oOffset;i<len;i++,j++,src+=m_noOutChannels)
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
 		{
 			tint16 x = *in;
 			engine::write16BitsBigEndianFromSampleInt16(x,reinterpret_cast<tbyte *>(&out[j]));
@@ -266,7 +280,7 @@ tint ASIOData::copyToBufferInt16MSB(const sample_t *src,tint len,tint oOffset,ti
 	{
 		const tint32 *in = reinterpret_cast<const tint32 *>(src);
 		
-		for(i=0,j=oOffset;i<len;i++,j++,src+=m_noOutChannels)
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
 		{
 			tint32 x = *in;
 			engine::write16BitsBigEndianFromSampleInt24(x,reinterpret_cast<tbyte *>(&out[j]));
@@ -277,7 +291,7 @@ tint ASIOData::copyToBufferInt16MSB(const sample_t *src,tint len,tint oOffset,ti
 	{
 		const tint32 *in = reinterpret_cast<const tint32 *>(src);
 		
-		for(i=0,j=oOffset;i<len;i++,j++,src+=m_noOutChannels)
+		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
 		{
 			tint32 x = *in;
 			engine::write16BitsBigEndianFromSampleInt32(x,reinterpret_cast<tbyte *>(&out[j]));
@@ -643,7 +657,7 @@ tint ASIOData::copyToBufferFloat64LSB(const sample_t *src,tint len,tint oOffset,
 		
 		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
 		{
-			tfloat64 x = engine::sample64From24Bit(*in);
+			tfloat64 x = engine::sample64From32Bit(*in);
 			engine::writeNative64BitsAsLittleEndian(reinterpret_cast<const tbyte *>(&x),reinterpret_cast<tbyte *>(&out[j]),1);
 		}
 		return j - oOffset;
@@ -695,7 +709,7 @@ tint ASIOData::copyToBufferFloat64MSB(const sample_t *src,tint len,tint oOffset,
 		
 		for(i=0,j=oOffset;i<len;i++,j++,in+=m_noOutChannels)
 		{
-			tfloat64 x = engine::sample64From24Bit(*in);
+			tfloat64 x = engine::sample64From32Bit(*in);
 			engine::writeNative64BitsAsBigEndian(reinterpret_cast<const tbyte *>(&x),reinterpret_cast<tbyte *>(&out[j]),1);
 		}
 		return j - oOffset;
