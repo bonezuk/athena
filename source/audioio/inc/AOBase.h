@@ -219,6 +219,8 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual void setExclusiveMode(int devIdx,bool flag);
 		
 		virtual void forceBitsPerSample(tint noBits);
+		
+		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
 
 	protected:
 		

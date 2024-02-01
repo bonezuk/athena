@@ -243,6 +243,13 @@ const sample_t *AData::dataOutConst() const
 }
 
 //-------------------------------------------------------------------------------------------
+
+bool AData::isMixing() const
+{
+	return (m_outData != NULL) ? 1 : 0;
+}
+
+//-------------------------------------------------------------------------------------------
 // Type A = 0.Center
 // Type B = 0.F-Left, 1.F-Right
 // Type C = 0.F-Left, 1.F-Right, 2.Center

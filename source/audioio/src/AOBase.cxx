@@ -5308,10 +5308,12 @@ bool AOBase::decodeAndResample(engine::Codec *c,AudioItem *outputItem,bool& init
 	}
 	else
 	{
+		engine::RData *oData = dynamic_cast<engine::RData *>(&dData);
+		
+		setCodecSampleFormatType(c, oData);
 		res = c->next(dData);
 		if(res && initF)
 		{
-			engine::RData *oData = dynamic_cast<engine::RData *>(&dData);
 			if(oData->noParts()>0)
 			{
 				oData->part(0).refStartTime() = m_refStartAudioTime;
@@ -7617,6 +7619,13 @@ void AOBase::slotComplete()
 void AOBase::forceBitsPerSample(tint noBits)
 {
 	m_forceBitsPerSample = noBits;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBase::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item)
+{
+	codec->setDataTypeFormat(engine::e_SampleFloat);
 }
 
 //-------------------------------------------------------------------------------------------

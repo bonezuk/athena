@@ -44,6 +44,7 @@ class ENGINE_EXPORT AData
 		virtual bool isComplete() const;
 		virtual void setComplete(bool flag);
 
+		virtual bool isMixing() const;
 		virtual void mixChannels();
 		
 	protected:
