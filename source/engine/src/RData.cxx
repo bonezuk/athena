@@ -31,7 +31,7 @@ RData::Part::Part(const Part& rhs) : m_offset(0),
 	m_nextFlag(false),
 	m_startNext(),
 	m_endNext(),
-	m_refStartTime()
+	m_refStartTime(),
 	m_dataType(e_SampleFloat)
 {
 	copy(rhs);

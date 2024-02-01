@@ -3224,7 +3224,7 @@ void write16BitsLittleEndianFromSampleInt24(tint32 v, tchar *mem)
 {
 	if((v & 0x00000080) && v < 8388607)
 	{
-		v++;
+		v += 0x00000100;
 	}
 	mem[0] = static_cast<tchar>((v >> 8) & 0x000000ff);
 	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
@@ -3236,10 +3236,10 @@ void write16BitsLittleEndianFromSampleInt32(tint32 v, tchar *mem)
 {
 	if((v & 0x00008000) && v < 2147483647)
 	{
-		v++;
+		v += 0x00010000;
 	}
-	mem[0] = static_cast<tchar>((v >> 8) & 0x000000ff);
-	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >> 24) & 0x000000ff);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -3256,7 +3256,7 @@ void write16BitsBigEndianFromSampleInt24(tint32 v, tchar *mem)
 {
 	if((v & 0x00000080) && v < 8388607)
 	{
-		v++;
+		v += 0x00000100;
 	}
 	mem[1] = static_cast<tchar>((v >> 8) & 0x000000ff);
 	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
@@ -3268,10 +3268,10 @@ void write16BitsBigEndianFromSampleInt32(tint32 v, tchar *mem)
 {
 	if((v & 0x00008000) && v < 2147483647)
 	{
-		v++;
+		v += 0x00010000;
 	}
-	mem[1] = static_cast<tchar>((v >> 8) & 0x000000ff);
-	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >> 24) & 0x000000ff);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -3296,13 +3296,13 @@ void write24BitsLittleEndianFromSampleInt24(tint32 v,tchar *mem)
 
 void write24BitsLittleEndianFromSampleInt32(tint32 v,tchar *mem)
 {
-	if((v & 0x00800000) && v < 2147483647)
+	if((v & 0x00000080) && v < 2147483647)
 	{
-		v++;
+		v += 0x00000100;
 	}
-	mem[0] = static_cast<tchar>(v & 0x000000ff);
-	mem[1] = static_cast<tchar>((v >>  8) & 0x000000ff);
-	mem[2] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >>  8) & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[2] = static_cast<tchar>((v >> 24) & 0x000000ff);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -3326,13 +3326,13 @@ void write24BitsBigEndianFromSampleInt24(tint32 v,tchar *mem)
 
 void write24BitsBigEndianFromSampleInt32(tint32 v,tchar *mem)
 {
-	if((v & 0x00800000) && v < 2147483647)
+	if((v & 0x00000080) && v < 2147483647)
 	{
-		v++;
+		v += 0x00000100;
 	}
-	mem[2] = static_cast<tchar>(v & 0x000000ff);
-	mem[1] = static_cast<tchar>((v >>  8) & 0x000000ff);
-	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[2] = static_cast<tchar>((v >>  8) & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >> 24) & 0x000000ff);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -3387,7 +3387,7 @@ void write32BitsBigEndianFromSampleInt24(tint32 v,tchar *mem)
 
 //-------------------------------------------------------------------------------------------
 
-void write23BitsBigEndianFromSampleInt32(tint32 v,tchar *mem)
+void write32BitsBigEndianFromSampleInt32(tint32 v,tchar *mem)
 {
 	mem[3] = static_cast<tchar>(v & 0x000000ff);
 	mem[2] = static_cast<tchar>((v >>  8) & 0x000000ff);
@@ -3399,17 +3399,18 @@ void write23BitsBigEndianFromSampleInt32(tint32 v,tchar *mem)
 
 void writeInt32LSB16FromSampleInt16(tint16 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	mem[0] = static_cast<tchar>(v & 0x00ff);
 	mem[1] = static_cast<tchar>((v >> 8) & 0x00ff);
 	if(v < 0)
 	{
-		mem[2] = 0xff;
-		mem[3] = 0xff;
+		x[2] = 0xff;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[2] = 0x00;
-		mem[3] = 0x00;
+		x[2] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3417,21 +3418,22 @@ void writeInt32LSB16FromSampleInt16(tint16 v,tchar *mem)
 
 void writeInt32LSB16FromSampleInt24(tint32 v,tchar *mem)
 {
+	tubyte* x = reinterpret_cast<tubyte*>(mem);
 	if((v & 0x00000080) && v < 8388607)
 	{
-		v++;
+		v += 0x00000100;
 	}
 	mem[0] = static_cast<tchar>((v >> 8) & 0x000000ff);
 	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
 	if(v < 0)
 	{
-		mem[2] = 0xff;
-		mem[3] = 0xff;
+		x[2] = 0xff;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[2] = 0x00;
-		mem[3] = 0x00;
+		x[2] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3439,21 +3441,22 @@ void writeInt32LSB16FromSampleInt24(tint32 v,tchar *mem)
 
 void writeInt32LSB16FromSampleInt32(tint32 v,tchar *mem)
 {
+	tubyte* x = reinterpret_cast<tubyte*>(mem);
 	if((v & 0x00008000) && v < 2147483647)
 	{
-		v++;
+		v += 0x00010000;
 	}
-	mem[0] = static_cast<tchar>((v >> 8) & 0x000000ff);
-	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[0] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[1] = static_cast<tchar>((v >> 24) & 0x000000ff);
 	if(v < 0)
 	{
-		mem[2] = 0xff;
-		mem[3] = 0xff;
+		x[2] = 0xff;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[2] = 0x00;
-		mem[3] = 0x00;
+		x[2] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3461,17 +3464,18 @@ void writeInt32LSB16FromSampleInt32(tint32 v,tchar *mem)
 
 void writeInt32MSB16FromSampleInt16(tint16 v,tchar *mem)
 {
+	tubyte* x = reinterpret_cast<tubyte*>(mem);
 	mem[3] = static_cast<tchar>(v & 0x00ff);
 	mem[2] = static_cast<tchar>((v >> 8) & 0x00ff);
 	if(v < 0)
 	{
-		mem[1] = 0xff;
-		mem[0] = 0xff;
+		x[1] = 0xff;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[1] = 0x00;
-		mem[0] = 0x00;
+		x[1] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3479,21 +3483,22 @@ void writeInt32MSB16FromSampleInt16(tint16 v,tchar *mem)
 
 void writeInt32MSB16FromSampleInt24(tint32 v,tchar *mem)
 {
+	tubyte* x = reinterpret_cast<tubyte*>(mem);
 	if((v & 0x00000080) && v < 8388607)
 	{
-		v++;
+		v += 0x00000100;
 	}
 	mem[3] = static_cast<tchar>((v >> 8) & 0x000000ff);
 	mem[2] = static_cast<tchar>((v >> 16) & 0x000000ff);
 	if(v < 0)
 	{
-		mem[1] = 0xff;
-		mem[0] = 0xff;
+		x[1] = 0xff;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[1] = 0x00;
-		mem[0] = 0x00;
+		x[1] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3501,21 +3506,22 @@ void writeInt32MSB16FromSampleInt24(tint32 v,tchar *mem)
 
 void writeInt32MSB16FromSampleInt32(tint32 v,tchar *mem)
 {
+	tubyte* x = reinterpret_cast<tubyte*>(mem);
 	if((v & 0x00008000) && v < 2147483647)
 	{
-		v++;
+		v += 0x00010000;
 	}
-	mem[3] = static_cast<tchar>((v >> 8) & 0x000000ff);
-	mem[2] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[3] = static_cast<tchar>((v >> 16) & 0x000000ff);
+	mem[2] = static_cast<tchar>((v >> 24) & 0x000000ff);
 	if(v < 0)
 	{
-		mem[1] = 0xff;
-		mem[0] = 0xff;
+		x[1] = 0xff;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[1] = 0x00;
-		mem[0] = 0x00;
+		x[1] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3523,17 +3529,18 @@ void writeInt32MSB16FromSampleInt32(tint32 v,tchar *mem)
 
 void writeInt32LSB18FromSampleInt16(tint16 v,tchar *mem)
 {
+	tubyte* x = reinterpret_cast<tubyte*>(mem);
 	mem[0] = static_cast<tchar>((v << 2)  & 0x00fc);
 	mem[1] = static_cast<tchar>((v >> 6)  & 0x00ff);
 	mem[2] = static_cast<tchar>((v >> 14) & 0x0003);
 	if(v < 0)
 	{
-		mem[2] |= 0xfc;
-		mem[3] = 0xff;
+		x[2] |= 0xfc;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3541,21 +3548,22 @@ void writeInt32LSB18FromSampleInt16(tint16 v,tchar *mem)
 
 void writeInt32LSB18FromSampleInt24(tint32 v,tchar *mem)
 {
+	tubyte* x = reinterpret_cast<tubyte*>(mem);
 	if((v & 0x00000020) && v < 8388607)
 	{
-		v++;
+		v += 0x00000040;
 	}
 	mem[0] = static_cast<tchar>((v >>  6) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 14) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 22) & 0x00000003);
 	if(v < 0)
 	{
-		mem[2] |= 0xfc;
-		mem[3] = 0xff;
+		x[2] |= 0xfc;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3563,21 +3571,22 @@ void writeInt32LSB18FromSampleInt24(tint32 v,tchar *mem)
 
 void writeInt32LSB18FromSampleInt32(tint32 v,tchar *mem)
 {
+	tubyte* x = reinterpret_cast<tubyte*>(mem);
 	if((v & 0x00002000) && v < 2147483647)
 	{
-		v++;
+		v += 0x00004000;
 	}
 	mem[0] = static_cast<tchar>((v >> 14) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 22) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 30) & 0x00000003);
 	if(v < 0)
 	{
-		mem[2] |= 0xfc;
-		mem[3] = 0xff;
+		x[2] |= 0xfc;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3585,17 +3594,18 @@ void writeInt32LSB18FromSampleInt32(tint32 v,tchar *mem)
 
 void writeInt32MSB18FromSampleInt16(tint16 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	mem[3] = static_cast<tchar>((v << 2)  & 0x00fc);
 	mem[2] = static_cast<tchar>((v >> 6)  & 0x00ff);
 	mem[1] = static_cast<tchar>((v >> 14) & 0x0003);
 	if(v < 0)
 	{
-		mem[1] |= 0xfc;
-		mem[0] = 0xff;
+		x[1] |= 0xfc;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3603,21 +3613,22 @@ void writeInt32MSB18FromSampleInt16(tint16 v,tchar *mem)
 
 void writeInt32MSB18FromSampleInt24(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	if((v & 0x00000020) && v < 8388607)
 	{
-		v++;
+		v += 0x00000040;
 	}
 	mem[3] = static_cast<tchar>((v >>  6) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 14) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 22) & 0x00000003);
 	if(v < 0)
 	{
-		mem[1] |= 0xfc;
-		mem[0] = 0xff;
+		x[1] |= 0xfc;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3625,21 +3636,22 @@ void writeInt32MSB18FromSampleInt24(tint32 v,tchar *mem)
 
 void writeInt32MSB18FromSampleInt32(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	if((v & 0x00002000) && v < 2147483647)
 	{
-		v++;
+		v += 0x00004000;
 	}
 	mem[3] = static_cast<tchar>((v >> 14) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 22) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 30) & 0x00000003);
 	if(v < 0)
 	{
-		mem[1] |= 0xfc;
-		mem[0] = 0xff;
+		x[1] |= 0xfc;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3647,17 +3659,18 @@ void writeInt32MSB18FromSampleInt32(tint32 v,tchar *mem)
 
 void writeInt32LSB20FromSampleInt16(tint16 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	mem[0] = static_cast<tchar>((v << 4)  & 0x00f0);
 	mem[1] = static_cast<tchar>((v >> 4)  & 0x00ff);
 	mem[2] = static_cast<tchar>((v >> 12) & 0x000f);
 	if(v < 0)
 	{
-		mem[2] |= 0xf0;
-		mem[3] = 0xff;
+		x[2] |= 0xf0;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3665,21 +3678,22 @@ void writeInt32LSB20FromSampleInt16(tint16 v,tchar *mem)
 
 void writeInt32LSB20FromSampleInt24(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	if((v & 0x00000008) && v < 8388607)
 	{
-		v++;
+		v += 0x00000010;
 	}
 	mem[0] = static_cast<tchar>((v >>  4) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 12) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 20) & 0x0000000f);
 	if(v < 0)
 	{
-		mem[2] |= 0xf0;
-		mem[3] = 0xff;
+		x[2] |= 0xf0;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3687,21 +3701,22 @@ void writeInt32LSB20FromSampleInt24(tint32 v,tchar *mem)
 
 void writeInt32LSB20FromSampleInt32(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	if((v & 0x00000800) && v < 2147483647)
 	{
-		v++;
+		v += 0x00001000;
 	}
 	mem[0] = static_cast<tchar>((v >> 12) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 20) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 28) & 0x0000000f);
 	if(v < 0)
 	{
-		mem[2] |= 0xf0;
-		mem[3] = 0xff;
+		x[2] |= 0xf0;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3709,17 +3724,18 @@ void writeInt32LSB20FromSampleInt32(tint32 v,tchar *mem)
 
 void writeInt32MSB20FromSampleInt16(tint16 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	mem[3] = static_cast<tchar>((v << 4)  & 0x00f0);
 	mem[2] = static_cast<tchar>((v >> 4)  & 0x00ff);
 	mem[1] = static_cast<tchar>((v >> 12) & 0x000f);
 	if(v < 0)
 	{
-		mem[1] |= 0xf0;
-		mem[0] = 0xff;
+		x[1] |= 0xf0;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3727,21 +3743,22 @@ void writeInt32MSB20FromSampleInt16(tint16 v,tchar *mem)
 
 void writeInt32MSB20FromSampleInt24(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	if((v & 0x00000008) && v < 8388607)
 	{
-		v++;
+		v += 0x00000010;
 	}
 	mem[3] = static_cast<tchar>((v >>  4) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 12) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 20) & 0x0000000f);
 	if(v < 0)
 	{
-		mem[1] |= 0xf0;
-		mem[0] = 0xff;
+		x[1] |= 0xf0;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3749,21 +3766,22 @@ void writeInt32MSB20FromSampleInt24(tint32 v,tchar *mem)
 
 void writeInt32MSB20FromSampleInt32(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	if((v & 0x00000800) && v < 2147483647)
 	{
-		v++;
+		v += 0x00001000;
 	}
 	mem[3] = static_cast<tchar>((v >> 12) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 20) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 28) & 0x0000000f);
 	if(v < 0)
 	{
-		mem[1] |= 0xf0;
-		mem[0] = 0xff;
+		x[1] |= 0xf0;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3771,16 +3789,17 @@ void writeInt32MSB20FromSampleInt32(tint32 v,tchar *mem)
 
 void writeInt32LSB24FromSampleInt16(tint16 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	mem[0] = 0x00;
 	mem[1] = static_cast<tchar>((v) & 0x00ff);
 	mem[2] = static_cast<tchar>((v >> 8) & 0x00ff);
 	if(v < 0)
 	{
-		mem[3] = 0xff;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3788,16 +3807,17 @@ void writeInt32LSB24FromSampleInt16(tint16 v,tchar *mem)
 
 void writeInt32LSB24FromSampleInt24(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	mem[0] = static_cast<tchar>((v      ) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >>  8) & 0x000000ff);
- 	mem[2] = static_cast<tchar>((v >> 16) & 0x0000000f);
+ 	mem[2] = static_cast<tchar>((v >> 16) & 0x000000ff);
 	if(v < 0)
 	{
-		mem[3] = 0xff;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3805,20 +3825,21 @@ void writeInt32LSB24FromSampleInt24(tint32 v,tchar *mem)
 
 void writeInt32LSB24FromSampleInt32(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	if((v & 0x00000080) && v < 2147483647)
 	{
-		v++;
+		v += 0x00000100;
 	}
 	mem[0] = static_cast<tchar>((v >>  8) & 0x000000ff);
  	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
- 	mem[2] = static_cast<tchar>((v >> 24) & 0x0000000f);
+ 	mem[2] = static_cast<tchar>((v >> 24) & 0x000000ff);
 	if(v < 0)
 	{
-		mem[3] = 0xff;
+		x[3] = 0xff;
 	}
 	else
 	{
-		mem[3] = 0x00;
+		x[3] = 0x00;
 	}
 }
 
@@ -3826,16 +3847,17 @@ void writeInt32LSB24FromSampleInt32(tint32 v,tchar *mem)
 
 void writeInt32MSB24FromSampleInt16(tint16 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	mem[3] = 0x00;
 	mem[2] = static_cast<tchar>((v) & 0x00ff);
 	mem[1] = static_cast<tchar>((v >> 8) & 0x00ff);
 	if(v < 0)
 	{
-		mem[0] = 0xff;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
@@ -3843,37 +3865,39 @@ void writeInt32MSB24FromSampleInt16(tint16 v,tchar *mem)
 
 void writeInt32MSB24FromSampleInt24(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	mem[3] = static_cast<tchar>((v      ) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >>  8) & 0x000000ff);
- 	mem[1] = static_cast<tchar>((v >> 16) & 0x0000000f);
+ 	mem[1] = static_cast<tchar>((v >> 16) & 0x000000ff);
 	if(v < 0)
 	{
-		mem[0] = 0xff;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 
 //-------------------------------------------------------------------------------------------
 
-void writeInt32MSB24FromSampleInt32(tint32 v,tchar *mem);
+void writeInt32MSB24FromSampleInt32(tint32 v,tchar *mem)
 {
+	tubyte *x = reinterpret_cast<tubyte *>(mem);
 	if((v & 0x00000080) && v < 2147483647)
 	{
-		v++;
+		v += 0x00000100;
 	}
 	mem[3] = static_cast<tchar>((v >>  8) & 0x000000ff);
  	mem[2] = static_cast<tchar>((v >> 16) & 0x000000ff);
- 	mem[1] = static_cast<tchar>((v >> 24) & 0x0000000f);
+ 	mem[1] = static_cast<tchar>((v >> 24) & 0x000000ff);
 	if(v < 0)
 	{
-		mem[0] = 0xff;
+		x[0] = 0xff;
 	}
 	else
 	{
-		mem[0] = 0x00;
+		x[0] = 0x00;
 	}
 }
 

@@ -182,7 +182,7 @@ TEST(ASIOData,sampleTo16BitLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[12] = {
+	const tuint16 c_sampleInput[12] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000,
 		0x7fff, 0x8000
@@ -223,7 +223,7 @@ TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[14] = {
+	const tuint32 c_sampleInput[14] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80
@@ -233,7 +233,7 @@ TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt24)
 		0xff, 0x7f,
 		0xcd, 0x4c,
 		0x9a, 0x19,
-		0xcc, 0xcc, 
+		0xcd, 0xcc, 
 		0x9a, 0x99, 
 		0x01, 0x00,
 		0x00, 0x00
@@ -265,7 +265,7 @@ TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[14] = {
+	const tuint32 c_sampleInput[14] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00008000, 0x00007fff, 0x00000000, 0xffff8000
@@ -275,7 +275,7 @@ TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt32)
 		0xff, 0x7f,
 		0xcd, 0x4c,
 		0x9a, 0x19,
-		0xcc, 0xcc, 
+		0xcd, 0xcc, 
 		0x9a, 0x99, 
 		0x01, 0x00,
 		0x00, 0x00
@@ -309,7 +309,7 @@ TEST(ASIOData,sampleTo16BitLSBConvertionStereoInt32)
 
 TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[12] = {
+	const tuint16 c_sampleInput[12] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000,
 		0x7fff, 0x8000
@@ -320,7 +320,7 @@ TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt16)
 		0x4c, 0xcc, // 2
 		0x19, 0x99, // 4
 		0xcc, 0xcd, // 6
-		0x99, 0x9a  // 8
+		0x99, 0x9a, // 8
 		0x7f, 0xff  // 10
 	};
 	
@@ -350,7 +350,7 @@ TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[14] = {
+	const tuint32 c_sampleInput[14] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80
@@ -360,7 +360,7 @@ TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt24)
 		0x7f, 0xff,
 		0x4c, 0xcd,
 		0x19, 0x9a,
-		0xcc, 0xcc,
+		0xcc, 0xcd,
 		0x99, 0x9a,
 		0x00, 0x01,
 		0x00, 0x00
@@ -392,7 +392,7 @@ TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[14] = {
+	const tuint32 c_sampleInput[14] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00008000, 0x00007fff, 0x00000000, 0xffff8000
@@ -402,7 +402,7 @@ TEST(ASIOData,sampleTo16BitMSBConvertionStereoInt32)
 		0x7f, 0xff,
 		0x4c, 0xcd,
 		0x19, 0x9a,
-		0xcc, 0xcc,
+		0xcc, 0xcd,
 		0x99, 0x9a,
 		0x00, 0x01,
 		0x00, 0x00
@@ -778,7 +778,7 @@ TEST(ASIOData,sampleTo24BitLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo24BitLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -816,7 +816,7 @@ TEST(ASIOData,sampleTo24BitLSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo24BitLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -854,7 +854,7 @@ TEST(ASIOData,sampleTo24BitLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo24BitLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -1065,7 +1065,7 @@ TEST(ASIOData,sampleTo24BitMSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo24BitMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -1103,7 +1103,7 @@ TEST(ASIOData,sampleTo24BitMSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo24BitMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -1141,7 +1141,7 @@ TEST(ASIOData,sampleTo24BitMSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo24BitMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -1352,7 +1352,7 @@ TEST(ASIOData,sampleTo32BitLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo32BitLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -1390,7 +1390,7 @@ TEST(ASIOData,sampleTo32BitLSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo32BitLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -1428,15 +1428,15 @@ TEST(ASIOData,sampleTo32BitLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo32BitLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
 
 	const tubyte c_expectIntegerSamplesA[20] = {
 		0xff, 0xff, 0xff, 0x7f,
-		0xcd, 0xcc, 0xcc, 0x4c,
-		0x9a, 0x99, 0x99, 0x19,
+		0xcc, 0xcc, 0xcc, 0x4c,
+		0x99, 0x99, 0x99, 0x19,
 		0xcd, 0xcc, 0xcc, 0xcc,
 		0x9a, 0x99, 0x99, 0x99
 	};
@@ -1639,7 +1639,7 @@ TEST(ASIOData,sampleTo32BitMSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo32BitMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -1677,7 +1677,7 @@ TEST(ASIOData,sampleTo32BitMSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo32BitMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -1715,15 +1715,15 @@ TEST(ASIOData,sampleTo32BitMSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo32BitMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
 
 	const tubyte c_expectIntegerSamplesA[20] = {
 		0x7f, 0xff, 0xff, 0xff,
-		0x4c, 0xcc, 0xcc, 0xcd,
-		0x19, 0x99, 0x99, 0x9a,
+		0x4c, 0xcc, 0xcc, 0xcc,
+		0x19, 0x99, 0x99, 0x99,
 		0xcc, 0xcc, 0xcc, 0xcd,
 		0x99, 0x99, 0x99, 0x9a
 	};
@@ -1922,7 +1922,7 @@ TEST(ASIOData,sampleToFloatLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleToFloatLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -1961,14 +1961,14 @@ TEST(ASIOData,sampleToFloatLSBConvertionStereoInt16)
 	engine::writeLittleEndian32BitsAsNative(reinterpret_cast<const tbyte *>(data.asioData(1,0)),reinterpret_cast<tbyte *>(outDataB),5);
 	for(int i=0;i<5;i++)
 	{
-		EXPECT_FLOAT_EQ(c_expectFloatSampleA[i],outDataA[i]);
-		EXPECT_FLOAT_EQ(c_expectFloatSampleB[i],outDataB[i]);
+		EXPECT_NEAR(c_expectFloatSampleA[i],outDataA[i], 0.0001);
+		EXPECT_NEAR(c_expectFloatSampleB[i],outDataB[i], 0.0001);
 	}
 }
 
 TEST(ASIOData,sampleToFloatLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -2013,7 +2013,7 @@ TEST(ASIOData,sampleToFloatLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleToFloatLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -2227,7 +2227,7 @@ TEST(ASIOData,sampleToFloatMSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleToFloatMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -2265,14 +2265,14 @@ TEST(ASIOData,sampleToFloatMSBConvertionStereoInt16)
 	engine::writeBigEndian32BitsAsNative(reinterpret_cast<const tbyte *>(data.asioData(1,0)),reinterpret_cast<tbyte *>(outDataB),5);
 	for(int i=0;i<5;i++)
 	{
-		EXPECT_FLOAT_EQ(c_expectFloatSampleA[i],outDataA[i]);
-		EXPECT_FLOAT_EQ(c_expectFloatSampleB[i],outDataB[i]);
+		EXPECT_NEAR(c_expectFloatSampleA[i],outDataA[i], 0.0001);
+		EXPECT_NEAR(c_expectFloatSampleB[i],outDataB[i], 0.0001);
 	}
 }
 
 TEST(ASIOData,sampleToFloatMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -2317,7 +2317,7 @@ TEST(ASIOData,sampleToFloatMSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleToFloatMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -2537,7 +2537,7 @@ TEST(ASIOData,sampleToDoubleLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleToDoubleLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -2576,14 +2576,14 @@ TEST(ASIOData,sampleToDoubleLSBConvertionStereoInt16)
 	engine::writeLittleEndian64BitsAsNative(reinterpret_cast<const tbyte *>(data.asioData(1,0)),reinterpret_cast<tbyte *>(outDataB),5);
 	for(int i=0;i<5;i++)
 	{
-		EXPECT_FLOAT_EQ(c_expectFloatSampleA[i],outDataA[i]);
-		EXPECT_FLOAT_EQ(c_expectFloatSampleB[i],outDataB[i]);
+		EXPECT_NEAR(c_expectFloatSampleA[i],outDataA[i], 0.0001);
+		EXPECT_NEAR(c_expectFloatSampleB[i],outDataB[i], 0.0001);
 	}
 }
 
 TEST(ASIOData,sampleToDoubleLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -2628,7 +2628,7 @@ TEST(ASIOData,sampleToDoubleLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleToDoubleLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -2848,7 +2848,7 @@ TEST(ASIOData,sampleToDoubleMSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleToDoubleMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -2886,14 +2886,14 @@ TEST(ASIOData,sampleToDoubleMSBConvertionStereoInt16)
 	engine::writeBigEndian64BitsAsNative(reinterpret_cast<const tbyte *>(data.asioData(1,0)),reinterpret_cast<tbyte *>(outDataB),5);
 	for(int i=0;i<5;i++)
 	{
-		EXPECT_FLOAT_EQ(c_expectFloatSampleA[i],outDataA[i]);
-		EXPECT_FLOAT_EQ(c_expectFloatSampleB[i],outDataB[i]);
+		EXPECT_NEAR(c_expectFloatSampleA[i],outDataA[i], 0.0001);
+		EXPECT_NEAR(c_expectFloatSampleB[i],outDataB[i], 0.0001);
 	}
 }
 
 TEST(ASIOData,sampleToDoubleMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -2938,7 +2938,7 @@ TEST(ASIOData,sampleToDoubleMSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleToDoubleMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -3156,7 +3156,7 @@ TEST(ASIOData,sampleTo16BitIn32BitLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo16BitIn32BitLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -3194,7 +3194,7 @@ TEST(ASIOData,sampleTo16BitIn32BitLSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo16BitIn32BitLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[14] = {
+	const tuint32 c_sampleInput[14] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80
@@ -3237,7 +3237,7 @@ TEST(ASIOData,sampleTo16BitIn32BitLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo16BitIn32BitLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[14] = {
+	const tuint32 c_sampleInput[14] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00008000, 0x00007fff, 0x00000000, 0xffff8000
@@ -3454,14 +3454,14 @@ TEST(ASIOData,sampleTo16BitIn32BitMSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo16BitIn32BitMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
 	
 	const tubyte c_expectIntegerSamplesA[20] = {
 		0x00, 0x00, 0x7f, 0xff, // 0
-		0x00, 0x00, 0x4c, 0x4c, // 2
+		0x00, 0x00, 0x4c, 0xcc, // 2
 		0x00, 0x00, 0x19, 0x99, // 4
 		0xff, 0xff, 0xcc, 0xcd, // 6
 		0xff, 0xff, 0x99, 0x9a  // 8
@@ -3492,7 +3492,7 @@ TEST(ASIOData,sampleTo16BitIn32BitMSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo16BitIn32BitMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[14] = {
+	const tuint32 c_sampleInput[14] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000,
 		0x00000080, 0x0000007f, 0x00000000, 0xffffff80
@@ -3535,7 +3535,7 @@ TEST(ASIOData,sampleTo16BitIn32BitMSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo16BitIn32BitMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[14] = {
+	const tuint32 c_sampleInput[14] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 		0x00008000, 0x00007fff, 0x00000000, 0xffff8000
@@ -3752,7 +3752,7 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -3761,8 +3761,8 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt16)
 		0xfc, 0xff, 0x01, 0x00, // 0
 		0x30, 0x33, 0x01, 0x00, // 2
 		0x64, 0x66, 0x00, 0x00, // 4
-		0x30, 0x33, 0xff, 0xff, // 6
-		0x64, 0x66, 0xfe, 0xff  // 8
+		0x34, 0x33, 0xff, 0xff, // 6
+		0x68, 0x66, 0xfe, 0xff  // 8
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
@@ -3790,7 +3790,7 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -3804,8 +3804,8 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt24)
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x99, 0x99, 0x01, 0x00, // 1
-		0xcc, 0xcc, 0x00, 0x00, // 3
+		0x9a, 0x99, 0x01, 0x00, // 1
+		0xcd, 0xcc, 0x00, 0x00, // 3
 		0x9a, 0x99, 0xff, 0xff, // 5
 		0xcd, 0xcc, 0xfe, 0xff, // 7
 		0x00, 0x00, 0xfe, 0xff  // 9
@@ -3828,7 +3828,7 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -3842,8 +3842,8 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt32)
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x99, 0x99, 0x01, 0x00, // 1
-		0xcc, 0xcc, 0x00, 0x00, // 3
+		0x9a, 0x99, 0x01, 0x00, // 1
+		0xcd, 0xcc, 0x00, 0x00, // 3
 		0x9a, 0x99, 0xff, 0xff, // 5
 		0xcd, 0xcc, 0xfe, 0xff, // 7
 		0x00, 0x00, 0xfe, 0xff  // 9
@@ -4039,25 +4039,25 @@ TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
 	
 	const tubyte c_expectIntegerSamplesA[20] = {
-		0xfc, 0xff, 0x01, 0x00, // 0
-		0x30, 0x33, 0x01, 0x00, // 2
-		0x64, 0x66, 0x00, 0x00, // 4
-		0x30, 0x33, 0xff, 0xff, // 6
-		0x64, 0x66, 0xfe, 0xff  // 8
+		0x00, 0x01, 0xff, 0xfc, // 0
+		0x00, 0x01, 0x33, 0x30, // 2
+		0x00, 0x00, 0x66, 0x64, // 4
+		0xff, 0xff, 0x33, 0x34, // 6
+		0xff, 0xfe, 0x66, 0x68  // 8
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x98, 0x99, 0x01, 0x00, // 1
-		0xcc, 0xcc, 0x00, 0x00, // 3
-		0x98, 0x99, 0xff, 0xff, // 5
-		0xcc, 0xcc, 0xfe, 0xff, // 7
-		0x00, 0x00, 0xfe, 0xff  // 9
+		0x00, 0x01, 0x99, 0x98, // 1
+		0x00, 0x00, 0xcc, 0xcc, // 3
+		0xff, 0xff, 0x99, 0x98, // 5
+		0xff, 0xfe, 0xcc, 0xcc, // 7
+		0xff, 0xfe, 0x00, 0x00  // 9
 	};
 	
 	ASIOData data(5,2,2);
@@ -4077,7 +4077,7 @@ TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -4091,8 +4091,8 @@ TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt24)
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x00, 0x01, 0x99, 0x99, // 1
-		0x00, 0x00, 0xcc, 0xcc, // 3
+		0x00, 0x01, 0x99, 0x9a, // 1
+		0x00, 0x00, 0xcc, 0xcd, // 3
 		0xff, 0xff, 0x99, 0x9a, // 5
 		0xff, 0xfe, 0xcc, 0xcd, // 7
 		0xff, 0xfe, 0x00, 0x00, // 9
@@ -4113,9 +4113,9 @@ TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt24)
 	ASSERT_EQ(0,memcmp(data.asioData(1,0),c_expectIntegerSamplesB,20));
 }
 
-TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt32)
+TEST(ASIOData,sampleTo18BitIn32BitMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -4129,8 +4129,8 @@ TEST(ASIOData,sampleTo18BitIn32BitLSBConvertionStereoInt32)
 	};
 
 	const tubyte c_expectIntegerSamplesB[20] = {
-		0x00, 0x01, 0x99, 0x99, // 1
-		0x00, 0x00, 0xcc, 0xcc, // 3
+		0x00, 0x01, 0x99, 0x9a, // 1
+		0x00, 0x00, 0xcc, 0xcd, // 3
 		0xff, 0xff, 0x99, 0x9a, // 5
 		0xff, 0xfe, 0xcc, 0xcd, // 7
 		0xff, 0xfe, 0x00, 0x00, // 9
@@ -4326,7 +4326,7 @@ TEST(ASIOData,sampleTo20BitIn32BitLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo20BitIn32BitLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -4364,7 +4364,7 @@ TEST(ASIOData,sampleTo20BitIn32BitLSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo20BitIn32BitLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -4402,7 +4402,7 @@ TEST(ASIOData,sampleTo20BitIn32BitLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo20BitIn32BitLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -4613,7 +4613,7 @@ TEST(ASIOData,sampleTo20BitIn32BitMSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo20BitIn32BitMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -4651,7 +4651,7 @@ TEST(ASIOData,sampleTo20BitIn32BitMSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo20BitIn32BitMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -4689,7 +4689,7 @@ TEST(ASIOData,sampleTo20BitIn32BitMSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo20BitIn32BitMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000
 	};
@@ -4900,7 +4900,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -4938,7 +4938,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -4947,7 +4947,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt24)
 		0xff, 0xff, 0x7f, 0x00, // 0
 		0xcc, 0xcc, 0x4c, 0x00, // 2
 		0x99, 0x99, 0x19, 0x00, // 4
-		0xcc, 0xcc, 0xcc, 0xff, // 6
+		0xcd, 0xcc, 0xcc, 0xff, // 6
 		0x9a, 0x99, 0x99, 0xff, // 8
 	};
 
@@ -4963,7 +4963,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt24)
 	data.setSampleType(ASIOSTInt32LSB24);
 	
 	engine::RData::Part& part = data.nextPart();
-	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint16));
+	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint32));
 	part.length() = 5;
 	part.done() = true;
 	part.setDataType(engine::e_SampleInt24);
@@ -4976,7 +4976,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt24)
 
 TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 	};
@@ -5001,7 +5001,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt32)
 	data.setSampleType(ASIOSTInt32LSB24);
 	
 	engine::RData::Part& part = data.nextPart();
-	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint16));
+	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint32));
 	part.length() = 5;
 	part.done() = true;
 	part.setDataType(engine::e_SampleInt32);
@@ -5187,7 +5187,7 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionQuadrophonic)
 
 TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt16)
 {
-	const tint16 c_sampleInput[10] = {
+	const tuint16 c_sampleInput[10] = {
 		0x7fff, 0x6666, 0x4ccc, 0x3333, 0x1999,
 		0xe666, 0xcccd, 0xb333, 0x999a, 0x8000
 	};
@@ -5225,7 +5225,7 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt16)
 
 TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt24)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x007fffff, 0x00666666, 0x004ccccc, 0x00333333, 0x00199999,
 		0xffe66666, 0xffcccccd, 0xffb33333, 0xff99999a, 0xff800000
 	};
@@ -5234,7 +5234,7 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt24)
 		0x00, 0x7f, 0xff, 0xff, // 0
 		0x00, 0x4c, 0xcc, 0xcc, // 2
 		0x00, 0x19, 0x99, 0x99, // 4
-		0xff, 0xcc, 0xcc, 0xcc, // 6
+		0xff, 0xcc, 0xcc, 0xcd, // 6
 		0xff, 0x99, 0x99, 0x9a, // 8
 	};
 
@@ -5250,7 +5250,7 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt24)
 	data.setSampleType(ASIOSTInt32MSB24);
 	
 	engine::RData::Part& part = data.nextPart();
-	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint16));
+	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint32));
 	part.length() = 5;
 	part.done() = true;
 	part.setDataType(engine::e_SampleInt24);
@@ -5261,9 +5261,9 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt24)
 	ASSERT_EQ(0,memcmp(data.asioData(1,0),c_expectIntegerSamplesB,20));
 }
 
-TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt32)
+TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt32)
 {
-	const tint32 c_sampleInput[10] = {
+	const tuint32 c_sampleInput[10] = {
 		0x7fffffff, 0x66666666, 0x4ccccccc, 0x33333333, 0x19999999,
 		0xe6666666, 0xcccccccd, 0xb3333333, 0x9999999a, 0x80000000,
 	};
@@ -5288,7 +5288,7 @@ TEST(ASIOData,sampleTo24BitIn32BitLSBConvertionStereoInt32)
 	data.setSampleType(ASIOSTInt32MSB24);
 	
 	engine::RData::Part& part = data.nextPart();
-	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint16));
+	memcpy(data.partDataOut(0),c_sampleInput,10 * sizeof(tint32));
 	part.length() = 5;
 	part.done() = true;
 	part.setDataType(engine::e_SampleInt32);

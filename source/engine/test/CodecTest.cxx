@@ -374,10 +374,10 @@ void CodecQtUnitTest::wavNativeIntegerSupport()
 	
 	engine::Codec *codec = engine::Codec::get(fileName);
 	QVERIFY(codec!=0);
-	QVERIFY(codec->init());s
+	QVERIFY(codec->init());
 	QCOMPARE(engine::e_SampleFloat | engine::e_SampleInt16, codec->dataTypesSupported());
-	QCOMPARE(true, codec->setDataTypesSupported(engine::e_SampleInt16));
-	QCOMPARE(false, codec->setDataTypesSupported(engine::e_SampleInt24));
+	QCOMPARE(true, codec->setDataTypeFormat(engine::e_SampleInt16));
+	QCOMPARE(false, codec->setDataTypeFormat(engine::e_SampleInt24));
 	
 	delete codec;
 }
