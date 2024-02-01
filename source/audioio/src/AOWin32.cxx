@@ -1385,15 +1385,15 @@ void AOWin32::setCodecSampleFormatTypeASIO(engine::Codec *codec, engine::RData *
 {
 	if(!item->isMixing())
 	{
-		if(codec->dataTypesSupported() & e_SampleInt32)
+		if(codec->dataTypesSupported() & engine::e_SampleInt32)
 		{
 			codec->setDataTypeFormat(engine::e_SampleInt32);
 		}
-		else if(codec->dataTypesSupported() & e_SampleInt24)
+		else if(codec->dataTypesSupported() & engine::e_SampleInt24)
 		{
 			codec->setDataTypeFormat(engine::e_SampleInt24);
 		}
-		else if(codec->dataTypesSupported() & e_SampleInt16)
+		else if(codec->dataTypesSupported() & engine::e_SampleInt16)
 		{
 			codec->setDataTypeFormat(engine::e_SampleInt16);
 		}
@@ -1410,15 +1410,15 @@ void AOWin32::setCodecSampleFormatTypeASIO(engine::Codec *codec, engine::RData *
 
 //-------------------------------------------------------------------------------------------
 
-void AOWin32::setCodecSampleFormatType(engine::Codec *codec)
+void AOWin32::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item)
 {
 	if(m_deviceType==AOQueryDevice::Device::e_deviceASIO)
 	{
-		setCodecSampleFormatTypeASIO(codec);
+		setCodecSampleFormatTypeASIO(codec, item);
 	}
 	else
 	{
-		AOBase::setCodecSampleFormatType(codec);
+		AOBase::setCodecSampleFormatType(codec, item);
 	}
 }
 
