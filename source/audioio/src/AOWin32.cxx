@@ -1380,6 +1380,49 @@ void AOWin32::writeWASAudio()
 }
 
 //-------------------------------------------------------------------------------------------
+
+void AOWin32::setCodecSampleFormatTypeASIO(engine::Codec *codec, engine::RData *item)
+{
+	if(!item->isMixing())
+	{
+		if(codec->dataTypesSupported() & e_SampleInt32)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt32);
+		}
+		else if(codec->dataTypesSupported() & e_SampleInt24)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt24);
+		}
+		else if(codec->dataTypesSupported() & e_SampleInt16)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt16);
+		}
+		else
+		{
+			codec->setDataTypeFormat(engine::e_SampleFloat);
+		}
+	}
+	else
+	{
+		codec->setDataTypeFormat(engine::e_SampleFloat);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOWin32::setCodecSampleFormatType(engine::Codec *codec)
+{
+	if(m_deviceType==AOQueryDevice::Device::e_deviceASIO)
+	{
+		setCodecSampleFormatTypeASIO(codec);
+	}
+	else
+	{
+		AOBase::setCodecSampleFormatType(codec);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------

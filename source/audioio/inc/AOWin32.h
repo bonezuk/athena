@@ -173,6 +173,8 @@ class AUDIOIO_EXPORT AOWin32 : public AOBase
 		virtual void writeWASAudioThreadImpl();
 		virtual void writeWASAudio();
 
+		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
+
 	protected slots:
 	
 		virtual void onStop();

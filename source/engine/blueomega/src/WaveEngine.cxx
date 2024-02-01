@@ -254,6 +254,8 @@ void WaveEngine::setPartDataType(RData::Part& part)
 	part.setDataType(type);
 }
 
+//-------------------------------------------------------------------------------------------
+
 bool WaveEngine::next(AData& data)
 {
 	tint amount,len,noSamples;
