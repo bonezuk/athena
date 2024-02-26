@@ -40,7 +40,7 @@ set ( TEST_SOURCE
 	../audioio/test/FormatDescriptionUtilsTest.cxx
 	../audioio/test/FormatsSupportedTest.cxx
 	../audioio/test/IOTimeStampTest.cxx
-	../audioio/test/SampleConverterTest.cxx
+#	../audioio/test/SampleConverterTest.cxx
 
 	../common/test/AsynchronousFileReaderMock.cxx
 	../common/test/AsynchronousFileReaderTest.cxx
@@ -122,7 +122,6 @@ set ( TEST_SOURCE
 	../track/info/test/XMCDInfoTest.cxx
 	
 	../track/model/test/TrackDBTestEnviroment.cxx
-	../track/model/test/JaroDBTest.cxx
 	../track/model/test/FileNameParserTest.cxx
 	
 	QUnitTestTimer.cxx

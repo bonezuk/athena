@@ -133,7 +133,7 @@ void Log::print(const char *fmt,...)
 {
 	va_list argp;
 	va_start(argp, fmt);
-	vsprintf(m_printBuffer,fmt,argp);
+	vsnprintf(m_printBuffer, 2048, fmt, argp);
 	write(m_printBuffer);
 	va_end(argp);
 }

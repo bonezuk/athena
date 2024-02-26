@@ -731,7 +731,7 @@ void AOCoreAudioMacOS::audioDeviceChange()
 			{
 				for(i=0;i<nDeviceInfo->noDevices() && !found;i++)
 				{
-					if(defaultDeviceID==nDeviceInfo->device(i).id())
+                                        if(defaultDeviceID==nDeviceInfo->device(i).idConst())
 					{
 						nDefaultIndex = i;
 						found = true;
@@ -766,8 +766,8 @@ void AOCoreAudioMacOS::audioDeviceChange()
 			{
 				QString nDeviceID,cDeviceID;
 					
-				cDeviceID = m_deviceInfo->device(m_deviceIdx).id();
-				nDeviceID = nDeviceInfo->device(nDefaultIndex).id();
+                                cDeviceID = m_deviceInfo->device(m_deviceIdx).idConst();
+                                nDeviceID = nDeviceInfo->device(nDefaultIndex).idConst();
 				if(cDeviceID!=nDeviceID)
 				{
 					pauseFlag = true;
