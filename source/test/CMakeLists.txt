@@ -40,7 +40,7 @@ set ( TEST_SOURCE
 	../audioio/test/FormatDescriptionUtilsTest.cxx
 	../audioio/test/FormatsSupportedTest.cxx
 	../audioio/test/IOTimeStampTest.cxx
-#	../audioio/test/SampleConverterTest.cxx
+	../audioio/test/SampleConverterTest.cxx
 
 	../common/test/AsynchronousFileReaderMock.cxx
 	../common/test/AsynchronousFileReaderTest.cxx

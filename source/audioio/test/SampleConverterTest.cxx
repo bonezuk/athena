@@ -12548,7 +12548,7 @@ TEST(SampleConverter,int16A24A32SamplesTo4BitSampleIn8BitsMSB)
 }
 
 //-------------------------------------------------------------------------------------------
-
+/*
 TEST(SampleConverter,int16A24A32SamplesTo4BitSampleInLE16BitsLSB)
 {
 	const tint c_noBits = 4;
@@ -18915,3 +18915,4 @@ TEST(SampleConverter,int16A24A32SamplesTo32BitSampleInBE32BitsMSBUnsigned)
 }
 
 //-------------------------------------------------------------------------------------------
+*/

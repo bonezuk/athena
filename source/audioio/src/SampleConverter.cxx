@@ -262,9 +262,67 @@ tuint32 SampleConverter::unsignedMask() const
 	return c_mask[m_noBits];
 }
 
+// 0000 = 0 1000 = 8
+// 0001 = 1 1001 = 9
+// 0010 = 2 1010 = A
+// 0011 = 3 1011 = B
+// 0100 = 4 1100 = C
+// 0101 = 5 1101 = D
+// 0110 = 6 1110 = E
+// 0111 = 7 1111 = F
+//
+// 0123 4567
+// 1111 1110 - 1 = 0xfe
+// 1111 1100 - 2 = 0xfc
+// 1111 1000 - 3 = 0xf8
+// 1111 0000 - 4 = 0xf0
+
+tuint16 SampleConverter::signedMaskInt16() const
+{
+	static const tuint16 c_mask[] = {
+		0xffff, // 0 
+		0xfffe, // 1
+		0xfffc, // 2
+		0xfff8, // 3
+		0xfff0, // 4
+		0xffe0, // 5
+		0xffc0, // 6
+		0xff80, // 7
+		0xff00, // 8
+		0xfe00, // 9
+		0xfc00, // 10
+		0xf800, // 11
+		0xf000, // 12
+		0xe000, // 13
+		0xc000, // 14
+		0x8000  // 15
+	};
+	return c_mask[m_noBits & 0xf];
+};
+
 //-------------------------------------------------------------------------------------------
 
-void SampleConverter::convertLittleEndian8BitLSB(const sample_t *in,tbyte *out,tint noSamples) const
+void SampleConverter::convertLittleEndian8BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const
+{
+    if(type & engine::e_SampleInt16)
+	{
+		convertLittleEndian8BitLSBInt16(in,out,noSamples);
+	}
+    else if(type & engine::e_SampleInt24)
+	{
+		convertLittleEndian8BitLSBInt24(in,out,noSamples);
+	}
+    else if(type & engine::e_SampleInt32)
+	{
+		convertLittleEndian8BitLSBInt32(in,out,noSamples);
+	}
+	else
+	{
+        convertLittleEndian8BitLSBFloat(in,out,noSamples);
+	}
+}
+
+void SampleConverter::convertLittleEndian8BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const
 {
 	tint inc = sizeof(tbyte) * m_noOutChannels;
 	tuint32 s = static_cast<tuint32>(1 << (m_noBits - 1));
@@ -277,6 +335,37 @@ void SampleConverter::convertLittleEndian8BitLSB(const sample_t *in,tbyte *out,t
 		*out = static_cast<tbyte>(x & 0x000000ff);
 	}
 }
+
+void SampleConverter::convertLittleEndian8BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const
+{
+	tint i, inc = sizeof(tbyte) * m_noOutChannels;
+	const tint16 *inInt16 = reinterpret_cast<const tint16 *>(in);	
+	tint16 x, xOrg, shiftF, maskM, max;
+	
+	shiftF = 16 - m_noBits;
+	maskM = 1 << (shiftF - 1);
+	max = 0x7fff >> shiftF;
+	for(tint i=0;i<noSamples;i++,in+=m_noInChannels,out+=inc)
+	{
+		x = xOrg = *inInt16;
+		x >>= shiftF;
+		if((xOrg & maskM) && x < max)
+		{
+			x++;
+		}
+		if(xOrg & 0x8000)
+		{
+			x |= signedMaskInt16();
+		}
+		*out = static_cast<tbyte>(x & 0x00ff);
+	}
+}
+
+void SampleConverter::convertLittleEndian8BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const
+{}
+
+void SampleConverter::convertLittleEndian8BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const
+{}
 
 //-------------------------------------------------------------------------------------------
 
@@ -1063,14 +1152,14 @@ void SampleConverter::convertBigEndianDoublePrecision(const sample_t *in,tbyte *
 
 //-------------------------------------------------------------------------------------------
 
-void SampleConverter::convertInteger(const sample_t *in,tbyte *out,tint noSamples) const
+void SampleConverter::convertInteger(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const
 {
 	switch(m_bytesPerSample)
 	{
 		case 1:
 			if(!m_alignHigh)
 			{
-				convertLittleEndian8BitLSB(in,out,noSamples);
+				convertLittleEndian8BitLSB(in,out,noSamples,type);
 			}
 			else
 			{
@@ -1253,7 +1342,7 @@ void SampleConverter::convertUnsignedInteger(const sample_t *in,tbyte *out,tint 
 
 //-------------------------------------------------------------------------------------------
 
-void SampleConverter::convert(const sample_t *in,tbyte *out,tint noSamples) const
+void SampleConverter::convert(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const
 {
 	switch(m_type)
 	{
@@ -1285,16 +1374,16 @@ void SampleConverter::convert(const sample_t *in,tbyte *out,tint noSamples) cons
 			
 		case FormatDescription::e_DataSignedInteger:
 		default:
-			convertInteger(in,out,noSamples);
+			convertInteger(in,out,noSamples,type);
 			break;
 	}
 }
 
 //-------------------------------------------------------------------------------------------
 
-void SampleConverter::convert(const sample_t *in,tubyte *out,tint noSamples) const
+void SampleConverter::convert(const sample_t *in,tubyte *out,tint noSamples,engine::CodecDataType type) const
 {
-	convert(in,reinterpret_cast<tbyte *>(out),noSamples);
+	convert(in,reinterpret_cast<tbyte *>(out),noSamples,type);
 }
 
 //-------------------------------------------------------------------------------------------

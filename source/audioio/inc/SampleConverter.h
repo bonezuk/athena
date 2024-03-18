@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "engine/inc/FormatTypeFromFloat.h"
+#include "engine/inc/RData.h"
 #include "audioio/inc/FormatDescription.h"
 
 //-------------------------------------------------------------------------------------------
@@ -47,8 +48,8 @@ class AUDIOIO_EXPORT SampleConverter
 		
 		void setVolume(sample_t v);
 		
-		void convert(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convert(const sample_t *in,tubyte *out,tint noSamples) const;
+		void convert(const sample_t *in,tbyte *out,tint noSamples, engine::CodecDataType type = engine::e_SampleFloat) const;
+		void convert(const sample_t *in,tubyte *out,tint noSamples, engine::CodecDataType type = engine::e_SampleFloat) const;
 		
 	protected:
 		
@@ -68,11 +69,17 @@ class AUDIOIO_EXPORT SampleConverter
 		tint sampleToInteger(sample_t v,const sample_t& dA,const sample_t& dB) const;
 
 		tuint32 unsignedMask() const;
+		tuint16 signedMaskInt16() const;
 
-		void convertInteger(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertInteger(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
 		void convertUnsignedInteger(const sample_t *in,tbyte *out,tint noSamples) const;
 
-		void convertLittleEndian8BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
+        void convertLittleEndian8BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndian8BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian8BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian8BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian8BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+				
 		void convertLittleEndianUnsigned8BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndian8BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndianUnsigned8BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
