@@ -262,6 +262,8 @@ tuint32 SampleConverter::unsignedMask() const
 	return c_mask[m_noBits];
 }
 
+//-------------------------------------------------------------------------------------------
+
 // 0000 = 0 1000 = 8
 // 0001 = 1 1001 = 9
 // 0010 = 2 1010 = A
@@ -302,6 +304,80 @@ tuint16 SampleConverter::signedMaskInt16() const
 
 //-------------------------------------------------------------------------------------------
 
+tuint32 SampleConverter::signedMaskInt24() const
+{
+	static const tuint32 c_mask[] = {
+		0xffffffff, // 0 
+		0xfffffffe, // 1
+		0xfffffffc, // 2
+		0xfffffff8, // 3
+		0xfffffff0, // 4
+		0xffffffe0, // 5
+		0xffffffc0, // 6
+		0xffffff80, // 7
+		0xffffff00, // 8
+		0xfffffe00, // 9
+		0xfffffc00, // 10
+		0xfffff800, // 11
+		0xfffff000, // 12
+		0xffffe000, // 13
+		0xffffc000, // 14
+		0xffff8000, // 15
+		0xffff0000, // 16
+		0xfffe0000, // 17
+		0xfffc0000, // 18
+		0xfff80000, // 19
+		0xfff00000, // 20
+		0xffe00000, // 21
+		0xffc00000, // 22
+		0xff800000  // 23
+	};
+	return c_mask[m_noBits % 24];
+};
+
+//-------------------------------------------------------------------------------------------
+
+tuint32 SampleConverter::signedMaskInt32() const
+{
+	static const tuint32 c_mask[] = {
+		0xffffffff, // 0 
+		0xfffffffe, // 1
+		0xfffffffc, // 2
+		0xfffffff8, // 3
+		0xfffffff0, // 4
+		0xffffffe0, // 5
+		0xffffffc0, // 6
+		0xffffff80, // 7
+		0xffffff00, // 8
+		0xfffffe00, // 9
+		0xfffffc00, // 10
+		0xfffff800, // 11
+		0xfffff000, // 12
+		0xffffe000, // 13
+		0xffffc000, // 14
+		0xffff8000, // 15
+		0xffff0000, // 16
+		0xfffe0000, // 17
+		0xfffc0000, // 18
+		0xfff80000, // 19
+		0xfff00000, // 20
+		0xffe00000, // 21
+		0xffc00000, // 22
+		0xff800000, // 23
+		0xff000000, // 24
+		0xfe000000, // 25
+		0xfc000000, // 26
+		0xf8000000, // 27
+		0xf0000000, // 28
+		0xe0000000, // 29
+		0xc0000000, // 30
+		0x80000000  // 31
+	};
+	return c_mask[m_noBits & 0x1f];
+};
+
+//-------------------------------------------------------------------------------------------
+
 void SampleConverter::convertLittleEndian8BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const
 {
     if(type & engine::e_SampleInt16)
@@ -336,16 +412,18 @@ void SampleConverter::convertLittleEndian8BitLSBFloat(const sample_t *in,tbyte *
 	}
 }
 
+//-------------------------------------------------------------------------------------------
+
 void SampleConverter::convertLittleEndian8BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const
 {
-	tint i, inc = sizeof(tbyte) * m_noOutChannels;
+	tint inc = sizeof(tbyte) * m_noOutChannels;
 	const tint16 *inInt16 = reinterpret_cast<const tint16 *>(in);	
 	tint16 x, xOrg, shiftF, maskM, max;
 	
 	shiftF = 16 - m_noBits;
 	maskM = 1 << (shiftF - 1);
 	max = 0x7fff >> shiftF;
-	for(tint i=0;i<noSamples;i++,in+=m_noInChannels,out+=inc)
+	for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
 	{
 		x = xOrg = *inInt16;
 		x >>= shiftF;
@@ -361,11 +439,59 @@ void SampleConverter::convertLittleEndian8BitLSBInt16(const sample_t *in,tbyte *
 	}
 }
 
+//-------------------------------------------------------------------------------------------
+
 void SampleConverter::convertLittleEndian8BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const
-{}
+{
+	tint inc = sizeof(tbyte) * m_noOutChannels;
+	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
+	tint32 x, xOrg, shiftF, maskM, max;
+
+	shiftF = 24 - m_noBits;
+	maskM = 1 << (shiftF - 1);
+	max = 0x007fffff >> shiftF;
+	for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+	{
+		x = xOrg = *inInt24;
+		x >>= shiftF;
+		if((xOrg & maskM) && x < max)
+		{
+			x++;
+		}
+		if(xOrg & 0x00800000)
+		{
+			x |= signedMaskInt24();
+		}
+		*out = static_cast<tbyte>(x & 0x00ff);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 
 void SampleConverter::convertLittleEndian8BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const
-{}
+{
+	tint inc = sizeof(tbyte) * m_noOutChannels;
+	const tint32 *inInt32 = reinterpret_cast<const tint32 *>(in);	
+	tint32 x, xOrg, shiftF, maskM, max;
+
+	shiftF = 32 - m_noBits;
+	maskM = 1 << (shiftF - 1);
+	max = 0x7fffffff >> shiftF;
+	for(tint i=0;i<noSamples;i++,inInt32+=m_noInChannels,out+=inc)
+	{
+		x = xOrg = *inInt32;
+		x >>= shiftF;
+		if((xOrg & maskM) && x < max)
+		{
+			x++;
+		}
+		if(xOrg & 0x80000000)
+		{
+			x |= signedMaskInt32();
+		}
+		*out = static_cast<tbyte>(x & 0x00ff);
+	}
+}
 
 //-------------------------------------------------------------------------------------------
 

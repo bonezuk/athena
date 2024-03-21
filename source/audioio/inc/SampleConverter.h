@@ -70,6 +70,8 @@ class AUDIOIO_EXPORT SampleConverter
 
 		tuint32 unsignedMask() const;
 		tuint16 signedMaskInt16() const;
+		tuint32 signedMaskInt24() const;
+		tuint32 signedMaskInt32() const;
 
 		void convertInteger(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
 		void convertUnsignedInteger(const sample_t *in,tbyte *out,tint noSamples) const;
