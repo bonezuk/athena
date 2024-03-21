@@ -3,7 +3,6 @@
 #define __OMEGA_AUDIOIO_SAMPLECONVERTER_H
 //-------------------------------------------------------------------------------------------
 
-#include "engine/inc/FormatTypeFromFloat.h"
 #include "engine/inc/RData.h"
 #include "audioio/inc/FormatDescription.h"
 
@@ -81,18 +80,43 @@ class AUDIOIO_EXPORT SampleConverter
 		void convertLittleEndian8BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndian8BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndian8BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertLittleEndian8BitMSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndian8BitMSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian8BitMSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian8BitMSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian8BitMSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
 				
 		void convertLittleEndianUnsigned8BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertLittleEndian8BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndianUnsigned8BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 
-		void convertLittleEndian16BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian16BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndian16BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian16BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian16BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian16BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertBigEndian16BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertBigEndian16BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian16BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian16BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian16BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertLittleEndian16BitMSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndian16BitMSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian16BitMSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian16BitMSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian16BitMSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertBigEndian16BitMSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertBigEndian16BitMSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian16BitMSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian16BitMSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian16BitMSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
 		void convertLittleEndianUnsigned16BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertLittleEndian16BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndianUnsigned16BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertBigEndian16BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertBigEndianUnsigned16BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertBigEndian16BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertBigEndianUnsigned16BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 
 		void convertLittleEndian24BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
