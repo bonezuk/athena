@@ -66,14 +66,21 @@ class AUDIOIO_EXPORT SampleConverter
 		tint calculateShift() const;
 		
 		tint sampleToInteger(sample_t v,const sample_t& dA,const sample_t& dB) const;
-
+		tuint16 toUnsigned16(tint16 x, tint16 min, tuint16 umask) const;
+		tuint32 toUnsigned32(tint32 x, tint32 min, tuint32 umask) const;
+		
 		tuint32 unsignedMask() const;
+		tuint16 unsignedMask16() const;
+		
 		tuint16 signedMaskInt16() const;
 		tuint32 signedMaskInt24() const;
 		tuint32 signedMaskInt32() const;
+		
+		tuint16 minIntegerValue16() const;
+		tuint32 minIntegerValue32() const;
 
 		void convertInteger(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
-		void convertUnsignedInteger(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertUnsignedInteger(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
 
         void convertLittleEndian8BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
 		void convertLittleEndian8BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
@@ -87,7 +94,12 @@ class AUDIOIO_EXPORT SampleConverter
 		void convertLittleEndian8BitMSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndian8BitMSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
 				
-		void convertLittleEndianUnsigned8BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndianUnsigned8BitLSB(const sample_t *in,tubyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndianUnsigned8BitLSBFloat(const sample_t *in,tubyte *out,tint noSamples) const;
+		void convertLittleEndianUnsigned8BitLSBInt16(const sample_t *in,tubyte *out,tint noSamples) const;
+		void convertLittleEndianUnsigned8BitLSBInt24(const sample_t *in,tubyte *out,tint noSamples) const;
+		void convertLittleEndianUnsigned8BitLSBInt32(const sample_t *in,tubyte *out,tint noSamples) const;
+		
 		void convertLittleEndianUnsigned8BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 
 		void convertLittleEndian16BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
@@ -119,22 +131,62 @@ class AUDIOIO_EXPORT SampleConverter
 		void convertBigEndianUnsigned16BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertBigEndianUnsigned16BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 
-		void convertLittleEndian24BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian24BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndian24BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian24BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian24BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian24BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertBigEndian24BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertBigEndian24BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian24BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian24BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian24BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertLittleEndian24BitMSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndian24BitMSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian24BitMSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian24BitMSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian24BitMSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertBigEndian24BitMSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertBigEndian24BitMSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian24BitMSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian24BitMSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian24BitMSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
 		void convertLittleEndianUnsigned24BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertLittleEndian24BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndianUnsigned24BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertBigEndian24BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertBigEndianUnsigned24BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertBigEndian24BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertBigEndianUnsigned24BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 
-		void convertLittleEndian32BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian32BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndian32BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian32BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian32BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian32BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertBigEndian32BitLSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertBigEndian32BitLSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian32BitLSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian32BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian32BitLSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertLittleEndian32BitMSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertLittleEndian32BitMSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian32BitMSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian32BitMSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertLittleEndian32BitMSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void convertBigEndian32BitMSB(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertBigEndian32BitMSBFloat(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian32BitMSBInt16(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian32BitMSBInt24(const sample_t *in,tbyte *out,tint noSamples) const;
+		void convertBigEndian32BitMSBInt32(const sample_t *in,tbyte *out,tint noSamples) const;
+		
 		void convertLittleEndianUnsigned32BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertLittleEndian32BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndianUnsigned32BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertBigEndian32BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertBigEndianUnsigned32BitLSB(const sample_t *in,tbyte *out,tint noSamples) const;
-		void convertBigEndian32BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertBigEndianUnsigned32BitMSB(const sample_t *in,tbyte *out,tint noSamples) const;
 		
 		void convertLittleEndianSinglePrecision(const sample_t *in,tbyte *out,tint noSamples) const;
@@ -190,6 +242,40 @@ inline tint SampleConverter::sampleToInteger(sample_t v,const sample_t& dA,const
 #endif
 
 	return x;
+}
+
+//-------------------------------------------------------------------------------------------
+
+inline tuint16 SampleConverter::toUnsigned16(tint16 x, tint16 min, tuint16 umask) const
+{
+	tuint16 v = static_cast<tuint16>(x);
+	if(x < 0)
+	{
+		v -= min;
+	}
+	else
+	{
+		v += min;
+		v &= umask;
+	}
+	return v;
+}
+
+//-------------------------------------------------------------------------------------------
+
+inline tuint32 SampleConverter::toUnsigned32(tint32 x, tint32 min, tuint32 umask) const
+{
+	tuint32 v = static_cast<tuint32>(x);
+	if(x < 0)
+	{
+		v -= min;
+	}
+	else
+	{
+		v += min;
+		v &= umask;
+	}
+	return v;
 }
 
 //-------------------------------------------------------------------------------------------
