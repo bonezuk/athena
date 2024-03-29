@@ -306,7 +306,7 @@ tuint16 SampleConverter::signedMaskInt16() const
 		0xc000, // 14
 		0x8000  // 15
 	};
-	return c_mask[m_noBits & 0xf];
+	return (m_noBits < 16) ? c_mask[m_noBits & 0xf] : 0x0000;
 };
 
 //-------------------------------------------------------------------------------------------
@@ -339,7 +339,7 @@ tuint32 SampleConverter::signedMaskInt24() const
 		0xffc00000, // 22
 		0xff800000  // 23
 	};
-	return c_mask[m_noBits % 24];
+    return (m_noBits < 24) ? c_mask[m_noBits % 24] : 0xff000000;
 };
 
 //-------------------------------------------------------------------------------------------
@@ -380,14 +380,32 @@ tuint32 SampleConverter::signedMaskInt32() const
 		0xc0000000, // 30
 		0x80000000  // 31
 	};
-	return c_mask[m_noBits & 0x1f];
+	return (m_noBits < 32) ? c_mask[m_noBits & 0x1f] : 0x80000000;
 };
 
 //-------------------------------------------------------------------------------------------
 
 tuint16 SampleConverter::minIntegerValue16() const
 {
-	return static_cast<tuint16>(minIntegerValue32());
+    static const tuint32 c_min[] = {
+        0xffffffff, // 1
+        0xfffffffe, // 2
+        0xfffffffc, // 3
+        0xfffffff8, // 4
+        0xfffffff0, // 5
+        0xffffffe0, // 6
+        0xffffffc0, // 7
+        0xffffff80, // 8
+        0xffffff00, // 9
+        0xfffffe00, // 10
+        0xfffffc00, // 11
+        0xfffff800, // 12
+        0xfffff000, // 13
+        0xffffe000, // 14
+        0xffffc000, // 15
+        0xffff8000, // 16
+    };
+    return (m_noBits > 16) ? 0x8000 : c_min[(m_noBits - 1) & 0x1f];
 }
 
 //-------------------------------------------------------------------------------------------
@@ -2097,7 +2115,17 @@ void SampleConverter::convertLittleEndian24BitLSBInt16(const sample_t *in,tbyte 
 	tint shiftF, max;
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = m_noBits - 16;
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -2133,7 +2161,7 @@ void SampleConverter::convertLittleEndian24BitLSBInt24(const sample_t *in,tbyte 
 	tint shiftF, max;
 	
 	shiftF = 24 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+    maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 	max = 0x007fffff >> shiftF;
 	for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
 	{
@@ -2238,7 +2266,19 @@ void SampleConverter::convertLittleEndianUnsigned24BitLSBInt16(const sample_t *i
 	tint shiftF, max;
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = m_noBits - 16;
+		min = minIntegerValue16();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+            v = toUnsigned16(x, min, 0xffff);
+			xFinal = static_cast<tint32>(v) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -2278,7 +2318,7 @@ void SampleConverter::convertLittleEndianUnsigned24BitLSBInt24(const sample_t *i
 	tint shiftF, max;
 
 	shiftF = 24 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 	max = 0x007fffff >> shiftF;
     min = minIntegerValue32();
     umask = unsignedMask();
@@ -2387,7 +2427,17 @@ void SampleConverter::convertLittleEndian24BitMSBInt16(const sample_t *in,tbyte 
 	tint shiftF, max, shiftMSB;
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = (m_noBits - 16) + calculateShift();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -2424,7 +2474,7 @@ void SampleConverter::convertLittleEndian24BitMSBInt24(const sample_t *in,tbyte 
 	tint shiftF, max, shiftMSB;
 	
 	shiftF = 24 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 	max = 0x007fffff >> shiftF;
 	shiftMSB = calculateShift();
 	for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
@@ -2534,7 +2584,19 @@ void SampleConverter::convertLittleEndianUnsigned24BitMSBInt16(const sample_t *i
 	tint shiftF, max, shiftMSB;
 	
 	if(m_noBits > 16)
-	{}
+	{
+        shiftF = (m_noBits - 16) + calculateShift();
+		min = minIntegerValue16();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+            v = toUnsigned16(x, min, 0xffff);
+			xFinal = static_cast<tint32>(v) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -2576,7 +2638,7 @@ void SampleConverter::convertLittleEndianUnsigned24BitMSBInt24(const sample_t *i
 	tint shiftMSB = calculateShift();
 
 	shiftF = 24 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 	max = 0x007fffff >> shiftF;
     min = minIntegerValue32();
     umask = unsignedMask();
@@ -2685,7 +2747,17 @@ void SampleConverter::convertBigEndian24BitLSBInt16(const sample_t *in,tbyte *ou
 	tint shiftF, max;
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = m_noBits - 16;
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+			xFinal = static_cast<tint32>(x) << shiftF;
+            out[2] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+            out[0] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -2721,7 +2793,7 @@ void SampleConverter::convertBigEndian24BitLSBInt24(const sample_t *in,tbyte *ou
 	tint shiftF, max;
 	
 	shiftF = 24 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 	max = 0x007fffff >> shiftF;
 	for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
 	{
@@ -2826,7 +2898,19 @@ void SampleConverter::convertBigEndianUnsigned24BitLSBInt16(const sample_t *in,t
 	tint shiftF, max;
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = m_noBits - 16;
+		min = minIntegerValue16();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+            v = toUnsigned16(x, min, 0xffff);
+			xFinal = static_cast<tint32>(v) << shiftF;
+			out[2] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[0] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -2866,7 +2950,7 @@ void SampleConverter::convertBigEndianUnsigned24BitLSBInt24(const sample_t *in,t
 	tint shiftF, max;
 
 	shiftF = 24 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 	max = 0x007fffff >> shiftF;
     min = minIntegerValue32();
     umask = unsignedMask();
@@ -2975,7 +3059,17 @@ void SampleConverter::convertBigEndian24BitMSBInt16(const sample_t *in,tbyte *ou
 	tint shiftF, max, shiftMSB;
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = (m_noBits - 16) + calculateShift();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[2] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[0] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -3012,7 +3106,7 @@ void SampleConverter::convertBigEndian24BitMSBInt24(const sample_t *in,tbyte *ou
 	tint shiftF, max, shiftMSB;
 	
 	shiftF = 24 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 	max = 0x007fffff >> shiftF;
 	shiftMSB = calculateShift();
 	for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
@@ -3122,7 +3216,19 @@ void SampleConverter::convertBigEndianUnsigned24BitMSBInt16(const sample_t *in,t
 	tint shiftF, max, shiftMSB;
 	
 	if(m_noBits > 16)
-	{}
+	{
+        shiftF = (m_noBits - 16) + calculateShift();
+		min = minIntegerValue16();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+            v = toUnsigned16(x, min, 0xffff);
+			xFinal = static_cast<tint32>(v) << shiftF;
+			out[2] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[0] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -3164,7 +3270,7 @@ void SampleConverter::convertBigEndianUnsigned24BitMSBInt24(const sample_t *in,t
 	tint shiftMSB = calculateShift();
 
 	shiftF = 24 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 	max = 0x007fffff >> shiftF;
     min = minIntegerValue32();
     umask = unsignedMask();
@@ -3236,7 +3342,7 @@ void SampleConverter::convertLittleEndian32BitLSB(const sample_t *in,tbyte *out,
 	}
     else if(type & engine::e_SampleInt32)
 	{
-		convertLittleEndian32BitLSBInt32(in,out,noSamples);
+        convertLittleEndian32BitLSBInt32(in,out,noSamples);
 	}
 	else
 	{
@@ -3274,7 +3380,18 @@ void SampleConverter::convertLittleEndian32BitLSBInt16(const sample_t *in,tbyte 
 	tint shiftF, max;
 	
 	if(m_noBits > 16)
-	{}
+	{
+        shiftF = m_noBits - 16;
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[3] = static_cast<tbyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -3306,16 +3423,27 @@ void SampleConverter::convertLittleEndian32BitLSBInt16(const sample_t *in,tbyte 
 void SampleConverter::convertLittleEndian32BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const
 {
 	tint inc = sizeof(tint32) * m_noOutChannels;
-	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
-	tint32 x, xOrg, maskM;
+	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);
+    tint32 x, xOrg, maskM, xFinal;
 	tint shiftF, max;
 	
 	if(m_noBits > 24)
-	{}
+	{
+        shiftF = m_noBits - 24;
+		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+		{
+            x = *inInt24;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[3] = static_cast<tbyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 24 - m_noBits;
-		maskM = 1 << (shiftF - 1);
+        maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 		max = 0x007fffff >> shiftF;
 		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
 		{
@@ -3347,7 +3475,7 @@ void SampleConverter::convertLittleEndian32BitLSBInt32(const sample_t *in,tbyte 
 	tint shiftF, max;
 	
 	shiftF = 32 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+    maskM = (m_noBits < 32) ? 1 << (shiftF - 1) : 0;
 	max = 0x7fffffff >> shiftF;
 	for(tint i=0;i<noSamples;i++,inInt32+=m_noInChannels,out+=inc)
 	{
@@ -3424,7 +3552,20 @@ void SampleConverter::convertLittleEndianUnsigned32BitLSBInt16(const sample_t *i
 	tint shiftF, max;
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = m_noBits - 16;
+		min = minIntegerValue16();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+            v = toUnsigned16(x, min, 0xffff);
+			xFinal = static_cast<tint32>(v) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[3] = static_cast<tubyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -3459,17 +3600,32 @@ void SampleConverter::convertLittleEndianUnsigned32BitLSBInt16(const sample_t *i
 void SampleConverter::convertLittleEndianUnsigned32BitLSBInt24(const sample_t *in,tubyte *out,tint noSamples) const
 {
     tint inc = sizeof(tbyte) * m_noOutChannels * 4;
-	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
-	tint32 x, xOrg, maskM, min;
+	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);
+    tint32 x, xOrg, maskM, min, xFinal;
 	tuint32 v, umask;
 	tint shiftF, max;
 
 	if(m_noBits > 24)
-	{}
+	{
+		shiftF = m_noBits - 24;
+		min = minIntegerValue32();
+		umask = unsignedMask();
+		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+		{
+            x = *inInt24;
+            x <<= shiftF;
+            v = toUnsigned32(x, min, umask);
+			xFinal = static_cast<tint32>(v);
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[3] = static_cast<tubyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 24 - m_noBits;
-		maskM = 1 << (shiftF - 1);
+		maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 		max = 0x007fffff >> shiftF;
 		min = minIntegerValue32();
 		umask = unsignedMask();
@@ -3505,7 +3661,7 @@ void SampleConverter::convertLittleEndianUnsigned32BitLSBInt32(const sample_t *i
 	tint shiftF, max;
 
 	shiftF = 32 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 32) ? 1 << (shiftF - 1) : 0;
 	max = 0x7fffffff >> shiftF;
     min = minIntegerValue32();
     umask = unsignedMask();
@@ -3582,7 +3738,18 @@ void SampleConverter::convertLittleEndian32BitMSBInt16(const sample_t *in,tbyte 
 	tint shiftF, max, shiftMSB;
 	
 	if(m_noBits > 16)
-	{}
+	{
+        shiftF = (m_noBits - 16) + calculateShift();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[3] = static_cast<tbyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -3616,15 +3783,26 @@ void SampleConverter::convertLittleEndian32BitMSBInt24(const sample_t *in,tbyte 
 {
 	tint inc = sizeof(tint32) * m_noOutChannels;
 	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
-	tint32 x, xOrg, maskM;
+	tint32 x, xOrg, maskM, xFinal;
 	tint shiftF, max, shiftMSB;
 	
 	if(m_noBits > 24)
-	{}
+	{
+        shiftF = (m_noBits - 24) + calculateShift();
+		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+		{
+            x = *inInt24;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[3] = static_cast<tbyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 24 - m_noBits;
-		maskM = 1 << (shiftF - 1);
+		maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 		max = 0x007fffff >> shiftF;
 		shiftMSB = calculateShift();
 		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
@@ -3658,7 +3836,7 @@ void SampleConverter::convertLittleEndian32BitMSBInt32(const sample_t *in,tbyte 
 	tint shiftF, max, shiftMSB;
 	
 	shiftF = 32 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 32) ? 1 << (shiftF - 1) : 0;
 	max = 0x7fffffff >> shiftF;
 	shiftMSB = calculateShift();
 	for(tint i=0;i<noSamples;i++,inInt32+=m_noInChannels,out+=inc)
@@ -3739,7 +3917,20 @@ void SampleConverter::convertLittleEndianUnsigned32BitMSBInt16(const sample_t *i
 	tint shiftMSB = calculateShift();
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = (m_noBits - 16) + calculateShift();
+		min = minIntegerValue16();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+            v = toUnsigned16(x, min, 0xffff);
+			xFinal = static_cast<tint32>(v) << shiftF;
+			out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[3] = static_cast<tubyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -3775,17 +3966,32 @@ void SampleConverter::convertLittleEndianUnsigned32BitMSBInt24(const sample_t *i
 {
     tint inc = sizeof(tbyte) * m_noOutChannels * 4;
 	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
-	tint32 x, xOrg, maskM, min;
+	tint32 x, xOrg, maskM, min, xFinal;
 	tuint32 v, umask;
 	tint shiftF, max;
 	tint shiftMSB = calculateShift();
 
 	if(m_noBits > 24)
-	{}
+	{
+        shiftF = m_noBits - 24;
+		min = minIntegerValue32();
+		umask = unsignedMask();
+		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+		{
+            x = *inInt24;
+            x <<= shiftF;
+            v = toUnsigned32(x, min, umask) << shiftMSB;
+			xFinal = static_cast<tint32>(v);
+            out[0] = static_cast<tbyte>(xFinal & 0x000000ff);
+            out[1] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+            out[2] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+            out[3] = static_cast<tubyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 24 - m_noBits;
-		maskM = 1 << (shiftF - 1);
+		maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 		max = 0x007fffff >> shiftF;
 		min = minIntegerValue32();
 		umask = unsignedMask();
@@ -3822,7 +4028,7 @@ void SampleConverter::convertLittleEndianUnsigned32BitMSBInt32(const sample_t *i
 	tint shiftMSB = calculateShift();
 
 	shiftF = 32 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 32) ? 1 << (shiftF - 1) : 0;
 	max = 0x7fffffff >> shiftF;
     min = minIntegerValue32();
     umask = unsignedMask();
@@ -3898,7 +4104,18 @@ void SampleConverter::convertBigEndian32BitLSBInt16(const sample_t *in,tbyte *ou
 	tint shiftF, max;
 	
 	if(m_noBits > 16)
-	{}
+	{
+        shiftF = m_noBits - 16;
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[3] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[0] = static_cast<tbyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -3930,16 +4147,27 @@ void SampleConverter::convertBigEndian32BitLSBInt16(const sample_t *in,tbyte *ou
 void SampleConverter::convertBigEndian32BitLSBInt24(const sample_t *in,tbyte *out,tint noSamples) const
 {
 	tint inc = sizeof(tint32) * m_noOutChannels;
-	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
-	tint32 x, xOrg, maskM;
+	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);
+    tint32 x, xOrg, maskM, xFinal;
 	tint shiftF, max;
 	
 	if(m_noBits > 24)
-	{}
+	{
+        shiftF = m_noBits - 24;
+		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+		{
+            x = *inInt24;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[3] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[0] = static_cast<tbyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 24 - m_noBits;
-		maskM = 1 << (shiftF - 1);
+        maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 		max = 0x007fffff >> shiftF;
 		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
 		{
@@ -3971,7 +4199,7 @@ void SampleConverter::convertBigEndian32BitLSBInt32(const sample_t *in,tbyte *ou
 	tint shiftF, max;
 	
 	shiftF = 32 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 32) ? 1 << (shiftF - 1) : 0;
 	max = 0x7fffffff >> shiftF;
 	for(tint i=0;i<noSamples;i++,inInt32+=m_noInChannels,out+=inc)
 	{
@@ -4048,7 +4276,20 @@ void SampleConverter::convertBigEndianUnsigned32BitLSBInt16(const sample_t *in,t
 	tint shiftF, max;
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = m_noBits - 16;
+		min = minIntegerValue16();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+            v = toUnsigned16(x, min, 0xffff);
+			xFinal = static_cast<tint32>(v) << shiftF;
+			out[3] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[0] = static_cast<tubyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -4083,17 +4324,32 @@ void SampleConverter::convertBigEndianUnsigned32BitLSBInt16(const sample_t *in,t
 void SampleConverter::convertBigEndianUnsigned32BitLSBInt24(const sample_t *in,tubyte *out,tint noSamples) const
 {
     tint inc = sizeof(tbyte) * m_noOutChannels * 4;
-	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
-	tint32 x, xOrg, maskM, min;
+	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);
+    tint32 x, xOrg, maskM, min, xFinal;
 	tuint32 v, umask;
 	tint shiftF, max;
 
 	if(m_noBits > 24)
-	{}
+	{
+		shiftF = m_noBits - 24;
+		min = minIntegerValue32();
+		umask = unsignedMask();
+		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+		{
+            x = *inInt24;
+            x <<= shiftF;
+            v = toUnsigned32(x, min, umask);
+			xFinal = static_cast<tint32>(v);
+			out[3] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[0] = static_cast<tubyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 24 - m_noBits;
-		maskM = 1 << (shiftF - 1);
+		maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 		max = 0x007fffff >> shiftF;
 		min = minIntegerValue32();
 		umask = unsignedMask();
@@ -4129,7 +4385,7 @@ void SampleConverter::convertBigEndianUnsigned32BitLSBInt32(const sample_t *in,t
 	tint shiftF, max;
 
 	shiftF = 32 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 32) ? 1 << (shiftF - 1) : 0;
 	max = 0x7fffffff >> shiftF;
     min = minIntegerValue32();
     umask = unsignedMask();
@@ -4206,7 +4462,18 @@ void SampleConverter::convertBigEndian32BitMSBInt16(const sample_t *in,tbyte *ou
 	tint shiftF, max, shiftMSB;
 	
 	if(m_noBits > 16)
-	{}
+	{
+        shiftF = (m_noBits - 16) + calculateShift();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[3] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[0] = static_cast<tbyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -4240,15 +4507,26 @@ void SampleConverter::convertBigEndian32BitMSBInt24(const sample_t *in,tbyte *ou
 {
 	tint inc = sizeof(tint32) * m_noOutChannels;
 	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
-	tint32 x, xOrg, maskM;
+	tint32 x, xOrg, maskM, xFinal;
 	tint shiftF, max, shiftMSB;
 	
 	if(m_noBits > 24)
-	{}
+	{
+        shiftF = (m_noBits - 24) + calculateShift();
+		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+		{
+            x = *inInt24;
+			xFinal = static_cast<tint32>(x) << shiftF;
+			out[3] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[0] = static_cast<tbyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 24 - m_noBits;
-		maskM = 1 << (shiftF - 1);
+		maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 		max = 0x007fffff >> shiftF;
 		shiftMSB = calculateShift();
 		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
@@ -4282,7 +4560,7 @@ void SampleConverter::convertBigEndian32BitMSBInt32(const sample_t *in,tbyte *ou
 	tint shiftF, max, shiftMSB;
 	
 	shiftF = 32 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 32) ? 1 << (shiftF - 1) : 0;
 	max = 0x7fffffff >> shiftF;
 	shiftMSB = calculateShift();
 	for(tint i=0;i<noSamples;i++,inInt32+=m_noInChannels,out+=inc)
@@ -4363,7 +4641,20 @@ void SampleConverter::convertBigEndianUnsigned32BitMSBInt16(const sample_t *in,t
 	tint shiftMSB = calculateShift();
 	
 	if(m_noBits > 16)
-	{}
+	{
+		shiftF = (m_noBits - 16) + calculateShift();
+		min = minIntegerValue16();
+		for(tint i=0;i<noSamples;i++,inInt16+=m_noInChannels,out+=inc)
+		{
+            x = *inInt16;
+            v = toUnsigned16(x, min, 0xffff);
+			xFinal = static_cast<tint32>(v) << shiftF;
+			out[3] = static_cast<tbyte>(xFinal & 0x000000ff);
+			out[2] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+			out[1] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+			out[0] = static_cast<tubyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 16 - m_noBits;
@@ -4400,16 +4691,31 @@ void SampleConverter::convertBigEndianUnsigned32BitMSBInt24(const sample_t *in,t
     tint inc = sizeof(tbyte) * m_noOutChannels * 4;
 	const tint32 *inInt24 = reinterpret_cast<const tint32 *>(in);	
 	tint32 x, xOrg, maskM, min;
-	tuint32 v, umask;
+	tuint32 v, umask, xFinal;
 	tint shiftF, max;
 	tint shiftMSB = calculateShift();
 
 	if(m_noBits > 24)
-	{}
+	{
+        shiftF = m_noBits - 24;
+		min = minIntegerValue32();
+		umask = unsignedMask();
+		for(tint i=0;i<noSamples;i++,inInt24+=m_noInChannels,out+=inc)
+		{
+            x = *inInt24;
+            x <<= shiftF;
+            v = toUnsigned32(x, min, umask) << shiftMSB;
+			xFinal = static_cast<tint32>(v);
+            out[3] = static_cast<tbyte>(xFinal & 0x000000ff);
+            out[2] = static_cast<tbyte>((xFinal >> 8) & 0x000000ff);
+            out[1] = static_cast<tbyte>((xFinal >> 16) & 0x000000ff);
+            out[0] = static_cast<tubyte>((xFinal >> 24) & 0x000000ff);
+		}
+	}
 	else
 	{
 		shiftF = 24 - m_noBits;
-		maskM = 1 << (shiftF - 1);
+		maskM = (m_noBits < 24) ? 1 << (shiftF - 1) : 0;
 		max = 0x007fffff >> shiftF;
 		min = minIntegerValue32();
 		umask = unsignedMask();
@@ -4446,7 +4752,7 @@ void SampleConverter::convertBigEndianUnsigned32BitMSBInt32(const sample_t *in,t
 	tint shiftMSB = calculateShift();
 
 	shiftF = 32 - m_noBits;
-	maskM = 1 << (shiftF - 1);
+	maskM = (m_noBits < 32) ? 1 << (shiftF - 1) : 0;
 	max = 0x7fffffff >> shiftF;
     min = minIntegerValue32();
     umask = unsignedMask();
