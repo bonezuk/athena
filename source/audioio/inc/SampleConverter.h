@@ -14,15 +14,8 @@ namespace audioio
 //-------------------------------------------------------------------------------------------
 
 class AUDIOIO_EXPORT SampleConverter
-{		typedef enum
-		{
-			e_DataFloatSingle = 1,
-			e_DataFloatDouble,
-			e_DataSignedInteger,
-			e_DataUnsignedInteger
-		} DataType;
-
-	public:
+{
+    public:
 		SampleConverter();
 		SampleConverter(tint noBits,tint bytesPerSample,bool littleEndian,bool alignHigh,bool isSigned);
 		SampleConverter(bool isSinglePrecision,bool littleEndian);
@@ -34,6 +27,7 @@ class AUDIOIO_EXPORT SampleConverter
 		
 		bool isLittleEndian() const;
 		bool isAlignedHigh() const;
+		bool isFloat() const;
 		
 		FormatDescription::DataType type() const;
 		

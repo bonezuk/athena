@@ -144,6 +144,13 @@ bool SampleConverter::isSupported() const
 
 //-------------------------------------------------------------------------------------------
 
+bool SampleConverter::isFloat() const
+{
+    return (m_type == FormatDescription::e_DataFloatSingle || m_type == FormatDescription::e_DataFloatDouble);
+}
+
+//-------------------------------------------------------------------------------------------
+
 FormatDescription::DataType SampleConverter::type() const
 {
 	return m_type;

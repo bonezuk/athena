@@ -1215,7 +1215,7 @@ void AOWin32::writeToAudioOutputBufferFromPartDataWasAPI(AbstractAudioHardwareBu
 	m_pSampleConverter->setNumberOfOutputChannels(noOutputChannels);
 	m_pSampleConverter->setVolume(m_volume);
 	
-	m_pSampleConverter->convert(&input[iIdx],out,amount);
+	m_pSampleConverter->convert(&input[iIdx],out,amount,data->partConst(partNumber).getDataType());
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1381,21 +1381,28 @@ void AOWin32::writeWASAudio()
 
 //-------------------------------------------------------------------------------------------
 
-void AOWin32::setCodecSampleFormatTypeASIO(engine::Codec *codec, engine::RData *item)
+void AOWin32::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item)
 {
 	if(!item->isMixing())
 	{
-		if(codec->dataTypesSupported() & engine::e_SampleInt32)
+		if(m_deviceType==AOQueryDevice::Device::e_deviceASIO || (m_pSampleConverter.isNull() && !m_pSampleConverter->isFloat()))
 		{
-			codec->setDataTypeFormat(engine::e_SampleInt32);
-		}
-		else if(codec->dataTypesSupported() & engine::e_SampleInt24)
-		{
-			codec->setDataTypeFormat(engine::e_SampleInt24);
-		}
-		else if(codec->dataTypesSupported() & engine::e_SampleInt16)
-		{
-			codec->setDataTypeFormat(engine::e_SampleInt16);
+			if(codec->dataTypesSupported() & engine::e_SampleInt32)
+			{
+				codec->setDataTypeFormat(engine::e_SampleInt32);
+			}
+			else if(codec->dataTypesSupported() & engine::e_SampleInt24)
+			{
+				codec->setDataTypeFormat(engine::e_SampleInt24);
+			}
+			else if(codec->dataTypesSupported() & engine::e_SampleInt16)
+			{
+				codec->setDataTypeFormat(engine::e_SampleInt16);
+			}
+			else
+			{
+				codec->setDataTypeFormat(engine::e_SampleFloat);
+			}		
 		}
 		else
 		{
@@ -1405,20 +1412,6 @@ void AOWin32::setCodecSampleFormatTypeASIO(engine::Codec *codec, engine::RData *
 	else
 	{
 		codec->setDataTypeFormat(engine::e_SampleFloat);
-	}
-}
-
-//-------------------------------------------------------------------------------------------
-
-void AOWin32::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item)
-{
-	if(m_deviceType==AOQueryDevice::Device::e_deviceASIO)
-	{
-		setCodecSampleFormatTypeASIO(codec, item);
-	}
-	else
-	{
-		AOBase::setCodecSampleFormatType(codec, item);
 	}
 }
 

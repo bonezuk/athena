@@ -181,6 +181,7 @@ void testSampleConvertion(tint noBits,tint bytesPerSample,bool littleEndian,bool
 	SampleConverter sampleConverter(noBits,bytesPerSample,littleEndian,alignHigh,true);
 	
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_FALSE(sampleConverter.isFloat());
 	
 	EXPECT_EQ(FormatDescription::e_DataSignedInteger,sampleConverter.type());
 	EXPECT_EQ(littleEndian,sampleConverter.isLittleEndian());
@@ -206,6 +207,7 @@ void testSampleUnsignedConvertion(tint noBits,tint bytesPerSample,bool littleEnd
 	SampleConverter sampleConverter(noBits,bytesPerSample,littleEndian,alignHigh,false);
 	
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_FALSE(sampleConverter.isFloat());
 	
 	EXPECT_EQ(FormatDescription::e_DataUnsignedInteger,sampleConverter.type());
 	EXPECT_EQ(littleEndian,sampleConverter.isLittleEndian());
@@ -255,6 +257,7 @@ TEST(SampleConverter,doubleSamplesToDoubleLittleEndian)
 	SampleConverter sampleConverter(false,true);
 	
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_TRUE(sampleConverter.isFloat());
 	
 	EXPECT_EQ(FormatDescription::e_DataFloatDouble,sampleConverter.type());
 	EXPECT_EQ(true,sampleConverter.isLittleEndian());
@@ -296,6 +299,7 @@ TEST(SampleConverter,doubleSamplesToDoubleBigEndian)
 	SampleConverter sampleConverter(false,false);
 	
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_TRUE(sampleConverter.isFloat());
 	
 	EXPECT_EQ(FormatDescription::e_DataFloatDouble,sampleConverter.type());
 	EXPECT_EQ(false,sampleConverter.isLittleEndian());
@@ -337,6 +341,7 @@ TEST(SampleConverter,doubleSamplesToFloatLittleEndian)
 	SampleConverter sampleConverter(true,true);
 	
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_TRUE(sampleConverter.isFloat());
 	
 	EXPECT_EQ(FormatDescription::e_DataFloatSingle,sampleConverter.type());
 	EXPECT_EQ(true,sampleConverter.isLittleEndian());
@@ -378,6 +383,7 @@ TEST(SampleConverter,doubleSamplesToFloatBigEndian)
 	SampleConverter sampleConverter(true,false);
 	
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_TRUE(sampleConverter.isFloat());
 	
 	EXPECT_EQ(FormatDescription::e_DataFloatSingle,sampleConverter.type());
 	EXPECT_EQ(false,sampleConverter.isLittleEndian());
@@ -11501,6 +11507,7 @@ void testSampleConvertionForChannelInterleave(tint noInChannels,tint noOutChanne
 	sampleConverter.setNumberOfOutputChannels(noOutChannels);
 	
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_FALSE(sampleConverter.isFloat());
 	
     EXPECT_EQ(noInChannels,sampleConverter.numberOfInputChannels());
     EXPECT_EQ(noOutChannels,sampleConverter.numberOfOutputChannels());
@@ -12460,6 +12467,7 @@ void testInt16A24A32Convertion(tint noBits, tint bytesPerSample, bool littleEndi
 	sampleConverter.setNumberOfOutputChannels(2);
 
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_FALSE(sampleConverter.isFloat());
 	
 	if(isSigned)
 	{
@@ -14992,6 +15000,7 @@ void testInt16Convertion(tint noBits, tint bytesPerSample, bool littleEndian,
 	sampleConverter.setNumberOfOutputChannels(2);
 
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_FALSE(sampleConverter.isFloat());
 	
 	if(isSigned)
 	{
@@ -15045,6 +15054,7 @@ void testInt24Convertion(tint noBits, tint bytesPerSample, bool littleEndian,
 	sampleConverter.setNumberOfOutputChannels(2);
 
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_FALSE(sampleConverter.isFloat());
 	
 	if(isSigned)
 	{
@@ -15098,6 +15108,7 @@ void testInt32Convertion(tint noBits, tint bytesPerSample, bool littleEndian,
 	sampleConverter.setNumberOfOutputChannels(2);
 
 	EXPECT_TRUE(sampleConverter.isSupported());
+	EXPECT_FALSE(sampleConverter.isFloat());
 	
 	if(isSigned)
 	{
