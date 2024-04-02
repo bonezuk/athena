@@ -219,8 +219,6 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual void setExclusiveMode(int devIdx,bool flag);
 		
 		virtual void forceBitsPerSample(tint noBits);
-		
-		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
 
 	protected:
 		
@@ -736,6 +734,8 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual QSharedPointer<AOQueryDevice::Device> copyDeviceInformation(const AOQueryDevice::Device& iDevice) = 0;
 		virtual QSharedPointer<AOQueryDevice::Device> getCurrentDevice();
 		virtual FormatDescription getSourceDescription(tint noChannels);
+
+		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
 		
 		// Member variable setters and getters
 		virtual States getState() const;

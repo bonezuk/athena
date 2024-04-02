@@ -180,7 +180,9 @@ class AUDIOIO_EXPORT AOCoreAudioMacOS : public AOCoreAudio
                                            
 		virtual bool canDeviceSupportExclusiveMode(AudioDeviceID devID);
 		virtual void updateExclusiveModeOnDevices();
-		
+
+		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
+
 	protected slots:
 	
 		void onStopProcess();

@@ -760,7 +760,7 @@ void AOLinuxALSA::writeToAudioOutputBufferFromPartData(AbstractAudioHardwareBuff
 	getSampleConverter()->setNumberOfOutputChannels(noOutputChannels);
 	getSampleConverter()->setVolume(m_volume);
 	
-	getSampleConverter()->convert(&input[iIdx],out,amount);
+	getSampleConverter()->convert(&input[iIdx],out,amount,data->partConst(partNumber).getDataType());
 }
 
 //-------------------------------------------------------------------------------------------
@@ -900,6 +900,35 @@ void AOLinuxALSA::freeALSAPlaybackBuffers()
 		delete [] buffer;
 	}
 	m_playbackALSAMemoryBufferSize = 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOLinuxALSA::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item)
+{
+	if(!item->isMixing() && m_pSampleConverter != NULL && !m_pSampleConverter->isFloat())
+	{
+		if(codec->dataTypesSupported() & engine::e_SampleInt32)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt32);
+		}
+		else if(codec->dataTypesSupported() & engine::e_SampleInt24)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt24);
+		}
+		else if(codec->dataTypesSupported() & engine::e_SampleInt16)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt16);
+		}
+		else
+		{
+			codec->setDataTypeFormat(engine::e_SampleFloat);
+		}		
+	}
+	else
+	{
+		codec->setDataTypeFormat(engine::e_SampleFloat);
+	}
 }
 
 //-------------------------------------------------------------------------------------------

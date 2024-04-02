@@ -1877,7 +1877,7 @@ void AOCoreAudioMacOS::writeToAudioOutputBufferFromPartData(AbstractAudioHardwar
 		m_pSampleConverter->setNumberOfOutputChannels(noOutputChannels);
 		m_pSampleConverter->setVolume(m_volume);
 		
-		m_pSampleConverter->convert(&input[iIdx],out,amount);
+		m_pSampleConverter->convert(&input[iIdx],out,amount,data->partConst(partNumber).getDataType());
 	}
 	else
 	{	
@@ -1963,6 +1963,35 @@ bool AOCoreAudioMacOS::isDeviceAlive(QSharedPointer<AOQueryCoreAudio::DeviceCore
 		printToLog(msg.toUtf8().constData());
 	}
 	return isAlive;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOCoreAudioMacOS::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item)
+{
+	if(!item->isMixing() && m_pSampleConverter.isNull() && !m_pSampleConverter->isFloat())
+	{
+		if(codec->dataTypesSupported() & engine::e_SampleInt32)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt32);
+		}
+		else if(codec->dataTypesSupported() & engine::e_SampleInt24)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt24);
+		}
+		else if(codec->dataTypesSupported() & engine::e_SampleInt16)
+		{
+			codec->setDataTypeFormat(engine::e_SampleInt16);
+		}
+		else
+		{
+			codec->setDataTypeFormat(engine::e_SampleFloat);
+		}		
+	}
+	else
+	{
+		codec->setDataTypeFormat(engine::e_SampleFloat);
+	}
 }
 
 //-------------------------------------------------------------------------------------------
