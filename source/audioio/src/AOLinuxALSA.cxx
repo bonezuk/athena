@@ -760,7 +760,7 @@ void AOLinuxALSA::writeToAudioOutputBufferFromPartData(AbstractAudioHardwareBuff
 	getSampleConverter()->setNumberOfOutputChannels(noOutputChannels);
 	getSampleConverter()->setVolume(m_volume);
 	
-	getSampleConverter()->convert(&input[iIdx],out,amount,data->partConst(partNumber).getDataType());
+	getSampleConverter()->convertAtIndex(input,iIdx,out,amount,data->partConst(partNumber).getDataType());
 }
 
 //-------------------------------------------------------------------------------------------

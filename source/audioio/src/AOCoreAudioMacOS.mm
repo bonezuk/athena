@@ -1375,7 +1375,7 @@ QSharedPointer<SampleConverter> AOCoreAudioMacOS::sampleConverterFromDescription
 	bool isLittleEndian,isAlignHigh;
 	QSharedPointer<SampleConverter> pConverter;
 	
-	isLittleEndian = (format.mFormatFlags & kAudioFormatFlagIsBigEndian) ? false : true;
+        isLittleEndian = (format.mFormatFlags & kAudioFormatFlagIsBigEndian) ? false : true;
 	isAlignHigh = isConvertionAlignedHigh(format);
 	
 	if(format.mFormatFlags & kAudioFormatFlagIsFloat)
@@ -1645,7 +1645,7 @@ bool AOCoreAudioMacOS::openIntegerAudio(QSharedPointer<AOQueryCoreAudio::DeviceC
 		m_hasExclusiveMode = useExclusiveModeIfAvailable(pDevice->deviceID());
 		m_hasMixingBeenDisabled = disableMixingIfPossible(pDevice->deviceID());
 	
-    	streamList = getAudioStreamsForDevice(pDevice->deviceID());
+		streamList = getAudioStreamsForDevice(pDevice->deviceID());
 		if(!streamList.isEmpty())
 		{
 			QPair<AudioStreamID,AudioStreamBasicDescription *> closestStream;
@@ -1877,7 +1877,7 @@ void AOCoreAudioMacOS::writeToAudioOutputBufferFromPartData(AbstractAudioHardwar
 		m_pSampleConverter->setNumberOfOutputChannels(noOutputChannels);
 		m_pSampleConverter->setVolume(m_volume);
 		
-		m_pSampleConverter->convert(&input[iIdx],out,amount,data->partConst(partNumber).getDataType());
+		m_pSampleConverter->convertAtIndex(input,iIdx,out,amount,data->partConst(partNumber).getDataType());
 	}
 	else
 	{	
@@ -1948,13 +1948,13 @@ bool AOCoreAudioMacOS::isDeviceAlive(QSharedPointer<AOQueryCoreAudio::DeviceCore
 	OSStatus err;
 	bool isAlive = false;
 	UInt32 paramSize = sizeof(bool);
-    AudioObjectPropertyAddress property = { kAudioDevicePropertyDeviceIsAlive, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
+	AudioObjectPropertyAddress property = { kAudioDevicePropertyDeviceIsAlive, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain };
 	
 	err = CoreAudioIF::instance()->AudioObjectGetPropertyData(pDevice->deviceID(),&property,0,0,&paramSize,&isAlive);
 	if(err!=noErr)
 	{
-		printErrorOS("isDeviceAlive","Failed to check whether device is alive",err);
-		isAlive = false;
+		// The DAC driver may have not implemented this functionality so default to alive.
+		isAlive = true;
 	}
 	
 	if(!isAlive)
@@ -1969,7 +1969,7 @@ bool AOCoreAudioMacOS::isDeviceAlive(QSharedPointer<AOQueryCoreAudio::DeviceCore
 
 void AOCoreAudioMacOS::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item)
 {
-	if(!item->isMixing() && m_pSampleConverter.isNull() && !m_pSampleConverter->isFloat())
+        if(!item->isMixing() && !m_pSampleConverter.isNull() && !m_pSampleConverter->isFloat())
 	{
 		if(codec->dataTypesSupported() & engine::e_SampleInt32)
 		{

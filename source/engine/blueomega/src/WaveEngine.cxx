@@ -404,6 +404,8 @@ CodecDataType WaveEngine::dataTypesSupported() const
 		case WaveInformation::e_32Bit_BigEndian:
 			types |= e_SampleInt32;
 			break;
+        default:
+            break;
 	}
 	return types;
 }

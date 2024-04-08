@@ -44,6 +44,9 @@ class AUDIOIO_EXPORT SampleConverter
 		void convert(const sample_t *in,tbyte *out,tint noSamples, engine::CodecDataType type = engine::e_SampleFloat) const;
 		void convert(const sample_t *in,tubyte *out,tint noSamples, engine::CodecDataType type = engine::e_SampleFloat) const;
 		
+		void convertAtIndex(const sample_t *in,tint idx,tbyte *out,tint noSamples,engine::CodecDataType type) const;
+		void convertAtIndex(const sample_t *in,tint idx,tubyte *out,tint noSamples,engine::CodecDataType type) const;
+		
 	protected:
 		
 		FormatDescription::DataType m_type;

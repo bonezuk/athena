@@ -18883,3 +18883,210 @@ TEST(SampleConverter,int16A24A32SamplesTo32BitSampleInBE32BitsMSBUnsigned)
 }
 
 //-------------------------------------------------------------------------------------------
+
+TEST(SampleConverter,convertAtIndexInt16)
+{
+	const tint c_noBits = 32;
+	const tint c_bytesPerSample = 4;
+	const bool c_littleEndian = true;
+	const bool c_alignHigh = false;
+	const bool c_isSigned = true;
+	const int c_noSamples = 10;
+	const int c_noChannels = 2;
+
+	const tuint16 c_int16Samples[c_noSamples * c_noChannels] = {
+		0x7fff, 0x1111,
+		0x6666, 0x1111,
+		0x4ccc, 0x1111,
+		0x3333, 0x1111,
+		0x1999, 0x1111,
+		0xe666, 0x1111,
+		0xcccd, 0x1111,
+		0xb333, 0x1111,
+		0x999a, 0x1111,
+		0x8000, 0x1111,
+	};
+	
+	const tubyte c_expectOutput16[7 * c_noChannels * c_bytesPerSample] = {
+		0x00, 0x00, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x99, 0x19, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x66, 0xe6, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0xcd, 0xcc, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x33, 0xb3, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x9a, 0x99, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
+	};
+
+	tint iIdx = 3 * c_noChannels;
+	tint outputSize = 7 * c_noChannels * c_bytesPerSample;
+	tubyte out[7 * c_noChannels * c_bytesPerSample];
+
+	SampleConverter sampleConverter(c_noBits, c_bytesPerSample, c_littleEndian, c_alignHigh, c_isSigned);
+	sampleConverter.setNumberOfInputChannels(2);
+	sampleConverter.setNumberOfOutputChannels(2);
+
+	memset(out, 0, outputSize);
+	sampleConverter.convertAtIndex(reinterpret_cast<const sample_t *>(c_int16Samples), iIdx, out, 7, engine::e_SampleInt16);
+	EXPECT_EQ(0, memcmp(c_expectOutput16, out, outputSize));
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(SampleConverter,convertAtIndexInt24)
+{
+	const tint c_noBits = 32;
+	const tint c_bytesPerSample = 4;
+	const bool c_littleEndian = true;
+	const bool c_alignHigh = false;
+	const bool c_isSigned = true;
+	const int c_noSamples = 10;
+	const int c_noChannels = 2;
+
+	const tuint32 c_int24Samples[c_noSamples * c_noChannels] = {
+		0x007fffff, 0x00111111,
+		0x00666666, 0x00111111,
+		0x004ccccc, 0x00111111,
+		0x00333333, 0x00111111,
+		0x00199999, 0x00111111,
+		0xffe66666, 0x00111111,
+		0xffcccccd, 0x00111111,
+		0xffb33333, 0x00111111,
+		0xff99999a, 0x00111111,
+		0xff800000, 0x00111111
+	};
+
+	const tubyte c_expectOutput24[7 * c_noChannels * c_bytesPerSample] = {
+		0x00, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x99, 0x99, 0x19, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x66, 0x66, 0xe6, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0xcd, 0xcc, 0xcc, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x33, 0x33, 0xb3, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x9a, 0x99, 0x99, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
+	};
+
+	tint iIdx = 3 * c_noChannels;
+	tint outputSize = 7 * c_noChannels * c_bytesPerSample;
+	tubyte out[7 * c_noChannels * c_bytesPerSample];
+
+	SampleConverter sampleConverter(c_noBits, c_bytesPerSample, c_littleEndian, c_alignHigh, c_isSigned);
+	sampleConverter.setNumberOfInputChannels(2);
+	sampleConverter.setNumberOfOutputChannels(2);
+
+	memset(out, 0, outputSize);
+	sampleConverter.convertAtIndex(reinterpret_cast<const sample_t *>(c_int24Samples), iIdx, out, 7, engine::e_SampleInt24);
+	EXPECT_EQ(0, memcmp(c_expectOutput24, out, outputSize));
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(SampleConverter,convertAtIndexInt32)
+{
+	const tint c_noBits = 32;
+	const tint c_bytesPerSample = 4;
+	const bool c_littleEndian = true;
+	const bool c_alignHigh = false;
+	const bool c_isSigned = true;
+	const int c_noSamples = 10;
+	const int c_noChannels = 2;
+
+	const tuint32 c_int32Samples[c_noSamples * c_noChannels] = {
+		0x7fffffff, 0x11111111,
+		0x66666666, 0x11111111,
+		0x4ccccccc, 0x11111111,
+		0x33333333, 0x11111111,
+		0x19999999, 0x11111111,
+		0xe6666666, 0x11111111,
+		0xcccccccd, 0x11111111,
+		0xb3333333, 0x11111111,
+		0x9999999a, 0x11111111,
+		0x80000000, 0x11111111
+	};
+
+	const tubyte c_expectOutput32[7 * c_noChannels * c_bytesPerSample] = {
+		0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00,
+		0x99, 0x99, 0x99, 0x19, 0x00, 0x00, 0x00, 0x00,
+		0x66, 0x66, 0x66, 0xe6, 0x00, 0x00, 0x00, 0x00,
+		0xcd, 0xcc, 0xcc, 0xcc, 0x00, 0x00, 0x00, 0x00,
+		0x33, 0x33, 0x33, 0xb3, 0x00, 0x00, 0x00, 0x00,
+		0x9a, 0x99, 0x99, 0x99, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
+	};
+	
+	tint iIdx = 3 * c_noChannels;
+	tint outputSize = 7 * c_noChannels * c_bytesPerSample;
+	tubyte out[7 * c_noChannels * c_bytesPerSample];
+
+	SampleConverter sampleConverter(c_noBits, c_bytesPerSample, c_littleEndian, c_alignHigh, c_isSigned);
+	sampleConverter.setNumberOfInputChannels(2);
+	sampleConverter.setNumberOfOutputChannels(2);
+
+	memset(out, 0, outputSize);
+	sampleConverter.convertAtIndex(reinterpret_cast<const sample_t *>(c_int32Samples), iIdx, out, 7, engine::e_SampleInt32);
+	EXPECT_EQ(0, memcmp(c_expectOutput32, out, outputSize));
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(SampleConverter,convertAtIndexFloat)
+{
+	const tint c_noBits = 32;
+	const tint c_bytesPerSample = 4;
+	const bool c_littleEndian = true;
+	const bool c_alignHigh = false;
+	const bool c_isSigned = true;
+	const int c_noSamples = 10;
+	const int c_noChannels = 2;
+
+#if defined(SINGLE_FLOAT_SAMPLE)
+	const sample_t c_sampleInput[c_noSamples * c_noChannels] = {
+		 1.0f, 1.0f,
+		 0.8f, 1.0f,
+		 0.6f, 1.0f,
+		 0.4f, 1.0f,
+		 0.2f, 1.0f,
+		-0.2f, 1.0f,
+		-0.4f, 1.0f,
+		-0.6f, 1.0f,
+		-0.8f, 1.0f,
+		-1.0f, 1.0f
+	};
+#else
+	const sample_t c_sampleInput[c_noSamples * c_noChannels] = {
+		 1.0, 1.0,
+		 0.8, 1.0,
+		 0.6, 1.0,
+		 0.4, 1.0,
+		 0.2, 1.0,
+		-0.2, 1.0,
+		-0.4, 1.0,
+		-0.6, 1.0,
+		-0.8, 1.0,
+		-1.0, 1.0
+	};
+#endif
+	
+	const tubyte c_expectOutput[7 * c_noChannels * c_bytesPerSample] = {
+		0x33, 0x33, 0x33, 0x33, 0x00, 0x00, 0x00, 0x00,
+		0x99, 0x99, 0x99, 0x19, 0x00, 0x00, 0x00, 0x00,
+		0x66, 0x66, 0x66, 0xe6, 0x00, 0x00, 0x00, 0x00,
+		0xcd, 0xcc, 0xcc, 0xcc, 0x00, 0x00, 0x00, 0x00,
+		0x33, 0x33, 0x33, 0xb3, 0x00, 0x00, 0x00, 0x00,
+		0x9a, 0x99, 0x99, 0x99, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00
+	};
+
+	tint iIdx = 3 * c_noChannels;
+	tint outputSize = 7 * c_noChannels * c_bytesPerSample;
+	tubyte out[7 * c_noChannels * c_bytesPerSample];
+
+	SampleConverter sampleConverter(c_noBits, c_bytesPerSample, c_littleEndian, c_alignHigh, c_isSigned);
+	sampleConverter.setNumberOfInputChannels(2);
+	sampleConverter.setNumberOfOutputChannels(2);
+
+	memset(out, 0, outputSize);
+	sampleConverter.convertAtIndex(c_sampleInput, iIdx, out, 7, engine::e_SampleFloat);
+	EXPECT_EQ(0, memcmp(c_expectOutput, out, outputSize));
+}
+
+//-------------------------------------------------------------------------------------------

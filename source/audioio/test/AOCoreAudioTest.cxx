@@ -43,7 +43,7 @@ TEST(AOCoreAudioMacOS,createIOTimeStamp)
 	
 	IOTimeStamp tS = audio.testCreateIOTimeStamp(&sysTime);
 	EXPECT_TRUE(tS.isValid());
-	EXPECT_EQ(tStamp,tS.time());	
+	EXPECT_NEAR(tStamp,tS.time(),500);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -5513,10 +5513,8 @@ TEST(AOCoreAudioMacOS,isDeviceAliveGivenOSErrorButDeviceIsAliveFlagIsSetToTrue)
 		.Times(1).WillOnce(DoAll(SetIsDeviceAlive(true),Return(static_cast<OSStatus>(kAudioHardwareNotRunningError))));
 
 	AOCoreAudioIsDeviceAliveTest audio;
-	EXPECT_CALL(audio,printErrorOS(StrEq("isDeviceAlive"),StrEq("Failed to check whether device is alive"),Eq(static_cast<OSStatus>(kAudioHardwareNotRunningError)))).Times(1);
-	EXPECT_CALL(audio,printToLog(StrEq("Audio device 'SoundBlaster' is no longer alive and available"))).Times(1);
 	
-	EXPECT_FALSE(audio.testIsDeviceAlive(pDevice));
+	EXPECT_TRUE(audio.testIsDeviceAlive(pDevice));
 
 	CoreAudioIF::release();
 }

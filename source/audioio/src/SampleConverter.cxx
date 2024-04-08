@@ -5120,6 +5120,37 @@ void SampleConverter::convert(const sample_t *in,tubyte *out,tint noSamples,engi
 }
 
 //-------------------------------------------------------------------------------------------
+
+void SampleConverter::convertAtIndex(const sample_t *in,tint idx,tbyte *out,tint noSamples,engine::CodecDataType type) const
+{
+	const sample_t *inFinal;
+
+    if(type & engine::e_SampleInt16)
+	{
+		const tint16 *inInt16 = reinterpret_cast<const tint16 *>(in);
+		inFinal = reinterpret_cast<const sample_t *>(&inInt16[idx]);
+		convert(inFinal,out,noSamples,type);
+	}
+    else if(type & engine::e_SampleInt24 || type & engine::e_SampleInt32)
+	{
+		const tint32 *inInt32 = reinterpret_cast<const tint32 *>(in);
+		inFinal = reinterpret_cast<const sample_t *>(&inInt32[idx]);
+		convert(inFinal,out,noSamples,type);
+	}
+	else
+	{
+		convert(&in[idx],out,noSamples,type);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SampleConverter::convertAtIndex(const sample_t *in,tint idx,tubyte *out,tint noSamples,engine::CodecDataType type) const
+{
+    convertAtIndex(in,idx,reinterpret_cast<tbyte *>(out),noSamples,type);
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------
