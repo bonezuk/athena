@@ -785,7 +785,7 @@ QString QKeyLineEdit::textForKeyCode(Qt::Key key)
 		case Qt::Key_acute:
 			k = QChar(0x00b4);
 			break;
-		case Qt::Key_mu:
+        case Qt::Key_micro:
 			k = QChar(0x00b5);
 			break;
 		case Qt::Key_paragraph:
