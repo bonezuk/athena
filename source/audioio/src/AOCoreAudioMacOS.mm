@@ -41,7 +41,8 @@ AOCoreAudioMacOS::AOCoreAudioMacOS(QObject *parent) : AOCoreAudio(parent),
 	m_oldStreamID(kAudioObjectUnknown),
 	m_oldStreamDescription(0),
 	m_integerDeviceID(kAudioObjectUnknown),
-    m_pIntegerDeviceIOProcID(0)
+    m_pIntegerDeviceIOProcID(0),
+    m_isDeviceVolume(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -137,6 +138,12 @@ bool AOCoreAudioMacOS::openAudio()
 	{
 		printError("openAudio","Could not find audio device");
 		return false;		
+	}
+	
+	m_isDeviceVolume = isDeviceVolume();
+	if(m_isDeviceVolume)
+	{
+		m_volume = getDeviceVolume();
 	}
 	
 	if(m_isIntegerMode)
@@ -1375,7 +1382,7 @@ QSharedPointer<SampleConverter> AOCoreAudioMacOS::sampleConverterFromDescription
 	bool isLittleEndian,isAlignHigh;
 	QSharedPointer<SampleConverter> pConverter;
 	
-        isLittleEndian = (format.mFormatFlags & kAudioFormatFlagIsBigEndian) ? false : true;
+	isLittleEndian = (format.mFormatFlags & kAudioFormatFlagIsBigEndian) ? false : true;
 	isAlignHigh = isConvertionAlignedHigh(format);
 	
 	if(format.mFormatFlags & kAudioFormatFlagIsFloat)
@@ -1875,7 +1882,15 @@ void AOCoreAudioMacOS::writeToAudioOutputBufferFromPartData(AbstractAudioHardwar
 		
 		m_pSampleConverter->setNumberOfInputChannels(noInputChannels);
 		m_pSampleConverter->setNumberOfOutputChannels(noOutputChannels);
-		m_pSampleConverter->setVolume(m_volume);
+		if(m_isDeviceVolume)
+		{
+			m_pSampleConverter->setVolume(c_plusOneSample);
+		}
+		else
+		{
+			m_pSampleConverter->setVolume(m_volume);
+		}
+		
 		
 		m_pSampleConverter->convertAtIndex(input,iIdx,out,amount,data->partConst(partNumber).getDataType());
 	}
@@ -1884,15 +1899,31 @@ void AOCoreAudioMacOS::writeToAudioOutputBufferFromPartData(AbstractAudioHardwar
 		tfloat32 *out = reinterpret_cast<tfloat32 *>(pBuffer->buffer(bufferIndex));
 		tint tAmount = oIdx + (amount * noOutputChannels);
 		
-		while(oIdx < tAmount)
+		if(m_isDeviceVolume)
 		{
+			while(oIdx < tAmount)
+			{
 #if defined(SINGLE_FLOAT_SAMPLE)
-			out[oIdx] = input[iIdx] * m_volume;
+				out[oIdx] = input[iIdx];
 #else
-			out[oIdx] = engine::sampleToFloat32(input[iIdx] * m_volume);
+				out[oIdx] = engine::sampleToFloat32(input[iIdx]);
 #endif
-			iIdx += noInputChannels;
-			oIdx += noOutputChannels;
+				iIdx += noInputChannels;
+				oIdx += noOutputChannels;
+			}
+		}
+		else
+		{
+			while(oIdx < tAmount)
+			{
+#if defined(SINGLE_FLOAT_SAMPLE)
+				out[oIdx] = input[iIdx] * m_volume;
+#else
+				out[oIdx] = engine::sampleToFloat32(input[iIdx] * m_volume);
+#endif
+				iIdx += noInputChannels;
+				oIdx += noOutputChannels;
+			}
 		}
 	}
 }
@@ -1991,6 +2022,154 @@ void AOCoreAudioMacOS::setCodecSampleFormatType(engine::Codec *codec, engine::RD
 	else
 	{
 		codec->setDataTypeFormat(engine::e_SampleFloat);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOCoreAudioMacOS::isDeviceVolume()
+{
+	tint i;
+	AudioObjectPropertyAddress prop = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, 0 };
+	QSharedPointer<AOQueryCoreAudio::DeviceCoreAudio> pDevice = getCurrentCoreAudioDevice();
+	bool isVolume = false;
+
+	// 0 = master volume, 1 = left volume, 2 = right volume.
+        for(i = 0; i < 3 && !isVolume; i++)
+	{
+                prop.mElement = i;
+		if(CoreAudioIF::instance()->AudioObjectHasProperty(pDevice->deviceID(), &prop))
+		{
+			isVolume = true;
+		}
+	}
+	return isVolume;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOCoreAudioMacOS::isDeviceVolumeSettable()
+{
+	tint i;
+	AudioObjectPropertyAddress prop = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, 0 };
+	QSharedPointer<AOQueryCoreAudio::DeviceCoreAudio> pDevice = getCurrentCoreAudioDevice();
+	bool isVolume = false;
+
+	// 0 = master volume, 1 = left volume, 2 = right volume.
+	for(i = 0; i < 3 && !isVolume; i++)
+	{
+                prop.mElement = i;
+		if(CoreAudioIF::instance()->AudioObjectHasProperty(pDevice->deviceID(), &prop))
+		{
+			OSStatus err;
+			Boolean settableFlag = false;
+		
+			err = CoreAudioIF::instance()->AudioObjectIsPropertySettable(pDevice->deviceID(), &prop, &settableFlag);
+			if(err == noErr && settableFlag)
+			{
+				isVolume = true;
+			}
+		}
+	}
+	return isVolume;
+}
+
+//-------------------------------------------------------------------------------------------
+
+sample_t AOCoreAudioMacOS::getDeviceVolume()
+{
+	tint i;
+	sample_t vol = 1.0f;
+	AudioObjectPropertyAddress prop = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, 0 };
+	QSharedPointer<AOQueryCoreAudio::DeviceCoreAudio> pDevice = getCurrentCoreAudioDevice();
+	
+	// 0 = master volume, 1 = left volume, 2 = right volume.
+	for(i = 0; i < 3; i++)
+	{
+                prop.mElement = i;
+		if(CoreAudioIF::instance()->AudioObjectHasProperty(pDevice->deviceID(),&prop))
+		{
+			Float32 volume;
+			UInt32 dataSize = sizeof(volume);
+			OSStatus err;
+			
+			err = CoreAudioIF::instance()->AudioObjectGetPropertyData(pDevice->deviceID(), &prop, 0, 0, &dataSize, &volume);
+			if(err == noErr)
+			{
+				vol = static_cast<sample_t>(volume);
+				break;
+			}
+		}
+	}
+	return vol;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOCoreAudioMacOS::setDeviceVolume(sample_t vol)
+{
+	tint i, chCount;
+	AudioObjectPropertyAddress prop = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, 0 };
+	QSharedPointer<AOQueryCoreAudio::DeviceCoreAudio> pDevice = getCurrentCoreAudioDevice();
+	bool isSet = false;
+
+	if(vol < c_zeroSample)
+	{
+		vol = c_zeroSample;
+	}
+	else if(vol > c_plusOneSample)
+	{
+		vol = c_plusOneSample;
+	}
+	chCount = 0;
+
+	// 0 = master volume, 1 = left volume, 2 = right volume.
+	for(i = 0; i < 3 && !isSet; i++)
+	{
+                prop.mElement = i;
+		if(CoreAudioIF::instance()->AudioObjectHasProperty(pDevice->deviceID(), &prop))
+		{
+			OSStatus err;
+			Boolean settableFlag = false;
+		
+			err = CoreAudioIF::instance()->AudioObjectIsPropertySettable(pDevice->deviceID(), &prop, &settableFlag);
+			if(err == noErr && settableFlag)
+			{
+				Float32 volume = static_cast<Float32>(vol);
+				UInt32 dataSize = sizeof(volume);
+
+                                err = CoreAudioIF::instance()->AudioObjectSetPropertyData(pDevice->deviceID(), &prop, 0, 0, dataSize, &volume);
+				if(err == noErr)
+				{
+					if(!i)
+					{
+						isSet = true;
+					}
+					else
+					{
+						chCount++;
+					}
+				}
+			}
+		}
+	}
+	return (isSet || (chCount > 1));
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOCoreAudioMacOS::doSetVolume(sample_t vol)
+{
+	if(m_isDeviceVolume)
+	{
+		if(!setDeviceVolume(vol))
+		{
+			m_volume = getDeviceVolume();
+		}
+	}
+	else
+	{
+		AOBase::doSetVolume(vol);
 	}
 }
 

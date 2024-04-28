@@ -63,6 +63,8 @@ class AUDIOIO_EXPORT AOCoreAudioMacOS : public AOCoreAudio
 		AudioStreamBasicDescription *m_oldStreamDescription;
 		AudioDeviceID m_integerDeviceID;
         AudioDeviceIOProcID *m_pIntegerDeviceIOProcID;
+        
+        bool m_isDeviceVolume;
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		virtual void printErrorOS(const tchar *strR,const tchar *strE,OSStatus err) const;
@@ -182,6 +184,13 @@ class AUDIOIO_EXPORT AOCoreAudioMacOS : public AOCoreAudio
 		virtual void updateExclusiveModeOnDevices();
 
 		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
+
+		virtual bool isDeviceVolume();
+		virtual bool isDeviceVolumeSettable();
+		virtual sample_t getDeviceVolume();
+		virtual bool setDeviceVolume(sample_t vol);
+
+		virtual void doSetVolume(sample_t vol);
 
 	protected slots:
 	
