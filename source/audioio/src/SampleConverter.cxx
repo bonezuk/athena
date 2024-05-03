@@ -14,7 +14,9 @@ SampleConverter::SampleConverter() : m_type(FormatDescription::e_DataSignedInteg
 	m_bytesPerSample(2),
 	m_littleEndian(true),
 	m_alignHigh(false),
-	m_volume(c_plusOneSample)
+	m_volume(c_plusOneSample),
+	m_vIntBuffer(NULL),
+	m_vIntBufSize(0)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -26,7 +28,9 @@ SampleConverter::SampleConverter(tint noBits,tint bytesPerSample,bool littleEndi
 	m_bytesPerSample(bytesPerSample),
 	m_littleEndian(littleEndian),
 	m_alignHigh(alignHigh),
-	m_volume(c_plusOneSample)
+	m_volume(c_plusOneSample),
+	m_vIntBuffer(NULL),
+	m_vIntBufSize(0)
 {
 	m_type = (isSigned) ? FormatDescription::e_DataSignedInteger : FormatDescription::e_DataUnsignedInteger;
 }
@@ -40,7 +44,9 @@ SampleConverter::SampleConverter(bool isSinglePrecision,bool littleEndian) : m_t
 	m_bytesPerSample(2),
 	m_littleEndian(true),
 	m_alignHigh(false),
-	m_volume(c_plusOneSample)
+	m_volume(c_plusOneSample),
+	m_vIntBuffer(NULL),
+	m_vIntBufSize(0)
 {
 	if(isSinglePrecision)
 	{
@@ -66,9 +72,26 @@ SampleConverter::SampleConverter(const SampleConverter& rhs) : m_type(FormatDesc
 	m_bytesPerSample(2),
 	m_littleEndian(true),
 	m_alignHigh(false),
-	m_volume(c_plusOneSample)
+	m_volume(c_plusOneSample),
+	m_vIntBuffer(NULL),
+	m_vIntBufSize(0)
 {
 	copy(rhs);
+}
+
+//-------------------------------------------------------------------------------------------
+
+SampleConverter::~SampleConverter()
+{
+	try
+	{
+		if(m_vIntBuffer != NULL)
+		{
+			delete [] m_vIntBuffer;
+			m_vIntBuffer = NULL;
+		}
+	}
+	catch(...) {}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -4885,6 +4908,106 @@ void SampleConverter::convertBigEndianDoublePrecision(const sample_t *in,tbyte *
 
 //-------------------------------------------------------------------------------------------
 
+void SampleConverter::volumeInt16Upscale(const tint16 *in, tint32 *out, tint noSamples) const
+{
+	tint64 vS = static_cast<tint64>(4294967296.0 * m_volume);
+
+	for(tint i=0; i<noSamples; i++, in+=m_noInChannels, out+=m_noInChannels)
+	{
+		tint64 x = static_cast<tint64>(*in) * vS;
+		tint32 y = static_cast<tint32>(x >> 16);
+		if(x & 0x0000000000008000ULL)
+		{
+			y++;
+		}
+		*out = y;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SampleConverter::volumeInt24Upscale(const tint32 *in, tint32 *out, tint noSamples) const
+{
+	tint64 vS = static_cast<tint64>(4294967296.0 * m_volume);
+
+	for(tint i=0; i<noSamples; i++, in+=m_noInChannels, out+=m_noInChannels)
+	{
+		tint64 x = static_cast<tint64>(*in) * vS;
+		tint32 y = static_cast<tint32>(x >> 24);
+		if(x & 0x0000000000800000ULL)
+		{
+			y++;
+		}
+		*out = y;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SampleConverter::volumeInt32Upscale(const tint32 *in, tint32 *out, tint noSamples) const
+{
+	tint64 vS = static_cast<tint64>(4294967296.0 * m_volume);
+
+	for(tint i=0; i<noSamples; i++, in+=m_noInChannels, out+=m_noInChannels)
+	{
+		tint64 x = static_cast<tint64>(*in) * vS;
+		tint32 y = static_cast<tint32>(x >> 32);
+		if(x & 0x0000000080000000ULL)
+		{
+			y++;
+		}
+		*out = y;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SampleConverter::volumeIntUpscale(const sample_t *in, tint32 *out, tint noSamples, engine::CodecDataType type) const
+{
+	if(type == engine::e_SampleInt24)
+	{
+        const tint32 *input = reinterpret_cast<const tint32 *>(in);
+        volumeInt24Upscale(input, out, noSamples);
+	}
+	else if(type == engine::e_SampleInt32)
+	{
+        const tint32 *input = reinterpret_cast<const tint32 *>(in);
+        volumeInt32Upscale(input, out, noSamples);
+	}
+	else
+	{
+        const tint16 *input = reinterpret_cast<const tint16 *>(in);
+        volumeInt16Upscale(input, out, noSamples);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+tint32 *SampleConverter::volumeIntBuffer(tint noSamples) const
+{
+	tint reqSize = noSamples * m_noInChannels;
+	
+	if(m_vIntBuffer == NULL || reqSize > m_vIntBufSize)
+	{
+		if(m_vIntBuffer != NULL)
+		{
+            delete [] m_vIntBuffer;
+		}
+		m_vIntBuffer = new tint32 [reqSize];
+		m_vIntBufSize = reqSize;
+	}
+	return m_vIntBuffer;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool SampleConverter::isIntegerType(engine::CodecDataType type) const
+{
+	return (type == engine::e_SampleInt16 || type == engine::e_SampleInt24 || type == engine::e_SampleInt32);
+}
+
+//-------------------------------------------------------------------------------------------
+
 void SampleConverter::convertInteger(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const
 {
 	switch(m_bytesPerSample)
@@ -5100,14 +5223,29 @@ void SampleConverter::convert(const sample_t *in,tbyte *out,tint noSamples,engin
 				convertBigEndianDoublePrecision(in,out,noSamples);
 			}
 			break;
-			
-		case FormatDescription::e_DataUnsignedInteger:
-			convertUnsignedInteger(in,reinterpret_cast<tubyte *>(out),noSamples,type);
-			break;
-			
-		case FormatDescription::e_DataSignedInteger:
+		
 		default:
-			convertInteger(in,out,noSamples,type);
+			if(isIntegerType(type) && !isEqual(m_volume, 1.0))
+			{
+				tint32 *uI = volumeIntBuffer(noSamples);
+				volumeIntUpscale(in, uI, noSamples, type);
+				if(m_type == FormatDescription::e_DataUnsignedInteger)
+				{
+					convertUnsignedInteger(reinterpret_cast<const sample_t *>(uI),reinterpret_cast<tubyte *>(out),noSamples,engine::e_SampleInt32);
+				}
+				else
+				{
+					convertInteger(reinterpret_cast<const sample_t *>(uI),out,noSamples,engine::e_SampleInt32);
+				}
+			}
+			if(m_type == FormatDescription::e_DataUnsignedInteger)
+			{
+				convertUnsignedInteger(in,reinterpret_cast<tubyte *>(out),noSamples,type);
+			}
+			else
+			{
+				convertInteger(in,out,noSamples,type);
+			}
 			break;
 	}
 }

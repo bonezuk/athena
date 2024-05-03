@@ -20,6 +20,7 @@ class AUDIOIO_EXPORT SampleConverter
 		SampleConverter(tint noBits,tint bytesPerSample,bool littleEndian,bool alignHigh,bool isSigned);
 		SampleConverter(bool isSinglePrecision,bool littleEndian);
 		SampleConverter(const SampleConverter& rhs);
+		virtual ~SampleConverter();
 		
 		const SampleConverter& operator = (const SampleConverter& rhs);
 		
@@ -58,6 +59,9 @@ class AUDIOIO_EXPORT SampleConverter
 		bool m_alignHigh;
 		sample_t m_volume;
 		
+		mutable tint32 *m_vIntBuffer;
+		mutable tint m_vIntBufSize;
+		
 		void copy(const SampleConverter& rhs);
 		
 		tint calculateShift() const;
@@ -75,6 +79,8 @@ class AUDIOIO_EXPORT SampleConverter
 		
 		tuint16 minIntegerValue16() const;
 		tuint32 minIntegerValue32() const;
+		
+		bool isIntegerType(engine::CodecDataType type) const;
 
 		void convertInteger(const sample_t *in,tbyte *out,tint noSamples,engine::CodecDataType type) const;
 		void convertUnsignedInteger(const sample_t *in,tubyte *out,tint noSamples,engine::CodecDataType type) const;
@@ -251,6 +257,13 @@ class AUDIOIO_EXPORT SampleConverter
 		void convertBigEndianSinglePrecision(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertLittleEndianDoublePrecision(const sample_t *in,tbyte *out,tint noSamples) const;
 		void convertBigEndianDoublePrecision(const sample_t *in,tbyte *out,tint noSamples) const;
+		
+		void volumeInt16Upscale(const tint16 *in, tint32 *out, tint noSamples) const;
+		void volumeInt24Upscale(const tint32 *in, tint32 *out, tint noSamples) const;
+		void volumeInt32Upscale(const tint32 *in, tint32 *out, tint noSamples) const;
+		void volumeIntUpscale(const sample_t *in, tint32 *out, tint noSamples, engine::CodecDataType type) const;
+		
+        tint32 *volumeIntBuffer(tint noSamples) const;
 };
 
 //-------------------------------------------------------------------------------------------
