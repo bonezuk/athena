@@ -5238,13 +5238,16 @@ void SampleConverter::convert(const sample_t *in,tbyte *out,tint noSamples,engin
 					convertInteger(reinterpret_cast<const sample_t *>(uI),out,noSamples,engine::e_SampleInt32);
 				}
 			}
-			if(m_type == FormatDescription::e_DataUnsignedInteger)
-			{
-				convertUnsignedInteger(in,reinterpret_cast<tubyte *>(out),noSamples,type);
-			}
 			else
 			{
-				convertInteger(in,out,noSamples,type);
+				if (m_type == FormatDescription::e_DataUnsignedInteger)
+				{
+					convertUnsignedInteger(in, reinterpret_cast<tubyte*>(out), noSamples, type);
+				}
+				else
+				{
+					convertInteger(in, out, noSamples, type);
+				}
 			}
 			break;
 	}

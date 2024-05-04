@@ -7,6 +7,7 @@ build_msvc16_win64/*
 build-blackomega*/*
 build_vc12debug_cmake/*
 build_vc12debug_cmake2/*
+build_msvc16_debug/*
 cmake_build_unixmake/*
 cmake_build_version/*
 cmake_build_ninja/*
@@ -15,3 +16,4 @@ source/versioner/Build/*
 CMakeLists.txt.user.4.8-pre1
 source/embedded/playlistmanager/Resources/*.qmlc
 source/blackomega.pro.user
+temp/*
