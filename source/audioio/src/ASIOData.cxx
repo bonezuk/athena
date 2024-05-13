@@ -12,7 +12,9 @@ ASIOData::ASIOData() : engine::RData(),
 	m_sampleType(ASIOSTFloat32LSB),
 	m_asioDataArray(0),
 	m_convertFlag(false),
-	m_volume(1.0)
+	m_volume(1.0),
+	m_vIntBuffer(NULL),
+	m_vIntBufSize(0)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -21,7 +23,9 @@ ASIOData::ASIOData(tint len,tint inChannel,tint outChannel) : engine::RData(len,
 	m_sampleType(ASIOSTFloat32LSB),
 	m_asioDataArray(0),
 	m_convertFlag(false),
-	m_volume(1.0)
+	m_volume(1.0),
+	m_vIntBuffer(NULL),
+	m_vIntBufSize(0)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -30,7 +34,9 @@ ASIOData::ASIOData(const engine::AData& rhs) : engine::RData(),
 	m_sampleType(ASIOSTFloat32LSB),
 	m_asioDataArray(0),
 	m_convertFlag(false),
-	m_volume(1.0)
+	m_volume(1.0),
+	m_vIntBuffer(NULL),
+	m_vIntBufSize(0)
 {
 	ASIOData::copy(rhs);
 }
@@ -49,6 +55,11 @@ ASIOData::~ASIOData()
 		}
 		::free(m_asioDataArray);
 		m_asioDataArray = 0;
+	}
+	if(m_vIntBuffer != NULL)
+	{
+		delete [] m_vIntBuffer;
+		m_vIntBuffer = NULL;
 	}
 }
 
@@ -1143,9 +1154,114 @@ tint ASIOData::copyToBufferInt32MSB24(const sample_t *src,tint len,tint oOffset,
 
 //-------------------------------------------------------------------------------------------
 
+tint32 *ASIOData::volumeIntBuffer()
+{
+	if(m_vIntBuffer == NULL || m_vIntBufSize < length())
+	{
+		if(m_vIntBuffer != NULL)
+		{
+			delete [] m_vIntBuffer;
+		}
+		m_vIntBuffer = new tint32 [length()];
+		m_vIntBufSize = length();
+	}
+	return m_vIntBuffer;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void ASIOData::volumeInt16Upscale(const tint16 *in, tint32 *out, tint noSamples) const
+{
+	tint64 vS = static_cast<tint64>(4294967296.0 * m_volume);
+
+	for(tint i=0; i<noSamples; i++, in+=m_noOutChannels, out+=m_noOutChannels)
+	{
+		tint64 x = static_cast<tint64>(*in) * vS;
+		tint32 y = static_cast<tint32>(x >> 16);
+		if(x & 0x0000000000008000ULL)
+		{
+			y++;
+		}
+		*out = y;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void ASIOData::volumeInt24Upscale(const tint32 *in, tint32 *out, tint noSamples) const
+{
+	tint64 vS = static_cast<tint64>(4294967296.0 * m_volume);
+
+	for(tint i=0; i<noSamples; i++, in+=m_noOutChannels, out+=m_noOutChannels)
+	{
+		tint64 x = static_cast<tint64>(*in) * vS;
+		tint32 y = static_cast<tint32>(x >> 24);
+		if(x & 0x0000000000800000ULL)
+		{
+			y++;
+		}
+		*out = y;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void ASIOData::volumeInt32Upscale(const tint32 *in, tint32 *out, tint noSamples) const
+{
+	tint64 vS = static_cast<tint64>(4294967296.0 * m_volume);
+
+	for(tint i=0; i<noSamples; i++, in+=m_noOutChannels, out+=m_noOutChannels)
+	{
+		tint64 x = static_cast<tint64>(*in) * vS;
+		tint32 y = static_cast<tint32>(x >> 32);
+		if(x & 0x0000000080000000ULL)
+		{
+			y++;
+		}
+		*out = y;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void ASIOData::volumeIntUpscale(const sample_t *in, tint32 *out, tint noSamples, engine::CodecDataType type) const
+{
+	if(type == engine::e_SampleInt24)
+	{
+        const tint32 *input = reinterpret_cast<const tint32 *>(in);
+        volumeInt24Upscale(input, out, noSamples);
+	}
+	else if(type == engine::e_SampleInt32)
+	{
+        const tint32 *input = reinterpret_cast<const tint32 *>(in);
+        volumeInt32Upscale(input, out, noSamples);
+	}
+	else
+	{
+        const tint16 *input = reinterpret_cast<const tint16 *>(in);
+        volumeInt16Upscale(input, out, noSamples);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 tint ASIOData::copyToBuffer(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type)
 {
+	return copyToBufferR(src, len, oOffset, chIndex, type, false);
+}
+
+//-------------------------------------------------------------------------------------------
+
+tint ASIOData::copyToBufferR(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type, bool recursive)
+{
 	tint amount;
+	
+	if(!recursive && !isEqual(m_volume, c_plusOneSample) && type != engine::e_SampleFloat)
+	{
+		tint32 *vBuffer = volumeIntBuffer();
+		volumeIntUpscale(src, vBuffer, len, type);
+		return copyToBufferR(reinterpret_cast<const sample_t>(vBuffer), len, oOffset, chIndex, engine::e_SampleInt32, true);
+	}
 	
 	switch(m_sampleType)
 	{

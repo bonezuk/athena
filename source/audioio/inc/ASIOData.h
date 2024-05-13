@@ -39,13 +39,23 @@ class AUDIOIO_EXPORT ASIOData : public engine::RData
 		bool m_convertFlag;
 		sample_t m_volume;
 		
+		tint32 *m_vIntBuffer;
+		tint m_vIntBufSize;
+		
 		virtual void copy(const engine::AData& rhs);
 		
 		virtual void asioAllocate();
 		virtual const void *asioDataI(tint chIdx,tint pIdx) const;
 		
 		virtual tint copyToBuffer(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
+		virtual tint copyToBufferR(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type, bool recursive);
 		
+		virtual tint32 *volumeIntBuffer();
+		virtual void volumeIntUpscale(const sample_t *in, tint32 *out, tint noSamples, engine::CodecDataType type) const;
+		virtual void volumeInt16Upscale(const tint16 *in, tint32 *out, tint noSamples) const;
+		virtual void volumeInt24Upscale(const tint32 *in, tint32 *out, tint noSamples) const;
+		virtual void volumeInt32Upscale(const tint32 *in, tint32 *out, tint noSamples) const;
+
 	private:
 	
 		sample_t volumeAndClip(sample_t x);

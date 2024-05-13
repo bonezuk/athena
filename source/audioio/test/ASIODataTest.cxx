@@ -5300,3 +5300,222 @@ TEST(ASIOData,sampleTo24BitIn32BitMSBConvertionStereoInt32)
 }
 
 //-------------------------------------------------------------------------------------------
+
+void testVolumeWithInt16(sample_t vol, const tuint16 in[10], const tubyte expectA[20], const tubyte expectB[20])
+{
+	ASIOData data(5,2,2);
+	data.setSampleType(ASIOSTInt32MSB);
+	data.setVolume(vol);
+	
+	engine::RData::Part& part = data.nextPart();
+	memcpy(data.partDataOut(0),in,10 * sizeof(tint16));
+	part.length() = 5;
+	part.done() = true;
+	part.setDataType(engine::e_SampleInt16);
+	
+	data.convert();
+	
+	ASSERT_EQ(0,memcmp(data.asioData(0,0),expectA,20));
+	ASSERT_EQ(0,memcmp(data.asioData(1,0),expectB,20));
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(ASIOData,volume32BitsMSBWithInt16)
+{
+	const tuint16 c_sampleInput[10] = {
+		0x7fff, 
+		0x6666, 
+		0x4ccc, 
+		0x3333, 
+		0x1999,
+		0xe667, 
+		0xcccd, 
+		0xb334, 
+		0x999a, 
+		0x8001
+	};
+
+    const tubyte c_expectIntegerSamplesA_75Percent[20] = {
+		0x5F, 0xFF, 0x40, 0x00,
+		0x39, 0x99, 0x00, 0x00,
+		0x13, 0x32, 0xC0, 0x00,
+		0xD9, 0x99, 0xC0, 0x00,
+		0xB3, 0x33, 0x80, 0x00
+	};
+
+    const tubyte c_expectIntegerSamplesB_75Percent[20] = {
+		0x4C, 0xCC, 0x80, 0x00,
+		0x26, 0x66, 0x40, 0x00,
+		0xEC, 0xCD, 0x40, 0x00,
+		0xC6, 0x67, 0x00, 0x00,
+		0xA0, 0x00, 0xC0, 0x00
+	};
+
+    const tubyte c_expectIntegerSamplesA_25Percent[20] = {
+		0x1F, 0xFF, 0xC0, 0x00,
+		0x13, 0x33, 0x00, 0x00,
+		0x06, 0x66, 0x40, 0x00,
+		0xF3, 0x33, 0x40, 0x00,
+		0xE6, 0x66, 0x80, 0x00,
+	};
+
+    const tubyte c_expectIntegerSamplesB_25Percent[20] = {
+		0x19, 0x99, 0x80, 0x00,
+		0x0C, 0xCC, 0xC0, 0x00,
+		0xF9, 0x99, 0xC0, 0x00,
+		0xEC, 0xCD, 0x00, 0x00,
+		0xE0, 0x00, 0x40, 0x00,
+	};
+	
+	testVolumeWithInt16(0.75, c_sampleInput, c_expectIntegerSamplesA_75Percent, c_expectIntegerSamplesB_75Percent);
+	testVolumeWithInt16(0.25, c_sampleInput, c_expectIntegerSamplesA_25Percent, c_expectIntegerSamplesB_25Percent);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void testVolumeWithInt24(sample_t vol, const tuint32 in[10], const tubyte expectA[20], const tubyte expectB[20])
+{
+	ASIOData data(5,2,2);
+	data.setSampleType(ASIOSTInt32MSB);
+	data.setVolume(vol);
+	
+	engine::RData::Part& part = data.nextPart();
+	memcpy(data.partDataOut(0),in,10 * sizeof(tint32));
+	part.length() = 5;
+	part.done() = true;
+	part.setDataType(engine::e_SampleInt24);
+	
+	data.convert();
+	
+	ASSERT_EQ(0,memcmp(data.asioData(0,0),expectA,20));
+	ASSERT_EQ(0,memcmp(data.asioData(1,0),expectB,20));
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(ASIOData,volume32BitsMSBWithInt24)
+{
+	const tuint32 c_int24Samples[10] = {
+		0x007fffff,
+		0x00666666,
+		0x004ccccc,
+		0x00333333,
+		0x00199999,
+		0xffe66667,
+		0xffcccccd,
+		0xffb33334,
+		0xff99999a,
+		0xff800000
+	};
+	
+    const tubyte c_expectOutput24A_75Percent[20] = {
+		0x5F, 0xFF, 0xFF, 0x40,
+		0x39, 0x99, 0x99, 0x00,
+		0x13, 0x33, 0x32, 0xC0,
+		0xD9, 0x99, 0x99, 0xC0,
+		0xB3, 0x33, 0x33, 0x80
+	};
+
+    const tubyte c_expectOutput24B_75Percent[20] = {
+		0x4C, 0xCC, 0xCC, 0x80,
+		0x26, 0x66, 0x66, 0x40,
+		0xEC, 0xCC, 0xCD, 0x40,
+		0xC6, 0x66, 0x67, 0x00,
+		0xA0, 0x00, 0x00, 0x00
+	};
+	
+    const tubyte c_expectOutput24A_25Percent[20] = {
+		0x1F, 0xFF, 0xFF, 0xC0,
+		0x13, 0x33, 0x33, 0x00,
+		0x06, 0x66, 0x66, 0x40,
+		0xF3, 0x33, 0x33, 0x40,
+		0xE6, 0x66, 0x66, 0x80
+	};
+
+    const tubyte c_expectOutput24B_25Percent[20] = {
+		0x19, 0x99, 0x99, 0x80,
+		0x0C, 0xCC, 0xCC, 0xC0,
+		0xF9, 0x99, 0x99, 0xC0,
+		0xEC, 0xCC, 0xCD, 0x00,
+		0xE0, 0x00, 0x00, 0x00
+	};
+
+	testVolumeWithInt24(0.75, c_int24Samples, c_expectOutput24A_75Percent, c_expectOutput24B_75Percent);
+	testVolumeWithInt24(0.25, c_int24Samples, c_expectOutput24A_25Percent, c_expectOutput24B_25Percent);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void testVolumeWithInt32(sample_t vol, const tuint32 in[10], const tubyte expectA[20], const tubyte expectB[20])
+{
+	ASIOData data(5,2,2);
+	data.setSampleType(ASIOSTInt32MSB);
+	data.setVolume(vol);
+	
+	engine::RData::Part& part = data.nextPart();
+	memcpy(data.partDataOut(0),in,10 * sizeof(tint32));
+	part.length() = 5;
+	part.done() = true;
+	part.setDataType(engine::e_SampleInt32);
+	
+	data.convert();
+	
+	ASSERT_EQ(0,memcmp(data.asioData(0,0),expectA,20));
+	ASSERT_EQ(0,memcmp(data.asioData(1,0),expectB,20));
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(ASIOData,volume32BitsMSBWithInt32)
+{
+	const tuint32 c_int32Samples[10] = {
+		0x7fffffff,
+		0x66666666,
+		0x4ccccccc,
+		0x33333333,
+		0x19999999,
+		0xe6666667,
+		0xcccccccd,
+		0xb3333334,
+		0x9999999a,
+		0x80000000
+	};
+	
+    const tubyte c_expectOutput32A_75Percent[20] = {
+		0x5F, 0xFF, 0xFF, 0xFF,
+		0x39, 0x99, 0x99, 0x99,
+		0x13, 0x33, 0x33, 0x33,
+		0xD9, 0x99, 0x99, 0x9A,
+		0xB3, 0x33, 0x33, 0x34
+	};
+
+    const tubyte c_expectOutput32B_75Percent[20] = {
+		0x4C, 0xCC, 0xCC, 0xCD,
+		0x26, 0x66, 0x66, 0x66,
+		0xEC, 0xCC, 0xCC, 0xCD,
+		0xC6, 0x66, 0x66, 0x67,
+		0xA0, 0x00, 0x00, 0x00
+	};
+
+    const tubyte c_expectOutput32A_25Percent[20] = {
+		0x20, 0x00, 0x00, 0x00,
+		0x13, 0x33, 0x33, 0x33,
+		0x06, 0x66, 0x66, 0x66,
+		0xF3, 0x33, 0x33, 0x33,
+		0xE6, 0x66, 0x66, 0x67
+	};
+
+    const tubyte c_expectOutput32B_25Percent[20] = {
+		0x19, 0x99, 0x99, 0x9A,
+		0x0C, 0xCC, 0xCC, 0xCD,
+		0xF9, 0x99, 0x99, 0x9A,
+		0xEC, 0xCC, 0xCC, 0xCD,
+		0xE0, 0x00, 0x00, 0x00
+	};
+
+	testVolumeWithInt32(0.75, c_int32Samples, c_expectOutput32A_75Percent, c_expectOutput32B_75Percent);
+	testVolumeWithInt32(0.25, c_int32Samples, c_expectOutput32A_25Percent, c_expectOutput32B_25Percent);
+}
+
+//-------------------------------------------------------------------------------------------
