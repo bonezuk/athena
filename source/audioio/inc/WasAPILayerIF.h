@@ -109,6 +109,8 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		
 		virtual IAudioClientIFSPtr getAudioClient();
 		virtual void releaseAudioClient();
+
+		static void printWaveFormat(WAVEFORMATEX *pFormat);
 		
 	protected:
 		
@@ -164,6 +166,11 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual WAVEFORMATEX *descriptionToWaveFormat(const FormatDescription& desc);
 		
 		virtual WAVEFORMATEX *findClosestWaveFormatFromDescription(const FormatDescription& sourceDesc);
+		
+		static QString waveFormatTypeName(WORD wFormatTag);
+		static QString waveFormatGUIDType(GUID guid);
+		static QString guidString(GUID id);
+		static QString printChannelMask(DWORD dwChannelMask);
 		
 	protected slots:
 	
