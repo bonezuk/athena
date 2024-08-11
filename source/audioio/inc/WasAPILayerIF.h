@@ -111,6 +111,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual void releaseAudioClient();
 
 		static void printWaveFormat(WAVEFORMATEX *pFormat);
+		void printIndexedFormatSupport(tint bitIdx,tint chIdx,tint freqIdx);
 		
 	protected:
 		
@@ -171,6 +172,8 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		static QString waveFormatGUIDType(GUID guid);
 		static QString guidString(GUID id);
 		static QString printChannelMask(DWORD dwChannelMask);
+		
+		void printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExcl);
 		
 	protected slots:
 	
