@@ -1,4 +1,5 @@
 #include "audioio/inc/WasAPILayerIF.h"
+#include "engine/inc/FormatType.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -1211,7 +1212,7 @@ QString WasAPIDeviceLayer::waveFormatGUIDType(GUID guid)
 	}
 	else if(IsEqualGUID(guid, KSDATAFORMAT_SUBTYPE_MULAW))
 	{
-		type = "Mu-Law"
+		type = "Mu-Law";
 	}
 	else if(IsEqualGUID(guid, KSDATAFORMAT_SUBTYPE_ADPCM))
 	{
@@ -1244,7 +1245,7 @@ QString WasAPIDeviceLayer::guidString(GUID id)
 	g += static_cast<const tchar *>(x);
 	g += "-";
 	
-	dataTG = engine::to16BitUnsignedFromLittleEndian(id.Data4);
+	dataTG = engine::to16BitUnsignedFromLittleEndian(reinterpret_cast<const tchar *>(id.Data4));
 	x = common::BString::HexInt(static_cast<tuint32>(dataTG), 4, true);
 	g += static_cast<const tchar *>(x);
 	g += "-";
@@ -1344,8 +1345,7 @@ void WasAPIDeviceLayer::printWaveFormat(WAVEFORMATEX *pFormat)
 		common::Log::g_Log << "\tSpeakers: " << printChannelMask(pFormatExt->dwChannelMask) << common::c_endl;
 		common::Log::g_Log << "\tGUID: " << guidString(pFormatExt->SubFormat) << " (" << waveFormatGUIDType(pFormatExt->SubFormat) << ")" << common::c_endl;
 	
-		WORD expectSize = sizeof(WAVE_FORMAT_EXTENSIBLE) - sizeof(WAVEFORMATEX);
-		if(pFormat->cbSize < expectSize)
+		if(pFormat->cbSize < (sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX)))
 		{
 			common::Log::g_Log << "\tExpected WAVE_FORMAT_EXTENSIBLE too small" << common::c_endl;
 		}
@@ -1363,20 +1363,20 @@ void WasAPIDeviceLayer::printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExc
 	HRESULT hr;
 	WAVEFORMATEX *pCloseFormat = 0;
 
-	hr = m_pAudioClient->IsFormatSupported((isExcl) ? AUDCLNT_SHAREMODE_EXCLUSIVE : AUDCLNT_SHAREMODE_SHARED, &format, &pCloseFormat);
+	hr = getAudioClient()->IsFormatSupported((isExcl) ? AUDCLNT_SHAREMODE_EXCLUSIVE : AUDCLNT_SHAREMODE_SHARED, pFormat, &pCloseFormat);
 	if(hr == S_OK)
 		common::Log::g_Log << "S_OK Succeeded and the audio endpoint device supports the specified stream format.";
-	else if(hr == S_FALSE
+	else if(hr == S_FALSE)
 		common::Log::g_Log << "S_FALSE Succeeded with a closest match to the specified format.";
-	else if(hr == AUDCLNT_E_UNSUPPORTED_FORMAT
+	else if(hr == AUDCLNT_E_UNSUPPORTED_FORMAT)
 		common::Log::g_Log << "AUDCLNT_E_UNSUPPORTED_FORMAT Succeeded but the specified format is not supported in exclusive mode.";
-	else if(hr == E_POINTER
+	else if(hr == E_POINTER)
 		common::Log::g_Log << "E_POINTER Parameter pFormat is NULL, or ppClosestMatch is NULL and ShareMode is AUDCLNT_SHAREMODE_SHARED.";
-	else if(hr == E_INVALIDARG
+	else if(hr == E_INVALIDARG)
 		common::Log::g_Log << "E_INVALIDARG Parameter ShareMode is a value other than AUDCLNT_SHAREMODE_SHARED or AUDCLNT_SHAREMODE_EXCLUSIVE.";
-	else if(hr == AUDCLNT_E_DEVICE_INVALIDATED
+	else if(hr == AUDCLNT_E_DEVICE_INVALIDATED)
 		common::Log::g_Log << "AUDCLNT_E_DEVICE_INVALIDATED The audio endpoint device has been unplugged, or the audio hardware or associated hardware resources have been reconfigured, disabled, removed, or otherwise made unavailable for use.";
-	else if(hr == AUDCLNT_E_SERVICE_NOT_RUNNING
+	else if(hr == AUDCLNT_E_SERVICE_NOT_RUNNING)
 		common::Log::g_Log << "AUDCLNT_E_SERVICE_NOT_RUNNING The Windows audio service is not running.";
 	else
 		common::Log::g_Log << "Unknown error code HRESULT=" << QString::number(hr, 16);
@@ -1393,22 +1393,20 @@ void WasAPIDeviceLayer::printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExc
 
 void WasAPIDeviceLayer::printIndexedFormatSupport(tint bitIdx,tint chIdx,tint freqIdx)
 {
-	HRESULT hr;
 	WAVEFORMATEX format;
-	WAVEFORMATEX *pCloseFormat = 0;
 
 	common::Log::g_Log << "Format bits=" << QString::number(getNumberOfBitsFromIndex(bitIdx));
 	common::Log::g_Log << ", channels=" << QString::number(getNumberOfChannelsFromIndex(chIdx));
 	common::Log::g_Log << ", frequency=" << QString::number(getFrequencyFromIndex(freqIdx));
 	common::Log::g_Log << common::c_endl;
 	
-	setWaveFormatFromIndex(bitIdx, chIdx, freqIdx, &format);
+	setWaveFormatFromIndex(bitIdx, chIdx, freqIdx, format);
 	printWaveFormat(&format);
 	
-	common::Log::g_Log << "Shared support = " << (m_formatsShared[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE" << common::c_endl;
+	common::Log::g_Log << "Shared support = " << ((m_formatsShared[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE") << common::c_endl;
 	printIsFormatSupported(&format, false);
 
-	common::Log::g_Log << "Exclusive support = " << (m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE" << common::c_endl;
+	common::Log::g_Log << "Exclusive support = " << ((m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE") << common::c_endl;
 	printIsFormatSupported(&format, true);
 }
 
