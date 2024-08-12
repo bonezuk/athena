@@ -1260,7 +1260,7 @@ tint ASIOData::copyToBufferR(const sample_t *src,tint len,tint oOffset,tint chIn
 	{
 		tint32 *vBuffer = volumeIntBuffer();
 		volumeIntUpscale(src, vBuffer, len, type);
-		return copyToBufferR(reinterpret_cast<const sample_t>(vBuffer), len, oOffset, chIndex, engine::e_SampleInt32, true);
+		return copyToBufferR(reinterpret_cast<const sample_t *>(vBuffer), len, oOffset, chIndex, engine::e_SampleInt32, true);
 	}
 	
 	switch(m_sampleType)
