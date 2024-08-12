@@ -1163,6 +1163,256 @@ void WasAPIDeviceLayer::releaseAudioClient()
 }
 
 //-------------------------------------------------------------------------------------------
+
+QString WasAPIDeviceLayer::waveFormatTypeName(WORD wFormatTag)
+{
+	QString name;
+	
+	switch(wFormatTag)
+	{
+		case WAVE_FORMAT_PCM: name = "PCM"; break;
+		case WAVE_FORMAT_IEEE_FLOAT: name = "PCM-Float"; break;
+		case WAVE_FORMAT_DRM: name = "DRM"; break;
+		case WAVE_FORMAT_EXTENSIBLE: name = "Extensible"; break;
+		case WAVE_FORMAT_ALAW: name = "A-Law"; break;
+		case WAVE_FORMAT_MULAW: name = "Mu-Law"; break;
+		case WAVE_FORMAT_ADPCM: name = "AD-PCM"; break;
+		case WAVE_FORMAT_MPEG: name = "MPEG-1"; break;
+		case WAVE_FORMAT_DOLBY_AC3_SPDIF: name = "DD-AC3"; break;
+		case WAVE_FORMAT_WMASPDIF: name = "WMA"; break;
+		default:
+			name = QString("Unknown (0x") + QString::number(static_cast<uint>(wFormatTag), 16) + QString(")");
+			break;
+	}
+	return name;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString WasAPIDeviceLayer::waveFormatGUIDType(GUID guid)
+{
+	QString type;
+	
+	if(IsEqualGUID(guid, KSDATAFORMAT_SUBTYPE_PCM))
+	{
+		type = "PCM";
+	}
+	else if(IsEqualGUID(guid, KSDATAFORMAT_SUBTYPE_IEEE_FLOAT))
+	{
+		type = "PCM-Float";
+	}
+	else if(IsEqualGUID(guid, KSDATAFORMAT_SUBTYPE_DRM))
+	{
+		type = "DRM";
+	}
+	else if(IsEqualGUID(guid, KSDATAFORMAT_SUBTYPE_ALAW))
+	{
+		type = "A-Law";
+	}
+	else if(IsEqualGUID(guid, KSDATAFORMAT_SUBTYPE_MULAW))
+	{
+		type = "Mu-Law"
+	}
+	else if(IsEqualGUID(guid, KSDATAFORMAT_SUBTYPE_ADPCM))
+	{
+		type = "AD-PCM";
+	}
+	else
+	{
+		type = "????";
+	}
+	return type;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString WasAPIDeviceLayer::guidString(GUID id)
+{
+	tuint16 dataTG;
+	QString g;
+	common::BString x;
+	
+	x = common::BString::HexInt(static_cast<tuint32>(id.Data1), 8, true);
+	g += static_cast<const tchar *>(x);
+	g += "-";
+	
+	x = common::BString::HexInt(static_cast<tuint32>(id.Data2), 4, true);
+	g += static_cast<const tchar *>(x);
+	g += "-";
+	
+	x = common::BString::HexInt(static_cast<tuint32>(id.Data3), 4, true);
+	g += static_cast<const tchar *>(x);
+	g += "-";
+	
+	dataTG = engine::to16BitUnsignedFromLittleEndian(id.Data4);
+	x = common::BString::HexInt(static_cast<tuint32>(dataTG), 4, true);
+	g += static_cast<const tchar *>(x);
+	g += "-";
+	
+	for(int i = 2; i < 8; i++)
+	{
+		x = common::BString::HexInt(static_cast<tuint32>(id.Data4[i]), 2, true);
+		g += static_cast<const tchar *>(x);
+	}
+	return g;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString WasAPIDeviceLayer::printChannelMask(DWORD dwChannelMask)
+{
+	static const char *speakerNames[] = {
+		// 0 - #define SPEAKER_FRONT_LEFT              0x1
+		"Front Left",
+		// 1 - #define SPEAKER_FRONT_RIGHT             0x2
+		"Front Right",
+		// 2 - #define SPEAKER_FRONT_CENTER            0x4
+		"Front Center",
+		// 3 - #define SPEAKER_LOW_FREQUENCY           0x8
+		"LFE (Subwoofer)",
+		// 4 - #define SPEAKER_BACK_LEFT               0x10
+		"Back Left",
+		// 5 - #define SPEAKER_BACK_RIGHT              0x20
+		"Back Right",
+		// 6 - #define SPEAKER_FRONT_LEFT_OF_CENTER    0x40
+		"Front Left of Center",
+		// 7 - #define SPEAKER_FRONT_RIGHT_OF_CENTER   0x80
+		"Front Right of Center",
+		// 8 - #define SPEAKER_BACK_CENTER             0x100
+		"Back Center",
+		// 9 - #define SPEAKER_SIDE_LEFT               0x200
+		"Side Left",
+		// 10 - #define SPEAKER_SIDE_RIGHT              0x400
+		"Side Right",
+		// 11 - #define SPEAKER_TOP_CENTER              0x800
+		"Top Center",
+		// 12 - #define SPEAKER_TOP_FRONT_LEFT          0x1000
+		"Top Front Left",
+		// 13 - #define SPEAKER_TOP_FRONT_CENTER        0x2000
+		"Top Front Center",
+		// 14 - #define SPEAKER_TOP_FRONT_RIGHT         0x4000
+		"Top Front Right",
+		// 15 - #define SPEAKER_TOP_BACK_LEFT           0x8000
+		"Top Back Left",
+		// 16 - #define SPEAKER_TOP_BACK_CENTER         0x10000
+		"Top Back Center",
+		// 17 - #define SPEAKER_TOP_BACK_RIGHT          0x20000
+		"Top Back Right"
+	};
+	
+	QString speakers;
+	
+	for(int i = 0; i < 18; i++)
+	{
+		DWORD mask = 1 << i;
+		
+		if(mask & dwChannelMask)
+		{
+			if(i)
+			{
+				speakers += ", ";
+			}
+			speakers += speakerNames[i];
+		}
+	}
+	return speakers;
+}
+
+//-------------------------------------------------------------------------------------------
+/*
+PCM ch=2, freq=44100, bits=16, ba=4
+Extensible ch=2, freq=44100, bits=16, ba=4, vbps=16
+	Speakers: Front Left, Front Right
+	GUID: 00000000-0000-0000-0000-000000000000 (KSDATAFORMAT_SUBTYPE_PCM)
+*/
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::printWaveFormat(WAVEFORMATEX *pFormat)
+{
+	QString formatString;
+	formatString = waveFormatTypeName(pFormat->wFormatTag);
+
+	common::Log::g_Log << waveFormatTypeName(pFormat->wFormatTag) << " ";
+	common::Log::g_Log << "ch=" << QString::number(pFormat->nChannels) << ", ";
+	common::Log::g_Log << "freq=" << QString::number(pFormat->nSamplesPerSec) << ", ";
+	common::Log::g_Log << "ba=" << QString::number(pFormat->nBlockAlign);
+	if(pFormat->wFormatTag == WAVE_FORMAT_EXTENSIBLE)
+	{
+		WAVEFORMATEXTENSIBLE *pFormatExt = reinterpret_cast<WAVEFORMATEXTENSIBLE *>(pFormat);
+	
+		common::Log::g_Log << ", vbps=" << QString::number(pFormatExt->Samples.wValidBitsPerSample) << common::c_endl;
+		common::Log::g_Log << "\tSpeakers: " << printChannelMask(pFormatExt->dwChannelMask) << common::c_endl;
+		common::Log::g_Log << "\tGUID: " << guidString(pFormatExt->SubFormat) << " (" << waveFormatGUIDType(pFormatExt->SubFormat) << ")" << common::c_endl;
+	
+		WORD expectSize = sizeof(WAVE_FORMAT_EXTENSIBLE) - sizeof(WAVEFORMATEX);
+		if(pFormat->cbSize < expectSize)
+		{
+			common::Log::g_Log << "\tExpected WAVE_FORMAT_EXTENSIBLE too small" << common::c_endl;
+		}
+	}
+	else
+	{
+		common::Log::g_Log << common::c_endl;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExcl)
+{
+	HRESULT hr;
+	WAVEFORMATEX *pCloseFormat = 0;
+
+	hr = m_pAudioClient->IsFormatSupported((isExcl) ? AUDCLNT_SHAREMODE_EXCLUSIVE : AUDCLNT_SHAREMODE_SHARED, &format, &pCloseFormat);
+	if(hr == S_OK)
+		common::Log::g_Log << "S_OK Succeeded and the audio endpoint device supports the specified stream format.";
+	else if(hr == S_FALSE
+		common::Log::g_Log << "S_FALSE Succeeded with a closest match to the specified format.";
+	else if(hr == AUDCLNT_E_UNSUPPORTED_FORMAT
+		common::Log::g_Log << "AUDCLNT_E_UNSUPPORTED_FORMAT Succeeded but the specified format is not supported in exclusive mode.";
+	else if(hr == E_POINTER
+		common::Log::g_Log << "E_POINTER Parameter pFormat is NULL, or ppClosestMatch is NULL and ShareMode is AUDCLNT_SHAREMODE_SHARED.";
+	else if(hr == E_INVALIDARG
+		common::Log::g_Log << "E_INVALIDARG Parameter ShareMode is a value other than AUDCLNT_SHAREMODE_SHARED or AUDCLNT_SHAREMODE_EXCLUSIVE.";
+	else if(hr == AUDCLNT_E_DEVICE_INVALIDATED
+		common::Log::g_Log << "AUDCLNT_E_DEVICE_INVALIDATED The audio endpoint device has been unplugged, or the audio hardware or associated hardware resources have been reconfigured, disabled, removed, or otherwise made unavailable for use.";
+	else if(hr == AUDCLNT_E_SERVICE_NOT_RUNNING
+		common::Log::g_Log << "AUDCLNT_E_SERVICE_NOT_RUNNING The Windows audio service is not running.";
+	else
+		common::Log::g_Log << "Unknown error code HRESULT=" << QString::number(hr, 16);
+	common::Log::g_Log << common::c_endl;
+	
+	if(pCloseFormat != 0)
+	{
+		printWaveFormat(pCloseFormat);
+		CoTaskMemFree(pCloseFormat);
+	}	
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::printIndexedFormatSupport(tint bitIdx,tint chIdx,tint freqIdx)
+{
+	HRESULT hr;
+	WAVEFORMATEX format;
+	WAVEFORMATEX *pCloseFormat = 0;
+
+	common::Log::g_Log << "Format bits=" << QString::number(getNumberOfBitsFromIndex(bitIdx));
+	common::Log::g_Log << ", channels=" << QString::number(getNumberOfChannelsFromIndex(chIdx));
+	common::Log::g_Log << ", frequency=" << QString::number(getFrequencyFromIndex(freqIdx));
+	common::Log::g_Log << common::c_endl;
+	
+	setWaveFormatFromIndex(bitIdx, chIdx, freqIdx, &format);
+	printWaveFormat(&format);
+	
+	common::Log::g_Log << "Shared support = " << (m_formatsShared[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE" << common::c_endl;
+	printIsFormatSupported(&format, false);
+
+	common::Log::g_Log << "Exclusive support = " << (m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE" << common::c_endl;
+	printIsFormatSupported(&format, true);
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------

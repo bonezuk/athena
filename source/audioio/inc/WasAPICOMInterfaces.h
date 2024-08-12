@@ -11,6 +11,7 @@
 #include <Devicetopology.h>
 #include <KsMedia.h>
 #include <MMReg.h>
+#include <guiddef.h>
 
 #include <QSharedPointer>
 
