@@ -308,7 +308,42 @@ void WasAPIDeviceLayer::defaultWaveFormat(WAVEFORMATEX& format) const
 
 //-------------------------------------------------------------------------------------------
 
-void WasAPIDeviceLayer::setWaveFormat(int noChannels,int noBits,int frequency,WAVEFORMATEX& format) const
+void WasAPIDeviceLayer::defaultWaveExtensibleFormat(WAVEFORMATEXTENSIBLE& format) const
+{
+	memset(&format,0,sizeof(WAVEFORMATEXTENSIBLE));
+	format.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
+	format.Format.nChannels = 2;
+	format.Format.nSamplesPerSec = 44100;
+	format.Format.nAvgBytesPerSec = 44100 * 2 * 2;
+	format.Format.nBlockAlign = 4;
+	format.Format.wBitsPerSample = 16;
+	format.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+	format.Samples.wValidBitsPerSample = 16;
+	format.dwChannelMask = KSAUDIO_SPEAKER_STEREO;
+	format.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::defaultWaveExtensibleFloatFormat(WAVEFORMATEXTENSIBLE& format, bool is64Bit) const
+{
+	int sampleSize = (is64Bit) ? sizeof(tfloat64) : sizeof(tfloat32);
+	memset(&format,0,sizeof(WAVEFORMATEXTENSIBLE));
+	format.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
+	format.Format.nChannels = 2;
+	format.Format.nSamplesPerSec = 44100;
+	format.Format.nAvgBytesPerSec = 44100 * 2 * sampleSize;
+	format.Format.nBlockAlign = sampleSize;
+	format.Format.wBitsPerSample = sampleSize * 8;
+	format.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+	format.Samples.wValidBitsPerSample = sampleSize * 8;
+	format.dwChannelMask = KSAUDIO_SPEAKER_STEREO;
+	format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::setWaveFormat(int noChannels, int noBits, int frequency, WAVEFORMATEX& format) const
 {
 	int noBytes = noBits >> 3;
 	format.nChannels = noChannels;
@@ -316,6 +351,80 @@ void WasAPIDeviceLayer::setWaveFormat(int noChannels,int noBits,int frequency,WA
 	format.nAvgBytesPerSec = frequency * noBytes * noChannels;
 	format.nBlockAlign = noBytes * noChannels;
 	format.wBitsPerSample = noBits;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::setWaveExtensibleFormat(int noChannels, int noBits, int frequency, WAVEFORMATEXTENSIBLE& format) const
+{
+	int noBytes 
+	
+	noBytes = noBits >> 3;
+	if(noBits & 0x7)
+		noBytes++;
+	
+	format.Format.nChannels = noChannels;
+	format.Format.nSamplesPerSec = frequency;
+	format.Format.nAvgBytesPerSec = frequency * noBytes * noChannels;
+	format.Format.nBlockAlign = noBytes * noChannels;
+	format.Format.wBitsPerSample = noBytes << 3;	
+	format.Samples.wValidBitsPerSample = noBits;
+	format.dwChannelMask = defaultChannelMask(noChannels);
+	format.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::setWaveExtensibleFloatFormat(int noChannels,int frequency, bool is64Bit,WAVEFORMATEXTENSIBLE& format) const
+{
+	int noBytes = (is64Bit) ? sizeof(tfloat32) : sizeof(tfloat64);
+	
+	format.Format.nChannels = noChannels;
+	format.Format.nSamplesPerSec = frequency;
+	format.Format.nAvgBytesPerSec = frequency * noBytes * noChannels;
+	format.Format.nBlockAlign = noBytes * noChannels;
+	format.Format.wBitsPerSample = noBytes << 3;	
+	format.Samples.wValidBitsPerSample = noBytes << 3;
+	format.dwChannelMask = defaultChannelMask(noChannels);
+	format.SubFormat = WAVE_FORMAT_IEEE_FLOAT;
+}
+
+//-------------------------------------------------------------------------------------------
+
+DWORD WasAPIDeviceLayer::defaultChannelMask(int noChannels) const
+{
+	DWORD dwChannelMask;
+	
+	switch(noChannels)
+	{
+		case 1:
+			dwChannelMask = KSAUDIO_SPEAKER_MONO;
+			break;
+		case 3:
+			dwChannelMask = KSAUDIO_SPEAKER_STEREO | SPEAKER_FRONT_CENTER;
+			break;
+		case 4:
+			dwChannelMask = KSAUDIO_SPEAKER_QUAD;
+			break;
+		case 5:
+			dwChannelMask = KSAUDIO_SPEAKER_5POINT1;
+			dwChannelMask &= ~SPEAKER_LOW_FREQUENCY;
+			break;
+		case 6:
+			dwChannelMask = KSAUDIO_SPEAKER_5POINT1;
+			break;
+		case 7:
+			dwChannelMask = KSAUDIO_SPEAKER_7POINT1;
+			dwChannelMask &= ~SPEAKER_LOW_FREQUENCY;
+			break;
+		case 8:
+			dwChannelMask = KSAUDIO_SPEAKER_7POINT1;
+			break;
+		case 2:
+		default:
+			dwChannelMask = KSAUDIO_SPEAKER_STEREO;
+			break;
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -331,41 +440,10 @@ WAVEFORMATEXTENSIBLE *WasAPIDeviceLayer::toWaveExtensible(WAVEFORMATEX *pFormat)
 	pExFormat->Format.nAvgBytesPerSec = pFormat->nAvgBytesPerSec;
 	pExFormat->Format.nBlockAlign = pFormat->nBlockAlign;
 	pExFormat->Format.wBitsPerSample = pFormat->wBitsPerSample;
-	pExFormat->Format.cbSize = 22;
-	
+	pExFormat->Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
 	pExFormat->Samples.wValidBitsPerSample = pFormat->wBitsPerSample;
-	
-	switch(pFormat->nChannels)
-	{
-		case 1:
-			pExFormat->dwChannelMask = KSAUDIO_SPEAKER_MONO;
-			break;
-		case 3:
-			pExFormat->dwChannelMask = SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT | SPEAKER_FRONT_CENTER;
-			break;
-		case 4:
-			pExFormat->dwChannelMask = KSAUDIO_SPEAKER_QUAD;
-			break;
-		case 5:
-			pExFormat->dwChannelMask = KSAUDIO_SPEAKER_SURROUND;
-			break;
-		case 6:
-			pExFormat->dwChannelMask = KSAUDIO_SPEAKER_5POINT1;
-			break;
-		case 7:
-			pExFormat->dwChannelMask = SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT | SPEAKER_FRONT_CENTER | SPEAKER_BACK_LEFT | SPEAKER_BACK_RIGHT | SPEAKER_SIDE_LEFT | SPEAKER_SIDE_RIGHT;
-			break;
-		case 8:
-			pExFormat->dwChannelMask = KSAUDIO_SPEAKER_7POINT1;
-			break;
-		case 2:
-		default:
-			pExFormat->dwChannelMask = KSAUDIO_SPEAKER_STEREO;
-			break;
-	}
-	
-	pExFormat->SubFormat = (pFormat->wFormatTag==WAVE_FORMAT_IEEE_FLOAT) ? KSDATAFORMAT_SUBTYPE_IEEE_FLOAT : KSDATAFORMAT_SUBTYPE_PCM;
-	
+	pExFormat->dwChannelMask = defaultChannelMask(pFormat->nChannels);
+	pExFormat->SubFormat = (pFormat->wFormatTag==WAVE_FORMAT_IEEE_FLOAT) ? KSDATAFORMAT_SUBTYPE_IEEE_FLOAT : KSDATAFORMAT_SUBTYPE_PCM;	
 	return pExFormat;
 }
 
@@ -946,7 +1024,7 @@ void WasAPIDeviceLayer::updateFormats()
 
 //-------------------------------------------------------------------------------------------
 
-void WasAPIDeviceLayer::setWaveFormatFromIndex(tint bitIdx,tint chIdx,tint freqIdx,WAVEFORMATEX& format)
+void WasAPIDeviceLayer::setWaveFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, WAVEFORMATEX& format)
 {
 	int noChannels = getNumberOfChannelsFromIndex(chIdx);
 	int noBits = getNumberOfBitsFromIndex(bitIdx);
@@ -962,6 +1040,36 @@ void WasAPIDeviceLayer::setWaveFormatFromIndex(tint bitIdx,tint chIdx,tint freqI
 		format.wFormatTag = e_formatFloat;
 		setWaveFormat(noChannels,32,frequency,format);
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::setWaveExtensibleFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, WAVEFORMATEXTENSIBLE& format)
+{
+	int noChannels = getNumberOfChannelsFromIndex(chIdx);
+	int noBits = getNumberOfBitsFromIndex(bitIdx);
+	int frequency = getFrequencyFromIndex(freqIdx);
+	
+	defaultWaveExtensibleFormat(format);
+	if(noBits > 0)
+	{
+		setWaveExtensibleFormat(noChannels, noBits, frequency, format);
+	}
+	else
+	{
+		setWaveExtensibleFloatFormatFromIndex(chIdx, freqIdx, false, format);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::setWaveExtensibleFloatFormatFromIndex(tint chIdx, tint freqIdx, bool is64Bit, WAVEFORMATEXTENSIBLE& format)
+{
+	int noChannels = getNumberOfChannelsFromIndex(chIdx);
+	int frequency = getFrequencyFromIndex(freqIdx);
+	
+	defaultWaveExtensibleFloatFormat(format, is64Bit);
+	setWaveExtensibleFloatFormat(noChannels, frequency, is64Bit, format);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1394,6 +1502,7 @@ void WasAPIDeviceLayer::printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExc
 void WasAPIDeviceLayer::printIndexedFormatSupport(tint bitIdx,tint chIdx,tint freqIdx)
 {
 	WAVEFORMATEX format;
+	WAVEFORMATEXTENSIBLE formatPCMEx, formatFloatEx;
 
 	common::Log::g_Log << "Format bits=" << QString::number(getNumberOfBitsFromIndex(bitIdx));
 	common::Log::g_Log << ", channels=" << QString::number(getNumberOfChannelsFromIndex(chIdx));
@@ -1401,13 +1510,31 @@ void WasAPIDeviceLayer::printIndexedFormatSupport(tint bitIdx,tint chIdx,tint fr
 	common::Log::g_Log << common::c_endl;
 	
 	setWaveFormatFromIndex(bitIdx, chIdx, freqIdx, format);
-	printWaveFormat(&format);
+	setWaveExtensibleFormatFromIndex(bitIdx, chIdx, freqIdx, formatPCMEx);
+	setWaveExtensibleFloatFormatFromIndex(chIdx, freqIdx, formatFloatEx);
 	
-	common::Log::g_Log << "Shared support = " << ((m_formatsShared[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE") << common::c_endl;
+	common::Log::g_Log << "**-- Basic WAVE Format" << common::c_endl;
+	printWaveFormat(&format);
+	common::Log::g_Log << "**-- Extensible WAVE Format" << common::c_endl;
+	printWaveFormat(&formatPCMEx)
+	common::Log::g_Log << "**-- Ext-Float WAVE Format" << common::c_endl;
+	printWaveFormat(&formatFloatEx)
+	
+	common::Log::g_Log << "---- Shared support = " << ((m_formatsShared[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE") << common::c_endl;
+	common::Log::g_Log << "-- Basic WAVE Format" << common::c_endl;
 	printIsFormatSupported(&format, false);
+	common::Log::g_Log << "-- Extensible WAVE Format" << common::c_endl;
+	printIsFormatSupported(&formatPCMEx, false);
+	common::Log::g_Log << "-- Ext-Float WAVE Format" << common::c_endl;
+	printIsFormatSupported(&formatFloatEx, false);
 
-	common::Log::g_Log << "Exclusive support = " << ((m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE") << common::c_endl;
+	common::Log::g_Log << "**** Exclusive support = " << ((m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE") << common::c_endl;
+	common::Log::g_Log << "** Basic WAVE Format" << common::c_endl;
 	printIsFormatSupported(&format, true);
+	common::Log::g_Log << "** Extensible WAVE Format" << common::c_endl;
+	printIsFormatSupported(&formatPCMEx, true);
+	common::Log::g_Log << "** Ext-Float WAVE Format" << common::c_endl;
+	printIsFormatSupported(&formatFloatEx, true);
 }
 
 //-------------------------------------------------------------------------------------------
