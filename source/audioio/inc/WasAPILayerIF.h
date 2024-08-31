@@ -112,6 +112,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 
 		static void printWaveFormat(WAVEFORMATEX *pFormat);
 		void printIndexedFormatSupport(tint bitIdx,tint chIdx,tint freqIdx);
+		QString capabilityCSVIndexed(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive);
 		
 	protected:
 		

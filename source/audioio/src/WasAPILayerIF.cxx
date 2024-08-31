@@ -1543,6 +1543,67 @@ void WasAPIDeviceLayer::printIndexedFormatSupport(tint bitIdx,tint chIdx,tint fr
 }
 
 //-------------------------------------------------------------------------------------------
+
+QString WasAPIDeviceLayer::capabilityCSVIndexed(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive)
+{
+	bool isSupported = false, bF = false, eF = false, fF = false;
+	WAVEFORMATEX format;
+	WAVEFORMATEXTENSIBLE formatPCMEx, formatFloatEx;
+	QString cap;
+
+	setWaveFormatFromIndex(bitIdx, chIdx, freqIdx, format);
+	setWaveExtensibleFormatFromIndex(bitIdx, chIdx, freqIdx, formatPCMEx);
+	setWaveExtensibleFloatFormatFromIndex(chIdx, freqIdx, false, formatFloatEx);
+
+	HRESULT hr;
+	WAVEFORMATEX* pCloseFormat = 0;
+
+	if (isExculsive)
+		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, &format, 0);
+	else
+		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, &format, &pCloseFormat);
+	if (hr == S_OK)
+	{
+		isSupported = true;
+		bF = true;
+	}
+	if (isExculsive)
+		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, reinterpret_cast<WAVEFORMATEX *>(&formatPCMEx), 0);
+	else
+		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, reinterpret_cast<WAVEFORMATEX*>(&formatPCMEx), &pCloseFormat);
+	if (hr == S_OK)
+	{
+		isSupported = true;
+		eF = true;
+	}
+	if (isExculsive)
+		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, reinterpret_cast<WAVEFORMATEX*>(&formatFloatEx), 0);
+	else
+		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, reinterpret_cast<WAVEFORMATEX*>(&formatFloatEx), &pCloseFormat);
+	if (hr == S_OK)
+	{
+		isSupported = true;
+		fF = true;
+	}
+	if (isSupported)
+	{
+		cap = "Yes (";
+		if (bF)
+			cap += "B";
+		if (eF)
+			cap += "E";
+		if (fF)
+			cap += "F";
+		cap += ")";
+	}
+	else
+	{
+		cap = "No";
+	}
+	return cap;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------
