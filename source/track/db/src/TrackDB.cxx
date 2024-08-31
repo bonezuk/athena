@@ -297,12 +297,13 @@ bool TrackDB::addInfo(info::Info *data)
 
 QString TrackDB::getDirectoryName(int dirID)
 {
-	QString cmdQ, dirName;
+	QString cmdQ, mountName, dirName;
 	SQLiteQuery dirQ(m_db);
 	
 	cmdQ = QString("SELECT c.mountName, a.directoryName FROM directory AS a INNER JOIN dirmount AS b ON a.directoryID=b.dirID INNER JOIN mountpoints AS c ON b.mountID=c.mountID WHERE a.directoryID=%1")
 		.arg(dirID);
 	dirQ.prepare(cmdQ);
+	dirQ.bind(mountName);
 	dirQ.bind(dirName);
 	if(!dirQ.next())
 	{
@@ -321,7 +322,7 @@ QString TrackDB::getDirectoryName(int dirID)
 	}
 	else
 	{
-		dirName = dbStringInv(dirName);
+		dirName = dbStringInv(mountName) + dbStringInv(dirName);
 	}
 	return dirName;
 }
