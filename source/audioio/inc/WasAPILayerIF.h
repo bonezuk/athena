@@ -143,7 +143,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual void setWaveExtensibleFormat(int noChannels, int noBits, int frequency, WAVEFORMATEXTENSIBLE& format) const;
 		virtual void setWaveExtensibleFloatFormat(int noChannels,int frequency, bool is64Bit, WAVEFORMATEXTENSIBLE& format) const;
 		
-		DWORD WasAPIDeviceLayer::defaultChannelMask(int noChannels) const;
+		DWORD defaultChannelMask(int noChannels) const;
 
 		virtual WAVEFORMATEXTENSIBLE *toWaveExtensible(WAVEFORMATEX *pFormat) const;
 		

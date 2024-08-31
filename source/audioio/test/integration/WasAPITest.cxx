@@ -690,7 +690,7 @@ TEST(WasAPI, deviceLogCapabilities)
 		ASSERT_TRUE(!pDevice.isNull());
 
 		common::Log::g_Log << "---------------------------------------------------------" << common::c_endl;
-		common::Log::g_Log << "---------------------------------------------------------" << common::c_endl;
+		common::Log::g_Log << "-*** Audio Device ***------------------------------------" << common::c_endl;
 		common::Log::g_Log << "---------------------------------------------------------" << common::c_endl;
 		common::Log::g_Log << "---------------------------------------------------------" << common::c_endl;
 		common::Log::g_Log << common::c_endl;
@@ -713,11 +713,18 @@ TEST(WasAPI, deviceLogCapabilities)
 		common::Log::g_Log << common::c_endl;
 		
 		common::Log::g_Log << "---------------------------------------------------------" << common::c_endl;
+
+
+//		int chList[2] = { 1,7 };
+//		for(tint chIdx = 0; chIdx < 2; chIdx++)
+//		{
+//			tint chs = chList[chIdx];
 		for(tint chs = 0; chs < NUMBER_WASAPI_MAXCHANNELS; chs++)
 		{
 			for(tint bitIdx = 0; bitIdx < NUMBER_WASAPI_MAXBITS; bitIdx++)
 			{
 				for(tint freqIdx = 0; freqIdx < NUMBER_WASAPI_MAXFREQUENCIES; freqIdx++)
+				//for(tint freqIdx = 7; freqIdx <= 8; freqIdx++)
 				{
 					pDevice->printIndexedFormatSupport(bitIdx, chs, freqIdx);
 					common::Log::g_Log << "---------------------------------------------------------" << common::c_endl;

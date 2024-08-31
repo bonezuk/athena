@@ -357,7 +357,7 @@ void WasAPIDeviceLayer::setWaveFormat(int noChannels, int noBits, int frequency,
 
 void WasAPIDeviceLayer::setWaveExtensibleFormat(int noChannels, int noBits, int frequency, WAVEFORMATEXTENSIBLE& format) const
 {
-	int noBytes 
+	int noBytes;
 	
 	noBytes = noBits >> 3;
 	if(noBits & 0x7)
@@ -377,7 +377,7 @@ void WasAPIDeviceLayer::setWaveExtensibleFormat(int noChannels, int noBits, int 
 
 void WasAPIDeviceLayer::setWaveExtensibleFloatFormat(int noChannels,int frequency, bool is64Bit,WAVEFORMATEXTENSIBLE& format) const
 {
-	int noBytes = (is64Bit) ? sizeof(tfloat32) : sizeof(tfloat64);
+	int noBytes = (is64Bit) ? sizeof(tfloat64) : sizeof(tfloat32);
 	
 	format.Format.nChannels = noChannels;
 	format.Format.nSamplesPerSec = frequency;
@@ -386,7 +386,7 @@ void WasAPIDeviceLayer::setWaveExtensibleFloatFormat(int noChannels,int frequenc
 	format.Format.wBitsPerSample = noBytes << 3;	
 	format.Samples.wValidBitsPerSample = noBytes << 3;
 	format.dwChannelMask = defaultChannelMask(noChannels);
-	format.SubFormat = WAVE_FORMAT_IEEE_FLOAT;
+	format.SubFormat = KSDATAFORMAT_SUBTYPE_IEEE_FLOAT;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -414,17 +414,18 @@ DWORD WasAPIDeviceLayer::defaultChannelMask(int noChannels) const
 			dwChannelMask = KSAUDIO_SPEAKER_5POINT1;
 			break;
 		case 7:
-			dwChannelMask = KSAUDIO_SPEAKER_7POINT1;
+			dwChannelMask = KSAUDIO_SPEAKER_7POINT0;
 			dwChannelMask &= ~SPEAKER_LOW_FREQUENCY;
 			break;
 		case 8:
-			dwChannelMask = KSAUDIO_SPEAKER_7POINT1;
+			dwChannelMask = KSAUDIO_SPEAKER_7POINT0 | SPEAKER_LOW_FREQUENCY;
 			break;
 		case 2:
 		default:
 			dwChannelMask = KSAUDIO_SPEAKER_STEREO;
 			break;
 	}
+	return dwChannelMask;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1471,7 +1472,11 @@ void WasAPIDeviceLayer::printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExc
 	HRESULT hr;
 	WAVEFORMATEX *pCloseFormat = 0;
 
-	hr = getAudioClient()->IsFormatSupported((isExcl) ? AUDCLNT_SHAREMODE_EXCLUSIVE : AUDCLNT_SHAREMODE_SHARED, pFormat, &pCloseFormat);
+	if(isExcl)
+		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, pFormat, 0);
+	else
+		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, pFormat, &pCloseFormat);
+
 	if(hr == S_OK)
 		common::Log::g_Log << "S_OK Succeeded and the audio endpoint device supports the specified stream format.";
 	else if(hr == S_FALSE)
@@ -1511,30 +1516,30 @@ void WasAPIDeviceLayer::printIndexedFormatSupport(tint bitIdx,tint chIdx,tint fr
 	
 	setWaveFormatFromIndex(bitIdx, chIdx, freqIdx, format);
 	setWaveExtensibleFormatFromIndex(bitIdx, chIdx, freqIdx, formatPCMEx);
-	setWaveExtensibleFloatFormatFromIndex(chIdx, freqIdx, formatFloatEx);
+	setWaveExtensibleFloatFormatFromIndex(chIdx, freqIdx, false, formatFloatEx);
 	
 	common::Log::g_Log << "**-- Basic WAVE Format" << common::c_endl;
 	printWaveFormat(&format);
 	common::Log::g_Log << "**-- Extensible WAVE Format" << common::c_endl;
-	printWaveFormat(&formatPCMEx)
+	printWaveFormat(reinterpret_cast<WAVEFORMATEX *>(&formatPCMEx));
 	common::Log::g_Log << "**-- Ext-Float WAVE Format" << common::c_endl;
-	printWaveFormat(&formatFloatEx)
+	printWaveFormat(reinterpret_cast<WAVEFORMATEX*>(&formatFloatEx));
 	
 	common::Log::g_Log << "---- Shared support = " << ((m_formatsShared[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE") << common::c_endl;
 	common::Log::g_Log << "-- Basic WAVE Format" << common::c_endl;
 	printIsFormatSupported(&format, false);
 	common::Log::g_Log << "-- Extensible WAVE Format" << common::c_endl;
-	printIsFormatSupported(&formatPCMEx, false);
+	printIsFormatSupported(reinterpret_cast<WAVEFORMATEX*>(&formatPCMEx), false);
 	common::Log::g_Log << "-- Ext-Float WAVE Format" << common::c_endl;
-	printIsFormatSupported(&formatFloatEx, false);
+	printIsFormatSupported(reinterpret_cast<WAVEFORMATEX*>(&formatFloatEx), false);
 
 	common::Log::g_Log << "**** Exclusive support = " << ((m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0) ? "TRUE" : "FALSE") << common::c_endl;
 	common::Log::g_Log << "** Basic WAVE Format" << common::c_endl;
 	printIsFormatSupported(&format, true);
 	common::Log::g_Log << "** Extensible WAVE Format" << common::c_endl;
-	printIsFormatSupported(&formatPCMEx, true);
+	printIsFormatSupported(reinterpret_cast<WAVEFORMATEX*>(&formatPCMEx), true);
 	common::Log::g_Log << "** Ext-Float WAVE Format" << common::c_endl;
-	printIsFormatSupported(&formatFloatEx, true);
+	printIsFormatSupported(reinterpret_cast<WAVEFORMATEX*>(&formatFloatEx), true);
 }
 
 //-------------------------------------------------------------------------------------------
