@@ -73,7 +73,7 @@ IMMDeviceIFSPtr WasAPILayerIF::createDeviceIF(IMMDevice *pDevice)
 
 //-------------------------------------------------------------------------------------------
 
-IPropertyStoreIFSPtr WasAPIDeviceLayer::createPropertyStoreIF(IPropertyStore *pPropertyStore)
+IPropertyStoreIFSPtr WasAPIDeviceLayer::createPropertyStoreIF(IPropertyStore *pPropertyStore) const
 {
 	IPropertyStoreIFSPtr pPropertyStoreIF(new IPropertyStoreIF(pPropertyStore));
 	return pPropertyStoreIF;
@@ -708,7 +708,7 @@ tint WasAPIDeviceLayer::getFrequencyFromWaveFormat(const WAVEFORMATEX *pFormat) 
 
 //-------------------------------------------------------------------------------------------
 
-QString WasAPIDeviceLayer::id()
+QString WasAPIDeviceLayer::id() const
 {
 	LPWSTR pName = 0;
 	QString id;
@@ -726,7 +726,7 @@ QString WasAPIDeviceLayer::id()
 
 //-------------------------------------------------------------------------------------------
 
-QString WasAPIDeviceLayer::name()
+QString WasAPIDeviceLayer::name() const
 {
 	HRESULT hr;
 	QString deviceName;
@@ -752,11 +752,19 @@ QString WasAPIDeviceLayer::name()
 
 //-------------------------------------------------------------------------------------------
 
-QString WasAPIDeviceLayer::settingsKey(bool exclusive)
+QString WasAPIDeviceLayer::settingsKey(bool exclusive) const
 {
 	QString key = "Formats_" + id() + "_";
 	key += (exclusive) ? "E" : "M";
 	return key;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString WasAPIDeviceLayer::settingsValidKey(bool exclusive) const
+{
+	QString validKey = settingsKey(exclusive) + "_valid";
+	return validKey;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -772,6 +780,7 @@ bool WasAPIDeviceLayer::loadFormats()
 
 bool WasAPIDeviceLayer::loadFormats(bool exclusive)
 {
+	QString validKey;
 	QString key = settingsKey(exclusive);
 	QSettings settings;
 	bool res = false;
@@ -783,10 +792,14 @@ bool WasAPIDeviceLayer::loadFormats(bool exclusive)
 		settings.beginGroup("wasapi");
 		if(settings.contains(key))
 		{
-			mem = settings.value(key).toByteArray();
-			if(mem.size()==(NUMBER_WASAPI_MAXCHANNELS * NUMBER_WASAPI_MAXBITS * NUMBER_WASAPI_MAXFREQUENCIES))
+			validKey = settingsValidKey(exclusive);
+			if(settings.contains(validKey) && settings.value(validKey).toBool())
 			{
-				res = true;
+				mem = settings.value(key).toByteArray();
+				if(mem.size() == (NUMBER_WASAPI_MAXCHANNELS * NUMBER_WASAPI_MAXBITS * NUMBER_WASAPI_MAXFREQUENCIES))
+				{
+					res = true;
+				}
 			}
 		}
 		settings.endGroup();
@@ -857,6 +870,7 @@ bool WasAPIDeviceLayer::saveFormats(bool exclusive)
 	}
 	
 	QString key = settingsKey(exclusive);
+	QString validKey = settingsValidKey(exclusive);
 	
 	if(!key.isEmpty())
 	{
@@ -866,6 +880,7 @@ bool WasAPIDeviceLayer::saveFormats(bool exclusive)
 		settings.beginGroup("wasapi");
 		key = settingsKey(exclusive);
 		settings.setValue(key,QVariant(mem));
+		settings.setValue(validKey, QVariant(true));
 		settings.endGroup();
 		res = true;
 	}

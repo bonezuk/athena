@@ -92,8 +92,8 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		WasAPIDeviceLayer();
 		virtual ~WasAPIDeviceLayer();
 
-		virtual QString id();
-		virtual QString name();
+		virtual QString id() const;
+		virtual QString name() const;
 
 		virtual QSet<int> queryFrequencyCapabilities();
 		virtual QVector<AOQueryDevice::Channel> queryChannelCapabilities();
@@ -132,7 +132,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual IMMDeviceEnumeratorIFSPtr deviceEnumerator();
 		virtual IMMDeviceIFSPtr createDeviceIF(IMMDevice *pDevice);
 		virtual IAudioClientIFSPtr createAudioClientIF(IAudioClient *pAudioClient);
-		virtual IPropertyStoreIFSPtr createPropertyStoreIF(IPropertyStore *pPropertyStore);
+		virtual IPropertyStoreIFSPtr createPropertyStoreIF(IPropertyStore *pPropertyStore) const;
 
 		virtual bool isExclusive() const;
 		
@@ -162,7 +162,8 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual bool loadFormats(bool exclusive);
 		virtual bool saveFormats();
 		virtual bool saveFormats(bool exclusive);
-		virtual QString settingsKey(bool exclusive);
+		virtual QString settingsKey(bool exclusive) const;
+		virtual QString settingsValidKey(bool exclusive) const;
 		
 		virtual void setFrequencyInWaveFormat(int frequency,WAVEFORMATEX *pFormat) const;
 		virtual void setChannelsInWaveFormat(int channel,WAVEFORMATEX *pFormat) const;

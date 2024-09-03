@@ -80,8 +80,8 @@ class AUDIOIO_EXPORT WasAPIDevice : public QObject
 		WasAPIDevice();
 		virtual ~WasAPIDevice();
 
-		virtual QString id() = 0;
-		virtual QString name() = 0;
+		virtual QString id() const = 0;
+		virtual QString name() const = 0;
 
 		virtual QSet<int> queryFrequencyCapabilities() = 0;
 		virtual QVector<AOQueryDevice::Channel> queryChannelCapabilities() = 0;
