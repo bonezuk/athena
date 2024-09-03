@@ -594,7 +594,7 @@ int WasAPIDeviceLayer::getNumberOfBitsFromIndex(int idx) const
 	
 	if(idx>=0 && idx<4)
 	{
-		noBits = (idx + 1) << 3;
+		noBits = (idx << 2) + 16;
 	}
 	else
 	{
@@ -1558,6 +1558,20 @@ void WasAPIDeviceLayer::printIndexedFormatSupport(tint bitIdx,tint chIdx,tint fr
 }
 
 //-------------------------------------------------------------------------------------------
+
+#define WAVE_EXT_16    0x0001
+#define WAVE_BASIC_16  0x0002
+#define WAVE_EXT_24    0x0004
+#define WAVE_BASIC_24  0x0008
+#define WAVE_EXT_32    0x0010
+#define WAVE_BASIC_32  0x0020
+
+// ( 0) 16 - WAVE_EXT_16, WAVE_BASIC_16
+// ( 1) 20 - WAVE_EXT_24, WAVE_EXT_32
+// ( 2) 24 - WAVE_EXT_24, WAVE_BASIC_24, WAVE_EXT_32
+// ( 3) 28 - WAVE_EXT_32
+// ( 4) 32 - WAVE_EXT_32, WAVE_BASIC_32
+// (-1) 32F- WAVE_EXT_32
 
 QString WasAPIDeviceLayer::capabilityCSVIndexed(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive)
 {
