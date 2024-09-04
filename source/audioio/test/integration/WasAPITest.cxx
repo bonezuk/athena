@@ -767,7 +767,7 @@ TEST(WasAPI, deviceLogCapCSV)
 		for(tint chs = 0; chs < NUMBER_WASAPI_MAXCHANNELS; chs++)
 		{
 			common::Log::g_Log << "Channels;" << pDevice->getNumberOfChannelsFromIndex(chs) << "; ; ; ;\n";
-			common::Log::g_Log << "Bits/Freq;8;16;24;32;32-Float\n";
+			common::Log::g_Log << "Bits/Freq;16;20;24;28;32;32-Float\n";
 			for(tint isExclusive = 0; isExclusive < 2; isExclusive++)
 			{
 				for(tint freqIdx = 0; freqIdx < NUMBER_WASAPI_MAXFREQUENCIES; freqIdx++)
@@ -776,11 +776,9 @@ TEST(WasAPI, deviceLogCapCSV)
 					for (tint bitIdx = 0; bitIdx < NUMBER_WASAPI_MAXBITS; bitIdx++)
 					{
 						common::Log::g_Log << pDevice->capabilityCSVIndexed(bitIdx, chs, freqIdx, isExclusive);
-						if (bitIdx < (NUMBER_WASAPI_MAXBITS - 1))
-						{
-							common::Log::g_Log << ";";
-						}
+						common::Log::g_Log << ";";
 					}
+					common::Log::g_Log << pDevice->capabilityCSVIndexed(-1, chs, freqIdx, isExclusive);
 					common::Log::g_Log << "\n";
 				}
 			}

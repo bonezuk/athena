@@ -599,7 +599,7 @@ int WasAPIDeviceLayer::getNumberOfBitsFromIndex(int idx) const
 {
 	int noBits;
 	
-	if(idx>=0 && idx<4)
+	if(idx>=0 && idx<5)
 	{
 		noBits = (idx << 2) + 16;
 	}
@@ -1597,6 +1597,7 @@ WAVEFORMATEX *WasAPIDeviceLayer::waveFormatFromType(tint noChannels, tint noBits
 		format = new WAVEFORMATEX;
 		if(format != NULL)
 		{
+			defaultWaveFormat(*format);
 			setWaveFormat(noChannels, noBits, frequency, *format);
 		}
 	}
@@ -1619,6 +1620,7 @@ WAVEFORMATEX *WasAPIDeviceLayer::waveFormatFromType(tint noChannels, tint noBits
 			{
 				noBytes = 4;
 			}
+			defaultWaveExtensibleFormat(*formatEx);
 			setWaveExtensibleFormat(noChannels, noBits, noBytes, frequency, *formatEx);
 			format = reinterpret_cast<WAVEFORMATEX *>(formatEx);
 		}
@@ -1628,6 +1630,7 @@ WAVEFORMATEX *WasAPIDeviceLayer::waveFormatFromType(tint noChannels, tint noBits
 		formatEx = new WAVEFORMATEXTENSIBLE;
 		if(formatEx != NULL)
 		{
+			defaultWaveExtensibleFloatFormat(*formatEx, false);
 			setWaveExtensibleFloatFormat(noChannels, frequency, false, *formatEx);
 			format = reinterpret_cast<WAVEFORMATEX *>(formatEx);
 		}	

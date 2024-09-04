@@ -184,6 +184,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		
 		virtual void setWaveFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, WAVEFORMATEX& format);
 		virtual void setWaveExtensibleFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, WAVEFORMATEXTENSIBLE& format);
+		virtual void setWaveExtensibleFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, bool is32Bit, WAVEFORMATEXTENSIBLE& format);
 		virtual void setWaveExtensibleFloatFormatFromIndex(tint chIdx, tint freqIdx, bool is64Bit, WAVEFORMATEXTENSIBLE& format);
 		
 		virtual void populateFormatsSupported(FormatsSupported& support);
@@ -200,7 +201,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		void printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExcl);
 		
 		WAVEFORMATEX *waveFormatFromType(tint noChannels, tint noBits, tint frequency, tint type) const;
-		int WasAPIDeviceLayer::queryFormatIndexCapability(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive);
+		int queryFormatIndexCapability(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive);
 		
 	protected slots:
 	
