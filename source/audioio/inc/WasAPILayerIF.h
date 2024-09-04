@@ -22,6 +22,16 @@ class WasAPIDeviceLayer;
 
 //-------------------------------------------------------------------------------------------
 
+#define WAVE_EXT_16    0x0001
+#define WAVE_BASIC_16  0x0002
+#define WAVE_EXT_24    0x0004
+#define WAVE_BASIC_24  0x0008
+#define WAVE_EXT_32    0x0010
+#define WAVE_BASIC_32  0x0020
+#define WAVE_FLOAT_32  0x0040
+
+//-------------------------------------------------------------------------------------------
+
 #define NUMBER_WASAPI_MAXCHANNELS NUMBER_MAXCHANNELS
 #define NUMBER_WASAPI_MAXBITS 5
 #define NUMBER_WASAPI_MAXFREQUENCIES NUMBER_MAXFREQUENCIES
@@ -142,6 +152,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		
 		virtual void setWaveFormat(int noChannels, int noBits, int frequency, WAVEFORMATEX& format) const;
 		virtual void setWaveExtensibleFormat(int noChannels, int noBits, int frequency, WAVEFORMATEXTENSIBLE& format) const;
+		virtual void setWaveExtensibleFormat(int noChannels, int noBits, int noBytes, int frequency, WAVEFORMATEXTENSIBLE& format) const;
 		virtual void setWaveExtensibleFloatFormat(int noChannels,int frequency, bool is64Bit, WAVEFORMATEXTENSIBLE& format) const;
 		
 		DWORD defaultChannelMask(int noChannels) const;
@@ -187,6 +198,9 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		static QString printChannelMask(DWORD dwChannelMask);
 		
 		void printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExcl);
+		
+		WAVEFORMATEX *waveFormatFromType(tint noChannels, tint noBits, tint frequency, tint type) const;
+		int WasAPIDeviceLayer::queryFormatIndexCapability(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive);
 		
 	protected slots:
 	

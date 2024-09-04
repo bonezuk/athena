@@ -362,15 +362,22 @@ void WasAPIDeviceLayer::setWaveExtensibleFormat(int noChannels, int noBits, int 
 	noBytes = noBits >> 3;
 	if(noBits & 0x7)
 		noBytes++;
-	
+		
+	setWaveExtensibleFormat(noChannels, noBits, noBytes, frequency, format);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::setWaveExtensibleFormat(int noChannels, int noBits, int noBytes, int frequency, WAVEFORMATEXTENSIBLE& format) const
+{
 	format.Format.nChannels = noChannels;
 	format.Format.nSamplesPerSec = frequency;
 	format.Format.nAvgBytesPerSec = frequency * noBytes * noChannels;
 	format.Format.nBlockAlign = noBytes * noChannels;
-	format.Format.wBitsPerSample = noBytes << 3;	
+	format.Format.wBitsPerSample = noBytes << 3;
 	format.Samples.wValidBitsPerSample = noBits;
 	format.dwChannelMask = defaultChannelMask(noChannels);
-	format.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
+	format.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;	
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1062,6 +1069,13 @@ void WasAPIDeviceLayer::setWaveFormatFromIndex(tint bitIdx, tint chIdx, tint fre
 
 void WasAPIDeviceLayer::setWaveExtensibleFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, WAVEFORMATEXTENSIBLE& format)
 {
+	setWaveExtensibleFormatFromIndex(bitIdx, chIdx, freqIdx, false, format);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::setWaveExtensibleFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, bool is32Bit, WAVEFORMATEXTENSIBLE& format)
+{
 	int noChannels = getNumberOfChannelsFromIndex(chIdx);
 	int noBits = getNumberOfBitsFromIndex(bitIdx);
 	int frequency = getFrequencyFromIndex(freqIdx);
@@ -1069,7 +1083,14 @@ void WasAPIDeviceLayer::setWaveExtensibleFormatFromIndex(tint bitIdx, tint chIdx
 	defaultWaveExtensibleFormat(format);
 	if(noBits > 0)
 	{
-		setWaveExtensibleFormat(noChannels, noBits, frequency, format);
+		if(is32Bit)
+		{
+			setWaveExtensibleFormat(noChannels, noBits, 4, frequency, format);
+		}
+		else
+		{
+			setWaveExtensibleFormat(noChannels, noBits, frequency, format);
+		}		
 	}
 	else
 	{
@@ -1558,78 +1579,154 @@ void WasAPIDeviceLayer::printIndexedFormatSupport(tint bitIdx,tint chIdx,tint fr
 }
 
 //-------------------------------------------------------------------------------------------
-
-#define WAVE_EXT_16    0x0001
-#define WAVE_BASIC_16  0x0002
-#define WAVE_EXT_24    0x0004
-#define WAVE_BASIC_24  0x0008
-#define WAVE_EXT_32    0x0010
-#define WAVE_BASIC_32  0x0020
-
 // ( 0) 16 - WAVE_EXT_16, WAVE_BASIC_16
 // ( 1) 20 - WAVE_EXT_24, WAVE_EXT_32
 // ( 2) 24 - WAVE_EXT_24, WAVE_BASIC_24, WAVE_EXT_32
 // ( 3) 28 - WAVE_EXT_32
 // ( 4) 32 - WAVE_EXT_32, WAVE_BASIC_32
-// (-1) 32F- WAVE_EXT_32
+// (-1) 32F- WAVE_FLOAT_32
+//-------------------------------------------------------------------------------------------
+
+WAVEFORMATEX *WasAPIDeviceLayer::waveFormatFromType(tint noChannels, tint noBits, tint frequency, tint type) const
+{
+	WAVEFORMATEX *format = NULL;
+	WAVEFORMATEXTENSIBLE *formatEx;
+
+	if(type & (WAVE_BASIC_16 | WAVE_BASIC_24 | WAVE_BASIC_32))
+	{
+		format = new WAVEFORMATEX;
+		if(format != NULL)
+		{
+			setWaveFormat(noChannels, noBits, frequency, *format);
+		}
+	}
+	else if(type & (WAVE_EXT_16 | WAVE_EXT_24 | WAVE_EXT_32))
+	{
+		formatEx = new WAVEFORMATEXTENSIBLE;
+		if(formatEx != NULL)
+		{
+			tint noBytes;
+			
+			if(type & WAVE_EXT_16)
+			{
+				noBytes = 2;
+			}
+			else if(type & WAVE_EXT_24)
+			{
+				noBytes = 3;
+			}
+			else
+			{
+				noBytes = 4;
+			}
+			setWaveExtensibleFormat(noChannels, noBits, noBytes, frequency, *formatEx);
+			format = reinterpret_cast<WAVEFORMATEX *>(formatEx);
+		}
+	}
+	else if(type & WAVE_FLOAT_32)
+	{
+		formatEx = new WAVEFORMATEXTENSIBLE;
+		if(formatEx != NULL)
+		{
+			setWaveExtensibleFloatFormat(noChannels, frequency, false, *formatEx);
+			format = reinterpret_cast<WAVEFORMATEX *>(formatEx);
+		}	
+	}
+	return format;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int WasAPIDeviceLayer::queryFormatIndexCapability(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive)
+{
+	int noBits, noChannels, frequency, caps, type;
+	WAVEFORMATEX *format;
+	QVector<int> types;
+
+	noBits = getNumberOfBitsFromIndex(bitIdx);
+	noChannels = getNumberOfChannelsFromIndex(chIdx);
+	frequency = getFrequencyFromIndex(freqIdx);
+	
+	switch(noBits)
+	{
+		case 16:
+			types.append(WAVE_EXT_16);
+			types.append(WAVE_BASIC_16);
+			break;
+		case 20:
+			types.append(WAVE_EXT_24);
+			types.append(WAVE_EXT_32);
+			break;
+		case 24:
+			types.append(WAVE_EXT_24);
+			types.append(WAVE_BASIC_24);
+			types.append(WAVE_EXT_32);
+			break;
+		case 28:
+			types.append(WAVE_EXT_32);
+			break;
+		case 32:
+			types.append(WAVE_EXT_32);
+			types.append(WAVE_BASIC_32);
+			break;
+		default:
+			types.append(WAVE_FLOAT_32);
+			break;
+	}
+	
+	caps = 0;
+	for(QVector<int>::iterator ppI = types.begin(); ppI != types.end(); ppI++)
+	{
+		type = *ppI;
+		format = waveFormatFromType(noChannels, noBits, frequency, type);
+		if(format != NULL)
+		{
+			HRESULT hr;
+			WAVEFORMATEX* pCloseFormat = 0;
+			
+			if (isExculsive)
+			{
+				hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, format, 0);
+			}
+			else
+			{
+				hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, format, &pCloseFormat);
+			}
+			if(hr == S_OK)
+			{
+				caps |= type;
+			}
+			if(pCloseFormat!=0)
+			{
+				CoTaskMemFree(pCloseFormat);
+				pCloseFormat = 0;
+			}
+			delete format;
+		}
+	}
+	return caps;
+}
+
+//-------------------------------------------------------------------------------------------
 
 QString WasAPIDeviceLayer::capabilityCSVIndexed(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive)
 {
-	bool isSupported = false, bF = false, eF = false, fF = false;
-	WAVEFORMATEX format;
-	WAVEFORMATEXTENSIBLE formatPCMEx, formatFloatEx;
-	QString cap;
-
-	setWaveFormatFromIndex(bitIdx, chIdx, freqIdx, format);
-	setWaveExtensibleFormatFromIndex(bitIdx, chIdx, freqIdx, formatPCMEx);
-	setWaveExtensibleFloatFormatFromIndex(chIdx, freqIdx, false, formatFloatEx);
-
-	HRESULT hr;
-	WAVEFORMATEX* pCloseFormat = 0;
-
-	if (isExculsive)
-		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, &format, 0);
-	else
-		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, &format, &pCloseFormat);
-	if (hr == S_OK)
+	QString c;
+	int caps;
+	
+	caps = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, isExculsive);
+	if(caps)
 	{
-		isSupported = true;
-		bF = true;
-	}
-	if (isExculsive)
-		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, reinterpret_cast<WAVEFORMATEX *>(&formatPCMEx), 0);
-	else
-		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, reinterpret_cast<WAVEFORMATEX*>(&formatPCMEx), &pCloseFormat);
-	if (hr == S_OK)
-	{
-		isSupported = true;
-		eF = true;
-	}
-	if (isExculsive)
-		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, reinterpret_cast<WAVEFORMATEX*>(&formatFloatEx), 0);
-	else
-		hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, reinterpret_cast<WAVEFORMATEX*>(&formatFloatEx), &pCloseFormat);
-	if (hr == S_OK)
-	{
-		isSupported = true;
-		fF = true;
-	}
-	if (isSupported)
-	{
-		cap = "Yes (";
-		if (bF)
-			cap += "B";
-		if (eF)
-			cap += "E";
-		if (fF)
-			cap += "F";
-		cap += ")";
+		common::BString n = common::BString::HexInt(caps, 2);
+		c = "Yes (0x";
+		c += static_cast<const tchar *>(n);
+		c += ")";
 	}
 	else
 	{
-		cap = "No";
+		c = "No";
 	}
-	return cap;
+	return c;
 }
 
 //-------------------------------------------------------------------------------------------
