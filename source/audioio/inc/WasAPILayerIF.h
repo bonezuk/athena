@@ -33,7 +33,7 @@ class WasAPIDeviceLayer;
 //-------------------------------------------------------------------------------------------
 
 #define NUMBER_WASAPI_MAXCHANNELS NUMBER_MAXCHANNELS
-#define NUMBER_WASAPI_MAXBITS 5
+#define NUMBER_WASAPI_MAXBITS 6
 #define NUMBER_WASAPI_MAXFREQUENCIES NUMBER_MAXFREQUENCIES
 
 //-------------------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual FormatDescription descriptionFromWaveFormat(const WAVEFORMATEX *pFormat);
 		virtual WAVEFORMATEX *descriptionToWaveFormat(const FormatDescription& desc);
 		
-		virtual WAVEFORMATEX *findClosestWaveFormatFromDescription(const FormatDescription& sourceDesc);
+		virtual bool findClosestDescription(const FormatDescription& sourceDesc, FormatDescription& descClosest);
 		
 		static QString waveFormatTypeName(WORD wFormatTag);
 		static QString waveFormatGUIDType(GUID guid);
@@ -202,7 +202,12 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		
 		WAVEFORMATEX *waveFormatFromType(tint noChannels, tint noBits, tint frequency, tint type) const;
 		int queryFormatIndexCapability(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive);
+
+		int bitIndexForFDIndex(int nativeBitIdx) const;
+		int nativeBitIndexFromFDIndex(int fdBitIndex) const;
 		
+		WAVEFORMATEX *WasAPIDeviceLayer::supportedWaveFormatFromDescription(const FormatDescription& desc);
+
 	protected slots:
 	
 		virtual void updateFormats();

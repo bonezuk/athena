@@ -501,6 +501,46 @@ bool WasAPIDeviceLayer::isFormatSupported(WAVEFORMATEX *pFormat)
 }
 
 //-------------------------------------------------------------------------------------------
+// 0 = 16  = 1
+// 1 = 20  = 23
+// 2 = 24  = 2
+// 3 = 28  = 30
+// 4 = 32  = 3
+// 5 = 32F = 4
+//-------------------------------------------------------------------------------------------
+
+int WasAPIDeviceLayer::bitIndexForFDIndex(int nativeBitIdx) const
+{
+	const int idxs[NUMBER_WASAPI_MAXBITS] = { 1, 23, 2, 30, 3, 4 };
+	
+	if(nativeBitIdx >= NUMBER_WASAPI_MAXBITS)
+	{
+		nativeBitIdx = NUMBER_WASAPI_MAXBITS - 1;
+	}
+	return nativeBitIdx;
+}
+
+//-------------------------------------------------------------------------------------------
+
+int WasAPIDeviceLayer::nativeBitIndexFromFDIndex(int fdBitIndex) const
+{
+	int nativeBitIndex;
+	
+	switch(fdBitIndex)
+	{
+		case 1:  nativeBitIndex = 0; break;
+		case 23: nativeBitIndex = 1; break;
+		case 2:  nativeBitIndex = 2; break;
+		case 30: nativeBitIndex = 3; break;
+		case 3:  nativeBitIndex = 4; break;
+		default:
+			nativeBitIndex = 5;
+			break;
+	}
+	return nativeBitIndex;
+}
+
+//-------------------------------------------------------------------------------------------
 
 int WasAPIDeviceLayer::getIndexOfBits(const WAVEFORMATEX *pFormat) const
 {
@@ -689,7 +729,7 @@ int WasAPIDeviceLayer::getFrequencyFromIndex(int idx) const
 
 bool WasAPIDeviceLayer::isFormat(int chIdx,int bitIdx,int freqIdx) const
 {
-	return (m_formats[chIdx][bitIdx][freqIdx]==1) ? true : false;
+	return (m_formats[chIdx][bitIdx][freqIdx] > 0) ? true : false;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1008,7 +1048,7 @@ bool WasAPIDeviceLayer::hasIndexedFormatWithUpdate(tint bitIdx,tint chIdx,tint f
 		
 		setWaveFormatFromIndex(bitIdx,chIdx,freqIdx,format);
 		
-		m_formats[chIdx][bitIdx][freqIdx] = (isFormatSupported(&format)) ? 1 : 0;
+		m_formats[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, isExclusive());
 		if(isExclusive())
 		{
 			m_formatsExclusive[chIdx][bitIdx][freqIdx] = m_formats[chIdx][bitIdx][freqIdx];
@@ -1115,7 +1155,7 @@ FormatDescription WasAPIDeviceLayer::descriptionFromWaveFormat(const WAVEFORMATE
 {
 	FormatDescription desc;
 
-	desc.setBitsIndex(getIndexOfBits(pFormat));
+	desc.setBitsIndex(nativeBitIndexFromFDIndex(getIndexOfBits(pFormat)));
 	desc.setChannelsIndex(getIndexOfChannels(pFormat));
 	desc.setFrequencyIndex(getIndexOfFrequency(pFormat));
 	return desc;
@@ -1126,7 +1166,7 @@ FormatDescription WasAPIDeviceLayer::descriptionFromWaveFormat(const WAVEFORMATE
 WAVEFORMATEX *WasAPIDeviceLayer::descriptionToWaveFormat(const FormatDescription& desc)
 {
 	WAVEFORMATEX *pFormat = new WAVEFORMATEX;
-	setWaveFormatFromIndex(desc.bitsIndex(),desc.channelsIndex(),desc.frequencyIndex(),*pFormat);
+	setWaveFormatFromIndex(nativeBitIndexFromFDIndex(desc.bitsIndex()),desc.channelsIndex(),desc.frequencyIndex(),*pFormat);
 	return pFormat;
 }
 
@@ -1134,6 +1174,8 @@ WAVEFORMATEX *WasAPIDeviceLayer::descriptionToWaveFormat(const FormatDescription
 
 void WasAPIDeviceLayer::populateFormatsSupported(FormatsSupported& support)
 {
+	const int 
+
 	support.clear();
 
 	for(tint i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
@@ -1146,7 +1188,7 @@ void WasAPIDeviceLayer::populateFormatsSupported(FormatsSupported& support)
 				{
 					FormatDescription desc;
 					
-					desc.setBitsIndex(j);
+					desc.setBitsIndex(bitIndexForFDIndex(j));
 					desc.setChannelsIndex(i);
 					desc.setFrequencyIndex(k);
 					
@@ -1159,120 +1201,112 @@ void WasAPIDeviceLayer::populateFormatsSupported(FormatsSupported& support)
 
 //-------------------------------------------------------------------------------------------
 
+WAVEFORMATEX *WasAPIDeviceLayer::supportedWaveFormatFromDescription(const FormatDescription& desc)
+{
+	tint bitIdx, chIdx, freqIdx, entry, type;
+
+	bitIdx = nativeBitIndexFromFDIndex(desc.bitsIndex());
+	chIdx = desc.channelsIndex();
+	freqIdx = desc.frequencyIndex();
+	entry = m_formats[chIdx][bitIdx][freqIdx];
+	
+	if(desc.bits() == 16)
+	{
+		type = (entry & WAVE_EXT_16) ? WAVE_EXT_16 : WAVE_BASIC_16;
+	}
+	else if(desc.bits() == 20)
+	{
+		type = (entry & WAVE_EXT_24) ? WAVE_EXT_24 : WAVE_EXT_32;
+	}
+	else if(desc.bits() == 24)
+	{
+		if(entry & WAVE_EXT_24)
+		{
+			type = WAVE_EXT_24;
+		}
+		else
+		{
+			type = (entry & WAVE_BASIC_24) ? WAVE_BASIC_24 : WAVE_EXT_32;
+		}
+	}
+	else if(desc.bits() == 28)
+	{
+		type = WAVE_EXT_32;
+	}
+	else if(desc.bits() == 32 && desc.typeOfData() == FormatDescription::e_DataSignedInteger)
+	{
+		type = (entry & WAVE_EXT_32) ? WAVE_EXT_32 : WAVE_BASIC_32;
+	}
+	else
+	{
+		type = WAVE_FLOAT_32;
+	}
+	return waveFormatFromType(desc.channels(), desc.bits(), desc.frequency(), type);
+}
+
+//-------------------------------------------------------------------------------------------
+
 WAVEFORMATEX *WasAPIDeviceLayer::findClosestFormatType(const WAVEFORMATEX *pFormat)
 {
 	WAVEFORMATEX *pCloseFormat = 0;
-	FormatDescription desc;
+	FormatDescription desc, closestDesc;
 	
 	if(pFormat!=0)
 	{
 		desc = descriptionFromWaveFormat(pFormat);
-		pCloseFormat = findClosestWaveFormatFromDescription(desc);
+		if(findClosestDescription(desc, closestDesc))
+		{
+			pCloseFormat = supportedWaveFormatFromDescription(closestDesc);
+		}
 	}
 	return pCloseFormat;
 }
 
 //-------------------------------------------------------------------------------------------
 
-WAVEFORMATEX *WasAPIDeviceLayer::findClosestWaveFormatFromDescription(const FormatDescription& sourceDesc)
+bool WasAPIDeviceLayer::findClosestDescription(const FormatDescription& sourceDesc, FormatDescription& descClosest)
 {
-	WAVEFORMATEX *pCloseFormat = 0;
 	FormatsSupported support;
-	FormatDescription descClose;
 	
 	populateFormatsSupported(support);
-	if(FormatDescriptionUtils::findClosestFormatType(sourceDesc,support,descClose))
-	{
-		pCloseFormat = descriptionToWaveFormat(descClose);
-	}
-	return pCloseFormat;
+	return FormatDescriptionUtils::findClosestFormatType(sourceDesc, support, descClosest);
 }
 
 //-------------------------------------------------------------------------------------------
 
 WAVEFORMATEX *WasAPIDeviceLayer::findClosestSupportedFormat(const FormatDescription& sourceDesc)
 {
+	WAVEFORMATEX *pFormat = NULL;
+	FormatDescription closestDesc;
+
 	if(m_pAudioClient.isNull())
 	{
 		return 0;
 	}
-
-	WAVEFORMATEX *pFormat = findClosestWaveFormatFromDescription(sourceDesc);
-	
-	if(pFormat!=0)
+	if(findClosestDescription(sourceDesc, closestDesc))
 	{
-		HRESULT hr;
-		
-		if(isExclusive())
+		pFormat = supportedWaveFormatFromDescription(closestDesc);
+		if(pFormat != NULL)
 		{
-			hr = m_pAudioClient->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE,pFormat,0);
-			if(hr!=S_OK)
-			{
-				WAVEFORMATEX *pDelFormat = pFormat;
+			HRESULT hr;
+			WAVEFORMATEX* pCloseFormat = 0;
 			
-				if(pFormat->cbSize==0)
-				{
-					WAVEFORMATEXTENSIBLE *pExFormat = toWaveExtensible(pFormat);
-					
-					hr = m_pAudioClient->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE,reinterpret_cast<const WAVEFORMATEX *>(pExFormat),0);
-					if(hr==S_OK)
-					{
-						pFormat = reinterpret_cast<WAVEFORMATEX *>(pExFormat);
-					}
-					else
-					{
-						delete pExFormat;
-						pFormat = 0;						
-					}
-				}
-				else
-				{
-					pFormat = 0;
-				}
-				delete pDelFormat;
+			if(isExclusive())
+			{
+				hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, format, 0);
 			}
-		}
-		else
-		{
-			WAVEFORMATEX *pCloseFormat = 0;
-			
-			hr = m_pAudioClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED,pFormat,&pCloseFormat);
-			if(pCloseFormat!=0)
+			else
 			{
-				CoTaskMemFree(pCloseFormat);
-				pCloseFormat = 0;
+				hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, format, &pCloseFormat);
+				if(pCloseFormat!=0)
+				{
+					CoTaskMemFree(pCloseFormat);
+				}
 			}
-
-			if(hr!=S_OK)
+			if(hr != S_OK)
 			{
-				WAVEFORMATEX *pDelFormat = pFormat;
-			
-				if(pFormat->cbSize==0)
-				{
-					WAVEFORMATEXTENSIBLE *pExFormat = toWaveExtensible(pFormat);
-				
-					hr = m_pAudioClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED,reinterpret_cast<const WAVEFORMATEX *>(pExFormat),&pCloseFormat);
-					if(pCloseFormat!=0)
-					{
-						CoTaskMemFree(pCloseFormat);
-						pCloseFormat = 0;
-					}					
-					
-					if(hr==S_OK)
-					{
-						pFormat = reinterpret_cast<WAVEFORMATEX *>(pExFormat);
-					}
-					else
-					{
-						delete pExFormat;
-						pFormat = 0;						
-					}
-				}
-				else
-				{
-					pFormat = 0;
-				}
-				delete pDelFormat;
+				delete pFormat;
+				pFormat = NULL;
 			}
 		}
 	}
