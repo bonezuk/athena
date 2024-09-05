@@ -927,7 +927,8 @@ bool WasAPIDeviceLayer::saveFormats(bool exclusive)
 		settings.beginGroup("wasapi");
 		key = settingsKey(exclusive);
 		settings.setValue(key,QVariant(mem));
-		settings.setValue(validKey, QVariant(true));
+		// settings.setValue(validKey, QVariant(true));
+		settings.setValue(validKey, QVariant(false));
 		settings.endGroup();
 		res = true;
 	}
@@ -1044,10 +1045,6 @@ bool WasAPIDeviceLayer::hasIndexedFormatWithUpdate(tint bitIdx,tint chIdx,tint f
 	
 	if(m_formats[chIdx][bitIdx][freqIdx] < 0)
 	{
-		WAVEFORMATEX format;
-		
-		setWaveFormatFromIndex(bitIdx,chIdx,freqIdx,format);
-		
 		m_formats[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, isExclusive());
 		if(isExclusive())
 		{
@@ -1174,8 +1171,6 @@ WAVEFORMATEX *WasAPIDeviceLayer::descriptionToWaveFormat(const FormatDescription
 
 void WasAPIDeviceLayer::populateFormatsSupported(FormatsSupported& support)
 {
-	const int 
-
 	support.clear();
 
 	for(tint i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
@@ -1293,11 +1288,11 @@ WAVEFORMATEX *WasAPIDeviceLayer::findClosestSupportedFormat(const FormatDescript
 			
 			if(isExclusive())
 			{
-				hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, format, 0);
+				hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_EXCLUSIVE, pFormat, 0);
 			}
 			else
 			{
-				hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, format, &pCloseFormat);
+				hr = getAudioClient()->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, pFormat, &pCloseFormat);
 				if(pCloseFormat!=0)
 				{
 					CoTaskMemFree(pCloseFormat);

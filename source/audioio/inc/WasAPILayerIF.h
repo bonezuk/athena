@@ -206,7 +206,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		int bitIndexForFDIndex(int nativeBitIdx) const;
 		int nativeBitIndexFromFDIndex(int fdBitIndex) const;
 		
-		WAVEFORMATEX *WasAPIDeviceLayer::supportedWaveFormatFromDescription(const FormatDescription& desc);
+		WAVEFORMATEX *supportedWaveFormatFromDescription(const FormatDescription& desc);
 
 	protected slots:
 	
