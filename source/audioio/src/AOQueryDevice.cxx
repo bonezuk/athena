@@ -66,8 +66,7 @@ AOQueryDevice::Device::Device() : m_initFlag(false),
 	m_id(),
 	m_name(),
 	m_frequencySet(),
-	m_channels(),
-	m_hasExclusive(false)
+	m_channels()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -77,8 +76,7 @@ AOQueryDevice::Device::Device(Type type) : m_initFlag(false),
 	m_id(),
 	m_name(),
 	m_frequencySet(),
-	m_channels(),
-	m_hasExclusive(false)
+	m_channels()
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -88,8 +86,7 @@ AOQueryDevice::Device::Device(const Device& rhs) : m_initFlag(false),
 	m_id(),
 	m_name(),
 	m_frequencySet(),
-	m_channels(),
-	m_hasExclusive(false)
+	m_channels()
 {
 	AOQueryDevice::Device::copy(rhs);
 }
@@ -120,7 +117,6 @@ void AOQueryDevice::Device::copy(const Device& rhs)
 	m_name = rhs.m_name;
 	m_frequencySet = rhs.m_frequencySet;
 	m_channels = rhs.m_channels;
-	m_hasExclusive = rhs.m_hasExclusive;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -243,14 +239,22 @@ void AOQueryDevice::Device::setNoChannels(int noCh)
 
 bool AOQueryDevice::Device::hasExclusive() const
 {
-	return m_hasExclusive;
-}
-
-//-------------------------------------------------------------------------------------------
-
-void AOQueryDevice::Device::setHasExclusive(bool flag)
-{
-	m_hasExclusive = flag;
+	bool exclusive;
+	QSettings settings;
+	QString groupName = "audio" + name();
+	
+	settings.beginGroup(groupName);
+	if(settings.contains("exclusive"))
+	{
+		exclusive = settings.value("exclusive",QVariant(false)).toBool();
+	}
+	else
+	{
+		exclusive = false;
+	}
+	settings.endGroup();
+	
+	return exclusive;
 }
 
 //-------------------------------------------------------------------------------------------

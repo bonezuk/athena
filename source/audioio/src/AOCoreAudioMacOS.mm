@@ -2000,7 +2000,7 @@ bool AOCoreAudioMacOS::isDeviceAlive(QSharedPointer<AOQueryCoreAudio::DeviceCore
 
 void AOCoreAudioMacOS::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item)
 {
-        if(!item->isMixing() && !m_pSampleConverter.isNull() && !m_pSampleConverter->isFloat())
+    if(!item->isMixing() && !m_pSampleConverter.isNull() && !m_pSampleConverter->isFloat())
 	{
 		if(codec->dataTypesSupported() & engine::e_SampleInt32)
 		{
@@ -2035,9 +2035,9 @@ bool AOCoreAudioMacOS::isDeviceVolume()
 	bool isVolume = false;
 
 	// 0 = master volume, 1 = left volume, 2 = right volume.
-        for(i = 0; i < 3 && !isVolume; i++)
+	for(i = 0; i < 3 && !isVolume; i++)
 	{
-                prop.mElement = i;
+		 prop.mElement = i;
 		if(CoreAudioIF::instance()->AudioObjectHasProperty(pDevice->deviceID(), &prop))
 		{
 			isVolume = true;
@@ -2058,7 +2058,7 @@ bool AOCoreAudioMacOS::isDeviceVolumeSettable()
 	// 0 = master volume, 1 = left volume, 2 = right volume.
 	for(i = 0; i < 3 && !isVolume; i++)
 	{
-                prop.mElement = i;
+		prop.mElement = i;
 		if(CoreAudioIF::instance()->AudioObjectHasProperty(pDevice->deviceID(), &prop))
 		{
 			OSStatus err;
@@ -2086,7 +2086,7 @@ sample_t AOCoreAudioMacOS::getDeviceVolume()
 	// 0 = master volume, 1 = left volume, 2 = right volume.
 	for(i = 0; i < 3; i++)
 	{
-                prop.mElement = i;
+		prop.mElement = i;
 		if(CoreAudioIF::instance()->AudioObjectHasProperty(pDevice->deviceID(),&prop))
 		{
 			Float32 volume;
@@ -2126,7 +2126,7 @@ bool AOCoreAudioMacOS::setDeviceVolume(sample_t vol)
 	// 0 = master volume, 1 = left volume, 2 = right volume.
 	for(i = 0; i < 3 && !isSet; i++)
 	{
-                prop.mElement = i;
+		prop.mElement = i;
 		if(CoreAudioIF::instance()->AudioObjectHasProperty(pDevice->deviceID(), &prop))
 		{
 			OSStatus err;
@@ -2138,7 +2138,7 @@ bool AOCoreAudioMacOS::setDeviceVolume(sample_t vol)
 				Float32 volume = static_cast<Float32>(vol);
 				UInt32 dataSize = sizeof(volume);
 
-                                err = CoreAudioIF::instance()->AudioObjectSetPropertyData(pDevice->deviceID(), &prop, 0, 0, dataSize, &volume);
+				err = CoreAudioIF::instance()->AudioObjectSetPropertyData(pDevice->deviceID(), &prop, 0, 0, dataSize, &volume);
 				if(err == noErr)
 				{
 					if(!i)

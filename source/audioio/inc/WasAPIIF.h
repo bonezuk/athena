@@ -38,9 +38,6 @@ class AUDIOIO_EXPORT WasAPIIF : public QObject
 		static QSharedPointer<WasAPIIF> instance();
 		static void release();
 		
-		static bool isExclusive();
-		static void setExclusive(bool flag);
-		
 		virtual QStringList enumerateDeviceIds() = 0;
 		
 		virtual QSharedPointer<WasAPIDevice> getDevice(const QString& devID) = 0;
@@ -52,12 +49,6 @@ class AUDIOIO_EXPORT WasAPIIF : public QObject
 		
 		virtual bool init() = 0;
 		virtual void done() = 0;
-		
-		virtual void signalExclusiveUpdated();
-		
-	signals:
-	
-		void exclusiveUpdated();
 };
 
 ABSTRACT_FACTORY_CLASS(AUDIOIO_EXPORT,WasAPIIFFactory,WasAPIIF)
@@ -83,6 +74,9 @@ class AUDIOIO_EXPORT WasAPIDevice : public QObject
 		virtual QString id() const = 0;
 		virtual QString name() const = 0;
 
+		virtual bool isExclusive() const = 0;
+		virtual void setExclusive(bool flag) = 0;
+
 		virtual QSet<int> queryFrequencyCapabilities() = 0;
 		virtual QVector<AOQueryDevice::Channel> queryChannelCapabilities() = 0;
 
@@ -90,11 +84,16 @@ class AUDIOIO_EXPORT WasAPIDevice : public QObject
 
 		virtual IAudioClientIFSPtr getAudioClient() = 0;
 		virtual void releaseAudioClient() = 0;
-
+		
 	protected:
 	
 		virtual bool init(const QString& devID) = 0;
 		virtual void done() = 0;
+
+		virtual void signalExclusiveUpdated() = 0;
+
+	signals:	
+		void exclusiveUpdated();
 };
 
 //-------------------------------------------------------------------------------------------

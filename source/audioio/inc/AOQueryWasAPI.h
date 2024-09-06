@@ -42,6 +42,8 @@ class AUDIOIO_EXPORT AOQueryWasAPI::DeviceWasAPI : public AOQueryDevice::Device
 
 		virtual void print() const;
 
+		virtual void updateExclusive();
+
 	protected:
 
 		WasAPIDeviceSPtr m_pDeviceInterface;

@@ -1416,6 +1416,33 @@ void AOWin32::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item
 }
 
 //-------------------------------------------------------------------------------------------
+
+void AOWin32::doSetExclusiveMode(int devIdx, bool flag)
+{
+	bool update = false;
+	QSharedPointer<AOQueryDevice::Device> pDevice;
+
+	m_deviceInfoMutex.lock();
+	AOBase::doSetExclusiveMode(devIdx, flag);
+	pDevice = device(devIdx);
+	if(!pDevice.isNull() && pDevice->type() == AOQueryDevice::Device::e_deviceWasAPI)
+	{
+		QSharedPointer<AOQueryWasAPI::DeviceWasAPI> pWASDevice = pDevice.dynamicCast<AOQueryWasAPI::DeviceWasAPI>();
+		if(!pWASDevice.isNull())
+		{
+			pWASDevice->updateExclusive();
+			update = true;
+		}
+	}
+	m_deviceInfoMutex.unlock();
+	
+	if(update)
+	{
+		emit emitOnDeviceUpdated(devIdx);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------

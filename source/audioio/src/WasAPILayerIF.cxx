@@ -166,10 +166,6 @@ WasAPIDeviceLayer::WasAPIDeviceLayer() : WasAPIDevice(),
 	m_pAudioClient()
 {
 	WasAPIDeviceLayer::blank();
-	if(!WasAPIIF::instance().isNull())
-	{
-		QObject::connect(WasAPIIF::instance().data(),SIGNAL(exclusiveUpdated()),this,SLOT(updateFormats()));
-	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -189,7 +185,6 @@ void WasAPIDeviceLayer::blank()
 		{
 			for(int k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 			{
-				m_formats[i][j][k] = -1;
 				m_formatsShared[i][j][k] = -1;
 				m_formatsExclusive[i][j][k] = -1;
 			}
@@ -283,13 +278,6 @@ void WasAPIDeviceLayer::done()
 	{
 		m_pDevice.clear();
 	}
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool WasAPIDeviceLayer::isExclusive() const
-{
-	return WasAPIIF::isExclusive();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -729,7 +717,17 @@ int WasAPIDeviceLayer::getFrequencyFromIndex(int idx) const
 
 bool WasAPIDeviceLayer::isFormat(int chIdx,int bitIdx,int freqIdx) const
 {
-	return (m_formats[chIdx][bitIdx][freqIdx] > 0) ? true : false;
+	bool res;
+	
+	if(isExclusive())
+	{
+		res = (m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0) ? true : false;
+	}
+	else
+	{
+		res = (m_formatsShared[chIdx][bitIdx][freqIdx] > 0) ? true : false;
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -818,9 +816,7 @@ QString WasAPIDeviceLayer::settingsValidKey(bool exclusive) const
 
 bool WasAPIDeviceLayer::loadFormats()
 {
-	bool res = (loadFormats(true) && loadFormats(false));
-	updateFormats();
-	return res;
+	return (loadFormats(true) && loadFormats(false));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -956,8 +952,11 @@ void WasAPIDeviceLayer::setChannelsInWaveFormat(int channel,WAVEFORMATEX *pForma
 
 QSet<int> WasAPIDeviceLayer::queryFrequencyCapabilities()
 {
+	bool exclusive;
 	int i,j,k;
 	QSet<int> frequencySet;
+	
+	exclusive = isExclusive();
 
 	for(i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
 	{
@@ -965,7 +964,7 @@ QSet<int> WasAPIDeviceLayer::queryFrequencyCapabilities()
 		{
 			for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 			{
-				if(m_formats[i][j][k] > 0)
+				if((exclusive && m_formatsExclusive[i][j][k] > 0) || (!exclusive && m_formatsShared[i][j][k] > 0))
 				{
 					int freq = getFrequencyFromIndex(k);
 					QSet<int>::iterator ppI = frequencySet.find(freq);
@@ -984,6 +983,7 @@ QSet<int> WasAPIDeviceLayer::queryFrequencyCapabilities()
 
 QVector<AOQueryDevice::Channel> WasAPIDeviceLayer::queryChannelCapabilities()
 {
+	bool exclusive = isExclusive();
 	QVector<AOQueryDevice::Channel> channelList;
 	int i,j,k,maxChs = 0;
 	
@@ -995,9 +995,19 @@ QVector<AOQueryDevice::Channel> WasAPIDeviceLayer::queryChannelCapabilities()
 		{
 			for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 			{
-				if(m_formats[i][j][k] > 0 && noChs > maxChs)
+				if(exclusive)
 				{
-					maxChs = noChs;
+					if(m_formatsExclusive[i][j][k] > 0 && noChs > maxChs)
+					{
+						maxChs = noChs;
+					}
+				}
+				else
+				{
+					if(m_formatsShared[i][j][k] > 0 && noChs > maxChs)
+					{
+						maxChs = noChs;
+					}				
 				}
 			}
 		}
@@ -1016,70 +1026,54 @@ QVector<AOQueryDevice::Channel> WasAPIDeviceLayer::queryChannelCapabilities()
 
 void WasAPIDeviceLayer::queryDeviceFormatCapabilities()
 {
-	bool exclusiveFlag = isExclusive();
+	bool exclusiveFlag;
 	int i,j,k,l;
 	
 	for(l=0;l<2;l++)
 	{
-		WasAPIIF::setExclusive((!l) ? true : false);
-		
+		exclusiveFlag = (!l) ? true : false;
 		for(i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
 		{
 			for(j=0;j<NUMBER_WASAPI_MAXBITS;j++)
 			{
 				for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 				{
-					hasIndexedFormatWithUpdate(j,i,k);
+					hasIndexedFormatWithUpdate(j, i, k, exclusiveFlag);
 				}
 			}
 		}
 	}
-	WasAPIIF::setExclusive(exclusiveFlag);
 }
 
 //-------------------------------------------------------------------------------------------
 
-bool WasAPIDeviceLayer::hasIndexedFormatWithUpdate(tint bitIdx,tint chIdx,tint freqIdx)
+bool WasAPIDeviceLayer::hasIndexedFormatWithUpdate(tint bitIdx, tint chIdx, tint freqIdx, bool exculsive)
 {
 	bool res = false;
 	
-	if(m_formats[chIdx][bitIdx][freqIdx] < 0)
+	if(exclusive)
 	{
-		m_formats[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, isExclusive());
-		if(isExclusive())
+		if(m_formatsExclusive[chIdx][bitIdx][freqIdx] < 0)
 		{
-			m_formatsExclusive[chIdx][bitIdx][freqIdx] = m_formats[chIdx][bitIdx][freqIdx];
+			m_formatsExclusive[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, isExclusive());
 		}
-		else
+		if(m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0)
 		{
-			m_formatsShared[chIdx][bitIdx][freqIdx] = m_formats[chIdx][bitIdx][freqIdx];
+			res = true;
 		}
 	}
-	
-	if(m_formats[chIdx][bitIdx][freqIdx] > 0)
+	else
 	{
-		res = true;
+		if(m_formatsShared[chIdx][bitIdx][freqIdx] < 0)
+		{
+			m_formatsShared[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, isExclusive());
+		}
+		if(m_formatsShared[chIdx][bitIdx][freqIdx] > 0)
+		{
+			res = true;
+		}	
 	}
 	return res;
-}
-
-//-------------------------------------------------------------------------------------------
-
-void WasAPIDeviceLayer::updateFormats()
-{
-	int i,j,k;
-	bool flag = WasAPIIF::isExclusive();
-	
-	for(i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
-	{
-		for(j=0;j<NUMBER_WASAPI_MAXBITS;j++)
-		{
-			for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
-			{
-				m_formats[i][j][k] = (flag) ? m_formatsExclusive[i][j][k] : m_formatsShared[i][j][k];
-			}
-		}
-	}	
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1171,6 +1165,8 @@ WAVEFORMATEX *WasAPIDeviceLayer::descriptionToWaveFormat(const FormatDescription
 
 void WasAPIDeviceLayer::populateFormatsSupported(FormatsSupported& support)
 {
+	bool exclusive = isExculsive();
+
 	support.clear();
 
 	for(tint i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
@@ -1179,7 +1175,7 @@ void WasAPIDeviceLayer::populateFormatsSupported(FormatsSupported& support)
 		{
 			for(tint k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 			{
-				if(hasIndexedFormatWithUpdate(j,i,k))
+				if(hasIndexedFormatWithUpdate(j, i, k, exclusive))
 				{
 					FormatDescription desc;
 					
@@ -1203,7 +1199,7 @@ WAVEFORMATEX *WasAPIDeviceLayer::supportedWaveFormatFromDescription(const Format
 	bitIdx = nativeBitIndexFromFDIndex(desc.bitsIndex());
 	chIdx = desc.channelsIndex();
 	freqIdx = desc.frequencyIndex();
-	entry = m_formats[chIdx][bitIdx][freqIdx];
+	entry = (isExclusive()) ? m_formatsExclusive[chIdx][bitIdx][freqIdx] : m_formatsShared[chIdx][bitIdx][freqIdx];
 	
 	if(desc.bits() == 16)
 	{
@@ -1759,6 +1755,30 @@ QString WasAPIDeviceLayer::capabilityCSVIndexed(tint bitIdx, tint chIdx, tint fr
 		c = "No";
 	}
 	return c;
+}
+
+//-------------------------------------------------------------------------------------------
+
+QString WasAPIDeviceLayer::exclusiveSettingsName() const
+{
+	QString n = "audio" + name();
+	return n;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::isExclusive() const
+{
+	bool flag = false;
+	QSettings settings;
+	
+	settings.beginGroup(exclusiveSettingsName());
+	if(settings.contains("exclusive"))
+	{
+		flag = settings.value("exclusive", QVariant(false)).toBool();
+	}
+	settings.endGroup();
+	return flag
 }
 
 //-------------------------------------------------------------------------------------------

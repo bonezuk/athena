@@ -105,6 +105,8 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual QString id() const;
 		virtual QString name() const;
 
+		virtual bool isExclusive() const;
+
 		virtual QSet<int> queryFrequencyCapabilities();
 		virtual QVector<AOQueryDevice::Channel> queryChannelCapabilities();
 
@@ -129,8 +131,6 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		IMMDeviceIFSPtr m_pDevice;
 		IAudioClientIFSPtr m_pAudioClient;
 		
-		tint m_formats[NUMBER_WASAPI_MAXCHANNELS][NUMBER_WASAPI_MAXBITS][NUMBER_WASAPI_MAXFREQUENCIES]; // (no. of channels) (no. of bits) (frequency)
-		
 		tint m_formatsShared[NUMBER_WASAPI_MAXCHANNELS][NUMBER_WASAPI_MAXBITS][NUMBER_WASAPI_MAXFREQUENCIES];
 		tint m_formatsExclusive[NUMBER_WASAPI_MAXCHANNELS][NUMBER_WASAPI_MAXBITS][NUMBER_WASAPI_MAXFREQUENCIES];
 		
@@ -144,8 +144,6 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual IAudioClientIFSPtr createAudioClientIF(IAudioClient *pAudioClient);
 		virtual IPropertyStoreIFSPtr createPropertyStoreIF(IPropertyStore *pPropertyStore) const;
 
-		virtual bool isExclusive() const;
-		
 		virtual void defaultWaveFormat(WAVEFORMATEX& format) const;
 		virtual void defaultWaveExtensibleFormat(WAVEFORMATEXTENSIBLE& format) const;
 		virtual void defaultWaveExtensibleFloatFormat(WAVEFORMATEXTENSIBLE& format, bool is64Bit) const;
@@ -180,7 +178,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual void setChannelsInWaveFormat(int channel,WAVEFORMATEX *pFormat) const;
 		
 		virtual void queryDeviceFormatCapabilities();
-		virtual bool hasIndexedFormatWithUpdate(tint bitIdx,tint chIdx,tint freqIdx);
+		virtual bool hasIndexedFormatWithUpdate(tint bitIdx,tint chIdx,tint freqIdx, bool exculsive);
 		
 		virtual void setWaveFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, WAVEFORMATEX& format);
 		virtual void setWaveExtensibleFormatFromIndex(tint bitIdx, tint chIdx, tint freqIdx, WAVEFORMATEXTENSIBLE& format);
@@ -207,10 +205,8 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		int nativeBitIndexFromFDIndex(int fdBitIndex) const;
 		
 		WAVEFORMATEX *supportedWaveFormatFromDescription(const FormatDescription& desc);
-
-	protected slots:
-	
-		virtual void updateFormats();
+		
+		QString exclusiveSettingsName() const;
 };
 
 //-------------------------------------------------------------------------------------------

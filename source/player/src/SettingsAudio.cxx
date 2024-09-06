@@ -64,6 +64,7 @@ void SettingsAudio::init()
 	QObject::connect(m_personButton,SIGNAL(clicked()),this,SLOT(onTestFull()));
 
     QObject::connect(ui.m_exclusiveFlag,SIGNAL(toggled(bool)),this,SLOT(onCheckExclusive(bool)));
+    QObject::connect(m_audio.data(), SIGNAL(onDeviceUpdated(int), this, SLOT(onDeviceUpdate(int)));
 
 #if defined(OMEGA_WIN32)
 	ui.m_exclusiveFlag->setText("Exclusive Mode");
@@ -141,8 +142,8 @@ void SettingsAudio::onDeviceChange(int idx)
 				m_audio->setExclusiveMode(idx,false);
 			}
 		}
-		ui.m_exclusiveFlag->blockSignals(false);
-		
+		ui.m_exclusiveFlag->blockSignals(false);		
+
 		noChs = m_channelMap.noChannels();
 		if(noChs > m_device->noChannels())
 		{
@@ -153,6 +154,36 @@ void SettingsAudio::onDeviceChange(int idx)
 		ui.m_speakerCombo->setCurrentIndex(noChs - 1);
 		ui.m_speakerCombo->blockSignals(false);
 		doSpeakerConfiguration(noChs - 1,false);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SettingsAudio::onDeviceUpdate(int idx)
+{
+	int noChs, currentChs;
+
+	if(idx == m_deviceIdx)
+	{
+		m_device = m_audio->device(idx);
+		m_channelMap = m_audio->deviceChannelMap(idx);
+		
+		currentChs = ui.m_speakerCombo->currentIndex() + 1;
+		noChs = m_channelMap.noChannels();
+		if(noChs > m_device->noChannels())
+		{
+			noChs = m_device->noChannels();
+		}
+		if(currentChs > noChs)
+		{
+			currentChs = noChs;
+		}
+		
+		updateSpeakerCombo();
+		ui.m_speakerCombo->blockSignals(true);
+		ui.m_speakerCombo->setCurrentIndex(currentChs - 1);
+		ui.m_speakerCombo->blockSignals(false);
+		doSpeakerConfiguration(currentChs - 1,false);
 	}
 }
 

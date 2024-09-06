@@ -83,6 +83,7 @@ class SettingsAudio : public SettingsBase
 	protected slots:
 	
 		void onDeviceChange(int idx);
+		void onDeviceUpdate(int idx);
 		void onSpeakerConfiguration(int idx);
 		void onStereoConfigutaion(int idx);
 

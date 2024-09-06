@@ -21,9 +21,6 @@
 #include <QCoreApplication>
 #endif
 
-// Important TODO : The bit depth of the sound from codec must be given such that the matching
-// bit depth can be used by the format sleection algorithm.
-
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
@@ -6597,22 +6594,14 @@ bool AOBase::isExclusive()
 
 bool AOBase::isExclusive(int devIdx)
 {
-	bool exclusive;
-	QSettings settings;
-	QString groupName = "audio" + getDeviceName(devIdx);
+	bool flag = false;
+	QSharedPointer<AOQueryDevice::Device> pDevice = device(devIdx);
 	
-	settings.beginGroup(groupName);
-	if(settings.contains("exclusive"))
+	if(!pDevice.isNull())
 	{
-		exclusive = settings.value("exclusive",QVariant(false)).toBool();
+		flag = pDevice->hasExclusive();
 	}
-	else
-	{
-		exclusive = false;
-	}
-	settings.endGroup();
-	
-	return exclusive;
+	return flag;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -6720,6 +6709,13 @@ void AOBase::emitOnCrossfade()
 Qt::HANDLE AOBase::threadId()
 {
 	return m_threadId;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBase::emitOnDeviceUpdated(int devIdx)
+{
+	emit onDeviceUpdated(devIdx);
 }
 
 //-------------------------------------------------------------------------------------------

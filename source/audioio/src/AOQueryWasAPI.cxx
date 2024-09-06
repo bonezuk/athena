@@ -72,7 +72,6 @@ bool AOQueryWasAPI::queryDevice(int idx)
 				}
 
 				dev->setInitialized();
-				dev->setHasExclusive(true);
 			}
 			res = true;
 		}
@@ -128,7 +127,7 @@ void AOQueryWasAPI::DeviceWasAPI::setDeviceInterface(WasAPIDeviceSPtr pDeviceIF)
 void AOQueryWasAPI::DeviceWasAPI::copy(const AOQueryDevice::Device& rhs)
 {
 	const AOQueryWasAPI::DeviceWasAPI& wasDevice = dynamic_cast<const AOQueryWasAPI::DeviceWasAPI&>(rhs);
-	m_pDeviceInterface = wasDevice.deviceInterface();
+	setDeviceInterface(wasDevice.deviceInterface());
 	AOQueryDevice::Device::copy(rhs);
 }
 
@@ -167,11 +166,11 @@ void AOQueryWasAPI::DeviceWasAPI::print() const
 		QSharedPointer<WasAPIDeviceLayer> pLDevice = pDevice.dynamicCast<WasAPIDeviceLayer>();
 
 		common::Log::g_Log.print("Supported Formats:\n");
-		for(i=0;i<8;i++)
+		for(i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
 		{
-			for(j=0;j<5;j++)
+			for(j=0;j<NUMBER_WASAPI_MAXBITS;j++)
 			{
-				for(k=0;k<18;k++)
+				for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 				{
 					if(pLDevice->isFormat(i,j,k))
 					{
@@ -183,6 +182,25 @@ void AOQueryWasAPI::DeviceWasAPI::print() const
 	}
 
 	common::Log::g_Log.print("\n\n");
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOQueryWasAPI::DeviceWasAPI::updateExclusive()
+{
+	QSet<int> freqSet = deviceInterface()->queryFrequencyCapabilities();
+	m_frequencySet.clear();
+	for(QSet<int>::iterator ppI=freqSet.begin();ppI!=freqSet.end();ppI++)
+	{
+		m_frequencySet.insert(*ppI);
+	}
+	
+	QVector<AOQueryDevice::Channel> channelList = deviceInterface()->queryChannelCapabilities();
+	deviceInterface()->setNoChannels(channelList.size());
+	for(int i=0;i<channelList.size();i++)
+	{
+		deviceInterface()->channel(i) = channelList.at(i);
+	}
 }
 
 //-------------------------------------------------------------------------------------------

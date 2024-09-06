@@ -174,6 +174,8 @@ class AUDIOIO_EXPORT AOWin32 : public AOBase
 		virtual void writeWASAudio();
 
 		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
+		
+		virtual void doSetExclusiveMode(int devIdx, bool flag);
 
 	protected slots:
 	

@@ -875,6 +875,8 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual void doCodecInit(void *cPtr);
 		virtual void doEventTimer();
 
+		virtual void emitOnDeviceUpdated(int devIdx);
+
 	protected slots:
 	
 		void onTimer();
@@ -897,6 +899,11 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		void onReadyForNext();
 		void onNoNext();
 		void onCrossfade();
+		
+		// Emitted when the values of an AOQueryDevice instance have been changed.
+		// e.g. When WasAPI mode is changed from shared/exclusive the number of
+		// channels and frequencies change
+		void onDeviceUpdated(int devIdx);
 };	
 
 //-------------------------------------------------------------------------------------------
