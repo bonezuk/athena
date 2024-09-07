@@ -14,55 +14,11 @@ using namespace testing;
 
 //-------------------------------------------------------------------------------------------
 
-TEST(WasAPI,queryDevicesExclusive)
-{
-	WasAPIIF::setExclusive(true);
-	WasAPIIFSPtr pWAS = WasAPIIF::instance("wasapi");
-	ASSERT_FALSE(pWAS.isNull());
-
-	AOQueryWasAPI audioQuery;
-	
-	ASSERT_TRUE(audioQuery.queryNames());
-
-	for(int i=0;i<audioQuery.noDevices();i++)
-	{
-		ASSERT_TRUE(audioQuery.queryDevice(i));
-	}
-	
-	audioQuery.print();
-	
-	WasAPIIF::release();
-}
-
-//-------------------------------------------------------------------------------------------
-
-TEST(WasAPI,queryDevicesShared)
-{
-	WasAPIIF::setExclusive(false);
-	WasAPIIFSPtr pWAS = WasAPIIF::instance("wasapi");
-	ASSERT_FALSE(pWAS.isNull());
-
-	AOQueryWasAPI audioQuery;
-	
-	ASSERT_TRUE(audioQuery.queryNames());
-	for(int i=0;i<audioQuery.noDevices();i++)
-	{
-		ASSERT_TRUE(audioQuery.queryDevice(i));
-	}
-	
-	audioQuery.print();
-	
-	WasAPIIF::release();
-}
-
-//-------------------------------------------------------------------------------------------
-
 TEST(Was,blankFormats)
 {
 	QSettings settings;
 	settings.beginGroup("wasapi");
 	
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pWAS = WasAPIIF::instance("wasapi");
 	
 	ASSERT_FALSE(pWAS.isNull());
@@ -264,7 +220,6 @@ void deviceTopologyScanPart(IPart *pPart)
 
 TEST(WasAPI,deviceTopologyA)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pWAS = WasAPIIF::instance("wasapi");
 	ASSERT_FALSE(pWAS.isNull());
 
@@ -535,7 +490,6 @@ void deviceTopologyGetChannelMask(IPart *pPart,void *pValue)
 
 TEST(WasAPI,deviceTopologyB)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pWAS = WasAPIIF::instance("wasapi");
 	ASSERT_FALSE(pWAS.isNull());
 
@@ -607,7 +561,6 @@ TEST(WasAPI,deviceTopologyB)
 
 TEST(WasAPI,deviceDefaultMixedFormat)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pWAS = WasAPIIF::instance("wasapi");
 	ASSERT_FALSE(pWAS.isNull());
 
@@ -669,7 +622,6 @@ TEST(WasAPI,deviceDefaultMixedFormat)
 
 TEST(WasAPI, deviceLogCapabilities)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pWAS = WasAPIIF::instance("wasapi");
 	ASSERT_FALSE(pWAS.isNull());
 
@@ -743,7 +695,6 @@ TEST(WasAPI, deviceLogCapabilities)
 
 TEST(WasAPI, deviceLogCapCSV)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pWAS = WasAPIIF::instance("wasapi");
 	ASSERT_FALSE(pWAS.isNull());
 

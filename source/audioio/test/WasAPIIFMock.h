@@ -42,6 +42,9 @@ class WasAPIDeviceMock : public WasAPIDevice
 		MOCK_CONST_METHOD0(id,QString());
 		MOCK_CONST_METHOD0(name,QString());
 
+		MOCK_CONST_METHOD0(isExclusive, bool());
+		MOCK_METHOD1(setExclusive, void(bool));
+
 		MOCK_METHOD0(queryFrequencyCapabilities,QSet<int>());
 		MOCK_METHOD0(queryChannelCapabilities,QVector<AOQueryDevice::Channel>());
 

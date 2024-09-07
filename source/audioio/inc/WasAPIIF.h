@@ -89,11 +89,6 @@ class AUDIOIO_EXPORT WasAPIDevice : public QObject
 	
 		virtual bool init(const QString& devID) = 0;
 		virtual void done() = 0;
-
-		virtual void signalExclusiveUpdated() = 0;
-
-	signals:	
-		void exclusiveUpdated();
 };
 
 //-------------------------------------------------------------------------------------------

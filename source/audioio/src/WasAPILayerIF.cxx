@@ -1047,7 +1047,7 @@ void WasAPIDeviceLayer::queryDeviceFormatCapabilities()
 
 //-------------------------------------------------------------------------------------------
 
-bool WasAPIDeviceLayer::hasIndexedFormatWithUpdate(tint bitIdx, tint chIdx, tint freqIdx, bool exculsive)
+bool WasAPIDeviceLayer::hasIndexedFormatWithUpdate(tint bitIdx, tint chIdx, tint freqIdx, bool exclusive)
 {
 	bool res = false;
 	
@@ -1165,7 +1165,7 @@ WAVEFORMATEX *WasAPIDeviceLayer::descriptionToWaveFormat(const FormatDescription
 
 void WasAPIDeviceLayer::populateFormatsSupported(FormatsSupported& support)
 {
-	bool exclusive = isExculsive();
+	bool exclusive = isExclusive();
 
 	support.clear();
 
@@ -1778,7 +1778,18 @@ bool WasAPIDeviceLayer::isExclusive() const
 		flag = settings.value("exclusive", QVariant(false)).toBool();
 	}
 	settings.endGroup();
-	return flag
+	return flag;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::setExclusive(bool flag)
+{
+	QSettings settings;
+
+	settings.beginGroup(exclusiveSettingsName());
+	settings.setValue("exclusive", QVariant(flag));
+	settings.endGroup();
 }
 
 //-------------------------------------------------------------------------------------------

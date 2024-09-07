@@ -1,5 +1,6 @@
 #include "audioio/inc/AOQueryDevice.h"
 #include "common/inc/Log.h"
+#include <QSettings>
 
 //-------------------------------------------------------------------------------------------
 namespace omega

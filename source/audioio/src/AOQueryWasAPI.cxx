@@ -196,10 +196,10 @@ void AOQueryWasAPI::DeviceWasAPI::updateExclusive()
 	}
 	
 	QVector<AOQueryDevice::Channel> channelList = deviceInterface()->queryChannelCapabilities();
-	deviceInterface()->setNoChannels(channelList.size());
+	setNoChannels(channelList.size());
 	for(int i=0;i<channelList.size();i++)
 	{
-		deviceInterface()->channel(i) = channelList.at(i);
+		channel(i) = channelList.at(i);
 	}
 }
 

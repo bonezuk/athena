@@ -106,6 +106,7 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual QString name() const;
 
 		virtual bool isExclusive() const;
+		virtual void setExclusive(bool flag);
 
 		virtual QSet<int> queryFrequencyCapabilities();
 		virtual QVector<AOQueryDevice::Channel> queryChannelCapabilities();

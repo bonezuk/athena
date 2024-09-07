@@ -64,7 +64,7 @@ void SettingsAudio::init()
 	QObject::connect(m_personButton,SIGNAL(clicked()),this,SLOT(onTestFull()));
 
     QObject::connect(ui.m_exclusiveFlag,SIGNAL(toggled(bool)),this,SLOT(onCheckExclusive(bool)));
-    QObject::connect(m_audio.data(), SIGNAL(onDeviceUpdated(int), this, SLOT(onDeviceUpdate(int)));
+    QObject::connect(m_audio.data(), SIGNAL(onDeviceUpdated(int)), this, SLOT(onDeviceUpdate(int)));
 
 #if defined(OMEGA_WIN32)
 	ui.m_exclusiveFlag->setText("Exclusive Mode");

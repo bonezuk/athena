@@ -475,10 +475,11 @@ class WasAPIDeviceLayerTest : public WasAPIDeviceLayer
 		tint testGetNoOfChannelsFromWaveFormat(const WAVEFORMATEX *pFormat) const;
 		tint testGetFrequencyFromWaveFormat(const WAVEFORMATEX *pFormat) const;
 
-		tint format(int i,int j,int k);
+		tint format(int i, int j, int k, bool exclusive);
 		tint formatExclusive(int i,int j,int k);
 		tint formatShared(int i,int j,int k);
-		void setFormat(int i,int j,int k,int value);
+
+		void setFormat(int i, int j, int k, bool exclusive, int value);
 		void setFormatExclusive(int i,int j,int k,int value);
 		void setFormatShared(int i,int j,int k,int value);
 		
@@ -570,13 +571,6 @@ tint WasAPIDeviceLayerTest::testGetFrequencyFromWaveFormat(const WAVEFORMATEX *p
 
 //-------------------------------------------------------------------------------------------
 
-void WasAPIDeviceLayerTest::setFormat(int i,int j,int k,int value)
-{
-	m_formats[i][j][k] = value;
-}
-
-//-------------------------------------------------------------------------------------------
-
 void WasAPIDeviceLayerTest::setFormatExclusive(int i,int j,int k,int value)
 {
 	m_formatsExclusive[i][j][k] = value;
@@ -591,9 +585,23 @@ void WasAPIDeviceLayerTest::setFormatShared(int i,int j,int k,int value)
 
 //-------------------------------------------------------------------------------------------
 
-tint WasAPIDeviceLayerTest::format(int i,int j,int k)
+tint WasAPIDeviceLayerTest::format(int i, int j, int k, bool exclusive)
 {
-	return m_formats[i][j][k];
+	return (exclusive) ? formatExclusive(i, j, k) : formatShared(i, j, k);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayerTest::setFormat(int i, int j, int k, bool exclusive, int value)
+{
+	if(exclusive)
+	{
+		setFormatExclusive(i, j, k, value);
+	}
+	else
+	{
+		setFormatShared(i, j, k, value);
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -772,7 +780,6 @@ class WasAPIDeviceLayerInitTest : public WasAPIDeviceLayerTest
 		
 		IMMDeviceIFSPtr getDeviceInterface();
 		IAudioClientIFSPtr getAudioClientInterface();
-		tint getFormatIndex(int i,int j,int k);
 
 		bool testInit(const QString& devID);
 };
@@ -789,13 +796,6 @@ IMMDeviceIFSPtr WasAPIDeviceLayerInitTest::getDeviceInterface()
 IAudioClientIFSPtr WasAPIDeviceLayerInitTest::getAudioClientInterface()
 {
 	return m_pAudioClient;
-}
-
-//-------------------------------------------------------------------------------------------
-
-tint WasAPIDeviceLayerInitTest::getFormatIndex(int i,int j,int k)
-{
-	return m_formats[i][j][k];
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1538,7 +1538,6 @@ HRESULT WasAPIDeviceLayerFindDefaultFormatTypeInvoker::IsFormatSupported(AUDCLNT
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits44100HzAnd2ChannelsWhen16Bits44100HzAnd2ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1586,7 +1585,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits44100HzAnd2Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits44100HzAnd2ChannelsWhen24Bits44100HzAnd2ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1634,7 +1632,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits44100HzAnd2Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd2ChannelsWhen16Bits96000HzAnd8ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1682,7 +1679,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd2Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd2ChannelsWhen32BitFloat88200HzAnd6ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1731,7 +1727,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd2Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits44100HzAnd2ChannelsWhen16Bits22050HzAnd2ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1779,7 +1774,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits44100HzAnd2Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd2ChannelsWhen24Bits32000HzAnd8ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1827,7 +1821,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd2Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd4ChannelsWhen16Bits96000HzAnd2ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1875,7 +1868,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd4Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd6ChannelsWhen32BitFloat88200HzAnd1ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1924,7 +1916,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd6Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd8ChannelsWhen24Bits32000HzAnd4ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -1972,7 +1963,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd8Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor24Bits44100HzAnd2ChannelsWhen8Bits44100HzAnd2ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -2020,7 +2010,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor24Bits44100HzAnd2Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor32BitFloat48000HzAnd6ChannelsWhen16Bits88200HzAnd2ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -2069,7 +2058,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor32BitFloat48000HzAnd6Cha
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd2ChannelsWhen8Bits32000HzAnd8ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -2117,7 +2105,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd2Channel
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor32BitFloat48000HzAnd4ChannelsWhen8Bits88200HzAnd3ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -2166,7 +2153,6 @@ TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor32BitFloat48000HzAnd4Cha
 
 TEST(WasAPIDeviceLayer,findClosestFormatTypeSupportedFor16Bits48000HzAnd8ChannelsWhen8Bits32000HzAnd2ChannelsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -2453,8 +2439,6 @@ HRESULT WasAPIDeviceLayerSaveAndLoadFormatsInvoker::GetId(LPWSTR *ppstrId)
 
 TEST(WasAPIDeviceLayer,saveAndLoadFormats)
 {
-	WasAPIIF::setExclusive(true);
-	
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -2509,7 +2493,6 @@ TEST(WasAPIDeviceLayer,saveAndLoadFormats)
 		{
 			for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 			{
-				EXPECT_EQ(-1,device.format(i,j,k));
 				EXPECT_EQ(-1,device.formatExclusive(i,j,k));
 				EXPECT_EQ(-1,device.formatShared(i,j,k));
 			}
@@ -2524,31 +2507,29 @@ TEST(WasAPIDeviceLayer,saveAndLoadFormats)
 		{
 			for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 			{
-				EXPECT_EQ(m_expectedFormatExclusive[i][j][k],device.format(i,j,k));
+				EXPECT_EQ(m_expectedFormatExclusive[i][j][k],device.format(i,j,k,true));
 			}
 		}
 	}
 	
-	WasAPIIF::setExclusive(false);
 	for(i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
 	{
 		for(j=0;j<NUMBER_WASAPI_MAXBITS;j++)
 		{
 			for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 			{
-				EXPECT_EQ(m_expectedFormatShared[i][j][k],device.format(i,j,k));
+				EXPECT_EQ(m_expectedFormatShared[i][j][k],device.format(i,j,k,false));
 			}
 		}
 	}
 	
-	WasAPIIF::setExclusive(true);
 	for(i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
 	{
 		for(j=0;j<NUMBER_WASAPI_MAXBITS;j++)
 		{
 			for(k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
 			{
-				EXPECT_EQ(m_expectedFormatExclusive[i][j][k],device.format(i,j,k));
+				EXPECT_EQ(m_expectedFormatExclusive[i][j][k],device.format(i,j,k,true));
 			}
 		}
 	}
@@ -3012,7 +2993,6 @@ MATCHER_P(WaveFormatExtensibleIsExpected,pExpectFormat,"") { return (memcmp(arg,
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWhenClosestNotFound)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -3036,7 +3016,6 @@ TEST(WasAPIDeviceLayer,findClosestSupportedFormatWhenClosestNotFound)
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithExclusiveAndNonExIsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -3070,7 +3049,6 @@ TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithExclusiveAndNonExIsSupporte
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithExclusiveAndNonExIsNotSupportedAndCBSizeIsSet)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -3104,7 +3082,6 @@ TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithExclusiveAndNonExIsNotSuppo
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithExclusiveAndNonExIsNotSupportedAndExtIsSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -3143,7 +3120,6 @@ TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithExclusiveAndNonExIsNotSuppo
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithExclusiveAndNonExAndExtIsNotSupported)
 {
-	WasAPIIF::setExclusive(true);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(true));
@@ -3181,7 +3157,6 @@ TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithExclusiveAndNonExAndExtIsNo
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithSharedAndNonExIsSupported)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(false));
@@ -3222,7 +3197,6 @@ TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithSharedAndNonExIsSupported)
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithSharedAndNonExIsNotSupportedAndCBSizeIsSet)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(false));
@@ -3261,7 +3235,6 @@ TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithSharedAndNonExIsNotSupporte
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithSharedAndNonExIsNotSupportedAndExtIsSupported)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(false));
@@ -3312,7 +3285,6 @@ TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithSharedAndNonExIsNotSupporte
 
 TEST(WasAPIDeviceLayer,findClosestSupportedFormatWithSharedAndNonExAndExtIsNotSupported)
 {
-	WasAPIIF::setExclusive(false);
 	WasAPIIFSPtr pAPI = WasAPIIF::instance("mock");
 	WasAPIIFMock& apiMock = dynamic_cast<WasAPIIFMock&>(*(pAPI.data()));
 	EXPECT_CALL(apiMock,isExclusive()).WillRepeatedly(Return(false));

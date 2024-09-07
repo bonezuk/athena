@@ -955,143 +955,131 @@ bool AOWin32::openAudioWasAPI()
 
 bool AOWin32::openAudioWasAPIWithExclusion(bool isExclusiveFlag)
 {
-	WasAPIIFSPtr pAPI = WasAPIIF::instance();
 	bool res = false;
 	
-	if(!pAPI.isNull())
+	QSharedPointer<AOQueryWasAPI::DeviceWasAPI> pDevice = getCurrentDevice().dynamicCast<AOQueryWasAPI::DeviceWasAPI>();
+
+	if(!pDevice.isNull() && pDevice->type()==AOQueryDevice::Device::e_deviceWasAPI)
 	{
-		// Set exclusive flag before getting closest wave format: as which formats are
-		// available depend on shared/exclusive mode being set.
-		pAPI->setExclusive(isExclusiveFlag);
-
-		QSharedPointer<AOQueryWasAPI::DeviceWasAPI> pDevice = getCurrentDevice().dynamicCast<AOQueryWasAPI::DeviceWasAPI>();
-
-		if(!pDevice.isNull() && pDevice->type()==AOQueryDevice::Device::e_deviceWasAPI)
-		{
-			m_pWASDevice = pDevice->deviceInterface();
+		m_pWASDevice = pDevice->deviceInterface();
 			
-			if(!m_pWASDevice.isNull())
-			{
-				m_pAudioClient = m_pWASDevice->getAudioClient();
-				if(!m_pAudioClient.isNull())
-				{				
-					m_pWASFormat = m_pWASDevice->findClosestSupportedFormat(getSourceDescription(pDevice->noChannels()));
-					if(m_pWASFormat!=0)
+		if(!m_pWASDevice.isNull())
+		{
+			m_pAudioClient = m_pWASDevice->getAudioClient();
+			if(!m_pAudioClient.isNull())
+			{				
+				m_pWASFormat = m_pWASDevice->findClosestSupportedFormat(getSourceDescription(pDevice->noChannels()));
+				if(m_pWASFormat!=0)
+				{
+					if(getFrequency() != m_pWASFormat->nSamplesPerSec)
 					{
-						if(getFrequency() != m_pWASFormat->nSamplesPerSec)
-						{
-							int iFreq = getFrequency();
-							setFrequency(m_pWASFormat->nSamplesPerSec);
-							initResampler(iFreq,getFrequency());
-						}
-						initCyclicBuffer();
+						int iFreq = getFrequency();
+						setFrequency(m_pWASFormat->nSamplesPerSec);
+						initResampler(iFreq,getFrequency());
+					}
+					initCyclicBuffer();
 						
-						m_pSampleConverter = createWASSampleConverter(m_pWASFormat);
-						if(!m_pSampleConverter.isNull())
+					m_pSampleConverter = createWASSampleConverter(m_pWASFormat);
+					if(!m_pSampleConverter.isNull())
+					{
+						if(activateWasAPIAudioDevice(m_pWASFormat))
 						{
-							if(activateWasAPIAudioDevice(m_pWASFormat))
-							{
-								m_hWASEvent = CreateEvent(0,FALSE,FALSE,0);
-								m_hWASFeedbackEvent = CreateEvent(0,TRUE,FALSE,0);
+							m_hWASEvent = CreateEvent(0,FALSE,FALSE,0);
+							m_hWASFeedbackEvent = CreateEvent(0,TRUE,FALSE,0);
 								
-								if(m_hWASEvent!=0 && m_hWASFeedbackEvent!=0)
-								{
-									DWORD threadID;
+							if(m_hWASEvent!=0 && m_hWASFeedbackEvent!=0)
+							{
+								DWORD threadID;
 									
-									m_wasRunThread = true;
-									m_hWASThread = CreateThread(0,0,AOWin32::writeWASAudioThread,reinterpret_cast<LPVOID>(this),0,&threadID);
-									if(m_hWASThread!=0)
-									{
-										HRESULT hr;
+								m_wasRunThread = true;
+								m_hWASThread = CreateThread(0,0,AOWin32::writeWASAudioThread,reinterpret_cast<LPVOID>(this),0,&threadID);
+								if(m_hWASThread!=0)
+								{
+									HRESULT hr;
 										
-										hr = m_pAudioClient->SetEventHandle(m_hWASEvent);
+									hr = m_pAudioClient->SetEventHandle(m_hWASEvent);
+									if(hr==S_OK)
+									{
+										hr = m_pAudioClient->GetBufferSize(&m_bufferWASFrameCount);
 										if(hr==S_OK)
 										{
-											hr = m_pAudioClient->GetBufferSize(&m_bufferWASFrameCount);
+											const IID IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
+											IAudioRenderClient *pRender = 0;
+												
+											hr = m_pAudioClient->GetService(IID_IAudioRenderClient,reinterpret_cast<void **>(&pRender));
 											if(hr==S_OK)
 											{
-												const IID IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
-												IAudioRenderClient *pRender = 0;
-												
-												hr = m_pAudioClient->GetService(IID_IAudioRenderClient,reinterpret_cast<void **>(&pRender));
+												IAudioRenderClientIFSPtr pNewRender(new IAudioRenderClientIF(pRender));
+												m_pAudioRenderClient = pNewRender;
+													
+												const IID IID_IAudioClock = __uuidof(IAudioClock);
+												IAudioClock *pClock = 0;
+												hr = m_pAudioClient->GetService(IID_IAudioClock,reinterpret_cast<void **>(&pClock));
 												if(hr==S_OK)
 												{
-													IAudioRenderClientIFSPtr pNewRender(new IAudioRenderClientIF(pRender));
-													m_pAudioRenderClient = pNewRender;
-													
-													const IID IID_IAudioClock = __uuidof(IAudioClock);
-													IAudioClock *pClock = 0;
-													hr = m_pAudioClient->GetService(IID_IAudioClock,reinterpret_cast<void **>(&pClock));
-													if(hr==S_OK)
-													{
-														IAudioClockIFSPtr pNewClock(new IAudioClockIF(pClock));
-														m_pAudioClock = pNewClock;
+													IAudioClockIFSPtr pNewClock(new IAudioClockIF(pClock));
+													m_pAudioClock = pNewClock;
 														
-														res = true;
-													}
-													else
-													{
-														printError("openAudioWasAPIWithExclusion","Failed to create audio clock");
-													}
+													res = true;
 												}
 												else
 												{
-													printError("openAudioWasAPIWithExclusion","Failed to create audio renderer");
+													printError("openAudioWasAPIWithExclusion","Failed to create audio clock");
 												}
 											}
 											else
 											{
-												printError("openAudioWasAPIWithExclusion","Failed to get buffer size");
+												printError("openAudioWasAPIWithExclusion","Failed to create audio renderer");
 											}
 										}
 										else
 										{
-											printError("openAudioWasAPIWithExclusion","Error setting audio write event");
+											printError("openAudioWasAPIWithExclusion","Failed to get buffer size");
 										}
 									}
 									else
 									{
-										printError("openAudioWasAPIWithExclusion","Failed to create audio writing thread");
+										printError("openAudioWasAPIWithExclusion","Error setting audio write event");
 									}
 								}
 								else
 								{
-									printError("openAudioWasAPIWithExclusion","Error creating event handler");
+									printError("openAudioWasAPIWithExclusion","Failed to create audio writing thread");
 								}
 							}
 							else
 							{
-								printError("openAudioWasAPIWithExclusion","Failed to open audio device");
+								printError("openAudioWasAPIWithExclusion","Error creating event handler");
 							}
 						}
 						else
 						{
-							printError("openAudioWasAPIWithExclusion","Failed to create sample converter audio");
+							printError("openAudioWasAPIWithExclusion","Failed to open audio device");
 						}
 					}
 					else
 					{
-						printError("openAudioWasAPIWithExclusion","Unable to find output format");
+						printError("openAudioWasAPIWithExclusion","Failed to create sample converter audio");
 					}
 				}
 				else
 				{
-					printError("openAudioWasAPIWithExclusion","Failed to create audio client interface");
+					printError("openAudioWasAPIWithExclusion","Unable to find output format");
 				}
 			}
 			else
 			{
-				printError("openAudioWasAPIWithExclusion","Failed to find WasAPI device");
+				printError("openAudioWasAPIWithExclusion","Failed to create audio client interface");
 			}
 		}
 		else
 		{
-			printError("openAudioWasAPIWithExclusion","Current device not associated with WasAPI");
+			printError("openAudioWasAPIWithExclusion","Failed to find WasAPI device");
 		}
 	}
 	else
 	{
-		printError("openAudioWasAPIWithExclusion","No WasAPI interface layer");
+		printError("openAudioWasAPIWithExclusion","Current device not associated with WasAPI");
 	}
 	return res;
 }
@@ -1230,10 +1218,9 @@ bool AOWin32::activateWasAPIAudioDevice(WAVEFORMATEX *pFormat)
 	HRESULT hr;
 	AUDCLNT_SHAREMODE shareMode;
 	REFERENCE_TIME bufferDuration;
-	WasAPIIFSPtr pAPI = WasAPIIF::instance();
 	bool res = false;
-	
-	if(pAPI->isExclusive())
+
+	if(m_pWASDevice->isExclusive())
 	{
 		shareMode = AUDCLNT_SHAREMODE_EXCLUSIVE;
 		if(m_pAudioClient->GetDevicePeriod(&bufferDuration,0)!=S_OK)
