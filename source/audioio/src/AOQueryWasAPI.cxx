@@ -204,6 +204,14 @@ void AOQueryWasAPI::DeviceWasAPI::updateExclusive()
 }
 
 //-------------------------------------------------------------------------------------------
+
+void AOQueryWasAPI::DeviceWasAPI::setInitialized()
+{
+	AOQueryDevice::Device::setInitialized();
+	setHasExclusive(true);
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------

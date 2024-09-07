@@ -67,7 +67,8 @@ AOQueryDevice::Device::Device() : m_initFlag(false),
 	m_id(),
 	m_name(),
 	m_frequencySet(),
-	m_channels()
+	m_channels(),
+	m_hasExclusive(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -77,7 +78,8 @@ AOQueryDevice::Device::Device(Type type) : m_initFlag(false),
 	m_id(),
 	m_name(),
 	m_frequencySet(),
-	m_channels()
+	m_channels(),
+	m_hasExclusive(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -87,7 +89,8 @@ AOQueryDevice::Device::Device(const Device& rhs) : m_initFlag(false),
 	m_id(),
 	m_name(),
 	m_frequencySet(),
-	m_channels()
+	m_channels(),
+	m_hasExclusive(false)
 {
 	AOQueryDevice::Device::copy(rhs);
 }
@@ -118,6 +121,7 @@ void AOQueryDevice::Device::copy(const Device& rhs)
 	m_name = rhs.m_name;
 	m_frequencySet = rhs.m_frequencySet;
 	m_channels = rhs.m_channels;
+	m_hasExclusive = rhs.m_hasExclusive;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -129,6 +133,7 @@ void AOQueryDevice::Device::clear()
 	m_name = "";
 	m_frequencySet.clear();
 	m_channels.clear();
+	m_hasExclusive = false;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -240,22 +245,14 @@ void AOQueryDevice::Device::setNoChannels(int noCh)
 
 bool AOQueryDevice::Device::hasExclusive() const
 {
-	bool exclusive;
-	QSettings settings;
-	QString groupName = "audio" + name();
-	
-	settings.beginGroup(groupName);
-	if(settings.contains("exclusive"))
-	{
-		exclusive = settings.value("exclusive",QVariant(false)).toBool();
-	}
-	else
-	{
-		exclusive = false;
-	}
-	settings.endGroup();
-	
-	return exclusive;
+	return m_hasExclusive;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOQueryDevice::Device::setHasExclusive(bool flag)
+{
+	m_hasExclusive = flag;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -319,6 +316,18 @@ int AOQueryDevice::noDevices() const
 const AOQueryDevice::Device& AOQueryDevice::device(int idx) const
 {
 	return *(m_devices.at(idx));
+}
+
+//-------------------------------------------------------------------------------------------
+
+AOQueryDevice::Device* AOQueryDevice::deviceDirect(int idx)
+{
+	Device* dev = NULL;
+	if(idx >= 0 && idx < m_devices.size())
+	{
+		dev = m_devices.at(idx);
+	}
+	return dev;
 }
 
 //-------------------------------------------------------------------------------------------

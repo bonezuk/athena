@@ -6595,12 +6595,15 @@ bool AOBase::isExclusive()
 bool AOBase::isExclusive(int devIdx)
 {
 	bool flag = false;
-	QSharedPointer<AOQueryDevice::Device> pDevice = device(devIdx);
-	
-	if(!pDevice.isNull())
+	QSettings settings;
+	QString groupName = "audio" + getDeviceName(devIdx);
+
+	settings.beginGroup(groupName);
+	if(settings.contains("exclusive"))
 	{
-		flag = pDevice->hasExclusive();
+		flag = settings.value("exclusive", QVariant(false)).toBool();
 	}
+	settings.endGroup();
 	return flag;
 }
 

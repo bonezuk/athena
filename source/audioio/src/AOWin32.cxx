@@ -1407,18 +1407,22 @@ void AOWin32::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item
 void AOWin32::doSetExclusiveMode(int devIdx, bool flag)
 {
 	bool update = false;
-	QSharedPointer<AOQueryDevice::Device> pDevice;
+	AOQueryDevice::Device *pDevice;
 
 	m_deviceInfoMutex.lock();
 	AOBase::doSetExclusiveMode(devIdx, flag);
-	pDevice = device(devIdx);
-	if(!pDevice.isNull() && pDevice->type() == AOQueryDevice::Device::e_deviceWasAPI)
+
+	if(devIdx >= 0 && devIdx < m_deviceInfo->noDevices())
 	{
-		QSharedPointer<AOQueryWasAPI::DeviceWasAPI> pWASDevice = pDevice.dynamicCast<AOQueryWasAPI::DeviceWasAPI>();
-		if(!pWASDevice.isNull())
+		pDevice = m_deviceInfo->deviceDirect(devIdx);
+		if(pDevice != NULL && pDevice->type() == AOQueryDevice::Device::e_deviceWasAPI)
 		{
-			pWASDevice->updateExclusive();
-			update = true;
+			AOQueryWasAPI::DeviceWasAPI* pWASDevice = dynamic_cast<AOQueryWasAPI::DeviceWasAPI*>(pDevice);
+			if(pWASDevice != NULL)
+			{
+				pWASDevice->updateExclusive();
+				update = true;
+			}
 		}
 	}
 	m_deviceInfoMutex.unlock();

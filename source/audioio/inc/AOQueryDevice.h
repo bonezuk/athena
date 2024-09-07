@@ -34,9 +34,10 @@ class AUDIOIO_EXPORT AOQueryDevice
 		
 		virtual int noDevices() const;
 		virtual const Device& device(int idx) const;
+		virtual Device* deviceDirect(int idx);
 		
 		virtual void print() const;
-		
+
 	protected:
 		
 		QVector<Device *> m_devices;
@@ -120,8 +121,11 @@ class AUDIOIO_EXPORT AOQueryDevice::Device
 		QString m_name;
 		QSet<int> m_frequencySet;
 		QVector<Channel> m_channels;
-		
+		bool m_hasExclusive;
+
 		virtual void copy(const Device& rhs);
+
+		virtual void setHasExclusive(bool flag);
 };
 
 //-------------------------------------------------------------------------------------------

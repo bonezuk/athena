@@ -43,6 +43,7 @@ class AUDIOIO_EXPORT AOQueryWasAPI::DeviceWasAPI : public AOQueryDevice::Device
 		virtual void print() const;
 
 		virtual void updateExclusive();
+		virtual void setInitialized();
 
 	protected:
 

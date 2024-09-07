@@ -139,7 +139,8 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual void done();
 		
 		virtual void blank();
-		
+		virtual void blank(bool exclusive);
+
 		virtual IMMDeviceEnumeratorIFSPtr deviceEnumerator();
 		virtual IMMDeviceIFSPtr createDeviceIF(IMMDevice *pDevice);
 		virtual IAudioClientIFSPtr createAudioClientIF(IAudioClient *pAudioClient);

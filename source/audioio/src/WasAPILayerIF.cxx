@@ -179,17 +179,31 @@ WasAPIDeviceLayer::~WasAPIDeviceLayer()
 
 void WasAPIDeviceLayer::blank()
 {
-	for(int i=0;i<NUMBER_WASAPI_MAXCHANNELS;i++)
+	blank(true);
+	blank(false);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::blank(bool exclusive)
+{
+	for(int i = 0; i < NUMBER_WASAPI_MAXCHANNELS; i++)
 	{
-		for(int j=0;j<NUMBER_WASAPI_MAXBITS;j++)
+		for(int j = 0; j < NUMBER_WASAPI_MAXBITS; j++)
 		{
-			for(int k=0;k<NUMBER_WASAPI_MAXFREQUENCIES;k++)
+			for(int k = 0; k < NUMBER_WASAPI_MAXFREQUENCIES; k++)
 			{
-				m_formatsShared[i][j][k] = -1;
-				m_formatsExclusive[i][j][k] = -1;
+				if(exclusive)
+				{
+					m_formatsExclusive[i][j][k] = -1;
+				}
+				else
+				{
+					m_formatsShared[i][j][k] = -1;
+				}
 			}
 		}
-	}	
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -872,7 +886,7 @@ bool WasAPIDeviceLayer::loadFormats(bool exclusive)
 		}
 		else
 		{
-			blank();
+			blank(exclusive);
 		}
 		res = true;
 	}
@@ -1055,7 +1069,7 @@ bool WasAPIDeviceLayer::hasIndexedFormatWithUpdate(tint bitIdx, tint chIdx, tint
 	{
 		if(m_formatsExclusive[chIdx][bitIdx][freqIdx] < 0)
 		{
-			m_formatsExclusive[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, isExclusive());
+			m_formatsExclusive[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, true);
 		}
 		if(m_formatsExclusive[chIdx][bitIdx][freqIdx] > 0)
 		{
@@ -1066,7 +1080,7 @@ bool WasAPIDeviceLayer::hasIndexedFormatWithUpdate(tint bitIdx, tint chIdx, tint
 	{
 		if(m_formatsShared[chIdx][bitIdx][freqIdx] < 0)
 		{
-			m_formatsShared[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, isExclusive());
+			m_formatsShared[chIdx][bitIdx][freqIdx] = queryFormatIndexCapability(bitIdx, chIdx, freqIdx, false);
 		}
 		if(m_formatsShared[chIdx][bitIdx][freqIdx] > 0)
 		{
