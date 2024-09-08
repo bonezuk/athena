@@ -44,7 +44,8 @@ AOWin32::AOWin32(QObject *parent) : AOBase(parent),
 	m_wasMutex(),
 	m_pSampleConverter(),
 	m_wasRunThread(false),
-	m_wasRunFlag(false)
+	m_wasRunFlag(false),
+	m_wasPlayExclusive(false)
 {
 	::memset(&m_driverInfo,0,sizeof(ASIODriverInfo));
 	::memset(m_bufferInfos,0,sizeof(ASIOBufferInfo) * c_kMaxOutputChannels);
@@ -1213,31 +1214,67 @@ void AOWin32::processMessagesWasAPI()
 
 //-------------------------------------------------------------------------------------------
 
+REFERENCE_TIME AOWin32::alignedBufferDuration(WAVEFORMATEX* pFormat)
+{
+	HRESULT hr;
+	REFERENCE_TIME duration = 10000000;
+	UINT32 nFrames = 0;
+
+	hr = m_pAudioClient->GetBufferSize(&nFrames);
+	if(hr == S_OK)
+	{
+		duration = static_cast<REFERENCE_TIME>((10000.0 * 1000 / pFormat->nSamplesPerSec * nFrames) + 0.5);
+	}
+	else
+	{
+		printError("alignedBufferDuration", "Failed to get buffer size");
+	}
+	return duration;
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool AOWin32::activateWasAPIAudioDevice(WAVEFORMATEX *pFormat)
 {
 	HRESULT hr;
 	AUDCLNT_SHAREMODE shareMode;
-	REFERENCE_TIME bufferDuration;
+	REFERENCE_TIME bufferDurationL = 0, bufferDurationH;
 	bool res = false;
 
 	if(m_pWASDevice->isExclusive())
 	{
 		shareMode = AUDCLNT_SHAREMODE_EXCLUSIVE;
-		if(m_pAudioClient->GetDevicePeriod(&bufferDuration,0)!=S_OK)
+		if(m_pAudioClient->GetDevicePeriod(&bufferDurationH,0)!=S_OK)
 		{
-			bufferDuration = 0;
+			bufferDurationH = 10000000;
 		}
+		bufferDurationL = bufferDurationH;
+		m_wasPlayExclusive = true;
 	}
 	else
 	{
 		shareMode = AUDCLNT_SHAREMODE_SHARED;
-		bufferDuration = 0;
+		bufferDurationH = 10000000;
+		m_wasPlayExclusive = false;
 	}
-		
-	hr = m_pAudioClient->Initialize(shareMode,AUDCLNT_STREAMFLAGS_EVENTCALLBACK,bufferDuration,bufferDuration,pFormat,0);
+	
+	hr = m_pAudioClient->Initialize(shareMode,AUDCLNT_STREAMFLAGS_EVENTCALLBACK, bufferDurationL, bufferDurationH,pFormat,0);
 	if(hr==S_OK)
 	{
 		res = true;
+	}
+	else if(hr == AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED && m_pWASDevice->isExclusive())
+	{
+		bufferDurationH = alignedBufferDuration(pFormat);
+		hr = m_pAudioClient->Initialize(shareMode, AUDCLNT_STREAMFLAGS_EVENTCALLBACK, bufferDurationH, bufferDurationH, pFormat, 0);
+		if(hr == S_OK)
+		{
+			res = true;
+		}
+		else
+		{
+			printError("activateWasAPIAudioDevice", "Failed to initialize audio device after realigning buffer");
+		}
 	}
 	else
 	{
@@ -1264,7 +1301,7 @@ QSharedPointer<SampleConverter> AOWin32::createWASSampleConverter(WAVEFORMATEX *
 		}
 		else
 		{
-			QSharedPointer<SampleConverter> pNC(new SampleConverter(pFormatEx->Samples.wValidBitsPerSample,pFormatEx->Format.wBitsPerSample/8,true,false,true));
+			QSharedPointer<SampleConverter> pNC(new SampleConverter(pFormatEx->Samples.wValidBitsPerSample,pFormatEx->Format.wBitsPerSample/8,true,true,true));
 			pConverter = pNC;
 		}
 	}
@@ -1278,7 +1315,7 @@ QSharedPointer<SampleConverter> AOWin32::createWASSampleConverter(WAVEFORMATEX *
 		}
 		else
 		{
-			QSharedPointer<SampleConverter> pNC(new SampleConverter(pFormat->wBitsPerSample,pFormat->wBitsPerSample/8,true,false,true));
+			QSharedPointer<SampleConverter> pNC(new SampleConverter(pFormat->wBitsPerSample,pFormat->wBitsPerSample/8,true,true,true));
 			pConverter = pNC;
 		}
 	}
@@ -1353,16 +1390,25 @@ void AOWin32::writeWASAudioThreadImpl()
 
 void AOWin32::writeWASAudio()
 {
+	UINT32 numFramesAvailable, numFramesPadding = 0;
 	BYTE *pData = 0;
-	HRESULT hr;
+	HRESULT hr = S_OK;
 	
-	hr = m_pAudioRenderClient->GetBuffer(m_bufferWASFrameCount,&pData);
-	if(hr==S_OK)
+	if(!m_wasPlayExclusive)
 	{
-		IOTimeStamp systemTime = createIOTimeStampWasAPI();
-		AudioHardwareBufferWasAPI buffer(m_pWASFormat,reinterpret_cast<tbyte *>(pData),static_cast<tint>(m_bufferWASFrameCount));
-		writeToAudioIOCallback(&buffer,systemTime);
-		m_pAudioRenderClient->ReleaseBuffer(m_bufferWASFrameCount,0);
+		hr = m_pAudioClient->GetCurrentPadding(&numFramesPadding);
+	}
+	if(hr == S_OK)
+	{
+		numFramesAvailable = m_bufferWASFrameCount - numFramesPadding;
+		hr = m_pAudioRenderClient->GetBuffer(numFramesAvailable, &pData);
+		if(hr == S_OK)
+		{
+			IOTimeStamp systemTime = createIOTimeStampWasAPI();
+			AudioHardwareBufferWasAPI buffer(m_pWASFormat, reinterpret_cast<tbyte*>(pData), static_cast<tint>(numFramesAvailable));
+			writeToAudioIOCallback(&buffer, systemTime);
+			m_pAudioRenderClient->ReleaseBuffer(numFramesAvailable, 0);
+		}
 	}
 }
 

@@ -519,7 +519,7 @@ int WasAPIDeviceLayer::bitIndexForFDIndex(int nativeBitIdx) const
 	{
 		nativeBitIdx = NUMBER_WASAPI_MAXBITS - 1;
 	}
-	return nativeBitIdx;
+	return idxs[nativeBitIdx];
 }
 
 //-------------------------------------------------------------------------------------------

@@ -77,6 +77,7 @@ class AUDIOIO_EXPORT AOWin32 : public AOBase
 		QSharedPointer<SampleConverter> m_pSampleConverter;
 		volatile bool m_wasRunThread;
 		bool m_wasRunFlag;
+		bool m_wasPlayExclusive;
 		
 		virtual void printError(const tchar *strE,const tchar *strR) const;
 		
@@ -176,6 +177,7 @@ class AUDIOIO_EXPORT AOWin32 : public AOBase
 		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
 		
 		virtual void doSetExclusiveMode(int devIdx, bool flag);
+		virtual REFERENCE_TIME alignedBufferDuration(WAVEFORMATEX* pFormat);
 
 	protected slots:
 	
