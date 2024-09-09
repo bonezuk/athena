@@ -1251,24 +1251,6 @@ WAVEFORMATEX *WasAPIDeviceLayer::supportedWaveFormatFromDescription(const Format
 
 //-------------------------------------------------------------------------------------------
 
-WAVEFORMATEX *WasAPIDeviceLayer::findClosestFormatType(const WAVEFORMATEX *pFormat)
-{
-	WAVEFORMATEX *pCloseFormat = 0;
-	FormatDescription desc, closestDesc;
-	
-	if(pFormat!=0)
-	{
-		desc = descriptionFromWaveFormat(pFormat);
-		if(findClosestDescription(desc, closestDesc))
-		{
-			pCloseFormat = supportedWaveFormatFromDescription(closestDesc);
-		}
-	}
-	return pCloseFormat;
-}
-
-//-------------------------------------------------------------------------------------------
-
 bool WasAPIDeviceLayer::findClosestDescription(const FormatDescription& sourceDesc, FormatDescription& descClosest)
 {
 	FormatsSupported support;

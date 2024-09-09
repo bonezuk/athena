@@ -117,7 +117,6 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 
 		virtual bool isFormat(int chIdx,int bitIdx,int freqIdx) const;
 		
-		virtual WAVEFORMATEX *findClosestFormatType(const WAVEFORMATEX *pFormat);
 		virtual WAVEFORMATEX *findClosestSupportedFormat(const FormatDescription& sourceDesc);
 		
 		virtual IAudioClientIFSPtr getAudioClient();

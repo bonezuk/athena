@@ -1162,7 +1162,7 @@ tint32 *ASIOData::volumeIntBuffer()
 		{
 			delete [] m_vIntBuffer;
 		}
-		m_vIntBuffer = new tint32 [length()];
+		m_vIntBuffer = new tint32 [length() * m_noOutChannels];
 		m_vIntBufSize = length();
 	}
 	return m_vIntBuffer;

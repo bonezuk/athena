@@ -21,7 +21,6 @@ class WasAPIIFMock : public WasAPIIF
 		WasAPIIFMock();
 		virtual ~WasAPIIFMock();
 		
-		MOCK_CONST_METHOD0(isExclusive,bool());
 		MOCK_METHOD0(enumerateDeviceIds,QStringList());
 		MOCK_METHOD1(getDevice,QSharedPointer<WasAPIDevice>(const QString& devID));
 		
