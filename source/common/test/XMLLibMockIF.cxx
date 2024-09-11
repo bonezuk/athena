@@ -1,27 +1,27 @@
-#include "dlna/test/UPnPMockIF.h"
+#include "common/test/XMLLibMockIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-CONCRETE_FACTORY_CLASS_IMPL(UPnPIFFactory,UPnPIF, \
-                            UPnPMockIFFactory,UPnPMockIF, \
+CONCRETE_FACTORY_CLASS_IMPL(XMLLibIFFactory,XMLLibIF, \
+                            XMLLibIFMockFactory,XMLLibMockIF, \
                             "mock",false)
 
 //-------------------------------------------------------------------------------------------
 
-UPnPMockIF::UPnPMockIF() : UPnPIF()
+XMLLibMockIF::XMLLibMockIF()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-UPnPMockIF::~UPnPMockIF()
+XMLLibMockIF::~XMLLibMockIF()
 {}
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------

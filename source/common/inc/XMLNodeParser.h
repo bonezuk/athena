@@ -1,34 +1,37 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __OMEGA_DLNA_UPNPMOCKIF_H
-#define __OMEGA_DLNA_UPNPMOCKIF_H
+#ifndef __OMEGA_COMMON_XMLNODEPARSER_H
+#define __OMEGA_COMMON_XMLNODEPARSER_H
 //-------------------------------------------------------------------------------------------
 
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
-
-#include "dlna/inc/UPnPIF.h"
+#include "common/inc/XMLReadOps.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-class UPnPMockIF : public UPnPIF
+class COMMON_EXPORT XMLNodeParser : public XMLReadOps
 {
 	public:
-		UPnPMockIF();
-		virtual ~UPnPMockIF();
+		XMLNodeParser();
+		virtual ~XMLNodeParser();
 		
-		MOCK_METHOD2(UpnpInit,int(const tchar *hostIP,tuint16 port));
-		MOCK_METHOD0(UpnpFinish,int());
+		virtual void parse(xmlNodePtr pNode);
+		
+	protected:
+	
+		virtual bool isRootNode(xmlNodePtr pNode) const = 0;
+		virtual void processNode(xmlNodePtr pNode) = 0;
 
+		virtual bool isSpecifiedNode(xmlNodePtr pNode,const tchar *name) const;
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
+

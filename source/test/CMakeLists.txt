@@ -12,9 +12,8 @@ set ( TEST_HEADERS
 	../common/test/CachedFileStreamMock.h
 	../common/test/ServiceEventTest.h
 	../common/test/DiskMockIF.h
-	../dlna/test/UPnPMockIF.h
-	../dlna/test/UPnPProviderTestEnviroment.h
-	../dlna/test/XMLLibMockIF.h
+	../common/test/XMLLibMockIF.h
+	../common/test/UPnPProviderTestEnviroment.h
 	../engine/test/ADataMock.h
 	../engine/test/CodecMock.h
 	../engine/test/CodecTest.h
@@ -63,16 +62,10 @@ set ( TEST_SOURCE
 	../common/test/DiskLayerTestIF.cxx
 	../common/test/DiskOpsTest.cxx
 	../common/test/DiskMockIF.cxx
-
-	../dlna/test/UPnPDeviceDescriptionTest.cxx
-	../dlna/test/UPnPMockIF.cxx
-	../dlna/test/UPnPProviderTest.cxx
-	../dlna/test/UPnPProviderTestEnviroment.cxx
-	../dlna/test/UPnPServiceDescriptionTest.cxx
-	../dlna/test/UPnPSpecVersionTest.cxx
-	../dlna/test/XMLLibMockIF.cxx
-	../dlna/test/XMLNodeParserTest.cxx
-	../dlna/test/XMLReadOpsTest.cxx
+	../common/test/UPnPProviderTestEnviroment.cxx
+	../common/test/XMLLibMockIF.cxx
+	../common/test/XMLNodeParserTest.cxx
+	../common/test/XMLReadOpsTest.cxx
 
 	../engine/test/ADataMock.cxx
 	../engine/test/CodecMock.cxx
@@ -185,11 +178,11 @@ elseif(OMEGA_LINUX)
 endif (OMEGA_WIN32)
 
 if (OMEGA_WIN32)
-	target_link_libraries(OmegaUnitTests audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets ${QTVER}::Test winmm ws2_32 wavpack gtest gtest_main gmock gmock_main)
+	target_link_libraries(OmegaUnitTests audioio blackomega blueomega common cyanomega engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets ${QTVER}::Test winmm ws2_32 wavpack gtest gtest_main gmock gmock_main)
 elseif (OMEGA_MACOSX)
-	target_link_libraries(OmegaUnitTests audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget playercommon xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets ${QTVER}::Test wavpack gtest gtest_main gmock gmock_main ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${CORESERVICES_FRAMEWORK_UNIT} ${COREAUDIO_FRAMEWORK_UNIT} ${AUDIOUNIT_FRAMEWORK_UNIT} ${AUDIOTOOLBOX_FRAMEWORK_UNIT})
+	target_link_libraries(OmegaUnitTests audioio blackomega blueomega common cyanomega engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget playercommon xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets ${QTVER}::Test wavpack gtest gtest_main gmock gmock_main ${COCOA_FRAMEWORK_UNIT} ${APPKIT_FRAMEWORK_UNIT} ${IOKIT_FRAMEWORK_UNIT} ${CORESERVICES_FRAMEWORK_UNIT} ${COREAUDIO_FRAMEWORK_UNIT} ${AUDIOUNIT_FRAMEWORK_UNIT} ${AUDIOTOOLBOX_FRAMEWORK_UNIT})
 elseif (OMEGA_LINUX)
-	target_link_libraries(OmegaUnitTests audioio blackomega blueomega common cyanomega dlna engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget playercommon xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets ${QTVER}::Test wavpack mpcdec gtest gtest_main gmock gmock_main ${LIBUPNP_LIBRARIES} Threads::Threads)
+	target_link_libraries(OmegaUnitTests audioio blackomega blueomega common cyanomega engine greenomega http mime toneomega wavpackomega network_omega redomega remote rtp rtp_silveromega silveromega trackdb trackinfo trackmodel violetomega whiteomega widget playercommon xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets ${QTVER}::Test wavpack mpcdec gtest gtest_main gmock gmock_main ${LIBUPNP_LIBRARIES} Threads::Threads)
 endif (OMEGA_WIN32)
 
 if (${TIGER_LINUX_DISTRO})

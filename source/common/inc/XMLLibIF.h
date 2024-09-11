@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __OMEGA_DLNA_XMLLIBIF_H
-#define __OMEGA_DLNA_XMLLIBIF_H
+#ifndef __OMEGA_COMMON_XMLLIBIF_H
+#define __OMEGA_COMMON_XMLLIBIF_H
 //-------------------------------------------------------------------------------------------
 
 #include <libxml/xmlmemory.h>
@@ -12,16 +12,17 @@
 #include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
 
-#include "dlna/inc/UPnPIF.h"
+#include "common/inc/CommonTypes.h"
+#include "common/inc/Factory.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-class DLNA_EXPORT XMLLibIF
+class COMMON_EXPORT XMLLibIF
 {
 	public:
 		XMLLibIF();
@@ -66,10 +67,10 @@ typedef QSharedPointer<XMLLibIF> XMLLibIFSPtr;
 
 //-------------------------------------------------------------------------------------------
 
-ABSTRACT_FACTORY_CLASS(DLNA_EXPORT,XMLLibIFFactory,XMLLibIF)
+ABSTRACT_FACTORY_CLASS(COMMON_EXPORT,XMLLibIFFactory,XMLLibIF)
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif

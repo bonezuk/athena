@@ -1,66 +1,55 @@
-#include "dlna/inc/UPnPSpecVersion.h"
+#include "common/inc/XMLLibIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-const tchar *UPnPSpecVersion::c_keySpecVersion = "specVersion";
-const tchar *UPnPSpecVersion::c_keyMajor = "major";
-const tchar *UPnPSpecVersion::c_keyMinor = "minor";
+ABSTRACT_FACTORY_CLASS_IMPL(XMLLibIFFactory,XMLLibIF)
 
 //-------------------------------------------------------------------------------------------
 
-UPnPSpecVersion::UPnPSpecVersion() : XMLNodeParser(),
-	m_major(1),
-	m_minor(0)
+QSharedPointer<XMLLibIF> XMLLibIF::m_instance;
+
+//-------------------------------------------------------------------------------------------
+
+XMLLibIF::XMLLibIF()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-UPnPSpecVersion::UPnPSpecVersion(int major,int minor) : XMLNodeParser(),
-	m_major(major),
-	m_minor(minor)
+XMLLibIF::~XMLLibIF()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-UPnPSpecVersion::~UPnPSpecVersion()
-{}
-
-//-------------------------------------------------------------------------------------------
-
-tfloat32 UPnPSpecVersion::version() const
+QSharedPointer<XMLLibIF> XMLLibIF::instance(const QString& factoryKey)
 {
-	return static_cast<tfloat32>(m_major) + (static_cast<tfloat32>(m_minor) / 10.0f);
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool UPnPSpecVersion::isRootNode(xmlNodePtr pNode) const
-{
-	return isSpecifiedNode(pNode,c_keySpecVersion);
-}
-
-//-------------------------------------------------------------------------------------------
-
-void UPnPSpecVersion::processNode(xmlNodePtr pNode)
-{
-	QString cName = getNameOfNode(pNode).toLower();
-	
-	if(cName==comparisonKey(c_keyMajor))
+	if(m_instance.data()==0)
 	{
-		m_major = getTextOfElement(pNode).toInt();
+        m_instance = XMLLibIFFactory::createShared(factoryKey);
 	}
-	else if(cName==comparisonKey(c_keyMinor))
-	{
-		m_minor = getTextOfElement(pNode).toInt();
-	}
+	return m_instance;
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+
+QSharedPointer<XMLLibIF> XMLLibIF::instance()
+{
+	return m_instance;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void XMLLibIF::release()
+{
+	QSharedPointer<XMLLibIF> eInstance;
+	m_instance = eInstance;
+}
+
+//-------------------------------------------------------------------------------------------
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------

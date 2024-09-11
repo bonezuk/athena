@@ -1,9 +1,9 @@
-#include "dlna/inc/XMLReadOps.h"
+#include "common/inc/XMLReadOps.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
@@ -199,7 +199,7 @@ QString XMLReadOps::getAttribute(xmlNodePtr pNode,const QString& name) const
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 

@@ -1,14 +1,14 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "dlna/inc/XMLNodeParser.h"
+#include "common/inc/XMLNodeParser.h"
 
-using namespace omega::dlna;
+using namespace omega::common;
 using namespace testing;
 
 //-------------------------------------------------------------------------------------------
 
-class XMLNodeParserTest : public omega::dlna::XMLNodeParser
+class XMLNodeParserTest : public omega::common::XMLNodeParser
 {
 	public:
 		MOCK_METHOD1(processNode,void(xmlNodePtr pNode));

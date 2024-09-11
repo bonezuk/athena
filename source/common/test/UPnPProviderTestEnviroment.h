@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __OMEGA_DLNA_TEST_UPNPPROVIDERTESTENVIROMENT
-#define __OMEGA_DLNA_TEST_UPNPPROVIDERTESTENVIROMENT
+#ifndef __OMEGA_COMMON_TEST_UPNPPROVIDERTESTENVIROMENT
+#define __OMEGA_COMMON_TEST_UPNPPROVIDERTESTENVIROMENT
 //-------------------------------------------------------------------------------------------
 
 #include <QtCore/QPair>
@@ -13,7 +13,7 @@
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 namespace test
 {
@@ -44,7 +44,7 @@ class UPnPProviderTestEnviroment
 
 //-------------------------------------------------------------------------------------------
 } // namespace test
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif

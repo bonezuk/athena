@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>632</width>
-    <height>529</height>
+    <height>555</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>303</y>
+     <y>330</y>
      <width>100</width>
      <height>31</height>
     </rect>
@@ -46,7 +46,7 @@ Left</string>
    <property name="geometry">
     <rect>
      <x>480</x>
-     <y>103</y>
+     <y>130</y>
      <width>100</width>
      <height>16</height>
     </rect>
@@ -74,7 +74,7 @@ Left</string>
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>365</y>
+     <y>392</y>
      <width>100</width>
      <height>16</height>
     </rect>
@@ -102,7 +102,7 @@ Left</string>
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>103</y>
+     <y>130</y>
      <width>100</width>
      <height>16</height>
     </rect>
@@ -130,7 +130,7 @@ Left</string>
    <property name="geometry">
     <rect>
      <x>480</x>
-     <y>263</y>
+     <y>290</y>
      <width>100</width>
      <height>26</height>
     </rect>
@@ -152,7 +152,7 @@ Left</string>
    <property name="geometry">
     <rect>
      <x>260</x>
-     <y>490</y>
+     <y>517</y>
      <width>101</width>
      <height>26</height>
     </rect>
@@ -174,7 +174,7 @@ Left</string>
    <property name="geometry">
     <rect>
      <x>260</x>
-     <y>379</y>
+     <y>406</y>
      <width>100</width>
      <height>16</height>
     </rect>
@@ -202,7 +202,7 @@ Left</string>
    <property name="geometry">
     <rect>
      <x>260</x>
-     <y>213</y>
+     <y>240</y>
      <width>100</width>
      <height>26</height>
     </rect>
@@ -224,7 +224,7 @@ Left</string>
    <property name="geometry">
     <rect>
      <x>510</x>
-     <y>303</y>
+     <y>330</y>
      <width>100</width>
      <height>31</height>
     </rect>
@@ -253,7 +253,7 @@ Right</string>
    <property name="geometry">
     <rect>
      <x>260</x>
-     <y>103</y>
+     <y>130</y>
      <width>100</width>
      <height>16</height>
     </rect>
@@ -281,7 +281,7 @@ Right</string>
    <property name="geometry">
     <rect>
      <x>380</x>
-     <y>365</y>
+     <y>392</y>
      <width>100</width>
      <height>16</height>
     </rect>
@@ -309,7 +309,7 @@ Right</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>443</y>
+     <y>470</y>
      <width>100</width>
      <height>26</height>
     </rect>
@@ -331,7 +331,7 @@ Right</string>
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>263</y>
+     <y>290</y>
      <width>101</width>
      <height>26</height>
     </rect>
@@ -353,7 +353,7 @@ Right</string>
    <property name="geometry">
     <rect>
      <x>380</x>
-     <y>490</y>
+     <y>517</y>
      <width>101</width>
      <height>26</height>
     </rect>
@@ -375,7 +375,7 @@ Right</string>
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>490</y>
+     <y>517</y>
      <width>101</width>
      <height>26</height>
     </rect>
@@ -399,13 +399,10 @@ Right</string>
      <x>11</x>
      <y>8</y>
      <width>659</width>
-     <height>96</height>
+     <height>114</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <property name="margin">
-     <number>8</number>
-    </property>
     <item row="1" column="1">
      <widget class="QComboBox" name="m_speakerCombo">
       <item>
@@ -450,6 +447,19 @@ Right</string>
       </item>
      </widget>
     </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="m_audioDeviceLabel">
+      <property name="text">
+       <string>Sound Device</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QComboBox" name="m_audioDeviceCombo"/>
+    </item>
     <item row="2" column="1">
      <widget class="QComboBox" name="m_stereoCombo">
       <item>
@@ -489,6 +499,16 @@ Right</string>
       </item>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="m_speakerLabel">
+      <property name="text">
+       <string>Speaker Configuration</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="2">
      <spacer name="horizontalSpacer_2">
       <property name="orientation">
@@ -502,6 +522,16 @@ Right</string>
       </property>
      </spacer>
     </item>
+    <item row="0" column="2">
+     <widget class="QCheckBox" name="m_exclusiveFlag">
+      <property name="toolTip">
+       <string>Use HAL Integer Mode with exclusive access to sound device</string>
+      </property>
+      <property name="text">
+       <string>Exclusive Mode</string>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="0">
      <widget class="QLabel" name="m_stereoLabel">
       <property name="text">
@@ -513,48 +543,9 @@ Right</string>
      </widget>
     </item>
     <item row="2" column="2">
-     <spacer name="horizontalSpacer_3">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>5</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="m_audioDeviceLabel">
+     <widget class="QCheckBox" name="m_useCenterMixing">
       <property name="text">
-       <string>Sound Device</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="m_audioDeviceCombo"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="m_speakerLabel">
-      <property name="text">
-       <string>Speaker Configuration</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QCheckBox" name="m_exclusiveFlag">
-      <property name="toolTip">
-       <string>Use HAL Integer Mode with exclusive access to sound device</string>
-      </property>
-      <property name="text">
-       <string>Exclusive Mode</string>
+       <string>Use Center Speaker</string>
       </property>
      </widget>
     </item>
@@ -564,7 +555,7 @@ Right</string>
    <property name="geometry">
     <rect>
      <x>510</x>
-     <y>443</y>
+     <y>470</y>
      <width>100</width>
      <height>26</height>
     </rect>

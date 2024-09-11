@@ -1,18 +1,18 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __OMEGA_DLNA_XMLLIBLAYERIF_H
-#define __OMEGA_DLNA_XMLLIBLAYERIF_H
+#ifndef __OMEGA_COMMON_XMLLIBLAYERIF_H
+#define __OMEGA_COMMON_XMLLIBLAYERIF_H
 //-------------------------------------------------------------------------------------------
 
-#include "dlna/inc/XMLLibIF.h"
+#include "common/inc/XMLLibIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-class DLNA_EXPORT XMLLibLayerIF : public XMLLibIF
+class COMMON_EXPORT XMLLibLayerIF : public XMLLibIF
 {
 	public:
 		XMLLibLayerIF();
@@ -46,7 +46,7 @@ class DLNA_EXPORT XMLLibLayerIF : public XMLLibIF
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif

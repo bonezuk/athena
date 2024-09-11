@@ -1,17 +1,17 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __OMEGA_DLNA_XMLLIBMOCKIF_H
-#define __OMEGA_DLNA_XMLLIBMOCKIF_H
+#ifndef __OMEGA_COMMON_XMLLIBMOCKIF_H
+#define __OMEGA_COMMON_XMLLIBMOCKIF_H
 //-------------------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "dlna/inc/XMLLibIF.h"
+#include "common/inc/XMLLibIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ class XMLLibMockIF : public XMLLibIF
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif

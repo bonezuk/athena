@@ -1,9 +1,9 @@
-#include "dlna/inc/XMLLibLayerIF.h"
+#include "common/inc/XMLLibLayerIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
@@ -169,6 +169,6 @@ int XMLLibLayerIF::xmlSaveFileEnc(const char *filename,xmlDocPtr doc,const char 
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------

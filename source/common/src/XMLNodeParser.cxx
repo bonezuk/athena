@@ -1,45 +1,47 @@
-#include "dlna/inc/UPnPLayerIF.h"
+#include "common/inc/XMLNodeParser.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-CONCRETE_FACTORY_CLASS_IMPL(UPnPIFFactory,UPnPIF, \
-                            UPnPLayerIFFactory,UPnPLayerIF, \
-                            "upnp",false)
-
-//-------------------------------------------------------------------------------------------
-
-UPnPLayerIF::UPnPLayerIF() : UPnPIF()
+XMLNodeParser::XMLNodeParser() : XMLReadOps()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-UPnPLayerIF::~UPnPLayerIF()
+XMLNodeParser::~XMLNodeParser()
 {}
 
 //-------------------------------------------------------------------------------------------
 
-int UPnPLayerIF::UpnpInit(const tchar *hostIP,tuint16 port)
+void XMLNodeParser::parse(xmlNodePtr pNode)
 {
-#if defined(OMEGA_MSVC16) || defined(OMEGA_MACOSX)
-	return ::UpnpInit2(hostIP,port);
-#else
-	return ::UpnpInit(hostIP, port);
-#endif
+	if(isRootNode(pNode))
+	{
+		xmlNodePtr pCNode = pNode->children;
+		
+		while(pCNode!=0)
+		{
+			if(isElementNode(pCNode))
+			{
+				processNode(pCNode);
+			}
+			pCNode = pCNode->next;
+		}
+	}
 }
 
 //-------------------------------------------------------------------------------------------
 
-int UPnPLayerIF::UpnpFinish()
+bool XMLNodeParser::isSpecifiedNode(xmlNodePtr pNode,const tchar *name) const
 {
-	return ::UpnpFinish();
+	return (isElementNode(pNode) && getNameOfNode(pNode).toLower()==comparisonKey(name)) ? true : false;
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------

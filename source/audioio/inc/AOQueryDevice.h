@@ -110,6 +110,7 @@ class AUDIOIO_EXPORT AOQueryDevice::Device
 		virtual void setNoChannels(int noCh);
 		
 		virtual bool hasExclusive() const;
+        virtual void setHasExclusive(bool flag);
 		
 		virtual void print() const;
 
@@ -124,8 +125,6 @@ class AUDIOIO_EXPORT AOQueryDevice::Device
 		bool m_hasExclusive;
 
 		virtual void copy(const Device& rhs);
-
-		virtual void setHasExclusive(bool flag);
 };
 
 //-------------------------------------------------------------------------------------------

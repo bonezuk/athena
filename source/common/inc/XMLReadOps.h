@@ -1,18 +1,18 @@
 //-------------------------------------------------------------------------------------------
-#ifndef __OMEGA_DLNA_XMLREADOPS_H
-#define __OMEGA_DLNA_XMLREADOPS_H
+#ifndef __OMEGA_COMMON_XMLREADOPS_H
+#define __OMEGA_COMMON_XMLREADOPS_H
 //-------------------------------------------------------------------------------------------
 
-#include "dlna/inc/XMLLibIF.h"
+#include "common/inc/XMLLibIF.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 //-------------------------------------------------------------------------------------------
 
-class DLNA_EXPORT XMLReadOps
+class COMMON_EXPORT XMLReadOps
 {
 	public:
 		XMLReadOps();
@@ -38,7 +38,7 @@ class DLNA_EXPORT XMLReadOps
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif

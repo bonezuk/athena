@@ -1,5 +1,5 @@
 #include "common/inc/DiskIF.h"
-#include "dlna/test/UPnPProviderTestEnviroment.h"
+#include "common/test/UPnPProviderTestEnviroment.h"
 #include "common/inc/SBService.h"
 
 #include "gtest/gtest.h"
@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace dlna
+namespace common
 {
 namespace test
 {
@@ -155,6 +155,6 @@ void UPnPProviderTestEnviroment::removeDirectory(int testCase)
 
 //-------------------------------------------------------------------------------------------
 } // namespace test
-} // namespace dlna
+} // namespace common
 } // namespace omega
 //-------------------------------------------------------------------------------------------
