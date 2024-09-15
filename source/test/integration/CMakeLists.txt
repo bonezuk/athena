@@ -12,6 +12,7 @@ set ( INTEGRATION_SOURCE
 	../../remote/test/integration/QKeyLineEditTester.cxx
 	../../engine/violetomega/test/integration/VioletPlayback.cxx
 	../../engine/cyanomega/test/integration/CyanPlayback.cxx
+	../../engine/test/integration/WaveDSPTest.cxx
 	../../track/model/test/integration/DiscogsServiceTest.cxx
 	TestIntegrationMain.cxx
 )
