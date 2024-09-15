@@ -11,6 +11,10 @@ endif (OMEGA_WIN32 OR OMEGA_LINUX)
 
 add_library(trackinfo SHARED ${TRACK_INFO_HEADER} ${TRACK_INFO_SOURCE})
 
+if(MSVC)
+	target_compile_options(trackinfo PRIVATE "/MP")
+endif (MSVC)
+
 set(QTLIBS_LIST ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml)
 list(APPEND QTLIBS_LIST ${QTVER}::Core5Compat)
 

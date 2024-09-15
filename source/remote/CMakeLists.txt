@@ -18,6 +18,10 @@ elseif (OMEGA_MACOSX)
 	add_library(remote SHARED ${REMOTE_HEADER} ${REMOTE_SOURCE} ${REMOTE_UI_RESOURCES} ${REMOTE_OBJECTIVE_SOURCE})
 endif (OMEGA_WIN32 OR OMEGA_LINUX)
 
+if(MSVC)
+	target_compile_options(remote PRIVATE "/MP")
+endif (MSVC)
+
 if (OMEGA_WIN32)
 	target_link_libraries(remote common network_omega xml2 ${QTVER}::Core ${QTVER}::Gui ${QTVER}::Xml ${QTVER}::Widgets winmm ws2_32)
 elseif (OMEGA_MACOSX)

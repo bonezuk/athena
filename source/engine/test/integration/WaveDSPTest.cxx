@@ -93,13 +93,17 @@ bool saveWaveHeaderSize(engine::Codec *codec, int totalDataSize, common::BIOStre
 
 TEST(WaveDSPTest, lowPass400Hz)
 {
-    QString inFilename = "/Users/bonez/Development/Temp/kiss_rose_44.1_24bit.wav";
-    QString outFilename = "/Users/bonez/Development/Temp/lp_kiss_rose_1.wav";
+    //QString inFilename = "/Users/bonez/Development/Temp/kiss_rose_44.1_24bit.wav";
+    //QString outFilename = "/Users/bonez/Development/Temp/lp_kiss_rose_1.wav";
 	
+	QString inFilename = "D:\\Music\\Temp\\kiss_rose_44.1_24bit.wav";
+	QString outFilename = "D:\\Music\\Temp\\lp_kiss_rose_1.wav";
+
 	ASSERT_TRUE(common::DiskOps::exist(inFilename));
 	
 	engine::Codec *codec = engine::Codec::get(inFilename);
     ASSERT_TRUE(codec != NULL);
+	ASSERT_TRUE(codec->init());
 	
 	if(common::DiskOps::exist(outFilename))
 	{
