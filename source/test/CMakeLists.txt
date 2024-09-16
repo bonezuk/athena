@@ -68,6 +68,7 @@ set ( TEST_SOURCE
 	../common/test/XMLReadOpsTest.cxx
 
 	../engine/test/ADataMock.cxx
+	../engine/test/BiQuadFilterTest.cxx
 	../engine/test/CodecMock.cxx
 	../engine/test/CodecTest.cxx
 	../engine/test/FormatTypeTest.cxx
