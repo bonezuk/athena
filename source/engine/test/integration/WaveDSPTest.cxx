@@ -1,11 +1,11 @@
 #include "gtest/gtest.h"
-#include "gmock/gmock.h"
 
 #include "common/inc/DiskOps.h"
 #include "common/inc/BIOBufferedStream.h"
 #include "engine/inc/Codec.h"
 #include "engine/blueomega/inc/WaveEngine.h"
 #include "engine/inc/FormatTypeFromFloat.h"
+#include "engine/inc/BiQuadFilter.h"
 
 using namespace omega;
 
@@ -93,11 +93,11 @@ bool saveWaveHeaderSize(engine::Codec *codec, int totalDataSize, common::BIOStre
 
 TEST(WaveDSPTest, lowPass400Hz)
 {
-    //QString inFilename = "/Users/bonez/Development/Temp/kiss_rose_44.1_24bit.wav";
-    //QString outFilename = "/Users/bonez/Development/Temp/lp_kiss_rose_1.wav";
+    QString inFilename = "/Users/bonez/Development/Temp/kiss_rose_44.1_24bit.wav";
+    QString outFilename = "/Users/bonez/Development/Temp/lp_kiss_rose_1.wav";
 	
-	QString inFilename = "D:\\Music\\Temp\\kiss_rose_44.1_24bit.wav";
-	QString outFilename = "D:\\Music\\Temp\\lp_kiss_rose_1.wav";
+	//QString inFilename = "D:\\Music\\Temp\\kiss_rose_44.1_24bit.wav";
+	//QString outFilename = "D:\\Music\\Temp\\lp_kiss_rose_1.wav";
 
 	ASSERT_TRUE(common::DiskOps::exist(inFilename));
 	
@@ -116,13 +116,21 @@ TEST(WaveDSPTest, lowPass400Hz)
 	
 	ASSERT_TRUE(saveWaveHeaderFromCodec(codec, out));
 	
+	int noChannels = codec->noChannels();
+	
+	engine::BiQuadFilter *lpFilter = new engine::BiQuadFilter [noChannels];
+	for(int fIdx = 0; fIdx < noChannels; fIdx++)
+	{
+		lpFilter[fIdx] = engine::BiQuadFilter::filter(engine::BiQuadFilter::e_LowPass_FirstOrder, 200.0, static_cast<tfloat64>(codec->frequency()));
+		ASSERT_FALSE(lpFilter[fIdx].type() == engine::BiQuadFilter::e_UnknownFilter);
+	}
+	
 	int totalDataSize = 0;
 	engine::RData data(2048, codec->noChannels(), codec->noChannels());
     while(codec->next(data))
 	{
 		for(int partIdx = 0; partIdx < data.noParts(); partIdx++)
 		{
-			int noChannels = codec->noChannels();
             sample_t *x = data.partData(partIdx);
 			for(int idx = 0; idx < data.part(partIdx).length(); idx++)
 			{
@@ -132,7 +140,7 @@ TEST(WaveDSPTest, lowPass400Hz)
 				
 				for(chIdx = 0; chIdx < noChannels; chIdx++)
 				{
-					y[chIdx] = x[(idx * noChannels) + chIdx];
+                    y[chIdx] = lpFilter[chIdx].process(x[(idx * noChannels) + chIdx]);
 				}
 				
 				for(chIdx = 0; chIdx < noChannels; chIdx++)
@@ -147,6 +155,8 @@ TEST(WaveDSPTest, lowPass400Hz)
 	}
 	
 	ASSERT_TRUE(saveWaveHeaderSize(codec, totalDataSize, out));
+
+	delete [] lpFilter;
 
 	out->close();
 	delete out;

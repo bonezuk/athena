@@ -50,6 +50,7 @@ class BiQuadFilter
 		} Type;
 
 	public:
+		BiQuadFilter();
 		BiQuadFilter(const BiQuadFilter& rhs);
 		
 		const BiQuadFilter& operator = (const BiQuadFilter& rhs);
@@ -84,8 +85,6 @@ class BiQuadFilter
 		sample_t m_xMinus2;
 		sample_t m_yMinus1;
 		sample_t m_yMinus2;
-		
-		BiQuadFilter();
 		
 		void copy(const BiQuadFilter& rhs);
 
