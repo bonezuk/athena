@@ -166,3 +166,21 @@ TEST(WaveDSPTest, lowPass400Hz)
 }
 
 //-------------------------------------------------------------------------------------------
+/*
+TEST(WaveDSPTest, remezTest)
+{
+	int numtaps = 325;
+	double cutoff = 8000.0;
+	double transWidth = 100.0;
+	double fs = 22050.0;
+	double bands[4] = { 0.0, cutoff, cutoff + transWidth, 0.5 * fs};
+	double *h = new double [numtaps];
+	
+	engine::RemezFIR r;
+	
+	r.remez(h, &numtaps, )
+	
+	delete [] h;
+}
+*/
+//-------------------------------------------------------------------------------------------

@@ -4,6 +4,8 @@
  *
  * https://en.wikipedia.org/wiki/Parks–McClellan_filter_design_algorithm
  * https://github.com/janovetz/remez-exchange/tree/master
+ * https://bitbucket.org/andrzejc/dsp/src/master/
+ * git clone https://bitbucket.org/andrzejc/dsp.git
  *
  */
 //-------------------------------------------------------------------------------------------
@@ -20,37 +22,71 @@ namespace engine
 {
 //-------------------------------------------------------------------------------------------
 
+typedef enum 
+{
+	NEGATIVE = 0,
+	POSITIVE = 1
+} RemezSymmetryType;
+
+typedef enum
+{
+	REMEZ_FILTER_BANDPASS, 			//!< @internal Band-pass (LP, HP, BP, BS) filter.
+	REMEZ_FILTER_DIFFERENTIATOR,	//!< @internal Differentiator.
+	REMEZ_FILTER_HILBERT			//!< @internal Hilbert transformer.
+} RemezFilterType;
+
+//! @internal Error code indicating that the algorithm was unable to allocate internal arrays.
+#define REMEZ_ERRNOMEM 		(-1)
+//! @internal Warning code indicating that the design was interrupted due to algorithm reaching max iteration count, the results may be invalid.
+#define REMEZ_WARNMAXITER	(1)
+//! @internal No-error status code.
+#define REMEZ_NOERR			(0)
+#define REMEZ_FAILED(stat) 	((stat) < 0)
+
+//-------------------------------------------------------------------------------------------
+
 class ENGINE_EXPORT RemezFIR
 {
 	public:
-		RemezFIR();
+		
+		static bool designBandPass(tint order, tint bandCount, double freqs[], const double amps[],
+			const double weights[], double h[]);
 
-		void remez(double h[], int *numtaps, int *numband, const double bands[], 
-		           const double des[], const double weight[], int *type, int *griddensity);
+		static bool designHilbert(tint order, tint bandCount, double freqs[], const double amps[],
+			const double weights[], double h[]);
 
 	private:
+		RemezFIR();
 		
-		void createDenseGrid(int r, int numtaps, int numband, const double bands[],
-		                     const double des[], const double weight[], int gridsize,
-		                     double Grid[], double D[], double W[],
-		                     int symmetry, int griddensity);
+		void printError(const tchar *strR, const tchar *strE) const;
 		
+		void createDenseGrid(int r, const int numtaps, const int numband, double bands[],
+				const double des[], const double weight[], int *gridsize, double Grid[], double D[],
+                double W[], RemezSymmetryType symmetry, int grid_density);
+				
 		void initialGuess(int r, int Ext[], int gridsize);
 
 		void calcParms(int r, int Ext[], double Grid[], double D[], double W[],
-		               double ad[], double x[], double y[]);
-
+				double ad[], double x[], double y[]);
+				
 		double computeA(double freq, int r, double ad[], double x[], double y[]);
-
-		void calcError(int r, double ad[], double x[], double y[],
-		               int gridsize, double Grid[],
-		               double D[], double W[], double E[]);
-
-		int search(int r, int Ext[], int gridsize, double E[]);
 		
-		void freqSample(int N, double A[], double h[], int symm);
+		void calcError(int r, double ad[], double x[], double y[], int gridsize,
+				double Grid[], double D[], double W[], double E[]);
+				
+		void search(int r, int Ext[], int gridsize, double E[], int* foundExt);
 		
-		int isDone(int r, int Ext[], double E[]);
+		void freqSample(const int N, double A[], double h[], RemezSymmetryType symm);
+		
+		short isDone(int r, int Ext[], double E[]);
+
+		bool remez(double h[], const int numtaps, const int numband, double bands[], const double des[],
+            const double weight[], const RemezFilterType type, const int grid_density,
+			const int max_iterations);
+
+		bool designFIR(tint order, tint bandCount, double freqs[], const double amps[],
+			const double weights[], double h[], RemezFilterType type);
+
 };
 
 //-------------------------------------------------------------------------------------------
@@ -59,3 +95,4 @@ class ENGINE_EXPORT RemezFIR
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
+
