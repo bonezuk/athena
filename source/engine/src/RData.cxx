@@ -315,6 +315,7 @@ void RData::copy(const AData& rhs)
 void RData::reset()
 {
 	m_parts.clear();
+	AData::reset();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -413,6 +414,14 @@ const sample_t *RData::partDataOutConst(tint i) const
 	{
 		return &m_data[ m_parts.at(i).offsetConst() * m_noOutChannels ];
 	}	
+}
+
+//-------------------------------------------------------------------------------------------
+
+sample_t *RData::partFilterData(tint i, tint filterIndex)
+{
+	sample_t *pFilterData = filterData(i);
+	return &pFilterData[ m_parts.at(i).offsetConst() * m_noChannels ];
 }
 
 //-------------------------------------------------------------------------------------------

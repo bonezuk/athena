@@ -14,7 +14,8 @@ AData::AData() : m_data(0),
 	m_noOutChannels(2),
 	m_start(),
 	m_end(),
-	m_completeFlag(false)
+	m_completeFlag(false),
+	m_filterDataMap()
 {
 	AData::init();
 }
@@ -28,7 +29,8 @@ AData::AData(tint len,tint inChannel,tint outChannel) : m_data(0),
 	m_noOutChannels(outChannel),
 	m_start(),
 	m_end(),
-	m_completeFlag(false)
+	m_completeFlag(false),
+	m_filterDataMap()
 {
 	AData::init();
 }
@@ -42,7 +44,8 @@ AData::AData(const AData& rhs) : m_data(0),
 	m_noOutChannels(0),
 	m_start(),
 	m_end(),
-	m_completeFlag(false)
+	m_completeFlag(false),
+	m_filterDataMap()
 {
 	copy(rhs);
 }
@@ -63,8 +66,21 @@ AData::~AData()
 			delete [] m_outData;
 			m_outData = 0;
 		}
+		AData::freeFilterData();
 	}
 	catch(...) {}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AData::freeFilterData()
+{
+	for(QMap<tint, sample_t *>::iterator ppI = m_filterDataMap.begin(); ppI != m_filterDataMap.end(); ppI++)
+	{
+		sample_t *filterData = ppI.value();
+		delete [] filterData;
+	}
+	m_filterDataMap.clear();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -119,7 +135,17 @@ const common::TimeStamp& AData::endConst() const
 //-------------------------------------------------------------------------------------------
 
 void AData::reset()
-{}
+{
+	int len = m_length * m_noChannels;
+	for(QMap<tint, sample_t *>::iterator ppI = m_filterDataMap.begin(); ppI != m_filterDataMap.end(); ppI++)
+	{
+		sample_t *filterData = ppI.value();
+		for(int i = 0; i < len; i++)
+		{
+			filterData[i] = 0.0;
+		}
+	}
+}
 
 //-------------------------------------------------------------------------------------------
 
@@ -170,6 +196,13 @@ void AData::init()
 	}
 	m_data = new sample_t [m_length * m_noChannels];
 
+	for(QMap<tint, sample_t *>::iterator ppI = m_filterDataMap.begin(); ppI != m_filterDataMap.end(); ppI++)
+	{
+		sample_t *filterData = ppI.value();
+		delete [] filterData;
+	}
+	m_filterDataMap.clear();
+
 	if(m_outData!=0)
 	{
 		delete [] m_outData;
@@ -203,9 +236,18 @@ void AData::copy(const AData& rhs)
 	if(rhs.m_outData!=0)
 	{
 		m_outData = new sample_t [ outLen ];
-		::memcpy(m_outData,rhs.m_outData,sizeof(sample_t) * len);
+		::memcpy(m_outData,rhs.m_outData,sizeof(sample_t) * outLen);
 	}
 	
+	freeFilterData();
+    for(QMap<tint, sample_t *>::const_iterator ppI = rhs.m_filterDataMap.begin(); ppI != rhs.m_filterDataMap.end(); ppI++)
+	{
+		sample_t *pA = ppI.value();
+		sample_t *pB = new sample_t [len];
+		::memcpy(pB, pA, sizeof(sample_t) * len);
+		m_filterDataMap.insert(ppI.key(), pB);
+	}
+
 	m_length = rhs.m_length;
 	m_noChannels = rhs.m_noChannels;
 	m_noOutChannels = rhs.m_noOutChannels;
@@ -247,6 +289,24 @@ const sample_t *AData::dataOutConst() const
 bool AData::isMixing() const
 {
 	return (m_outData != NULL) ? 1 : 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
+sample_t *AData::filterData(tint filterIdx)
+{
+	sample_t *f;
+	QMap<tint, sample_t *>::iterator ppI = m_filterDataMap.find(filterIdx);
+	if(ppI != m_filterDataMap.end())
+	{
+		f = ppI.value();
+	}
+	else
+	{
+		f = new sample_t [m_length * m_noChannels];
+		m_filterDataMap.insert(filterIdx, f);
+	}
+	return f;
 }
 
 //-------------------------------------------------------------------------------------------

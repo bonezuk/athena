@@ -6,6 +6,8 @@
 #include "common/inc/TimeStamp.h"
 #include "engine/inc/EngineDLL.h"
 
+#include <QMap>
+
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
@@ -47,6 +49,8 @@ class ENGINE_EXPORT AData
 		virtual bool isMixing() const;
 		virtual void mixChannels();
 		
+		virtual sample_t *filterData(tint filterIdx);
+		
 	protected:
 	
 		sample_t *m_data;
@@ -57,9 +61,12 @@ class ENGINE_EXPORT AData
 		common::TimeStamp m_start;
 		common::TimeStamp m_end;
 		bool m_completeFlag;
+		QMap<tint, sample_t *> m_filterDataMap;
 		
 		virtual void init();
 		virtual void copy(const AData& rhs);
+		
+		virtual void freeFilterData();
 		
 		virtual void mixAToA();
 		virtual void mixAToB();
