@@ -303,7 +303,12 @@ sample_t *AData::filterData(tint filterIdx)
 	}
 	else
 	{
-		f = new sample_t [m_length * m_noChannels];
+		tint len = m_length * m_noChannels;
+		f = new sample_t [len];
+		for(tint i = 0; i < len; i++)
+		{
+			f[i] = 0.0;
+		}
 		m_filterDataMap.insert(filterIdx, f);
 	}
 	return f;

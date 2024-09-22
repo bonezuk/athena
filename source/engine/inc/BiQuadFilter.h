@@ -22,7 +22,7 @@ namespace engine
 {
 //-------------------------------------------------------------------------------------------
 
-class BiQuadFilter
+class ENGINE_EXPORT BiQuadFilter
 {
 	public:
 		typedef enum

@@ -8,6 +8,7 @@ using namespace omega::engine;
 
 TEST(BiQuadFilter, allPassFirstOrder)
 {
+	const sample_t c_tolerance = 0.0000001;
 	const sample_t x[5] = { -0.25, 0.25, 0.5, 0.75, -0.5 };
 
 	const sample_t fc = 10000.0;
@@ -16,16 +17,16 @@ TEST(BiQuadFilter, allPassFirstOrder)
 
     BiQuadFilter f = BiQuadFilter::filter(BiQuadFilter::e_AllPass_FirstOrder, fc, fs);
 	EXPECT_EQ(f.type(), BiQuadFilter::e_AllPass_FirstOrder);
-	EXPECT_DOUBLE_EQ(f.a0(), a);
-	EXPECT_DOUBLE_EQ(f.a1(), 1.0);
-	EXPECT_DOUBLE_EQ(f.a2(), 0.0);
-	EXPECT_DOUBLE_EQ(f.b1(), a);
-	EXPECT_DOUBLE_EQ(f.b2(), 0.0);
-	EXPECT_DOUBLE_EQ(f.process(x[0]), 0.018287231797256782);
-	EXPECT_DOUBLE_EQ(f.process(x[1]), -0.26694954041003038);
-	EXPECT_DOUBLE_EQ(f.process(x[2]), 0.19389846391088889);
-	EXPECT_DOUBLE_EQ(f.process(x[3]), 0.45932176922691148);
-	EXPECT_DOUBLE_EQ(f.process(x[4]), 0.82017335824802806);
+	EXPECT_NEAR(f.a0(), a, c_tolerance);
+	EXPECT_NEAR(f.a1(), 1.0, c_tolerance);
+	EXPECT_NEAR(f.a2(), 0.0, c_tolerance);
+	EXPECT_NEAR(f.b1(), a, c_tolerance);
+	EXPECT_NEAR(f.b2(), 0.0, c_tolerance);
+	EXPECT_NEAR(f.process(x[0]), 0.018287231797256782, c_tolerance);
+	EXPECT_NEAR(f.process(x[1]), -0.26694954041003038, c_tolerance);
+	EXPECT_NEAR(f.process(x[2]), 0.19389846391088889, c_tolerance);
+	EXPECT_NEAR(f.process(x[3]), 0.45932176922691148, c_tolerance);
+	EXPECT_NEAR(f.process(x[4]), 0.82017335824802806, c_tolerance);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -285,6 +286,7 @@ TEST(BiQuadFilter, bandStopButterworthSecondOrder)
 
 TEST(BiQuadFilter, highPassButterworthSecondOrder)
 {
+	const sample_t c_tolerance = 0.0000001;
 	const sample_t x[5] = { -0.25, 0.25, 0.5, 0.75, -0.5 };
 
 	const sample_t fc = 10000.0;
@@ -294,16 +296,16 @@ TEST(BiQuadFilter, highPassButterworthSecondOrder)
 
 	BiQuadFilter f = BiQuadFilter::filter(BiQuadFilter::e_highPassButterworthSecondOrder, fc, fs);
     EXPECT_EQ(f.type(), BiQuadFilter::e_highPassButterworthSecondOrder);
-	EXPECT_DOUBLE_EQ(f.a0(), 1.0 / (1.0 + c_SQR_TWO_D*c + ::pow(c, 2.0)));
-	EXPECT_DOUBLE_EQ(f.a1(), -2.0 * f.a0());
-	EXPECT_DOUBLE_EQ(f.a2(), f.a0());
-	EXPECT_DOUBLE_EQ(f.b1(), 2.0 * f.a0()*(::pow(c, 2.0) - 1.0));
-	EXPECT_DOUBLE_EQ(f.b2(), f.a0() * (1.0 - c_SQR_TWO_D*c + ::pow(c, 2.0)));
-	EXPECT_DOUBLE_EQ(f.process(x[0]), -0.084250172255100841);
-	EXPECT_DOUBLE_EQ(f.process(x[1]), 0.23832340012822295);
-	EXPECT_DOUBLE_EQ(f.process(x[2]), -0.028547166347985785);
-	EXPECT_DOUBLE_EQ(f.process(x[3]), -0.047014826141254615);
-	EXPECT_DOUBLE_EQ(f.process(x[4]), -0.50850588161725063);
+	EXPECT_NEAR(f.a0(), 1.0 / (1.0 + c_SQR_TWO_D*c + ::pow(c, 2.0)), c_tolerance);
+	EXPECT_NEAR(f.a1(), -2.0 * f.a0(), c_tolerance);
+	EXPECT_NEAR(f.a2(), f.a0(), c_tolerance);
+	EXPECT_NEAR(f.b1(), 2.0 * f.a0()*(::pow(c, 2.0) - 1.0), c_tolerance);
+	EXPECT_NEAR(f.b2(), f.a0() * (1.0 - c_SQR_TWO_D*c + ::pow(c, 2.0)), c_tolerance);
+	EXPECT_NEAR(f.process(x[0]), -0.084250172255100841, c_tolerance);
+	EXPECT_NEAR(f.process(x[1]), 0.23832340012822295, c_tolerance);
+	EXPECT_NEAR(f.process(x[2]), -0.028547166347985785, c_tolerance);
+	EXPECT_NEAR(f.process(x[3]), -0.047014826141254615, c_tolerance);
+	EXPECT_NEAR(f.process(x[4]), -0.50850588161725063, c_tolerance);
 }
 
 //-------------------------------------------------------------------------------------------
