@@ -94,8 +94,8 @@ void expectDataNoNextPart(const sample_t *sample, tint noSamples, tint offset, c
 			idx = i + j - offset;
 			sL = (idx >= 0 && idx < noSamples) ? sample[(idx * 2) + 0] : 0.0;
 			sR = (idx >= 0 && idx < noSamples) ? sample[(idx * 2) + 1] : 0.0;
-            fL += sL * filterCooefs[j];
-            fR += sR * filterCooefs[j];
+            fL += sL * filterCooefs[noCooefs - (j + 1)];
+            fR += sR * filterCooefs[noCooefs - (j + 1)];
 		}
 		expect[(i * 2) + 0] = fL;
 		expect[(i * 2) + 1] = fR;
@@ -131,8 +131,8 @@ TEST(FIRFilter,filterNoOffsetCompleteNoNextPart)
 	ASSERT_EQ(filterL.offset(), c_offset);
 	ASSERT_EQ(filterR.offset(), c_offset);
 	
-	filterL.process(&dataA, 0, c_filterIndex, true);
-	filterR.process(&dataA, 1, c_filterIndex, true);
+	filterL.process(&dataA, 0, c_filterIndex, true, false);
+	filterR.process(&dataA, 1, c_filterIndex, true, false);
 	
 	testActualToExpectedFIRFilter(dataA, expectA2Ch, c_filterIndex, c_noOfTestSamples, c_noChannels);
 }
@@ -169,8 +169,8 @@ TEST(FIRFilter,filterOffsetCompleteNoNextPart)
 	ASSERT_EQ(filterL.offset(), c_offset);
 	ASSERT_EQ(filterR.offset(), c_offset);
 	
-	filterL.process(&dataA, 0, c_filterIndex, true);
-	filterR.process(&dataA, 1, c_filterIndex, true);
+	filterL.process(&dataA, 0, c_filterIndex, true, false);
+	filterR.process(&dataA, 1, c_filterIndex, true, false);
 	
 	testActualToExpectedFIRFilter(dataA, expectA2Ch, c_filterIndex, c_noOfTestSamples, c_noChannels);
 }
@@ -194,8 +194,8 @@ void expectDataNoNextPartNoComplete(const sample_t * sample, tint noSamples, tin
 			{
 				sL = (idx >= 0 && idx < noSamples) ? sample[(idx * 2) + 0] : 0.0;
 				sR = (idx >= 0 && idx < noSamples) ? sample[(idx * 2) + 1] : 0.0;
-				fL += sL * filterCooefs[j];
-				fR += sR * filterCooefs[j];			
+				fL += sL * filterCooefs[noCooefs - (j + 1)];
+				fR += sR * filterCooefs[noCooefs - (j + 1)];
 			}
 			else
 			{
@@ -239,8 +239,8 @@ TEST(FIRFilter,filterNoOffsetNoCompleteNoNextPart)
 	ASSERT_EQ(filterL.offset(), c_offset);
 	ASSERT_EQ(filterR.offset(), c_offset);
 	
-	filterL.process(&dataA, 0, c_filterIndex, false);
-	filterR.process(&dataA, 1, c_filterIndex, false);
+	filterL.process(&dataA, 0, c_filterIndex, false, false);
+	filterR.process(&dataA, 1, c_filterIndex, false, false);
 	
 	testActualToExpectedFIRFilter(dataA, expectA2Ch, c_filterIndex, c_noOfTestSamples, c_noChannels);
 }
@@ -264,16 +264,16 @@ void expectDataTwoDataComplete(const sample_t * sampleA, const sample_t * sample
 			{
 				sL = sampleA[(idx * 2) + 0];
 				sR = sampleA[(idx * 2) + 1];
-				fL += sL * filterCooefs[j];
-				fR += sR * filterCooefs[j];			
+				fL += sL * filterCooefs[noCooefs - (j + 1)];
+				fR += sR * filterCooefs[noCooefs - (j + 1)];
 			}
 			else if(idx >= noSamples && idx < (noSamples * 2))
 			{
 				idx -= noSamples;
 				sL = sampleB[(idx * 2) + 0];
 				sR = sampleB[(idx * 2) + 1];
-				fL += sL * filterCooefs[j];
-				fR += sR * filterCooefs[j];			
+				fL += sL * filterCooefs[noCooefs - (j + 1)];
+				fR += sR * filterCooefs[noCooefs - (j + 1)];
 			}
 		}
 		expect[(i * 2) + 0] = fL;
@@ -315,11 +315,11 @@ TEST(FIRFilter,filterNoOffsetTwoData)
 	FIRFilter filterL(c_filterCooefs, c_noCooefs);
 	FIRFilter filterR(c_filterCooefs, c_noCooefs);
 		
-	filterL.process(&dataA, 0, c_filterIndex, false);
-	filterR.process(&dataA, 1, c_filterIndex, false);
+	filterL.process(&dataA, 0, c_filterIndex, false, false);
+	filterR.process(&dataA, 1, c_filterIndex, false, false);
 
-	filterL.process(&dataB, 0, c_filterIndex, true);
-	filterR.process(&dataB, 1, c_filterIndex, true);
+	filterL.process(&dataB, 0, c_filterIndex, true, false);
+	filterR.process(&dataB, 1, c_filterIndex, true, false);
 	
 	testActualToExpectedFIRFilter(dataA, expect2Ch, c_filterIndex, c_noOfTestSamples, c_noChannels);
 	testActualToExpectedFIRFilter(dataB, &expect2Ch[c_noOfTestSamples * c_noChannels], c_filterIndex, c_noOfTestSamples, c_noChannels);
@@ -362,11 +362,11 @@ TEST(FIRFilter,filterOffsetTwoData)
 	filterL.setOffset(c_offset);
 	filterR.setOffset(c_offset);
 	
-	filterL.process(&dataA, 0, c_filterIndex, false);
-	filterR.process(&dataA, 1, c_filterIndex, false);
+	filterL.process(&dataA, 0, c_filterIndex, false, false);
+	filterR.process(&dataA, 1, c_filterIndex, false, false);
 
-	filterL.process(&dataB, 0, c_filterIndex, true);
-	filterR.process(&dataB, 1, c_filterIndex, true);
+	filterL.process(&dataB, 0, c_filterIndex, true, false);
+	filterR.process(&dataB, 1, c_filterIndex, true, false);
 	
 	testActualToExpectedFIRFilter(dataA, expect2Ch, c_filterIndex, c_noOfTestSamples, c_noChannels);
 	testActualToExpectedFIRFilter(dataB, &expect2Ch[c_noOfTestSamples * c_noChannels], c_filterIndex, c_noOfTestSamples, c_noChannels);
@@ -391,24 +391,24 @@ void expectDataThreeDataComplete(const sample_t *sampleA, const sample_t *sample
 			{
 				sL = sampleA[(idx * 2) + 0];
 				sR = sampleA[(idx * 2) + 1];
-				fL += sL * filterCooefs[j];
-				fR += sR * filterCooefs[j];			
+				fL += sL * filterCooefs[noCooefs - (j + 1)];
+				fR += sR * filterCooefs[noCooefs - (j + 1)];
 			}
 			else if(idx >= noSamples && idx < (noSamples * 2))
 			{
 				idx -= noSamples;
 				sL = sampleB[(idx * 2) + 0];
 				sR = sampleB[(idx * 2) + 1];
-				fL += sL * filterCooefs[j];
-				fR += sR * filterCooefs[j];			
+				fL += sL * filterCooefs[noCooefs - (j + 1)];
+				fR += sR * filterCooefs[noCooefs - (j + 1)];
 			}
 			else if(idx >= (noSamples * 2) && idx < (noSamples * 3))
 			{
 				idx -= noSamples * 2;
 				sL = sampleC[(idx * 2) + 0];
 				sR = sampleC[(idx * 2) + 1];
-				fL += sL * filterCooefs[j];
-				fR += sR * filterCooefs[j];			
+				fL += sL * filterCooefs[noCooefs - (j + 1)];
+				fR += sR * filterCooefs[noCooefs - (j + 1)];
 			}
 		}
 		expect[(i * 2) + 0] = fL;
@@ -457,14 +457,14 @@ TEST(FIRFilter,filterNoOffsetThreeData)
 	FIRFilter filterL(c_filterCooefs, c_noCooefs);
 	FIRFilter filterR(c_filterCooefs, c_noCooefs);
 		
-	filterL.process(&dataA, 0, c_filterIndex, false);
-	filterR.process(&dataA, 1, c_filterIndex, false);
+	filterL.process(&dataA, 0, c_filterIndex, false, false);
+	filterR.process(&dataA, 1, c_filterIndex, false, false);
 
-	filterL.process(&dataB, 0, c_filterIndex, false);
-	filterR.process(&dataB, 1, c_filterIndex, false);
+	filterL.process(&dataB, 0, c_filterIndex, false, false);
+	filterR.process(&dataB, 1, c_filterIndex, false, false);
 	
-	filterL.process(&dataC, 0, c_filterIndex, true);
-	filterR.process(&dataC, 1, c_filterIndex, true);
+	filterL.process(&dataC, 0, c_filterIndex, true, false);
+	filterR.process(&dataC, 1, c_filterIndex, true, false);
 
 	testActualToExpectedFIRFilter(dataA, expect2Ch, c_filterIndex, c_noOfTestSamples, c_noChannels);
 	testActualToExpectedFIRFilter(dataB, &expect2Ch[c_noOfTestSamples * c_noChannels], c_filterIndex, c_noOfTestSamples, c_noChannels);
@@ -515,14 +515,14 @@ TEST(FIRFilter,filterOffsetThreeData)
 	filterL.setOffset(c_offset);
 	filterR.setOffset(c_offset);
 
-	filterL.process(&dataA, 0, c_filterIndex, false);
-	filterR.process(&dataA, 1, c_filterIndex, false);
+	filterL.process(&dataA, 0, c_filterIndex, false, false);
+	filterR.process(&dataA, 1, c_filterIndex, false, false);
 
-	filterL.process(&dataB, 0, c_filterIndex, false);
-	filterR.process(&dataB, 1, c_filterIndex, false);
+	filterL.process(&dataB, 0, c_filterIndex, false, false);
+	filterR.process(&dataB, 1, c_filterIndex, false, false);
 	
-	filterL.process(&dataC, 0, c_filterIndex, true);
-	filterR.process(&dataC, 1, c_filterIndex, true);
+	filterL.process(&dataC, 0, c_filterIndex, true, false);
+	filterR.process(&dataC, 1, c_filterIndex, true, false);
 
 	testActualToExpectedFIRFilter(dataA, expect2Ch, c_filterIndex, c_noOfTestSamples, c_noChannels);
 	testActualToExpectedFIRFilter(dataB, &expect2Ch[c_noOfTestSamples * c_noChannels], c_filterIndex, c_noOfTestSamples, c_noChannels);

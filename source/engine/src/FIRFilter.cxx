@@ -44,7 +44,7 @@ void FIRFilter::setOffset(tint of)
 
 //-------------------------------------------------------------------------------------------
 
-void FIRFilter::process(RData *pData, tint channelIdx, tint filterIdx, bool isLast)
+void FIRFilter::process(RData *pData, tint channelIdx, tint filterIdx, bool isLast, bool clip)
 {
 	tint i, j, idx, len, dLen, prevLen, prevIdx, noChannels;
 	sample_t x, y;
@@ -84,14 +84,27 @@ void FIRFilter::process(RData *pData, tint channelIdx, tint filterIdx, bool isLa
 				if(m_pPrevious != NULL)
 				{
 					prevIdx = prevLen + idx;
-					y += m_coefficients[j] * pPD[(prevIdx * noChannels) + channelIdx];
+					y += m_coefficients[m_filterLength - (j + 1)] * pPD[(prevIdx * noChannels) + channelIdx];
 				}
 			}
 			else if(idx < dLen)
 			{
-				y += m_coefficients[j] * pDA[(idx * noChannels) + channelIdx];
+				y += m_coefficients[m_filterLength - (j + 1)] * pDA[(idx * noChannels) + channelIdx];
 			}
 		}
+		
+		if(clip)
+		{
+			if(y < -1.0)
+			{
+				y = -1.0;
+			}
+			else if(y > 1.0)
+			{
+				y = 1.0;
+			}
+		}
+		
 		if(i < 0)
 		{
 			prevIdx = prevLen + i;

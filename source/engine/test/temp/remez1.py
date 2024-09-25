@@ -2,7 +2,7 @@ import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
 
-fs = 22050   # Sample rate, Hz
+fs = 44100   # Sample rate, Hz
 
 def plot_response(w, h, title):
     "Utility function to plot response functions"
@@ -15,13 +15,26 @@ def plot_response(w, h, title):
     ax.set_ylabel('Gain (dB)')
     ax.set_title(title)
 
-cutoff = 8000.0    # Desired cutoff frequency, Hz
+cutoff = 500.0    # Desired cutoff frequency, Hz
 trans_width = 100  # Width of transition from pass to stop, Hz
-numtaps = 6      # Size of the FIR filter.
+numtaps = 400      # Size of the FIR filter.
 taps = signal.remez(numtaps, [0, cutoff, cutoff + trans_width, 0.5*fs],
                     [1, 0], fs=fs)
 w, h = signal.freqz(taps, [1], worN=2000, fs=fs)
 plot_response(w, h, "Low-pass Filter")
 plt.show()
 
-print(taps)
+total = 0
+count = 0
+ostr = "\t\t"
+for tap in taps:
+	ostr = ostr + " " + str(tap) + ", "
+	count += 1
+	total += 1
+	if count >= 4:
+		ostr = ostr + " // " + str(total)
+		print(ostr)
+		ostr = "\t\t"
+		count = 0
+ostr = ostr + " // " + str(total)
+print(ostr)
