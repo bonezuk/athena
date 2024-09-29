@@ -336,7 +336,7 @@ sample_t *AData::filterData(tint filterIdx)
 	}
 	else
 	{
-		tint len = m_length * m_noChannels;
+        tint len = m_length * ((filterIdx >= 0) ? m_noChannels : 1);
 		f = new sample_t [len];
 		for(tint i = 0; i < len; i++)
 		{
@@ -358,6 +358,7 @@ sample_t *AData::center()
 	if(!m_isCenterValid)
 	{
 		const sample_t *d = dataConst();
+		
 		for(tint idx = 0; idx < m_length; idx++)
 		{
 			sample_t x = 0.0f;
@@ -371,6 +372,21 @@ sample_t *AData::center()
 		m_isCenterValid = true;
 	}
 	return m_centreData;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AData::isCenter() const
+{
+	return (m_centreData != NULL) ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AData::isLFE() const
+{
+    QMap<tint, sample_t *>::const_iterator ppI = m_filterDataMap.find(e_lfeChannelIndex);
+	return (ppI != m_filterDataMap.end()) ? true : false;
 }
 
 //-------------------------------------------------------------------------------------------

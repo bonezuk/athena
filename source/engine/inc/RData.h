@@ -14,20 +14,6 @@ namespace omega
 namespace engine
 {
 //-------------------------------------------------------------------------------------------
-/* In order to support native integer mode and DSD audio the codec must have the ability  
-   output its audio format in its native format. The endianness of the data is that of 
-   the executing CPU.
-*/
-
-typedef int CodecDataType;
-const CodecDataType e_SampleFloat = 0x01;
-const CodecDataType e_SampleInt16 = 0x02;
-const CodecDataType e_SampleInt24 = 0x04;
-const CodecDataType e_SampleInt32 = 0x08;
-const CodecDataType e_SampleDSD8LSB = 0x10;
-const CodecDataType e_SampleDSD8MSB = 0x20;
-
-//-------------------------------------------------------------------------------------------
 
 class ENGINE_EXPORT RData : public AData
 {
@@ -66,7 +52,9 @@ class ENGINE_EXPORT RData : public AData
 		virtual void reset();
 		
 		virtual void clipToTime(const common::TimeStamp& clipT);
-				
+		
+		virtual sample_t *center();
+		
 	protected:
 		
 		QVector<Part> m_parts;

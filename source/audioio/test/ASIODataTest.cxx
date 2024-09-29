@@ -5519,3 +5519,97 @@ TEST(ASIOData,volume32BitsMSBWithInt32)
 }
 
 //-------------------------------------------------------------------------------------------
+
+void expectCentreLFEData(const sample_t *sample, tint noSamples, tint offset, const sample_t *filterCooefs, tint noCooefs, sample_t *expect)
+{
+	tint i, j, idx;
+	
+	for(i = 0; i < noSamples; i++)
+	{
+		sample_t sC, fC;
+		
+		fC = 0.0;
+		for(j = 0; j < noCooefs; j++)
+		{
+			idx = i + j - offset;
+			if(idx >= 0 && idx < noSamples)
+			{
+				sC = (sample[(idx * 2) + 0] + sample[(idx * 2) + 1]) / 2.0;
+				fC += sC * filterCooefs[noCooefs - (j + 1)];
+			}
+		}
+		sC = (sample[(i * 2) + 0] + sample[(i * 2) + 1]) / 2.0;
+		if(sC < -1.0)
+			sC = -1.0
+		else if(sC > 1.0)
+			sC = 1.0
+		expect[(i * 2) + 0] = sC;
+		if(fC < -1.0)
+			fC = -1.0
+		else if(fC > 1.0)
+			fC = 1.0
+		expect[(i * 2) + 1] = fC;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(ASIOData,sampleTo24BitIn32BitForCentreAndLFEWithNoOffset)
+{
+	const tfloat64 c_tolerance = 0.0000001;
+	const tint c_noOfTestSamples = 10;
+	const tint c_noChannels = 2;
+	const tint c_noCooefs = 6;
+	const tint c_offset = 0;
+
+	const sample_t c_sampleInput[c_noOfTestSamples * c_noChannels] = {
+		0.1, 0.2, // 0
+		0.3, 0.4, // 1
+		0.5, 0.6, // 2
+		0.7, 0.8, // 3
+		0.9, 1.0, // 4
+		0.9, 0.8, // 5
+		0.7, 0.6, // 6
+		0.5, 0.4, // 7
+		0.3, 0.2, // 8
+		0.1, 0.0, // 9
+	};
+	const sample_t c_filterCooefs[c_noCooefs] = {-0.19062389, -0.16668996,  0.61590277,  0.61590277, -0.16668996, -0.19062389};
+	
+	sample_t expectCLFE[c_noOfTestSamples * c_noChannels];
+	expectCentreLFEData(c_sampleInput, c_noOfTestSamples, c_offset, c_filterCooefs, c_noCooefs, expectCLFE);
+	
+	ASIOData expectData(5, 2, 2);
+	expectData.setSampleType(ASIOSTInt32LSB24);
+	engine::RData::Part& partE = expectData.nextPart();
+	memcpy(expectData.partDataOut(0), expectCLFE, c_noOfTestSamples * c_noChannels * sizeof(sample_t));
+	partE.length() = c_noOfTestSamples;
+	partE.done() = true;
+	expectData.convert();
+	
+	ASIOData data(c_noOfTestSamples, 2, 2);
+	
+	engine::RData::Part& part = data.nextPart();
+	memcpy(data.partData(0), c_sampleInput, c_noOfTestSamples * c_noChannels * sizeof(sample_t));
+	part.length() = c_noOfTestSamples;
+	part.done() = true;
+
+	ASSERT_TRUE(data.partDataCenter() != NULL);
+	
+	FIRFilter filterLFE(c_filterCooefs, c_noCooefs);
+		
+	filterLFE.process(&data, e_lfeChannelIndex, true);
+	
+	data.convert();
+	
+	const sample_t *outC = data.asioDataConst(e_centerChannelIndex);
+	const sample_t *expectC = expectData.asioDataConst(0);
+	
+	const sample_t *outLFE = data.asioDataConst(e_lfeChannelIndex);
+	const sample_t *expectLFE = expectData.asioDataConst(0);
+	
+	EXPECT_EQ(memcmp(outC, expectC, c_noOfTestSamples * 4), 0);
+	EXPECT_EQ(memcmp(outLFE, expectLFE, c_noOfTestSamples * 4), 0);
+}
+
+//-------------------------------------------------------------------------------------------

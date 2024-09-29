@@ -32,9 +32,17 @@ class AUDIOIO_EXPORT ASIOData : public engine::RData
 		virtual void reset();
 		
 	protected:
-	
+
 		ASIOSampleType m_sampleType;
 		void **m_asioDataArray;
+
+		/*
+		e_centerChannelIndex = -2, == m_asioAuxDataArray[0] -> m_asioAuxDataArray[-(-2) - 2] = [0]
+		e_lfeChannelIndex = -3,    == m_asioAuxDataArray[1] -> m_asioAuxDataArray[-(-3) - 2] = [1]
+		[ -( idx ) - m_asioAuxArraySize ]
+		*/
+		void **m_asioAuxDataArray;
+		const tint m_asioAuxArraySize = 2;
 		
 		bool m_convertFlag;
 		sample_t m_volume;

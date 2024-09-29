@@ -11,6 +11,7 @@ namespace audioio
 ASIOData::ASIOData() : engine::RData(),
 	m_sampleType(ASIOSTFloat32LSB),
 	m_asioDataArray(0),
+	m_asioAuxDataArray(0),
 	m_convertFlag(false),
 	m_volume(1.0),
 	m_vIntBuffer(NULL),
@@ -22,6 +23,7 @@ ASIOData::ASIOData() : engine::RData(),
 ASIOData::ASIOData(tint len,tint inChannel,tint outChannel) : engine::RData(len,inChannel,outChannel),
 	m_sampleType(ASIOSTFloat32LSB),
 	m_asioDataArray(0),
+	m_asioAuxDataArray(0),
 	m_convertFlag(false),
 	m_volume(1.0),
 	m_vIntBuffer(NULL),
@@ -33,6 +35,7 @@ ASIOData::ASIOData(tint len,tint inChannel,tint outChannel) : engine::RData(len,
 ASIOData::ASIOData(const engine::AData& rhs) : engine::RData(),
 	m_sampleType(ASIOSTFloat32LSB),
 	m_asioDataArray(0),
+	m_asioAuxDataArray(0),
 	m_convertFlag(false),
 	m_volume(1.0),
 	m_vIntBuffer(NULL),
@@ -45,16 +48,25 @@ ASIOData::ASIOData(const engine::AData& rhs) : engine::RData(),
 
 ASIOData::~ASIOData()
 {
+	tint i;
+
 	if(m_asioDataArray!=0)
 	{
-		tint i;
-		
 		for(i=0;i<m_noOutChannels;++i)
 		{
 			::free(m_asioDataArray[i]);
 		}
 		::free(m_asioDataArray);
 		m_asioDataArray = 0;
+	}
+	if(m_asioAuxDataArray != 0)
+	{
+		for(i = 0; i < m_asioAuxArraySize; i++)
+		{
+			::free(m_asioAuxDataArray[i]);
+		}
+		::free(m_asioAuxDataArray);
+		m_asioAuxDataArray = 0;
 	}
 	if(m_vIntBuffer != NULL)
 	{
@@ -77,6 +89,10 @@ void ASIOData::copy(const engine::AData& rhs)
 		for(i=0;i<m_noOutChannels;++i)
 		{
 			::memcpy(m_asioDataArray[i],d.m_asioDataArray[i],length() * getSampleSize());
+		}
+		for(i = 0; i < m_asioAuxArraySize; i++)
+		{
+			::memcpy(m_asioAuxDataArray[i],d.m_asioAuxDataArray[i],length() * getSampleSize());
 		}
 		m_convertFlag = d.m_convertFlag;
 		m_volume = d.m_volume;
@@ -107,6 +123,14 @@ void ASIOData::asioAllocate()
 			m_asioDataArray[i] = ::malloc(length() * getSampleSize());
 		}
 	}
+	m_asioAuxDataArray = reinterpret_cast<void **>(::malloc(sizeof(void *) * m_asioAuxArraySize));
+	if(m_asioAuxDataArray != 0)
+	{
+		for(i = 0; i < m_asioAuxArraySize; ++i)
+		{
+			m_asioAuxDataArray[i] = ::malloc(length() * getSampleSize());
+		}	
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -127,16 +151,22 @@ const void *ASIOData::asioDataConst(tint chIdx,tint pIdx) const
 
 const void *ASIOData::asioDataI(tint chIdx,tint pIdx) const
 {
+	const tubyte *mem = 0;
+
 	if(chIdx<m_noOutChannels && pIdx<noParts())
 	{
-		const tubyte *mem = reinterpret_cast<const tubyte *>(m_asioDataArray[chIdx]);
-		mem = &mem[ m_parts.at(pIdx).offsetConst() * getSampleSize() ];
-		return reinterpret_cast<const void *>(mem);
+		if(chIdx >= 0 && chIdx < m_noOutChannels)
+		{
+			mem = reinterpret_cast<const tubyte *>(m_asioDataArray[chIdx]);
+			mem = &mem[ m_parts.at(pIdx).offsetConst() * getSampleSize() ];
+		}
+		else if(chIdx>=e_lfeChannelIndex && chIdx<=e_centerChannelIndex)
+		{
+			mem = reinterpret_cast<const tubyte *>(m_asioAuxDataArray[(0 - chIdx) - m_asioAuxArraySize]);
+			mem = &mem[ m_parts.at(pIdx).offsetConst() * getSampleSize() ];
+		}
 	}
-	else
-	{
-		return 0;
-	}
+	return reinterpret_cast<const void *>(mem);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -175,7 +205,9 @@ void ASIOData::convert()
 {
 	if(!m_convertFlag)
 	{
-		tint i,j,pLen,amount;
+		tint i,j,pLen,amount, nOChannels;
+		tint offsetCenter = 0;
+		tint offsetLFE = 0;
 		QVector<tint> amountS(m_noOutChannels,0);
 	
 		for(i=0;i<noParts();++i)
@@ -203,6 +235,19 @@ void ASIOData::convert()
 				Q_ASSERT(pLen == amount);
 				amountS[j] += amount;
 			}
+			nOChannels = m_noOutChannels;
+			m_noOutChannels = 1;
+			if(isCenter())
+			{
+				sample_t *in = partDataCenter(i);
+				offsetCenter += copyToBuffer(in, pLen, offsetCenter, e_centerChannelIndex, engine::e_SampleFloat);
+			}
+			if(isLFE())
+			{
+				sample_t *in = partFilterData(i, e_lfeChannelIndex);
+				offsetLFE += copyToBuffer(in, pLen, offsetLFE, e_lfeChannelIndex, engine::e_SampleFloat);
+			}
+			m_noOutChannels = nOChannels;
 		}
 		m_convertFlag = true;
 	}

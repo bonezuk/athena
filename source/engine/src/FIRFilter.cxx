@@ -44,6 +44,85 @@ void FIRFilter::setOffset(tint of)
 
 //-------------------------------------------------------------------------------------------
 
+void FIRFilter::process(RData *pData, tint filterIdx, bool isLast, bool clip)
+{
+	tint i, j, idx, len, dLen, prevLen, prevIdx, noChannels;
+	sample_t x, y;
+	sample_t *pPD = NULL;
+	sample_t *pDA = pData->data();
+	sample_t *pPrevFilter = NULL;
+	sample_t *pFilter = pData->filterData(filterIdx);
+	
+	if(filterIdx == e_lfeChannelIndex)
+		pDA = pData->center();
+	
+	i = 0;
+	dLen = len = pData->length() - pData->rLength();
+	if(!isLast)
+	{
+		len -= (m_filterLength - m_offset - 1);
+	}
+	
+	if(m_pPrevious != NULL)
+	{
+		i = -(m_filterLength + m_offset - 1);
+		pPD = m_pPrevious->data();
+		prevLen = m_pPrevious->length() - m_pPrevious->rLength();
+		pPrevFilter = m_pPrevious->filterData(filterIdx);
+	}
+	else
+	{
+		prevLen = 0;
+	}
+	
+	while(i < len)
+	{
+		y = 0.0;
+		for(j = 0; j < m_filterLength; j++)
+		{
+			idx = i + j - m_offset;
+			if(idx < 0)
+			{
+				if(m_pPrevious != NULL)
+				{
+					prevIdx = prevLen + idx;
+					y += m_coefficients[m_filterLength - (j + 1)] * pPD[prevIdx];
+				}
+			}
+			else if(idx < dLen)
+			{
+				y += m_coefficients[m_filterLength - (j + 1)] * pDA[idx];
+			}
+		}
+		
+		if(clip)
+		{
+			if(y < -1.0)
+			{
+				y = -1.0;
+			}
+			else if(y > 1.0)
+			{
+				y = 1.0;
+			}
+		}
+		
+		if(i < 0)
+		{
+			prevIdx = prevLen + i;
+			pPrevFilter[prevIdx] = y;
+		}
+		else
+		{
+			pFilter[i] = y;
+		}
+		i++;
+	}
+	m_pPrevious = pData;
+}
+
+//-------------------------------------------------------------------------------------------
+
 void FIRFilter::process(RData *pData, tint channelIdx, tint filterIdx, bool isLast, bool clip)
 {
 	tint i, j, idx, len, dLen, prevLen, prevIdx, noChannels;

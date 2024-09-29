@@ -21,6 +21,7 @@ class ENGINE_EXPORT FIRFilter
 		tint offset() const;
 		void setOffset(tint of);
 		
+		void process(RData *pData, tint channelIdx, bool isLast, bool clip = true);
 		void process(RData *pData, tint channelIdx, tint filterIdx, bool isLast, bool clip = true);
 	
 	private:

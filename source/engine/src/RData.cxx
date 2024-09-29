@@ -1,4 +1,5 @@
 #include "engine/inc/RData.h"
+#include "engine/inc/FormatTypeFromFloat.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -428,8 +429,9 @@ const sample_t *RData::partDataOutConst(tint i) const
 
 sample_t *RData::partFilterData(tint i, tint filterIndex)
 {
-	sample_t *pFilterData = filterData(i);
-	return &pFilterData[ m_parts.at(i).offsetConst() * m_noChannels ];
+	sample_t *pFilterData = filterData(filterIndex);
+    tint noChs = (filterIndex >= 0) ? m_noChannels : 1;
+	return &pFilterData[ m_parts.at(i).offsetConst() * noChs ];
 }
 
 //-------------------------------------------------------------------------------------------
@@ -524,6 +526,88 @@ void RData::clipToTime(const common::TimeStamp& clipT)
 		
 		delete [] cData;
 	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+sample_t *RData::center()
+{
+	if(m_centreData == 0)
+	{
+		m_centreData = new sample_t [m_length];
+	}
+	
+	if(!m_isCenterValid)
+	{
+		for(tint partIdx = 0; partIdx < noParts(); partIdx++)
+		{
+			int idx, ch;
+			const sample_t *d = partDataConst(partIdx);
+			Part& p = part(partIdx);
+			sample_t *o = partDataCenter(partIdx);
+			
+			if(p.getDataType() == e_SampleInt16)
+			{
+                const tint16 *in = reinterpret_cast<const tint16 *>(d);
+				
+				for(idx = 0; idx < p.length(); idx++)
+				{
+					sample_t x = 0.0f;
+					
+					for(tint ch = 0; ch < m_noChannels; ch++)
+					{
+						x += sample64From16Bit(*in++);
+					}
+					o[idx] = x / static_cast<tfloat64>(m_noChannels);
+				}
+			}
+			else if(p.getDataType() == e_SampleInt24)
+			{
+                const tint32 *in = reinterpret_cast<const tint32 *>(d);
+				
+				for(idx = 0; idx < p.length(); idx++)
+				{
+					sample_t x = 0.0f;
+					
+					for(tint ch = 0; ch < m_noChannels; ch++)
+					{
+						x += sample64From24Bit(*in++);
+					}
+					o[idx] = x / static_cast<tfloat64>(m_noChannels);
+				}
+			}
+			else if(p.getDataType() == e_SampleInt32)
+			{
+                const tint32 *in = reinterpret_cast<const tint32 *>(d);
+				
+				for(idx = 0; idx < p.length(); idx++)
+				{
+					sample_t x = 0.0f;
+					
+					for(tint ch = 0; ch < m_noChannels; ch++)
+					{
+						x += sample64From32Bit(*in++);
+					}
+					o[idx] = x / static_cast<tfloat64>(m_noChannels);
+				}
+			}
+			else
+			{
+				for(idx = 0; idx < p.length(); idx++)
+				{
+					sample_t x = 0.0f;
+					
+					for(tint ch = 0; ch < m_noChannels; ch++)
+					{
+						x += *d++;
+					}
+					o[idx] = x / static_cast<tfloat64>(m_noChannels);
+				}
+			}
+		}
+		m_isCenterValid = true;
+	}
+	return m_centreData;
 }
 
 //-------------------------------------------------------------------------------------------
