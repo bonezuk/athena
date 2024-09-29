@@ -51,6 +51,8 @@ class ENGINE_EXPORT AData
 		
 		virtual sample_t *filterData(tint filterIdx);
 		
+		virtual sample_t *center();
+		
 	protected:
 	
 		sample_t *m_data;
@@ -62,6 +64,8 @@ class ENGINE_EXPORT AData
 		common::TimeStamp m_end;
 		bool m_completeFlag;
 		QMap<tint, sample_t *> m_filterDataMap;
+		sample_t *m_centreData;
+		bool m_isCenterValid;
 		
 		virtual void init();
 		virtual void copy(const AData& rhs);

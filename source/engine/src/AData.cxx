@@ -15,7 +15,9 @@ AData::AData() : m_data(0),
 	m_start(),
 	m_end(),
 	m_completeFlag(false),
-	m_filterDataMap()
+	m_filterDataMap(),
+	m_centreData(NULL),
+	m_isCenterValid(false)
 {
 	AData::init();
 }
@@ -30,7 +32,9 @@ AData::AData(tint len,tint inChannel,tint outChannel) : m_data(0),
 	m_start(),
 	m_end(),
 	m_completeFlag(false),
-	m_filterDataMap()
+	m_filterDataMap(),
+	m_centreData(NULL),
+	m_isCenterValid(false)
 {
 	AData::init();
 }
@@ -45,7 +49,9 @@ AData::AData(const AData& rhs) : m_data(0),
 	m_start(),
 	m_end(),
 	m_completeFlag(false),
-	m_filterDataMap()
+	m_filterDataMap(),
+	m_centreData(NULL),
+	m_isCenterValid(false)
 {
 	copy(rhs);
 }
@@ -65,6 +71,11 @@ AData::~AData()
 		{
 			delete [] m_outData;
 			m_outData = 0;
+		}
+		if(m_centreData != 0)
+		{
+			delete [] m_centreData;
+			m_centreData = 0;
 		}
 		AData::freeFilterData();
 	}
@@ -145,6 +156,14 @@ void AData::reset()
 			filterData[i] = 0.0;
 		}
 	}
+	if(m_centreData != 0)
+	{
+        for(tint i = 0 ; i < len; i++)
+		{
+			m_centreData[i] = 0.0;
+		}
+	}
+	m_isCenterValid = false;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -196,12 +215,7 @@ void AData::init()
 	}
 	m_data = new sample_t [m_length * m_noChannels];
 
-	for(QMap<tint, sample_t *>::iterator ppI = m_filterDataMap.begin(); ppI != m_filterDataMap.end(); ppI++)
-	{
-		sample_t *filterData = ppI.value();
-		delete [] filterData;
-	}
-	m_filterDataMap.clear();
+	freeFilterData();
 
 	if(m_outData!=0)
 	{
@@ -212,6 +226,13 @@ void AData::init()
 	{
 		m_outData = new sample_t [m_length * m_noOutChannels];
 	}
+
+	if(m_centreData != 0)
+	{
+		delete [] m_centreData;
+		m_centreData = 0;
+	}
+	m_isCenterValid = false;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -238,6 +259,18 @@ void AData::copy(const AData& rhs)
 		m_outData = new sample_t [ outLen ];
 		::memcpy(m_outData,rhs.m_outData,sizeof(sample_t) * outLen);
 	}
+	
+	if(m_centreData != 0)
+	{
+		delete [] m_centreData;
+		m_centreData = 0;
+	}
+	if(rhs.m_centreData != 0)
+	{
+		m_centreData = new sample_t [ outLen ];
+		::memcpy(m_centreData, rhs.m_centreData, sizeof(sample_t) * outLen);
+	}
+	m_isCenterValid = rhs.m_isCenterValid;
 	
 	freeFilterData();
     for(QMap<tint, sample_t *>::const_iterator ppI = rhs.m_filterDataMap.begin(); ppI != rhs.m_filterDataMap.end(); ppI++)
@@ -312,6 +345,32 @@ sample_t *AData::filterData(tint filterIdx)
 		m_filterDataMap.insert(filterIdx, f);
 	}
 	return f;
+}
+
+//-------------------------------------------------------------------------------------------
+
+sample_t *AData::center()
+{
+	if(m_centreData == 0)
+	{
+		m_centreData = new sample_t [m_length];
+	}
+	if(!m_isCenterValid)
+	{
+		const sample_t *d = dataConst();
+		for(tint idx = 0; idx < m_length; idx++)
+		{
+			sample_t x = 0.0f;
+			
+			for(tint ch = 0; ch < m_noChannels; ch++)
+			{
+				x += *d++;
+			}
+			m_centreData[idx] = x / static_cast<tfloat64>(m_noChannels);
+		}
+		m_isCenterValid = true;
+	}
+	return m_centreData;
 }
 
 //-------------------------------------------------------------------------------------------

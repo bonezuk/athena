@@ -390,6 +390,14 @@ const sample_t *RData::partDataConst(tint i) const
 
 //-------------------------------------------------------------------------------------------
 
+sample_t *RData::partDataCenter(tint i)
+{
+	sample_t *c = center();
+	return &c[m_parts.at(i).offsetConst()];
+}
+
+//-------------------------------------------------------------------------------------------
+
 sample_t *RData::partDataOut(tint i)
 {
 	if(m_outData!=0)

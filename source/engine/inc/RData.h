@@ -60,7 +60,9 @@ class ENGINE_EXPORT RData : public AData
 		virtual const sample_t *currentPartDataConst() const;
 		
 		virtual sample_t *partFilterData(tint i, tint filterIndex);
-		
+
+		virtual sample_t *partDataCenter(tint i);
+
 		virtual void reset();
 		
 		virtual void clipToTime(const common::TimeStamp& clipT);
