@@ -35,6 +35,7 @@ set ( TEST_SOURCE
 	../audioio/test/AOChannelMapMock.cxx
 	../audioio/test/AudioHardwareBufferTester.cxx
 	../audioio/test/AudioItemMock.cxx
+	../audioio/test/AudioSettingsTest.cxx
 	../audioio/test/FormatDescriptionTest.cxx
 	../audioio/test/FormatDescriptionUtilsTest.cxx
 	../audioio/test/FormatsSupportedTest.cxx

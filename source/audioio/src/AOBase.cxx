@@ -5319,6 +5319,14 @@ bool AOBase::decodeAndResample(engine::Codec *c,AudioItem *outputItem,bool& init
 			}
 		}
 	}
+	if(isCenterChannelGenerated())
+	{
+		oData->center();
+	}
+	if(isLFEChannelGenerated())
+	{
+		
+	}
 	dData.mixChannels();
 	return res;
 }
@@ -5451,6 +5459,35 @@ tint AOBase::decodeAndResampleCalculateOutputLength()
 
 //-------------------------------------------------------------------------------------------
 
+bool AOBase::isChannelGenerated(tint inChannelIdx) const
+{
+	bool res = false;
+	for(tint i = 0; i < c_kMaxOutputChannels && !res; i++)
+	{
+		if(m_outputChannelArray[i] == inChannelIdx)
+		{
+			res = true;
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOBase::isCenterChannelGenerated() const
+{
+	return isChannelGenerated(e_centerChannelIndex);
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOBase::isLFEChannelGenerated() const
+{
+	return isChannelGenerated(e_lfeChannelIndex);
+}
+
+//-------------------------------------------------------------------------------------------
+
 void AOBase::buildChannelMapArray()
 {
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
@@ -5469,6 +5506,7 @@ void AOBase::buildChannelMapArray()
 
 		if(m_codec->noChannels()==2)
 		{
+			QSharedPointer<AudioSettings> pSettings = AudioSettings::instance(getDeviceName(m_deviceIdx));
 			bool fFlag = false,sFlag = false,rFlag = false;
 
 			switch(aoChannelMap->stereoType())
@@ -5505,22 +5543,39 @@ void AOBase::buildChannelMapArray()
 			{
 				int idxL = aoChannelMap->channel(e_FrontLeft);
 				int idxR = aoChannelMap->channel(e_FrontRight);
-				m_outputChannelArray[idxL] = 0;
-				m_outputChannelArray[idxR] = 1;
+				if(idxL >= 0 && idxR >= 0)
+				{
+					m_outputChannelArray[idxL] = 0;
+					m_outputChannelArray[idxR] = 1;				
+				}
 			}
 			if(sFlag)
 			{
 				int idxL = aoChannelMap->channel(e_SurroundLeft);
 				int idxR = aoChannelMap->channel(e_SurroundRight);
-				m_outputChannelArray[idxL] = 0;
-				m_outputChannelArray[idxR] = 1;
+				if(idxL >= 0 && idxR >= 0)
+				{
+					m_outputChannelArray[idxL] = 0;
+					m_outputChannelArray[idxR] = 1;
+				}
 			}
 			if(rFlag)
 			{
 				int idxL = aoChannelMap->channel(e_RearLeft);
 				int idxR = aoChannelMap->channel(e_RearRight);
-				m_outputChannelArray[idxL] = 0;
-				m_outputChannelArray[idxR] = 1;
+				if(idxL >= 0 && idxR >= 0)
+				{
+					m_outputChannelArray[idxL] = 0;
+					m_outputChannelArray[idxR] = 1;
+				}
+			}
+			if(pSettings->isCenter() && aoChannelMap->channel(e_Center) >= 0)
+			{
+				m_outputChannelArray[aoChannelMap->channel(e_Center)] = e_centerChannelIndex;
+			}
+			if(pSettings->isLFE() && aoChannelMap->channel(e_LFE) >= 0)
+			{
+				m_outputChannelArray[aoChannelMap->channel(e_LFE)] = e_lfeChannelIndex;
 			}
 		}
 		else

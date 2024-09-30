@@ -18,6 +18,7 @@ if (OMEGA_WIN32)
 		inc/AudioHardwareBufferWasAPI.h
 		inc/AudioInfo.h
 		inc/AudioIODLL.h
+		inc/AudioSettings.h
 		inc/FormatDescription.h
 		inc/FormatDescriptionUtils.h
 		inc/FormatsSupported.h
@@ -41,6 +42,7 @@ if (OMEGA_WIN32)
 		src/AudioHardwareBufferASIO.cxx
 		src/AudioHardwareBufferWasAPI.cxx
 		src/AudioInfo.cxx
+		src/AudioSettings.cxx
 		src/FormatDescription.cxx
 		src/FormatDescriptionUtils.cxx
 		src/FormatsSupported.cxx
@@ -63,6 +65,7 @@ elseif (OMEGA_MACOSX)
 		inc/AOQueryDevice.h
 		inc/AOQueryCoreAudio.h
 		inc/AudioHardwareBufferCoreAudio.h
+		inc/AudioSettings.h
 		inc/CoreAudioIF.h
 		inc/CoreAudioLayerIF.h
 		inc/FormatDescription.h
@@ -79,6 +82,7 @@ elseif (OMEGA_MACOSX)
 		src/AOCoreAudioMacOS.mm
 		src/AudioHardwareBufferCoreAudio.cxx
 		src/AudioInfo.cxx
+		src/AudioSettings.cxx
 		src/AOQueryDevice.cxx
 		src/AOQueryCoreAudio.mm
 		src/CoreAudioIF.cxx
@@ -101,6 +105,7 @@ elseif (OMEGA_LINUX)
 		inc/AOQueryALSA.h
 		inc/AOQueryDevice.h
 		inc/AudioHardwareBufferALSA.h
+		inc/AudioSettings.h
 		inc/FormatDescription.h
 		inc/FormatDescriptionUtils.h
 		inc/FormatsSupported.h
@@ -118,6 +123,7 @@ elseif (OMEGA_LINUX)
 		src/AOQueryDevice.cxx
 		src/AOQueryALSA.cxx
 		src/AudioHardwareBufferALSA.cxx
+		src/AudioSettings.cxx
 		src/FormatDescription.cxx
 		src/FormatDescriptionUtils.cxx
 		src/FormatsSupported.cxx

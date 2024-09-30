@@ -402,6 +402,9 @@ bool AData::isLFE() const
 
 void AData::mixChannels()
 {
+	if(!isMixing())
+		return;
+
 	if(m_noChannels==1)
 	{
 		switch(m_noOutChannels-1)

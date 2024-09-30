@@ -22,6 +22,7 @@
 #include "engine/inc/Codec.h"
 #include "engine/inc/Resample.h"
 #include "audioio/inc/AudioIODLL.h"
+#include "audioio/inc/AudioSettings.h"
 #include "audioio/inc/AOQueryDevice.h"
 #include "audioio/inc/IOTimeStamp.h"
 #include "audioio/inc/AbstractAudioHardwareBuffer.h"
@@ -736,7 +737,11 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual FormatDescription getSourceDescription(tint noChannels);
 
 		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
-		
+
+		virtual bool isChannelGenerated(tint inChannelIdx) const;
+		virtual bool isCenterChannelGenerated() const;
+		virtual bool isLFEChannelGenerated() const;
+
 		// Member variable setters and getters
 		virtual States getState() const;
 		virtual void setState(States s);
