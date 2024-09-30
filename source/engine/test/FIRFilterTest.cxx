@@ -551,12 +551,13 @@ void expectLFEDataThreeDataComplete(const sample_t *sampleA, const sample_t *sam
 			else if(idx >= noSamples && idx < (noSamples * 2))
 			{
 				idx -= noSamples;
-				sC = (sampleA[(idx * 2) + 0] + sampleA[(idx * 2) + 1]) / 2.0;
+				sC = (sampleB[(idx * 2) + 0] + sampleB[(idx * 2) + 1]) / 2.0;
 				fC += sC * filterCooefs[noCooefs - (j + 1)];
 			}
 			else if(idx >= (noSamples * 2) && idx < (noSamples * 3))
 			{
-				sC = (sampleA[(idx * 2) + 0] + sampleA[(idx * 2) + 1]) / 2.0;
+				idx -= noSamples * 2;
+				sC = (sampleC[(idx * 2) + 0] + sampleC[(idx * 2) + 1]) / 2.0;
 				fC += sC * filterCooefs[noCooefs - (j + 1)];
 			}
 		}
@@ -569,7 +570,7 @@ void expectLFEDataThreeDataComplete(const sample_t *sampleA, const sample_t *sam
 void testActualLFEToExpectedFIRFilter(RData& data, const sample_t *expect, tint filterIndex, tint noSamples)
 {
 	const tfloat64 c_tolerance = 0.0000001;
-	tint i, idx;
+	tint i;
 
 	sample_t *actual = data.filterData(filterIndex);
 	ASSERT_TRUE(actual != NULL);	
@@ -604,7 +605,7 @@ TEST(FIRFilter,filterLFENoOffsetThreeData)
     const sample_t *sampleC = testSampleFIRFilterC();
     sample_t expect[c_noOfTestSamples * 3];
 
-    expectDataThreeDataComplete(sampleA, sampleB, sampleC, c_noOfTestSamples, c_offset, c_filterCooefs, c_noCooefs, expect);
+	expectLFEDataThreeDataComplete(sampleA, sampleB, sampleC, c_noOfTestSamples, c_offset, c_filterCooefs, c_noCooefs, expect);
 	
 	RData dataA(20, c_noChannels, c_noChannels);
     RData::Part& partA = dataA.nextPart();
@@ -645,36 +646,37 @@ TEST(FIRFilter,filterLFEOffsetThreeData)
 	const tint c_noCooefs = 6;
 	const tint c_offset = 4;
 	const tint c_filterIndex = 0;
-	
-    const sample_t c_filterCooefs[c_noCooefs] = {-0.19062389, -0.16668996,  0.61590277,  0.61590277, -0.16668996, -0.19062389};
-	
-    const sample_t *sampleA = testSampleFIRFilterA();
-    const sample_t *sampleB = testSampleFIRFilterB();
-    const sample_t *sampleC = testSampleFIRFilterC();
-    sample_t expect[c_noOfTestSamples * 3];
 
-    expectDataThreeDataComplete(sampleA, sampleB, sampleC, c_noOfTestSamples, c_offset, c_filterCooefs, c_noCooefs, expect);
-	
+	const sample_t c_filterCooefs[c_noCooefs] = { -0.19062389, -0.16668996,  0.61590277,  0.61590277, -0.16668996, -0.19062389 };
+
+	const sample_t* sampleA = testSampleFIRFilterA();
+	const sample_t* sampleB = testSampleFIRFilterB();
+	const sample_t* sampleC = testSampleFIRFilterC();
+	sample_t expect[c_noOfTestSamples * 3];
+
+	expectLFEDataThreeDataComplete(sampleA, sampleB, sampleC, c_noOfTestSamples, c_offset, c_filterCooefs, c_noCooefs, expect);
+
 	RData dataA(20, c_noChannels, c_noChannels);
-    RData::Part& partA = dataA.nextPart();
-    memcpy(dataA.partData(0), sampleA, sizeof(sample_t) * c_noOfTestSamples * c_noChannels);
+	RData::Part& partA = dataA.nextPart();
+	memcpy(dataA.partData(0), sampleA, sizeof(sample_t) * c_noOfTestSamples * c_noChannels);
 	partA.length() = c_noOfTestSamples;
 	partA.done() = true;
 
 	RData dataB(20, c_noChannels, c_noChannels);
-    RData::Part& partB = dataB.nextPart();
-    memcpy(dataB.partData(0), sampleB, sizeof(sample_t) * c_noOfTestSamples * c_noChannels);
+	RData::Part& partB = dataB.nextPart();
+	memcpy(dataB.partData(0), sampleB, sizeof(sample_t) * c_noOfTestSamples * c_noChannels);
 	partB.length() = c_noOfTestSamples;
 	partB.done() = true;
-	
+
 	RData dataC(20, c_noChannels, c_noChannels);
-    RData::Part& partC = dataC.nextPart();
-    memcpy(dataC.partData(0), sampleC, sizeof(sample_t) * c_noOfTestSamples * c_noChannels);
+	RData::Part& partC = dataC.nextPart();
+	memcpy(dataC.partData(0), sampleC, sizeof(sample_t) * c_noOfTestSamples * c_noChannels);
 	partC.length() = c_noOfTestSamples;
 	partC.done() = true;
 
 	FIRFilter filterLFE(c_filterCooefs, c_noCooefs);
-		
+	filterLFE.setOffset(c_offset);
+
 	filterLFE.process(&dataA, e_lfeChannelIndex, false, false);
 	filterLFE.process(&dataB, e_lfeChannelIndex, false, false);
 	filterLFE.process(&dataC, e_lfeChannelIndex, true, false);

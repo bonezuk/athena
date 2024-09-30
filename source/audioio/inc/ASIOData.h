@@ -54,6 +54,7 @@ class AUDIOIO_EXPORT ASIOData : public engine::RData
 		
 		virtual void asioAllocate();
 		virtual const void *asioDataI(tint chIdx,tint pIdx) const;
+		virtual void *asioDataChannelIndex(tint chIdx);
 		
 		virtual tint copyToBuffer(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type);
 		virtual tint copyToBufferR(const sample_t *src,tint len,tint oOffset,tint chIndex,engine::CodecDataType type, bool recursive);

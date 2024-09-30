@@ -2,6 +2,7 @@
 
 #include "audioio/inc/ASIOData.h"
 #include "engine/inc/FormatTypeFromFloat.h"
+#include "engine/inc/FIRFilter.h"
 
 using namespace omega;
 using namespace audioio;
@@ -5540,14 +5541,14 @@ void expectCentreLFEData(const sample_t *sample, tint noSamples, tint offset, co
 		}
 		sC = (sample[(i * 2) + 0] + sample[(i * 2) + 1]) / 2.0;
 		if(sC < -1.0)
-			sC = -1.0
+			sC = -1.0;
 		else if(sC > 1.0)
-			sC = 1.0
+			sC = 1.0;
 		expect[(i * 2) + 0] = sC;
 		if(fC < -1.0)
-			fC = -1.0
+			fC = -1.0;
 		else if(fC > 1.0)
-			fC = 1.0
+			fC = 1.0;
 		expect[(i * 2) + 1] = fC;
 	}
 }
@@ -5579,7 +5580,7 @@ TEST(ASIOData,sampleTo24BitIn32BitForCentreAndLFEWithNoOffset)
 	sample_t expectCLFE[c_noOfTestSamples * c_noChannels];
 	expectCentreLFEData(c_sampleInput, c_noOfTestSamples, c_offset, c_filterCooefs, c_noCooefs, expectCLFE);
 	
-	ASIOData expectData(5, 2, 2);
+	ASIOData expectData(c_noOfTestSamples, 2, 2);
 	expectData.setSampleType(ASIOSTInt32LSB24);
 	engine::RData::Part& partE = expectData.nextPart();
 	memcpy(expectData.partDataOut(0), expectCLFE, c_noOfTestSamples * c_noChannels * sizeof(sample_t));
@@ -5588,25 +5589,27 @@ TEST(ASIOData,sampleTo24BitIn32BitForCentreAndLFEWithNoOffset)
 	expectData.convert();
 	
 	ASIOData data(c_noOfTestSamples, 2, 2);
-	
+	data.setSampleType(ASIOSTInt32LSB24);
+
 	engine::RData::Part& part = data.nextPart();
 	memcpy(data.partData(0), c_sampleInput, c_noOfTestSamples * c_noChannels * sizeof(sample_t));
 	part.length() = c_noOfTestSamples;
 	part.done() = true;
 
-	ASSERT_TRUE(data.partDataCenter() != NULL);
+	ASSERT_TRUE(data.partDataCenter(0) != NULL);
 	
-	FIRFilter filterLFE(c_filterCooefs, c_noCooefs);
-		
-	filterLFE.process(&data, e_lfeChannelIndex, true);
+	engine::FIRFilter filterLFE(c_filterCooefs, c_noCooefs);
+	filterLFE.setOffset(c_offset);
+
+	filterLFE.process(&data, engine::e_lfeChannelIndex, true);
 	
 	data.convert();
 	
-	const sample_t *outC = data.asioDataConst(e_centerChannelIndex);
-	const sample_t *expectC = expectData.asioDataConst(0);
+	const tbyte *outC = reinterpret_cast<const tbyte *>(data.asioDataConst(engine::e_centerChannelIndex, 0));
+	const tbyte *expectC = reinterpret_cast<const tbyte*>(expectData.asioDataConst(0, 0));
 	
-	const sample_t *outLFE = data.asioDataConst(e_lfeChannelIndex);
-	const sample_t *expectLFE = expectData.asioDataConst(0);
+	const tbyte *outLFE = reinterpret_cast<const tbyte*>(data.asioDataConst(engine::e_lfeChannelIndex, 0));
+	const tbyte *expectLFE = reinterpret_cast<const tbyte*>(expectData.asioDataConst(1, 0));
 	
 	EXPECT_EQ(memcmp(outC, expectC, c_noOfTestSamples * 4), 0);
 	EXPECT_EQ(memcmp(outLFE, expectLFE, c_noOfTestSamples * 4), 0);

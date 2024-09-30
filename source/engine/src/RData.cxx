@@ -541,11 +541,11 @@ sample_t *RData::center()
 	{
 		for(tint partIdx = 0; partIdx < noParts(); partIdx++)
 		{
-			int idx, ch;
+			int idx;
 			const sample_t *d = partDataConst(partIdx);
 			Part& p = part(partIdx);
-			sample_t *o = partDataCenter(partIdx);
-			
+			sample_t* o = &m_centreData[p.offsetConst()];
+				
 			if(p.getDataType() == e_SampleInt16)
 			{
                 const tint16 *in = reinterpret_cast<const tint16 *>(d);
