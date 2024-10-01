@@ -26,6 +26,8 @@
 #include "audioio/inc/AOQueryDevice.h"
 #include "audioio/inc/IOTimeStamp.h"
 #include "audioio/inc/AbstractAudioHardwareBuffer.h"
+#include "engine/inc/RemezFIR.h"
+#include "engine/inc/FIRFilter.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -498,6 +500,9 @@ class AUDIOIO_EXPORT AOBase : public QObject
 
 		// Debug hack to set the number of bits per sample on output DAC.
 		tint m_forceBitsPerSample;
+		
+		// Low band pass FIR Filter for generation of LFE channel
+        engine::FIRFilter *m_lfeFilter;
 
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		
@@ -741,6 +746,8 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual bool isChannelGenerated(tint inChannelIdx) const;
 		virtual bool isCenterChannelGenerated() const;
 		virtual bool isLFEChannelGenerated() const;
+		
+		virtual engine::FIRFilter *createLFEBandPassFilter();
 
 		// Member variable setters and getters
 		virtual States getState() const;

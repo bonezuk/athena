@@ -23,7 +23,7 @@ AudioSettings::~AudioSettings()
 
 QSharedPointer<AudioSettings> AudioSettings::instance(const QString& devName)
 {
-	QSharedPointer<AudioSettings>::iterator ppI;
+    QMap<QString, QSharedPointer<AudioSettings> >::iterator ppI;
 	QSharedPointer<AudioSettings> pSettings;
 	
 	ppI = m_instances.find(devName);
@@ -52,6 +52,7 @@ const QString& AudioSettings::deviceName() const
 QString AudioSettings::groupName() const
 {
 	QString name = "audio" + m_devName;
+    return name;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -63,9 +64,10 @@ bool AudioSettings::isCenter() const
 	settings.beginGroup(groupName());
 	if(settings.contains("is_center"))
 	{
-		res = settings.value("is_center", QVariant(true)).toBool();
+        flag = settings.value("is_center", QVariant(true)).toBool();
 	}
 	settings.endGroup();
+    return flag;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -87,9 +89,10 @@ bool AudioSettings::isLFE() const
 	settings.beginGroup(groupName());
 	if(settings.contains("is_lfe"))
 	{
-		res = settings.value("is_lfe", QVariant(true)).toBool();
+        flag = settings.value("is_lfe", QVariant(true)).toBool();
 	}
 	settings.endGroup();
+    return flag;
 }
 
 //-------------------------------------------------------------------------------------------

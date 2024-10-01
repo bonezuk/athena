@@ -5145,6 +5145,13 @@ void AOBase::resetResampler(int iFreq,int oFreq)
 
 //-------------------------------------------------------------------------------------------
 
+engine::FIRFilter *AOBase::createLFEBandPassFilter()
+{
+	return 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool AOBase::decodeAndResample(engine::Codec *c,AudioItem *outputItem,bool& initF)
 {
 	tint i,j,k,idx;
@@ -5321,7 +5328,7 @@ bool AOBase::decodeAndResample(engine::Codec *c,AudioItem *outputItem,bool& init
 	}
 	if(isCenterChannelGenerated())
 	{
-		oData->center();
+        dData.center();
 	}
 	if(isLFEChannelGenerated())
 	{
@@ -5476,14 +5483,14 @@ bool AOBase::isChannelGenerated(tint inChannelIdx) const
 
 bool AOBase::isCenterChannelGenerated() const
 {
-	return isChannelGenerated(e_centerChannelIndex);
+    return isChannelGenerated(engine::e_centerChannelIndex);
 }
 
 //-------------------------------------------------------------------------------------------
 
 bool AOBase::isLFEChannelGenerated() const
 {
-	return isChannelGenerated(e_lfeChannelIndex);
+    return isChannelGenerated(engine::e_lfeChannelIndex);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -5571,11 +5578,11 @@ void AOBase::buildChannelMapArray()
 			}
 			if(pSettings->isCenter() && aoChannelMap->channel(e_Center) >= 0)
 			{
-				m_outputChannelArray[aoChannelMap->channel(e_Center)] = e_centerChannelIndex;
+                m_outputChannelArray[aoChannelMap->channel(e_Center)] = engine::e_centerChannelIndex;
 			}
 			if(pSettings->isLFE() && aoChannelMap->channel(e_LFE) >= 0)
 			{
-				m_outputChannelArray[aoChannelMap->channel(e_LFE)] = e_lfeChannelIndex;
+                m_outputChannelArray[aoChannelMap->channel(e_LFE)] = engine::e_lfeChannelIndex;
 			}
 		}
 		else
