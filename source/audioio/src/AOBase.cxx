@@ -4232,6 +4232,8 @@ void AOBase::logAudioEvent(const tchar *strR,AudioEvent *audioE)
 			typeStr = "e_audioDeviceChangeEvent"; break;
 		case AudioEvent::e_setExclusive:
 			typeStr = "e_setExclusive"; break;
+        case AudioEvent::e_resetPlaybackEvent:
+            typeStr = "e_resetPlaybackEvent"; break;
 	}
 	common::Log::g_Log.print("AOBase::%s : AudioEvent - %s, %s, %.8f, %.8f\n",strR,typeStr.toUtf8().constData(),audioE->uri().toUtf8().constData(),static_cast<tfloat64>(audioE->time()),static_cast<tfloat64>(audioE->timeLength()));
 }
@@ -4475,6 +4477,9 @@ void AOBase::audioEventStopState(AudioEvent *e)
 		case AudioEvent::e_setExclusive:
 			doSetExclusiveMode(e->device(),e->exclusive());
 			break;
+		
+		case AudioEvent::e_resetPlaybackEvent:
+			break;
 	}
 }
 
@@ -4553,6 +4558,10 @@ void AOBase::audioEventPlayState(AudioEvent *e)
 				resetPlayback();
 			}
 			break;
+			
+		case AudioEvent::e_resetPlaybackEvent:
+			resetPlayback();
+			break;
 	}
 }
 
@@ -4626,6 +4635,10 @@ void AOBase::audioEventPauseState(AudioEvent *e)
 			
 		case AudioEvent::e_setExclusive:
 			doSetExclusiveMode(e->device(),e->exclusive());
+			break;
+
+		case AudioEvent::e_resetPlaybackEvent:
+			resetPlayback();
 			break;
 	}
 }
@@ -4705,6 +4718,10 @@ void AOBase::audioEventNoCodecState(AudioEvent *e)
 				resetPlayback();
 			}
 			break;
+			
+		case AudioEvent::e_resetPlaybackEvent:
+			resetPlayback();
+			break;
 	}
 }
 
@@ -4778,6 +4795,9 @@ void AOBase::audioEventPreBufferState(AudioEvent *e)
 		
 		case AudioEvent::e_setExclusive:
 			doSetExclusiveMode(e->device(),e->exclusive());
+			break;
+			
+		case AudioEvent::e_resetPlaybackEvent:
 			break;
 	}
 }
@@ -4856,6 +4876,10 @@ void AOBase::audioEventCrossFadeState(AudioEvent *e)
 			{
 				resetPlayback();
 			}
+			break;
+			
+		case AudioEvent::e_resetPlaybackEvent:
+			resetPlayback();
 			break;
 	}
 }
@@ -4985,6 +5009,17 @@ void AOBase::stop()
 	AudioEvent *e = new AudioEvent(AudioEvent::e_stopPlaybackEvent);
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
 	common::Log::g_Log.print("AOBase::stop\n");
+#endif
+	postAudioEvent(e);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBase::resetPlay()
+{
+	AudioEvent *e = new AudioEvent(AudioEvent::e_resetPlaybackEvent);
+#if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
+	common::Log::g_Log.print("AOBase::reset\n");
 #endif
 	postAudioEvent(e);
 }

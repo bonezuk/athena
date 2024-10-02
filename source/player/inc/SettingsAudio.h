@@ -79,6 +79,9 @@ class SettingsAudio : public SettingsBase
 		void setupChannelMap(int fl,int fr,int c,int lfe,int sl,int sr,int rl,int rr);
 		
 		void setAudioMap();
+
+		void updateUseCenter();
+		void updateUseLFE();
 	
 	protected slots:
 	
@@ -107,6 +110,8 @@ class SettingsAudio : public SettingsBase
 		void onTestFull();
 		
 		void onCheckExclusive(bool checked);
+		void onCheckUseCenter(bool checked);
+		void onCheckUseLFE(bool checked);
 };
 
 //-------------------------------------------------------------------------------------------

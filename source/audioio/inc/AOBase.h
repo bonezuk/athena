@@ -195,6 +195,7 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual void play();
 		virtual void pause();
 		virtual void stop();
+		virtual void resetPlay();
 		
 		virtual void seek(const common::TimeStamp& t);
 		
@@ -1021,7 +1022,8 @@ class AudioEvent : public QEvent
 			e_nextCrossPlaybackEvent,
 			e_crossFadeEvent,
 			e_audioDeviceChangeEvent,
-			e_setExclusive
+			e_setExclusive,
+			e_resetPlaybackEvent
 		} AudioEventType;
 		
 	public:

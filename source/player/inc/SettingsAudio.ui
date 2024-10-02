@@ -399,10 +399,79 @@ Right</string>
      <x>11</x>
      <y>8</y>
      <width>659</width>
-     <height>114</height>
+     <height>128</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <widget class="QComboBox" name="m_audioDeviceCombo"/>
+    </item>
+    <item row="0" column="2">
+     <widget class="QCheckBox" name="m_exclusiveFlag">
+      <property name="toolTip">
+       <string>Use HAL Integer Mode with exclusive access to sound device</string>
+      </property>
+      <property name="text">
+       <string>Exclusive Mode</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="m_stereoLabel">
+      <property name="text">
+       <string>Stereo Configuration</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QComboBox" name="m_stereoCombo">
+      <item>
+       <property name="text">
+        <string>Front</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Surround</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Rear</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Front + Surround</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Front + Rear</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Surround + Rear</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Front + Surround + Rear</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QCheckBox" name="m_useSubwoofer">
+      <property name="text">
+       <string>Stereo Subwoofer</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="1">
      <widget class="QComboBox" name="m_speakerCombo">
       <item>
@@ -457,48 +526,6 @@ Right</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="m_audioDeviceCombo"/>
-    </item>
-    <item row="2" column="1">
-     <widget class="QComboBox" name="m_stereoCombo">
-      <item>
-       <property name="text">
-        <string>Front</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Surround</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Rear</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Front + Surround</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Front + Rear</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Surround + Rear</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Front + Surround + Rear</string>
-       </property>
-      </item>
-     </widget>
-    </item>
     <item row="1" column="0">
      <widget class="QLabel" name="m_speakerLabel">
       <property name="text">
@@ -510,42 +537,9 @@ Right</string>
      </widget>
     </item>
     <item row="1" column="2">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>5</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="2">
-     <widget class="QCheckBox" name="m_exclusiveFlag">
-      <property name="toolTip">
-       <string>Use HAL Integer Mode with exclusive access to sound device</string>
-      </property>
+     <widget class="QCheckBox" name="m_useCenter">
       <property name="text">
-       <string>Exclusive Mode</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="m_stereoLabel">
-      <property name="text">
-       <string>Stereo Configuration</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QCheckBox" name="m_useCenterMixing">
-      <property name="text">
-       <string>Use Center Speaker</string>
+       <string>Stereo Center</string>
       </property>
      </widget>
     </item>

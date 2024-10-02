@@ -64,6 +64,9 @@ void SettingsAudio::init()
 	QObject::connect(m_personButton,SIGNAL(clicked()),this,SLOT(onTestFull()));
 
     QObject::connect(ui.m_exclusiveFlag,SIGNAL(toggled(bool)),this,SLOT(onCheckExclusive(bool)));
+	QObject::connect(ui.m_useCenter,SIGNAL(toggled(bool)),this,SLOT(onCheckUseCenter(bool)));
+	QObject::connect(ui.m_useSubwoofer,SIGNAL(toggled(bool)),this,SLOT(onCheckUseLFE(bool)));
+    
     QObject::connect(m_audio.data(), SIGNAL(onDeviceUpdated(int)), this, SLOT(onDeviceUpdate(int)));
 
 #if defined(OMEGA_WIN32)
@@ -154,6 +157,9 @@ void SettingsAudio::onDeviceChange(int idx)
 		ui.m_speakerCombo->setCurrentIndex(noChs - 1);
 		ui.m_speakerCombo->blockSignals(false);
 		doSpeakerConfiguration(noChs - 1,false);
+		
+		updateUseCenter();
+		updateUseLFE();
 	}
 }
 
@@ -1095,6 +1101,86 @@ QString SettingsAudio::nextSpeakerFile()
 void SettingsAudio::onCheckExclusive(bool checked)
 {
 	m_audio->setExclusiveMode(m_deviceIdx,checked);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SettingsAudio::updateUseCenter()
+{
+	tint noChannels;
+	bool isEnabled;
+	
+	ui.m_useCenter->blockSignals(true);
+	noChannels = m_device->noChannels();
+	isEnabled = (noChannels == 3 || noChannels >= 5) ? true : false;
+	if(isEnabled)
+	{
+		QSharedPointer<audioio::AudioSettings> pASettings = audioio::AudioSettings::instance(m_device->name());
+		if(pASettings->isCenter())
+		{
+			ui.m_useCenter->setCheckState(Qt::Checked);
+		}
+		else
+		{
+			ui.m_useCenter->setCheckState(Qt::Unchecked);
+		}
+		ui.m_useCenter->setEnabled(true);
+	}
+	else
+	{
+		ui.m_useCenter->setEnabled(false);
+		ui.m_useCenter->setCheckState(Qt::Unchecked);
+	}
+	ui.m_useCenter->blockSignals(false);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SettingsAudio::updateUseLFE()
+{
+	tint noChannels;
+	bool isEnabled;
+	
+	ui.m_useSubwoofer->blockSignals(true);
+	noChannels = m_device->noChannels();
+	isEnabled = (noChannels == 6 || noChannels == 8) ? true : false;
+	if(isEnabled)
+	{
+		QSharedPointer<audioio::AudioSettings> pASettings = audioio::AudioSettings::instance(m_device->name());
+		if(pASettings->isLFE())
+		{
+			ui.m_useSubwoofer->setCheckState(Qt::Checked);
+		}
+		else
+		{
+			ui.m_useSubwoofer->setCheckState(Qt::Unchecked);
+		}
+		ui.m_useSubwoofer->setEnabled(true);
+	}
+	else
+	{
+		ui.m_useSubwoofer->setEnabled(false);
+		ui.m_useSubwoofer->setCheckState(Qt::Unchecked);
+	}
+	ui.m_useSubwoofer->blockSignals(false);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SettingsAudio::onCheckUseCenter(bool checked)
+{
+	QSharedPointer<audioio::AudioSettings> pASettings = audioio::AudioSettings::instance(m_device->name());
+	pASettings->setCenter(checked);
+	m_audio->resetPlay();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void SettingsAudio::onCheckUseLFE(bool checked)
+{
+	QSharedPointer<audioio::AudioSettings> pASettings = audioio::AudioSettings::instance(m_device->name());
+	pASettings->setLFE(checked);
+	m_audio->resetPlay();
 }
 
 //-------------------------------------------------------------------------------------------
