@@ -1869,11 +1869,34 @@ void AOCoreAudioMacOS::writeToAudioOutputBufferFromPartData(AbstractAudioHardwar
 {
 	const sample_t *input = data->partDataOutConst(partNumber);
 
-	tint noInputChannels = data->noOutChannels();
+	engine::CodecDataType dType;
+	tint noInputChannels;
 	tint noOutputChannels = pBuffer->numberOfChannelsInBuffer(bufferIndex);
 
-	tint iIdx = (inputSampleIndex * noInputChannels) + inChannelIndex;
+	tint iIdx;
 	tint oIdx = (outputSampleIndex * noOutputChannels) + outChannelIndex;
+	
+	if(inChannelIndex >= 0)
+	{
+		input = data->partDataOutConst(partNumber);
+		noInputChannels = data->noOutChannels();
+		iIdx = (inputSampleIndex * noInputChannels) + inChannelIndex;
+		dType = data->partGetDataType(partNumber);
+	}
+	else
+	{
+		if(inChannelIndex == engine::e_lfeChannelIndex)
+		{
+			input = data->partFilterDataConst(partNumber, engine::e_lfeChannelIndex);
+		}
+		else
+		{
+			input = data->partDataCenterConst(partNumber);
+		}
+		iIdx = inputSampleIndex;
+		noInputChannels = 1;
+		dType = engine::e_SampleFloat;
+	}
 	
 	if(m_isIntegerMode)
 	{
@@ -1890,40 +1913,138 @@ void AOCoreAudioMacOS::writeToAudioOutputBufferFromPartData(AbstractAudioHardwar
 		{
 			m_pSampleConverter->setVolume(m_volume);
 		}
-		
-		
-		m_pSampleConverter->convertAtIndex(input,iIdx,out,amount,data->partConst(partNumber).getDataType());
+		m_pSampleConverter->convertAtIndex(input,iIdx,out,amount,dType);
 	}
 	else
 	{	
 		tfloat32 *out = reinterpret_cast<tfloat32 *>(pBuffer->buffer(bufferIndex));
 		tint tAmount = oIdx + (amount * noOutputChannels);
-		
-		if(m_isDeviceVolume)
+
+		if(dType == engine::e_SampleInt16)
 		{
-			while(oIdx < tAmount)
-			{
-#if defined(SINGLE_FLOAT_SAMPLE)
-				out[oIdx] = input[iIdx];
-#else
-				out[oIdx] = engine::sampleToFloat32(input[iIdx]);
-#endif
-				iIdx += noInputChannels;
-				oIdx += noOutputChannels;
-			}
+			writeToAudioFromInt16(input, iIdx, out, oIdx, tAmount, noInputChannels, noOutputChannels);
+		}
+		else if(dType == engine::e_SampleInt24)
+		{
+			writeToAudioFromInt24(input, iIdx, out, oIdx, tAmount, noInputChannels, noOutputChannels);
+		}
+		else if(dType == engine::e_SampleInt32)
+		{
+			writeToAudioFromInt32(input, iIdx, out, oIdx, tAmount, noInputChannels, noOutputChannels);
 		}
 		else
 		{
-			while(oIdx < tAmount)
-			{
+			writeToAudioFromFloat(input, iIdx, out, oIdx, tAmount, noInputChannels, noOutputChannels);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOCoreAudioMacOS::writeToAudioFromFloat(const sample_t *input, tint iIdx, tfloat32 *output, tint oIdx, tint tAmount, tint noInputChannels, tint noOutputChannels)
+{
+	if(m_isDeviceVolume)
+	{
+		while(oIdx < tAmount)
+		{
 #if defined(SINGLE_FLOAT_SAMPLE)
-				out[oIdx] = input[iIdx] * m_volume;
+			output[oIdx] = input[iIdx];
 #else
-				out[oIdx] = engine::sampleToFloat32(input[iIdx] * m_volume);
+			output[oIdx] = engine::sampleToFloat32(input[iIdx]);
 #endif
-				iIdx += noInputChannels;
-				oIdx += noOutputChannels;
-			}
+			iIdx += noInputChannels;
+			oIdx += noOutputChannels;
+		}
+	}
+	else
+	{
+		while(oIdx < tAmount)
+		{
+#if defined(SINGLE_FLOAT_SAMPLE)
+			output[oIdx] = input[iIdx] * m_volume;
+#else
+			output[oIdx] = engine::sampleToFloat32(input[iIdx] * m_volume);
+#endif
+			iIdx += noInputChannels;
+			oIdx += noOutputChannels;
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOCoreAudioMacOS::writeToAudioFromInt16(const sample_t *in, tint iIdx, tfloat32 *output, tint oIdx, tint tAmount, tint noInputChannels, tint noOutputChannels)
+{
+	const tint16 *input = reinterpret_cast<const tint16 *>(in);
+
+	if(m_isDeviceVolume)
+	{
+		while(oIdx < tAmount)
+		{
+			output[oIdx] = engine::sample32From16Bit(input[iIdx]);
+			iIdx += noInputChannels;
+			oIdx += noOutputChannels;
+		}
+	}
+	else
+	{
+		while(oIdx < tAmount)
+		{
+			output[oIdx] = engine::sample32From16Bit(input[iIdx]) * static_cast<tfloat32>(m_volume);
+			iIdx += noInputChannels;
+			oIdx += noOutputChannels;
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOCoreAudioMacOS::writeToAudioFromInt24(const sample_t *in, tint iIdx, tfloat32 *output, tint oIdx, tint tAmount, tint noInputChannels, tint noOutputChannels)
+{
+	const tint32 *input = reinterpret_cast<const tint32 *>(in);
+
+	if(m_isDeviceVolume)
+	{
+		while(oIdx < tAmount)
+		{
+			output[oIdx] = engine::sample32From24Bit(input[iIdx]);
+			iIdx += noInputChannels;
+			oIdx += noOutputChannels;
+		}
+	}
+	else
+	{
+		while(oIdx < tAmount)
+		{
+			output[oIdx] = engine::sample32From24Bit(input[iIdx]) * static_cast<tfloat32>(m_volume);
+			iIdx += noInputChannels;
+			oIdx += noOutputChannels;
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOCoreAudioMacOS::writeToAudioFromInt32(const sample_t *in, tint iIdx, tfloat32 *output, tint oIdx, tint tAmount, tint noInputChannels, tint noOutputChannels)
+{
+	const tint32 *input = reinterpret_cast<const tint32 *>(in);
+
+	if(m_isDeviceVolume)
+	{
+		while(oIdx < tAmount)
+		{
+			output[oIdx] = engine::sample32From32Bit(input[iIdx]);
+			iIdx += noInputChannels;
+			oIdx += noOutputChannels;
+		}
+	}
+	else
+	{
+		while(oIdx < tAmount)
+		{
+			output[oIdx] = engine::sample32From32Bit(input[iIdx]) * static_cast<tfloat32>(m_volume);
+			iIdx += noInputChannels;
+			oIdx += noOutputChannels;
 		}
 	}
 }

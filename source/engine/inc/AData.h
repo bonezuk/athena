@@ -74,6 +74,7 @@ class ENGINE_EXPORT AData
 		virtual void mixChannels();
 		
 		virtual sample_t *filterData(tint filterIdx);
+		virtual const sample_t *filterDataConst(tint filterIdx) const;
 		
 		virtual sample_t *center();
 		

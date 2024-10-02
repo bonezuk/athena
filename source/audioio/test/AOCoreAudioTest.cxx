@@ -84,8 +84,9 @@ void testWriteToAudioOutputBufferFromPartData(const sample_t *inputData,
 	memcpy(actualOutput,originalOutputBuffer,outputSize * noOutputChannels * sizeof(tfloat32));
 	
     RDataMock data;
-	EXPECT_CALL(data,partDataOutConst(2)).Times(1).WillOnce(Return(inputData));
+	EXPECT_CALL(data,partDataOutConst(2)).WillRepeatedly(Return(inputData));
 	EXPECT_CALL(data,noOutChannels()).Times(1).WillOnce(Return(noInputChannels));
+	EXPECT_CALL(data,partGetDataType(2)).WillRepeatedly(Return(engine::e_SampleFloat));
 	
 	AudioHardwareBufferMock buffer;
 	EXPECT_CALL(buffer,buffer(3)).Times(1).WillOnce(Return(actualOutput));

@@ -132,6 +132,11 @@ class AUDIOIO_EXPORT AOCoreAudioMacOS : public AOCoreAudio
                                                           tint outputSampleIndex,
                                                           tint amount);
 
+        virtual void writeToAudioFromFloat(const sample_t *input, tint iIdx, tfloat32 *output, tint oIdx, tint tAmount, tint noInputChannels, tint noOutputChannels);
+        virtual void writeToAudioFromInt16(const sample_t *in, tint iIdx, tfloat32 *output, tint oIdx, tint tAmount, tint noInputChannels, tint noOutputChannels);
+        virtual void writeToAudioFromInt24(const sample_t *in, tint iIdx, tfloat32 *output, tint oIdx, tint tAmount, tint noInputChannels, tint noOutputChannels);
+        virtual void writeToAudioFromInt32(const sample_t *in, tint iIdx, tfloat32 *output, tint oIdx, tint tAmount, tint noInputChannels, tint noOutputChannels);
+
         virtual pid_t getCurrentProcessID() const;
 		
 		virtual bool setupPropertyRunLoop();		

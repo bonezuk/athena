@@ -1189,22 +1189,43 @@ void AOWin32::writeToAudioOutputBufferFromPartDataWasAPI(AbstractAudioHardwareBu
                                                          tint outputSampleIndex,
                                                          tint amount)
 {
-	const sample_t *input = data->partDataOutConst(partNumber);
+	const sample_t *input;
 
-	tint noInputChannels = data->noOutChannels();
+	engine::CodecDataType dType;
+	tint noInputChannels;
 	tint noOutputChannels = pBuffer->numberOfChannelsInBuffer(bufferIndex);
-
-	tint iIdx = (inputSampleIndex * noInputChannels) + inChannelIndex;
+	tint iIdx;
 	tint oIdx = (outputSampleIndex * noOutputChannels) + outChannelIndex;
 
 	tbyte *out = reinterpret_cast<tbyte *>(pBuffer->buffer(bufferIndex));
 	out += oIdx * m_pSampleConverter->bytesPerSample();
 	
+	if(inChannelIndex >= 0)
+	{
+		input = data->partDataOutConst(partNumber);
+		noInputChannels = data->noOutChannels();
+		iIdx = (inputSampleIndex * noInputChannels) + inChannelIndex;
+		dType = data->partConst(partNumber).getDataType();
+	}
+	else
+	{
+		if(inChannelIndex == engine::e_lfeChannelIndex)
+		{
+			input = data->partFilterDataConst(partNumber, engine::e_lfeChannelIndex);
+		}
+		else
+		{
+			input = data->partDataCenterConst(partNumber);
+		}
+		iIdx = inputSampleIndex;
+		noInputChannels = 1;
+		dType = engine::e_SampleFloat;
+	}
 	m_pSampleConverter->setNumberOfInputChannels(noInputChannels);
 	m_pSampleConverter->setNumberOfOutputChannels(noOutputChannels);
 	m_pSampleConverter->setVolume(m_volume);
 	
-	m_pSampleConverter->convert(&input[iIdx],out,amount,data->partConst(partNumber).getDataType());
+	m_pSampleConverter->convertAtIndex(input,iIdx,out,amount,dType);
 }
 
 //-------------------------------------------------------------------------------------------

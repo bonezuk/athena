@@ -741,12 +741,12 @@ void AOLinuxALSA::writeToAudioOutputBufferFromPartData(AbstractAudioHardwareBuff
                                                         tint amount)
 
 {
-	const sample_t *input = data->partDataOutConst(partNumber);
+	const sample_t *input;
 	
-	tint noInputChannels = data->noOutChannels();
+	engine::CodecDataType dType;
+	tint noInputChannels;
 	tint noOutputChannels = pBuffer->numberOfChannelsInBuffer(bufferIndex);
-	
-	tint iIdx = (inputSampleIndex * noInputChannels) + inChannelIndex;
+	tint iIdx;
 	tint oIdx = (outputSampleIndex * noOutputChannels) + outChannelIndex;
 	
 	tbyte *out = reinterpret_cast<tbyte *>(pBuffer->buffer(bufferIndex));
@@ -756,11 +756,33 @@ void AOLinuxALSA::writeToAudioOutputBufferFromPartData(AbstractAudioHardwareBuff
 	common::Log::g_Log.print("AOLinuxALSA::writeToAudioOutputBufferFromPartData\n");
 #endif
 
+	if(inChannelIndex >= 0)
+	{
+		input = data->partDataOutConst(partNumber);
+		noInputChannels = data->noOutChannels();
+		iIdx = (inputSampleIndex * noInputChannels) + inChannelIndex;
+		dType = data->partConst(partNumber).getDataType();
+	}
+	else
+	{
+		if(inChannelIndex == engine::e_lfeChannelIndex)
+		{
+			input = data->partFilterDataConst(partNumber, engine::e_lfeChannelIndex);
+		}
+		else
+		{
+			input = data->partDataCenterConst(partNumber);
+		}
+		iIdx = inputSampleIndex;
+		noInputChannels = 1;
+		dType = engine::e_SampleFloat;
+	}
+
 	getSampleConverter()->setNumberOfInputChannels(noInputChannels);
 	getSampleConverter()->setNumberOfOutputChannels(noOutputChannels);
 	getSampleConverter()->setVolume(m_volume);
 	
-	getSampleConverter()->convertAtIndex(input,iIdx,out,amount,data->partConst(partNumber).getDataType());
+	getSampleConverter()->convertAtIndex(input,iIdx,out,amount,dType);
 }
 
 //-------------------------------------------------------------------------------------------

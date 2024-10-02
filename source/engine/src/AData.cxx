@@ -349,6 +349,23 @@ sample_t *AData::filterData(tint filterIdx)
 
 //-------------------------------------------------------------------------------------------
 
+const sample_t *AData::filterDataConst(tint filterIdx) const
+{
+	const sample_t *f;
+	QMap<tint, sample_t *>::const_iterator ppI = m_filterDataMap.find(filterIdx);
+	if(ppI != m_filterDataMap.end())
+	{
+		f = ppI.value();
+	}
+	else
+	{
+		f = 0;
+	}
+	return f;
+}
+
+//-------------------------------------------------------------------------------------------
+
 sample_t *AData::center()
 {
 	if(m_centreData == 0)

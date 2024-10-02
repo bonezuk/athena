@@ -685,7 +685,8 @@ AOBase::AOBase(QObject *parent) : QObject(parent),
 	m_eventQueueMutex(),
 	m_eventQueue(),
 	m_recursiveSlotList(),
-	m_forceBitsPerSample(-1)
+	m_forceBitsPerSample(-1),
+	m_lfeFilter()
 {
 	::memset(m_resample,0,sizeof(engine::Resample*) * 8);
 	::memset(m_rIn,0,sizeof(sample_t *) * 8);
@@ -1728,7 +1729,6 @@ bool AOBase::startAudio(const QString& url)
 			
 			m_state = e_statePlay;
 			
-
 			if(openAudio())
 			{
 				m_audioStartFlag = false;
@@ -5057,6 +5057,8 @@ bool AOBase::initResampler(int iFreq,int oFreq)
 	{
 		int i;
 		
+		m_lfeFilter = createLFEBandPassFilter(oFreq);
+		
 		m_resampleFlag = true;
 		m_resampleItem = new AudioItem(this,c_noSamplesPerAudioItem,m_noInChannels,m_noOutChannels);
 		m_resampleRatio = static_cast<tfloat64>(oFreq) / static_cast<tfloat64>(iFreq);
@@ -5145,9 +5147,9 @@ void AOBase::resetResampler(int iFreq,int oFreq)
 
 //-------------------------------------------------------------------------------------------
 
-engine::FIRFilter *AOBase::createLFEBandPassFilter()
+QSharedPointer<engine::FIRFilter> AOBase::createLFEBandPassFilter(int freq)
 {
-	return 0;
+    return engine::createFIRFilter200HzLowPass(freq);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -5332,7 +5334,7 @@ bool AOBase::decodeAndResample(engine::Codec *c,AudioItem *outputItem,bool& init
 	}
 	if(isLFEChannelGenerated())
 	{
-		
+        m_lfeFilter->process(reinterpret_cast<engine::RData *>(&dData), engine::e_lfeChannelIndex, false);
 	}
 	dData.mixChannels();
 	return res;
@@ -5490,7 +5492,7 @@ bool AOBase::isCenterChannelGenerated() const
 
 bool AOBase::isLFEChannelGenerated() const
 {
-    return isChannelGenerated(engine::e_lfeChannelIndex);
+    return (isChannelGenerated(engine::e_lfeChannelIndex) && !m_lfeFilter.isNull()) ? true : false;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -5582,7 +5584,11 @@ void AOBase::buildChannelMapArray()
 			}
 			if(pSettings->isLFE() && aoChannelMap->channel(e_LFE) >= 0)
 			{
-                m_outputChannelArray[aoChannelMap->channel(e_LFE)] = engine::e_lfeChannelIndex;
+				m_lfeFilter = createLFEBandPassFilter(m_codec->frequency());
+				if(!m_lfeFilter.isNull())
+				{
+					m_outputChannelArray[aoChannelMap->channel(e_LFE)] = engine::e_lfeChannelIndex;
+				}
 			}
 		}
 		else
@@ -6318,7 +6324,7 @@ void AOBase::writeToAudioOutputBuffer(AbstractAudioHardwareBuffer *pBuffer,
 		{
 			tint inChannelIndex = partBufferIndexForChannel(channelIdx);
 			
-			if(inChannelIndex >= 0)
+			if(inChannelIndex >= 0 || inChannelIndex == engine::e_centerChannelIndex || inChannelIndex == engine::e_lfeChannelIndex)
 			{
 				writeToAudioOutputBufferFromPartData(pBuffer,data,partNumber,inChannelIndex,
 					bufferIdx,packetInFrame,inputSampleIndex,outputSampleIndex,amount);

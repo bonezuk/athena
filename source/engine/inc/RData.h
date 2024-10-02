@@ -46,14 +46,18 @@ class ENGINE_EXPORT RData : public AData
 		virtual const sample_t *currentPartDataConst() const;
 		
 		virtual sample_t *partFilterData(tint i, tint filterIndex);
+		virtual const sample_t *partFilterDataConst(tint i, tint filterIndex) const;
 
 		virtual sample_t *partDataCenter(tint i);
+		virtual const sample_t *partDataCenterConst(tint i) const;
 
 		virtual void reset();
 		
 		virtual void clipToTime(const common::TimeStamp& clipT);
 		
 		virtual sample_t *center();
+		
+		virtual CodecDataType partGetDataType(tint i) const;
 		
 	protected:
 		

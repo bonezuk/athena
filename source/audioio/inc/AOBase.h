@@ -28,6 +28,7 @@
 #include "audioio/inc/AbstractAudioHardwareBuffer.h"
 #include "engine/inc/RemezFIR.h"
 #include "engine/inc/FIRFilter.h"
+#include "engine/inc/FIRFilter200HzLowPass.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -502,7 +503,7 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		tint m_forceBitsPerSample;
 		
 		// Low band pass FIR Filter for generation of LFE channel
-        engine::FIRFilter *m_lfeFilter;
+        QSharedPointer<engine::FIRFilter> m_lfeFilter;
 
 		virtual void printError(const tchar *strR,const tchar *strE) const;
 		
@@ -747,7 +748,7 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual bool isCenterChannelGenerated() const;
 		virtual bool isLFEChannelGenerated() const;
 		
-		virtual engine::FIRFilter *createLFEBandPassFilter();
+		virtual QSharedPointer<engine::FIRFilter> createLFEBandPassFilter(int frequency);
 
 		// Member variable setters and getters
 		virtual States getState() const;

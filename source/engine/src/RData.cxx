@@ -377,6 +377,13 @@ tint RData::rLength() const
 
 //-------------------------------------------------------------------------------------------
 
+CodecDataType RData::partGetDataType(tint i) const
+{
+	return m_parts.at(i).getDataType();
+}
+
+//-------------------------------------------------------------------------------------------
+
 sample_t *RData::partData(tint i)
 {
 	return &m_data[ m_parts.at(i).offsetConst() * m_noChannels ];
@@ -395,6 +402,20 @@ sample_t *RData::partDataCenter(tint i)
 {
 	sample_t *c = center();
 	return &c[m_parts.at(i).offsetConst()];
+}
+
+//-------------------------------------------------------------------------------------------
+
+const sample_t *RData::partDataCenterConst(tint i) const
+{
+	if(m_centreData != 0)
+	{
+		return &m_centreData[m_parts.at(i).offsetConst()];
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 //-------------------------------------------------------------------------------------------
@@ -430,6 +451,15 @@ const sample_t *RData::partDataOutConst(tint i) const
 sample_t *RData::partFilterData(tint i, tint filterIndex)
 {
 	sample_t *pFilterData = filterData(filterIndex);
+    tint noChs = (filterIndex >= 0) ? m_noChannels : 1;
+	return &pFilterData[ m_parts.at(i).offsetConst() * noChs ];
+}
+
+//-------------------------------------------------------------------------------------------
+
+const sample_t *RData::partFilterDataConst(tint i, tint filterIndex) const
+{
+	const sample_t *pFilterData = filterDataConst(filterIndex);
     tint noChs = (filterIndex >= 0) ? m_noChannels : 1;
 	return &pFilterData[ m_parts.at(i).offsetConst() * noChs ];
 }
