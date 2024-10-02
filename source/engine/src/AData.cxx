@@ -147,7 +147,7 @@ const common::TimeStamp& AData::endConst() const
 
 void AData::reset()
 {
-	int len = m_length * m_noChannels;
+	int len = m_length;
 	for(QMap<tint, sample_t *>::iterator ppI = m_filterDataMap.begin(); ppI != m_filterDataMap.end(); ppI++)
 	{
 		sample_t *filterData = ppI.value();
@@ -268,7 +268,7 @@ void AData::copy(const AData& rhs)
 	if(rhs.m_centreData != 0)
 	{
 		m_centreData = new sample_t [ outLen ];
-		::memcpy(m_centreData, rhs.m_centreData, sizeof(sample_t) * outLen);
+		::memcpy(m_centreData, rhs.m_centreData, sizeof(sample_t) * rhs.m_length);
 	}
 	m_isCenterValid = rhs.m_isCenterValid;
 	
@@ -277,7 +277,7 @@ void AData::copy(const AData& rhs)
 	{
 		sample_t *pA = ppI.value();
 		sample_t *pB = new sample_t [len];
-		::memcpy(pB, pA, sizeof(sample_t) * len);
+		::memcpy(pB, pA, sizeof(sample_t) * rhs.m_length);
 		m_filterDataMap.insert(ppI.key(), pB);
 	}
 

@@ -6254,7 +6254,7 @@ QSharedPointer<FIRFilter> createFIRFilter200HzLowPass(int frequency)
 			coeff = c_coeff200HzLP_44100Hz; noCoeffs = 351;
 			break;
 		case 48000:
-			coeff = c_coeff200HzLP_44100Hz; noCoeffs = 383;
+			coeff = c_coeff200HzLP_48000Hz; noCoeffs = 383;
 			break;
 		case 64000:
 			coeff = c_coeff200HzLP_64000Hz; noCoeffs = 509;
