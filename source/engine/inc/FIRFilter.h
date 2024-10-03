@@ -23,7 +23,9 @@ class ENGINE_EXPORT FIRFilter
 		
 		void process(RData *pData, tint channelIdx, bool isLast, bool clip = true);
 		void process(RData *pData, tint channelIdx, tint filterIdx, bool isLast, bool clip = true);
-	
+		
+		void reset();
+
 	private:
 	
 		sample_t *m_coefficients;

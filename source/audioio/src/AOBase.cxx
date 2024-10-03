@@ -1081,6 +1081,8 @@ void AOBase::freeCyclicBuffer()
 	}
 
 	m_noOfCyclicBufferItems = 0;
+
+	resetLFEChannel();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -3138,6 +3140,8 @@ bool AOBase::pausePlayback(bool shutdown,bool signalFlag)
 		{
 			emitOnPause();
 		}
+
+		resetLFEChannel();
 	}
 	return true;
 }
@@ -5528,6 +5532,16 @@ bool AOBase::isCenterChannelGenerated() const
 bool AOBase::isLFEChannelGenerated() const
 {
     return (isChannelGenerated(engine::e_lfeChannelIndex) && !m_lfeFilter.isNull()) ? true : false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBase::resetLFEChannel()
+{
+	if(!m_lfeFilter.isNull())
+	{
+		m_lfeFilter->reset();
+	}
 }
 
 //-------------------------------------------------------------------------------------------

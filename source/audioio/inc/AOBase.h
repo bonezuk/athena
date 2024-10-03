@@ -748,6 +748,7 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual bool isChannelGenerated(tint inChannelIdx) const;
 		virtual bool isCenterChannelGenerated() const;
 		virtual bool isLFEChannelGenerated() const;
+		virtual void resetLFEChannel();
 		
 		virtual QSharedPointer<engine::FIRFilter> createLFEBandPassFilter(int frequency);
 

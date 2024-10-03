@@ -6291,6 +6291,7 @@ QSharedPointer<FIRFilter> createFIRFilter200HzLowPass(int frequency)
 	if(coeff != 0 && noCoeffs > 0)
 	{
 		QSharedPointer<FIRFilter> filter(new FIRFilter(coeff, noCoeffs));
+		filter->setOffset(noCoeffs / 2);
 		return filter;
 	}
 	else
