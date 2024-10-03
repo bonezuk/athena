@@ -37,7 +37,7 @@ bool AOQueryASIO::queryNames()
 			ASIODriver *driver = asioService.driverPtr(i);
 			if(driver!=0)
 			{
-				AOQueryDevice::Device *dev = new AOQueryDevice::Device(AOQueryDevice::Device::e_deviceASIO);
+				AOQueryDevice::Device *dev = new DeviceASIO();
 				ASIODriverInfo dInfo;
 								
 				if(driver->ASIOInit(&dInfo)==ASE_OK)
@@ -119,6 +119,32 @@ bool AOQueryASIO::queryDevice(int idx)
 		}
 	}
 	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+// AOQueryASIO::DeviceASIO
+//-------------------------------------------------------------------------------------------
+
+AOQueryASIO::DeviceASIO::DeviceASIO() : AOQueryDevice::Device(AOQueryDevice::Device::e_deviceASIO)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+AOQueryASIO::DeviceASIO::DeviceASIO(const AOQueryDevice::Device& rhs) : AOQueryDevice::Device(rhs)
+{
+	Q_ASSERT(rhs.type() == AOQueryDevice::Device::e_deviceASIO);
+}
+
+//-------------------------------------------------------------------------------------------
+
+AOQueryASIO::DeviceASIO::~DeviceASIO()
+{}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOQueryASIO::DeviceASIO::isAPIExclusive() const
+{
+	return true;
 }
 
 //-------------------------------------------------------------------------------------------

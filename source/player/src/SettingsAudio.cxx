@@ -139,7 +139,7 @@ void SettingsAudio::onDeviceChange(int idx)
 		else
 		{
 			ui.m_exclusiveFlag->setEnabled(false);
-			ui.m_exclusiveFlag->setChecked(false);
+			ui.m_exclusiveFlag->setChecked(m_device->isAPIExclusive());
 			if(m_audio->isExclusive(idx))
 			{
 				m_audio->setExclusiveMode(idx,false);
@@ -372,6 +372,8 @@ void SettingsAudio::doSpeakerConfiguration(int idx,bool defaultFlag)
 			break;
 	}
 	updateStereoCombo();
+	updateUseCenter();
+	updateUseLFE();
 	if(defaultFlag)
 	{
 		setAudioMap();
@@ -1107,12 +1109,12 @@ void SettingsAudio::onCheckExclusive(bool checked)
 
 void SettingsAudio::updateUseCenter()
 {
-	tint noChannels;
+	tint noChannelsUsed;
 	bool isEnabled;
 	
 	ui.m_useCenter->blockSignals(true);
-	noChannels = m_device->noChannels();
-	isEnabled = (noChannels == 3 || noChannels >= 5) ? true : false;
+	noChannelsUsed = ui.m_speakerCombo->currentIndex() + 1;
+	isEnabled = (noChannelsUsed == 3 || noChannelsUsed >= 5) ? true : false;
 	if(isEnabled)
 	{
 		QSharedPointer<audioio::AudioSettings> pASettings = audioio::AudioSettings::instance(m_device->name());
@@ -1138,12 +1140,12 @@ void SettingsAudio::updateUseCenter()
 
 void SettingsAudio::updateUseLFE()
 {
-	tint noChannels;
+	tint noChannelsUsed;
 	bool isEnabled;
 	
 	ui.m_useSubwoofer->blockSignals(true);
-	noChannels = m_device->noChannels();
-	isEnabled = (noChannels == 6 || noChannels == 8) ? true : false;
+	noChannelsUsed = ui.m_speakerCombo->currentIndex() + 1;
+	isEnabled = (noChannelsUsed == 6 || noChannelsUsed == 8) ? true : false;
 	if(isEnabled)
 	{
 		QSharedPointer<audioio::AudioSettings> pASettings = audioio::AudioSettings::instance(m_device->name());

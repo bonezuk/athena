@@ -908,7 +908,7 @@ QSharedPointer<AOQueryDevice::Device> AOWin32::copyDeviceInformation(const AOQue
 	
 	if(iDevice.type()==AOQueryDevice::Device::e_deviceASIO)
 	{
-		QSharedPointer<AOQueryDevice::Device> nDevice(new AOQueryDevice::Device(iDevice));
+		QSharedPointer<AOQueryDevice::Device> nDevice(new AOQueryASIO::DeviceASIO(iDevice));
 		pDevice = nDevice;
 	}
 	else if(iDevice.type()==AOQueryDevice::Device::e_deviceWasAPI)

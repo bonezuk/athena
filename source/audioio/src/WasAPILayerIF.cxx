@@ -1231,7 +1231,7 @@ WAVEFORMATEX *WasAPIDeviceLayer::supportedWaveFormatFromDescription(const Format
 		}
 		else
 		{
-			type = (entry & WAVE_BASIC_24) ? WAVE_BASIC_24 : WAVE_EXT_32;
+			type = (entry & WAVE_EXT_32) ? WAVE_EXT_32 : WAVE_BASIC_24;
 		}
 	}
 	else if(desc.bits() == 28)

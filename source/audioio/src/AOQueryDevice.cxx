@@ -243,6 +243,13 @@ void AOQueryDevice::Device::setNoChannels(int noCh)
 
 //-------------------------------------------------------------------------------------------
 
+bool AOQueryDevice::Device::isAPIExclusive() const
+{
+	return false;
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool AOQueryDevice::Device::hasExclusive() const
 {
 	return m_hasExclusive;

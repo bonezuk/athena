@@ -109,8 +109,12 @@ class AUDIOIO_EXPORT AOQueryDevice::Device
 		virtual int noChannels() const;
 		virtual void setNoChannels(int noCh);
 		
+		// An audio device can be either a shared resource or exclusively used
 		virtual bool hasExclusive() const;
         virtual void setHasExclusive(bool flag);
+
+		// The API of an audio device is exclusive by its very nature (e.g. ASIO)
+		virtual bool isAPIExclusive() const;
 		
 		virtual void print() const;
 
