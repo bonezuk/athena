@@ -106,6 +106,31 @@ void AudioSettings::setLFE(bool isChannel)
 }
 
 //-------------------------------------------------------------------------------------------
+
+bool AudioSettings::isExclusive() const
+{
+    bool flag = false;
+	QSettings settings;
+	settings.beginGroup(groupName());
+	if(settings.contains("exclusive"))
+	{
+        flag = settings.value("exclusive", QVariant(false)).toBool();
+	}
+	settings.endGroup();
+    return flag;	
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AudioSettings::setExclusive(bool isExcl)
+{
+	QSettings settings;
+	settings.beginGroup(groupName());
+	settings.setValue("exclusive", QVariant(isExcl));
+	settings.endGroup();
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------

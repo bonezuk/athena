@@ -30,6 +30,8 @@ class AUDIOIO_EXPORT AudioSettings
 		void setCenter(bool isChannel);
 		bool isLFE() const;
 		void setLFE(bool isChannel);
+		bool isExclusive() const;
+		void setExclusive(bool isExcl);
 		
 	private:
 		static QMap<QString, QSharedPointer<AudioSettings> > m_instances;

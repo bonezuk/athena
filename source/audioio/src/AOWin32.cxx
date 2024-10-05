@@ -926,38 +926,25 @@ QSharedPointer<AOQueryDevice::Device> AOWin32::copyDeviceInformation(const AOQue
 bool AOWin32::openAudioWasAPI()
 {
 	bool res = false;
-
-	if(isExclusive())
-	{
-		if(openAudioWasAPIWithExclusion(true))
-		{
-			res = true;
-		}
-		else
-		{
-			printError("openAudioWasAPI","Failed to open audio in exclusive mode");
-			closeAudioWasAPI();
-		}
-	}
 	
-	if(!res)
+	if(openAudioWasAPIImpl())
 	{
-		res = openAudioWasAPIWithExclusion(false);
-		if(!res)
-		{
-			printError("openAudioWasAPI","Failed to open audio in shared mode");
-			closeAudioWasAPI();
-		}
+		res = true;
+	}
+	else
+	{
+		QString errStr = QString("Failed to open audio in %1 mode").arg(isExclusive() ? "exclusive" : "shared" );
+		printError("openAudioWasAPI",errStr.toUtf8().constData());
+		closeAudioWasAPI();
 	}
 	return res;
 }
 
 //-------------------------------------------------------------------------------------------
 
-bool AOWin32::openAudioWasAPIWithExclusion(bool isExclusiveFlag)
+bool AOWin32::openAudioWasAPIImpl()
 {
 	bool res = false;
-	
 	QSharedPointer<AOQueryWasAPI::DeviceWasAPI> pDevice = getCurrentDevice().dynamicCast<AOQueryWasAPI::DeviceWasAPI>();
 
 	if(!pDevice.isNull() && pDevice->type()==AOQueryDevice::Device::e_deviceWasAPI)

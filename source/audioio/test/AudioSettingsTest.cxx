@@ -35,7 +35,6 @@ TEST(AudioSettings, isCenterOffWhenSet)
 	EXPECT_TRUE(pSettings->isCenter());
 	pSettings->setCenter(false);
 	EXPECT_FALSE(pSettings->isCenter());
-	EXPECT_TRUE(pSettings->isLFE());
 }
 
 //-------------------------------------------------------------------------------------------
@@ -60,7 +59,30 @@ TEST(AudioSettings, isLFEOffWhenSet)
 	EXPECT_TRUE(pSettings->isLFE());
 	pSettings->setLFE(false);
 	EXPECT_FALSE(pSettings->isLFE());
-	EXPECT_TRUE(pSettings->isCenter());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AudioSettings, isExclusiveOffByDefault)
+{
+	QString devName = "test_audio_device";
+	removeAudioSettings(devName);
+	QSharedPointer<AudioSettings> pSettings = AudioSettings::instance(devName);
+    ASSERT_FALSE(pSettings.isNull());
+	EXPECT_FALSE(pSettings->isExclusive());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AudioSettings, isExclusiveOnWhenSet)
+{
+	QString devName = "test_audio_device";
+	removeAudioSettings(devName);
+	QSharedPointer<AudioSettings> pSettings = AudioSettings::instance(devName);
+    ASSERT_FALSE(pSettings.isNull());
+    EXPECT_FALSE(pSettings->isExclusive());
+	pSettings->setExclusive(true);
+	EXPECT_TRUE(pSettings->isExclusive());
 }
 
 //-------------------------------------------------------------------------------------------

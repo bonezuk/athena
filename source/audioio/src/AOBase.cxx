@@ -6711,17 +6711,7 @@ bool AOBase::isExclusive()
 
 bool AOBase::isExclusive(int devIdx)
 {
-	bool flag = false;
-	QSettings settings;
-	QString groupName = "audio" + getDeviceName(devIdx);
-
-	settings.beginGroup(groupName);
-	if(settings.contains("exclusive"))
-	{
-		flag = settings.value("exclusive", QVariant(false)).toBool();
-	}
-	settings.endGroup();
-	return flag;
+	return AudioSettings::instance(getDeviceName(devIdx))->isExclusive();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -6745,12 +6735,7 @@ void AOBase::setExclusiveMode(int devIdx,bool flag)
 
 void AOBase::doSetExclusiveMode(int devIdx,bool flag)
 {
-	QSettings settings;
-	QString groupName = "audio" + getDeviceName(devIdx);
-	
-	settings.beginGroup(groupName);
-	settings.setValue("exclusive",QVariant(flag));
-	settings.endGroup();
+	AudioSettings::instance(getDeviceName(devIdx))->setExclusive(flag);
 }
 
 //-------------------------------------------------------------------------------------------

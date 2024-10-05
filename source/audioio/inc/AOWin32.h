@@ -96,7 +96,7 @@ class AUDIOIO_EXPORT AOWin32 : public AOBase
 		virtual bool isAudioASIO() const;
 
 		virtual bool openAudioWasAPI();
-		virtual bool openAudioWasAPIWithExclusion(bool isExclusiveFlag);
+		virtual bool openAudioWasAPIImpl();
 		virtual void closeAudioWasAPI();
 		virtual bool startAudioDeviceWasAPI();
 		virtual void stopAudioDeviceWasAPI();
