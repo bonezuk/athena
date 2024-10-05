@@ -126,10 +126,17 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		void printIndexedFormatSupport(tint bitIdx,tint chIdx,tint freqIdx);
 		QString capabilityCSVIndexed(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive);
 		
+		virtual bool isDeviceVolume();
+		virtual sample_t getVolume();
+		virtual bool setVolume(sample_t vol);
+		
 	protected:
 		
 		IMMDeviceIFSPtr m_pDevice;
 		IAudioClientIFSPtr m_pAudioClient;
+		
+		ISimpleAudioVolumeIF m_pVolumeShared;
+		IAudioEndpointVolumeIF m_pVolumeExclusive;
 		
 		tint m_formatsShared[NUMBER_WASAPI_MAXCHANNELS][NUMBER_WASAPI_MAXBITS][NUMBER_WASAPI_MAXFREQUENCIES];
 		tint m_formatsExclusive[NUMBER_WASAPI_MAXCHANNELS][NUMBER_WASAPI_MAXBITS][NUMBER_WASAPI_MAXFREQUENCIES];
@@ -197,17 +204,28 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		static QString guidString(GUID id);
 		static QString printChannelMask(DWORD dwChannelMask);
 		
-		void printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExcl);
+		virtual void printIsFormatSupported(WAVEFORMATEX *pFormat, bool isExcl);
 		
-		WAVEFORMATEX *waveFormatFromType(tint noChannels, tint noBits, tint frequency, tint type) const;
-		int queryFormatIndexCapability(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive);
+		virtual WAVEFORMATEX *waveFormatFromType(tint noChannels, tint noBits, tint frequency, tint type) const;
+		virtual int queryFormatIndexCapability(tint bitIdx, tint chIdx, tint freqIdx, tint isExculsive);
 
-		int bitIndexForFDIndex(int nativeBitIdx) const;
-		int nativeBitIndexFromFDIndex(int fdBitIndex) const;
+		virtual int bitIndexForFDIndex(int nativeBitIdx) const;
+		virtual int nativeBitIndexFromFDIndex(int fdBitIndex) const;
 		
-		WAVEFORMATEX *supportedWaveFormatFromDescription(const FormatDescription& desc);
+		virtual WAVEFORMATEX *supportedWaveFormatFromDescription(const FormatDescription& desc);
 		
-		QString exclusiveSettingsName() const;
+		virtual QString exclusiveSettingsName() const;
+		
+		virtual ISimpleAudioVolumeIFSPtr getVolumeSharedIF();
+		virtual IAudioEndpointVolumeIFSPtr getVolumeExclusiveIF();
+		virtual void releaseVolumeIF();
+		
+		virtual bool isDeviceVolumeExclusive();
+		virtual bool isDeviceVolumeShared();
+		virtual sample_t getVolumeShared();
+		virtual sample_t getVolumeExclusive();
+		virtual bool setVolumeShared(sample_t vol);
+		virtual bool setVolumeExclusive(sample_t vol);
 };
 
 //-------------------------------------------------------------------------------------------

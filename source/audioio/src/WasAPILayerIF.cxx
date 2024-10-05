@@ -14,6 +14,11 @@ CONCRETE_FACTORY_CLASS_IMPL(WasAPIIFFactory,WasAPIIF, \
 
 //-------------------------------------------------------------------------------------------
 
+// GUID to volume controls identifying the volume source change
+DEFINE_GUID(GUID_OMEGA_VOLUME_EVENTS, 0x59aedf6bL, 0x66d0, 0x4539, 0x90,0xf7, 0xa4, 0x44, 0x92, 0x29, 0x32, 0xf3);
+
+//-------------------------------------------------------------------------------------------
+
 WasAPILayerIF::WasAPILayerIF() : WasAPIIF(),
 	m_pEnumerator()
 {}
@@ -163,7 +168,9 @@ QSharedPointer<WasAPIDevice> WasAPILayerIF::getDevice(const QString& devID)
 
 WasAPIDeviceLayer::WasAPIDeviceLayer() : WasAPIDevice(),
 	m_pDevice(),
-	m_pAudioClient()
+	m_pAudioClient(),
+	m_pVolumeShared(),
+	m_pVolumeExclusive()
 {
 	WasAPIDeviceLayer::blank();
 }
@@ -1307,7 +1314,7 @@ IAudioClientIFSPtr WasAPIDeviceLayer::getAudioClient()
 	if(m_pAudioClient.isNull() && !m_pDevice.isNull())
 	{
 		HRESULT hr;
-		IAudioClient *pAudioClient;
+		IAudioClient *pAudioClient = 0;
 		const IID IDOF_IAudioClient = __uuidof(IAudioClient);
 		
 		hr = m_pDevice->Activate(IDOF_IAudioClient,CLSCTX_ALL,0,reinterpret_cast<void **>(&pAudioClient));
@@ -1326,6 +1333,60 @@ void WasAPIDeviceLayer::releaseAudioClient()
 	if(!m_pAudioClient.isNull())
 	{
 		m_pAudioClient.clear();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+ISimpleAudioVolumeIFSPtr WasAPIDeviceLayer::getVolumeSharedIF()
+{
+	if(m_pVolumeShared.isNull() && !m_pAudioClient.isNull())
+	{
+		HRESULT hr;
+		ISimpleAudioVolume *pVolume = 0;
+		const IID IDOF_ISimpleAudioVolume = __uuidof(ISimpleAudioVolume);
+		
+		hr = m_pAudioClient->GetService(IDOF_ISimpleAudioVolume, reinterpret_cast<void **>(&pVolume));
+		if(hr == S_OK && pVolume != 0)
+		{
+			ISimpleAudioVolumeIFSPtr pVolumeIF(new ISimpleAudioVolumeIF(pVolume));
+			m_pVolumeShared = pVolumeIF;
+		}
+	}
+	return m_pVolumeShared;
+}
+
+//-------------------------------------------------------------------------------------------
+
+IAudioEndpointVolumeIFSPtr WasAPIDeviceLayer::getVolumeExclusiveIF()
+{
+	if(m_pVolumeExclusive.isNull() && !m_pDevice.isNull())
+	{
+		HRESULT hr;
+		IAudioEndpointVolume *pVolume = 0;
+		const IID IDOF_IAudioEndpointVolume = __uuidof(IAudioEndpointVolume);
+		
+		hr = m_pDevice->Activate(IDOF_IAudioEndpointVolume, CLSCTX_ALL, 0, reinterpret_cast<void **>(&pVolume));
+		if(hr == S_OK && pVolume != 0)
+		{
+			IAudioEndpointVolumeIFSPtr pVolumeIF(new IAudioEndpointVolumeIF(pVolume));
+			m_pVolumeExclusive = pVolumeIF;
+		}
+	}
+	return m_pVolumeExclusive;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::releaseVolumeIF()
+{
+	if(!m_pVolumeExclusive.isNull())
+	{
+		m_pVolumeExclusive.clear();
+	}
+	if(!m_pVolumeShared.isNull())
+	{
+		m_pVolumeShared.clear();
 	}
 }
 
@@ -1786,6 +1847,246 @@ void WasAPIDeviceLayer::setExclusive(bool flag)
 	settings.beginGroup(exclusiveSettingsName());
 	settings.setValue("exclusive", QVariant(flag));
 	settings.endGroup();
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::isDeviceVolume()
+{
+	bool res;
+	
+	if(isExclusive())
+	{
+		res = isDeviceVolumeExclusive();
+	}
+	else
+	{
+		res = isDeviceVolumeShared();
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::isDeviceVolumeShared()
+{
+	bool res = false;
+	ISimpleAudioVolumeIFSPtr pVolume = getVolumeSharedIF();
+	
+	if(!pVolume.isNull())
+	{
+		res = true;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::isDeviceVolumeExclusive()
+{
+	bool res = false;
+	IAudioEndpointVolumeIFSPtr pVolume = getVolumeExclusiveIF();
+	
+	if(!pVolume.isNull())
+	{
+		HRESULT hr;
+		DWORD mask = 0;
+		
+		if(pVolume->QueryHardwareSupport(&mask) == S_OK)
+		{
+			res = (mask & ENDPOINT_HARDWARE_SUPPORT_VOLUME) ? true : false;
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+sample_t WasAPIDeviceLayer::getVolume()
+{
+	sample_t vol
+	
+	if(isExclusive())
+	{
+		vol = getVolumeExclusive();
+	}
+	else
+	{
+		vol = getVolumeShared();
+	}
+	if(vol < 0.0)
+	{
+		vol = 0.0;
+	}
+	else if(vol > 1.0)
+	{
+		vol = 1.0;
+	}
+	return vol;
+}
+
+//-------------------------------------------------------------------------------------------
+
+sample_t WasAPIDeviceLayer::getVolumeShared()
+{
+	sample_t vol = 1.0;
+	ISimpleAudioVolumeIFSPtr pVolume = getVolumeSharedIF();
+	
+	if(!pVolume.isNull())
+	{
+		BOOL isMute = FALSE;
+		pVolume->GetMute(&isMute);
+		if(!isMute)
+		{
+			float pVol = 1.0f;
+			if(pVolume->GetMasterVolume(&pVol) == S_OK)
+			{
+				vol = static_cast<sample_t>(pVol);
+			}
+		}
+	}
+	return vol;
+}
+
+//-------------------------------------------------------------------------------------------
+
+sample_t WasAPIDeviceLayer::getVolumeExclusive()
+{
+	sample_t vol = 1.0;
+	IAudioEndpointVolumeIFSPtr pVolume = getVolumeExclusiveIF();
+	
+	if(!pVolume.isNull())
+	{
+		BOOL isMute = FALSE;
+		pVolume->GetMute(&isMute);
+		if(!isMute)
+		{
+			float pVol = 1.0f;
+			if(pVolume->GetMasterVolumeLevelScalar(&pVol) == S_OK)
+			{
+				vol = static_cast<sample_t>(pVol);
+			}
+		}		
+	}
+	return vol;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::setVolume(sample_t vol)
+{
+	bool res;
+
+	if(vol < 0.0)
+	{
+		vol = 0.0;
+	}
+	else if(vol > 1.0)
+	{
+		vol = 1.0;
+	}
+
+	if(isExclusive())
+	{
+		res = setVolumeExclusive(vol);
+	}
+	else
+	{
+		res = setVolumeShared(vol);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::setVolumeShared(sample_t vol)
+{
+	bool res = false;
+	ISimpleAudioVolumeIFSPtr pVolume = getVolumeSharedIF();
+	
+	if(!pVolume.isNull())
+	{
+		res = true;
+		if(isEqual(vol, 0.0))
+		{
+			BOOL isMute = TRUE;
+		
+			pVolume->GetMute(&isMute);
+			if(!isMute)
+			{
+				if(pVolume->SetMute(TRUE, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+				{
+					res = false;
+				}
+			}
+		}
+		else
+		{
+			BOOL isMute = FALSE;
+			
+			pVolume->GetMute(&isMute);
+			if(isMute)
+			{
+				if(pVolume->SetMute(FALSE, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+				{
+					res = false;
+				}
+			}
+		}
+		
+		float pVol = static_cast<float>(vol);
+		if(pVolume->SetMasterVolume(pVol, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+		{
+			res = false;
+		}
+	}
+	return res;	
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::setVolumeExclusive(sample_t vol)
+{
+	bool res = false;
+	IAudioEndpointVolumeIFSPtr pVolume = getVolumeExclusiveIF();
+	
+	if(!pVolume.isNull())
+	{
+		res = true;
+		if(isEqual(vol, 0.0))
+		{
+			BOOL isMute = TRUE;
+		
+			pVolume->GetMute(&isMute);
+			if(!isMute)
+			{
+				if(pVolume->SetMute(TRUE, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+				{
+					res = false;
+				}
+			}
+		}
+		else
+		{
+			BOOL isMute = FALSE;
+			
+			pVolume->GetMute(&isMute);
+			if(isMute)
+			{
+				if(pVolume->SetMute(FALSE, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+				{
+					res = false;
+				}
+			}
+		}
+		
+		float pVol = static_cast<float>(vol);
+		if(pVolume->SetMasterVolumeLevelScalar(pVol, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+		{
+			res = false;
+		}
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------

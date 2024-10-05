@@ -1086,6 +1086,315 @@ HRESULT IAudioClockIF::GetPosition(UINT64 *pu64Position,UINT64 *pu64QPCPosition)
 }
 
 //-------------------------------------------------------------------------------------------
+// IAudioEndpointVolumeIF
+//-------------------------------------------------------------------------------------------
+
+IAudioEndpointVolumeIF::IAudioEndpointVolumeIF() : m_pInterface(0)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+IAudioEndpointVolumeIF::IAudioEndpointVolumeIF(IAudioEndpointVolume *pInterface) : m_pInterface(pInterface)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+IAudioEndpointVolumeIF::~IAudioEndpointVolumeIF();
+{
+	if(m_pInterface!=0)
+	{
+		m_pInterface->Release();
+		m_pInterface = 0;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::GetChannelCount(UINT *pnChannelCount)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetChannelCount(pnChannelCount);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::GetChannelVolumeLevel(UINT nChannel, float *pfLevelDB)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetChannelVolumeLevel(nChannel, pfLevelDB);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::GetChannelVolumeLevelScalar(UINT nChannel, float *pfLevel)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetChannelVolumeLevelScalar(nChannel, pfLevel);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::GetMasterVolumeLevel(float *pfLevelDB)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetMasterVolumeLevel(pfLevelDB);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::GetMasterVolumeLevelScalar(float *pfLevel)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetMasterVolumeLevelScalar(pfLevel);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::GetMute(BOOL *pbMute)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetMute(pbMute);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::GetVolumeRange(float *pflVolumeMindB, float *pflVolumeMaxdB, float *pflVolumeIncrementdB)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetVolumeRange(pflVolumeMindB, pflVolumeMaxdB, pflVolumeIncrementdB);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::GetVolumeStepInfo(UINT *pnStep, UINT *pnStepCount)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetVolumeStepInfo(pnStep, pnStepCount);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::QueryHardwareSupport(DWORD *pdwHardwareSupportMask)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->QueryHardwareSupport(pdwHardwareSupportMask);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::RegisterControlChangeNotify(IAudioEndpointVolumeCallback *pNotify)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->RegisterControlChangeNotify(pNotify);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::SetChannelVolumeLevel(UINT nChannel, float fLevelDB, LPCGUID pguidEventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetChannelVolumeLevel(nChannel, fLevelDB, pguidEventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::SetChannelVolumeLevelScalar(UINT nChannel, float fLevel, LPCGUID pguidEventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetChannelVolumeLevelScalar(nChannel, fLevel, pguidEventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::SetMasterVolumeLevel(float fLevelDB, LPCGUID pguidEventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetMasterVolumeLevel(fLevelDB, pguidEventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::SetMasterVolumeLevelScalar(float fLevel, LPCGUID pguidEventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetMasterVolumeLevelScalar(fLevel, pguidEventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::SetMute(BOOL bMute, LPCGUID pguidEventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetMute(bMute, pguidEventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::UnregisterControlChangeNotify(IAudioEndpointVolumeCallback *pNotify)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->UnregisterControlChangeNotify(pNotify);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::VolumeStepDown(LPCGUID pguidEventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->VolumeStepDown(pguidEventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioEndpointVolumeIF::VolumeStepUp(LPCGUID pguidEventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->VolumeStepUp(pguidEventContext);
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+// ISimpleAudioVolumeIF
+//-------------------------------------------------------------------------------------------
+
+ISimpleAudioVolumeIF::ISimpleAudioVolumeIF() : m_pInterface(0)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+ISimpleAudioVolumeIF::ISimpleAudioVolumeIF(ISimpleAudioVolume *pInterface) : m_pInterface(pInterface)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+ISimpleAudioVolumeIF::~ISimpleAudioVolumeIF();
+{
+	if(m_pInterface!=0)
+	{
+		m_pInterface->Release();
+		m_pInterface = 0;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT ISimpleAudioVolumeIF::GetMasterVolume(float *pfLevel)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetMasterVolume(pfLevel);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT ISimpleAudioVolumeIF::GetMute(BOOL *pbMute)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetMute(pbMute);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT ISimpleAudioVolumeIF::SetMasterVolume(float fLevel, LPCGUID EventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetMasterVolume(fLevel, EventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT ISimpleAudioVolumeIF::SetMute(const BOOL bMute, LPCGUID EventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetMute(bMute, EventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------

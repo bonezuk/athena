@@ -27,6 +27,7 @@ if (OMEGA_WIN32)
 		inc/WasAPICOMInterfaces.h
 		inc/WasAPIIF.h
 		inc/WasAPILayerIF.h
+		inc/WasAPIVolumeEvents.h
 	)
 
 	set(AUDIOIO_SOURCE 
@@ -51,6 +52,7 @@ if (OMEGA_WIN32)
 		src/WasAPICOMInterfaces.cxx
 		src/WasAPIIF.cxx
 		src/WasAPILayerIF.cxx
+		src/WasAPIVolumeEvents.cxx
 	)
 
 elseif (OMEGA_MACOSX)

@@ -297,6 +297,59 @@ class AUDIOIO_EXPORT IAudioClockIF
 typedef QSharedPointer<IAudioClockIF> IAudioClockIFSPtr;
 
 //-------------------------------------------------------------------------------------------
+
+class AUDIOIO_EXPORT IAudioEndpointVolumeIF
+{
+	public:
+		IAudioEndpointVolumeIF();
+		IAudioEndpointVolumeIF(IAudioEndpointVolume *pInterface);
+		virtual ~IAudioEndpointVolumeIF();
+
+		HRESULT GetChannelCount(UINT *pnChannelCount);
+		HRESULT GetChannelVolumeLevel(UINT nChannel, float *pfLevelDB);
+		HRESULT GetChannelVolumeLevelScalar(UINT nChannel, float *pfLevel);
+		HRESULT GetMasterVolumeLevel(float *pfLevelDB);
+		HRESULT GetMasterVolumeLevelScalar(float *pfLevel);
+		HRESULT GetMute(BOOL *pbMute);
+		HRESULT GetVolumeRange(float *pflVolumeMindB, float *pflVolumeMaxdB, float *pflVolumeIncrementdB);
+		HRESULT GetVolumeStepInfo(UINT *pnStep, UINT *pnStepCount);
+		HRESULT QueryHardwareSupport(DWORD *pdwHardwareSupportMask);
+		HRESULT RegisterControlChangeNotify(IAudioEndpointVolumeCallback *pNotify);
+		HRESULT SetChannelVolumeLevel(UINT nChannel, float fLevelDB, LPCGUID pguidEventContext);
+		HRESULT SetChannelVolumeLevelScalar(UINT nChannel, float fLevel, LPCGUID pguidEventContext);
+		HRESULT SetMasterVolumeLevel(float fLevelDB, LPCGUID pguidEventContext);
+		HRESULT SetMasterVolumeLevelScalar(float fLevel, LPCGUID pguidEventContext);
+		HRESULT SetMute(BOOL bMute, LPCGUID pguidEventContext);
+		HRESULT UnregisterControlChangeNotify(IAudioEndpointVolumeCallback *pNotify);
+		HRESULT VolumeStepDown(LPCGUID pguidEventContext);
+		HRESULT VolumeStepUp(LPCGUID pguidEventContext);
+	protected:
+	
+		IAudioEndpointVolume *m_pInterface;
+};
+
+typedef QSharedPointer<IAudioEndpointVolumeIF> IAudioEndpointVolumeIFSPtr;
+
+//-------------------------------------------------------------------------------------------
+
+class AUDIOIO_EXPORT ISimpleAudioVolumeIF
+{
+	public:
+		ISimpleAudioVolumeIF();
+		ISimpleAudioVolumeIF(ISimpleAudioVolume *pInterface);
+		virtual ~ISimpleAudioVolumeIF();
+		
+		HRESULT GetMasterVolume(float *pfLevel);
+		HRESULT GetMute(BOOL *pbMute);
+		HRESULT SetMasterVolume(float fLevel, LPCGUID EventContext);
+		HRESULT SetMute(const BOOL bMute, LPCGUID EventContext);
+
+	protected:
+		
+		ISimpleAudioVolume *m_pInterface;
+};
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------
