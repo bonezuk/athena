@@ -192,10 +192,17 @@ class AUDIOIO_EXPORT AOCoreAudioMacOS : public AOCoreAudio
 
 		virtual bool isDeviceVolume();
 		virtual bool isDeviceVolumeSettable();
+		virtual bool isDeviceMuted();
+        virtual void setDeviceMuted(bool isMute);
 		virtual sample_t getDeviceVolume();
 		virtual bool setDeviceVolume(sample_t vol);
 
 		virtual void doSetVolume(sample_t vol, bool isCallback);
+
+        static OSStatus volumePropertyChangeProc(AudioObjectID inObjectID,UInt32 inNumberAddresses,const AudioObjectPropertyAddress inAddresses[],void *inClientData);
+		OSStatus volumeChangeProcImpl(AudioObjectID inObjectID,UInt32 inNumberAddresses,const AudioObjectPropertyAddress inAddresses[]);
+		void addVolumeChangeNotification(AudioDeviceID devID);
+		void removeVolumeChangeNotification(AudioDeviceID devID);
 
 	protected slots:
 	
