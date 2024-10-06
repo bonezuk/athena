@@ -1070,6 +1070,13 @@ void Player::onAudioCrossfade()
 
 //-------------------------------------------------------------------------------------------
 
+void Player::onAudioVolumeChanged(tfloat64 vol)
+{
+	m_playControls->setVolume(static_cast<tfloat32>(vol));
+}
+
+//-------------------------------------------------------------------------------------------
+
 void Player::playFile(QPLItemBase *item)
 {
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)

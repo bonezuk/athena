@@ -133,6 +133,7 @@ class Player : public QDialog
 		void onAudioPause();
 		void onAudioTime(quint64 t);
 		void onAudioCrossfade();
+		void onAudioVolumeChanged(tfloat64 vol);
 
 		common::TimeStamp getPLItemTimeStart(QPLItemBase *item) const;
 		common::TimeStamp getPLItemTimeEnd(QPLItemBase *item) const;

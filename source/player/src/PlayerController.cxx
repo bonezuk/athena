@@ -175,6 +175,7 @@ void PlayerController::onStart()
             QObject::connect(m_audio.data(),SIGNAL(onReadyForNext()),this,SLOT(onAudioNext()));
             QObject::connect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
             QObject::connect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
+            QObject::connect(m_audio.data(),SIGNAL(onVolumeChanged(tfloat64)),this,SLOT(onAudioVolumeChanged(tfloat64)));
 		}
 	}
 
@@ -238,6 +239,7 @@ void PlayerController::onStop()
         QObject::disconnect(m_audio.data(),SIGNAL(onReadyForNext()),this,SLOT(onAudioNext()));
         QObject::disconnect(m_audio.data(),SIGNAL(onNoNext()),this,SLOT(onAudioNoNext()));
         QObject::disconnect(m_audio.data(),SIGNAL(onCrossfade()),this,SLOT(onAudioCrossfade()));
+        QObject::disconnect(m_audio.data(),SIGNAL(onVolumeChanged(tfloat64)),this,SLOT(onAudioVolumeChanged(tfloat64)));
 
         QSharedPointer<audioio::AOBase> eAudio;
 		audioio::AOBase::end(m_audio);
@@ -644,6 +646,16 @@ void PlayerController::onAudioCrossfade()
 	if(m_playerDialog!=0)
 	{
 		m_playerDialog->onAudioCrossfade();
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void PlayerController::onAudioVolumeChanged(tfloat64 vol)
+{
+	if(m_playerDialog!=0)
+	{
+		m_playerDialog->onAudioVolumeChanged(vol);
 	}
 }
 
