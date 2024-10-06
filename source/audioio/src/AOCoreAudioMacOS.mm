@@ -144,6 +144,7 @@ bool AOCoreAudioMacOS::openAudio()
 	if(m_isDeviceVolume)
 	{
 		m_volume = getDeviceVolume();
+		emitOnVolumeChanged(m_volume);
 	}
 	
 	if(m_isIntegerMode)
@@ -2279,18 +2280,16 @@ bool AOCoreAudioMacOS::setDeviceVolume(sample_t vol)
 
 //-------------------------------------------------------------------------------------------
 
-void AOCoreAudioMacOS::doSetVolume(sample_t vol)
+void AOCoreAudioMacOS::doSetVolume(sample_t vol, bool isCallback)
 {
+	AOBase::doSetVolume(vol, isCallback);
 	if(m_isDeviceVolume)
 	{
 		if(!setDeviceVolume(vol))
 		{
 			m_volume = getDeviceVolume();
+			emitOnVolumeChanged(m_volume);
 		}
-	}
-	else
-	{
-		AOBase::doSetVolume(vol);
 	}
 }
 

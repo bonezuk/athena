@@ -349,6 +349,34 @@ class AUDIOIO_EXPORT ISimpleAudioVolumeIF
 		ISimpleAudioVolume *m_pInterface;
 };
 
+typedef QSharedPointer<ISimpleAudioVolumeIF> ISimpleAudioVolumeIFSPtr;
+
+//-------------------------------------------------------------------------------------------
+
+class AUDIOIO_EXPORT IAudioSessionControlIF
+{
+	public:
+		IAudioSessionControlIF();
+		IAudioSessionControlIF(IAudioSessionControl *pInterface);
+		virtual ~IAudioSessionControlIF();
+
+		HRESULT GetDisplayName(LPWSTR *pRetVal);
+		HRESULT GetGroupingParam(GUID *pRetVal);
+		HRESULT GetIconPath(LPWSTR *pRetVal);
+		HRESULT GetState(AudioSessionState *pRetVal);
+		HRESULT RegisterAudioSessionNotification(IAudioSessionEvents *NewNotifications);
+		HRESULT SetDisplayName(LPCWSTR Value, LPCGUID EventContext);
+		HRESULT SetGroupingParam(LPCGUID Override, LPCGUID EventContext);
+		HRESULT SetIconPath(LPCWSTR Value, LPCGUID EventContext);
+		HRESULT UnregisterAudioSessionNotification(IAudioSessionEvents *NewNotifications);
+	
+	protected:
+	
+		IAudioSessionControl *m_pInterface
+};
+
+typedef QSharedPointer<IAudioSessionControlIF> IAudioSessionControlIFSPtr;
+
 //-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega

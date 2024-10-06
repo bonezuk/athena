@@ -3,13 +3,15 @@
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace engine
+namespace audioio
 {
 //-------------------------------------------------------------------------------------------
 // WasAPISharedVolumeEvents
 //-------------------------------------------------------------------------------------------
 
-WasAPISharedVolumeEvents::WasAPISharedVolumeEvents() : m_cRef(1)
+WasAPISharedVolumeEvents::WasAPISharedVolumeEvents(VolumeChangeNotifier pNotifier, LPVOID pVInstance) : m_cRef(1),
+	m_pNotifier(pNotifier),
+	m_pVInstance(pVInstance)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -94,7 +96,20 @@ HRESULT WasAPISharedVolumeEvents::OnIconPathChanged(LPCWSTR NewIconPath, LPCGUID
 
 HRESULT WasAPISharedVolumeEvents::OnSimpleVolumeChanged(float NewVolume, BOOL NewMute, LPCGUID EventContext)
 {
-	// TODO: Implement callback for volume change
+	if(m_pNotifier != 0 && !IsEqualGUID(EventContext, GUID_OMEGA_VOLUME_EVENTS))
+	{
+		sample_t vol;
+		
+		if(NewMute)
+		{
+			vol = 0.0;
+		}
+		else
+		{
+			vol = static_cast<sample_t>(NewVolume);
+		}
+		m_pNotifier(m_pVInstance, vol);
+	}
 	return S_OK;
 }
 
@@ -174,7 +189,9 @@ HRESULT WasAPISharedVolumeEvents::OnSessionDisconnected(AudioSessionDisconnectRe
 // WasAPIExclusiveVolumeEvents
 //-------------------------------------------------------------------------------------------
 
-WasAPIExclusiveVolumeEvents::WasAPIExclusiveVolumeEvents() : m_cRef(1)
+WasAPIExclusiveVolumeEvents::WasAPIExclusiveVolumeEvents(VolumeChangeNotifier pNotifier, LPVOID pVInstance) : m_cRef(1),
+	m_pNotifier(pNotifier),
+	m_pVInstance(pVInstance)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -236,13 +253,27 @@ void WasAPIExclusiveVolumeEvents::logEvent(const char *strR, const QString& even
 
 HRESULT WasAPIExclusiveVolumeEvents::OnNotify(PAUDIO_VOLUME_NOTIFICATION_DATA pNotify)
 {
-	//TODO: Implement endpoint volume notification back to app.
 	QString eventStr = QString("Volume = %1, isMute=%2").arg(pNotify->fMasterVolume).arg(pNotify->bMuted);
 	logEvent("OnNotify", eventStr);
+	
+	if(m_pNotifier != 0 && !IsEqualGUID(pNotify->guidEventContext, GUID_OMEGA_VOLUME_EVENTS))
+	{
+		sample_t vol;
+		
+		if(pNotify->bMuted)
+		{
+			vol = 0.0;
+		}
+		else
+		{
+			vol = static_cast<sample_t>(pNotify->fMasterVolume);
+		}
+		m_pNotifier(m_pVInstance, vol);
+	}
 	return S_OK;
 }
 
 //-------------------------------------------------------------------------------------------
-} // namespace engine
+} // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------

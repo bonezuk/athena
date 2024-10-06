@@ -129,7 +129,10 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual bool isDeviceVolume();
 		virtual sample_t getVolume();
 		virtual bool setVolume(sample_t vol);
-		
+
+		virtual bool setupVolumeNotification(VolumeChangeNotifier pNotifier, LPVOID pVInstance);
+		virtual void shutdownVolumeNotification();
+	
 	protected:
 		
 		IMMDeviceIFSPtr m_pDevice;
@@ -137,6 +140,10 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		
 		ISimpleAudioVolumeIF m_pVolumeShared;
 		IAudioEndpointVolumeIF m_pVolumeExclusive;
+		
+		IAudioSessionControlIFSPtr m_pAudioSessionControl;
+		WasAPISharedVolumeEvents *m_pVolumeEventsShared;
+		WasAPIExclusiveVolumeEvents *m_pVolumeEventsExclusive;
 		
 		tint m_formatsShared[NUMBER_WASAPI_MAXCHANNELS][NUMBER_WASAPI_MAXBITS][NUMBER_WASAPI_MAXFREQUENCIES];
 		tint m_formatsExclusive[NUMBER_WASAPI_MAXCHANNELS][NUMBER_WASAPI_MAXBITS][NUMBER_WASAPI_MAXFREQUENCIES];
@@ -214,8 +221,6 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		
 		virtual WAVEFORMATEX *supportedWaveFormatFromDescription(const FormatDescription& desc);
 		
-		virtual QString exclusiveSettingsName() const;
-		
 		virtual ISimpleAudioVolumeIFSPtr getVolumeSharedIF();
 		virtual IAudioEndpointVolumeIFSPtr getVolumeExclusiveIF();
 		virtual void releaseVolumeIF();
@@ -226,6 +231,9 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		virtual sample_t getVolumeExclusive();
 		virtual bool setVolumeShared(sample_t vol);
 		virtual bool setVolumeExclusive(sample_t vol);
+
+		virtual bool setupVolumeNotificationShared(VolumeChangeNotifier pNotifier, LPVOID pVInstance);
+		virtual bool setupVolumeNotificationExclusive(VolumeChangeNotifier pNotifier, LPVOID pVInstance);
 };
 
 //-------------------------------------------------------------------------------------------

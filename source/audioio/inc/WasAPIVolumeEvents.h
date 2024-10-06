@@ -8,14 +8,23 @@
 //-------------------------------------------------------------------------------------------
 namespace omega
 {
-namespace engine
+namespace audioio
 {
+//-------------------------------------------------------------------------------------------
+
+// GUID to volume controls identifying the volume source change
+DEFINE_GUID(GUID_OMEGA_VOLUME_EVENTS, 0x59aedf6bL, 0x66d0, 0x4539, 0x90,0xf7, 0xa4, 0x44, 0x92, 0x29, 0x32, 0xf3);
+
+//-------------------------------------------------------------------------------------------
+
+typedef void(*VolumeChangeNotifier)(LPVOID, sample_t);
+
 //-------------------------------------------------------------------------------------------
 
 class AUDIOIO_EXPORT WasAPISharedVolumeEvents : public IAudioSessionEvents
 {
 	public:
-		WasAPISharedVolumeEvents();
+		WasAPISharedVolumeEvents(VolumeChangeNotifier pNotifier, LPVOID pVInstance);
 		virtual ~WasAPISharedVolumeEvents();
 		
 	    // IUnknown methods.
@@ -34,6 +43,8 @@ class AUDIOIO_EXPORT WasAPISharedVolumeEvents : public IAudioSessionEvents
 
 	private:
 		LONG m_cRef;
+		VolumeChangeNotifier m_pNotifier;
+		LPVOID m_pVInstance;
 		
 		virtual void logEvent(const char *strR, const char *eventStr) const;
 		virtual void logEvent(const char *strR, const QString& eventStr) const;
@@ -44,7 +55,7 @@ class AUDIOIO_EXPORT WasAPISharedVolumeEvents : public IAudioSessionEvents
 class AUDIOIO_EXPORT WasAPIExclusiveVolumeEvents : public IAudioEndpointVolumeCallback
 {
 	public:
-		WasAPIExclusiveVolumeEvents();
+		WasAPIExclusiveVolumeEvents(VolumeChangeNotifier pNotifier, LPVOID pVInstance);
 		virtual ~WasAPIExclusiveVolumeEvents();
 
 	    // IUnknown methods.
@@ -57,12 +68,14 @@ class AUDIOIO_EXPORT WasAPIExclusiveVolumeEvents : public IAudioEndpointVolumeCa
 		
 	private:
 		LONG m_cRef;
+		VolumeChangeNotifier m_pNotifier;
+		LPVOID m_pVInstance;
 		
 		virtual void logEvent(const char *strR, const QString& eventStr) const;
 };
 
 //-------------------------------------------------------------------------------------------
-} // namespace engine
+} // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------
 #endif

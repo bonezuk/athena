@@ -1,4 +1,5 @@
 #include "audioio/inc/WasAPILayerIF.h"
+#include "audioio/inc/AudioSettings.h"
 #include "engine/inc/FormatType.h"
 
 //-------------------------------------------------------------------------------------------
@@ -11,11 +12,6 @@ namespace audioio
 CONCRETE_FACTORY_CLASS_IMPL(WasAPIIFFactory,WasAPIIF, \
                             WasAPILayerIFFactory,WasAPILayerIF, \
                             "wasapi",false)
-
-//-------------------------------------------------------------------------------------------
-
-// GUID to volume controls identifying the volume source change
-DEFINE_GUID(GUID_OMEGA_VOLUME_EVENTS, 0x59aedf6bL, 0x66d0, 0x4539, 0x90,0xf7, 0xa4, 0x44, 0x92, 0x29, 0x32, 0xf3);
 
 //-------------------------------------------------------------------------------------------
 
@@ -170,7 +166,10 @@ WasAPIDeviceLayer::WasAPIDeviceLayer() : WasAPIDevice(),
 	m_pDevice(),
 	m_pAudioClient(),
 	m_pVolumeShared(),
-	m_pVolumeExclusive()
+	m_pVolumeExclusive(),
+	m_pAudioSessionControl(),
+	m_pVolumeEventsShared(0),
+	m_pVolumeEventsExclusive(0)
 {
 	WasAPIDeviceLayer::blank();
 }
@@ -284,6 +283,7 @@ bool WasAPIDeviceLayer::init(const QString& devID)
 
 void WasAPIDeviceLayer::done()
 {
+	shutdownVolumeNotification();
 	if(!m_pDevice.isNull())
 	{
 		if(!WasAPIIF::instance().dynamicCast<WasAPILayerIF>().isNull())
@@ -291,14 +291,11 @@ void WasAPIDeviceLayer::done()
 			saveFormats();
 		}
 	}
-	if(m_pAudioClient.data()!=0)
-	{
-		m_pAudioClient.clear();
-	}
-	if(m_pDevice.data()!=0)
-	{
-		m_pDevice.clear();
-	}
+	m_pAudioSessionControl.clear();
+	m_pVolumeExclusive.clear();
+	m_pVolumeShared.clear();
+	m_pAudioClient.clear();
+	m_pDevice.clear();
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1816,37 +1813,16 @@ QString WasAPIDeviceLayer::capabilityCSVIndexed(tint bitIdx, tint chIdx, tint fr
 
 //-------------------------------------------------------------------------------------------
 
-QString WasAPIDeviceLayer::exclusiveSettingsName() const
-{
-	QString n = "audio" + name();
-	return n;
-}
-
-//-------------------------------------------------------------------------------------------
-
 bool WasAPIDeviceLayer::isExclusive() const
 {
-	bool flag = false;
-	QSettings settings;
-	
-	settings.beginGroup(exclusiveSettingsName());
-	if(settings.contains("exclusive"))
-	{
-		flag = settings.value("exclusive", QVariant(false)).toBool();
-	}
-	settings.endGroup();
-	return flag;
+	return AudioSettings::instance(name())->isExclusive();
 }
 
 //-------------------------------------------------------------------------------------------
 
 void WasAPIDeviceLayer::setExclusive(bool flag)
 {
-	QSettings settings;
-
-	settings.beginGroup(exclusiveSettingsName());
-	settings.setValue("exclusive", QVariant(flag));
-	settings.endGroup();
+	AudioSettings::instance(name())->setExclusive(flag);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -2087,6 +2063,110 @@ bool WasAPIDeviceLayer::setVolumeExclusive(sample_t vol)
 		}
 	}
 	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::setupVolumeNotification(VolumeChangeNotifier pNotifier, LPVOID pVInstance)
+{
+	bool res;
+	
+	if(pNotifier != 0)
+	{
+		shutdownVolumeNotification();
+		if(isExclusive())
+		{
+			res = setupVolumeNotificationExclusive(pNotifier, pVInstance);
+		}
+		else
+		{
+			res = setupVolumeNotificationShared(pNotifier, pVInstance);
+		}
+	}
+	else
+	{
+		res = false;
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::setupVolumeNotificationShared(VolumeChangeNotifier pNotifier, LPVOID pVInstance)
+{
+	HRESULT hr;
+	IAudioSessionControl *pControl = 0;
+	bool res = false;
+		
+	hr = m_pAudioClient->GetService(IID_IAudioSessionControl, reinterpret_cast<void **>(&pControl));
+	if(hr == S_OK && pControl != 0)
+	{
+		IAudioSessionControlIFSPtr pAudioCtrl(new IAudioSessionControlIF(pControl));
+		m_pAudioSessionControl = pAudioCtrl;
+		
+		WasAPISharedVolumeEvents *pVolEvents = new WasAPISharedVolumeEvents(pNotifier, pVInstance);
+		hr = m_pAudioSessionControl->RegisterAudioSessionNotification(reinterpret_cast<IAudioSessionEvents *>(pVolEvents));
+		if(hr == S_OK)
+		{
+			m_pVolumeEventsShared = pVolEvents;
+			res = true;
+		}
+		else
+		{
+			pVolEvents->Release();
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool WasAPIDeviceLayer::setupVolumeNotificationExclusive(VolumeChangeNotifier pNotifier, LPVOID pVInstance)
+{
+	HRESULT hr;
+	IAudioEndpointVolumeIFSPtr pVolumeIF = getVolumeExclusiveIF();
+	bool res = false;
+
+	if(!pVolumeIF.isNull())
+	{
+		WasAPIExclusiveVolumeEvents *pVolEvents = new WasAPIExclusiveVolumeEvents(pNotifier, pVInstance);
+		hr = pVolumeIF->RegisterControlChangeNotify(reinterpret_cast<IAudioEndpointVolumeCallback *>(pVolEvents));
+		if(hr == S_OK)
+		{
+			m_pVolumeEventsExclusive = pVolEvents;
+			res = true;
+		}
+		else
+		{
+			pVolEvents->Release();
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void WasAPIDeviceLayer::shutdownVolumeNotification()
+{
+	if(m_pVolumeEventsShared != 0)
+	{
+		if(!m_pAudioSessionControl.isNull())
+		{
+			m_pAudioSessionControl->UnregisterAudioSessionNotification(reinterpret_cast<IAudioSessionEvents *>(m_pVolumeEventsShared));
+		}
+		m_pVolumeEventsShared->Release();
+		m_pVolumeEventsShared = 0;
+	}
+	if(m_pVolumeEventsExclusive != 0)
+	{
+		if(!m_pVolumeExclusive.isNull())
+		{
+			m_pVolumeExclusive->UnregisterControlChangeNotify(reinterpret_cast<IAudioEndpointVolumeCallback *>(m_pVolumeEventsExclusive));
+		}
+		m_pVolumeEventsExclusive->Release();
+		m_pVolumeEventsExclusive = 0;
+	}
+	m_pAudioSessionControl.clear();
 }
 
 //-------------------------------------------------------------------------------------------

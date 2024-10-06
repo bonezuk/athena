@@ -1395,6 +1395,137 @@ HRESULT ISimpleAudioVolumeIF::SetMute(const BOOL bMute, LPCGUID EventContext)
 }
 
 //-------------------------------------------------------------------------------------------
+// IAudioSessionControlIF
+//-------------------------------------------------------------------------------------------
+
+IAudioSessionControlIF::IAudioSessionControlIF() : m_pInterface(0)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+IAudioSessionControlIF::IAudioSessionControlIF(IAudioSessionControl *pInterface)  : m_pInterface(pInterface)
+{}
+
+//-------------------------------------------------------------------------------------------
+
+IAudioSessionControlIF::~IAudioSessionControlIF()
+{
+	if(m_pInterface != 0)
+	{
+		m_pInterface->Release();
+		m_pInterface = 0;
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::GetDisplayName(LPWSTR *pRetVal)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetDisplayName(pRetVal);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::GetGroupingParam(GUID *pRetVal)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetGroupingParam(pRetVal);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::GetIconPath(LPWSTR *pRetVal)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetIconPath(pRetVal);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::GetState(AudioSessionState *pRetVal)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->GetState(pRetVal);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::RegisterAudioSessionNotification(IAudioSessionEvents *NewNotifications)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->RegisterAudioSessionNotification(NewNotifications);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::SetDisplayName(LPCWSTR Value, LPCGUID EventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetDisplayName(Value, EventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::SetGroupingParam(LPCGUID Override, LPCGUID EventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetGroupingParam(Override, EventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::SetIconPath(LPCWSTR Value, LPCGUID EventContext)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->SetIconPath(Value, EventContext);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+HRESULT IAudioSessionControlIF::UnregisterAudioSessionNotification(IAudioSessionEvents *NewNotifications)
+{
+	HRESULT res = S_FALSE;
+	if(m_pInterface!=0)
+	{
+		res = m_pInterface->UnregisterAudioSessionNotification(NewNotifications);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace audioio
 } // namespace omega
 //-------------------------------------------------------------------------------------------

@@ -195,7 +195,7 @@ class AUDIOIO_EXPORT AOCoreAudioMacOS : public AOCoreAudio
 		virtual sample_t getDeviceVolume();
 		virtual bool setDeviceVolume(sample_t vol);
 
-		virtual void doSetVolume(sample_t vol);
+		virtual void doSetVolume(sample_t vol, bool isCallback);
 
 	protected slots:
 	

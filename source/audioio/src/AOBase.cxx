@@ -481,7 +481,8 @@ AudioEvent::AudioEvent(AudioEvent::AudioEventType t) : QEvent(static_cast<QEvent
 	m_volume(1.0f),
 	m_channelMap(),
 	m_timeLength(),
-	m_exclusive(false)
+	m_exclusive(false),
+	m_isCallback(false)
 {}
 
 //-------------------------------------------------------------------------------------------
@@ -496,6 +497,7 @@ AudioEvent *AudioEvent::clone(AudioEvent *pEvent)
 	cEvent->volume() = pEvent->volume();
 	cEvent->channelMap() = pEvent->channelMap();
 	cEvent->exclusive() = pEvent->exclusive();
+	cEvent->isCallback() = pEvent->isCallback();
 	return cEvent;
 }
 
@@ -595,6 +597,20 @@ const bool& AudioEvent::exclusive() const
 bool& AudioEvent::exclusive()
 {
 	return m_exclusive;
+}
+
+//-------------------------------------------------------------------------------------------
+
+const bool& AudioEvent::isCallback() const
+{
+	return m_isCallback;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool& AudioEvent::isCallback()
+{
+	return m_isCallback;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -3698,7 +3714,7 @@ void AOBase::setChannelMap(tint devId,const AOChannelMap& chMap)
 
 //-------------------------------------------------------------------------------------------
 
-void AOBase::doSetVolume(sample_t vol)
+void AOBase::doSetVolume(sample_t vol, bool isCallback)
 {
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
 	common::Log::g_Log.print("AOBase::doSetVolume\n");
@@ -3715,6 +3731,10 @@ void AOBase::doSetVolume(sample_t vol)
 	else
 	{
 		m_volume = vol;
+	}
+	if(isCallback)
+	{
+		emitOnVolumeChanged(m_volume);
 	}
 }
 
@@ -4451,7 +4471,7 @@ void AOBase::audioEventStopState(AudioEvent *e)
 			break;
 			
 		case AudioEvent::e_setVolumeEvent:
-			doSetVolume(e->volume());
+			doSetVolume(e->volume(), e->isCallback());
 			break;
 						
 		case AudioEvent::e_setDeviceID:
@@ -4520,7 +4540,7 @@ void AOBase::audioEventPlayState(AudioEvent *e)
 			break;
 			
 		case AudioEvent::e_setVolumeEvent:
-			doSetVolume(e->volume());
+			doSetVolume(e->volume(), e->isCallback());
 			break;
 						
 		case AudioEvent::e_setDeviceID:
@@ -4602,7 +4622,7 @@ void AOBase::audioEventPauseState(AudioEvent *e)
 			break;
 			
 		case AudioEvent::e_setVolumeEvent:
-			doSetVolume(e->volume());
+			doSetVolume(e->volume(), e->isCallback());
 			break;
 						
 		case AudioEvent::e_setDeviceID:
@@ -4680,7 +4700,7 @@ void AOBase::audioEventNoCodecState(AudioEvent *e)
 			break;
 			
 		case AudioEvent::e_setVolumeEvent:
-			doSetVolume(e->volume());
+			doSetVolume(e->volume(), e->isCallback());
 			break;
 			
 		case AudioEvent::e_setDeviceID:
@@ -4762,7 +4782,7 @@ void AOBase::audioEventPreBufferState(AudioEvent *e)
 			break;
 			
 		case AudioEvent::e_setVolumeEvent:
-			doSetVolume(e->volume());
+			doSetVolume(e->volume(), e->isCallback());
 			break;
 			
 		case AudioEvent::e_setDeviceID:
@@ -4839,7 +4859,7 @@ void AOBase::audioEventCrossFadeState(AudioEvent *e)
 			break;
 			
 		case AudioEvent::e_setVolumeEvent:
-			doSetVolume(e->volume());
+			doSetVolume(e->volume(), e->isCallback());
 			break;
 			
 		case AudioEvent::e_setDeviceID:
@@ -5046,6 +5066,7 @@ void AOBase::setVolume(sample_t vol)
 {
 	AudioEvent *e = new AudioEvent(AudioEvent::e_setVolumeEvent);
 	e->volume() = vol;
+	e->isCallback() = false;
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
 	common::Log::g_Log.print("AOBase::setVolume\n");
 #endif
@@ -6821,6 +6842,13 @@ Qt::HANDLE AOBase::threadId()
 void AOBase::emitOnDeviceUpdated(int devIdx)
 {
 	emit onDeviceUpdated(devIdx);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBase::emitOnVolumeChanged(tfloat64 vol)
+{
+	emit onVolumeChanged(vol);
 }
 
 //-------------------------------------------------------------------------------------------

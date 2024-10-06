@@ -45,7 +45,8 @@ AOWin32::AOWin32(QObject *parent) : AOBase(parent),
 	m_pSampleConverter(),
 	m_wasRunThread(false),
 	m_wasRunFlag(false),
-	m_wasPlayExclusive(false)
+	m_wasPlayExclusive(false),
+	m_isVolumeDevice(false)
 {
 	::memset(&m_driverInfo,0,sizeof(ASIODriverInfo));
 	::memset(m_bufferInfos,0,sizeof(ASIOBufferInfo) * c_kMaxOutputChannels);
@@ -102,6 +103,40 @@ engine::AData *AOWin32::allocateData(tint len,tint inChannel,tint outChannel)
 
 //-------------------------------------------------------------------------------------------
 
+bool AOWin32::isASIODevice()
+{
+	bool res = false;
+	QSharedPointer<AOQueryDevice::Device> pDevice = getCurrentDevice();
+	
+	if(!pDevice.isNull())
+	{
+		if(pDevice->type()==AOQueryDevice::Device::e_deviceASIO)
+		{
+			res = true;
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOWin32::isWasAPIDevice()
+{
+	bool res = false;
+	QSharedPointer<AOQueryDevice::Device> pDevice = getCurrentDevice();
+	
+	if(!pDevice.isNull())
+	{
+		if(pDevice->type()==AOQueryDevice::Device::e_deviceWasAPI)
+		{
+			res = true;
+		}
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
 bool AOWin32::openAudio()
 {
 	bool res = false;
@@ -110,33 +145,25 @@ bool AOWin32::openAudio()
 	
 	m_frequency = m_codec->frequency();
 	
-	QSharedPointer<AOQueryDevice::Device> pDevice = getCurrentDevice();
-	if(!pDevice.isNull())
+	if(isASIODevice())
 	{
-		if(pDevice->type()==AOQueryDevice::Device::e_deviceASIO)
+		res = openAudioASIO();
+		if(res)
 		{
-			res = openAudioASIO();
-			if(res)
-			{
-				m_deviceType = AOQueryDevice::Device::e_deviceASIO;
-			}
+			m_deviceType = AOQueryDevice::Device::e_deviceASIO;
 		}
-		else if(pDevice->type()==AOQueryDevice::Device::e_deviceWasAPI)
+	}
+	else if(isWasAPIDevice())
+	{
+		res = openAudioASIO();
+		if(res)
 		{
-			res = openAudioWasAPI();
-			if(res)
-			{
-				m_deviceType = AOQueryDevice::Device::e_deviceWasAPI;
-			}
-		}
-		else
-		{
-			printError("openAudio","Unknown audio device type");
+			m_deviceType = AOQueryDevice::Device::e_deviceASIO;
 		}
 	}
 	else
 	{
-		printError("openAudio","No device information for selected audio device");
+		printError("openAudio","Unknown audio device type");
 	}
 	return res;
 }
@@ -1007,7 +1034,7 @@ bool AOWin32::openAudioWasAPIImpl()
 												{
 													IAudioClockIFSPtr pNewClock(new IAudioClockIF(pClock));
 													m_pAudioClock = pNewClock;
-														
+													openAudioWasAPIVolume();
 													res = true;
 												}
 												else
@@ -1095,7 +1122,9 @@ void AOWin32::closeAudioWasAPI()
 		CloseHandle(m_hWASFeedbackEvent);
 		m_hWASFeedbackEvent = 0;
 	}
-
+	
+	closeAudioWasAPIVolume();
+	
 	if(!m_pAudioClock.isNull())
 	{
 		m_pAudioClock.clear();
@@ -1166,6 +1195,77 @@ bool AOWin32::isAudioWasAPI() const
 
 //-------------------------------------------------------------------------------------------
 
+void AOWin32::openAudioWasAPIVolume()
+{
+	m_isVolumeDevice = false;
+	
+	if(!m_pWASDevice.isNull() && m_pWASDevice->isDeviceVolume())
+	{
+		m_isVolumeDevice = true;
+		m_pWASDevice->setupVolumeNotification(AOWin32::onVolumeChangeNotification, reinterpret_cast<LPVOID>(this));
+		m_volume = getVolume();
+		emitOnVolumeChanged(m_volume);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOWin32::closeAudioWasAPIVolume()
+{
+	if(m_isVolumeDevice && !m_pWASDevice.isNull())
+	{
+		m_pWASDevice->shutdownVolumeNotification();
+	}
+	m_isVolumeDevice = false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOWin32::onVolumeChangeNotification(LPVOID pVInstance, sample_t vol)
+{
+	if(pVInstance != 0)
+	{
+		AOWin32 *pInstance = reinterpret_cast<AOWin32 *>(pVInstance);
+		pInstance->onVolumeChangeNotification(vol);
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOWin32::onVolumeChangeNotification(sample_t vol)
+{
+	AudioEvent *e = new AudioEvent(AudioEvent::e_setVolumeEvent);
+	
+	if(vol < 0.0)
+	{
+		vol = 0.0;
+	}
+	else if(vol > 1.0)
+	{
+		vol = 1.0;
+	}
+	e->volume() = vol;
+	e->isCallback() = true;
+	QCoreApplication::postEvent(this,e);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOWin32::doSetVolume(sample_t vol, bool isCallback)
+{
+	AOBase::doSetVolume(vol);
+	if(isWasAPIDevice() && m_isVolumeDevice && !m_pWASDevice.isNull() && !isCallback)
+	{
+		if(!m_pWASDevice->setVolume(vol))
+		{
+			m_volume = getDeviceVolume();
+			emitOnVolumeChanged(m_volume);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
 void AOWin32::writeToAudioOutputBufferFromPartDataWasAPI(AbstractAudioHardwareBuffer *pBuffer,
                                                          const engine::RData *data,
                                                          tint partNumber,
@@ -1211,6 +1311,15 @@ void AOWin32::writeToAudioOutputBufferFromPartDataWasAPI(AbstractAudioHardwareBu
 	m_pSampleConverter->setNumberOfInputChannels(noInputChannels);
 	m_pSampleConverter->setNumberOfOutputChannels(noOutputChannels);
 	m_pSampleConverter->setVolume(m_volume);
+
+	if(m_isVolumeDevice)
+	{
+		m_pSampleConverter->setVolume(c_plusOneSample);
+	}
+	else
+	{
+		m_pSampleConverter->setVolume(m_volume);
+	}
 	
 	m_pSampleConverter->convertAtIndex(input,iIdx,out,amount,dType);
 }

@@ -630,7 +630,7 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		
 		virtual void setDeviceID(tint idIndex);
 		virtual void setChannelMap(tint devId,const AOChannelMap& chMap);
-		virtual void doSetVolume(sample_t vol);
+		virtual void doSetVolume(sample_t vol, bool isCallback);
 		virtual void doSetCrossFade(const common::TimeStamp& t);
 		virtual void doSetExclusiveMode(int devIdx,bool flag);
 		
@@ -891,6 +891,7 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual void doEventTimer();
 
 		virtual void emitOnDeviceUpdated(int devIdx);
+		virtual void emitOnVolumeChanged(tfloat64 vol);
 
 	protected slots:
 	
@@ -919,6 +920,9 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		// e.g. When WasAPI mode is changed from shared/exclusive the number of
 		// channels and frequencies change
 		void onDeviceUpdated(int devIdx);
+		
+		// Emitted when the volume is changed by audio system or OS from callback
+		void onVolumeChanged(tfloat64 vol);
 };	
 
 //-------------------------------------------------------------------------------------------
@@ -1053,6 +1057,9 @@ class AudioEvent : public QEvent
 		const bool& exclusive() const;
 		bool& exclusive();
 		
+		const bool& isCallback() const;
+		bool& isCallback();
+		
 	protected:
 	
 		tint m_device;
@@ -1062,6 +1069,7 @@ class AudioEvent : public QEvent
 		AOChannelMap m_channelMap;
 		common::TimeStamp m_timeLength;
 		bool m_exclusive;
+		bool m_isCallback;
 };
 
 //-------------------------------------------------------------------------------------------
