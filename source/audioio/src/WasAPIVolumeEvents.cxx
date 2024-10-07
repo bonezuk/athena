@@ -1,4 +1,6 @@
 #include "audioio/inc/WasAPIVolumeEvents.h"
+#include "common/inc/Log.h"
+#include "audioio/inc/WasAPICOMInterfaces.h"
 
 //-------------------------------------------------------------------------------------------
 namespace omega
@@ -96,7 +98,7 @@ HRESULT WasAPISharedVolumeEvents::OnIconPathChanged(LPCWSTR NewIconPath, LPCGUID
 
 HRESULT WasAPISharedVolumeEvents::OnSimpleVolumeChanged(float NewVolume, BOOL NewMute, LPCGUID EventContext)
 {
-	if(m_pNotifier != 0 && !IsEqualGUID(EventContext, GUID_OMEGA_VOLUME_EVENTS))
+	if(m_pNotifier != 0 && !IsEqualGUID(*EventContext, GUID_OMEGA_VOLUME_EVENTS))
 	{
 		sample_t vol;
 		
@@ -145,7 +147,7 @@ HRESULT WasAPISharedVolumeEvents::OnStateChanged(AudioSessionState newState)
 			state = "unknown";
 			break;
 	}
-	QString eventStr("New session state = %1").arg(state);
+	QString eventStr = QString("New session state = %1").arg(state);
 	logEvent("OnStateChanged", eventStr);
 	return S_OK;
 }

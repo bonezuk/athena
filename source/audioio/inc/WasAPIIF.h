@@ -8,6 +8,7 @@
 #include "audioio/inc/AOQueryDevice.h"
 #include "audioio/inc/WasAPICOMInterfaces.h"
 #include "audioio/inc/FormatDescription.h"
+#include "audioio/inc/WasAPIVolumeEvents.h"
 
 #include <QSharedPointer>
 #include <QString>
@@ -84,7 +85,14 @@ class AUDIOIO_EXPORT WasAPIDevice : public QObject
 
 		virtual IAudioClientIFSPtr getAudioClient() = 0;
 		virtual void releaseAudioClient() = 0;
-		
+
+		virtual bool isDeviceVolume() = 0;
+		virtual sample_t getVolume() = 0;
+		virtual bool setVolume(sample_t vol) = 0;
+
+		virtual bool setupVolumeNotification(VolumeChangeNotifier pNotifier, LPVOID pVInstance) = 0;
+		virtual void shutdownVolumeNotification() = 0;
+
 	protected:
 	
 		virtual bool init(const QString& devID) = 0;

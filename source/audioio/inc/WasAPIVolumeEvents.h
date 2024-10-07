@@ -6,15 +6,17 @@
 #include "audioio/inc/WasAPICOMInterfaces.h"
 
 //-------------------------------------------------------------------------------------------
+// GUID to volume controls identifying the volume source change
+//-------------------------------------------------------------------------------------------
+
+DEFINE_GUIDSTRUCT("241a7a58-6c86-41f6-ba70-da2bbba7378a", GUID_OMEGA_VOLUME_EVENTS);
+#define GUID_OMEGA_VOLUME_EVENTS DEFINE_GUIDNAMED(GUID_OMEGA_VOLUME_EVENTS)
+
+//-------------------------------------------------------------------------------------------
 namespace omega
 {
 namespace audioio
 {
-//-------------------------------------------------------------------------------------------
-
-// GUID to volume controls identifying the volume source change
-DEFINE_GUID(GUID_OMEGA_VOLUME_EVENTS, 0x59aedf6bL, 0x66d0, 0x4539, 0x90,0xf7, 0xa4, 0x44, 0x92, 0x29, 0x32, 0xf3);
-
 //-------------------------------------------------------------------------------------------
 
 typedef void(*VolumeChangeNotifier)(LPVOID, sample_t);

@@ -51,6 +51,14 @@ class WasAPIDeviceMock : public WasAPIDevice
 
 		MOCK_METHOD0(getAudioClient,IAudioClientIFSPtr());
 		MOCK_METHOD0(releaseAudioClient,void());
+
+		MOCK_METHOD0(isDeviceVolume, bool());
+		MOCK_METHOD0(getVolume, sample_t());
+		MOCK_METHOD1(setVolume, bool(sample_t vol));
+
+		MOCK_METHOD2(setupVolumeNotification, bool(VolumeChangeNotifier pNotifier, LPVOID pVInstance));
+		MOCK_METHOD0(shutdownVolumeNotification, void());
+
 	protected:
 	
 		virtual bool init(const QString& devID);

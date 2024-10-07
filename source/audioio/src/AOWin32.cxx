@@ -1253,12 +1253,12 @@ void AOWin32::onVolumeChangeNotification(sample_t vol)
 
 void AOWin32::doSetVolume(sample_t vol, bool isCallback)
 {
-	AOBase::doSetVolume(vol);
+	AOBase::doSetVolume(vol, isCallback);
 	if(isWasAPIDevice() && m_isVolumeDevice && !m_pWASDevice.isNull() && !isCallback)
 	{
 		if(!m_pWASDevice->setVolume(vol))
 		{
-			m_volume = getDeviceVolume();
+			m_volume = m_pWASDevice->getVolume();
 			emitOnVolumeChanged(m_volume);
 		}
 	}

@@ -1099,7 +1099,7 @@ IAudioEndpointVolumeIF::IAudioEndpointVolumeIF(IAudioEndpointVolume *pInterface)
 
 //-------------------------------------------------------------------------------------------
 
-IAudioEndpointVolumeIF::~IAudioEndpointVolumeIF();
+IAudioEndpointVolumeIF::~IAudioEndpointVolumeIF()
 {
 	if(m_pInterface!=0)
 	{
@@ -1317,9 +1317,10 @@ HRESULT IAudioEndpointVolumeIF::VolumeStepDown(LPCGUID pguidEventContext)
 HRESULT IAudioEndpointVolumeIF::VolumeStepUp(LPCGUID pguidEventContext)
 {
 	HRESULT res = S_FALSE;
-	if(m_pInterface!=0)
+	if(m_pInterface != 0)
 	{
 		res = m_pInterface->VolumeStepUp(pguidEventContext);
+	}
 	return res;
 }
 
@@ -1337,7 +1338,7 @@ ISimpleAudioVolumeIF::ISimpleAudioVolumeIF(ISimpleAudioVolume *pInterface) : m_p
 
 //-------------------------------------------------------------------------------------------
 
-ISimpleAudioVolumeIF::~ISimpleAudioVolumeIF();
+ISimpleAudioVolumeIF::~ISimpleAudioVolumeIF()
 {
 	if(m_pInterface!=0)
 	{

@@ -7,6 +7,7 @@
 #include "audioio/inc/WasAPICOMInterfaces.h"
 #include "audioio/inc/FormatDescriptionUtils.h"
 #include "common/inc/Log.h"
+#include "audioio/inc/WasAPIVolumeEvents.h"
 
 #include <QSettings>
 #include <QSet>
@@ -138,8 +139,8 @@ class AUDIOIO_EXPORT WasAPIDeviceLayer : public WasAPIDevice
 		IMMDeviceIFSPtr m_pDevice;
 		IAudioClientIFSPtr m_pAudioClient;
 		
-		ISimpleAudioVolumeIF m_pVolumeShared;
-		IAudioEndpointVolumeIF m_pVolumeExclusive;
+		ISimpleAudioVolumeIFSPtr m_pVolumeShared;
+		IAudioEndpointVolumeIFSPtr m_pVolumeExclusive;
 		
 		IAudioSessionControlIFSPtr m_pAudioSessionControl;
 		WasAPISharedVolumeEvents *m_pVolumeEventsShared;

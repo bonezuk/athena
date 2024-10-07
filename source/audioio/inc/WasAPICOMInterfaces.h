@@ -12,6 +12,8 @@
 #include <KsMedia.h>
 #include <MMReg.h>
 #include <guiddef.h>
+#include <endpointvolume.h>
+#include <audiopolicy.h>
 
 #include <QSharedPointer>
 
@@ -372,7 +374,7 @@ class AUDIOIO_EXPORT IAudioSessionControlIF
 	
 	protected:
 	
-		IAudioSessionControl *m_pInterface
+		IAudioSessionControl* m_pInterface;
 };
 
 typedef QSharedPointer<IAudioSessionControlIF> IAudioSessionControlIFSPtr;

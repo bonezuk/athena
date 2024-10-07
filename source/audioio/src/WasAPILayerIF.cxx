@@ -292,8 +292,6 @@ void WasAPIDeviceLayer::done()
 		}
 	}
 	m_pAudioSessionControl.clear();
-	m_pVolumeExclusive.clear();
-	m_pVolumeShared.clear();
 	m_pAudioClient.clear();
 	m_pDevice.clear();
 }
@@ -1865,7 +1863,6 @@ bool WasAPIDeviceLayer::isDeviceVolumeExclusive()
 	
 	if(!pVolume.isNull())
 	{
-		HRESULT hr;
 		DWORD mask = 0;
 		
 		if(pVolume->QueryHardwareSupport(&mask) == S_OK)
@@ -1880,7 +1877,7 @@ bool WasAPIDeviceLayer::isDeviceVolumeExclusive()
 
 sample_t WasAPIDeviceLayer::getVolume()
 {
-	sample_t vol
+	sample_t vol;
 	
 	if(isExclusive())
 	{
@@ -1979,6 +1976,7 @@ bool WasAPIDeviceLayer::setVolumeShared(sample_t vol)
 {
 	bool res = false;
 	ISimpleAudioVolumeIFSPtr pVolume = getVolumeSharedIF();
+	const GUID volGUID = GUID_OMEGA_VOLUME_EVENTS;
 	
 	if(!pVolume.isNull())
 	{
@@ -1990,7 +1988,7 @@ bool WasAPIDeviceLayer::setVolumeShared(sample_t vol)
 			pVolume->GetMute(&isMute);
 			if(!isMute)
 			{
-				if(pVolume->SetMute(TRUE, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+				if(pVolume->SetMute(TRUE, &volGUID) != S_OK)
 				{
 					res = false;
 				}
@@ -2003,7 +2001,7 @@ bool WasAPIDeviceLayer::setVolumeShared(sample_t vol)
 			pVolume->GetMute(&isMute);
 			if(isMute)
 			{
-				if(pVolume->SetMute(FALSE, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+				if(pVolume->SetMute(FALSE, &volGUID) != S_OK)
 				{
 					res = false;
 				}
@@ -2011,7 +2009,7 @@ bool WasAPIDeviceLayer::setVolumeShared(sample_t vol)
 		}
 		
 		float pVol = static_cast<float>(vol);
-		if(pVolume->SetMasterVolume(pVol, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+		if(pVolume->SetMasterVolume(pVol, &volGUID) != S_OK)
 		{
 			res = false;
 		}
@@ -2025,6 +2023,7 @@ bool WasAPIDeviceLayer::setVolumeExclusive(sample_t vol)
 {
 	bool res = false;
 	IAudioEndpointVolumeIFSPtr pVolume = getVolumeExclusiveIF();
+	const GUID volGUID = GUID_OMEGA_VOLUME_EVENTS;
 	
 	if(!pVolume.isNull())
 	{
@@ -2036,7 +2035,7 @@ bool WasAPIDeviceLayer::setVolumeExclusive(sample_t vol)
 			pVolume->GetMute(&isMute);
 			if(!isMute)
 			{
-				if(pVolume->SetMute(TRUE, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+				if(pVolume->SetMute(TRUE, &volGUID) != S_OK)
 				{
 					res = false;
 				}
@@ -2049,7 +2048,7 @@ bool WasAPIDeviceLayer::setVolumeExclusive(sample_t vol)
 			pVolume->GetMute(&isMute);
 			if(isMute)
 			{
-				if(pVolume->SetMute(FALSE, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+				if(pVolume->SetMute(FALSE, &volGUID) != S_OK)
 				{
 					res = false;
 				}
@@ -2057,7 +2056,7 @@ bool WasAPIDeviceLayer::setVolumeExclusive(sample_t vol)
 		}
 		
 		float pVol = static_cast<float>(vol);
-		if(pVolume->SetMasterVolumeLevelScalar(pVol, GUID_OMEGA_VOLUME_EVENTS) != S_OK)
+		if(pVolume->SetMasterVolumeLevelScalar(pVol, &volGUID) != S_OK)
 		{
 			res = false;
 		}
@@ -2098,7 +2097,7 @@ bool WasAPIDeviceLayer::setupVolumeNotificationShared(VolumeChangeNotifier pNoti
 	IAudioSessionControl *pControl = 0;
 	bool res = false;
 		
-	hr = m_pAudioClient->GetService(IID_IAudioSessionControl, reinterpret_cast<void **>(&pControl));
+	hr = m_pAudioClient->GetService(__uuidof(IAudioSessionControl), reinterpret_cast<void **>(&pControl));
 	if(hr == S_OK && pControl != 0)
 	{
 		IAudioSessionControlIFSPtr pAudioCtrl(new IAudioSessionControlIF(pControl));
