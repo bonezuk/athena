@@ -158,7 +158,7 @@ bool AOWin32::openAudio()
 		res = openAudioWasAPI();
 		if(res)
 		{
-			m_deviceType = AOQueryDevice::Device::e_deviceASIO;
+			m_deviceType = AOQueryDevice::Device::e_deviceWasAPI;
 		}
 	}
 	else

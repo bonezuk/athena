@@ -284,6 +284,7 @@ bool WasAPIDeviceLayer::init(const QString& devID)
 void WasAPIDeviceLayer::done()
 {
 	shutdownVolumeNotification();
+	releaseVolumeIF();
 	if(!m_pDevice.isNull())
 	{
 		if(!WasAPIIF::instance().dynamicCast<WasAPILayerIF>().isNull())
@@ -1325,6 +1326,7 @@ IAudioClientIFSPtr WasAPIDeviceLayer::getAudioClient()
 
 void WasAPIDeviceLayer::releaseAudioClient()
 {
+	releaseVolumeIF();
 	if(!m_pAudioClient.isNull())
 	{
 		m_pAudioClient.clear();
@@ -1911,8 +1913,11 @@ sample_t WasAPIDeviceLayer::getVolumeShared()
 		pVolume->GetMute(&isMute);
 		if(!isMute)
 		{
+			HRESULT hr;
 			float pVol = 1.0f;
-			if(pVolume->GetMasterVolume(&pVol) == S_OK)
+
+			hr = pVolume->GetMasterVolume(&pVol);
+			if(hr == S_OK)
 			{
 				vol = static_cast<sample_t>(pVol);
 			}
