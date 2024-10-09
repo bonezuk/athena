@@ -155,7 +155,7 @@ bool AOWin32::openAudio()
 	}
 	else if(isWasAPIDevice())
 	{
-		res = openAudioASIO();
+		res = openAudioWasAPI();
 		if(res)
 		{
 			m_deviceType = AOQueryDevice::Device::e_deviceASIO;
@@ -1203,7 +1203,7 @@ void AOWin32::openAudioWasAPIVolume()
 	{
 		m_isVolumeDevice = true;
 		m_pWASDevice->setupVolumeNotification(AOWin32::onVolumeChangeNotification, reinterpret_cast<LPVOID>(this));
-		m_volume = getVolume();
+		m_volume = m_pWASDevice->getVolume();
 		emitOnVolumeChanged(m_volume);
 	}
 }
