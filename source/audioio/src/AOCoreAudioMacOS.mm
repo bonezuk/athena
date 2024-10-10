@@ -2257,7 +2257,7 @@ sample_t AOCoreAudioMacOS::getDeviceVolume()
 	AudioObjectPropertyAddress prop = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, 0 };
 	QSharedPointer<AOQueryCoreAudio::DeviceCoreAudio> pDevice = getCurrentCoreAudioDevice();
 	
-	if(isDeviceMuted())
+        if(!isDeviceMuted())
 	{
 		// 0 = master volume, 1 = left volume, 2 = right volume.
 		for(i = 0; i < 3; i++)
@@ -2395,8 +2395,8 @@ OSStatus AOCoreAudioMacOS::volumeChangeProcImpl(AudioObjectID inObjectID,UInt32 
 
 void AOCoreAudioMacOS::addVolumeChangeNotification(AudioDeviceID devID)
 {
-        AudioObjectPropertyAddress propVolume = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
-        AudioObjectPropertyAddress propMuted = { kAudioDevicePropertyMute, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
+	AudioObjectPropertyAddress propVolume = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
+	AudioObjectPropertyAddress propMuted = { kAudioDevicePropertyMute, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
 	OSStatus err;
 	
 	if(CoreAudioIF::instance()->AudioObjectHasProperty(devID, &propVolume))
@@ -2421,8 +2421,8 @@ void AOCoreAudioMacOS::addVolumeChangeNotification(AudioDeviceID devID)
 
 void AOCoreAudioMacOS::removeVolumeChangeNotification(AudioDeviceID devID)
 {
-        AudioObjectPropertyAddress propVolume = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
-        AudioObjectPropertyAddress propMuted = { kAudioDevicePropertyMute, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
+	AudioObjectPropertyAddress propVolume = { kAudioDevicePropertyVolumeScalar, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
+	AudioObjectPropertyAddress propMuted = { kAudioDevicePropertyMute, kAudioDevicePropertyScopeOutput, kAudioObjectPropertyElementMain };
 	OSStatus err;
 	
 	if(CoreAudioIF::instance()->AudioObjectHasProperty(devID, &propVolume))
