@@ -78,6 +78,8 @@ class GREENOMEGA_EXPORT GreenCodec : public engine::Codec
 		engine::File *m_file;
 		
 		virtual void printError(const tchar *strR,const tchar *strE) const;
+		
+		virtual void setPartDataType(RData::Part& part);
 };
 
 //-------------------------------------------------------------------------------------------
