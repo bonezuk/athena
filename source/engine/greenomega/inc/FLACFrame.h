@@ -4,6 +4,7 @@
 //-------------------------------------------------------------------------------------------
 
 #include "common/inc/Allocation.h"
+#include "engine/inc/RData.h"
 #include "engine/greenomega/inc/FLACHeader.h"
 #include "engine/greenomega/inc/FLACSubframe.h"
 #include "engine/greenomega/inc/FLACFramework.h"
@@ -35,6 +36,9 @@ class GREENOMEGA_EXPORT FLACFrame
 		const common::TimeStamp& end() const;
 
 		bool seek(FLACFramework *framework,common::TimeStamp& t);
+
+		virtual CodecDataType dataTypesSupported() const;
+		virtual bool setDataTypeFormat(CodecDataType type);
 		
 	protected:
 		
@@ -43,12 +47,19 @@ class GREENOMEGA_EXPORT FLACFrame
 		FLACSubframe *m_subframe[8];
 		
 		tint m_outSize;
+		// Buffer for 64-bit double precision
 		sample_t *m_out[8];
+		// Buffer for 16-bit integer
+		tint16 *m_outInt16[8];
+		// Buffer for 24-bit OR 32-bit integer
+		tint32 *m_outInt32[8];
 
 		common::TimeStamp m_timeStart;
 		common::TimeStamp m_timeEnd;
 
 		tint m_count;
+		
+		CodecDataType m_outputFormatType;
 		
 		bool allocate();
 		bool crc(Sequence *seq);

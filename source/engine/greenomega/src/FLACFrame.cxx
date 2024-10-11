@@ -18,10 +18,13 @@ FLACFrame::FLACFrame(FLACMetaStreamInfo *info) : m_streamInfo(info),
 	m_outSize(0),
 	m_timeStart(),
 	m_timeEnd(),
-	m_count(0)
+	m_count(0),
+	m_outputFormatType(e_SampleFloat)
 {
 	::memset(m_subframe,0,8 * sizeof(FLACSubframe *));
 	::memset(m_out,0,8 * sizeof(sample_t *));
+	::memset(m_outInt16, 0, 8 * sizeof(tint16 *));
+	::memset(m_outInt32, 0, 8 * sizeof(tint32 *));
 }
 
 //-------------------------------------------------------------------------------------------
@@ -39,8 +42,18 @@ FLACFrame::~FLACFrame()
 		}
 		if(m_out[i]!=0)
 		{
-			delete m_out[i];
+			delete [] m_out[i];
 			m_out[i] = 0;
+		}
+        if(m_outInt16[i]!=0)
+		{
+			delete [] m_outInt16[i];
+			m_outInt16[i] = 0;
+		}
+        if(m_outInt32[i]!=0)
+		{
+			delete [] m_outInt32[i];
+			m_outInt32[i] = 0;
 		}
 	}
 }
@@ -462,6 +475,48 @@ bool FLACFrame::seek(FLACFramework *framework,common::TimeStamp& t)
 		}
 	}
 	return false;
+}
+
+//-------------------------------------------------------------------------------------------
+
+CodecDataType FLACFrame::dataTypesSupported() const
+{
+	CodecDataType types = e_SampleFloat;
+	int bps = m_header.bitsPerSample();
+	
+	if(bps <= 16)
+	{
+		types |= e_SampleInt16;
+	}
+	else if(bps <= 24)
+	{
+		types |= e_SampleInt24;
+	}
+	else if(bps <= 32)
+	{
+		types |= e_SampleInt32;
+	}
+	return types;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool FLACFrame::setDataTypeFormat(CodecDataType type)
+{
+	bool res;
+	CodecDataType caps;
+	
+	caps = dataTypesSupported();
+	if((type == e_SampleInt16 && (caps & e_SampleInt16)) || (type == e_SampleInt24 && (caps & e_SampleInt24)) || (type == e_SampleInt32 && (caps & e_SampleInt32)))
+	{
+		m_outputFormatType = type;
+		res = true;
+	}
+	else
+	{
+        res = (!(type & ~e_SampleFloat) && type == e_SampleFloat) ? true : false;
+	}
+	return res;
 }
 
 //-------------------------------------------------------------------------------------------

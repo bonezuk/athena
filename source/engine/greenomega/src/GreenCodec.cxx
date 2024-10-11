@@ -357,6 +357,36 @@ tint GreenCodec::bitrate() const
 }
 
 //-------------------------------------------------------------------------------------------
+
+CodecDataType GreenCodec::dataTypesSupported() const
+{
+	CodecDataType types = e_SampleFloat;
+	
+	if(m_frame != 0)
+	{
+        types = m_frame->dataTypesSupported();
+	}
+	return types;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool GreenCodec::setDataTypeFormat(CodecDataType type)
+{
+	bool res;
+	
+	if(m_frame != 0)
+	{
+		res = m_frame->setDataTypeFormat(type);
+	}
+	else
+	{
+		res = Codec::setDataTypeFormat(type);
+	}
+	return res;
+}
+
+//-------------------------------------------------------------------------------------------
 } // namespace greenomega
 } // namespace engine
 } // namespace omega

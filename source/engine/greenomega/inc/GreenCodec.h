@@ -60,7 +60,10 @@ class GREENOMEGA_EXPORT GreenCodec : public engine::Codec
 		virtual tint frequency() const;
 		virtual tint noChannels() const;
 		virtual common::TimeStamp length() const;
-		
+
+		virtual CodecDataType dataTypesSupported() const;
+		virtual bool setDataTypeFormat(CodecDataType type);
+
 	protected:
 		
 		FLACFramework *m_framework;

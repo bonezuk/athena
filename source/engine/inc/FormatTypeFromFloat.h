@@ -97,11 +97,17 @@ class ENGINE_EXPORT SampleFromInteger
 		SampleFromInteger(tint noBits);
 		
 		sample_t convert(tint32 v);
+		tint16 convertInt16(tint32 v);
+		tint32 convertInt24(tint32 v);
+		tint32 convertInt32(tint32 v);
 		
 	protected:
 	
 		sample_t m_divP;
 		sample_t m_divN;
+		int m_noBits;
+		tint32 m_min;
+		tint32 m_max;
 };
 
 //-------------------------------------------------------------------------------------------
