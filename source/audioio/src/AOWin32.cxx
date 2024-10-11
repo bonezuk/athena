@@ -1535,7 +1535,7 @@ void AOWin32::setCodecSampleFormatType(engine::Codec *codec, engine::RData *item
 {
 	if(!item->isMixing())
 	{
-		if(m_deviceType==AOQueryDevice::Device::e_deviceASIO || (m_pSampleConverter.isNull() && !m_pSampleConverter->isFloat()))
+		if(m_deviceType==AOQueryDevice::Device::e_deviceASIO || (!m_pSampleConverter.isNull() && !m_pSampleConverter->isFloat()))
 		{
 			if(codec->dataTypesSupported() & engine::e_SampleInt32)
 			{
