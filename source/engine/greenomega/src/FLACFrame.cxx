@@ -678,44 +678,9 @@ bool FLACFrame::seek(FLACFramework *framework,common::TimeStamp& t)
 
 //-------------------------------------------------------------------------------------------
 
-CodecDataType FLACFrame::dataTypesSupported() const
+void FLACFrame::setDataTypeFormat(CodecDataType type)
 {
-	CodecDataType types = e_SampleFloat;
-	int bps = m_header.bitsPerSample();
-	
-	if(bps <= 16)
-	{
-		types |= e_SampleInt16;
-	}
-	else if(bps <= 24)
-	{
-		types |= e_SampleInt24;
-	}
-	else if(bps <= 32)
-	{
-		types |= e_SampleInt32;
-	}
-	return types;
-}
-
-//-------------------------------------------------------------------------------------------
-
-bool FLACFrame::setDataTypeFormat(CodecDataType type)
-{
-	bool res;
-	CodecDataType caps;
-	
-	caps = dataTypesSupported();
-	if((type == e_SampleInt16 && (caps & e_SampleInt16)) || (type == e_SampleInt24 && (caps & e_SampleInt24)) || (type == e_SampleInt32 && (caps & e_SampleInt32)))
-	{
-		m_outputFormatType = type;
-		res = true;
-	}
-	else
-	{
-        res = (!(type & ~e_SampleFloat) && type == e_SampleFloat) ? true : false;
-	}
-	return res;
+	m_outputFormatType = type;
 }
 
 //-------------------------------------------------------------------------------------------

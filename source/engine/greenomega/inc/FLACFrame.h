@@ -46,8 +46,7 @@ class GREENOMEGA_EXPORT FLACFrame
 
 		bool seek(FLACFramework *framework,common::TimeStamp& t);
 
-		virtual CodecDataType dataTypesSupported() const;
-		virtual bool setDataTypeFormat(CodecDataType type);
+		virtual void setDataTypeFormat(CodecDataType type);
 		virtual CodecDataType dataType() const;
 		
 	protected:

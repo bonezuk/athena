@@ -412,9 +412,22 @@ CodecDataType GreenCodec::dataTypesSupported() const
 {
 	CodecDataType types = e_SampleFloat;
 	
-	if(m_frame != 0)
+	if(m_framework != 0 && m_framework->streamInfo() != 0)
 	{
-        types = m_frame->dataTypesSupported();
+		FLACMetaStreamInfo *info = m_framework->streamInfo();
+		
+		if(info->m_bitsPerSample <= 16)
+		{
+			types |= e_SampleInt16;
+		}
+		else if(info->m_bitsPerSample <= 24)
+		{
+			types |= e_SampleInt24;
+		}
+		else
+		{
+			types |= e_SampleInt32;
+		}
 	}
 	return types;
 }
@@ -427,7 +440,18 @@ bool GreenCodec::setDataTypeFormat(CodecDataType type)
 	
 	if(m_frame != 0)
 	{
-		res = m_frame->setDataTypeFormat(type);
+		CodecDataType caps;
+		
+		caps = dataTypesSupported();
+		if((type == e_SampleInt16 && (caps & e_SampleInt16)) || (type == e_SampleInt24 && (caps & e_SampleInt24)) || (type == e_SampleInt32 && (caps & e_SampleInt32)))
+		{
+			m_frame->setDataTypeFormat(type);
+			res = true;
+		}
+		else
+		{
+			res = Codec::setDataTypeFormat(type);
+		}
 	}
 	else
 	{
