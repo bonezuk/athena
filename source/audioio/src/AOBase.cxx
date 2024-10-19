@@ -6807,7 +6807,36 @@ QSharedPointer<AOQueryDevice::Device> AOBase::getCurrentDevice()
 
 FormatDescription AOBase::getSourceDescription(tint noChannels)
 {
-	FormatDescription desc(FormatDescription::e_DataFloatDouble,64,noChannels,getFrequency());
+	FormatDescription desc;
+
+	if(getCodec() != 0)
+	{
+		if(getCodec()->dataTypesSupported() & engine::e_SampleInt32)
+		{
+			FormatDescription descTmp(FormatDescription::e_DataSignedInteger, 32, noChannels, getFrequency());
+			desc = descTmp;
+		}
+		else if(getCodec()->dataTypesSupported() & engine::e_SampleInt24)
+		{
+			FormatDescription descTmp(FormatDescription::e_DataSignedInteger, 24, noChannels, getFrequency());
+			desc = descTmp;
+		}
+		else if(getCodec()->dataTypesSupported() & engine::e_SampleInt16)
+		{
+			FormatDescription descTmp(FormatDescription::e_DataSignedInteger, 16, noChannels, getFrequency());
+			desc = descTmp;
+		}
+		else
+		{
+			FormatDescription descTmp(FormatDescription::e_DataFloatDouble, 64, noChannels, getFrequency());
+			desc = descTmp;
+		}
+	}
+	else
+	{
+		FormatDescription descTmp(FormatDescription::e_DataFloatDouble, 64, noChannels, getFrequency());
+		desc = descTmp;
+	}
 	return desc;
 }
 

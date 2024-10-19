@@ -11632,6 +11632,7 @@ TEST(AOBase,getCurrentDeviceWithDefaultAlreadyInitialized)
 class AOBaseGetSourceDescriptionTest : public AOBaseTest
 {
 	public:
+		MOCK_METHOD0(getCodec, engine::Codec *());
 		MOCK_CONST_METHOD0(getFrequency,tint());
 		FormatDescription getSourceDescription(tint noChannels);
 };
@@ -11645,9 +11646,10 @@ FormatDescription AOBaseGetSourceDescriptionTest::getSourceDescription(tint noCh
 
 //-------------------------------------------------------------------------------------------
 
-TEST(AOCoreAudio,getSourceDescription)
+TEST(AOBase, getSourceDescriptionNoCodec)
 {
 	AOBaseGetSourceDescriptionTest audio;
+    EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(reinterpret_cast<engine::Codec *>(NULL)));
 	EXPECT_CALL(audio,getFrequency()).WillRepeatedly(Return(192000));
 	
 	FormatDescription desc;
@@ -11657,6 +11659,86 @@ TEST(AOCoreAudio,getSourceDescription)
 	EXPECT_EQ(64,desc.bits());
 	EXPECT_EQ(6,desc.channels());
 	EXPECT_EQ(192000,desc.frequency());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, getSourceDescriptionCodecInt32)
+{
+	CodecMock codec;
+	EXPECT_CALL(codec, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleInt32 | engine::e_SampleFloat));
+
+	AOBaseGetSourceDescriptionTest audio;
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&codec));
+	EXPECT_CALL(audio,getFrequency()).WillRepeatedly(Return(48000));
+	
+	FormatDescription desc;
+	desc = audio.getSourceDescription(2);
+	
+	EXPECT_EQ(FormatDescription::e_DataSignedInteger, desc.typeOfData());
+	EXPECT_EQ(32, desc.bits());
+	EXPECT_EQ(2, desc.channels());
+	EXPECT_EQ(48000, desc.frequency());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, getSourceDescriptionCodecInt24)
+{
+	CodecMock codec;
+	EXPECT_CALL(codec, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleInt24 | engine::e_SampleFloat));
+
+	AOBaseGetSourceDescriptionTest audio;
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&codec));
+	EXPECT_CALL(audio,getFrequency()).WillRepeatedly(Return(48000));
+	
+	FormatDescription desc;
+	desc = audio.getSourceDescription(2);
+	
+	EXPECT_EQ(FormatDescription::e_DataSignedInteger, desc.typeOfData());
+	EXPECT_EQ(24, desc.bits());
+	EXPECT_EQ(2, desc.channels());
+	EXPECT_EQ(48000, desc.frequency());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, getSourceDescriptionCodecInt16)
+{
+	CodecMock codec;
+	EXPECT_CALL(codec, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleInt16 | engine::e_SampleFloat));
+
+	AOBaseGetSourceDescriptionTest audio;
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&codec));
+	EXPECT_CALL(audio,getFrequency()).WillRepeatedly(Return(48000));
+	
+	FormatDescription desc;
+	desc = audio.getSourceDescription(2);
+	
+	EXPECT_EQ(FormatDescription::e_DataSignedInteger, desc.typeOfData());
+	EXPECT_EQ(16, desc.bits());
+	EXPECT_EQ(2, desc.channels());
+	EXPECT_EQ(48000, desc.frequency());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, getSourceDescriptionCodecNoInteger)
+{
+	CodecMock codec;
+	EXPECT_CALL(codec, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+
+	AOBaseGetSourceDescriptionTest audio;
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&codec));
+	EXPECT_CALL(audio,getFrequency()).WillRepeatedly(Return(48000));
+	
+	FormatDescription desc;
+	desc = audio.getSourceDescription(2);
+	
+	EXPECT_EQ(FormatDescription::e_DataFloatDouble, desc.typeOfData());
+	EXPECT_EQ(64, desc.bits());
+	EXPECT_EQ(2, desc.channels());
+	EXPECT_EQ(48000, desc.frequency());
 }
 
 //-------------------------------------------------------------------------------------------
