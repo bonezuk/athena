@@ -743,6 +743,7 @@ class AUDIOIO_EXPORT AOBase : public QObject
 		virtual QSharedPointer<AOQueryDevice::Device> getCurrentDevice();
 		virtual FormatDescription getSourceDescription(tint noChannels);
 
+		virtual bool isNextCodecSeamless();
 		virtual void setCodecSampleFormatType(engine::Codec *codec, engine::RData *item);
 
 		virtual bool isChannelGenerated(tint inChannelIdx) const;

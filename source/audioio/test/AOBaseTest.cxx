@@ -798,7 +798,7 @@ TEST(AOBase,startNextCodecLocalSuccessWithSeek)
 	
 	EXPECT_CALL(audio,stopNextCodec()).Times(1);
 	EXPECT_CALL(audio,getCodecState()).Times(2).WillRepeatedly(Return(AOBase::e_codecCurrentFinish));
-	EXPECT_CALL(audio,getNextCodec()).Times(9).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
+    EXPECT_CALL(audio,getNextCodec()).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
 	EXPECT_CALL(audio,createNewCodecFromUrl(fileName)).Times(1).WillOnce(Return(&codec));
 	EXPECT_CALL(audio,setNextCodec(&codec)).Times(1);
 	EXPECT_CALL(audio,getAudioChannelMapConst()).Times(1).WillOnce(ReturnRef(channels));
@@ -811,14 +811,17 @@ TEST(AOBase,startNextCodecLocalSuccessWithSeek)
 	EXPECT_CALL(codec,isSeek()).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(audio,getNextCodecSeekTime()).Times(2).WillRepeatedly(ReturnRef(nextCodecSeekTime));
 	EXPECT_CALL(codec,seek(nextCodecSeekTime)).Times(1);
-	EXPECT_CALL(codec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(audio,getCodec()).Times(2).WillRepeatedly(Return(&currentCodec));
-	EXPECT_CALL(currentCodec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(codec,noChannels()).Times(1).WillOnce(Return(2));
-	EXPECT_CALL(audio,getNoInChannels()).Times(1).WillOnce(Return(2));
+	
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&currentCodec));
+	EXPECT_CALL(codec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(currentCodec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(codec,noChannels()).WillRepeatedly(Return(2));
+    EXPECT_CALL(audio,getNoInChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+    EXPECT_CALL(currentCodec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+	
 	EXPECT_CALL(audio,getState()).Times(1).WillOnce(Return(AOBase::e_statePause));
 	EXPECT_CALL(audio,setNextName(fileName)).Times(1);
-	
 	EXPECT_CALL(audio,setCodecState(AOBase::e_codecNextQueued)).Times(1);
 	
 	EXPECT_TRUE(audio.testStartNextCodec(fileName,startTime,trackLen,true));
@@ -911,7 +914,7 @@ TEST(AOBase,startNextCodecSuccessWithFadeAndStatePlay)
 	AOChannelMapMock channels;
 	
 	EXPECT_CALL(audio,stopNextCodec()).Times(1);
-	EXPECT_CALL(audio,getNextCodec()).Times(8).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
+	EXPECT_CALL(audio,getNextCodec()).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
 	EXPECT_CALL(audio,createNewCodecFromUrl(fileName)).Times(1).WillOnce(Return(&codec));
 	EXPECT_CALL(audio,setNextCodec(&codec)).Times(1);
 	EXPECT_CALL(audio,setNextCodecTimeLengthComplete(trackLen)).Times(1);
@@ -922,11 +925,15 @@ TEST(AOBase,startNextCodecSuccessWithFadeAndStatePlay)
 	EXPECT_CALL(codec,isRemote()).Times(1).WillOnce(Return(false));
 	EXPECT_CALL(codec,init()).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(codec,isSeek()).Times(1).WillOnce(Return(false));
-	EXPECT_CALL(codec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(audio,getCodec()).Times(2).WillRepeatedly(Return(&currentCodec));
-	EXPECT_CALL(currentCodec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(codec,noChannels()).Times(1).WillOnce(Return(2));
-	EXPECT_CALL(audio,getNoInChannels()).Times(1).WillOnce(Return(2));
+
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&currentCodec));
+	EXPECT_CALL(codec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(currentCodec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(codec,noChannels()).WillRepeatedly(Return(2));
+    EXPECT_CALL(audio,getNoInChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+    EXPECT_CALL(currentCodec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+
 	EXPECT_CALL(audio,getState()).Times(1).WillOnce(Return(AOBase::e_statePlay));
 	EXPECT_CALL(audio,calculateNextCodecCrossFadeTime()).Times(1);
 	EXPECT_CALL(audio,setNextName(fileName)).Times(1);
@@ -949,7 +956,7 @@ TEST(AOBase,startNextCodecSuccessWithFadeAndStateNotPlay)
 	AOChannelMapMock channels;
 	
 	EXPECT_CALL(audio,stopNextCodec()).Times(1);
-	EXPECT_CALL(audio,getNextCodec()).Times(8).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
+	EXPECT_CALL(audio,getNextCodec()).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
 	EXPECT_CALL(audio,createNewCodecFromUrl(fileName)).Times(1).WillOnce(Return(&codec));
 	EXPECT_CALL(audio,setNextCodec(&codec)).Times(1);
 	EXPECT_CALL(audio,getAudioChannelMapConst()).Times(1).WillOnce(ReturnRef(channels));
@@ -960,11 +967,15 @@ TEST(AOBase,startNextCodecSuccessWithFadeAndStateNotPlay)
 	EXPECT_CALL(codec,isRemote()).Times(1).WillOnce(Return(false));
 	EXPECT_CALL(codec,init()).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(codec,isSeek()).Times(1).WillOnce(Return(false));
-	EXPECT_CALL(codec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(audio,getCodec()).Times(2).WillRepeatedly(Return(&currentCodec));
-	EXPECT_CALL(currentCodec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(codec,noChannels()).Times(1).WillOnce(Return(2));
-	EXPECT_CALL(audio,getNoInChannels()).Times(1).WillOnce(Return(2));
+	
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&currentCodec));
+	EXPECT_CALL(codec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(currentCodec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(codec,noChannels()).WillRepeatedly(Return(2));
+    EXPECT_CALL(audio,getNoInChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+    EXPECT_CALL(currentCodec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+
 	EXPECT_CALL(audio,getState()).Times(1).WillOnce(Return(AOBase::e_statePause));
 	EXPECT_CALL(audio,setNextName(fileName)).Times(1);
 	EXPECT_CALL(audio,getCodecState()).Times(2).WillRepeatedly(Return(AOBase::e_codecCurrentFinish));
@@ -986,7 +997,7 @@ TEST(AOBase,startNextCodecSuccessWithCurrentCodecFinishedAndLengthOfNextCodecUnd
 	AOChannelMapMock channels;
 
 	EXPECT_CALL(audio,stopNextCodec()).Times(1);
-	EXPECT_CALL(audio,getNextCodec()).Times(9).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
+	EXPECT_CALL(audio,getNextCodec()).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
 	EXPECT_CALL(audio,createNewCodecFromUrl(fileName)).Times(1).WillOnce(Return(&codec));
 	EXPECT_CALL(audio,setNextCodec(&codec)).Times(1);
 	EXPECT_CALL(audio,getAudioChannelMapConst()).Times(1).WillOnce(ReturnRef(channels));
@@ -997,11 +1008,15 @@ TEST(AOBase,startNextCodecSuccessWithCurrentCodecFinishedAndLengthOfNextCodecUnd
 	EXPECT_CALL(codec,isRemote()).Times(1).WillOnce(Return(false));
 	EXPECT_CALL(codec,init()).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(codec,isSeek()).Times(1).WillOnce(Return(false));
-	EXPECT_CALL(codec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(audio,getCodec()).Times(2).WillRepeatedly(Return(&currentCodec));
-	EXPECT_CALL(currentCodec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(codec,noChannels()).Times(1).WillOnce(Return(2));
-	EXPECT_CALL(audio,getNoInChannels()).Times(1).WillOnce(Return(2));
+	
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&currentCodec));
+	EXPECT_CALL(codec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(currentCodec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(codec,noChannels()).WillRepeatedly(Return(2));
+    EXPECT_CALL(audio,getNoInChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+    EXPECT_CALL(currentCodec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+
 	EXPECT_CALL(audio,setNextName(fileName)).Times(1);
 	EXPECT_CALL(audio,getCodecState()).Times(2).WillRepeatedly(Return(AOBase::e_codecSingleFinish));
 	EXPECT_CALL(audio,setCodecState(AOBase::e_codecCurrentFinish)).Times(1);
@@ -1031,7 +1046,7 @@ TEST(AOBase,startNextCodecSuccessWithCurrentCodecFinishedAndLengthOfNextCodecDef
 	AOChannelMapMock channels;
 
 	EXPECT_CALL(audio,stopNextCodec()).Times(1);
-	EXPECT_CALL(audio,getNextCodec()).Times(9).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
+	EXPECT_CALL(audio,getNextCodec()).WillOnce(Return((engine::Codec *)0)).WillRepeatedly(Return(&codec));
 	EXPECT_CALL(audio,createNewCodecFromUrl(fileName)).Times(1).WillOnce(Return(&codec));
 	EXPECT_CALL(audio,setNextCodec(&codec)).Times(1);
 	EXPECT_CALL(audio,getAudioChannelMapConst()).Times(1).WillOnce(ReturnRef(channels));
@@ -1042,11 +1057,15 @@ TEST(AOBase,startNextCodecSuccessWithCurrentCodecFinishedAndLengthOfNextCodecDef
 	EXPECT_CALL(codec,isRemote()).Times(1).WillOnce(Return(false));
 	EXPECT_CALL(codec,init()).Times(1).WillOnce(Return(true));
 	EXPECT_CALL(codec,isSeek()).Times(1).WillOnce(Return(false));
-	EXPECT_CALL(codec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(audio,getCodec()).Times(2).WillRepeatedly(Return(&currentCodec));
-	EXPECT_CALL(currentCodec,frequency()).Times(1).WillOnce(Return(44100));
-	EXPECT_CALL(codec,noChannels()).Times(1).WillOnce(Return(2));
-	EXPECT_CALL(audio,getNoInChannels()).Times(1).WillOnce(Return(2));
+	
+	EXPECT_CALL(audio,getCodec()).WillRepeatedly(Return(&currentCodec));
+	EXPECT_CALL(codec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(currentCodec,frequency()).WillRepeatedly(Return(44100));
+    EXPECT_CALL(codec,noChannels()).WillRepeatedly(Return(2));
+    EXPECT_CALL(audio,getNoInChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+    EXPECT_CALL(currentCodec,dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+
 	EXPECT_CALL(audio,setNextName(fileName)).Times(1);
 	EXPECT_CALL(audio,getCodecState()).Times(2).WillRepeatedly(Return(AOBase::e_codecSingleFinish));
 	EXPECT_CALL(audio,setCodecState(AOBase::e_codecCurrentFinish)).Times(1);
@@ -11825,6 +11844,338 @@ TEST(AOBase,slotCallRecursiveSequence)
 	ASSERT_FALSE(audio.testCanCallSlot(AOBase::e_onTimer));
 	ASSERT_FALSE(audio.testCanCallSlot(AOBase::e_onEventTimer));
 	audio.testSlotComplete();
+}
+
+//-------------------------------------------------------------------------------------------
+
+class AOBaseNextCodecSeamless : public AOBaseTest
+{
+	public:
+		virtual void setCodec(engine::Codec *c);
+		virtual void setNextCodec(engine::Codec *c);
+		virtual void setNoInChannels(tint n);
+		virtual bool isNextCodecSeamless();
+};
+
+//-------------------------------------------------------------------------------------------
+
+void AOBaseNextCodecSeamless::setCodec(engine::Codec *c)
+{
+	AOBase::setCodec(c);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBaseNextCodecSeamless::setNextCodec(engine::Codec *c)
+{
+	AOBase::setNextCodec(c);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void AOBaseNextCodecSeamless::setNoInChannels(tint n)
+{
+	AOBase::setNoInChannels(n);
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOBaseNextCodecSeamless::isNextCodecSeamless()
+{
+	return AOBase::isNextCodecSeamless();
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessWhenNoCurrentCodec)
+{
+	CodecMock codecNext;
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setCodec(NULL);
+	audio.setNextCodec(&codecNext);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessWhenNoNextCodec)
+{
+	CodecMock codecCurrent;
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setCodec(&codecCurrent);
+	audio.setNextCodec(NULL);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessWhenDifferentFrequencies)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(48000));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessWhenDifferentChannels)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(4));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsSeamlessGivenBothCodecsUseFloat)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_TRUE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessGivenCurrentFloatAndNextInteger16)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt16));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsSeamlessGivenBothCodecsUseInteger16)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt16));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt16));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_TRUE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessGivenCurrentInteger16AndNextFloat)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt16));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessGivenCurrentInteger16AndNextInteger24)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt16));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt24));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsSeamlessGivenBothCodecsUseInteger24)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt24));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt24));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_TRUE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessGivenCurrentInteger24AndNextFloat)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt24));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessGivenCurrentInteger24AndNextInteger16)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt24));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt16));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsSeamlessGivenBothCodecsUseInteger32)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt32));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt32));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_TRUE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessGivenCurrentInteger32AndNextFloat)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt32));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST(AOBase, nextCodecIsNotSeamlessGivenCurrentInteger32AndNextInteger24)
+{
+	CodecMock codecC;
+	EXPECT_CALL(codecC, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecC, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt32));
+
+	CodecMock codecN;
+	EXPECT_CALL(codecN, noChannels()).WillRepeatedly(Return(2));
+	EXPECT_CALL(codecN, frequency()).WillRepeatedly(Return(44100));
+	EXPECT_CALL(codecN, dataTypesSupported()).WillRepeatedly(Return(engine::e_SampleFloat | engine::e_SampleInt24));
+	
+	AOBaseNextCodecSeamless audio;
+	audio.setNoInChannels(2);
+	audio.setCodec(&codecC);
+	audio.setNextCodec(&codecN);
+	
+	EXPECT_FALSE(audio.isNextCodecSeamless());
 }
 
 //-------------------------------------------------------------------------------------------

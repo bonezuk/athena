@@ -1486,7 +1486,7 @@ bool AOBase::startNextCodec(const QString& url,const common::TimeStamp& nT,const
 						getNextCodec()->seek(getNextCodecSeekTime());
 					}
 
-					if(getCodec()!=0 && getNextCodec()->frequency()==getCodec()->frequency() && getNextCodec()->noChannels()==getNoInChannels())
+					if(isNextCodecSeamless())
 					{
 #if defined(OMEGA_PLAYBACK_DEBUG_MESSAGES)
 						common::Log::g_Log.print("AOBase::startNextCodec - Next codec can be played without gaps\n");
@@ -6838,6 +6838,26 @@ FormatDescription AOBase::getSourceDescription(tint noChannels)
 		desc = descTmp;
 	}
 	return desc;
+}
+
+//-------------------------------------------------------------------------------------------
+
+bool AOBase::isNextCodecSeamless()
+{
+	bool isSeamless = false;
+	
+	if(getCodec() != 0 && getNextCodec() != 0)
+	{
+		if(getCodec()->frequency() == getNextCodec()->frequency() && getNextCodec()->noChannels() == getNoInChannels())
+		{
+			engine::CodecDataType xorType = getCodec()->dataTypesSupported() ^ getNextCodec()->dataTypesSupported();
+			if(!xorType)
+			{
+				isSeamless = true;
+			}
+		}
+	}
+	return isSeamless;
 }
 
 //-------------------------------------------------------------------------------------------
