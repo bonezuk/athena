@@ -1071,6 +1071,23 @@ Manually calculate viberti step
 */
 //-------------------------------------------------------------------------------------------
 
+template <typename T> void testerSineWaveThroughNextStates(SDMTrellisStates<T> *states)
+{
+    const double c_period = (2.0 * c_PI_D) / (8.0 * 2.0 * c_maxNoSDMTrellisPaths);
+
+    for(int j = 0; j < 8; j++)
+    {
+        for(int i = 0; i < 2 * c_maxNoSDMTrellisPaths; i++)
+        {
+            int idx = (j * 8) + i + 1;
+            T x = static_cast<T>(sin(c_period * static_cast<double>(idx)));
+            states->states[j][i] = x;
+        }
+    }
+}
+
+//-------------------------------------------------------------------------------------------
+
 template <typename T> void testVibertiStep()
 {
 	struct VTestData {
@@ -1121,15 +1138,15 @@ template <typename T> void testVibertiStep()
 		double cost;
 	};
 	const VTestResult c_testResults[32] = {
-		{22,19, 0.0308}, {12,38, 0.0565}, {18,49, 0.0829},
-		{ 8, 4, 0.1028}, { 3,41, 0.1034},
-		{10, 5, 0.1131}, {16,16, 0.1552},
-		{25,60, 0.1582}, {29,30, 0.1638},
-		{13,46, 0.1837}, { 7,43, 0.2215},
-		{20,50, 0.2327}, { 9,44, 0.2706},
-		{24,52, 0.2746}, {30,23, 0.2971},
-		{11,45, 0.3019}, { 6, 3, 0.3050},
-		{27,29, 0.3443}, 
+		{22,19, 0.0308}, {12,38, 0.0565}, 
+		{18,49, 0.0829}, { 8, 4, 0.1028}, 
+		{ 3,41, 0.1034}, {10, 5, 0.1131}, 
+		{16,16, 0.1552}, {25,60, 0.1582}, 
+		{29,30, 0.1638}, {13,46, 0.1837}, 
+		{ 7,43, 0.2215}, {20,50, 0.2327}, 
+		{ 9,44, 0.2706}, {24,52, 0.2746}, 
+		{30,23, 0.2971}, {11,45, 0.3019}, 
+		{ 6, 3, 0.3050}, {27,29, 0.3443}, 
 		{14, 7, 0.4069}, {19,57, 0.4175},
 		{ 0, 0, 0.4379}, {17,24, 0.4564},
 		{ 5,42, 0.4602}, {15,15, 0.4672},
@@ -1156,6 +1173,7 @@ template <typename T> void testVibertiStep()
 	{
 		next->cost[c_testData[i].nIndex] = static_cast<T>(c_testData[i].cost);
 	}
+	testerSineWaveThroughNextStates<T>(next);
 	
 	sdmTrellis.testVirbetiStep();
 	
@@ -1165,6 +1183,12 @@ template <typename T> void testVibertiStep()
 		EXPECT_EQ(idx, c_testResults[i].nIndex);
 		EXPECT_NEAR(next->cost[idx], c_testResults[i].cost, 0.00001);
 		EXPECT_EQ(sdmTrellis.testNextTrellisState(idx), c_testResults[i].nPath);
+		for(int j = 0; j < 8; j++)
+		{
+			EXPECT_NEAR(curr->states[j][i], next->states[j][idx], 0.00001);
+		}
+		EXPECT_NEAR(curr->cost[i], c_testResults[i].cost - 0.0308, 0.00001);
+		EXPECT_EQ(curr->path[i], c_testResults[i].nPath);
 	}
 }
 

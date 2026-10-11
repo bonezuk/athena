@@ -97,11 +97,14 @@ template <typename T> class SDMTrellis
 		int order() const;
 		int latency() const;
 		
+		int process(const T *pcmInput, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB);
+		
 	protected:
 		int m_rate;
 		int m_order;
 		int m_latency;
 		int m_noCandidates;
+		int m_latencyOffset;
 		
 		SDMTrellisStates<T> *m_states[2];
 		SDMTrellisBlockFilter<T> *m_filter;
@@ -146,6 +149,8 @@ template <typename T> class SDMTrellis
 		int insertIndex(const T *data, const uint32_t *indices, int N, T value) const;
 		
 		int vibertiStep();
+		
+		void copyStates(T minCost);
 };
 
 //-------------------------------------------------------------------------------------------
@@ -220,6 +225,7 @@ template <typename T> bool SDMTrellis<T>::init(int dsdRate, int trellisOrder, in
 	m_order = trellisOrder;
 	m_latency = latency;
 	m_noCandidates = 1;
+	m_latencyOffset = latency;
 	
 	m_pathMask = (1 << m_latency) - 1;
 	m_trellisMask = (1 << m_order) - 1;
@@ -560,7 +566,58 @@ template <typename T> int SDMTrellis<T>::vibertiStep()
 		}
 	}
 	m_noCandidates = outIdx;
+	copyStates(min);
 	return oBit;
+}
+
+//-------------------------------------------------------------------------------------------
+
+template <typename T> void SDMTrellis<T>::copyStates(T minCost)
+{
+	for(int i = 0; i < m_noCandidates; i++)
+	{
+		int nIdx = m_states[0]->cand[i];
+		for(int j = 0; j < 8; j++)
+		{
+			m_states[0]->states[j][i] = m_states[1]->states[j][nIdx];
+		}
+		m_states[0]->cost[i] = m_states[1]->cost[i] - minCost;
+		m_states[0]->path[i] = m_states[1]->path[i];
+	}
+}
+
+//-------------------------------------------------------------------------------------------
+
+template <typename T> int SDMTrellis<T>::process(const T *pcmInput, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB)
+{
+    const uint8_t maskMSB[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
+    const uint8_t maskLSB[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
+    const uint8_t *mask = (isLSB) ? maskLSB : maskMSB;
+    int i, noDSDBits = noDSDBytes >> 3;
+
+	memset(dsd, 0, noDSDBytes);
+	
+	for(i = 0; i < m_latencyOffset; i++)
+	{
+		calc(pcmInput[i]);
+		vibertiStep();
+	}
+	m_latencyOffset -= i;
+	
+	const T *pcm = &pcmInput[i];
+	noSamples -= i;
+	
+	for(i = 0; i < noSamples && i < noDSDBits; i++)
+	{
+		calc(pcm[i]);
+		int v = vibertiStep();
+		if(v)
+		{
+			dsd[i >> 3] |= mask[i & 0x7];
+		}
+		i++;
+	}
+	return i;
 }
 
 //-------------------------------------------------------------------------------------------
