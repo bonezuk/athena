@@ -1180,7 +1180,8 @@ template <typename T> void testVibertiStep()
 	for(int i = 0; i < 32; i++)
 	{
 		int idx = curr->cand[i];
-		EXPECT_EQ(idx, c_testResults[i].nIndex);
+
+        EXPECT_EQ(idx, c_testResults[i].nIndex);
 		EXPECT_NEAR(next->cost[idx], c_testResults[i].cost, 0.00001);
 		EXPECT_EQ(sdmTrellis.testNextTrellisState(idx), c_testResults[i].nPath);
 		for(int j = 0; j < 8; j++)
@@ -1188,7 +1189,7 @@ template <typename T> void testVibertiStep()
 			EXPECT_NEAR(curr->states[j][i], next->states[j][idx], 0.00001);
 		}
 		EXPECT_NEAR(curr->cost[i], c_testResults[i].cost - 0.0308, 0.00001);
-		EXPECT_EQ(curr->path[i], c_testResults[i].nPath);
+		EXPECT_EQ(curr->path[i] & 0x1f, c_testResults[i].nPath);
 	}
 }
 

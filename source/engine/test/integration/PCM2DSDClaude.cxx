@@ -2572,8 +2572,8 @@ void dsd_write_codec_our_trellis(engine::Codec *inCodec, const QString& outFilen
 	tfloat32 *upRFloat = new tfloat32 [upscaleR.noOutputSamples()];
 
 	engine::SDMTrellis<float> modL, modR;
-	ASSERT_TRUE(modL.init(DSD_Times, 8, 32));
-	ASSERT_TRUE(modR.init(DSD_Times, 8, 32));
+	ASSERT_TRUE(modL.init(DSD_Times, 8, 31));
+	ASSERT_TRUE(modR.init(DSD_Times, 8, 31));
 	
     engine::RData data(inputBlockSize, inCodec->noChannels(), inCodec->noChannels());
 
@@ -2614,7 +2614,7 @@ void dsd_write_codec_our_trellis(engine::Codec *inCodec, const QString& outFilen
             
             double *upL = upLPtr.get();
             double *upR = upRPtr.get();
-            for(idx = 0; idx < outLenL, idx++)
+            for(idx = 0; idx < outLenL; idx++)
             {
             	upLFloat[idx] = static_cast<float>(upL[idx]);
             	upRFloat[idx] = static_cast<float>(upR[idx]);
@@ -2663,7 +2663,7 @@ void dsd_write_codec_our_trellis(engine::Codec *inCodec, const QString& outFilen
 TEST(PCM2DSDRevClaude, convertDSD128OurTrellis)
 {
     QString inFilename = "D:\\Development\\Temp\\dsd\\isla.wav";
-    QString outFilename = "D:\\Development\\Temp\\dsd\\isla_64_trellis_2.dff";
+    QString outFilename = "D:\\Development\\Temp\\dsd\\isla_64_trellis_3.dff";
 
 	//QString inFilename = "D:\\Development\\Temp\\dsd\\fading.flac";
 	//QString outFilename = "D:\\Development\\Temp\\dsd\\fading_64_trellis_1.dff";
@@ -2672,7 +2672,7 @@ TEST(PCM2DSDRevClaude, convertDSD128OurTrellis)
     ASSERT_FALSE(codec == NULL);
     ASSERT_TRUE(codec->init());
 
-    dsd_write_codec_claude(codec, outFilename, 64);
+    dsd_write_codec_our_trellis(codec, outFilename, 64);
 
     delete codec;
 }

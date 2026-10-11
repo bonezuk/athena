@@ -433,16 +433,24 @@ template <typename T> void SDMTrellis<T>::calc(T sample)
 
 template <typename T> T SDMTrellis<T>::stepMinCostAndResetHash(int& minIdx)
 {
-	T min;
-	for(int idx = 0; idx < 2 * m_noCandidates; idx++)
+	T min = static_cast<T>(0.0);
+	for(int i = 0; i < m_noCandidates; i++)
 	{
-		if(!idx || m_states[1]->cost[idx] < min)
+		int d = i >> 3;
+		int r = i & 0x7;
+		int nIdx[2] = { (d << 4) + r, (d << 4) + r + 8 };
+
+		for(int j = 0; j < 2; j++)
 		{
-			min = m_states[1]->cost[idx];
-			minIdx = idx;
+			int idx = nIdx[j];
+			if(!idx || m_states[1]->cost[idx] < min)
+			{
+				min = m_states[1]->cost[idx];
+				minIdx = idx;
+			}
+			int nState = nextTrellisState(idx);
+			m_stateHashTable[nState] = -1;
 		}
-		int nState = nextTrellisState(idx);
-		m_stateHashTable[nState] = -1;
 	}
 	return min;
 }
@@ -581,8 +589,8 @@ template <typename T> void SDMTrellis<T>::copyStates(T minCost)
 		{
 			m_states[0]->states[j][i] = m_states[1]->states[j][nIdx];
 		}
-		m_states[0]->cost[i] = m_states[1]->cost[i] - minCost;
-		m_states[0]->path[i] = m_states[1]->path[i];
+		m_states[0]->cost[i] = m_states[1]->cost[nIdx] - minCost;
+		m_states[0]->path[i] = m_states[1]->path[nIdx];
 	}
 }
 
@@ -593,7 +601,7 @@ template <typename T> int SDMTrellis<T>::process(const T *pcmInput, int noSample
     const uint8_t maskMSB[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
     const uint8_t maskLSB[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
     const uint8_t *mask = (isLSB) ? maskLSB : maskMSB;
-    int i, noDSDBits = noDSDBytes >> 3;
+    int i, noDSDBits = noDSDBytes << 3;
 
 	memset(dsd, 0, noDSDBytes);
 	
@@ -615,7 +623,6 @@ template <typename T> int SDMTrellis<T>::process(const T *pcmInput, int noSample
 		{
 			dsd[i >> 3] |= mask[i & 0x7];
 		}
-		i++;
 	}
 	return i;
 }
