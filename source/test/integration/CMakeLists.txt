@@ -48,7 +48,10 @@ set ( INTEGRATION_SOURCE
 )
 
 if (OMEGA_USE_CUDA)
-	list(APPEND INTEGRATION_SOURCE ../../engine/test/integration/PCM2DSDClaude.cxx)
+	list(APPEND INTEGRATION_SOURCE 
+		../../engine/test/integration/PCM2DSDClaude.cxx
+		../../engine/test/integration/SDMTrellisComparison.cxx
+	)
 endif ()
 
 if (OMEGA_MACOSX)
