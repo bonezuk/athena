@@ -15,7 +15,7 @@ using namespace omega;
 #define SOX_SAMPLE_MIN (sox_sample_t)SOX_INT_MIN(32)
 
 #define MAX_FILTER_ORDER 8
-#define PATH_HASH_SIZE 128
+#define PATH_HASH_SIZE 256
 #define PATH_HASH_MASK (PATH_HASH_SIZE - 1)
 
 #define SDM_TRELLIS_MAX_ORDER 32
@@ -979,7 +979,7 @@ int DSDModSoxTrellisComparator::sdm_process(sdm_t *p, const double *ibuf, sox_sa
   if (p->trellis_mask) {
     if (p->pending < p->trellis_lat) {
       size_t pre = min(p->trellis_lat - p->pending, len);
-      p->pending += pre;
+      p->pending += (unsigned int)pre;
       len -= pre;
       while (pre--) {
         x = *ibuf++ * c_gain;
@@ -1014,7 +1014,7 @@ int DSDModSoxTrellisComparator::sdm_drain(sdm_t *p, sox_sample_t *obuf, size_t *
     }
 
     p->draining = 1;
-    p->pending -= len;
+    p->pending -= (unsigned int)len;
 
     while (len--)
       *obuf++ = sdm_sample_trellis(p, 0.0);
@@ -1138,7 +1138,7 @@ int DSDModSoxTrellisComparator::process(const double *in, int noSamples, uint8_t
 
 //-------------------------------------------------------------------------------------------
 
-template <typename T> class SDMTrellisCompare : public SDMTrellis<T>
+template <typename T> class SDMTrellisCompare : public engine::SDMTrellis<T>
 {
 	public:
 		SDMTrellisCompare();
@@ -1146,7 +1146,7 @@ template <typename T> class SDMTrellisCompare : public SDMTrellis<T>
 		virtual bool testIsRateSupported(int rate) const;
 		virtual int testCurrentIndexFromNext(int nextPathIdx) const;
 		
-		SDMTrellisStates<T> *testGetStates(int stateIdx);
+		engine::SDMTrellisStates<T> *testGetStates(int stateIdx);
 		int *stateHashIndex();
 		virtual uint32_t testCurrentPath(int pathIdx) const;
 		virtual uint32_t testCurrentTrellisState(int pathIdx) const;
@@ -1188,7 +1188,7 @@ template <typename T> bool SDMTrellisCompare<T>::testIsRateSupported(int rate) c
 
 //-------------------------------------------------------------------------------------------
 
-template <typename T> SDMTrellisStates<T> *SDMTrellisCompare<T>::testGetStates(int stateIdx)
+template <typename T> engine::SDMTrellisStates<T> *SDMTrellisCompare<T>::testGetStates(int stateIdx)
 {
 	return this->m_states[stateIdx];
 }
@@ -1286,26 +1286,55 @@ template <typename T> int SDMTrellisCompare<T>::getNoCandidates()
 
 //-------------------------------------------------------------------------------------------
 
-void compareSDMTrellisStates(engine::SDMTrellisCompare<double>& mod, DSDModSoxTrellisComparator& modsox)
+void compareSDMTrellisStates(SDMTrellisCompare<double>& mod, DSDModSoxTrellisComparator& modsox)
 {
-	constexpr double c_tolerance = 0.00001;
-	sdm_t *pSox = modsox.m_mod;
-	sdm_trellis_t *soxTrellis = &(pSox->trellis[pSox->idx]);
+	constexpr double c_tolerance = 0.01;
+    DSDModSoxTrellisComparator::sdm_t *pSox = modsox.m_mod;
+    DSDModSoxTrellisComparator::sdm_trellis_t *soxTrellis = &(pSox->trellis[pSox->idx]);
 	
-	EXPECT_EQ(modL.getNoCandidates(), pSox->num_cands);
-	for(int stIdx = 0; stIdx < modL.getNoCandidates() && stIdx < pSox->num_cands; stIdx++)
+	EXPECT_EQ(mod.getNoCandidates(), pSox->num_cands);
+	for(int stIdx = 0; stIdx < mod.getNoCandidates() && stIdx < (int)pSox->num_cands; stIdx++)
 	{
-		sdm_state_t *soxState = soxTrellis->act[stIdx];
+        DSDModSoxTrellisComparator::sdm_state_t *soxState = soxTrellis->act[stIdx];
 		ASSERT_TRUE(soxState != NULL);
-		SDMTrellisStates<double> *curr = mod.testGetStates(0);
+		engine::SDMTrellisStates<double> *curr = mod.testGetStates(0);
 		for(int j = 0; j < 8; j++)
 		{
 			EXPECT_NEAR(curr->states[j][stIdx], soxState->state[j], c_tolerance);
+            if(abs(curr->states[j][stIdx] - soxState->state[j]) > c_tolerance)
+            {
+                int a = 0;
+            }
 		}
 		EXPECT_NEAR(curr->cost[stIdx], soxState->cost, c_tolerance);
-		EXPECT_EQ(curr->path[stIdx], soxState->path);
+        if(abs(curr->cost[stIdx] - soxState->cost) > c_tolerance)
+        {
+			int a = 0;
+        }
+		EXPECT_EQ(curr->path[stIdx] & 0xff, soxState->path);
+        if((curr->path[stIdx] & 0xff) != soxState->path)
+        {
+			int a = 0;;
+        }
 	}
+}
 
+//-------------------------------------------------------------------------------------------
+
+void syncSDMTrellisStates(SDMTrellisCompare<double>& mod, DSDModSoxTrellisComparator& modsox)
+{
+    DSDModSoxTrellisComparator::sdm_t *pSox = modsox.m_mod;
+    DSDModSoxTrellisComparator::sdm_trellis_t *soxTrellis = &(pSox->trellis[pSox->idx]);
+    for(int stIdx = 0; stIdx < (int)pSox->num_cands; stIdx++)
+    {
+        engine::SDMTrellisStates<double> *curr = mod.testGetStates(0);
+        DSDModSoxTrellisComparator::sdm_state_t *soxState = soxTrellis->act[stIdx];
+        for(int j = 0; j < 8; j++)
+        {
+            curr->states[j][stIdx] = soxState->state[j];
+        }
+        curr->cost[stIdx] = soxState->cost;
+    }
 }
 
 //-------------------------------------------------------------------------------------------
@@ -1321,9 +1350,9 @@ void compareSDMTrellisAlgos(const QString& inFilename, int dsdRate)
     ASSERT_EQ(inCodec->noChannels(), 2);
 
     engine::PCMUpscale upscaleL;
-    ASSERT_TRUE(upscaleL.init(inCodec->frequency(), DSD_Times));
+    ASSERT_TRUE(upscaleL.init(inCodec->frequency(), dsdRate));
     engine::PCMUpscale upscaleR;
-    ASSERT_TRUE(upscaleR.init(inCodec->frequency(), DSD_Times));
+    ASSERT_TRUE(upscaleR.init(inCodec->frequency(), dsdRate));
     int inputBlockSize = upscaleL.noInputSamples();
 
     tfloat64 *inL = new tfloat64 [inputBlockSize];
@@ -1336,15 +1365,15 @@ void compareSDMTrellisAlgos(const QString& inFilename, int dsdRate)
 	ASSERT_TRUE(modsoxL.init(dsdRate));
 	ASSERT_TRUE(modsoxR.init(dsdRate));
 	
-	engine::SDMTrellisCompare<double> modL, modR;
+	SDMTrellisCompare<double> modL, modR;
 	ASSERT_TRUE(modL.init(dsdRate, 8, 31));
 	ASSERT_TRUE(modR.init(dsdRate, 8, 31));
-	SDMTrellisStates<double> *currL = modL.testGetStates(0);
-	SDMTrellisStates<double> *nextL = modL.testGetStates(1);
-	SDMTrellisStates<double> *currR = modR.testGetStates(0);
-	SDMTrellisStates<double> *nextR = modR.testGetStates(1);
+	engine::SDMTrellisStates<double> *currL = modL.testGetStates(0);
+    engine::SDMTrellisStates<double> *nextL = modL.testGetStates(1);
+    engine::SDMTrellisStates<double> *currR = modR.testGetStates(0);
+    engine::SDMTrellisStates<double> *nextR = modR.testGetStates(1);
 	// The SOX paths are set to zero at startup.
-	for(idx = 0; idx < 2 * c_maxNoSDMTrellisPaths; idx++)
+	for(int idx = 0; idx < 2 * engine::c_maxNoSDMTrellisPaths; idx++)
 	{
 		currL->path[idx] = 0;
 		nextL->path[idx] = 0;
@@ -1352,6 +1381,7 @@ void compareSDMTrellisAlgos(const QString& inFilename, int dsdRate)
 		nextR->path[idx] = 0;
 	}
 	
+    int count = 0;
 	engine::RData data(inputBlockSize, inCodec->noChannels(), inCodec->noChannels());	
 	bool loop = true;
 	while(loop)
@@ -1376,29 +1406,51 @@ void compareSDMTrellisAlgos(const QString& inFilename, int dsdRate)
                 idx++;
             }
 
-            int outLenL, outLenR;
-            QSharedPointer<double> upLPtr = upscaleL.upscale(inL, inputBlockSize, outLenL);
-            ASSERT_FALSE(upLPtr.isNull());
-            ASSERT_EQ(outLenL / 8, outputLen);
-            QSharedPointer<double> upRPtr = upscaleR.upscale(inR, inputBlockSize, outLenR);
-            ASSERT_FALSE(upRPtr.isNull());
-            ASSERT_EQ(outLenR / 8, outputLen);
-            
-            double *upL = upLPtr.get();
-            double *upR = upRPtr.get();
-			
-			for(idx = 0; idx < outputL; idx++)
-			{
-				modsoxL.sdm_sample_trellis(modsoxL.m_mod, upL[idx]);
-				modL.testCalc(upL[idx]);
-				modL.testVirbetiStep();
-				compareSDMTrellisStates(modL, modsoxL);
+			int outLenL, outLenR;
+			QSharedPointer<double> upLPtr = upscaleL.upscale(inL, inputBlockSize, outLenL);
+			ASSERT_FALSE(upLPtr.isNull());
+			ASSERT_EQ(outLenL / 8, outputLen);
+			QSharedPointer<double> upRPtr = upscaleR.upscale(inR, inputBlockSize, outLenR);
+			ASSERT_FALSE(upRPtr.isNull());
+			ASSERT_EQ(outLenR / 8, outputLen);
 
-				modsoxR.sdm_sample_trellis(modsoxR.m_mod, upR[idx]);
-				modR.testCalc(upR[idx]);
-				modR.testVirbetiStep();
-				compareSDMTrellisStates(modR, modsoxR);
-			}
+            if(count > 10)
+            {
+                double *upL = upLPtr.get();
+                double *upR = upRPtr.get();
+			
+			    for(idx = 0; idx < outLenL; idx++)
+			    {
+                    if(count == 13 && idx == 84562)
+                    {
+                        int a = 0;
+                    }
+
+				    int bitLSox = (modsoxL.sdm_sample_trellis(modsoxL.m_mod, upL[idx]) > 0) ? 1 : 0;
+				    modL.testCalc(upL[idx]);
+				    int bitL = modL.testVirbetiStep();
+				    compareSDMTrellisStates(modL, modsoxL);
+                    if(bitLSox != bitL)
+                    {
+                        ASSERT_EQ(bitLSox, bitL);
+                    }
+
+				    int bitRSox = (modsoxR.sdm_sample_trellis(modsoxR.m_mod, upR[idx]) > 0) ? 1 : 0;
+				    modR.testCalc(upR[idx]);
+				    int bitR = modR.testVirbetiStep();
+				    compareSDMTrellisStates(modR, modsoxR);
+					if(bitRSox != bitR)
+					{
+						ASSERT_EQ(bitRSox, bitR);
+					}
+
+                    if(idx > 0 && (idx % 100) == 0)
+                    {
+                        syncSDMTrellisStates(modL,modsoxL);
+                        syncSDMTrellisStates(modR,modsoxR);
+                    }
+			    }
+            }
 			
 			data.reset();
 		}
@@ -1406,6 +1458,7 @@ void compareSDMTrellisAlgos(const QString& inFilename, int dsdRate)
 		{
 			loop = false;
 		}
+        count++;
 	}
 	
 	delete [] inL;

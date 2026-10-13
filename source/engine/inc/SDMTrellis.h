@@ -97,7 +97,7 @@ template <typename T> class SDMTrellis
 		int order() const;
 		int latency() const;
 		
-		int process(const T *pcmInput, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB);
+		int process(const T *pcm, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB);
 		
 	protected:
 		int m_rate;
@@ -419,6 +419,7 @@ template <typename T> void SDMTrellis<T>::stepPath()
 		m_states[1]->path[nIdxB] = (n & m_pathMask) + 1;
 		m_states[1]->cand[idx << 1] = nIdxA;
 		m_states[1]->cand[(idx << 1) + 1] = nIdxB;
+		m_states[0]->cand[idx] = -1;
 	}
 }
 
@@ -529,11 +530,6 @@ template <typename T> int SDMTrellis<T>::vibertiStep()
 				int pos = insertIndex(m_states[1]->cost, m_states[0]->cand, outIdx, costOfCand(inIdx));
 				// The next value in the insertion list, starting with the new candidate
 				int val = inIdx;
-				// Increment output index as required
-				if(outIdx < c_maxNoSDMTrellisPaths)
-				{
-					outIdx++;
-				}
 				// Perform insertion sort of new candidate within list.
 				for(int j = pos; j < outIdx; j++)
 				{
@@ -596,7 +592,7 @@ template <typename T> void SDMTrellis<T>::copyStates(T minCost)
 
 //-------------------------------------------------------------------------------------------
 
-template <typename T> int SDMTrellis<T>::process(const T *pcmInput, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB)
+template <typename T> int SDMTrellis<T>::process(const T *pcm, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB)
 {
     const uint8_t maskMSB[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
     const uint8_t maskLSB[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
@@ -604,16 +600,6 @@ template <typename T> int SDMTrellis<T>::process(const T *pcmInput, int noSample
     int i, noDSDBits = noDSDBytes << 3;
 
 	memset(dsd, 0, noDSDBytes);
-	
-	for(i = 0; i < m_latencyOffset; i++)
-	{
-		calc(pcmInput[i]);
-		vibertiStep();
-	}
-	m_latencyOffset -= i;
-	
-	const T *pcm = &pcmInput[i];
-	noSamples -= i;
 	
 	for(i = 0; i < noSamples && i < noDSDBits; i++)
 	{
@@ -624,7 +610,7 @@ template <typename T> int SDMTrellis<T>::process(const T *pcmInput, int noSample
 			dsd[i >> 3] |= mask[i & 0x7];
 		}
 	}
-	return i;
+	return i / 8;
 }
 
 //-------------------------------------------------------------------------------------------
