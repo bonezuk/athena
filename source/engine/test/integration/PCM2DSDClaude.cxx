@@ -2228,7 +2228,7 @@ void dsd_write_codec_our_trellis(engine::Codec *inCodec, const QString& outFilen
     uint8_t *outR = new uint8_t [outputLen];
     uint8_t *out = new uint8_t [outputLen * 2];
 
-	engine::SDMTrellis<double> modL, modR;
+	engine::SDMTrellis<float> modL, modR;
 	ASSERT_TRUE(modL.init(DSD_Times, 8, 31));
 	ASSERT_TRUE(modR.init(DSD_Times, 8, 31));
 	
@@ -2313,7 +2313,7 @@ void dsd_write_codec_our_trellis(engine::Codec *inCodec, const QString& outFilen
 TEST(PCM2DSDRevClaude, convertDSD128OurTrellis)
 {
     QString inFilename = "D:\\Development\\Temp\\dsd\\isla.wav";
-    QString outFilename = "D:\\Development\\Temp\\dsd\\isla_64_trellis_7.dff";
+    QString outFilename = "D:\\Development\\Temp\\dsd\\isla_64_trellis_9.dff";
 
 	//QString inFilename = "D:\\Development\\Temp\\dsd\\fading.flac";
 	//QString outFilename = "D:\\Development\\Temp\\dsd\\fading_64_trellis_1.dff";

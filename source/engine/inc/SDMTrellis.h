@@ -97,7 +97,8 @@ template <typename T> class SDMTrellis
 		int order() const;
 		int latency() const;
 		
-		int process(const T *pcm, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB);
+		int process(const float *pcm, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB);
+		int process(const double *pcm, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB);
 		
 	protected:
 		int m_rate;
@@ -592,8 +593,34 @@ template <typename T> void SDMTrellis<T>::copyStates(T minCost)
 
 //-------------------------------------------------------------------------------------------
 
-template <typename T> int SDMTrellis<T>::process(const T *pcm, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB)
+template <typename T> int SDMTrellis<T>::process(const float *pcm, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB)
 {
+	constexpr T c_gain = 0.5;
+	const uint8_t maskMSB[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
+	const uint8_t maskLSB[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
+	const uint8_t *mask = (isLSB) ? maskLSB : maskMSB;
+	int i, noDSDBits = noDSDBytes << 3;
+
+	memset(dsd, 0, noDSDBytes);
+
+	for(i = 0; i < noSamples && i < noDSDBits; i++)
+	{
+		calc(static_cast<T>(pcm[i]) * c_gain);
+		int v = vibertiStep();
+		if(v)
+		{
+			dsd[i >> 3] |= mask[i & 0x7];
+		}
+	}
+	return i / 8;
+}
+
+
+//-------------------------------------------------------------------------------------------
+
+template <typename T> int SDMTrellis<T>::process(const double *pcm, int noSamples, uint8_t *dsd, int noDSDBytes, bool isLSB)
+{
+	constexpr T c_gain = 0.5;
     const uint8_t maskMSB[8] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
     const uint8_t maskLSB[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
     const uint8_t *mask = (isLSB) ? maskLSB : maskMSB;
@@ -603,7 +630,7 @@ template <typename T> int SDMTrellis<T>::process(const T *pcm, int noSamples, ui
 	
 	for(i = 0; i < noSamples && i < noDSDBits; i++)
 	{
-		calc(pcm[i]);
+		calc(static_cast<T>(pcm[i]) * c_gain);
 		int v = vibertiStep();
 		if(v)
 		{
