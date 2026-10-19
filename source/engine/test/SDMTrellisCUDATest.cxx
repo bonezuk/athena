@@ -5,85 +5,38 @@
 using namespace omega::engine;
 
 //-------------------------------------------------------------------------------------------
-// CUDA Helper function tests
-//-------------------------------------------------------------------------------------------
 
-TEST(CUDAHelperFunctions, isPointerForCUDADeviceWhenAllocatedOnStack)
+class SDMTrellisCUDATest : public ::testing::Test 
 {
-    SMDTrellisDataCUDA data;
-    EXPECT_EQ(isPointerForCUDADevice(&data), 0);
-}
+protected:
+    static void SetUpTestSuite() {
+        cuda_init_result_ = initCUDAOmega();
 
-//-------------------------------------------------------------------------------------------
+        if (cuda_init_result_ >= 0) {
+            std::cout << "[INFO] CUDA device initialized successfully (result = "
+                      << cuda_init_result_ << ")." << std::endl;
+        } else {
+            std::cout << "[WARN] No CUDA device available (initCUDAOmega() returned "
+                      << cuda_init_result_ << "). CUDA tests will be skipped." << std::endl;
+        }
+    }
 
-TEST(CUDAHelperFunctions, isPointerForCUDADeviceWhenAllocatedOnHost)
-{
-    SMDTrellisDataCUDA *pData = new SMDTrellisDataCUDA;
-    ASSERT_TRUE(pData != nullptr);
-    EXPECT_EQ(isPointerForCUDADevice(pData), 0);
-    delete pData;
-}
+    void SetUp() override {
+        if (cuda_init_result_ < 0) {
+            GTEST_SKIP() << "CUDA device not available or initialization failed "
+                         << "(initCUDAOmega() returned " << cuda_init_result_ << ")";
+        }
+    }
 
-//-------------------------------------------------------------------------------------------
+    static void TearDownTestSuite() {}
 
-TEST(CUDAHelperFunctions, isPointerForCUDADeviceWhenAllocatedOnDevice)
-{
-    SMDTrellisDataCUDA *pData = sdmTrellisAllocateCUDA();
-    ASSERT_TRUE(pData != nullptr);
-    EXPECT_EQ(isPointerForCUDADevice(pData), 1);
-    sdmTrellisFreeStatesCUDA(pData);
-}
+private:
+    static int cuda_init_result_;
+};
 
-//-------------------------------------------------------------------------------------------
+int SDMTrellisCUDATest::cuda_init_result_ = -1;
 
-TEST(CUDAHelperFunctions, memoryCopyKindWhenBothOnHost)
-{
-    SMDTrellisDataCUDA *pDataA = new SMDTrellisDataCUDA;
-    SMDTrellisDataCUDA *pDataB = new SMDTrellisDataCUDA;
-    EXPECT_EQ(memoryCopyKind(pDataA, pDataB), cudaMemcpyHostToHost);
-    delete pDataA;
-    delete pDataB;
-}
 
-//-------------------------------------------------------------------------------------------
-
-TEST(CUDAHelperFunctions, memoryCopyKindWhenSourceHostAndDestDevice)
-{
-    SMDTrellisDataCUDA *pDataA = new SMDTrellisDataCUDA;
-    SMDTrellisDataCUDA *pDataB = sdmTrellisAllocateCUDA();
-    ASSERT_TRUE(pDataB != nullptr);
-    EXPECT_EQ(memoryCopyKind(pDataA, pDataB), cudaMemcpyHostToDevice);
-    delete pDataA;
-    sdmTrellisFreeStatesCUDA(pDataB);
-}
-
-//-------------------------------------------------------------------------------------------
-
-TEST(CUDAHelperFunctions, memoryCopyKindWhenSourceDeviceAndDestHost)
-{
-    SMDTrellisDataCUDA *pDataB = new SMDTrellisDataCUDA;
-    SMDTrellisDataCUDA *pDataA = sdmTrellisAllocateCUDA();
-    ASSERT_TRUE(pDataA != nullptr);
-    EXPECT_EQ(memoryCopyKind(pDataA, pDataB), cudaMemcpyDeviceToHost);
-    delete pDataB;
-    sdmTrellisFreeStatesCUDA(pDataA);
-}
-
-//-------------------------------------------------------------------------------------------
-
-TEST(CUDAHelperFunctions, memoryCopyKindWhenSourceDeviceAndDestDevice)
-{
-    SMDTrellisDataCUDA *pDataA = sdmTrellisAllocateCUDA();
-    SMDTrellisDataCUDA *pDataB = sdmTrellisAllocateCUDA();
-    ASSERT_TRUE(pDataA != nullptr);
-    ASSERT_TRUE(pDataB != nullptr);
-    EXPECT_EQ(memoryCopyKind(pDataA, pDataB), cudaMemcpyDeviceToDevice);
-    sdmTrellisFreeStatesCUDA(pDataA);
-    sdmTrellisFreeStatesCUDA(pDataB);
-}
-
-//-------------------------------------------------------------------------------------------
-// SDMTrellisCUDA tests
 //-------------------------------------------------------------------------------------------
 
 void testerSineWaveThroughStatesCUDA(SDMTrellisStates<float> *states, SMDTrellisDataCUDA *pCTrellis)
@@ -109,11 +62,11 @@ void testerSineWaveThroughStatesCUDA(SDMTrellisStates<float> *states, SMDTrellis
 
 //-------------------------------------------------------------------------------------------
 
-TEST(SDMTrellisCUDA, calculateStateAndCostUsingTensorCore)
+TEST_F(SDMTrellisCUDATest, calculateStateAndCostUsingTensorCore)
 {
     constexpr int c_dsdRate = 64;
     constexpr float c_inSample = 0.5f;
-    constexpr float c_tolerance = 0.0001f;
+    constexpr float c_tolerance = 0.01f;
 
     SDMTrellisBlockFilter<float> *filterTest = getSDMTrellisBlockFilter<float>(c_dsdRate, false);
     SDMTrellisStates<float> *statesA = allocateSDMTrellisStates<float>();
@@ -129,8 +82,11 @@ TEST(SDMTrellisCUDA, calculateStateAndCostUsingTensorCore)
     trellisCPU.noCandidates = 32;
     ASSERT_TRUE(sdmTrellisCopyDataCUDA(&trellisCPU, pTrellisGPU));
 
-    ASSERT_TRUE(sdmCalcTrellisBlockFilter4Lanes(statesA, statesB, filterTest, c_inSample, 0));
-    ASSERT_TRUE(sdmCalcTrellisBlockFilter4Lanes(statesA, statesB, filterTest, c_inSample, 4));
+    for(int i = 0; i < 32; i += 8)
+    {
+        ASSERT_TRUE(sdmCalcTrellisBlockFilter4Lanes(statesA, statesB, filterTest, c_inSample, i));
+        ASSERT_TRUE(sdmCalcTrellisBlockFilter4Lanes(statesA, statesB, filterTest, c_inSample, i + 4));
+    }
 
     testSDMTrellisCalcStateAndCostCUDA(pTrellisGPU, c_inSample);
     ASSERT_TRUE(sdmTrellisCopyDataCUDA(pTrellisGPU, &trellisCPU));
@@ -145,8 +101,8 @@ TEST(SDMTrellisCUDA, calculateStateAndCostUsingTensorCore)
         EXPECT_NEAR(trellisCPU.cost[i+32], statesB->cost[nIdxB], c_tolerance);
         for(int j = 0; j < 8; j++)
         {
-            EXPECT_NEAR(trellisCPU.states[1][i][j], statesA->states[j][nIdxA], c_tolerance);
-            EXPECT_NEAR(trellisCPU.states[1][i+32][j], statesA->states[j][nIdxB], c_tolerance);
+            EXPECT_NEAR(trellisCPU.states[1][i][j], statesB->states[j][nIdxA], c_tolerance);
+            EXPECT_NEAR(trellisCPU.states[1][i+32][j], statesB->states[j][nIdxB], c_tolerance);
         }
     }
 

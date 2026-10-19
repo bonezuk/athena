@@ -155,3 +155,43 @@ int initCUDAOmega()
 }
 
 //-------------------------------------------------------------------------------------------
+// Determines if a given pointer is a host or device memory pointer
+// res = 1; => pointer is CUDA device memory
+// res = 0; => pointer is CPU host memory
+// res = -1; => Unable to determine if host or device memory
+//-------------------------------------------------------------------------------------------
+
+int isPointerForCUDADevice(void *ptr)
+{
+    int res = -1;
+    cudaPointerAttributes attr;
+
+    if(cudaPointerGetAttributes(&attr, ptr) == cudaSuccess)
+    {
+        res = (attr.type == cudaMemoryTypeUnregistered) ? 0 : 1;
+    }
+    return res;
+}
+
+//-------------------------------------------------------------------------------------------
+
+cudaMemcpyKind memoryCopyKind(void *pSrc, void *pDest)
+{
+    cudaMemcpyKind type = cudaMemcpyDefault;
+    int sType = isPointerForCUDADevice(pSrc);
+    int dType = isPointerForCUDADevice(pDest);
+    if(sType >= 0 && dType >= 0)
+    {
+        if(!sType)
+        {
+            type = (!dType) ? cudaMemcpyHostToHost : cudaMemcpyHostToDevice;
+        }
+        else
+        {
+            type = (!dType) ? cudaMemcpyDeviceToHost : cudaMemcpyDeviceToDevice;
+        }
+    }
+    return type;
+}
+
+//-------------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 #define __OMEGA_ENGINE_SDMTRELLISCUDA_H
 //-------------------------------------------------------------------------------------------
 
-#include <cuda_runtime.h>
+#include "engine/inc/OmegaCUDACommon.h"
 #include "engine/inc/SDMTrellis.h"
 
 //-------------------------------------------------------------------------------------------
@@ -24,11 +24,6 @@ typedef struct s_SMDTrellisDataCUDA
     float filterA[8][8];
     int noCandidates;
 } SMDTrellisDataCUDA;
-
-//-------------------------------------------------------------------------------------------
-
-ENGINE_EXPORT int isPointerForCUDADevice(void *ptr);
-ENGINE_EXPORT cudaMemcpyKind memoryCopyKind(void *pSrc, void *pDest);
 
 //-------------------------------------------------------------------------------------------
 

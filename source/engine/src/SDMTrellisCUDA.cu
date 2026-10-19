@@ -1,3 +1,4 @@
+#include <cuda_runtime.h>
 #include <cute/tensor.hpp>
 #include <cute/layout.hpp>
 #include <cute/atom/mma_traits_sm80.hpp>
@@ -164,46 +165,6 @@ __global__ void kernelSDMTrellisTestCalcStateAndCost(SMDTrellisDataCUDA *pTrelli
 //-------------------------------------------------------------------------------------------
 #endif
 //-------------------------------------------------------------------------------------------
-// Determines if a given pointer is a host or device memory pointer
-// res = 1; => pointer is CUDA device memory
-// res = 0; => pointer is CPU host memory
-// res = -1; => Unable to determine if host or device memory
-//-------------------------------------------------------------------------------------------
-
-int isPointerForCUDADevice(void *ptr)
-{
-    int res = -1;
-    cudaPointerAttributes attr;
-
-    if(cudaPointerGetAttributes(&attr, ptr) == cudaSuccess)
-    {
-        res = (attr.type == cudaMemoryTypeUnregistered) ? 0 : 1;
-    }
-    return res;
-}
-
-//-------------------------------------------------------------------------------------------
-
-cudaMemcpyKind memoryCopyKind(void *pSrc, void *pDest)
-{
-    cudaMemcpyKind type = cudaMemcpyDefault;
-    int sType = isPointerForCUDADevice(pSrc);
-    int dType = isPointerForCUDADevice(pDest);
-    if(sType >= 0 && dType >= 0)
-    {
-        if(!sType)
-        {
-            type = (!dType) ? cudaMemcpyHostToHost : cudaMemcpyHostToDevice;
-        }
-        else
-        {
-            type = (!dType) ? cudaMemcpyDeviceToHost : cudaMemcpyDeviceToDevice;
-        }
-    }
-    return type;
-}
-
-//-------------------------------------------------------------------------------------------
 
 void sdmTrellisFreeStatesCUDA(SMDTrellisDataCUDA *states)
 {
@@ -242,7 +203,7 @@ void initSDMTrellisFilterG_CUDA(const double *g, SMDTrellisDataCUDA *pData)
     {
         for(int rIdx = 0; rIdx < 8; rIdx++)
         {
-            pData->filterG[cIdx][rIdx] = (rIdx == cIdx || (rIdx + 1) == cIdx) ? 1.0f : 0.0f;
+            pData->filterG[cIdx][rIdx] = (rIdx == cIdx || (rIdx - 1) == cIdx) ? 1.0f : 0.0f;
         }
     }
     pData->filterG[1][0] = static_cast<float>(0.0 - g[0]);

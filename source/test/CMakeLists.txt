@@ -104,6 +104,7 @@ set ( TEST_SOURCE
 	../engine/test/FormatType8BitTest.cxx
 	../engine/test/FormatTypeFromFloatTest.cxx
 	../engine/test/InterleavedCodecTest.cxx
+	../engine/test/OmegaCUDACommonTest.cxx
 	../engine/test/OmegaDCT64Test.cxx
 	../engine/test/PCMToDSDTest.cxx
 	../engine/test/PCMToDSDProcessorTest.cxx

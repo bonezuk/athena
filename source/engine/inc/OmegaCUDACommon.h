@@ -5,13 +5,11 @@
 #if defined(OMEGA_CUDA)
 //-------------------------------------------------------------------------------------------
 
-//#define __KERNEL_DEBUG_CUDA_MEMORY 1
-
-#if defined(__KERNEL_DEBUG_CUDA_MEMORY)
 #include <cuda_runtime.h>
-#endif
 
 #include "engine/inc/EngineDLL.h"
+
+//#define __KERNEL_DEBUG_CUDA_MEMORY 1
 
 //-------------------------------------------------------------------------------------------
 
@@ -29,6 +27,12 @@ template <typename T> void omegaDebugCUDAMemoryOmega(const T *gMem, int len)
 ENGINE_EXPORT void Omega1DCuda_ThreadDivision(int N, int& noBlocks, int& threadsPerBlock);
 
 ENGINE_EXPORT int initCUDAOmega();
+
+//-------------------------------------------------------------------------------------------
+
+ENGINE_EXPORT int isPointerForCUDADevice(void *ptr);
+
+ENGINE_EXPORT cudaMemcpyKind memoryCopyKind(void *pSrc, void *pDest);
 
 //-------------------------------------------------------------------------------------------
 #endif
