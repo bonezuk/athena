@@ -112,6 +112,7 @@ set ( TEST_SOURCE
 	../engine/test/RemezFIRTest.cxx
 	../engine/test/SDMSortTest.cxx
 	../engine/test/SDMTrellisTest.cxx
+	../engine/test/SDMTrellisCUDATest.cxx
 
 	../engine/violetomega/test/IFFChunkTest.cxx
 	../engine/violetomega/test/IFFCommonChunkTest.cxx

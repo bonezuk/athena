@@ -9,8 +9,32 @@ qt_add_resources(ENGINE_UI_RESOURCES engine.qrc)
 if (OMEGA_USE_CUDA)
     find_package(CUDAToolkit REQUIRED)
 
+    include(FetchContent)
+ 
+    FetchContent_Declare(
+        cutlass
+        GIT_REPOSITORY https://github.com/NVIDIA/cutlass.git
+        GIT_TAG        v4.8.0
+        GIT_SHALLOW    TRUE
+        GIT_PROGRESS   TRUE
+        # CuTe is header-only, so we only want the sources. Pointing SOURCE_SUBDIR
+        # at a directory that has no CMakeLists.txt stops FetchContent_MakeAvailable
+        # from running CUTLASS's own (large) build of tests, examples and profiler.
+        SOURCE_SUBDIR  _headers_only_
+    )
+    FetchContent_MakeAvailable(cutlass)
+    
+    # Interface target carrying the include paths and required flags
+    add_library(cute INTERFACE)
+    add_library(cute::cute ALIAS cute)
+ 
 	file(GLOB ENGINE_CUDA_SOURCE "src/*.cu")
     add_library(engine SHARED ${ENGINE_HEADER} ${ENGINE_SOURCE} ${ENGINE_CUDA_SOURCE} ${ENGINE_UI_RESOURCES})
+
+    target_include_directories(engine SYSTEM PUBLIC
+        ${cutlass_SOURCE_DIR}/include             # cute/ and cutlass/ headers (CuTe needs both)
+        ${cutlass_SOURCE_DIR}/tools/util/include  # optional: cutlass/util helpers used by many examples
+    )
 
     if (OMEGA_WIN32)
         set_target_properties(engine PROPERTIES
@@ -23,6 +47,13 @@ if (OMEGA_USE_CUDA)
             CUDA_ARCHITECTURES "61;75;86;87;89"
         )
     endif ()
+
+    # CCCL (CUDA 13+) requires MSVC's standard conforming preprocessor
+    if (MSVC)
+        target_compile_options(engine PRIVATE
+            $<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/Zc:preprocessor>
+        )
+    endif()
 
     if (TIGER_DEBUG_BUILD)
         target_compile_options(engine PRIVATE
