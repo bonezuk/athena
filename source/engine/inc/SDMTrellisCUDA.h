@@ -34,7 +34,8 @@ ENGINE_EXPORT bool initSDMTrellisFilterCUDA(int dsdRate, bool isClans, SMDTrelli
 
 //-------------------------------------------------------------------------------------------
 
-ENGINE_EXPORT void testSDMTrellisCalcStateAndCostCUDA(SMDTrellisDataCUDA *pTrellis, float xSample);
+ENGINE_EXPORT void testSDMTrellisCalcStateAndCostCUDATF32(SMDTrellisDataCUDA *pTrellis, float xSample);
+ENGINE_EXPORT void testSDMTrellisCalcStateAndCostCUDAFP32(SMDTrellisDataCUDA *pTrellis, float xSample);
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine
