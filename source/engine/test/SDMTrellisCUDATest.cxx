@@ -118,7 +118,7 @@ TEST_F(SDMTrellisCUDATest, calculateStateAndCostUsingTensorCoreFP32)
 {
     constexpr int c_dsdRate = 64;
     constexpr float c_inSample = 0.5f;
-    constexpr float c_tolerance = 0.01f;
+    constexpr float c_tolerance = 0.00001f;
 
     SDMTrellisBlockFilter<float> *filterTest = getSDMTrellisBlockFilter<float>(c_dsdRate, false);
     SDMTrellisStates<float> *statesA = allocateSDMTrellisStates<float>();

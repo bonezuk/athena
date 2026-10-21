@@ -23,7 +23,7 @@ namespace engine
 using Traits = MMA_Traits<SM80_16x8x8_F32TF32TF32F32_TN>;
 
 //-------------------------------------------------------------------------------------------
-//#if defined(__OMEGA_CUDA_SM80)
+#if defined(__OMEGA_CUDA_SM80)
 //-------------------------------------------------------------------------------------------
 
 __device__ __forceinline__ uint32_t kFloatToTF32(float x)
@@ -72,7 +72,7 @@ __device__ void kSDMTrellisSplitTF32Matrix8x8(const float* __restrict__ inMatrix
     for(int idx = 0; idx < (noRows << 3); idx += 32)
     {
         int i = idx + threadIdx.x;
-        kSplitTF32(inMatrix[i], highM[i], lowM[i])
+        kSplitTF32(inMatrix[i], highM[i], lowM[i]);
     }
     __syncwarp();
 }
@@ -152,7 +152,7 @@ __device__ void kSDMTrellisNextStateAndCost(float* __restrict__ pState,
                                             float a0)
 {
     float* __restrict__ pNextA = pState;
-    float* __restrict__ pNextB = &[32 * 8];
+    float* __restrict__ pNextB = &pState[32 * 8];
     int idx = threadIdx.x << 3;
 
     pNextA[idx] = dMatrix[idx] + 1.0f;
@@ -165,11 +165,11 @@ __device__ void kSDMTrellisNextStateAndCost(float* __restrict__ pState,
 
     float vA = vMatrix[idx] + a0;
     vA *= vA;
-    cost[threadIdx.x] += vA;
+    pCost[threadIdx.x] += vA;
 
     float vB = vMatrix[idx] - a0;
     vB *= vB;
-    cost[threadIdx.x + 32] += vB;
+    pCost[threadIdx.x + 32] += vB;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ __device__ void kSDMTrellisNextStateAndCost(float* __restrict__ pState,
 __global__ void kSDMTrellisTestCalcStateAndCostFP32(SMDTrellisDataCUDA *pTrellis, float xSample)
 {
     __shared__ uint32_t matLoAFilter[64], matHiAFilter[64];
-    __shared__ uint32_t matLoAGilter[64], matHiGFilter[64];
+    __shared__ uint32_t matLoGFilter[64], matHiGFilter[64];
     float *pAFilter = &(pTrellis->filterA[0][0]);
     float *pGFilter = &(pTrellis->filterG[0][0]);
     kSDMTrellisSplitTF32Matrix8x8(pAFilter, matHiAFilter, matLoAFilter, 8);
