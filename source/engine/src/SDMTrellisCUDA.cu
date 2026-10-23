@@ -410,23 +410,27 @@ __device__ int kSDMTrellisSortCosts(const float *cost, int indices[2][64], int N
             int n2 = right - mid;
             int idx = threadIdx.x - left;
 
-            int *sL = &indices[arrayIndex][left];
-            int *sR = &indices[arrayIndex][mid];
-            int *dst = &indices[arrayIndex ^ 1][left];
-
+            int ind = indices[arrayIndex][left + idx];
+            int nMargin;
+            int *src;
+            bool upper;
             if(idx < n1)
             {
-                int ind = sL[idx];
-                int j = idx + kSDMInsertIndex(cost, sR, n2, cost[ind], false);
-                dst[j] = ind;
+                nMargin = n2;
+                src = &indices[arrayIndex][mid];
+                upper = false;
             }
             else
             {
+                nMargin = n1;
+                src = &indices[arrayIndex][left];
+                upper = true;
                 idx -= n1;
-                int ind = sR[idx];
-                int j = idx + kSDMInsertIndex(cost, sL, n1, cost[ind], true);
-                dst[j] = ind;
             }
+
+            int j = idx + kSDMInsertIndex(cost, src, nMargin, cost[ind], upper);
+            int *dst = &indices[arrayIndex ^ 1][left];
+            dst[j] = ind;
 
             arrayIndex ^= 1;
             stepShift++;
