@@ -174,6 +174,7 @@ TEST_F(SDMTrellisCUDATest, sortCostIndices)
     constexpr int noIters = 1000;
     constexpr int max = 64;
     common::Random *rand = common::Random::instance();
+    rand->seed(1);
 
     SMDTrellisDataCUDA trellisCPU;
     memset(&trellisCPU, 0, sizeof(SMDTrellisDataCUDA));

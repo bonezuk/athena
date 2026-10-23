@@ -51,14 +51,14 @@ template <typename T> void testSDMSortOfRandomIndices(int noIters)
 
 TEST(SDMSort, sortIndicesFloat)
 {
-	testSDMSortOfRandomIndices<float>(100000);
+	testSDMSortOfRandomIndices<float>(10000);
 }
 
 //-------------------------------------------------------------------------------------------
 
 TEST(SDMSort, sortIndicesDouble)
 {
-	testSDMSortOfRandomIndices<double>(1000);
+	testSDMSortOfRandomIndices<double>(10000);
 }
 
 //-------------------------------------------------------------------------------------------

@@ -346,11 +346,12 @@ __device__ void kSDMTrellisSortPopulateIndices(const float *data, int *src, int 
             src[idxA] = idxA;
         }
     }
+    __syncthreads();
 }
 
 //-------------------------------------------------------------------------------------------
 
-__device__ __forceinline__ int kSDMInsertIndex(const float *data, const int *indices, int N, float value)
+__device__ __forceinline__ int kSDMInsertIndex(const float *data, const int *indices, int N, float value, bool upper)
 {
     int lo = 0;
     int hi = N;
@@ -358,7 +359,7 @@ __device__ __forceinline__ int kSDMInsertIndex(const float *data, const int *ind
     while(lo < hi)
     {
         int mid = lo + ((hi - lo) >> 1);
-        if(data[indices[mid]] < value)
+        if(upper ? (data[indices[mid]] <= value) : (data[indices[mid]] < value))
         {
             lo = mid + 1;
         }
@@ -396,6 +397,15 @@ __device__ int kSDMTrellisSortCosts(const float *cost, int indices[2][64], int N
             int right = left + step;
             int mid = left + (step >> 1);
 
+            if(right > N)
+            {
+                right = N;
+                if(mid > N)
+                {
+                    mid = N;
+                }
+            }
+
             int n1 = mid - left;
             int n2 = right - mid;
             int idx = threadIdx.x - left;
@@ -407,14 +417,14 @@ __device__ int kSDMTrellisSortCosts(const float *cost, int indices[2][64], int N
             if(idx < n1)
             {
                 int ind = sL[idx];
-                int j = idx + kSDMInsertIndex(cost, sR, n2, cost[ind]);
+                int j = idx + kSDMInsertIndex(cost, sR, n2, cost[ind], false);
                 dst[j] = ind;
             }
             else
             {
                 idx -= n1;
                 int ind = sR[idx];
-                int j = idx + kSDMInsertIndex(cost, sL, n1, cost[ind]);
+                int j = idx + kSDMInsertIndex(cost, sL, n1, cost[ind], true);
                 dst[j] = ind;
             }
 
