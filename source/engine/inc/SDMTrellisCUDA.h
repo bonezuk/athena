@@ -22,6 +22,7 @@ typedef struct s_SMDTrellisDataCUDA
     float filterG[8][8];
     // row-major
     float filterA[8][8];
+    int path[2 * c_maxNoSDMTrellisPaths];
     int noCandidates;
 } SMDTrellisDataCUDA;
 
@@ -36,6 +37,7 @@ ENGINE_EXPORT bool initSDMTrellisFilterCUDA(int dsdRate, bool isClans, SMDTrelli
 
 ENGINE_EXPORT void testSDMTrellisCalcStateAndCostCUDATF32(SMDTrellisDataCUDA *pTrellis, float xSample);
 ENGINE_EXPORT void testSDMTrellisCalcStateAndCostCUDAFP32(SMDTrellisDataCUDA *pTrellis, float xSample);
+ENGINE_EXPORT void testSDMTrellisSortCosts(SMDTrellisDataCUDA *pTrellis);
 
 //-------------------------------------------------------------------------------------------
 } // namespace engine

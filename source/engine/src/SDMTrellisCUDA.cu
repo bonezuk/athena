@@ -315,6 +315,141 @@ __global__ void kSDMTrellisTestCalcStateAndCostTF32(SMDTrellisDataCUDA *pTrellis
 #endif
 //-------------------------------------------------------------------------------------------
 
+__device__ __forceinline__ int kSDMTrellisCostGT(const float *cost, int aIdx, int bIdx) 
+{
+    return (cost[aIdx] > cost[bIdx]) ? 1 : 0;
+}
+
+//-------------------------------------------------------------------------------------------
+
+__device__ void kSDMTrellisSortPopulateIndices(const float *data, int *src, int N)
+{
+    if(threadIdx.x <= (N >> 1))
+    {
+        int idxA = threadIdx.x << 1;
+        int idxB = idxA + 1;
+        if(idxB < N)
+        {
+            if(data[idxA] > data[idxB])
+            {
+                src[idxA] = idxB;
+                src[idxB] = idxA;
+            }
+            else
+            {
+                src[idxA] = idxA;
+                src[idxB] = idxB;
+            }
+        }
+        else if(idxA < N)
+        {
+            src[idxA] = idxA;
+        }
+    }
+}
+
+//-------------------------------------------------------------------------------------------
+
+__device__ __forceinline__ int kSDMInsertIndex(const float *data, const int *indices, int N, float value)
+{
+    int lo = 0;
+    int hi = N;
+
+    while(lo < hi)
+    {
+        int mid = lo + ((hi - lo) >> 1);
+        if(data[indices[mid]] < value)
+        {
+            lo = mid + 1;
+        }
+        else
+        {
+            hi = mid;
+        }
+    }
+    return lo;
+}
+
+//-------------------------------------------------------------------------------------------
+
+__device__ int kSDMTrellisSortCosts(const float *cost, int indices[2][64], int N)
+{
+    assert(N <= 64 && "64 candidates or less expected in sorting");
+
+    int arrayIndex = 0;
+
+    if(threadIdx.x < N)
+    {
+        kSDMTrellisSortPopulateIndices(cost, &indices[0][0], N);
+        
+        int stepShift = 2;
+        while(1)
+        {
+            int step = 1 << stepShift;
+            if(step >= (N << 1))
+            {
+                break;
+            }
+
+            int mask = ~(step - 1);
+            int left = threadIdx.x & mask;
+            int right = left + step;
+            int mid = left + (step >> 1);
+
+            int n1 = mid - left;
+            int n2 = right - mid;
+            int idx = threadIdx.x - left;
+
+            int *sL = &indices[arrayIndex][left];
+            int *sR = &indices[arrayIndex][mid];
+            int *dst = &indices[arrayIndex ^ 1][left];
+
+            if(idx < n1)
+            {
+                int ind = sL[idx];
+                int j = idx + kSDMInsertIndex(cost, sR, n2, cost[ind]);
+                dst[j] = ind;
+            }
+            else
+            {
+                idx -= n1;
+                int ind = sR[idx];
+                int j = idx + kSDMInsertIndex(cost, sL, n1, cost[ind]);
+                dst[j] = ind;
+            }
+
+            arrayIndex ^= 1;
+            stepShift++;
+            __syncthreads();
+        }
+    }
+    return arrayIndex;
+}
+
+//-------------------------------------------------------------------------------------------
+
+__global__ void kTestSDMTrellisSortCosts(SMDTrellisDataCUDA *pTrellis)
+{
+    __shared__ float cost[64];
+    int N = pTrellis->noCandidates;
+
+    if(threadIdx.x < N)
+    {
+        cost[threadIdx.x] = pTrellis->cost[threadIdx.x];
+    }
+    __syncthreads();
+
+    __shared__ int indices[2][64];
+    int aIdx = kSDMTrellisSortCosts(cost, indices, N);
+
+    if(threadIdx.x < N)
+    {
+        pTrellis->path[threadIdx.x] = indices[aIdx][threadIdx.x];
+    }
+}
+
+//-------------------------------------------------------------------------------------------
+
 void sdmTrellisFreeStatesCUDA(SMDTrellisDataCUDA *states)
 {
     if(states != nullptr)
@@ -407,6 +542,13 @@ void testSDMTrellisCalcStateAndCostCUDATF32(SMDTrellisDataCUDA *pTrellis, float 
 void testSDMTrellisCalcStateAndCostCUDAFP32(SMDTrellisDataCUDA *pTrellis, float xSample)
 {
     kSDMTrellisTestCalcStateAndCostFP32<<<1, 32>>>(pTrellis, xSample);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void testSDMTrellisSortCosts(SMDTrellisDataCUDA *pTrellis)
+{
+    kTestSDMTrellisSortCosts<<<1, 64>>>(pTrellis);
 }
 
 //-------------------------------------------------------------------------------------------

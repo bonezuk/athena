@@ -28,7 +28,7 @@ template <typename T> class SDMSort
 		int m_indSize;
 		
 		virtual void reallocateAsRequired(int N);
-		virtual int insertIndex(const T *data, const int *indices, int N, T value);
+		virtual int insertIndex(const T *data, const int *indices, int N, T value, bool upper);
 		virtual void merge(const T *data, int left, int mid, int right, int arrayIndex);
 		virtual void mergeSort(const T *data, int N, int& arrayIndex);
 };
@@ -57,7 +57,7 @@ template <typename T> SDMSort<T>::~SDMSort()
 
 //-------------------------------------------------------------------------------------------
 
-template <typename T> int SDMSort<T>::insertIndex(const T *data, const int *indices, int N, T value)
+template <typename T> int SDMSort<T>::insertIndex(const T *data, const int *indices, int N, T value, bool upper)
 {
 	int lo = 0;
 	int hi = N;
@@ -65,7 +65,7 @@ template <typename T> int SDMSort<T>::insertIndex(const T *data, const int *indi
 	while(lo < hi)
 	{
 		int mid = lo + ((hi - lo) >> 1);
-		if(data[indices[mid]] < value)
+		if(upper ? (data[indices[mid]] <= value) : (data[indices[mid]] < value))
 		{
 			lo = mid + 1;
 		}
@@ -93,13 +93,13 @@ template <typename T> void SDMSort<T>::merge(const T *data, int left, int mid, i
 	for(int idx = 0; idx < n1; idx++)
 	{
 		int ind = sL[idx];
-		int j = idx + insertIndex(data, sR, n2, data[ind]);
+		int j = idx + insertIndex(data, sR, n2, data[ind], false);
 		dst[j] = ind;
 	}
 	for(int idx = 0; idx < n2; idx++)
 	{
 		int ind = sR[idx];
-		int j = idx + insertIndex(data, sL, n1, data[ind]);
+		int j = idx + insertIndex(data, sL, n1, data[ind], true);
 		dst[j] = ind;
 	}
 }
@@ -116,6 +116,14 @@ template <typename T> void SDMSort<T>::mergeSort(const T *data, int N, int& arra
 			int right = pos + step;
 			int diff = right - left;
 			int mid = left + (diff >> 1);
+			if(right > N)
+			{
+				right = N;
+				if(mid > N)
+				{
+					mid = N;
+				}
+			}
 			merge(data, left, mid, right, arrayIndex);
 		}
 		arrayIndex = (arrayIndex + 1) & 0x1;

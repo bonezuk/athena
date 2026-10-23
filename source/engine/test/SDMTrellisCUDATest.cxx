@@ -1,7 +1,10 @@
 #include <cuda_runtime.h>
 #include "gtest/gtest.h"
+
+#include "common/inc/Random.h"
 #include "engine/inc/SDMTrellisCUDA.h"
 
+using namespace omega;
 using namespace omega::engine;
 
 //-------------------------------------------------------------------------------------------
@@ -162,6 +165,44 @@ TEST_F(SDMTrellisCUDATest, calculateStateAndCostUsingTensorCoreFP32)
     freeSDMFreeTrellisBlockFilter<float>(filterTest);
     freeSDMTrellisStates<float>(statesA);
     freeSDMTrellisStates<float>(statesB);
+}
+
+//-------------------------------------------------------------------------------------------
+
+TEST_F(SDMTrellisCUDATest, sortCostIndices)
+{
+    constexpr int noIters = 1000;
+    constexpr int max = 64;
+    common::Random *rand = common::Random::instance();
+
+    SMDTrellisDataCUDA trellisCPU;
+    memset(&trellisCPU, 0, sizeof(SMDTrellisDataCUDA));
+    SMDTrellisDataCUDA *pTrellisGPU = sdmTrellisAllocateCUDA();
+    ASSERT_TRUE(pTrellisGPU != nullptr);
+
+    for(int iter = 0; iter < noIters; iter++)
+    {
+        for(int idx = 0; idx < max; idx++)
+        {
+            trellisCPU.cost[idx] = static_cast<float>(rand->randomReal2());
+        }
+        for(int N = 2; N < max; N++)
+        {
+            trellisCPU.noCandidates = N;
+            ASSERT_TRUE(sdmTrellisCopyDataCUDA(&trellisCPU, pTrellisGPU));
+            testSDMTrellisSortCosts(pTrellisGPU);
+            ASSERT_TRUE(sdmTrellisCopyDataCUDA(pTrellisGPU, &trellisCPU));
+
+            for(int idx = 0; idx < N - 1; idx++)
+            {
+                int iA = trellisCPU.path[idx];
+                int iB = trellisCPU.path[idx + 1];
+                EXPECT_LE(trellisCPU.cost[iA], trellisCPU.cost[iB]);
+            }
+        }
+    }
+
+    sdmTrellisFreeStatesCUDA(pTrellisGPU);
 }
 
 //-------------------------------------------------------------------------------------------
